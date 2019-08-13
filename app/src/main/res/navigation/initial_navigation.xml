@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/initial_navigation"
+    app:startDestination="@id/splashFragment">
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="cc.cryptopunks.crypton.app.ui.fragment.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/splash_layout">
+        <action
+            android:id="@+id/navigate_splashFragment_to_setAccountFragment"
+            app:destination="@id/setAccountFragment"
+            app:popUpTo="@+id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/setAccountFragment"
+        android:name="cc.cryptopunks.crypton.app.ui.fragment.SetAccountFragment"
+        android:label="SetAccountFragment"
+        tools:layout="@layout/set_account_layout">
+        <action
+            android:id="@+id/navigate_setAccountFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/navigate_setAccountFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="cc.cryptopunks.crypton.app.ui.fragment.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/sign_in_layout"/>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="cc.cryptopunks.crypton.app.ui.fragment.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/sign_up_layout"/>
+    <activity
+        android:id="@+id/dashboardActivity"
+        android:name="cc.cryptopunks.crypton.app.ui.activity.DashboardActivity"
+        android:label="DashboardActivity"
+        tools:layout="@layout/dashboard_layout"/>
+    <action
+        android:id="@+id/navigate_to_dashboardActivity"
+        app:destination="@id/dashboardActivity"
+        app:launchSingleTop="true" />
+</navigation>
