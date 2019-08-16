@@ -6,4 +6,6 @@ import dagger.Subcomponent
 
 @ServiceScope
 @Subcomponent(modules = [ServiceModule::class])
-interface ServiceComponent
+interface ServiceComponent {
+    fun inject(xmppService: XmppService)
+}

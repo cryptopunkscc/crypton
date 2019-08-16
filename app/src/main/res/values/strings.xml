@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Crypton Messenger</string>
 
+    <string name="xmpp_service_title">Crypton service</string>
+
     <string name="login_title">Login</string>
     <string name="dashboard_title">Dashboard</string>
-    <string name="xmpp_title">Contacts</string>
     <string name="chat_title">Chat</string>
     <string name="contacts_title">Contacts</string>
 
