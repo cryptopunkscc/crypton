@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">Crypton Messenger</string>
+
     <string name="login_title">Login</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="xmpp_title">Contacts</string>
-    <string name="roster_title">Roster log</string>
     <string name="chat_title">Chat</string>
     <string name="contacts_title">Contacts</string>
-
-    <string name="logout">Logout</string>
-    <string name="kill">Kill</string>
 
     <string name="set_account_label">Please add existing xmpp account or create new one.</string>
     <string name="add_existing_account">Add existing account</string>
@@ -18,4 +15,8 @@
     <string name="user_name">User name</string>
     <string name="password">password</string>
     <string name="confirm_password">Confirm password</string>
+
+    <string name="manage_accounts">Manage accounts</string>
+
+    <string name="set_account">Set account</string>
 </resources>

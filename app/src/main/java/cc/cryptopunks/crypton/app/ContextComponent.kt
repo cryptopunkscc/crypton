@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.app.app
+package cc.cryptopunks.crypton.app
 
 import cc.cryptopunks.crypton.app.module.ActivityModule
 import cc.cryptopunks.crypton.app.module.ContextModule

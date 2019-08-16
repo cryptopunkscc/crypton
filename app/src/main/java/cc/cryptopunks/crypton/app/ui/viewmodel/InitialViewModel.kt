@@ -19,7 +19,7 @@ class InitialViewModel @Inject constructor(
             navigation.navigate(
                 when (condition) {
                     true -> R.id.navigate_to_dashboardActivity
-                    false -> R.id.navigate_splashFragment_to_setAccountFragment
+                    false -> R.id.action_splashFragment_to_set_account_navigation
                 }
             )
         }

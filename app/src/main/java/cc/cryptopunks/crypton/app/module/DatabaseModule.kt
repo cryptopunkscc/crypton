@@ -13,7 +13,7 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun appDatabase(context: Application) = Room
-//        .databaseBuilder(context, CoreDatabase::class.java, "cryption.db")
-        .inMemoryDatabaseBuilder(context, CoreDatabase::class.java)
+        .databaseBuilder(context, CoreDatabase::class.java, "cryption.db")
+//        .inMemoryDatabaseBuilder(context, CoreDatabase::class.java)
         .build()
 }

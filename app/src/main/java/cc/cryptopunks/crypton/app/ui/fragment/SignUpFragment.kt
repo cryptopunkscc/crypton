@@ -3,15 +3,15 @@ package cc.cryptopunks.crypton.app.ui.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.app.R
-import cc.cryptopunks.crypton.app.databinding.SignUpLayoutBinding
+import cc.cryptopunks.crypton.app.databinding.SignUpBinding
 import cc.cryptopunks.crypton.app.ui.viewmodel.SignUpViewModel
 import cc.cryptopunks.crypton.app.util.DataBindingFragment
 import cc.cryptopunks.crypton.app.util.bind
 import javax.inject.Inject
 
-class SignUpFragment : DataBindingFragment<SignUpLayoutBinding>() {
+class SignUpFragment : DataBindingFragment<SignUpBinding>() {
 
-    override val layoutId: Int get() = R.layout.sign_up_layout
+    override val layoutId: Int get() = R.layout.sign_up
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -23,9 +23,9 @@ class SignUpFragment : DataBindingFragment<SignUpLayoutBinding>() {
         signUpViewModel: SignUpViewModel
     ) {
         binding?.apply {
-            root.bind(viewDisposables)
+            root.bind(viewDisposable)
             model = signUpViewModel.accountViewModel
         }
-        viewDisposables.add(signUpViewModel())
+        viewDisposable.add(signUpViewModel())
     }
 }

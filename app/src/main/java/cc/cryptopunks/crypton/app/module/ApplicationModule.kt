@@ -23,16 +23,13 @@ import javax.inject.Singleton
 
 @Module(includes = [ApplicationModule.Bindings::class])
 class ApplicationModule(
-    private val application: Application
+    @get:Provides
+    @get:Singleton
+    val application: Application
 ) {
-
     @get:Provides
     @get:Singleton
     val handler = Handler()
-
-    @Provides
-    @Singleton
-    fun application(): Application = application
 
     @Provides
     @Singleton

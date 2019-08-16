@@ -34,7 +34,7 @@
                 android:text="@string/set_account_label"
                 android:padding="16dp"/>
 
-        </LinearLayout>>
+        </LinearLayout>
 
         <Button
             android:id="@+id/toDashboard"

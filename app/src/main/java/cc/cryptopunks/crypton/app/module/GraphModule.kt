@@ -16,6 +16,5 @@ class GraphModule {
 
     @Provides
     @GraphScope
-    fun navigationBus(): Navigation.Bus =
-        NavigationBus()
+    fun navigationBus(): Navigation.Bus = NavigationBus()
 }

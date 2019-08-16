@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import cc.cryptopunks.crypton.app.module.FragmentModule
@@ -14,7 +15,13 @@ abstract class BaseFragment :
     Fragment() {
 
     @get:LayoutRes
-    open val layoutId get() = 0
+    open val layoutId
+        get() = 0
+
+    @get:StringRes
+    open val titleId
+        get() = 0
+
 
     val baseActivity get() = activity as BaseActivity
 
@@ -38,8 +45,8 @@ abstract class BaseFragment :
 
     open val navController get() = findNavController()
 
-    val viewDisposables = CompositeDisposable()
-    val modelDisposables = CompositeDisposable()
+    val viewDisposable = CompositeDisposable()
+    val modelDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,14 +61,21 @@ abstract class BaseFragment :
         .takeIf { it != 0 }
         ?.let { inflater.inflate(it, container, false) }
 
+    override fun onResume() {
+        super.onResume()
+        titleId.takeIf { it > 0 }?.let {
+            baseActivity.supportActionBar?.setTitle(it)
+        }
+    }
+
     override fun onDestroyView() {
-        viewDisposables.clear()
+        viewDisposable.clear()
         super.onDestroyView()
     }
 
     override fun onDestroy() {
-        viewDisposables.dispose()
-        modelDisposables.dispose()
+        viewDisposable.dispose()
+        modelDisposable.dispose()
         super.onDestroy()
     }
 }

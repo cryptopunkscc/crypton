@@ -16,6 +16,6 @@ class InitialNavigationFragment : BaseFragment() {
     fun init(
         initialViewModel: InitialViewModel
     ) {
-        modelDisposables.addAll(initialViewModel())
+        modelDisposable.addAll(initialViewModel())
     }
 }

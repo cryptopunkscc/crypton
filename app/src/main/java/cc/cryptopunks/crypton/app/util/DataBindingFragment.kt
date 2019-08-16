@@ -29,7 +29,7 @@ abstract class DataBindingFragment<VB : ViewDataBinding> :
         container = container
     ).also {
         binding = it
-        viewDisposables.add(disposeBinding)
+        viewDisposable.add(disposeBinding)
     }.root
 
     private val disposeBinding

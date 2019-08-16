@@ -1,13 +1,9 @@
 package cc.cryptopunks.crypton.app.ui.component
 
-import cc.cryptopunks.crypton.xmpp.Xmpp
 import cc.cryptopunks.crypton.app.module.ViewModelModule
 import cc.cryptopunks.crypton.app.module.ViewModelScope
-import cc.cryptopunks.crypton.app.ui.activity.InitialActivity
-import cc.cryptopunks.crypton.app.ui.fragment.InitialNavigationFragment
-import cc.cryptopunks.crypton.app.ui.fragment.SetAccountFragment
-import cc.cryptopunks.crypton.app.ui.fragment.SignInFragment
-import cc.cryptopunks.crypton.app.ui.fragment.SignUpFragment
+import cc.cryptopunks.crypton.app.ui.fragment.*
+import cc.cryptopunks.crypton.xmpp.Xmpp
 import dagger.Subcomponent
 
 @ViewModelScope
@@ -18,11 +14,12 @@ import dagger.Subcomponent
     ]
 )
 interface ViewModelComponent {
-    fun inject(target: InitialActivity)
     fun inject(target: InitialNavigationFragment)
+    fun inject(target: SetAccountFragment)
     fun inject(target: SignInFragment)
     fun inject(target: SignUpFragment)
-    fun inject(target: SetAccountFragment)
+    fun inject(target: ChatListFragment)
+    fun inject(target: AccountListFragment)
 
     @Subcomponent.Builder
     interface Builder {

@@ -11,13 +11,14 @@ import dagger.Provides
 
 @Module
 class ActivityModule(
-    private val activity: Activity,
-    private val optionItemSelectedBroadcast: OptionItemSelectedBroadcast
-) {
+    @get:Provides
+    @get:ActivityScope
+    val activity: Activity,
 
-    @Provides
-    @ActivityScope
-    fun appCompatActivity() = activity as AppCompatActivity
+    @get:Provides
+    @get:ActivityScope
+    val optionItemSelectedBroadcast: OptionItemSelectedBroadcast
+) {
 
     @Provides
     @ActivityScope
@@ -25,7 +26,7 @@ class ActivityModule(
 
     @Provides
     @ActivityScope
-    fun activity(): Activity = activity
+    fun appCompatActivity() = activity as AppCompatActivity
 
     @Provides
     @ActivityScope
@@ -34,9 +35,5 @@ class ActivityModule(
     @Provides
     @ActivityScope
     fun fragmentManager(activity: FragmentActivity) = activity.supportFragmentManager!!
-
-    @Provides
-    @ActivityScope
-    fun broadcast() = optionItemSelectedBroadcast
 }
 

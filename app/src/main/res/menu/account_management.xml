@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/setAccount"
+        android:title="@string/set_account"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_person_add_white_24dp"/>
+</menu>
