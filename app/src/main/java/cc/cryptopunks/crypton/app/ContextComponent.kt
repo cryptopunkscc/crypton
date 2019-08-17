@@ -1,23 +1,18 @@
 package cc.cryptopunks.crypton.app
 
-import cc.cryptopunks.crypton.app.module.ActivityModule
+import android.app.NotificationManager
 import cc.cryptopunks.crypton.app.module.ContextModule
 import cc.cryptopunks.crypton.app.module.ContextScope
-import cc.cryptopunks.crypton.app.module.ServiceModule
-import cc.cryptopunks.crypton.app.service.ServiceComponent
-import cc.cryptopunks.crypton.app.ui.component.ActivityComponent
-import dagger.Subcomponent
+import cc.cryptopunks.crypton.app.service.notification.SetupNotificationChannel
+import dagger.Component
 
 @ContextScope
-@Subcomponent(modules = [ContextModule::class])
-interface ContextComponent {
+@Component(
+    dependencies = [AppComponent::class],
+    modules = [ContextModule::class]
+)
+interface ContextComponent : AppComponent {
 
-    fun service(module: ServiceModule): ServiceComponent
-    fun activity(module: ActivityModule): ActivityComponent
-
-    @Subcomponent.Builder
-    interface Builder {
-        fun plus(module: ContextModule): Builder
-        fun build(): ContextComponent
-    }
+    val notificationManager: NotificationManager
+    val setupNotificationChannel: SetupNotificationChannel
 }

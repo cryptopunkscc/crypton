@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "cc.cryptopunks.xmpp.app2"
+        applicationId "cc.cryptopunks.crypton"
         minSdkVersion 22
         targetSdkVersion 28
         versionCode 1

@@ -12,6 +12,5 @@ annotation class ServiceScope
 @Module
 class ServiceModule(
     @get:Provides
-    @get:ServiceScope
     val service: Service
 )

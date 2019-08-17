@@ -5,12 +5,16 @@ import android.view.MenuItem
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import cc.cryptopunks.crypton.common.OptionItemSelectedBroadcast
-import cc.cryptopunks.crypton.app.R
 import cc.cryptopunks.crypton.app.App
-import cc.cryptopunks.crypton.app.module.ActivityModule
+import cc.cryptopunks.crypton.app.DaggerContextComponent
+import cc.cryptopunks.crypton.app.R
 import cc.cryptopunks.crypton.app.module.ContextModule
+import cc.cryptopunks.crypton.app.module.GraphModule
+import cc.cryptopunks.crypton.app.ui.component.ActivityComponent
+import cc.cryptopunks.crypton.app.ui.component.DaggerActivityComponent
+import cc.cryptopunks.crypton.app.ui.component.DaggerGraphComponent
 import cc.cryptopunks.crypton.app.ui.component.GraphComponent
+import cc.cryptopunks.crypton.common.OptionItemSelectedBroadcast
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseActivity :
@@ -27,19 +31,25 @@ abstract class BaseActivity :
 
     val applicationComponent get() = app.component
 
-    val activityComponent by lazy {
-        applicationComponent
-            .contextComponent()
-            .plus(ContextModule(this))
+    val activityComponent: ActivityComponent by lazy {
+        DaggerActivityComponent
+            .builder()
+            .contextComponent(
+                DaggerContextComponent
+                    .builder()
+                    .appComponent(applicationComponent)
+                    .contextModule(ContextModule(this))
+                    .build()
+            )
             .build()
-            .activity(ActivityModule(this, broadcastItemSelected))
     }
 
     val graphComponent: GraphComponent by lazy {
         fragment("graph") {
             DependenciesFragment(
-                applicationComponent
-                    .graphComponent()
+                DaggerGraphComponent.builder()
+                    .appComponent(applicationComponent)
+                    .graphModule(GraphModule())
                     .build()
             )
         }.component

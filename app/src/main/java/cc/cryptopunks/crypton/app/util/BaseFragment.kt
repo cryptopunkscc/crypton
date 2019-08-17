@@ -8,7 +8,11 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import cc.cryptopunks.crypton.app.module.FragmentModule
+import cc.cryptopunks.crypton.app.module.ViewModelModule
+import cc.cryptopunks.crypton.app.ui.component.DaggerFragmentComponent
+import cc.cryptopunks.crypton.app.ui.component.DaggerViewModelComponent
+import cc.cryptopunks.crypton.app.ui.component.FragmentComponent
+import cc.cryptopunks.crypton.app.ui.component.ViewModelComponent
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseFragment :
@@ -29,17 +33,17 @@ abstract class BaseFragment :
         baseActivity.applicationComponent
     }
 
-    val fragmentComponent by lazy {
-        applicationComponent
-            .fragmentComponent()
-            .plus(FragmentModule(this))
+    val fragmentComponent: FragmentComponent by lazy {
+        DaggerFragmentComponent
+            .builder()
             .build()
     }
 
-    val viewModelComponent by lazy {
-        baseActivity
-            .graphComponent
-            .viewModelComponent()
+    val viewModelComponent: ViewModelComponent by lazy {
+        DaggerViewModelComponent
+            .builder()
+            .graphComponent(baseActivity.graphComponent)
+            .viewModelModule(ViewModelModule())
             .build()
     }
 

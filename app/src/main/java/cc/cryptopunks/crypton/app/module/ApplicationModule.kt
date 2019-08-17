@@ -2,16 +2,14 @@ package cc.cryptopunks.crypton.app.module
 
 import android.app.Application
 import android.os.Handler
-import cc.cryptopunks.crypton.common.HandleError
-import cc.cryptopunks.crypton.common.SingletonQualifier
-import cc.cryptopunks.kache.core.Kache
-import cc.cryptopunks.kache.core.KacheManager
-import cc.cryptopunks.crypton.xmpp.Xmpp
-import cc.cryptopunks.crypton.app.util.AsyncExecutor
 import cc.cryptopunks.crypton.app.util.KacheProviderFactory
 import cc.cryptopunks.crypton.app.util.MainErrorHandler
-import cc.cryptopunks.crypton.app.util.RunningTasks
+import cc.cryptopunks.crypton.common.HandleError
+import cc.cryptopunks.crypton.common.SingletonQualifier
 import cc.cryptopunks.crypton.smack.SmackXmppFactory
+import cc.cryptopunks.crypton.xmpp.Xmpp
+import cc.cryptopunks.kache.core.Kache
+import cc.cryptopunks.kache.core.KacheManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -51,16 +49,6 @@ class ApplicationModule(
         setHostAddress(InetAddress.getByName("10.0.2.2"))
         setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
     }
-
-    @Provides
-    @Singleton
-    fun asyncExecutor(
-        handleError: HandleError,
-        runningTasks: RunningTasks
-    ) = AsyncExecutor(
-        handleError = handleError,
-        runningTasks = runningTasks
-    )
 
     @Module
     interface Bindings {

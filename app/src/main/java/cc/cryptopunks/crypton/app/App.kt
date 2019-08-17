@@ -5,13 +5,18 @@ import android.app.Application
 import android.app.Service
 import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.app.module.ApplicationModule
+import cc.cryptopunks.crypton.app.module.CoreModule
+import cc.cryptopunks.crypton.app.module.DatabaseModule
 import timber.log.Timber
 
 class App : Application() {
 
     val component: AppComponent by lazy {
-        DaggerAppComponent.builder()
+        DaggerAppComponent
+            .builder()
             .applicationModule(ApplicationModule(this))
+            .coreModule(CoreModule())
+            .databaseModule(DatabaseModule())
             .build()
     }
 

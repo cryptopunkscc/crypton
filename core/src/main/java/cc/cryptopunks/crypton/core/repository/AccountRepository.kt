@@ -6,8 +6,9 @@ import cc.cryptopunks.crypton.core.util.reduce
 import cc.cryptopunks.crypton.xmpp.Xmpp
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
+@Singleton
 data class AccountRepository @Inject constructor(
     private val dao: Account.Dao,
     private val createXmpp: Xmpp.Factory,

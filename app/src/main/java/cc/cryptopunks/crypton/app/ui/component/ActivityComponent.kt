@@ -1,9 +1,13 @@
 package cc.cryptopunks.crypton.app.ui.component
 
-import cc.cryptopunks.crypton.common.ActivityScope
+import cc.cryptopunks.crypton.app.ContextComponent
 import cc.cryptopunks.crypton.app.module.ActivityModule
-import dagger.Subcomponent
+import cc.cryptopunks.crypton.common.ActivityScope
+import dagger.Component
 
 @ActivityScope
-@Subcomponent(modules = [ActivityModule::class])
+@Component(
+    dependencies = [ContextComponent::class],
+    modules = [ActivityModule::class]
+)
 interface ActivityComponent

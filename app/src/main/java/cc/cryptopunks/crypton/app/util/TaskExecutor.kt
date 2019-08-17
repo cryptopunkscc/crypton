@@ -7,7 +7,8 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
-class AsyncExecutor(
+@Singleton
+class AsyncExecutor @Inject constructor(
     private val handleError: HandleError,
     private val runningTasks: RunningTasks
 ) {

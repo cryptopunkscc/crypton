@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.app.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
+import cc.cryptopunks.crypton.app.DaggerContextComponent
 import cc.cryptopunks.crypton.app.app
 import cc.cryptopunks.crypton.app.module.ContextModule
 import cc.cryptopunks.crypton.app.module.ServiceModule
@@ -23,12 +24,18 @@ class XmppService :
 
     override val disposable = CompositeDisposable()
 
-    private val component by lazy {
-        app.component
-            .contextComponent()
-            .plus(ContextModule(this))
+    private val component: ServiceComponent by lazy {
+        DaggerServiceComponent
+            .builder()
+            .contextComponent(
+                DaggerContextComponent
+                    .builder()
+                    .contextModule(ContextModule(this))
+                    .appComponent(app.component)
+                    .build()
+            )
+            .serviceModule(ServiceModule(this))
             .build()
-            .service(ServiceModule(this))
     }
 
     override fun onCreate() {
@@ -57,7 +64,7 @@ class XmppService :
         .also { Timber.d("onStartCommand") }
 
     companion object {
-        val TAG = XmppService::class.java.simpleName!!
+        val TAG: String = XmppService::class.java.simpleName
         val NOTIFICATION_ID = TAG.hashCode()
         val NOTIFICATION_CHANNEL_ID = TAG + "_notification_channel_id"
     }

@@ -1,11 +1,15 @@
 package cc.cryptopunks.crypton.app.service
 
+import cc.cryptopunks.crypton.app.ContextComponent
 import cc.cryptopunks.crypton.app.module.ServiceModule
 import cc.cryptopunks.crypton.app.module.ServiceScope
-import dagger.Subcomponent
+import dagger.Component
 
 @ServiceScope
-@Subcomponent(modules = [ServiceModule::class])
-interface ServiceComponent {
+@Component(
+    dependencies = [ContextComponent::class],
+    modules = [ServiceModule::class]
+)
+interface ServiceComponent : ContextComponent {
     fun inject(xmppService: XmppService)
 }
