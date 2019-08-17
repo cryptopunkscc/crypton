@@ -1,0 +1,40 @@
+package cc.cryptopunks.crypton.account.presentation.fragment
+
+import android.os.Bundle
+import android.view.View
+import cc.cryptopunks.crypton.core.util.bind
+import cc.cryptopunks.crypton.account.R
+import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountViewModel
+import cc.cryptopunks.crypton.account.presentation.viewmodel.SignUpViewModel
+import kotlinx.android.synthetic.main.set_account.*
+import kotlinx.android.synthetic.main.sign_up.*
+import javax.inject.Inject
+
+class SignUpFragment : BaseAccountFragment() {
+
+    override val layoutId: Int get() = R.layout.sign_up
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        accountComponent.inject(this)
+    }
+
+    @Inject
+    fun init(
+        accountViewModel: AccountViewModel,
+        signUpViewModel: SignUpViewModel
+    ) {
+        with(accountViewModel) {
+            viewDisposable.addAll(
+                serviceNameLayout.bind(serviceName),
+                userNameLayout.bind(userName),
+                passwordLayout.bind(password),
+                confirmPasswordLayout.bind(confirmPassword),
+                registerButton.bind(onClick)
+            )
+        }
+        viewDisposable.addAll(
+            signUpViewModel()
+        )
+    }
+}

@@ -3,11 +3,11 @@ package cc.cryptopunks.crypton.app.service.notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import cc.cryptopunks.crypton.app.module.ContextScope
 import cc.cryptopunks.crypton.app.service.XmppService
+import cc.cryptopunks.crypton.core.module.ServiceScope
 import javax.inject.Inject
 
-@ContextScope
+@ServiceScope
 class SetupNotificationChannel @Inject constructor(
     private val notificationManager: NotificationManager
 ) : () -> Unit by {

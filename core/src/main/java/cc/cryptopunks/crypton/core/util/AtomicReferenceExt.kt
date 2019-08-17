@@ -1,12 +1,10 @@
 package cc.cryptopunks.crypton.core.util
 
-import cc.cryptopunks.crypton.core.entity.Account
 import java.util.concurrent.atomic.AtomicReference
 
-internal fun <T> AtomicReference<T>.reduce(f: T.() -> T?) = get().f().also { set(it) }
 
-internal fun <T, R> AtomicReference<T>.get(f: T.() -> R) = get().run { f() }!!
+val AtomicReference<*>.isEmpty: Boolean get() = get() == null
 
-fun AtomicReference<Account>.wrap(throwable: Throwable) =
-    if (throwable is Account.Exception) throwable
-    else Account.Exception(get(), throwable)
+inline fun <T, R> AtomicReference<T>.get(f: T.() -> R) = get().run { f() }!!
+
+inline infix fun <T> AtomicReference<T>.reduce(fn: T.() -> T) = apply { synchronized(this) { set(get().fn()) } }

@@ -6,7 +6,7 @@
     app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/splashFragment"
-        android:name="cc.cryptopunks.crypton.app.ui.fragment.SplashFragment"
+        android:name="cc.cryptopunks.crypton.app.presentation.fragment.SplashFragment"
         android:label="SplashFragment"
         tools:layout="@layout/splash">
         <action
@@ -18,7 +18,7 @@
     <include app:graph="@navigation/set_account" />
     <activity
         android:id="@+id/dashboardActivity"
-        android:name="cc.cryptopunks.crypton.app.ui.activity.MainActivity"
+        android:name="cc.cryptopunks.crypton.app.presentation.activity.MainActivity"
         android:label="DashboardActivity"
         tools:layout="@layout/main" />
     <action

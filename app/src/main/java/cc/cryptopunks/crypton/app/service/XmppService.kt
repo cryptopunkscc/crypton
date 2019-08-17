@@ -3,16 +3,18 @@ package cc.cryptopunks.crypton.app.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.app.DaggerContextComponent
-import cc.cryptopunks.crypton.app.app
-import cc.cryptopunks.crypton.app.module.ContextModule
-import cc.cryptopunks.crypton.app.module.ServiceModule
-import cc.cryptopunks.crypton.app.module.ServiceScope
+import cc.cryptopunks.crypton.app.presentation.component.DaggerXmppServiceComponent
+import cc.cryptopunks.crypton.app.presentation.component.XmppServiceComponent
 import cc.cryptopunks.crypton.app.service.notification.SetupNotificationChannel
 import cc.cryptopunks.crypton.app.service.notification.ShowXmppServiceNotification
-import cc.cryptopunks.crypton.app.util.AsyncExecutor
-import cc.cryptopunks.crypton.app.util.DisposableDelegate
-import cc.cryptopunks.crypton.core.interactor.ReconnectAccounts
+import cc.cryptopunks.crypton.core.app
+import cc.cryptopunks.crypton.core.component.DaggerContextComponent
+import cc.cryptopunks.crypton.account.domain.command.ReconnectAccounts
+import cc.cryptopunks.crypton.core.module.ContextModule
+import cc.cryptopunks.crypton.core.module.ServiceModule
+import cc.cryptopunks.crypton.core.module.ServiceScope
+import cc.cryptopunks.crypton.core.util.AsyncExecutor
+import cc.cryptopunks.crypton.core.util.DisposableDelegate
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
@@ -24,14 +26,14 @@ class XmppService :
 
     override val disposable = CompositeDisposable()
 
-    private val component: ServiceComponent by lazy {
-        DaggerServiceComponent
+    private val component: XmppServiceComponent by lazy {
+        DaggerXmppServiceComponent
             .builder()
             .contextComponent(
                 DaggerContextComponent
                     .builder()
                     .contextModule(ContextModule(this))
-                    .appComponent(app.component)
+                    .applicationComponent(app.component)
                     .build()
             )
             .serviceModule(ServiceModule(this))

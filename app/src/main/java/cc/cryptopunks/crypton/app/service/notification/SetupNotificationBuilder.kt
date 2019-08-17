@@ -5,8 +5,8 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import cc.cryptopunks.crypton.app.R
-import cc.cryptopunks.crypton.app.module.ServiceScope
-import cc.cryptopunks.crypton.app.ui.activity.InitialActivity
+import cc.cryptopunks.crypton.core.module.ServiceScope
+import cc.cryptopunks.crypton.app.presentation.activity.InitialActivity
 import javax.inject.Inject
 
 @ServiceScope

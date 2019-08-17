@@ -1,9 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
+
 
     defaultConfig {
         minSdkVersion 22
@@ -22,50 +24,38 @@ android {
         }
     }
 
-    useLibrary 'android.test.runner'
-    useLibrary 'android.test.base'
-    useLibrary 'android.test.mock'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-
-    kapt "androidx.room:room-compiler:$room_version"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
-
-    testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:$mockk_version"
-
-    androidTestImplementation(project(':xmpp:integration')) {
-        exclude group: 'org.igniterealtime.smack', module: 'smack-resolver-javax'
-        exclude group: 'org.igniterealtime.smack', module: 'smack-resolver-dnsjava'
-        exclude group: 'org.igniterealtime.smack', module: 'smack-java7'
-    }
+    api project(':common')
     api project(':xmpp:smack')
 
-    // AndroidJUnitRunner and JUnit Rules
+    api 'androidx.appcompat:appcompat:1.0.2'
+    api 'androidx.core:core-ktx:1.0.2'
+
+    api 'android.arch.navigation:navigation-fragment-ktx:1.0.0'
+    api 'android.arch.navigation:navigation-ui-ktx:1.0.0'
+
+    api "com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-drawerlayout:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-leanback:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-slidingpanelayout:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-viewpager:3.0.0-alpha2"
+    api "com.jakewharton.rxbinding3:rxbinding-material:3.0.0-alpha2"
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation "io.mockk:mockk:1.9.3.kotlin12"
+
     androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-
-    // Assertions
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
-    androidTestImplementation 'com.google.truth:truth:0.42'
-
-    // Espresso dependencies
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
-    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
 
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
-}
-
-configurations {
-    all*.exclude group: 'xpp3', module: 'xpp3'
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/set_account_navigation"
+    app:startDestination="@id/setAccountFragment"
+    tools:ignore="UnusedNavigation">
+    <fragment
+        android:id="@+id/setAccountFragment"
+        android:name="cc.cryptopunks.crypton.account.presentation.fragment.SetAccountFragment"
+        android:label="SetAccountFragment"
+        tools:layout="@layout/set_account">
+        <action
+            android:id="@+id/navigate_setAccountFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/navigate_setAccountFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="cc.cryptopunks.crypton.account.presentation.fragment.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/sign_in" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="cc.cryptopunks.crypton.account.presentation.fragment.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/sign_up" />
+</navigation>
