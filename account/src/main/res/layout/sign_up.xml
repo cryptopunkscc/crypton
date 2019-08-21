@@ -62,7 +62,7 @@
         android:textColor="@color/error" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="sign up" />
