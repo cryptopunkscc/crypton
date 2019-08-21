@@ -6,7 +6,12 @@ import cc.cryptopunks.crypton.xmpp.entities.Jid
 import io.reactivex.Observable
 import io.reactivex.Single
 
-@Entity
+@Entity(
+    indices = [Index(
+        value = ["domain", "userName"],
+        unique = true
+    )]
+)
 data class Account constructor(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val domain: String = "",

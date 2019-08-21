@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.core.util
+package cc.cryptopunks.crypton.common
 
 import io.reactivex.Scheduler
 
