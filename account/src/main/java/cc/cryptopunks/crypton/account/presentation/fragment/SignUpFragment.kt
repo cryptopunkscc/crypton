@@ -2,10 +2,10 @@ package cc.cryptopunks.crypton.account.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.core.util.bind
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountViewModel
 import cc.cryptopunks.crypton.account.presentation.viewmodel.SignUpViewModel
+import cc.cryptopunks.crypton.core.util.bind
 import kotlinx.android.synthetic.main.set_account.*
 import kotlinx.android.synthetic.main.sign_up.*
 import javax.inject.Inject
@@ -30,7 +30,8 @@ class SignUpFragment : BaseAccountFragment() {
                 userNameLayout.bind(userName),
                 passwordLayout.bind(password),
                 confirmPasswordLayout.bind(confirmPassword),
-                registerButton.bind(onClick)
+                registerButton.bind(onClick),
+                errorOutput.bind(errorMessage)
             )
         }
         viewDisposable.addAll(

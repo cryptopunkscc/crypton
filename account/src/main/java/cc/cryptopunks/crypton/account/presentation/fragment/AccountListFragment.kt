@@ -30,17 +30,17 @@ class AccountListFragment : BaseAccountFragment() {
 
     @Inject
     fun init(
-        accountListViewModel: AccountListViewModel
+        accountListViewModel: AccountListViewModel,
+        accountListAdapter: AccountListAdapter
     ) {
-        val accountsAdapter = AccountListAdapter()
-
         accountRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = accountsAdapter
+            adapter = accountListAdapter
         }
 
         viewDisposable.addAll(
-            accountListViewModel.accounts.subscribe(accountsAdapter)
+            accountListAdapter,
+            accountListViewModel.observable.subscribe(accountListAdapter)
         )
     }
 

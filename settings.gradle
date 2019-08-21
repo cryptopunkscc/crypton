@@ -1,5 +1,7 @@
-include ':xmpp:core', ':app',
+include ':xmpp:core',
         ':xmpp:smack',
         ':xmpp:integration',
         ':common',
-        ':core'
+        ':core',
+        ':account',
+        ':app'

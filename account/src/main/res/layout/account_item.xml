@@ -6,21 +6,37 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/status"
+    <LinearLayout
+        android:id="@+id/controlsLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        tools:text="connected" />
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="connected" />
+
+        <Switch
+            android:id="@+id/connectionSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/accountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="account@cryptopuncks.cc"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/status"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/controlsLayout"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        tools:text="account@cryptopuncks.cc" />
+
 
 </RelativeLayout>

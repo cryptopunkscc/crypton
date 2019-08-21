@@ -47,14 +47,14 @@ class XmppService :
 
     @Inject
     fun init(
-        executeAsync: AsyncExecutor,
+        async: AsyncExecutor,
         reconnectAccounts: ReconnectAccounts,
         setupNotificationChannel: SetupNotificationChannel,
         showXmppServiceNotification: ShowXmppServiceNotification
     ) {
         setupNotificationChannel()
         showXmppServiceNotification()
-        executeAsync(reconnectAccounts)
+        async(task = reconnectAccounts)
     }
 
     override fun onHandleIntent(intent: Intent?) {

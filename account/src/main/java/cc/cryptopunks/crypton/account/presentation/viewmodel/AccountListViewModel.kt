@@ -8,7 +8,7 @@ class AccountListViewModel @Inject constructor(
     private val observeAccounts: ObserveAccountList,
     private val schedulers: Schedulers
 ) {
-    val accounts
+    val observable
         get() = observeAccounts()
             .subscribeOn(schedulers.io)
             .observeOn(schedulers.main)!!

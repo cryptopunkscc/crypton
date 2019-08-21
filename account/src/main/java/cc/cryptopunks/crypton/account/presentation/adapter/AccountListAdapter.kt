@@ -5,35 +5,66 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
+import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.core.entity.Account
+import cc.cryptopunks.crypton.core.util.DisposableDelegate
+import com.jakewharton.rxbinding3.widget.checkedChanges
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.account_item.*
+import javax.inject.Inject
+import javax.inject.Provider
 import kotlin.properties.Delegates.observable
 
-class AccountListAdapter : RecyclerView.Adapter<AccountListAdapter.ViewHolder>() {
+class AccountListAdapter @Inject constructor(
+    private val accountItemViewModelProvider: Provider<AccountItemViewModel>
+) : RecyclerView.Adapter<AccountListAdapter.ViewHolder>(),
+    DisposableDelegate {
+
+    override val disposable = CompositeDisposable()
 
     var items by observable(listOf<Account>()) { _, _, _ -> notifyDataSetChanged() }
 
     override fun getItemCount(): Int = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.account_item, parent, false)
-    )
+        containerView = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.account_item, parent, false),
+        model = accountItemViewModelProvider.get()
+    ).also { viewHolder ->
+        disposable.add(viewHolder)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
     }
 
     class ViewHolder(
-        override val containerView: View
+        override val containerView: View,
+        private val model: AccountItemViewModel
     ) : RecyclerView.ViewHolder(containerView),
-        LayoutContainer {
+        LayoutContainer,
+        DisposableDelegate {
 
-        fun bind(account: Account) {
-            accountName.text = account.jid
+        override val disposable = CompositeDisposable()
+
+        fun bind(account: Account): Unit = with(disposable) {
+            clear()
+            model.account = account
+
+            accountName.text = model.name
             status.text = account.status.name
+            connectionSwitch.apply {
+                isChecked = model.isChecked
+                isEnabled = model.isEnabled
+            }
+
+            add(connectionSwitch.checkedChanges().skip(1).subscribe {
+                model.toggleConnection()
+            })
         }
     }
 }

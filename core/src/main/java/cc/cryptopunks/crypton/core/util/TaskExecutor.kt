@@ -15,7 +15,10 @@ class AsyncExecutor @Inject constructor(
 
     private val scheduler = Schedulers.single()
 
-    operator fun invoke(task: () -> Completable): Unit = invoke<Any> { task() }(Unit)
+    operator fun invoke(
+        onError: (Throwable) -> Unit = handleError,
+        task: () -> Completable
+    ): Unit = invoke<Any>(onError) { task() }(Unit)
 
     operator fun <A : Any> invoke(
         onError: (Throwable) -> Unit = handleError,

@@ -28,7 +28,8 @@ class SignInFragment : BaseAccountFragment() {
                 serviceNameLayout.bind(serviceName),
                 userNameLayout.bind(userName),
                 passwordLayout.bind(password),
-                loginButton.bind(onClick)
+                loginButton.bind(onClick),
+                errorOutput.bind(errorMessage)
             )
         }
         modelDisposable.addAll(
