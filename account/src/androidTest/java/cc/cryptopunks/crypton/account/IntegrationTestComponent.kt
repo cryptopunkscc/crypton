@@ -8,8 +8,8 @@ import cc.cryptopunks.crypton.common.SingletonQualifier
 import cc.cryptopunks.crypton.core.data.CoreDatabase
 import cc.cryptopunks.crypton.core.entity.Account
 import cc.cryptopunks.crypton.account.domain.repository.AccountRepository
-import cc.cryptopunks.crypton.xmpp.Xmpp
-import cc.cryptopunks.crypton.smack.SmackXmppFactory
+import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.smack.SmackClientFactory
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -26,7 +26,7 @@ internal interface IntegrationTestComponent {
     val disposable: CompositeDisposable
     val database: CoreDatabase
     val accountDao: Account.Dao
-    val xmppCache: Xmpp.Cache
+    val clientCache: Client.Cache
     val accountRepository: AccountRepository
 
     val addAccount: AddAccount
@@ -72,11 +72,11 @@ internal class TestModule(
 
     @Provides
     @Singleton
-    fun xmppFactory(): Xmpp.Factory = smackFactory
+    fun clientFactory(): Client.Factory = smackFactory
 }
 
 internal val smackFactory by lazy {
-    SmackXmppFactory {
+    SmackClientFactory {
         setResource("xmpptest")
         setHostAddress(InetAddress.getByName("10.0.2.2"))
         setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)

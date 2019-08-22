@@ -8,7 +8,7 @@ import org.junit.Test
 
 class DisconnectAccountIntegrationTest : IntegrationTest() {
 
-    override fun setUp(): Unit = with(xmpp1) {
+    override fun setUp(): Unit = with(client1) {
         insertAccount()
         connect()
         create()
@@ -38,11 +38,11 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
         )
 
         assertNull(
-            xmppCache[id]
+            clientCache[id]
         )
     }
 
-    override fun tearDown(): Unit = with(xmpp1) {
+    override fun tearDown(): Unit = with(client1) {
         connect()
         login()
         remove()

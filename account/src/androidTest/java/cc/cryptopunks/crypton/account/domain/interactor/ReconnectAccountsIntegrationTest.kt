@@ -12,7 +12,7 @@ class ReconnectAccountsIntegrationTest : IntegrationTest() {
     private val ids = 1..3
 
     override fun setUp() {
-        xmpps(ids).forEach {
+        clients(ids).forEach {
             with(it) {
                 insertAccount { copy(status = Connecting) }
                 connect()
@@ -47,7 +47,7 @@ class ReconnectAccountsIntegrationTest : IntegrationTest() {
     }
 
     override fun tearDown() {
-        xmpps(ids).forEach {
+        clients(ids).forEach {
             with(it) {
                 connect()
                 login()

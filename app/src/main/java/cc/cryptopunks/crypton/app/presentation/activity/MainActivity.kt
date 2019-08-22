@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import cc.cryptopunks.crypton.app.R
-import cc.cryptopunks.crypton.app.service.StartXmppService
+import cc.cryptopunks.crypton.app.service.StartAppService
 import cc.cryptopunks.crypton.account.presentation.activity.AccountManagementActivity
 import cc.cryptopunks.crypton.core.util.BaseActivity
 
@@ -14,7 +14,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        StartXmppService(this).invoke()
+        StartAppService(this).invoke()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

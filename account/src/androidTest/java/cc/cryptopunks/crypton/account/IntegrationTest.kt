@@ -2,13 +2,13 @@ package cc.cryptopunks.crypton.account
 
 import androidx.test.core.app.ApplicationProvider
 import cc.cryptopunks.crypton.core.entity.Account
-import cc.cryptopunks.crypton.xmpp.Xmpp
-import cc.cryptopunks.crypton.smack.integration.XmppIntegrationTest
+import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.smack.integration.ApiIntegrationTest
 import org.junit.After
 import org.junit.Before
 import java.util.concurrent.atomic.AtomicReference
 
-abstract class IntegrationTest : XmppIntegrationTest() {
+abstract class IntegrationTest : ApiIntegrationTest() {
 
     init {
         smackFactory
@@ -41,7 +41,7 @@ abstract class IntegrationTest : XmppIntegrationTest() {
         else copy(id = index)
     }
 
-    fun Xmpp.insertAccount(
+    fun Client.insertAccount(
         reduce: Account.() -> Account = { this }
     ) = account(id).reduce().run {
         copy(id = component.accountDao.insert(this)!!)

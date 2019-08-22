@@ -6,8 +6,8 @@ import cc.cryptopunks.crypton.core.util.KacheProviderFactory
 import cc.cryptopunks.crypton.core.util.MainErrorHandler
 import cc.cryptopunks.crypton.common.HandleError
 import cc.cryptopunks.crypton.common.SingletonQualifier
-import cc.cryptopunks.crypton.smack.SmackXmppFactory
-import cc.cryptopunks.crypton.xmpp.Xmpp
+import cc.cryptopunks.crypton.smack.SmackClientFactory
+import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.kache.core.Kache
 import cc.cryptopunks.kache.core.KacheManager
 import dagger.Binds
@@ -44,7 +44,7 @@ class ApplicationModule(
 
     @Provides
     @Singleton
-    fun xmppFactory(): Xmpp.Factory = SmackXmppFactory {
+    fun clientFactory(): Client.Factory = SmackClientFactory {
         setResource("xmpptest")
         setHostAddress(InetAddress.getByName("10.0.2.2"))
         setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)

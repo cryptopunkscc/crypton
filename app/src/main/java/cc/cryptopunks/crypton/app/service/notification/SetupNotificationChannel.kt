@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.app.service.notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import cc.cryptopunks.crypton.app.service.XmppService
+import cc.cryptopunks.crypton.app.service.AppService
 import cc.cryptopunks.crypton.core.module.ServiceScope
 import javax.inject.Inject
 
@@ -15,8 +15,8 @@ class SetupNotificationChannel @Inject constructor(
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         notificationManager.createNotificationChannel(
             NotificationChannel(
-                XmppService.NOTIFICATION_CHANNEL_ID,
-                XmppService.TAG,
+                AppService.NOTIFICATION_CHANNEL_ID,
+                AppService.TAG,
                 NotificationManager.IMPORTANCE_DEFAULT
             )
         )

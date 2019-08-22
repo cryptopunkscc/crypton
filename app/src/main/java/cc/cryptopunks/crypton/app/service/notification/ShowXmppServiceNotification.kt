@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.core.module.ServiceScope
 import javax.inject.Inject
 
 @ServiceScope
-class ShowXmppServiceNotification @Inject constructor(
+class ShowAppServiceNotification @Inject constructor(
     createNotificationBuilder: CreateNotificationBuilder,
     setupNotificationBuilder: SetupNotificationBuilder,
     showNotification: ShowNotification

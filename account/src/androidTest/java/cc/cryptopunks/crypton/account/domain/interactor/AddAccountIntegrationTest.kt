@@ -7,7 +7,7 @@ import org.junit.Test
 
 class AddAccountIntegrationTest : IntegrationTest() {
 
-    override fun setUp(): Unit = with(xmpp1) {
+    override fun setUp(): Unit = with(client1) {
         connect()
         create()
         disconnect()
@@ -37,7 +37,7 @@ class AddAccountIntegrationTest : IntegrationTest() {
         )
     }
 
-    override fun tearDown(): Unit = with(xmpp1) {
+    override fun tearDown(): Unit = with(client1) {
         connect()
         login()
         remove()

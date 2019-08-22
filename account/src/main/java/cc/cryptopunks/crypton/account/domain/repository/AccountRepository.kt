@@ -3,41 +3,41 @@ package cc.cryptopunks.crypton.account.domain.repository
 import cc.cryptopunks.crypton.core.entity.Account
 import cc.cryptopunks.crypton.core.util.get
 import cc.cryptopunks.crypton.core.util.reduce
-import cc.cryptopunks.crypton.xmpp.Xmpp
+import cc.cryptopunks.crypton.api.Client
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 data class AccountRepository @Inject constructor(
     private val dao: Account.Dao,
-    private val createXmpp: Xmpp.Factory,
-    private val xmppCache: Xmpp.Cache
+    private val createClient: Client.Factory,
+    private val clientCache: Client.Cache
 ) :
     AtomicReference<Account>(Account.Empty) {
 
     val id get() = get().id
 
-    val isInitialized get() = xmppCache.contains(get().id)
+    val isInitialized get() = clientCache.contains(get().id)
 
-    val xmpp: Xmpp
-        get() = xmppCache[id] ?: get {
-            createXmpp(
-                Xmpp.Config(
+    val client: Client
+        get() = clientCache[id] ?: get {
+            createClient(
+                Client.Config(
                     id = id,
                     jid = jid,
                     password = credentials.password
                 )
             ).also {
-                xmppCache[id] = it
+                clientCache[id] = it
             }
         }
 
     operator fun invoke(account: Account) = copy().apply { set(account) }
 
-    fun create() = xmpp.create()
+    fun create() = client.create()
 
-    fun login() = xmpp.login()
+    fun login() = client.login()
 
-    fun disconnect() = xmpp.disconnect()
+    fun disconnect() = client.disconnect()
 
     fun setStatus(status: Account.Status) {
         reduce { copy(status = status) }
@@ -50,7 +50,7 @@ data class AccountRepository @Inject constructor(
     fun update() = dao.update(get())
 
     fun delete() {
-        xmpp.remove()
+        client.remove()
         remove()
     }
 
@@ -60,6 +60,6 @@ data class AccountRepository @Inject constructor(
     }
 
     fun clear() {
-        xmppCache -= id
+        clientCache -= id
     }
 }

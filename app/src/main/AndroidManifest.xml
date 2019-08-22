@@ -23,10 +23,10 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <service
-            android:name=".service.XmppService"
+            android:name=".service.AppService"
             android:exported="false"
             android:icon="@drawable/ic_https_black_24dp"
-            android:label="@string/xmpp_service_title" />
+            android:label="@string/app_service_title" />
 
         <activity android:name=".presentation.activity.InitialActivity">
             <intent-filter>

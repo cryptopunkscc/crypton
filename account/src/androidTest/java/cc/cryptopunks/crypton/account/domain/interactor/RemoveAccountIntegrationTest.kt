@@ -7,7 +7,7 @@ import org.junit.Test
 
 class RemoveAccountIntegrationTest : IntegrationTest() {
 
-    override fun setUp(): Unit = with(xmpp1) {
+    override fun setUp(): Unit = with(client1) {
         insertAccount()
     }
 
@@ -31,7 +31,7 @@ class RemoveAccountIntegrationTest : IntegrationTest() {
         )
 
         assertNull(
-            xmppCache[id]
+            clientCache[id]
         )
     }
 }

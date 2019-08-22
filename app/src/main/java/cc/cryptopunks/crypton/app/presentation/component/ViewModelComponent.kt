@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.app.presentation.fragment.*
 import cc.cryptopunks.crypton.core.component.GraphComponent
 import cc.cryptopunks.crypton.core.module.ViewModelModule
 import cc.cryptopunks.crypton.core.module.ViewModelScope
-import cc.cryptopunks.crypton.xmpp.Xmpp
+import cc.cryptopunks.crypton.api.Client
 import dagger.Component
 
 @ViewModelScope
@@ -12,7 +12,7 @@ import dagger.Component
     dependencies = [GraphComponent::class],
     modules = [
         ViewModelModule::class,
-        Xmpp.Module::class
+        Client.Module::class
     ]
 )
 interface ViewModelComponent : GraphComponent {

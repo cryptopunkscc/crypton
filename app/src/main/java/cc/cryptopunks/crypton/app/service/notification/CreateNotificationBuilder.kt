@@ -5,7 +5,7 @@ import android.app.Service
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N_MR1
 import cc.cryptopunks.crypton.core.module.ServiceScope
-import cc.cryptopunks.crypton.app.service.XmppService
+import cc.cryptopunks.crypton.app.service.AppService
 import javax.inject.Inject
 
 @ServiceScope
@@ -15,7 +15,7 @@ class CreateNotificationBuilder @Inject constructor(
     when {
         SDK_INT > N_MR1 -> Builder(
             service,
-            XmppService.NOTIFICATION_CHANNEL_ID
+            AppService.NOTIFICATION_CHANNEL_ID
         )
         else -> Builder(service)
     }

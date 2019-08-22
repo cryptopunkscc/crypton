@@ -31,7 +31,7 @@ class CreateAccountIntegrationTest : IntegrationTest() {
         )
     }
 
-    override fun tearDown(): Unit = with(xmpp1) {
+    override fun tearDown(): Unit = with(client1) {
         connect()
         login()
         remove()
