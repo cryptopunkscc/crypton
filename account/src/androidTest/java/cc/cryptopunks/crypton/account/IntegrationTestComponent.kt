@@ -33,6 +33,8 @@ internal interface IntegrationTestComponent {
     val connectAccount: ConnectAccount
     val createAccount: CreateAccount
     val disconnectAccount: DisconnectAccount
+    val removeAccount: RemoveAccount
+    val deleteAccount: DeleteAccount
 
     val reconnectAccounts: ReconnectAccounts
 }
@@ -55,7 +57,6 @@ internal class TestModule(
     @Singleton
     fun appDatabase(context: Application) = Room
         .inMemoryDatabaseBuilder(context, CoreDatabase::class.java)
-//        .enableMultiInstanceInvalidation()
         .build()
 
     @Provides
