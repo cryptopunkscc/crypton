@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.account.presentation.adapter.AccountListAdapter
 import cc.cryptopunks.crypton.account.presentation.adapter.subscribe
+import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountListViewModel
 import kotlinx.android.synthetic.main.account_list.*
 import javax.inject.Inject
+import javax.inject.Provider
 
 class AccountListFragment : BaseAccountFragment() {
 
@@ -31,8 +33,13 @@ class AccountListFragment : BaseAccountFragment() {
     @Inject
     fun init(
         accountListViewModel: AccountListViewModel,
-        accountListAdapter: AccountListAdapter
+        accountItemViewModelProvider: Provider<AccountItemViewModel>
     ) {
+        val accountListAdapter = AccountListAdapter(
+            accountItemViewModelProvider = accountItemViewModelProvider,
+            fragmentManager = fragmentManager!!
+        )
+
         accountRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = accountListAdapter
@@ -40,7 +47,8 @@ class AccountListFragment : BaseAccountFragment() {
 
         viewDisposable.addAll(
             accountListAdapter,
-            accountListViewModel.observable.subscribe(accountListAdapter)
+            accountListViewModel.observable
+                .subscribe(accountListAdapter)
         )
     }
 

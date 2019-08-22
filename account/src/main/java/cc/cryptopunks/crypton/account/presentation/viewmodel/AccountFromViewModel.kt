@@ -1,13 +1,8 @@
 package cc.cryptopunks.crypton.account.presentation.viewmodel
 
-import cc.cryptopunks.crypton.account.domain.command.ConnectAccount
-import cc.cryptopunks.crypton.account.domain.command.DisconnectAccount
 import cc.cryptopunks.crypton.common.HandleError
 import cc.cryptopunks.crypton.core.entity.Account
-import cc.cryptopunks.crypton.core.entity.Account.Status.Connected
-import cc.cryptopunks.crypton.core.entity.Account.Status.Connecting
 import cc.cryptopunks.crypton.core.module.ViewModelScope
-import cc.cryptopunks.crypton.core.util.AsyncExecutor
 import cc.cryptopunks.crypton.core.util.Input
 import cc.cryptopunks.crypton.core.util.ViewModel
 import cc.cryptopunks.kache.core.Kache
@@ -62,28 +57,3 @@ class AccountViewModel @Inject constructor(
 }
 
 fun SASLErrorException.getErrorMessage() = saslFailure.saslError.toString().replace("_", " ")
-
-class AccountItemViewModel @Inject constructor(
-    private val async: AsyncExecutor,
-    private val connectAccount: ConnectAccount,
-    private val disconnectAccount: DisconnectAccount
-) {
-    var account: Account = Account.Empty
-
-    val name get() = account.jid
-
-    val status get() = account.status.name
-
-    val isChecked get() = account.status == Connected
-
-    val isEnabled get() = account.status != Connecting
-
-    fun toggleConnection() = async(
-        task = when (account.status) {
-            Connected -> disconnectAccount
-            else -> connectAccount
-        }
-    )(account.id)
-
-    fun remove() = async(task = disconnectAccount)(account.id)
-}

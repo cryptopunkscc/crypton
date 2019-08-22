@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="remove_account">Remove account</string>
+    <string name="remove_also_from_server">Delete account also from server.</string>
+    <string name="remove_account_confirmation_message">Are you sure you want to remove this account from the application?</string>
+</resources>

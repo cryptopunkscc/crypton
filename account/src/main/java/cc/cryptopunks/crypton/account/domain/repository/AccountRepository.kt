@@ -49,12 +49,12 @@ data class AccountRepository @Inject constructor(
 
     fun update() = dao.update(get())
 
-    fun remove() {
+    fun delete() {
         xmpp.remove()
-        delete()
+        remove()
     }
 
-    fun delete() {
+    fun remove() {
         clear()
         dao.delete(get())
     }
