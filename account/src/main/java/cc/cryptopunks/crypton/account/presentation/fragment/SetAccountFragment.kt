@@ -25,7 +25,6 @@ class SetAccountFragment : BaseAccountFragment() {
     ) {
         with(setAccountViewModel) {
             viewDisposable.addAll(
-                toDashboard.clicks().subscribe { dashboard() },
                 addButton.clicks().subscribe { addAccount() },
                 registerButton.clicks().subscribe { registerAccount() }
             )
