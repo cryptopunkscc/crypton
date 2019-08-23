@@ -7,6 +7,6 @@ import javax.inject.Inject
 class HasAccounts @Inject constructor(
     dao: Account.Dao
 ) : () -> Observable<Boolean> by {
-    dao.observeAll().map { it.isNotEmpty() }
+    dao.observeList().map { it.isNotEmpty() }
         .distinctUntilChanged()
 }

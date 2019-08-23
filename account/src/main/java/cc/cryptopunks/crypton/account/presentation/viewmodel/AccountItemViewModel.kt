@@ -25,10 +25,18 @@ class AccountItemViewModel @Inject constructor(
 
     val isChecked get() = account.run { status == Connected || status == Connecting }
 
+    val isConnected get() = account.status == Connected
+
     fun toggleConnection() = with(account) {
         async(
             task = when (status) {
                 Connected -> disconnectAccount
+
+                Connecting -> when (isChecked) {
+                    true -> disconnectAccount
+                    else -> connectAccount
+                }
+
                 else -> connectAccount
             }
         )(id)

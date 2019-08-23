@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.core.util.Navigation
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-class InitialViewModel @Inject constructor(
+class NavigationViewModel @Inject constructor(
     hasAccounts: HasAccounts,
     navigation: Navigation.Bus,
     schedulers: Schedulers

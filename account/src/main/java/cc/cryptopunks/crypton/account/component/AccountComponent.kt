@@ -1,9 +1,6 @@
 package cc.cryptopunks.crypton.account.component
 
-import cc.cryptopunks.crypton.account.presentation.fragment.AccountListFragment
-import cc.cryptopunks.crypton.account.presentation.fragment.SetAccountFragment
-import cc.cryptopunks.crypton.account.presentation.fragment.SignInFragment
-import cc.cryptopunks.crypton.account.presentation.fragment.SignUpFragment
+import cc.cryptopunks.crypton.account.presentation.fragment.*
 import cc.cryptopunks.crypton.core.component.GraphComponent
 import cc.cryptopunks.crypton.core.module.ViewModelModule
 import cc.cryptopunks.crypton.core.module.ViewModelScope
@@ -23,4 +20,5 @@ interface AccountComponent : GraphComponent {
     fun inject(target: SignInFragment)
     fun inject(target: SignUpFragment)
     fun inject(target: AccountListFragment)
+    fun inject(target: NavigationFragment)
 }

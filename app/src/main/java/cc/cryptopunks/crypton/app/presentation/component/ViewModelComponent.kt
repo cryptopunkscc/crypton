@@ -16,6 +16,6 @@ import dagger.Component
     ]
 )
 interface ViewModelComponent : GraphComponent {
-    fun inject(target: InitialNavigationFragment)
+    fun inject(target: NavigationFragment)
     fun inject(target: ChatListFragment)
 }

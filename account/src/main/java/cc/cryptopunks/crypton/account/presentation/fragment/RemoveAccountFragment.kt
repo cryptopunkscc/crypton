@@ -15,12 +15,12 @@ class RemoveAccountFragment :
     DialogFragment(),
     OnClickListener {
 
-    lateinit var model: AccountItemViewModel private set
+    private lateinit var model: AccountItemViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog
         .Builder(activity)
-        .setMessage(getString(R.string.remove_account_confirmation_message))
-        .apply { if (model.isChecked) setView(R.layout.delete_account_checkbox) }
+        .setMessage(R.string.remove_account_confirmation_message)
+        .apply { if (model.isConnected) setView(R.layout.delete_account_checkbox) }
         .setPositiveButton(R.string.ok, this)
         .setNegativeButton(R.string.cancel, this)
         .create()

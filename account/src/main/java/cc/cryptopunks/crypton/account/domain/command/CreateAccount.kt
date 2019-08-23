@@ -16,8 +16,8 @@ class CreateAccount @Inject constructor(
         Single.fromCallable {
             set(account)
             setStatus(Disconnected)
-            insert()
             create()
+            insert()
         }.flatMapCompletable {
             connect(id)
         }.onErrorResumeNext {

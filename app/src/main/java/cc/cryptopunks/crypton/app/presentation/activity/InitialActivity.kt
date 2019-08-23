@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.app.presentation.activity
 
 import android.os.Bundle
 import cc.cryptopunks.crypton.app.R
-import cc.cryptopunks.crypton.app.presentation.fragment.InitialNavigationFragment
+import cc.cryptopunks.crypton.app.presentation.fragment.NavigationFragment
 import cc.cryptopunks.crypton.core.util.BaseActivity
 import cc.cryptopunks.crypton.core.util.Navigation
 import cc.cryptopunks.crypton.core.util.fragment
@@ -15,7 +15,7 @@ class InitialActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.initial)
         overridePendingTransition(0, 0)
-        fragment<InitialNavigationFragment>()
+        fragment<NavigationFragment>()
         graphComponent.navigationBus.init()
     }
 

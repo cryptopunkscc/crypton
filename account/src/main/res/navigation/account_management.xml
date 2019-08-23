@@ -16,4 +16,10 @@
     </fragment>
 
     <include app:graph="@navigation/set_account" />
+
+    <action
+        android:id="@+id/navigate_to_accountListFragment"
+        app:destination="@id/accountListFragment"
+        app:popUpTo="@id/accountListFragment"
+        app:popUpToInclusive="true" />
 </navigation>

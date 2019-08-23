@@ -95,13 +95,11 @@ data class Account constructor(
         @Query("select * from account")
         abstract fun getAllSingle(): Single<List<Account>>
 
-        fun observeAll(): Observable<List<Account>> = Observable.concat(
-            Observable.fromCallable { getAll() },
-            observeList()
-        )
-
         @Query("select * from account")
         abstract fun observeList(): Observable<List<Account>>
+
+        @Query("select id from account")
+        abstract fun observeIdList(): Observable<List<Long>>
     }
 
     companion object {
