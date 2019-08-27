@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.core.util
 
 import androidx.annotation.IdRes
 import androidx.navigation.NavController
+import cc.cryptopunks.crypton.core.util.ext.isEmpty
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor

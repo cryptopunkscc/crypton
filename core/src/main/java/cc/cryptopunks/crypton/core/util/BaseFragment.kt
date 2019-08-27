@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import cc.cryptopunks.crypton.core.component.DaggerFragmentComponent
 import cc.cryptopunks.crypton.core.component.FragmentComponent
-import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseFragment :
     Fragment() {
@@ -38,8 +37,8 @@ abstract class BaseFragment :
 
     open val navController get() = findNavController()
 
-    val viewDisposable = CompositeDisposable()
-    val modelDisposable = CompositeDisposable()
+    val viewDisposable = ViewDisposable()
+    val modelDisposable = ModelDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

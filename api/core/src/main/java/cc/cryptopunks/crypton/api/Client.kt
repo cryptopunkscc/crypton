@@ -98,6 +98,11 @@ interface Client {
 
     class Empty(override val id: Long) : Client by DummyClient
 
+    interface Component {
+        val createClient: Factory
+        val clientCache: Cache
+    }
+
     @dagger.Module
     class Module(@get:Provides val client: Client) : Client {
         override val user: User @Provides get() = client.user

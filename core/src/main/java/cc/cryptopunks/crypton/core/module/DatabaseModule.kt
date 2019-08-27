@@ -19,6 +19,12 @@ class DatabaseModule {
         .build()
 
     @Provides
-    fun accountDao(coreDatabase: CoreDatabase) = coreDatabase
-        .accountDao()
+    fun CoreDatabase.accountDao() = accountDao
+
+    @Provides
+    fun CoreDatabase.conversationDao() = conversationDao
+
+    @Provides
+    fun CoreDatabase.messageDao() = messageDao
+
 }

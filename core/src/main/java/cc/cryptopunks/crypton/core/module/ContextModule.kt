@@ -29,5 +29,5 @@ class ContextModule(
 
     @Provides
     @ContextScope
-    fun notificationManager(context: Context): NotificationManager = context.getSystemService()!!
+    fun Context.notificationManager(): NotificationManager = getSystemService()!!
 }

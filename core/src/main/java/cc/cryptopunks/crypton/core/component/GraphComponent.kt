@@ -11,5 +11,6 @@ import dagger.Component
     modules = [GraphModule::class]
 )
 interface GraphComponent : ApplicationComponent {
+    val navigation: Navigation
     val navigationBus: Navigation.Bus
 }

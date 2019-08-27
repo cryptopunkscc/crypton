@@ -5,19 +5,22 @@ import android.view.MenuItem
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import cc.cryptopunks.crypton.common.OptionItemSelectedBroadcast
 import cc.cryptopunks.crypton.core.App
 import cc.cryptopunks.crypton.core.R
 import cc.cryptopunks.crypton.core.component.*
 import cc.cryptopunks.crypton.core.module.ContextModule
 import cc.cryptopunks.crypton.core.module.GraphModule
-import cc.cryptopunks.crypton.common.OptionItemSelectedBroadcast
+import cc.cryptopunks.crypton.core.util.ext.fragment
+import cc.cryptopunks.crypton.core.util.ext.invoke
 import io.reactivex.disposables.CompositeDisposable
+
 
 abstract class BaseActivity :
     AppCompatActivity(),
     DisposableDelegate {
 
-    val toolbar: Toolbar by lazy { findViewById<Toolbar>(R.id.action_bar) }
+    val toolbar by lazy { findViewById<Toolbar>(R.id.action_bar) }
 
     override val disposable = CompositeDisposable()
 

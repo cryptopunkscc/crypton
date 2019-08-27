@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.app.R
 import cc.cryptopunks.crypton.app.presentation.fragment.NavigationFragment
 import cc.cryptopunks.crypton.core.util.BaseActivity
 import cc.cryptopunks.crypton.core.util.Navigation
-import cc.cryptopunks.crypton.core.util.fragment
+import cc.cryptopunks.crypton.core.util.ext.fragment
 import cc.cryptopunks.crypton.core.util.subscribe
 import cc.cryptopunks.kache.rxjava.observable
 

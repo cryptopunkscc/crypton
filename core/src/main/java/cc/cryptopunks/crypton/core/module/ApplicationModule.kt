@@ -2,18 +2,17 @@ package cc.cryptopunks.crypton.core.module
 
 import android.app.Application
 import android.os.Handler
-import cc.cryptopunks.crypton.core.util.KacheProviderFactory
-import cc.cryptopunks.crypton.core.util.MainErrorHandler
+import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.common.HandleError
 import cc.cryptopunks.crypton.common.SingletonQualifier
+import cc.cryptopunks.crypton.core.util.MainErrorHandler
 import cc.cryptopunks.crypton.smack.SmackClientFactory
-import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.kache.core.Kache
-import cc.cryptopunks.kache.core.KacheManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.ConnectionConfiguration
 import java.net.InetAddress
 import javax.inject.Singleton
@@ -31,16 +30,15 @@ class ApplicationModule(
 
     @Provides
     @Singleton
-    fun kacheManager(provide: KacheProviderFactory): KacheManager = provide() as KacheManager
-
-    @Provides
-    @Singleton
-    fun kacheProvider(kacheManager: KacheManager): Kache.Provider = kacheManager
-
-    @Provides
-    @Singleton
     @SingletonQualifier
     fun disposable() = CompositeDisposable()
+
+    @Provides
+    @Singleton
+    fun schedulers() = cc.cryptopunks.crypton.common.Schedulers(
+        main = AndroidSchedulers.mainThread(),
+        io = Schedulers.io()
+    )
 
     @Provides
     @Singleton
@@ -54,11 +52,9 @@ class ApplicationModule(
     interface Bindings {
 
         @Binds
-        @Singleton
         fun handleError(handler: MainErrorHandler): HandleError
 
         @Binds
-        @Singleton
         fun errorPublisher(handler: MainErrorHandler): HandleError.Publisher
     }
 }
