@@ -3,10 +3,18 @@ package cc.cryptopunks.crypton.core.entity
 import androidx.paging.DataSource
 import androidx.room.*
 
-@Entity
+@Entity(
+    foreignKeys = [ForeignKey(
+        entity = Account::class,
+        parentColumns = ["id"],
+        childColumns = ["accountId"],
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class Conversation(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val title: String = ""
+    val title: String = "",
+    val accountId: Long = 0
 ) {
 
     data class Exception(

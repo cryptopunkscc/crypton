@@ -1,20 +1,23 @@
 package cc.cryptopunks.crypton.core.entity
 
 import androidx.room.*
+import androidx.room.ForeignKey.*
 import io.reactivex.Observable
+import java.lang.System.*
 
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Conversation::class,
         parentColumns = ["id"],
-        childColumns = ["conversationId"]
+        childColumns = ["conversationId"],
+        onDelete = CASCADE
     )]
 )
 data class Message(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val conversationId: Long = 0,
     val text: String = "",
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = currentTimeMillis()
 ) {
     @androidx.room.Dao
     interface Dao {

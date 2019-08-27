@@ -18,6 +18,7 @@ class LoadMessages @Inject constructor(
             conversationDao.insertIfNeeded(
                 Conversation(
                     id = it,
+                    accountId = 1,
                     title = "Conversation $it"
                 )
             )
@@ -29,6 +30,7 @@ class LoadMessages @Inject constructor(
                     text = "message $it"
                 )
             )
+            Thread.sleep(200)
         }
     }.runOn(schedulers)
 }
