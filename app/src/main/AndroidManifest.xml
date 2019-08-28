@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="cc.cryptopunks.crypton.app"
     tools:ignore="
     ImpliedTouchscreenHardware,
     MissingLeanbackLauncher,
     MissingLeanbackSupport">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="cc.cryptopunks.crypton.core.App"
@@ -22,21 +18,28 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <service
-            android:name=".service.AppService"
-            android:exported="false"
-            android:icon="@drawable/ic_https_black_24dp"
-            android:label="@string/app_service_title" />
-
-        <activity android:name=".presentation.activity.InitialActivity">
+        <activity
+            android:name=".presentation.activity.MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.activity.MainActivity" />
+
         <activity android:name="cc.cryptopunks.crypton.account.presentation.activity.AccountManagementActivity" />
+
+        <service
+            android:name=".service.AppService"
+            android:exported="false"
+            android:icon="@drawable/ic_https_black_24dp"
+            android:label="@string/app_service_title" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

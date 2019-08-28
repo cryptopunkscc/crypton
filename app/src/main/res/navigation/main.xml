@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainNavigation"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="cc.cryptopunks.crypton.app.presentation.fragment.SplashFragment"
+        android:label="SplashFragment" />
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="cc.cryptopunks.crypton.app.presentation.fragment.DashboardFragment"
+        android:label="DashboardFragment"
+        tools:layout="@layout/dashboard" >
+        <action
+            android:id="@id/navigateAccountManagement"
+            app:destination="@id/accountManagementActivity" />
+    </fragment>
+    <include app:graph="@navigation/set_account" />
+    <activity
+        android:id="@+id/accountManagementActivity"
+        android:name="cc.cryptopunks.crypton.account.presentation.activity.AccountManagementActivity"
+        android:label="AccountManagementActivity"
+        tools:layout="@layout/account_list"/>
+    <action
+        android:id="@id/navigateSetAccounts"
+        app:destination="@id/set_account_navigation"
+        app:popUpTo="@+id/mainNavigation"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@id/navigateDashboard"
+        app:destination="@id/dashboardFragment"
+        app:popUpTo="@+id/mainNavigation"
+        app:popUpToInclusive="true" />
+</navigation>

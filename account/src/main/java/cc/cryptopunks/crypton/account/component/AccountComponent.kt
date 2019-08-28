@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.account.component
 
 import cc.cryptopunks.crypton.account.presentation.fragment.*
-import cc.cryptopunks.crypton.core.component.GraphComponent
+import cc.cryptopunks.crypton.core.component.FeatureComponent
 import cc.cryptopunks.crypton.core.module.ViewModelModule
 import cc.cryptopunks.crypton.core.module.ViewModelScope
 import cc.cryptopunks.crypton.api.Client
@@ -9,13 +9,13 @@ import dagger.Component
 
 @ViewModelScope
 @Component(
-    dependencies = [GraphComponent::class],
+    dependencies = [FeatureComponent::class],
     modules = [
         ViewModelModule::class,
         Client.Module::class
     ]
 )
-interface AccountComponent : GraphComponent {
+interface AccountComponent : FeatureComponent {
     fun inject(target: SetAccountFragment)
     fun inject(target: SignInFragment)
     fun inject(target: SignUpFragment)

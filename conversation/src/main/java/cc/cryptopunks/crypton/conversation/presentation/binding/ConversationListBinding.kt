@@ -4,21 +4,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.conversation.domain.command.LoadMessages
 import cc.cryptopunks.crypton.conversation.presentation.adapter.ConversationItemAdapter
 import cc.cryptopunks.crypton.conversation.presentation.viewmodel.ConversationListViewModel
+import cc.cryptopunks.crypton.core.util.AsyncExecutor
 import cc.cryptopunks.crypton.core.util.BaseFragment
-import cc.cryptopunks.crypton.core.util.ModelDisposable
 import kotlinx.android.synthetic.main.conversations.*
 import javax.inject.Inject
 
 class ConversationListBinding @Inject constructor(
-    modelDisposable: ModelDisposable,
     loadMessages: LoadMessages,
+    async: AsyncExecutor,
     private val conversationListViewModel: ConversationListViewModel
 ) {
 
     init {
-        modelDisposable.addAll(
-            loadMessages().subscribe()
-        )
+        async(task = loadMessages)
     }
 
     inner class ViewBinding {
@@ -27,7 +25,7 @@ class ConversationListBinding @Inject constructor(
             conversationItemAdapter: ConversationItemAdapter
         ) {
 
-            accountRecyclerView.apply {
+            conversationRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = conversationItemAdapter
             }

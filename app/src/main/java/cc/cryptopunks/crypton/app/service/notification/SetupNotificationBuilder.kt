@@ -5,8 +5,8 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import cc.cryptopunks.crypton.app.R
+import cc.cryptopunks.crypton.app.presentation.activity.MainActivity
 import cc.cryptopunks.crypton.core.module.ServiceScope
-import cc.cryptopunks.crypton.app.presentation.activity.InitialActivity
 import javax.inject.Inject
 
 @ServiceScope
@@ -22,7 +22,7 @@ class SetupNotificationBuilder @Inject constructor(
             PendingIntent.getActivity(
                 service,
                 REQUEST_CODE,
-                Intent(service, InitialActivity::class.java),
+                Intent(service, MainActivity::class.java),
                 FLAGS
             )
         )!!

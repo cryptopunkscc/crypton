@@ -11,6 +11,6 @@ class NavigationViewModel @Inject constructor(
     navigation: Navigation.Bus
 ) : () -> Disposable by {
     newAccountConnected().subscribe {
-        navigation.navigate(R.id.navigate_to_accountListFragment)
+        navigation.navigate(R.id.navigateAccountList)
     }
 }

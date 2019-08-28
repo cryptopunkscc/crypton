@@ -1,11 +1,9 @@
 package cc.cryptopunks.crypton.app.service
 
-import android.app.Activity
+import android.app.Application
 import android.content.Intent
-import cc.cryptopunks.crypton.common.ActivityScope
 import javax.inject.Inject
 
-@ActivityScope
-class StopAppService @Inject constructor(activity: Activity) : () -> Unit by {
-    activity.stopService(Intent(activity, AppService::class.java))
+class StopAppService @Inject constructor(context: Application) : () -> Unit by {
+    context.stopService(Intent(context, AppService::class.java))
 }

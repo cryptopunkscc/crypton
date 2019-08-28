@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.core.module.ViewModelScope
 import cc.cryptopunks.crypton.core.util.AsyncExecutor
 import cc.cryptopunks.crypton.core.util.ViewModel
 import cc.cryptopunks.crypton.account.domain.command.AddAccount
+import cc.cryptopunks.crypton.core.util.text
 import cc.cryptopunks.kache.rxjava.observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -24,4 +25,12 @@ class SignInViewModel @Inject constructor(
             .map { accountViewModel.getAccount() }
             .subscribe(async(task = addAccount))
     )
+} {
+    init {
+        accountViewModel.apply {
+            serviceName.text = "test.io"
+            userName.text = "test"
+            password.text = "test"
+        }
+    }
 }

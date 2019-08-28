@@ -8,9 +8,7 @@ class SetAccountViewModel @Inject constructor(
     navigation: Navigation.Bus
 ) : Navigation.Bus by navigation {
 
-    fun dashboard(): Unit = navigate(R.id.navigate_to_dashboardActivity)
+    fun addAccount(): Unit = navigate(R.id.navigateSignIn)
 
-    fun addAccount(): Unit = navigate(R.id.navigate_setAccountFragment_to_signInFragment)
-
-    fun registerAccount(): Unit = navigate(R.id.navigate_setAccountFragment_to_signUpFragment)
+    fun registerAccount(): Unit = navigate(R.id.navigateSignUp)
 }

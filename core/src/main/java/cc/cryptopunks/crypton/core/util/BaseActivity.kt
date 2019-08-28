@@ -1,30 +1,21 @@
 package cc.cryptopunks.crypton.core.util
 
-import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import cc.cryptopunks.crypton.common.OptionItemSelectedBroadcast
 import cc.cryptopunks.crypton.core.App
 import cc.cryptopunks.crypton.core.R
 import cc.cryptopunks.crypton.core.component.*
 import cc.cryptopunks.crypton.core.module.ContextModule
-import cc.cryptopunks.crypton.core.module.GraphModule
+import cc.cryptopunks.crypton.core.module.FeatureModule
 import cc.cryptopunks.crypton.core.util.ext.fragment
-import cc.cryptopunks.crypton.core.util.ext.invoke
+import cc.cryptopunks.kache.rxjava.observable
 import io.reactivex.disposables.CompositeDisposable
 
-
 abstract class BaseActivity :
-    AppCompatActivity(),
-    DisposableDelegate {
+    DisposableActivity() {
 
     val toolbar by lazy { findViewById<Toolbar>(R.id.action_bar) }
-
-    override val disposable = CompositeDisposable()
-
-    private val broadcastItemSelected = OptionItemSelectedBroadcast()
 
     private val app get() = application as App
 
@@ -43,34 +34,26 @@ abstract class BaseActivity :
             .build()
     }
 
-    val graphComponent: GraphComponent by lazy {
-        fragment("graph") {
-            DependenciesFragment(
-                DaggerGraphComponent.builder()
-                    .applicationComponent(applicationComponent)
-                    .graphModule(GraphModule())
-                    .build()
-            )
-        }.component
+    val featureComponent by lazy {
+        fragment("feature") { DependenciesFragment<FeatureComponent>() }.also { fragment ->
+            if (fragment.component == null)
+            fragment.component = DaggerFeatureComponent.builder()
+                .applicationComponent(applicationComponent)
+                .featureModule(FeatureModule())
+                .build()
+        }.component!!
     }
 
     open val navController by lazy {
         findNavController(R.id.navHost)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        applicationComponent.activityStackCache { plus(this@BaseActivity) }
-    }
-
-    override fun onDestroy() {
-        disposable.dispose()
-        applicationComponent.activityStackCache { minus(this@BaseActivity) }
-        super.onDestroy()
-    }
+    override fun CompositeDisposable.onStart() = addAll (
+        featureComponent.navigationBus.observable().subscribe(navController)
+    )
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        broadcastItemSelected(item)
+        featureComponent.broadcastOptionItemSelected(item)
         return super.onOptionsItemSelected(item)
     }
 }

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/manage_accounts"
+    android:id="@+id/manageAccounts"
     app:startDestination="@id/accountListFragment">
 
     <fragment
@@ -18,8 +18,8 @@
     <include app:graph="@navigation/set_account" />
 
     <action
-        android:id="@+id/navigate_to_accountListFragment"
+        android:id="@+id/navigateAccountList"
         app:destination="@id/accountListFragment"
-        app:popUpTo="@id/accountListFragment"
+        app:popUpTo="@id/manageAccounts"
         app:popUpToInclusive="true" />
 </navigation>

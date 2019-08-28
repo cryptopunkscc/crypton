@@ -10,13 +10,13 @@ import javax.inject.Scope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class GraphScope
+annotation class FeatureScope
 
-@Module(includes = [GraphModule.Bindings::class])
-class GraphModule {
+@Module(includes = [FeatureModule.Bindings::class])
+class FeatureModule {
 
     @Provides
-    @GraphScope
+    @FeatureScope
     fun navigationBus(): Navigation.Bus = NavigationBus()
 
     @Module

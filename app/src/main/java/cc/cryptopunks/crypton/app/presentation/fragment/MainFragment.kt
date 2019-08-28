@@ -2,9 +2,10 @@ package cc.cryptopunks.crypton.app.presentation.fragment
 
 import android.os.Bundle
 import cc.cryptopunks.crypton.app.presentation.viewmodel.NavigationViewModel
+import cc.cryptopunks.crypton.app.presentation.viewmodel.ToggleAppServiceViewModel
 import javax.inject.Inject
 
-class NavigationFragment : AppFragment() {
+class MainFragment : BaseAppFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -13,8 +14,12 @@ class NavigationFragment : AppFragment() {
 
     @Inject
     fun init(
-        navigationViewModel: NavigationViewModel
+        navigationViewModel: NavigationViewModel,
+        toggleAppServiceViewModel: ToggleAppServiceViewModel
     ) {
-        modelDisposable.addAll(navigationViewModel())
+        modelDisposable.addAll(
+            navigationViewModel(),
+            toggleAppServiceViewModel()
+        )
     }
 }

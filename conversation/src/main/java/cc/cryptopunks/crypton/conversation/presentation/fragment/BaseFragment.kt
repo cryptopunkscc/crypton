@@ -10,7 +10,7 @@ abstract class BaseFragment : BaseFragment() {
     val component: ConversationComponent by lazy {
         DaggerConversationComponent
             .builder()
-            .graphComponent(baseActivity.graphComponent)
+            .featureComponent(baseActivity.featureComponent)
             .baseFragmentModule(BaseFragmentModule(this))
             .build()
     }

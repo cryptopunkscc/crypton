@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import cc.cryptopunks.crypton.common.ActivityScope
-import cc.cryptopunks.crypton.common.OptionItemSelectedBroadcast
+import cc.cryptopunks.crypton.core.util.OptionItemSelectedBroadcast
 import dagger.Module
 import dagger.Provides
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.core.component.ApplicationComponent
 import cc.cryptopunks.crypton.core.component.DaggerApplicationComponent
 import cc.cryptopunks.crypton.core.module.ApplicationModule
+import cc.cryptopunks.crypton.core.util.ActivityLifecycleLogger
 import timber.log.Timber
 
 class App : Application() {
@@ -20,6 +21,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         component
         Timber.plant(Timber.DebugTree())
     }
