@@ -1,11 +1,21 @@
 package cc.cryptopunks.crypton.common
 
 import io.reactivex.*
+import io.reactivex.schedulers.Schedulers as RxSchedulers
 
 data class Schedulers(
     val main: Scheduler,
     val io: Scheduler
-)
+) {
+    companion object {
+        private val currentThreadScheduler = RxSchedulers.from { it.run() }
+
+        val currentThread = Schedulers(
+            main = currentThreadScheduler,
+            io = currentThreadScheduler
+        )
+    }
+}
 
 fun <T> Flowable<T>.runOn(schedulers: Schedulers) = this
     .subscribeOn(schedulers.io)

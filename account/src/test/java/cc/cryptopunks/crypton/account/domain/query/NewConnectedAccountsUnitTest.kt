@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.account.domain.query
 
+import cc.cryptopunks.crypton.common.Schedulers
 import cc.cryptopunks.crypton.core.entity.Account
 import cc.cryptopunks.crypton.core.entity.Account.Status.*
 import io.mockk.MockKAnnotations
@@ -13,12 +14,12 @@ class NewConnectedAccountsUnitTest {
 
     @RelaxedMockK
     lateinit var dao: Account.Dao
-    private lateinit var newConnectedAccounts: NewConnectedAccounts
+    private lateinit var newAccountConnected: NewAccountConnected
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        newConnectedAccounts = NewConnectedAccounts(dao)
+        newAccountConnected = NewAccountConnected(dao, Schedulers.currentThread)
     }
 
     @Test
@@ -28,8 +29,11 @@ class NewConnectedAccountsUnitTest {
         every { dao.observeList() } returns subject
 
         // when
-        val addedAccounts = newConnectedAccounts().test()
+        val addedAccounts = newAccountConnected().test()
 
+        subject.onNext(
+            emptyList()
+        )
         subject.onNext(
             listOf(
                 Account(id = 1, status = Connected),
