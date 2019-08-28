@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/setAccount"
+        android:id="@+id/navigateSetAccount"
         android:title="@string/set_account"
         app:showAsAction="always"
         android:icon="@drawable/ic_person_add_white_24dp"/>

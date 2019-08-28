@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.account.presentation.fragment
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.account.R
@@ -47,17 +46,12 @@ class AccountListFragment : BaseAccountFragment() {
 
         viewDisposable.addAll(
             accountListAdapter,
-            accountListViewModel.observable
-                .subscribe(accountListAdapter)
+            accountListViewModel(),
+            accountListViewModel.observable.subscribe(accountListAdapter)
         )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.account_management, menu)
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId) {
-        R.id.setAccount -> navController.navigate(R.id.action_accountListFragment_to_set_account_navigation)
-        else -> null
-    } != null
 }

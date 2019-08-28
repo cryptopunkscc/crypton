@@ -53,7 +53,7 @@ abstract class BaseActivity :
     )
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        featureComponent.broadcastOptionItemSelected(item)
+        featureComponent.onOptionItemSelected(item.itemId)
         return super.onOptionsItemSelected(item)
     }
 }

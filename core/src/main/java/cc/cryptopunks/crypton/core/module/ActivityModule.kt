@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import cc.cryptopunks.crypton.common.ActivityScope
-import cc.cryptopunks.crypton.core.util.OptionItemSelectedBroadcast
 import dagger.Module
 import dagger.Provides
 
@@ -13,11 +12,7 @@ import dagger.Provides
 class ActivityModule(
     @get:Provides
     @get:ActivityScope
-    val activity: Activity,
-
-    @get:Provides
-    @get:ActivityScope
-    val optionItemSelectedBroadcast: OptionItemSelectedBroadcast
+    val activity: Activity
 ) {
 
     @Provides

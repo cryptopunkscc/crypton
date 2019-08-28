@@ -19,7 +19,7 @@ class NavigationViewModel @Inject constructor(
             navigation.navigate(
                 when (condition) {
                     true -> R.id.navigateDashboard
-                    false -> R.id.navigateSetAccounts
+                    false -> R.id.navigateSetAccount
                 }
             )
         }

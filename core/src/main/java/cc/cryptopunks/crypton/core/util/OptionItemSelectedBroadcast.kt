@@ -1,9 +1,24 @@
 package cc.cryptopunks.crypton.core.util
 
-import android.view.MenuItem
-import cc.cryptopunks.crypton.common.Broadcast
+import cc.cryptopunks.crypton.common.RxBroadcast
 import cc.cryptopunks.crypton.core.module.FeatureScope
+import dagger.Binds
+import dagger.Module
+import org.reactivestreams.Publisher
 import javax.inject.Inject
 
-@FeatureScope
-class OptionItemSelectedBroadcast @Inject constructor() : Broadcast<MenuItem>()
+interface OptionItemSelected : Publisher<Int> {
+
+    interface Input : (Int) -> Unit
+
+    @FeatureScope
+    class Broadcast @Inject constructor() : OptionItemSelected, Input, RxBroadcast<Int>()
+
+    @Module
+    interface Bindings {
+        @Binds
+        fun publisher(broadcast: Broadcast) : OptionItemSelected
+        @Binds
+        fun input(broadcast: Broadcast) : Input
+    }
+}

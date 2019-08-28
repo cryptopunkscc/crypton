@@ -26,13 +26,13 @@
         android:label="AccountManagementActivity"
         tools:layout="@layout/account_list"/>
     <action
-        android:id="@id/navigateSetAccounts"
-        app:destination="@id/set_account_navigation"
-        app:popUpTo="@+id/mainNavigation"
+        android:id="@id/navigateSetAccount"
+        app:destination="@id/setAccountNavigation"
+        app:popUpTo="@id/mainNavigation"
         app:popUpToInclusive="true" />
     <action
         android:id="@id/navigateDashboard"
         app:destination="@id/dashboardFragment"
-        app:popUpTo="@+id/mainNavigation"
-        app:popUpToInclusive="true" />
+        app:popUpTo="@id/mainNavigation"
+        app:popUpToInclusive="true" />set_account_navigation
 </navigation>
