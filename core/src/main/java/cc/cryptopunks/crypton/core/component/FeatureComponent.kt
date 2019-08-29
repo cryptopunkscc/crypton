@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.core.component
 
 import cc.cryptopunks.crypton.core.module.FeatureModule
 import cc.cryptopunks.crypton.core.module.FeatureScope
-import cc.cryptopunks.crypton.core.util.Navigation
+import cc.cryptopunks.crypton.core.util.Navigate
 import cc.cryptopunks.crypton.core.util.OptionItemSelected
 import dagger.Component
 
@@ -11,12 +11,11 @@ import dagger.Component
     dependencies = [ApplicationComponent::class],
     modules = [
         FeatureModule::class,
-        OptionItemSelected.Bindings::class
+        OptionItemSelected.Bindings::class,
+        Navigate.Bindings::class
     ]
 )
-interface FeatureComponent : ApplicationComponent {
-    val navigation: Navigation
-    val navigationBus: Navigation.Bus
-    val optionItemSelected: OptionItemSelected
-    val onOptionItemSelected: OptionItemSelected.Input
-}
+interface FeatureComponent :
+    ApplicationComponent,
+    OptionItemSelected.Component,
+    Navigate.Component

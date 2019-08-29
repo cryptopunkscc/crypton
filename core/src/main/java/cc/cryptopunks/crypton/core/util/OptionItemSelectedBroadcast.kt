@@ -21,4 +21,9 @@ interface OptionItemSelected : Publisher<Int> {
         @Binds
         fun input(broadcast: Broadcast) : Input
     }
+
+    interface Component {
+        val optionItemSelected: OptionItemSelected
+        val onOptionItemSelected: Input
+    }
 }

@@ -49,7 +49,7 @@ abstract class BaseActivity :
     }
 
     override fun CompositeDisposable.onStart() = addAll (
-        featureComponent.navigationBus.observable().subscribe(navController)
+        featureComponent.navigationPublisher.observable().subscribe(navController)
     )
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

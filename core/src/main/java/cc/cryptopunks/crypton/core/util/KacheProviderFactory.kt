@@ -11,9 +11,8 @@ import javax.inject.Singleton
 @Singleton
 class KacheProviderFactory @Inject constructor(
     private val application: Application
-) : () -> Kache.Provider {
-
-    override fun invoke(): Kache.Provider = KacheManager(
+) : () -> Kache.Provider by {
+    KacheManager(
         SharedPreferencesKache.Factory { key: Kache.Key<*>, mode: Int ->
             application.getSharedPreferences(key.toString().replace('/', '\\'), mode)
         },
