@@ -8,11 +8,8 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import cc.cryptopunks.crypton.core.component.DaggerFragmentComponent
-import cc.cryptopunks.crypton.core.component.FragmentComponent
 
-abstract class BaseFragment :
-    Fragment() {
+abstract class BaseFragment : Fragment() {
 
     @get:LayoutRes
     open val layoutId
@@ -22,22 +19,14 @@ abstract class BaseFragment :
     open val titleId
         get() = 0
 
+    open val navController get() = findNavController()
 
     val baseActivity get() = activity as BaseActivity
 
-    val applicationComponent by lazy {
-        baseActivity.applicationComponent
-    }
-
-    val fragmentComponent: FragmentComponent by lazy {
-        DaggerFragmentComponent
-            .builder()
-            .build()
-    }
-
-    open val navController get() = findNavController()
+    val applicationComponent by lazy { baseActivity.applicationComponent }
 
     val viewDisposable = ViewDisposable()
+
     val modelDisposable = ModelDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,14 +38,14 @@ abstract class BaseFragment :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = layoutId
-        .takeIf { it != 0 }
-        ?.let { inflater.inflate(it, container, false) }
+    ): View? = layoutId.takeIf { it > 0 }?.let {
+        inflater.inflate(it, container, false)
+    }
 
     override fun onResume() {
         super.onResume()
-        titleId.takeIf { it > 0 }?.let {
-            baseActivity.supportActionBar?.setTitle(it)
+        titleId.takeIf { it > 0 }?.let { id ->
+            baseActivity.supportActionBar?.setTitle(id)
         }
     }
 
