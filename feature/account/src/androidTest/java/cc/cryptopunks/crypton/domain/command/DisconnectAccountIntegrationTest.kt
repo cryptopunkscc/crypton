@@ -1,13 +1,14 @@
-package cc.cryptopunks.crypton.domain.interactor
+package cc.cryptopunks.crypton.domain.command
 
 import cc.cryptopunks.crypton.IntegrationTest
-import cc.cryptopunks.crypton.entity.Account.Status.Connected
+import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
-class ConnectAccountIntegrationTest : IntegrationTest() {
+class DisconnectAccountIntegrationTest : IntegrationTest() {
 
-    override fun setUp(): Unit = with(client(1L)) {
+    override fun setUp(): Unit = with(client1) {
         insertAccount()
         connect()
         create()
@@ -20,11 +21,11 @@ class ConnectAccountIntegrationTest : IntegrationTest() {
         val id = 1L
         val expected = account(id).copy(
             id = id,
-            status = Connected
+            status = Disconnected
         )
 
         // when
-        val connection = connectAccount(id).test()
+        val connection = disconnectAccount(id).test()
 
         // then
         connection
@@ -34,6 +35,10 @@ class ConnectAccountIntegrationTest : IntegrationTest() {
         assertEquals(
             expected,
             accountDao.get(id)
+        )
+
+        assertNull(
+            clientCache[id]
         )
     }
 

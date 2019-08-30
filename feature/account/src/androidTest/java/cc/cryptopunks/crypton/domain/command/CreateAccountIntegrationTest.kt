@@ -1,17 +1,11 @@
-package cc.cryptopunks.crypton.domain.interactor
+package cc.cryptopunks.crypton.domain.command
 
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class AddAccountIntegrationTest : IntegrationTest() {
-
-    override fun setUp(): Unit = with(client1) {
-        connect()
-        create()
-        disconnect()
-    }
+class CreateAccountIntegrationTest : IntegrationTest() {
 
     @Test
     fun invoke(): Unit = with(component) {
@@ -24,10 +18,10 @@ class AddAccountIntegrationTest : IntegrationTest() {
         )
 
         // when
-        val addition = addAccount(account).test()
+        val creation = createAccount(account).test()
 
         // then
-        addition
+        creation
             .assertNoErrors()
             .assertComplete()
 
@@ -44,5 +38,3 @@ class AddAccountIntegrationTest : IntegrationTest() {
         super.tearDown()
     }
 }
-
-

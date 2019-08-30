@@ -17,4 +17,4 @@ import cc.cryptopunks.crypton.entity.Message
     version = 1
 )
 @TypeConverters(Account.Status.Converter::class)
-abstract class CoreDatabase : RoomDatabase(), DaoComponent
+abstract class Database : RoomDatabase(), DaoComponent

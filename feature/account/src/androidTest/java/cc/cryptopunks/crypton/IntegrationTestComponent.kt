@@ -2,18 +2,15 @@ package cc.cryptopunks.crypton
 
 import android.app.Application
 import androidx.room.Room
-import cc.cryptopunks.crypton.domain.command.*
-import cc.cryptopunks.crypton.util.HandleError
-import cc.cryptopunks.crypton.util.SingletonQualifier
-import cc.cryptopunks.crypton.data.CoreDatabase
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.domain.repository.AccountRepository
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.data.Database
+import cc.cryptopunks.crypton.domain.command.*
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.smack.SmackClientFactory
+import cc.cryptopunks.crypton.util.HandleError
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import io.reactivex.disposables.CompositeDisposable
 import org.jivesoftware.smack.ConnectionConfiguration
 import java.net.InetAddress
 import javax.inject.Singleton
@@ -22,12 +19,9 @@ import javax.inject.Singleton
 @Component(modules = [TestModule::class])
 internal interface IntegrationTestComponent {
 
-    @get:SingletonQualifier
-    val disposable: CompositeDisposable
-    val database: CoreDatabase
+    val database: Database
     val accountDao: Account.Dao
     val clientCache: Client.Cache
-    val accountRepository: AccountRepository
 
     val addAccount: AddAccount
     val connectAccount: ConnectAccount
@@ -49,19 +43,15 @@ internal class TestModule(
         smackFactory
     }
 
-    @get:Provides
-    @get:SingletonQualifier
-    val disposable = CompositeDisposable()
-
     @Provides
     @Singleton
     fun appDatabase(context: Application) = Room
-        .inMemoryDatabaseBuilder(context, CoreDatabase::class.java)
+        .inMemoryDatabaseBuilder(context, Database::class.java)
         .build()
 
     @Provides
     @Singleton
-    fun accountDao(coreDatabase: CoreDatabase) = coreDatabase
+    fun accountDao(database: Database) = database
         .accountDao
 
     @Provides

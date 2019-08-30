@@ -1,29 +1,35 @@
-package cc.cryptopunks.crypton.domain.interactor
+package cc.cryptopunks.crypton.domain.command
 
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class CreateAccountIntegrationTest : IntegrationTest() {
+class ConnectAccountIntegrationTest : IntegrationTest() {
+
+    override fun setUp(): Unit = with(client(1L)) {
+        insertAccount()
+        connect()
+        create()
+        disconnect()
+    }
 
     @Test
     fun invoke(): Unit = with(component) {
         // given
         val id = 1L
-        val account = account(id)
-        val expected = account.copy(
+        val expected = account(id).copy(
             id = id,
             status = Connected
         )
 
         // when
-        val creation = createAccount(account).test()
+        val connection = connectAccount(id).test()
 
         // then
-        creation
-            .assertNoErrors()
+        connection
             .assertComplete()
+            .assertNoErrors()
 
         assertEquals(
             expected,
