@@ -1,10 +1,6 @@
-package cc.cryptopunks.crypton.api.entities
+package cc.cryptopunks.crypton.entity
 
-import android.view.Gravity
-import cc.cryptopunks.crypton.util.RxBroadcast
 import cc.cryptopunks.crypton.util.RxPublisher
-import cc.cryptopunks.crypton.api.ApiScope
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -14,28 +10,17 @@ data class ChatMessage(
     val stanzaId: String = "",
     val body: String = "",
     val stamp: Date = Date(),
-    val from: Jid = Jid.Empty,
-    val to: Jid = Jid.Empty,
-    val gravity: Int = Gravity.LEFT
+    val from: RemoteId = RemoteId.Empty,
+    val to: RemoteId = RemoteId.Empty
 ) {
 
-    val formattedDate: String get() = DATE_FORMAT.format(stamp)
+    interface Api {
+        val sendMessage: Send
+        val chatMessagePublisher: Publisher
 
-    fun getChatId(userId: Jid): Jid = when (userId.withoutResource) {
-        from.withoutResource -> to
-        else -> from
+        interface Send : (RemoteId, String) -> Unit
+        interface Publisher : RxPublisher<ChatMessage>
     }
-
-    private companion object {
-        private val DATE_FORMAT = SimpleDateFormat.getDateTimeInstance()
-    }
-
-    interface Send : (Jid, String) -> Unit
-
-    @ApiScope
-    class Broadcast @Inject constructor() : RxBroadcast<ChatMessage>()
-
-    interface Publisher : RxPublisher<ChatMessage>
 
     interface Filter : (ChatMessage) -> Boolean {
 
@@ -52,11 +37,11 @@ data class ChatMessage(
         }
 
 
-        class HasChatJid @Inject constructor(
-            jid: Jid
+        class HasChatId @Inject constructor(
+            remoteId: RemoteId
         ) : Filter, (ChatMessage) -> Boolean {
 
-            private val jid = jid.withoutResource
+            private val jid = remoteId.withoutResource
 
             override fun invoke(message: ChatMessage): Boolean = with(message) {
                 from.withoutResource == jid || to.withoutResource == jid

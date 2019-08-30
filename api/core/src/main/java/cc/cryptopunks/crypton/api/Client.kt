@@ -3,15 +3,18 @@ package cc.cryptopunks.crypton.api
 import cc.cryptopunks.crypton.util.RxPublisher
 import cc.cryptopunks.crypton.util.createDummyClass
 import cc.cryptopunks.kache.rxjava.flowable
-import cc.cryptopunks.crypton.api.entities.*
-import cc.cryptopunks.crypton.entity.RemoteId
+import cc.cryptopunks.crypton.entity.*
 import dagger.Provides
 import io.reactivex.processors.PublishProcessor
 import org.reactivestreams.Subscriber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface Client {
+interface Client:
+    User.Api,
+    Presence.Api,
+    ChatMessage.Api,
+    RosterEvent.Api {
 
     val id: Long
     val user: User
@@ -20,15 +23,7 @@ interface Client {
     val login: Login
     val connect: Connect
     val disconnect: Disconnect
-    val sendMessage: ChatMessage.Send
-    val sendPresence: Presence.Send
     val isAuthenticated: IsAuthenticated
-    val getContacts: User.GetContacts
-    val invite: User.Invite
-    val invited: User.Invited
-
-    val chatMessagePublisher: ChatMessage.Publisher
-    val rosterEventPublisher: RosterEvent.Publisher
 
     interface Create: () -> Unit
     interface Remove: () -> Unit
@@ -40,7 +35,7 @@ interface Client {
     interface Factory : (Config) -> Client {
         data class Arg(
             val accountId: Int = EmptyId,
-            val jid: Jid = Jid(),
+            val remoteId: RemoteId = RemoteId(),
             val password: String = ""
         ) {
             companion object {
@@ -113,15 +108,14 @@ interface Client {
         override val connect: Connect @Provides get() = client.connect
         override val disconnect: Disconnect @Provides get() = client.disconnect
         override val login: Login @Provides get() = client.login
-        override val sendMessage: ChatMessage.Send @Provides get() = client.sendMessage
-        override val sendPresence: Presence.Send @Provides get() = client.sendPresence
+        override val sendMessage: ChatMessage.Api.Send @Provides get() = client.sendMessage
+        override val sendPresence: Presence.Api.Send @Provides get() = client.sendPresence
         override val isAuthenticated: IsAuthenticated @Provides get() = client.isAuthenticated
-        override val getContacts: User.GetContacts @Provides get() = client.getContacts
-        override val invite: User.Invite @Provides get() = client.invite
-        override val invited: User.Invited @Provides get() = client.invited
-
-        override val chatMessagePublisher: ChatMessage.Publisher @Provides get() = client.chatMessagePublisher
-        override val rosterEventPublisher: RosterEvent.Publisher @Provides get() = client.rosterEventPublisher
+        override val getContacts: User.Api.GetContacts @Provides get() = client.getContacts
+        override val invite: User.Api.Invite @Provides get() = client.invite
+        override val invited: User.Api.Invited @Provides get() = client.invited
+        override val chatMessagePublisher: ChatMessage.Api.Publisher @Provides get() = client.chatMessagePublisher
+        override val rosterEventPublisher: RosterEvent.Api.Publisher @Provides get() = client.rosterEventPublisher
     }
 
     companion object {

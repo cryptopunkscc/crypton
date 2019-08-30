@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.smack.integration.test
 
 import cc.cryptopunks.kache.rxjava.observable
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.api.entities.RosterEvent
+import cc.cryptopunks.crypton.entity.RosterEvent
 import cc.cryptopunks.crypton.smack.integration.IntegrationTest
 import io.reactivex.Observable
 import org.junit.Assert.assertEquals
@@ -44,13 +44,13 @@ internal class UserTest : IntegrationTest() {
             .blockingFirst()
 
         assertEquals(
-            client1.user.jid.withoutResource,
-            client2.getContacts().first().jid
+            client1.user.remoteId.withoutResource,
+            client2.getContacts().first().remoteId
         )
 
         assertEquals(
-            client2.user.jid.withoutResource,
-            client1.getContacts().first().jid
+            client2.user.remoteId.withoutResource,
+            client1.getContacts().first().remoteId
         )
 
         log.dispose()

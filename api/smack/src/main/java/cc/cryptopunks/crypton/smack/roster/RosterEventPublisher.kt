@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.smack.roster
 
 import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.ApiScope
-import cc.cryptopunks.crypton.api.entities.RosterEvent
+import cc.cryptopunks.crypton.entity.RosterEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.internal.disposables.CancellableDisposable
 import org.jivesoftware.smack.roster.Roster
@@ -15,7 +15,7 @@ internal class RosterEventPublisher @Inject constructor(
     roster: Roster,
     adapter: RosterRxAdapter
 ) :
-    RosterEvent.Publisher,
+    RosterEvent.Api.Publisher,
     Publisher<RosterEvent> by adapter {
 
     init {

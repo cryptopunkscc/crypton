@@ -3,10 +3,10 @@ package cc.cryptopunks.crypton.smack
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.ApiScope
-import cc.cryptopunks.crypton.api.entities.ChatMessage
-import cc.cryptopunks.crypton.api.entities.Presence
-import cc.cryptopunks.crypton.api.entities.RosterEvent
-import cc.cryptopunks.crypton.api.entities.User
+import cc.cryptopunks.crypton.entity.ChatMessage
+import cc.cryptopunks.crypton.entity.Presence
+import cc.cryptopunks.crypton.entity.RosterEvent
+import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.smack.chat.ChatMessagePublisher
 import cc.cryptopunks.crypton.smack.chat.SendChatMessage
 import cc.cryptopunks.crypton.smack.presence.SendPresence
@@ -46,7 +46,7 @@ internal interface SmackComponent : Client {
         @Provides
         @ApiScope
         fun user(connection: XMPPConnection) = User(
-            jid = connection.user.jid()
+            remoteId = connection.user.remoteId()
         )
 
         @Provides
@@ -130,30 +130,30 @@ internal interface SmackComponent : Client {
 
         @Binds
         @ApiScope
-        fun sendMessage(instance: SendChatMessage): ChatMessage.Send
+        fun sendMessage(instance: SendChatMessage): ChatMessage.Api.Send
 
         @Binds
         @ApiScope
-        fun sendPresence(instance: SendPresence): Presence.Send
+        fun sendPresence(instance: SendPresence): Presence.Api.Send
 
         @Binds
         @ApiScope
-        fun chatMessagePublisher(instance: ChatMessagePublisher): ChatMessage.Publisher
+        fun chatMessagePublisher(instance: ChatMessagePublisher): ChatMessage.Api.Publisher
 
         @Binds
         @ApiScope
-        fun getUserContacts(instance: UserGetContacts): User.GetContacts
+        fun getUserContacts(instance: UserGetContacts): User.Api.GetContacts
 
         @Binds
         @ApiScope
-        fun inviteUser(instance: UserInvite): User.Invite
+        fun inviteUser(instance: UserInvite): User.Api.Invite
 
         @Binds
         @ApiScope
-        fun invitedUser(instance: UserInvited): User.Invited
+        fun invitedUser(instance: UserInvited): User.Api.Invited
 
         @Binds
         @ApiScope
-        fun rosterEventPublisher(instance: RosterEventPublisher): RosterEvent.Publisher
+        fun rosterEventPublisher(instance: RosterEventPublisher): RosterEvent.Api.Publisher
     }
 }

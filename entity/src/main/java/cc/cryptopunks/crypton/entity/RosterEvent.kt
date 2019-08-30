@@ -1,39 +1,43 @@
-package cc.cryptopunks.crypton.api.entities
+package cc.cryptopunks.crypton.entity
 
 import cc.cryptopunks.crypton.util.RxPublisher
 
 
 sealed class RosterEvent {
 
-    interface Publisher : RxPublisher<RosterEvent>
+    interface Api {
+        val rosterEventPublisher: Publisher
+
+        interface Publisher : RxPublisher<RosterEvent>
+    }
 
     data class ProcessSubscribe(
-        val from: Jid,
+        val from: RemoteId,
         val subscribeRequest: Presence
     ) : RosterEvent()
 
     data class PresenceAvailable(
-        val address: Jid,
+        val address: RemoteId,
         val availablePresence: Presence
     ) : RosterEvent()
 
     data class PresenceUnavailable(
-        val address: Jid,
+        val address: RemoteId,
         val presence: Presence
     ) : RosterEvent()
 
     data class PresenceSubscribed(
-        val address: Jid,
+        val address: RemoteId,
         val subscribedPresence: Presence
     ) : RosterEvent()
 
     data class PresenceUnsubscribed(
-        val address: Jid,
+        val address: RemoteId,
         val unsubscribedPresence: Presence
     ) : RosterEvent()
 
     data class PresenceError(
-        val address: Jid,
+        val address: RemoteId,
         val errorPresence: Presence
     ) : RosterEvent()
 
@@ -46,7 +50,7 @@ sealed class RosterEvent {
     ) : RosterEvent()
 
     data class EntriesDeleted(
-        val addresses: Collection<Jid>
+        val addresses: Collection<RemoteId>
     ) : RosterEvent()
 
     data class PresenceChanged(
@@ -54,11 +58,11 @@ sealed class RosterEvent {
     ) : RosterEvent()
 
     data class EntriesUpdated(
-        val addresses: Collection<Jid>
+        val addresses: Collection<RemoteId>
     ) : RosterEvent()
 
     data class EntriesAdded(
-        val addresses: Collection<Jid>
+        val addresses: Collection<RemoteId>
     ) : RosterEvent()
 
 }

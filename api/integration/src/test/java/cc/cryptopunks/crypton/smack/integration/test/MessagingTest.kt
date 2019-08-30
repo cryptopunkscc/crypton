@@ -23,7 +23,7 @@ internal class MessagingTest : IntegrationTest() {
         Observable.just(Unit)
             .doOnNext {
                 client1.sendMessage(
-                    client2.user.jid,
+                    client2.user.remoteId,
                     "test"
                 )
             }

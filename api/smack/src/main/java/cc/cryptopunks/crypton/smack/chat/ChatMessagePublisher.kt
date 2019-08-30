@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.smack.chat
 
 import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.ApiScope
-import cc.cryptopunks.crypton.api.entities.ChatMessage
-import cc.cryptopunks.crypton.api.entities.User
+import cc.cryptopunks.crypton.entity.ChatMessage
+import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.smack.chatMessage
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.internal.disposables.CancellableDisposable
@@ -21,7 +21,7 @@ internal class ChatMessagePublisher @Inject constructor(
     private val user: User,
     @ApiQualifier private val disposable: CompositeDisposable
 ) :
-    ChatMessage.Publisher {
+    ChatMessage.Api.Publisher {
 
     private val processor = PublishProcessor.create<ChatMessage>()
 
@@ -37,7 +37,7 @@ internal class ChatMessagePublisher @Inject constructor(
         processor.onNext(
             chatMessage(
                 message = message.apply {
-                    from = JidCreate.from(user.jid)
+                    from = JidCreate.from(user.remoteId)
                 }
             )
         )

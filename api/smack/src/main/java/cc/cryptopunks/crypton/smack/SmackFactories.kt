@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.smack
 
-import cc.cryptopunks.crypton.api.entities.ChatMessage
-import cc.cryptopunks.crypton.api.entities.Jid
-import cc.cryptopunks.crypton.api.entities.Presence
+import cc.cryptopunks.crypton.entity.ChatMessage
+import cc.cryptopunks.crypton.entity.Presence
+import cc.cryptopunks.crypton.entity.RemoteId
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.delay.packet.DelayInformation
 import org.jivesoftware.smackx.sid.element.StanzaIdElement
@@ -16,20 +16,20 @@ internal fun chatMessage(
 ) = ChatMessage(
     id = message.extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: "",
     body = message.body,
-    from = message.from.jid(),
-    to = message.to.jid(),
+    from = message.from.remoteId(),
+    to = message.to.remoteId(),
     stamp = delayInformation.stamp,
     stanzaId = message.stanzaId
 )
 
 
-internal fun SmackJid.jid() = Jid(
+internal fun SmackJid.remoteId() = RemoteId(
     local = localpartOrNull?.toString() ?: "",
     domain = domain.toString(),
     resource = resourceOrNull?.toString() ?: ""
 )
 
-internal fun String.jid(): Jid = JidCreate.from(toString()).jid()
+internal fun String.remoteId(): RemoteId = JidCreate.from(toString()).remoteId()
 
 internal fun SmackPresence.presence() = Presence(
     status = Presence.Status.values()[type.ordinal]
