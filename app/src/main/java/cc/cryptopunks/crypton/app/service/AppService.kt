@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.app.presentation.component.AppServiceComponent
 import cc.cryptopunks.crypton.app.service.notification.SetupNotificationChannel
 import cc.cryptopunks.crypton.app.service.notification.ShowAppServiceNotification
 import cc.cryptopunks.crypton.component.DaggerContextComponent
-import cc.cryptopunks.crypton.account.domain.command.ReconnectAccounts
+import cc.cryptopunks.crypton.domain.command.ReconnectAccounts
 import cc.cryptopunks.crypton.app
 import cc.cryptopunks.crypton.module.ContextModule
 import cc.cryptopunks.crypton.module.ServiceModule

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.app.presentation.viewmodel
 
-import cc.cryptopunks.crypton.account.domain.query.HasAccounts
+import cc.cryptopunks.crypton.domain.query.HasAccounts
 import cc.cryptopunks.crypton.app.service.StartAppService
 import cc.cryptopunks.crypton.app.service.StopAppService
 import io.reactivex.disposables.Disposable

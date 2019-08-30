@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/accountListFragment"
-        android:name="cc.cryptopunks.crypton.account.presentation.fragment.AccountListFragment"
+        android:name="cc.cryptopunks.crypton.presentation.fragment.AccountListFragment"
         android:label="AccountListFragment"
         tools:layout="@layout/account_list">
         <action

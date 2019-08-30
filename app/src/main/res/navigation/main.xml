@@ -22,7 +22,7 @@
     <include app:graph="@navigation/set_account" />
     <activity
         android:id="@+id/accountManagementActivity"
-        android:name="cc.cryptopunks.crypton.account.presentation.activity.AccountManagementActivity"
+        android:name="cc.cryptopunks.crypton.presentation.activity.AccountManagementActivity"
         android:label="AccountManagementActivity"
         tools:layout="@layout/account_list"/>
     <action

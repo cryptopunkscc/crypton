@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="cc.cryptopunks.crypton.account.presentation.activity.AccountManagementActivity" />
+        <activity android:name="cc.cryptopunks.crypton.presentation.activity.AccountManagementActivity" />
 
         <service
             android:name=".service.AppService"
