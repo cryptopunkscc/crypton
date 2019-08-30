@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.conversation.domain.query
+package cc.cryptopunks.crypton.domain.query
 
 import cc.cryptopunks.crypton.util.Schedulers
 import cc.cryptopunks.crypton.util.runOn

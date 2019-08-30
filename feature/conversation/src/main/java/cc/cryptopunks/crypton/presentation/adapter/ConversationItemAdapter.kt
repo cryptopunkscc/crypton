@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.conversation.presentation.adapter
+package cc.cryptopunks.crypton.presentation.adapter
 
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.conversation.R
-import cc.cryptopunks.crypton.conversation.presentation.viewmodel.ConversationItemViewModel
+import cc.cryptopunks.crypton.presentation.viewmodel.ConversationItemViewModel
 import cc.cryptopunks.crypton.util.Disposables
 import cc.cryptopunks.crypton.util.ext.inflate
 import io.reactivex.Observable

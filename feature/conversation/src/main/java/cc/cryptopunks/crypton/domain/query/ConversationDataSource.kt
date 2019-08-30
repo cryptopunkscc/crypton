@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.conversation.domain.query
+package cc.cryptopunks.crypton.domain.query
 
 import androidx.paging.DataSource
 import cc.cryptopunks.crypton.entity.Conversation

@@ -1,9 +1,8 @@
-package cc.cryptopunks.crypton.conversation.component
+package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.conversation.presentation.binding.ConversationListBinding
-import cc.cryptopunks.crypton.conversation.presentation.fragment.ConversationListFragment
-import cc.cryptopunks.crypton.component.FeatureComponent
+import cc.cryptopunks.crypton.presentation.binding.ConversationListBinding
+import cc.cryptopunks.crypton.presentation.fragment.ConversationListFragment
 import cc.cryptopunks.crypton.module.BaseFragmentModule
 import cc.cryptopunks.crypton.module.ViewModelModule
 import cc.cryptopunks.crypton.module.ViewModelScope

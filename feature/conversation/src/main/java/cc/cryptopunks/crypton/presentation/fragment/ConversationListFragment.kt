@@ -1,12 +1,12 @@
-package cc.cryptopunks.crypton.conversation.presentation.fragment
+package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.conversation.R
-import cc.cryptopunks.crypton.conversation.presentation.binding.ConversationListBinding
+import cc.cryptopunks.crypton.presentation.binding.ConversationListBinding
 import javax.inject.Inject
 
-class ConversationListFragment : BaseFragment() {
+class ConversationListFragment : BaseConversationFragment() {
 
     override val layoutId: Int get() = R.layout.conversations
 

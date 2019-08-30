@@ -1,7 +1,7 @@
-package cc.cryptopunks.crypton.conversation.presentation.viewmodel
+package cc.cryptopunks.crypton.presentation.viewmodel
 
 import androidx.paging.RxPagedListBuilder
-import cc.cryptopunks.crypton.conversation.domain.query.ConversationDataSource
+import cc.cryptopunks.crypton.domain.query.ConversationDataSource
 import cc.cryptopunks.crypton.module.ViewModelScope
 import javax.inject.Inject
 
