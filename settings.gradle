@@ -4,6 +4,6 @@ include ':common',
         ':api:smack',
         ':api:integration',
         ':core',
-        ':account',
-        ':conversation',
+        ':feature:account',
+        ':feature:conversation',
         ':app'
