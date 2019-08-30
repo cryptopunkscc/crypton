@@ -1,6 +1,6 @@
-package cc.cryptopunks.crypton.app.presentation.component
+package cc.cryptopunks.crypton.presentation.component
 
-import cc.cryptopunks.crypton.app.service.AppService
+import cc.cryptopunks.crypton.service.AppService
 import cc.cryptopunks.crypton.component.ContextComponent
 import cc.cryptopunks.crypton.module.ServiceModule
 import cc.cryptopunks.crypton.module.ServiceScope

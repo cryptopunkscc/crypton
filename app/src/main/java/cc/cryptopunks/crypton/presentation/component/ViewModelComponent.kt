@@ -1,6 +1,6 @@
-package cc.cryptopunks.crypton.app.presentation.component
+package cc.cryptopunks.crypton.presentation.component
 
-import cc.cryptopunks.crypton.app.presentation.fragment.*
+import cc.cryptopunks.crypton.presentation.fragment.*
 import cc.cryptopunks.crypton.component.FeatureComponent
 import cc.cryptopunks.crypton.module.ViewModelModule
 import cc.cryptopunks.crypton.module.ViewModelScope

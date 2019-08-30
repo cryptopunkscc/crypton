@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.app.presentation.viewmodel
+package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.OptionItemSelected

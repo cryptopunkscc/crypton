@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.app.service
+package cc.cryptopunks.crypton.service
 
 import android.app.Application
 import android.content.Intent

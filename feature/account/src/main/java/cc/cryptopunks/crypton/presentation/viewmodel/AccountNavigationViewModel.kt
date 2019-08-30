@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.util.Navigate
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-class NavigationViewModel @Inject constructor(
+class AccountNavigationViewModel @Inject constructor(
     newAccountConnected: NewAccountConnected,
     navigate: Navigate
 ) : () -> Disposable by {

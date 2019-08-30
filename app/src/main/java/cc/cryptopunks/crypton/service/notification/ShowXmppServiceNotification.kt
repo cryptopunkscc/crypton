@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.app.service.notification
+package cc.cryptopunks.crypton.service.notification
 
 import cc.cryptopunks.crypton.module.ServiceScope
 import javax.inject.Inject

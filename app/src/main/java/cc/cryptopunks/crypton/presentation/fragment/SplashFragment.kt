@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.app.presentation.fragment
+package cc.cryptopunks.crypton.presentation.fragment
 
 import cc.cryptopunks.crypton.util.BaseFragment
 

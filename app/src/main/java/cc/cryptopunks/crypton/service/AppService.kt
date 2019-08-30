@@ -1,12 +1,12 @@
-package cc.cryptopunks.crypton.app.service
+package cc.cryptopunks.crypton.service
 
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.app.presentation.component.DaggerAppServiceComponent
-import cc.cryptopunks.crypton.app.presentation.component.AppServiceComponent
-import cc.cryptopunks.crypton.app.service.notification.SetupNotificationChannel
-import cc.cryptopunks.crypton.app.service.notification.ShowAppServiceNotification
+import cc.cryptopunks.crypton.presentation.component.DaggerAppServiceComponent
+import cc.cryptopunks.crypton.presentation.component.AppServiceComponent
+import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel
+import cc.cryptopunks.crypton.service.notification.ShowAppServiceNotification
 import cc.cryptopunks.crypton.component.DaggerContextComponent
 import cc.cryptopunks.crypton.domain.command.ReconnectAccounts
 import cc.cryptopunks.crypton.app

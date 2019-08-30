@@ -1,9 +1,9 @@
-package cc.cryptopunks.crypton.app.service.notification
+package cc.cryptopunks.crypton.service.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import cc.cryptopunks.crypton.app.service.AppService
+import cc.cryptopunks.crypton.service.AppService
 import cc.cryptopunks.crypton.module.ServiceScope
 import javax.inject.Inject
 

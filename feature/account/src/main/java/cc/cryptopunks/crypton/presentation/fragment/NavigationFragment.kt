@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
-import cc.cryptopunks.crypton.presentation.viewmodel.NavigationViewModel
+import cc.cryptopunks.crypton.presentation.viewmodel.AccountNavigationViewModel
 import javax.inject.Inject
 
 class NavigationFragment : BaseAccountFragment() {
@@ -13,7 +13,7 @@ class NavigationFragment : BaseAccountFragment() {
 
     @Inject
     fun init(
-        navigationViewModel: NavigationViewModel
+        navigationViewModel: AccountNavigationViewModel
     ) {
         modelDisposable.addAll(navigationViewModel())
     }

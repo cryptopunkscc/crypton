@@ -1,13 +1,13 @@
-package cc.cryptopunks.crypton.app.presentation.viewmodel
+package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.domain.query.HasAccounts
-import cc.cryptopunks.crypton.app.R
+import cc.cryptopunks.crypton.R
 import cc.cryptopunks.crypton.util.Schedulers
 import cc.cryptopunks.crypton.util.Navigate
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-class NavigationViewModel @Inject constructor(
+class MainNavigationViewModel @Inject constructor(
     hasAccounts: HasAccounts,
     navigate: Navigate,
     schedulers: Schedulers

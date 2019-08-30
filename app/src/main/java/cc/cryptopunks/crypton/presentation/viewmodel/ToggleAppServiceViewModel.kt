@@ -1,8 +1,8 @@
-package cc.cryptopunks.crypton.app.presentation.viewmodel
+package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.domain.query.HasAccounts
-import cc.cryptopunks.crypton.app.service.StartAppService
-import cc.cryptopunks.crypton.app.service.StopAppService
+import cc.cryptopunks.crypton.service.StartAppService
+import cc.cryptopunks.crypton.service.StopAppService
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 

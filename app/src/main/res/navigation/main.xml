@@ -8,11 +8,11 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="cc.cryptopunks.crypton.app.presentation.fragment.SplashFragment"
+        android:name="cc.cryptopunks.crypton.presentation.fragment.SplashFragment"
         android:label="SplashFragment" />
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="cc.cryptopunks.crypton.app.presentation.fragment.DashboardFragment"
+        android:name="cc.cryptopunks.crypton.presentation.fragment.DashboardFragment"
         android:label="DashboardFragment"
         tools:layout="@layout/dashboard" >
         <action

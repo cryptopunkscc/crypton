@@ -1,10 +1,10 @@
-package cc.cryptopunks.crypton.app.presentation.fragment
+package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
-import cc.cryptopunks.crypton.app.R
-import cc.cryptopunks.crypton.app.presentation.viewmodel.DashboardViewModel
+import cc.cryptopunks.crypton.R
+import cc.cryptopunks.crypton.presentation.viewmodel.DashboardViewModel
 import javax.inject.Inject
 
 class DashboardFragment : BaseAppFragment() {
