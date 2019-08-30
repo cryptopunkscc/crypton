@@ -4,7 +4,7 @@ import android.app.Notification.Builder
 import android.app.Service
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N_MR1
-import cc.cryptopunks.crypton.core.module.ServiceScope
+import cc.cryptopunks.crypton.module.ServiceScope
 import cc.cryptopunks.crypton.app.service.AppService
 import javax.inject.Inject
 

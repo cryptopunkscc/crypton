@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.api
 
-import cc.cryptopunks.crypton.common.RxPublisher
-import cc.cryptopunks.crypton.common.createDummyClass
+import cc.cryptopunks.crypton.util.RxPublisher
+import cc.cryptopunks.crypton.util.createDummyClass
 import cc.cryptopunks.kache.rxjava.flowable
 import cc.cryptopunks.crypton.api.entities.*
 import cc.cryptopunks.crypton.entity.RemoteId

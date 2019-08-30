@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.api.entities
 
-import cc.cryptopunks.crypton.common.RxPublisher
+import cc.cryptopunks.crypton.util.RxPublisher
 
 
 sealed class RosterEvent {

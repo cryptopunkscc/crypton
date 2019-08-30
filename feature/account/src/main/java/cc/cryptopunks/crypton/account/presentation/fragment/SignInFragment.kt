@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.account.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.core.util.*
+import cc.cryptopunks.crypton.util.*
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountViewModel
 import cc.cryptopunks.crypton.account.presentation.viewmodel.SignInViewModel

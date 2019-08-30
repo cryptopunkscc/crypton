@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.conversation.domain.command.LoadMessages
 import cc.cryptopunks.crypton.conversation.presentation.adapter.ConversationItemAdapter
 import cc.cryptopunks.crypton.conversation.presentation.viewmodel.ConversationListViewModel
-import cc.cryptopunks.crypton.core.util.AsyncExecutor
-import cc.cryptopunks.crypton.core.util.BaseFragment
+import cc.cryptopunks.crypton.util.AsyncExecutor
+import cc.cryptopunks.crypton.util.BaseFragment
 import kotlinx.android.synthetic.main.conversations.*
 import javax.inject.Inject
 

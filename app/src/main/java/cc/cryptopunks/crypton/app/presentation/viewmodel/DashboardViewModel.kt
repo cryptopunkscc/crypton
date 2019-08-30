@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.app.presentation.viewmodel
 
-import cc.cryptopunks.crypton.core.util.Navigate
-import cc.cryptopunks.crypton.core.util.OptionItemSelected
+import cc.cryptopunks.crypton.util.Navigate
+import cc.cryptopunks.crypton.util.OptionItemSelected
 import cc.cryptopunks.kache.rxjava.observable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject

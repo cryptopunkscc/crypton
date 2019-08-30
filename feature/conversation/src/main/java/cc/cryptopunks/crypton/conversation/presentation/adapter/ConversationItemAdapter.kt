@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.conversation.R
 import cc.cryptopunks.crypton.conversation.presentation.viewmodel.ConversationItemViewModel
-import cc.cryptopunks.crypton.core.util.Disposables
-import cc.cryptopunks.crypton.core.util.ext.inflate
+import cc.cryptopunks.crypton.util.Disposables
+import cc.cryptopunks.crypton.util.ext.inflate
 import io.reactivex.Observable
 import io.reactivex.internal.disposables.CancellableDisposable
 import kotlinx.android.extensions.LayoutContainer

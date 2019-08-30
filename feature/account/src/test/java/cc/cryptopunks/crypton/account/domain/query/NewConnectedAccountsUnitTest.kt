@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.account.domain.query
 
-import cc.cryptopunks.crypton.common.Schedulers
+import cc.cryptopunks.crypton.util.Schedulers
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.*
 import io.mockk.MockKAnnotations

@@ -5,7 +5,7 @@ import android.view.View
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountViewModel
 import cc.cryptopunks.crypton.account.presentation.viewmodel.SignUpViewModel
-import cc.cryptopunks.crypton.core.util.bind
+import cc.cryptopunks.crypton.util.bind
 import kotlinx.android.synthetic.main.sign_up.*
 import javax.inject.Inject
 

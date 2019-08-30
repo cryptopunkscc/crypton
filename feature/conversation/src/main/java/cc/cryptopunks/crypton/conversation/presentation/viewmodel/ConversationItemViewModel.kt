@@ -2,9 +2,9 @@ package cc.cryptopunks.crypton.conversation.presentation.viewmodel
 
 import cc.cryptopunks.crypton.conversation.domain.query.LastMessage
 import cc.cryptopunks.crypton.entity.Conversation
-import cc.cryptopunks.crypton.core.module.ViewModelScope
-import cc.cryptopunks.crypton.core.util.Navigate
-import cc.cryptopunks.crypton.core.util.letterColors
+import cc.cryptopunks.crypton.module.ViewModelScope
+import cc.cryptopunks.crypton.util.Navigate
+import cc.cryptopunks.crypton.util.letterColors
 import javax.inject.Inject
 
 class ConversationItemViewModel(

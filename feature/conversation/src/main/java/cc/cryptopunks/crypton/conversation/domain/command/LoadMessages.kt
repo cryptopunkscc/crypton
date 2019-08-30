@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.conversation.domain.command
 
-import cc.cryptopunks.crypton.common.Schedulers
-import cc.cryptopunks.crypton.common.runOn
+import cc.cryptopunks.crypton.util.Schedulers
+import cc.cryptopunks.crypton.util.runOn
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Conversation
 import cc.cryptopunks.crypton.entity.Message

@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.api.entities
 
 import android.view.Gravity
-import cc.cryptopunks.crypton.common.RxBroadcast
-import cc.cryptopunks.crypton.common.RxPublisher
+import cc.cryptopunks.crypton.util.RxBroadcast
+import cc.cryptopunks.crypton.util.RxPublisher
 import cc.cryptopunks.crypton.api.ApiScope
 import java.text.SimpleDateFormat
 import java.util.*

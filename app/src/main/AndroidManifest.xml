@@ -9,7 +9,7 @@
     MissingLeanbackSupport">
 
     <application
-        android:name="cc.cryptopunks.crypton.core.App"
+        android:name="cc.cryptopunks.crypton.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.account.domain.command.RemoveAccount
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting
-import cc.cryptopunks.crypton.core.util.AsyncExecutor
+import cc.cryptopunks.crypton.util.AsyncExecutor
 import javax.inject.Inject
 
 class AccountItemViewModel @Inject constructor(

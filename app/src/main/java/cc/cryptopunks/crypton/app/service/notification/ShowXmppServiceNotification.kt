@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.app.service.notification
 
-import cc.cryptopunks.crypton.core.module.ServiceScope
+import cc.cryptopunks.crypton.module.ServiceScope
 import javax.inject.Inject
 
 @ServiceScope
