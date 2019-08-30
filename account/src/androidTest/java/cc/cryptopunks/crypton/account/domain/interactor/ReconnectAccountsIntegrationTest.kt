@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.account.domain.interactor
 
 import cc.cryptopunks.crypton.account.IntegrationTest
-import cc.cryptopunks.crypton.core.entity.Account.Status.Connected
-import cc.cryptopunks.crypton.core.entity.Account.Status.Connecting
+import cc.cryptopunks.crypton.entity.Account.Status.Connected
+import cc.cryptopunks.crypton.entity.Account.Status.Connecting
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.TimeUnit

@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.core.entity
+package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
 import androidx.room.ForeignKey.*

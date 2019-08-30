@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.account.domain.repository
 
-import cc.cryptopunks.crypton.core.entity.Account
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.core.util.ext.get
 import cc.cryptopunks.crypton.core.util.ext.reduce
 import cc.cryptopunks.crypton.api.Client
@@ -23,7 +23,7 @@ data class AccountRepository @Inject constructor(
             createClient(
                 Client.Config(
                     id = id,
-                    jid = jid,
+                    remoteId = remoteId,
                     password = credentials.password
                 )
             ).also {

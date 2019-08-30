@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.account.domain.query
 
 import cc.cryptopunks.crypton.common.Schedulers
 import cc.cryptopunks.crypton.common.runOn
-import cc.cryptopunks.crypton.core.entity.Account
+import cc.cryptopunks.crypton.entity.Account
 import io.reactivex.Observable
 import javax.inject.Inject
 import kotlin.math.max

@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.account.domain.command.*
 import cc.cryptopunks.crypton.common.HandleError
 import cc.cryptopunks.crypton.common.SingletonQualifier
 import cc.cryptopunks.crypton.core.data.CoreDatabase
-import cc.cryptopunks.crypton.core.entity.Account
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.account.domain.repository.AccountRepository
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.smack.SmackClientFactory
@@ -62,7 +62,7 @@ internal class TestModule(
     @Provides
     @Singleton
     fun accountDao(coreDatabase: CoreDatabase) = coreDatabase
-        .accountDao()
+        .accountDao
 
     @Provides
     @Singleton

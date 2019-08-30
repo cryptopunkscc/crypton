@@ -1,8 +1,6 @@
-package cc.cryptopunks.crypton.core.entity
+package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
-import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.api.entities.Jid
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -19,16 +17,8 @@ data class Account constructor(
     @Embedded val credentials: Credentials = Credentials.Empty
 ) {
 
-    constructor(config: Client.Config) : this(
-        domain = config.jid.domain,
-        credentials = Credentials(
-            userName = config.jid.local,
-            password = config.password
-        )
-    )
-
-    val jid
-        @Ignore get() = Jid(
+    val remoteId
+        @Ignore get() = RemoteId(
             local = credentials.userName,
             domain = domain
         )

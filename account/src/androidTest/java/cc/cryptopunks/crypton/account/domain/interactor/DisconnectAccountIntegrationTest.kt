@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.account.domain.interactor
 
 import cc.cryptopunks.crypton.account.IntegrationTest
-import cc.cryptopunks.crypton.core.entity.Account.Status.Disconnected
+import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

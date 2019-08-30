@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.account.domain.entity
 
 import cc.cryptopunks.crypton.account.IntegrationTest
-import cc.cryptopunks.crypton.core.entity.Account.Status.*
+import cc.cryptopunks.crypton.entity.Account.Status.*
 import io.reactivex.Observable
 import org.junit.Assert.assertEquals
 import org.junit.Test

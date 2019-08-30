@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.account.presentation.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.account.presentation.viewmodel.AccountItemViewModel
-import cc.cryptopunks.crypton.core.entity.Account
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.core.util.DisposableDelegate
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.checkedChanges

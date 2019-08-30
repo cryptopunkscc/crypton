@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.account.presentation.viewmodel
 
 import cc.cryptopunks.crypton.common.HandleError
-import cc.cryptopunks.crypton.core.entity.Account
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.core.module.ViewModelScope
 import cc.cryptopunks.crypton.core.util.Input
 import cc.cryptopunks.crypton.core.util.ViewModel

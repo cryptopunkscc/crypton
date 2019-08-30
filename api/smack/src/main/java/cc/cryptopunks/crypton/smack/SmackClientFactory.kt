@@ -20,8 +20,8 @@ object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
             accountId = config.id,
             configuration = configBuilder
                 .run(setup)
-                .setUsernameAndPassword(config.jid.login, config.password)
-                .setXmppDomain(config.jid.domain)
+                .setUsernameAndPassword(config.remoteId.login, config.password)
+                .setXmppDomain(config.remoteId.domain)
                 .build()
         )
     ).build()

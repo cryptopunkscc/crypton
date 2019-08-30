@@ -1,12 +1,12 @@
 package cc.cryptopunks.crypton.smack.integration
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.api.entities.Jid
+import cc.cryptopunks.crypton.entity.RemoteId
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 
 abstract class ApiIntegrationTest {
 
-    val baseJid = Jid(domain = "test.io")
+    val baseId = RemoteId(domain = "test.io")
     private val clients = mutableMapOf<Long, Client>()
     private var autoRemove = false
 
@@ -50,7 +50,7 @@ abstract class ApiIntegrationTest {
 
     fun config(index: Long) = Client.Config(
         id = index,
-        jid = baseJid.copy(local = "test$index"),
+        remoteId = baseId.copy(local = "test$index"),
         password = "test$index"
     )
 }

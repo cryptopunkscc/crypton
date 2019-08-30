@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.common.RxPublisher
 import cc.cryptopunks.crypton.common.createDummyClass
 import cc.cryptopunks.kache.rxjava.flowable
 import cc.cryptopunks.crypton.api.entities.*
+import cc.cryptopunks.crypton.entity.RemoteId
 import dagger.Provides
 import io.reactivex.processors.PublishProcessor
 import org.reactivestreams.Subscriber
@@ -51,7 +52,7 @@ interface Client {
 
     data class Config(
         val id: Long = EmptyId,
-        val jid: Jid = Jid(),
+        val remoteId: RemoteId = RemoteId.Empty,
         val password: String = ""
     ) {
         companion object {

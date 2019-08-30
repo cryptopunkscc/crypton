@@ -4,9 +4,9 @@ import cc.cryptopunks.crypton.account.domain.command.ConnectAccount
 import cc.cryptopunks.crypton.account.domain.command.DeleteAccount
 import cc.cryptopunks.crypton.account.domain.command.DisconnectAccount
 import cc.cryptopunks.crypton.account.domain.command.RemoveAccount
-import cc.cryptopunks.crypton.core.entity.Account
-import cc.cryptopunks.crypton.core.entity.Account.Status.Connected
-import cc.cryptopunks.crypton.core.entity.Account.Status.Connecting
+import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.entity.Account.Status.Connected
+import cc.cryptopunks.crypton.entity.Account.Status.Connecting
 import cc.cryptopunks.crypton.core.util.AsyncExecutor
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class AccountItemViewModel @Inject constructor(
 ) {
     var account = Account.Empty
 
-    val name get() = account.jid
+    val name get() = account.remoteId
 
     val status get() = account.status.name
 

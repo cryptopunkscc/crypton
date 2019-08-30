@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.account.domain.query
 
 import cc.cryptopunks.crypton.common.Schedulers
-import cc.cryptopunks.crypton.core.entity.Account
-import cc.cryptopunks.crypton.core.entity.Account.Status.*
+import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.entity.Account.Status.*
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK

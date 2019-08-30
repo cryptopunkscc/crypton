@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.conversation.domain.query
 
 import cc.cryptopunks.crypton.common.Schedulers
 import cc.cryptopunks.crypton.common.runOn
-import cc.cryptopunks.crypton.core.entity.Conversation
-import cc.cryptopunks.crypton.core.entity.Message
+import cc.cryptopunks.crypton.entity.Conversation
+import cc.cryptopunks.crypton.entity.Message
 import io.reactivex.Observable
 import javax.inject.Inject
 

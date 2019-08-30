@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.account.domain.command
 
 import cc.cryptopunks.crypton.account.domain.repository.AccountRepository
 import cc.cryptopunks.crypton.account.util.wrap
-import cc.cryptopunks.crypton.core.entity.Account.Status.Disconnected
+import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
 import io.reactivex.Completable
 import io.reactivex.Completable.*
 import javax.inject.Inject

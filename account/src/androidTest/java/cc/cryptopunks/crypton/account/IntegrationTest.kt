@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.account
 
 import androidx.test.core.app.ApplicationProvider
-import cc.cryptopunks.crypton.core.entity.Account
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.smack.integration.ApiIntegrationTest
 import org.junit.After
@@ -36,7 +36,7 @@ abstract class IntegrationTest : ApiIntegrationTest() {
         componentRef.set(null)
     }
 
-    fun account(index: Long, withId: Boolean = false) = Account(config(index)).run {
+    fun account(index: Long, withId: Boolean = false) = createAccount(config(index)).run {
         if (!withId) this
         else copy(id = index)
     }
@@ -48,3 +48,11 @@ abstract class IntegrationTest : ApiIntegrationTest() {
     }
 
 }
+
+fun createAccount(config: Client.Config) = Account(
+    domain = config.remoteId.domain,
+    credentials = Account.Credentials(
+        userName = config.remoteId.local,
+        password = config.password
+    )
+)
