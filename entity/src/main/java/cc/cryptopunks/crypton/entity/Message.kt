@@ -1,24 +1,39 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
-import androidx.room.ForeignKey.*
+import cc.cryptopunks.crypton.util.RxPublisher
 import io.reactivex.Observable
-import java.lang.System.*
+
+typealias ApiMessage = Message
 
 @Entity(
-    foreignKeys = [ForeignKey(
-        entity = Conversation::class,
-        parentColumns = ["id"],
-        childColumns = ["conversationId"],
-        onDelete = CASCADE
-    )]
+    foreignKeys = [
+        ForeignKey(
+            entity = Conversation::class,
+            parentColumns = ["id"],
+            childColumns = ["conversationId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class Message(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey val id: String = "",
     val conversationId: Long = 0,
+    val stanzaId: String = "",
     val text: String = "",
-    val timestamp: Long = currentTimeMillis()
+    val timestamp: Long = 0,
+    @Embedded(prefix = "from") val from: RemoteId = RemoteId.Empty,
+    @Embedded(prefix = "to") val to: RemoteId = RemoteId.Empty
 ) {
+
+    interface Api {
+        val sendMessage: Send
+        val messagePublisher: Publisher
+
+        interface Send : (RemoteId, String) -> Unit
+        interface Publisher : RxPublisher<Message>
+    }
+
     @androidx.room.Dao
     interface Dao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)

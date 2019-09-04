@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.smack.chat
 
 import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.ApiScope
-import cc.cryptopunks.crypton.entity.ChatMessage
+import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.smack.chatMessage
 import io.reactivex.disposables.CompositeDisposable
@@ -21,9 +21,9 @@ internal class ChatMessagePublisher @Inject constructor(
     private val user: User,
     @ApiQualifier private val disposable: CompositeDisposable
 ) :
-    ChatMessage.Api.Publisher {
+    Message.Api.Publisher {
 
-    private val processor = PublishProcessor.create<ChatMessage>()
+    private val processor = PublishProcessor.create<Message>()
 
     private val incomingListener = IncomingChatMessageListener { _, message, _ ->
         processor.onNext(
@@ -58,7 +58,7 @@ internal class ChatMessagePublisher @Inject constructor(
         }
     }
 
-    override fun subscribe(subscriber: Subscriber<in ChatMessage>) {
+    override fun subscribe(subscriber: Subscriber<in Message>) {
         processor.subscribe(subscriber)
     }
 }

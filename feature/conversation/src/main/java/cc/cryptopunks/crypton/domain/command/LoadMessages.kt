@@ -28,7 +28,7 @@ class LoadMessages @Inject constructor(
 
                 messageDao.insertOrUpdate(
                     Message(
-                        id = it,
+                        id = it.toString(),
                         conversationId = it,
                         text = "message $it"
                     )

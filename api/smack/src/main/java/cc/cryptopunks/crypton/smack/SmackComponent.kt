@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.smack
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.ApiScope
-import cc.cryptopunks.crypton.entity.ChatMessage
+import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.entity.RosterEvent
 import cc.cryptopunks.crypton.entity.User
@@ -130,7 +130,7 @@ internal interface SmackComponent : Client {
 
         @Binds
         @ApiScope
-        fun sendMessage(instance: SendChatMessage): ChatMessage.Api.Send
+        fun sendMessage(instance: SendChatMessage): Message.Api.Send
 
         @Binds
         @ApiScope
@@ -138,7 +138,7 @@ internal interface SmackComponent : Client {
 
         @Binds
         @ApiScope
-        fun chatMessagePublisher(instance: ChatMessagePublisher): ChatMessage.Api.Publisher
+        fun chatMessagePublisher(instance: ChatMessagePublisher): Message.Api.Publisher
 
         @Binds
         @ApiScope

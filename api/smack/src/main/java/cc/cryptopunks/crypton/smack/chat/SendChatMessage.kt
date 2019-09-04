@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.chat
 
 import cc.cryptopunks.crypton.api.ApiScope
-import cc.cryptopunks.crypton.entity.ChatMessage
+import cc.cryptopunks.crypton.entity.Message.Api.Send
 import cc.cryptopunks.crypton.entity.RemoteId
 import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.packet.Message
@@ -11,7 +11,7 @@ import javax.inject.Inject
 @ApiScope
 class SendChatMessage @Inject constructor(
     connection: XMPPConnection
-) : ChatMessage.Api.Send, (RemoteId, String) -> Unit by { to, text ->
+) : Send, (RemoteId, String) -> Unit by { to, text ->
 
     connection.sendStanza(
         Message(

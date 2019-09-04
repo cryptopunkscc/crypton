@@ -14,7 +14,7 @@ internal class MessagingTest : IntegrationTest() {
 
     @Test
     operator fun invoke() {
-        val messages = client2.chatMessagePublisher.observable()
+        val messages = client2.messagePublisher.observable()
             .replay()
             .autoConnect()
 

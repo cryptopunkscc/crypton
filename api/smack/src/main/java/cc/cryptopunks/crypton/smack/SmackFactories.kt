@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack
 
-import cc.cryptopunks.crypton.entity.ChatMessage
+import cc.cryptopunks.crypton.entity.ApiMessage
 import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.entity.RemoteId
 import org.jivesoftware.smack.packet.Message
@@ -13,12 +13,12 @@ import java.util.*
 internal fun chatMessage(
     message: Message = Message(),
     delayInformation: DelayInformation = DelayInformation(Date())
-) = ChatMessage(
+) = ApiMessage(
     id = message.extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: "",
-    body = message.body,
+    text = message.body,
     from = message.from.remoteId(),
     to = message.to.remoteId(),
-    stamp = delayInformation.stamp,
+    timestamp = delayInformation.stamp.time,
     stanzaId = message.stanzaId
 )
 

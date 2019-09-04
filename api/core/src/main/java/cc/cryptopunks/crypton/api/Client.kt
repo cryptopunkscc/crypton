@@ -13,7 +13,7 @@ import javax.inject.Singleton
 interface Client:
     User.Api,
     Presence.Api,
-    ChatMessage.Api,
+    Message.Api,
     RosterEvent.Api {
 
     val id: Long
@@ -108,13 +108,13 @@ interface Client:
         override val connect: Connect @Provides get() = client.connect
         override val disconnect: Disconnect @Provides get() = client.disconnect
         override val login: Login @Provides get() = client.login
-        override val sendMessage: ChatMessage.Api.Send @Provides get() = client.sendMessage
+        override val sendMessage: Message.Api.Send @Provides get() = client.sendMessage
         override val sendPresence: Presence.Api.Send @Provides get() = client.sendPresence
         override val isAuthenticated: IsAuthenticated @Provides get() = client.isAuthenticated
         override val getContacts: User.Api.GetContacts @Provides get() = client.getContacts
         override val invite: User.Api.Invite @Provides get() = client.invite
         override val invited: User.Api.Invited @Provides get() = client.invited
-        override val chatMessagePublisher: ChatMessage.Api.Publisher @Provides get() = client.chatMessagePublisher
+        override val messagePublisher: Message.Api.Publisher @Provides get() = client.messagePublisher
         override val rosterEventPublisher: RosterEvent.Api.Publisher @Provides get() = client.rosterEventPublisher
     }
 
