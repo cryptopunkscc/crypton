@@ -12,32 +12,32 @@ sealed class RosterEvent {
     }
 
     data class ProcessSubscribe(
-        val from: RemoteId,
+        val from: ResourceId,
         val subscribeRequest: Presence
     ) : RosterEvent()
 
     data class PresenceAvailable(
-        val address: RemoteId,
+        val address: ResourceId,
         val availablePresence: Presence
     ) : RosterEvent()
 
     data class PresenceUnavailable(
-        val address: RemoteId,
+        val address: ResourceId,
         val presence: Presence
     ) : RosterEvent()
 
     data class PresenceSubscribed(
-        val address: RemoteId,
+        val address: ResourceId,
         val subscribedPresence: Presence
     ) : RosterEvent()
 
     data class PresenceUnsubscribed(
-        val address: RemoteId,
+        val address: ResourceId,
         val unsubscribedPresence: Presence
     ) : RosterEvent()
 
     data class PresenceError(
-        val address: RemoteId,
+        val address: ResourceId,
         val errorPresence: Presence
     ) : RosterEvent()
 
@@ -50,7 +50,7 @@ sealed class RosterEvent {
     ) : RosterEvent()
 
     data class EntriesDeleted(
-        val addresses: Collection<RemoteId>
+        val addresses: Collection<ResourceId>
     ) : RosterEvent()
 
     data class PresenceChanged(
@@ -58,11 +58,11 @@ sealed class RosterEvent {
     ) : RosterEvent()
 
     data class EntriesUpdated(
-        val addresses: Collection<RemoteId>
+        val addresses: Collection<ResourceId>
     ) : RosterEvent()
 
     data class EntriesAdded(
-        val addresses: Collection<RemoteId>
+        val addresses: Collection<ResourceId>
     ) : RosterEvent()
 
 }

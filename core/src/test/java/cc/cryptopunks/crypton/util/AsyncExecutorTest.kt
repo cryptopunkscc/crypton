@@ -27,14 +27,21 @@ class AsyncExecutorTest {
     operator fun invoke() {
         val taskContext = TaskContext(task = Task, arg = Unit)
 
-        async(task = Task)(Unit)
-        async(task = Task)(Unit)
+        val test1 = async.wrap(Task)(Unit).test()
+        val test2 = async.wrap(Task)(Unit).test()
+
+        sleep(DELAY/2)
 
         verify(exactly = 2) { runningTasks.add(taskContext) }
         assertEquals(1, runningTasks.size)
         assertEquals(1, runningTasks.values.first().size)
-        sleep(DELAY)
+
+        sleep(DELAY/2)
+
         assertEquals(0, runningTasks.size)
+
+        test1.assertComplete().assertNoErrors()
+        test2.assertComplete().assertNoErrors()
     }
 
     object Task : (Any) -> Completable by {
@@ -44,6 +51,6 @@ class AsyncExecutorTest {
     }
 
     companion object {
-        private const val DELAY = 100L
+        private const val DELAY = 300L
     }
 }

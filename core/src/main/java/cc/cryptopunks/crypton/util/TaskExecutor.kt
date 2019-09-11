@@ -2,7 +2,9 @@ package cc.cryptopunks.crypton.util
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import org.reactivestreams.Publisher
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,22 +25,41 @@ class AsyncExecutor @Inject constructor(
         onError: (Throwable) -> Unit = handleError,
         task: (A) -> Completable
     ): (A) -> Unit = { arg ->
-        val context = TaskContext(
-            task = task,
-            arg = arg
-        )
-        runningTasks.add(context).let { notRunning ->
+        wrap(task)(arg).subscribe({}, onError)
+    }
 
-            if (notRunning) Single.just(arg)
-                .observeOn(scheduler)
-                .flatMapCompletable(task)
-                .doAfterTerminate {
-                    runningTasks.remove(context)
+    fun <A : Any> wrap(
+        task: (A) -> Completable
+    ): (A) -> Completable = { arg ->
+        Single.just(Unit).flatMapCompletable {
+            synchronized(runningTasks) {
+                runningTasks.add(
+                    TaskContext(
+                        task = task,
+                        arg = arg
+                    )
+                ).run {
+                    publisher ?: PublishProcessor.create<Nothing>().run {
+                        publisher = this
+                        doOnSubscribe {
+                            Single.just(arg)
+                                .observeOn(scheduler)
+                                .flatMapCompletable(task)
+                                .doAfterTerminate {
+                                    synchronized(runningTasks) {
+                                        runningTasks.remove(context)
+                                    }
+                                }
+                                .subscribe(
+                                    ::onComplete,
+                                    handleError
+                                )
+                        }
+                    }
+                }.let {
+                    Completable.fromPublisher(it)
                 }
-                .subscribe(
-                    {},
-                    onError
-                )
+            }
         }
     }
 }
@@ -48,22 +69,46 @@ data class TaskContext(
     val arg: Any
 )
 
-@Singleton
-class RunningTasks @Inject constructor() : MutableMap<Any, MutableSet<Any>> by mutableMapOf() {
+data class MutableTaskContext(
+    val context: TaskContext,
+    private val cache: MutableMap<Any, Publisher<Nothing>>
+) {
+    private val arg get() = context.arg
 
-    fun add(context: TaskContext): Boolean = context.run {
-        getOrPut(task, ::mutableSetOf).add(arg)
-    }
+    var publisher: Publisher<Nothing>?
+        get() = cache[arg]
+        set(value) {
+            if (value == null) cache.remove(arg)
+            else cache[arg] = value
+        }
+}
+
+@Singleton
+class RunningTasks @Inject constructor() {
+
+    private val cache = mutableMapOf<Any, MutableMap<Any, Publisher<Nothing>>>()
+
+    val size get() = cache.size
+
+    val values get() = cache.values
+
+    fun add(context: TaskContext) = MutableTaskContext(
+        context = context,
+        cache = cache.getOrPut(
+            context.task,
+            ::mutableMapOf
+        )
+    )
 
     fun remove(context: TaskContext): Boolean = context.run {
-        get(task)?.let { args ->
-            args.remove(arg).also { removed ->
-                if (removed && args.isEmpty()) {
-                    remove(task)
+        cache.get(task)?.let { args ->
+            args.remove(arg)?.also {
+                if (args.isEmpty()) {
+                    cache.remove(task) != null
                 }
             }
         }
-    } ?: false
+    } != null
 
-    override fun toString(): String = toMap().toString()
+    override fun toString(): String = cache.toMap().toString()
 }

@@ -16,7 +16,7 @@ class LoadMessages @Inject constructor(
 ) : () -> Completable by {
     //TODO: replace mock witch integration
     Completable.fromAction {
-        accountDao.getAll().firstOrNull()?.run {
+        accountDao.list().firstOrNull()?.run {
             (1L..200).forEach {
                 conversationDao.insertIfNeeded(
                     Conversation(

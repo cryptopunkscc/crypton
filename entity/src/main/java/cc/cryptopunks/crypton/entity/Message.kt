@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
 import cc.cryptopunks.crypton.util.RxPublisher
-import io.reactivex.Observable
+import io.reactivex.Flowable
 
 typealias ApiMessage = Message
 
@@ -22,8 +22,8 @@ data class Message(
     val stanzaId: String = "",
     val text: String = "",
     val timestamp: Long = 0,
-    @Embedded(prefix = "from") val from: RemoteId = RemoteId.Empty,
-    @Embedded(prefix = "to") val to: RemoteId = RemoteId.Empty
+    @Embedded(prefix = "from") val from: ResourceId = ResourceId.Empty,
+    @Embedded(prefix = "to") val to: ResourceId = ResourceId.Empty
 ) {
 
     interface Api {
@@ -41,7 +41,7 @@ data class Message(
 
 
         @Query("select * from Message where conversationId == :conversationId order by timestamp")
-        fun lastMessage(conversationId: Long): Observable<Message>
+        fun flowableLatest(conversationId: Long): Flowable<Message>
     }
 
     companion object {

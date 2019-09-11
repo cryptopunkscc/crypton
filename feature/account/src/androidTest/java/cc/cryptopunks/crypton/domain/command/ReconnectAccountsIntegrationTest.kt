@@ -42,7 +42,7 @@ class ReconnectAccountsIntegrationTest : IntegrationTest() {
 
         assertEquals(
             expected,
-            accountDao.getAll()
+            accountDao.list()
         )
     }
 

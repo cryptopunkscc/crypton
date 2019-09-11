@@ -1,43 +1,30 @@
 package cc.cryptopunks.crypton.domain.repository
 
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.util.ext.get
-import cc.cryptopunks.crypton.util.ext.reduce
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.util.ext.reduce
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 data class AccountRepository @Inject constructor(
     private val dao: Account.Dao,
-    private val createClient: Client.Factory,
-    private val clientCache: Client.Cache
+    private val clientRepository: ClientRepository
 ) :
     AtomicReference<Account>(Account.Empty) {
 
     val id get() = get().id
 
-    val isInitialized get() = clientCache.contains(get().id)
+    val isInitialized get() = get() in clientRepository
 
-    val client: Client
-        get() = clientCache[id] ?: get {
-            createClient(
-                Client.Config(
-                    id = id,
-                    remoteId = remoteId,
-                    password = credentials.password
-                )
-            ).also {
-                clientCache[id] = it
-            }
-        }
+    val client: Client get() = clientRepository[get()]
 
     operator fun invoke(account: Account) = copy().apply { set(account) }
 
-    fun create() = client.create()
+    fun create(): Unit = client.create()
 
-    fun login() = client.login()
+    fun login(): Unit = client.login()
 
-    fun disconnect() = client.disconnect()
+    fun disconnect(): Unit = client.disconnect()
 
     fun setStatus(status: Account.Status) {
         reduce { copy(status = status) }
@@ -45,9 +32,9 @@ data class AccountRepository @Inject constructor(
 
     fun load(id: Long): Account = reduce { dao.get(id) }.get()
 
-    fun insert() = dao.insert(get())!!.also { set(get().copy(id = it)) }
+    fun insert(): Long = dao.insert(get())!!.also { set(get().copy(id = it)) }
 
-    fun update() = dao.update(get())
+    fun update(): Unit = dao.update(get())
 
     fun delete() {
         client.remove()
@@ -60,6 +47,6 @@ data class AccountRepository @Inject constructor(
     }
 
     fun clear() {
-        clientCache -= id
+        clientRepository - get()
     }
 }

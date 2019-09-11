@@ -31,7 +31,7 @@ data class Conversation(
     interface Dao {
 
         @Query("select * from Conversation")
-        fun getAllPaged(): DataSource.Factory<Int, Conversation>
+        fun dataSourceFactory(): DataSource.Factory<Int, Conversation>
 
         @Insert(onConflict = OnConflictStrategy.IGNORE)
         fun insertIfNeeded(conversation: Conversation): Long?

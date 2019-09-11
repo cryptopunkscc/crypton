@@ -3,12 +3,10 @@ package cc.cryptopunks.crypton.smack
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.ApiScope
-import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.Presence
-import cc.cryptopunks.crypton.entity.RosterEvent
-import cc.cryptopunks.crypton.entity.User
+import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.chat.ChatMessagePublisher
 import cc.cryptopunks.crypton.smack.chat.SendChatMessage
+import cc.cryptopunks.crypton.smack.contact.AddContact
 import cc.cryptopunks.crypton.smack.presence.SendPresence
 import cc.cryptopunks.crypton.smack.roster.RosterEventPublisher
 import cc.cryptopunks.crypton.smack.user.UserGetContacts
@@ -46,7 +44,7 @@ internal interface SmackComponent : Client {
         @Provides
         @ApiScope
         fun user(connection: XMPPConnection) = User(
-            remoteId = connection.user.remoteId()
+            resourceId = connection.user.resourceId()
         )
 
         @Provides
@@ -97,63 +95,51 @@ internal interface SmackComponent : Client {
     interface Bindings {
 
         @Binds
-        @ApiScope
         fun abstractConnection(instance: XMPPTCPConnection): AbstractXMPPConnection
 
         @Binds
-        @ApiScope
         fun connection(instance: AbstractXMPPConnection): XMPPConnection
 
         @Binds
-        @ApiScope
-        fun register(instance: CreateClient): Client.Create
+        fun create(instance: CreateClient): Client.Create
 
         @Binds
-        @ApiScope
-        fun unregister(instance: RemoveClient): Client.Remove
+        fun remove(instance: RemoveClient): Client.Remove
 
         @Binds
-        @ApiScope
         fun connect(instance: ConnectClient): Client.Connect
 
         @Binds
-        @ApiScope
         fun disconnect(instance: DisconnectClient): Client.Disconnect
 
         @Binds
-        @ApiScope
         fun login(instance: LoginClient): Client.Login
 
         @Binds
-        @ApiScope
         fun isAuthenticated(instance: IsClientAuthentificated): Client.IsAuthenticated
 
         @Binds
-        @ApiScope
         fun sendMessage(instance: SendChatMessage): Message.Api.Send
 
         @Binds
-        @ApiScope
         fun sendPresence(instance: SendPresence): Presence.Api.Send
 
         @Binds
-        @ApiScope
         fun chatMessagePublisher(instance: ChatMessagePublisher): Message.Api.Publisher
 
         @Binds
-        @ApiScope
         fun getUserContacts(instance: UserGetContacts): User.Api.GetContacts
 
         @Binds
-        @ApiScope
         fun inviteUser(instance: UserInvite): User.Api.Invite
 
         @Binds
-        @ApiScope
         fun invitedUser(instance: UserInvited): User.Api.Invited
 
         @Binds
-        @ApiScope
         fun rosterEventPublisher(instance: RosterEventPublisher): RosterEvent.Api.Publisher
+
+        @Binds
+        fun addContact(addContact: AddContact): Contact.Add
     }
 }

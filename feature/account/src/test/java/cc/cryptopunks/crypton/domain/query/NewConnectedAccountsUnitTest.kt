@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.util.Schedulers
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.processors.PublishProcessor
 import org.junit.Before
 import org.junit.Test
 
@@ -25,8 +25,8 @@ class NewConnectedAccountsUnitTest {
     @Test
     operator fun invoke() {
         // given
-        val subject = PublishSubject.create<List<Account>>()
-        every { dao.observeList() } returns subject
+        val subject = PublishProcessor.create<List<Account>>()
+        every { dao.flowableList() } returns subject
 
         // when
         val addedAccounts = newAccountConnected().test()

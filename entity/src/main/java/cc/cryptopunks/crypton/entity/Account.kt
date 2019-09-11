@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 @Entity(
     indices = [Index(
@@ -59,37 +58,31 @@ data class Account constructor(
     )
 
     @androidx.room.Dao
-    abstract class Dao {
+    interface Dao {
 
         @Query("select id from account where id = :id")
-        abstract fun contains(id: Long): Long?
+        fun contains(id: Long): Long?
 
         @Query("select * from account where id = :id")
-        abstract fun get(id: Long): Account
+        fun get(id: Long): Account
 
         @Insert
-        abstract fun insert(account: Account): Long?
+        fun insert(account: Account): Long?
 
         @Update
-        abstract fun update(account: Account)
+        fun update(account: Account)
 
         @Delete
-        abstract fun delete(vararg accounts: Account)
+        fun delete(vararg accounts: Account)
 
         @Query("select * from account")
-        abstract fun observeChanges(): Observable<Account>
+        fun observeChanges(): Flowable<Account>
 
         @Query("select * from account")
-        abstract fun getAll(): List<Account>
+        fun list(): List<Account>
 
         @Query("select * from account")
-        abstract fun getAllSingle(): Single<List<Account>>
-
-        @Query("select * from account")
-        abstract fun observeList(): Observable<List<Account>>
-
-        @Query("select id from account")
-        abstract fun observeIdList(): Observable<List<Long>>
+        fun flowableList(): Flowable<List<Account>>
     }
 
     companion object {

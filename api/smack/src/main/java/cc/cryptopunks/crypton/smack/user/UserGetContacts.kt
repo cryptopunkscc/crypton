@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.smack.user
 
 import cc.cryptopunks.crypton.api.ApiScope
 import cc.cryptopunks.crypton.entity.User
-import cc.cryptopunks.crypton.smack.remoteId
+import cc.cryptopunks.crypton.smack.resourceId
 import org.jivesoftware.smack.roster.Roster
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ class UserGetContacts @Inject constructor(
 ) : User.Api.GetContacts, () -> List<User> by {
     roster.entries.map { entry ->
         User(
-            remoteId = entry.jid.remoteId()
+            resourceId = entry.jid.resourceId()
         )
     }
 }

@@ -14,7 +14,7 @@ class ReconnectAccounts @Inject constructor(
 ) : () -> Completable {
 
     override fun invoke() = Observable
-        .defer { Observable.fromIterable(dao.getAll()) }
+        .defer { Observable.fromIterable(dao.list()) }
         .map { repository.copy().invoke(it) }
         .filter { it.shouldReconnect() }
         .observeOn(Schedulers.newThread())

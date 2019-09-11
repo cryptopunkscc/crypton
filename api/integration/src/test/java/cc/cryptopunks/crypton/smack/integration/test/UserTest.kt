@@ -44,12 +44,12 @@ internal class UserTest : IntegrationTest() {
             .blockingFirst()
 
         assertEquals(
-            client1.user.remoteId.withoutResource,
+            client1.user.remoteId,
             client2.getContacts().first().remoteId
         )
 
         assertEquals(
-            client2.user.remoteId.withoutResource,
+            client2.user.remoteId,
             client1.getContacts().first().remoteId
         )
 

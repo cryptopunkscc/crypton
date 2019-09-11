@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.smack.roster
 
 import cc.cryptopunks.crypton.entity.RosterEvent
 import cc.cryptopunks.crypton.smack.SmackJid
-import cc.cryptopunks.crypton.smack.remoteId
+import cc.cryptopunks.crypton.smack.resourceId
 import cc.cryptopunks.crypton.smack.presence
 import io.reactivex.processors.PublishProcessor
 import org.jivesoftware.smack.packet.Presence
@@ -36,7 +36,7 @@ class RosterRxAdapter private constructor(
     ): SubscribeListener.SubscribeAnswer? {
         processor.onNext(
             RosterEvent.ProcessSubscribe(
-                from.remoteId(),
+                from.resourceId(),
                 subscribeRequest.presence()
             )
         )
@@ -46,7 +46,7 @@ class RosterRxAdapter private constructor(
     override fun presenceAvailable(address: FullJid, availablePresence: Presence) =
         processor.onNext(
             RosterEvent.PresenceAvailable(
-                address.remoteId(),
+                address.resourceId(),
                 availablePresence.presence()
             )
         )
@@ -55,7 +55,7 @@ class RosterRxAdapter private constructor(
     override fun presenceUnavailable(address: FullJid, presence: Presence) =
         processor.onNext(
             RosterEvent.PresenceUnavailable(
-                address.remoteId(),
+                address.resourceId(),
                 presence.presence()
             )
         )
@@ -64,7 +64,7 @@ class RosterRxAdapter private constructor(
     override fun presenceSubscribed(address: BareJid, subscribedPresence: Presence) =
         processor.onNext(
             RosterEvent.PresenceSubscribed(
-                address.remoteId(),
+                address.resourceId(),
                 subscribedPresence.presence()
             )
         )
@@ -73,7 +73,7 @@ class RosterRxAdapter private constructor(
     override fun presenceUnsubscribed(address: BareJid, unsubscribedPresence: Presence) =
         processor.onNext(
             RosterEvent.PresenceUnsubscribed(
-                address.remoteId(),
+                address.resourceId(),
                 unsubscribedPresence.presence()
             )
         )
@@ -82,7 +82,7 @@ class RosterRxAdapter private constructor(
     override fun presenceError(address: Jid, errorPresence: Presence) =
         processor.onNext(
             RosterEvent.PresenceError(
-                address.remoteId(),
+                address.resourceId(),
                 errorPresence.presence()
             )
         )
@@ -107,7 +107,7 @@ class RosterRxAdapter private constructor(
 //    override fun entriesDeleted(addresses: Collection<Jid>) =
 //        processor.onNext(
 //            RosterEvent.EntriesDeleted(
-//                addresses.map(Jid::remoteId)
+//                addresses.map(Jid::resourceId)
 //            )
 //        )
 //
@@ -123,7 +123,7 @@ class RosterRxAdapter private constructor(
 //    override fun entriesUpdated(addresses: Collection<Jid>) =
 //        processor.onNext(
 //            RosterEvent.EntriesUpdated(
-//                addresses.map(Jid::remoteId)
+//                addresses.map(Jid::resourceId)
 //            )
 //        )
 //
@@ -131,7 +131,7 @@ class RosterRxAdapter private constructor(
 //    override fun entriesAdded(addresses: Collection<Jid>) =
 //        processor.onNext(
 //            RosterEvent.EntriesAdded(
-//                addresses.map(Jid::remoteId)
+//                addresses.map(Jid::resourceId)
 //            )
 //        )
 }

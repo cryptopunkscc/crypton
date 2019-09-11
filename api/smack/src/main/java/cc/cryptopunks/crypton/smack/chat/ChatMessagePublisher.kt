@@ -37,7 +37,7 @@ internal class ChatMessagePublisher @Inject constructor(
         processor.onNext(
             chatMessage(
                 message = message.apply {
-                    from = JidCreate.from(user.remoteId)
+                    from = JidCreate.from(user.resourceId)
                 }
             )
         )

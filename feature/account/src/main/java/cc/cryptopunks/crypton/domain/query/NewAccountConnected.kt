@@ -1,17 +1,17 @@
 package cc.cryptopunks.crypton.domain.query
 
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.util.Schedulers
 import cc.cryptopunks.crypton.util.runOn
-import cc.cryptopunks.crypton.entity.Account
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import javax.inject.Inject
 import kotlin.math.max
 
 class NewAccountConnected @Inject constructor(
     dao: Account.Dao,
     schedulers: Schedulers
-) : () -> Observable<Long> by {
-    dao.observeList()
+) : () -> Flowable<Long> by {
+    dao.flowableList()
         .skip(1)
         .map { it.getConnectedIds() }
         .filter { it.isNotEmpty() }

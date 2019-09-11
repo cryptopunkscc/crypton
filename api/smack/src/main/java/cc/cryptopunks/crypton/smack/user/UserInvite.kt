@@ -13,7 +13,7 @@ class UserInvite @Inject constructor(
 ) : User.Api.Invite, (User) -> Unit by { user ->
     connection.sendStanza(
         Presence(
-            JidCreate.from(user.remoteId),
+            JidCreate.from(user.resourceId),
             Presence.Type.subscribe
         )
     )

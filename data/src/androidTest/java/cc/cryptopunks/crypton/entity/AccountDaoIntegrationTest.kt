@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.entity
 
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.*
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.lang.Thread.sleep
@@ -23,7 +23,7 @@ class AccountDaoIntegrationTest : IntegrationTest() {
         // then
         assertEquals(
             expected,
-            getAll()
+            list()
         )
     }
 
@@ -84,8 +84,8 @@ class AccountDaoIntegrationTest : IntegrationTest() {
         val ids = 1L..3
         val accounts = ids.map { account(index = it) }
         val expected = ids.map { account(index = it, withId = true) }
-        val test = observeList()
-            .flatMap { Observable.fromIterable(it) }
+        val test = flowableList()
+            .flatMap { Flowable.fromIterable(it) }
             .distinct()
             .test()
 
