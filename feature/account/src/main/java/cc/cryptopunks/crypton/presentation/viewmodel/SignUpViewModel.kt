@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.interactor.CreateAccount
+import cc.cryptopunks.crypton.domain.interactor.CreateAccountInteractor
 import cc.cryptopunks.kache.rxjava.observable
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.AsyncExecutor
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     val accountViewModel: AccountViewModel,
     async: AsyncExecutor,
-    createAccount: CreateAccount
+    createAccount: CreateAccountInteractor
 ) : ViewModel, () -> Disposable by {
     CompositeDisposable(
         accountViewModel(),

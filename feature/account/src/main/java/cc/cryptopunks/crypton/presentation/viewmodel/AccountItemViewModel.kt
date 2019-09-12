@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.interactor.ConnectAccount
-import cc.cryptopunks.crypton.domain.interactor.DeleteAccount
-import cc.cryptopunks.crypton.domain.interactor.DisconnectAccount
-import cc.cryptopunks.crypton.domain.interactor.RemoveAccount
+import cc.cryptopunks.crypton.domain.interactor.ConnectAccountInteractor
+import cc.cryptopunks.crypton.domain.interactor.DeleteAccountInteractor
+import cc.cryptopunks.crypton.domain.interactor.DisconnectAccountInteractor
+import cc.cryptopunks.crypton.domain.interactor.RemoveAccountInteractor
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting
@@ -12,10 +12,10 @@ import javax.inject.Inject
 
 class AccountItemViewModel @Inject constructor(
     private val async: AsyncExecutor,
-    private val connectAccount: ConnectAccount,
-    private val disconnectAccount: DisconnectAccount,
-    private val removeAccount: RemoveAccount,
-    private val deleteAccount: DeleteAccount
+    private val connectAccount: ConnectAccountInteractor,
+    private val disconnectAccount: DisconnectAccountInteractor,
+    private val removeAccount: RemoveAccountInteractor,
+    private val deleteAccount: DeleteAccountInteractor
 ) {
     var account = Account.Empty
 

@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.presentation.component.AppServiceComponent
 import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel
 import cc.cryptopunks.crypton.service.notification.ShowAppServiceNotification
 import cc.cryptopunks.crypton.component.DaggerContextComponent
-import cc.cryptopunks.crypton.domain.interactor.ReconnectAccounts
+import cc.cryptopunks.crypton.domain.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.app
 import cc.cryptopunks.crypton.module.ContextModule
 import cc.cryptopunks.crypton.module.ServiceModule
@@ -48,7 +48,7 @@ class AppService :
     @Inject
     fun init(
         async: AsyncExecutor,
-        reconnectAccounts: ReconnectAccounts,
+        reconnectAccounts: ReconnectAccountsInteractor,
         setupNotificationChannel: SetupNotificationChannel,
         showAppServiceNotification: ShowAppServiceNotification
     ) {

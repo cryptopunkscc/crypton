@@ -7,10 +7,10 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ReconnectAccounts @Inject constructor(
+class ReconnectAccountsInteractor @Inject constructor(
     private val dao: Account.Dao,
     private val repository: AccountRepository,
-    private val connect: ConnectAccount
+    private val connect: ConnectAccountInteractor
 ) : () -> Completable {
 
     override fun invoke() = Observable

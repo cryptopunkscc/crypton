@@ -8,14 +8,15 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
-class AddAccount @Inject constructor(
+class CreateAccountInteractor @Inject constructor(
     repository: AccountRepository,
-    connect: ConnectAccount
+    connect: ConnectAccountInteractor
 ) : (Account) -> Completable by { account ->
     repository.copy().run {
         Single.fromCallable {
             set(account)
             setStatus(Disconnected)
+            create()
             insert()
         }.flatMapCompletable {
             connect(id)

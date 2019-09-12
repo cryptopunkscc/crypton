@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.entity.Message
 import io.reactivex.Completable
 import javax.inject.Inject
 
-class LoadMessages @Inject constructor(
+class LoadMessagesInteractor @Inject constructor(
     messageDao: Message.Dao,
     conversationDao: Conversation.Dao,
     accountDao: Account.Dao,

@@ -23,14 +23,14 @@ internal interface IntegrationTestComponent {
     val accountDao: Account.Dao
     val clientCache: Client.Cache
 
-    val addAccount: AddAccount
-    val connectAccount: ConnectAccount
-    val createAccount: CreateAccount
-    val disconnectAccount: DisconnectAccount
-    val removeAccount: RemoveAccount
-    val deleteAccount: DeleteAccount
+    val addAccount: AddAccountInteractor
+    val connectAccount: ConnectAccountInteractor
+    val createAccount: CreateAccountInteractor
+    val disconnectAccount: DisconnectAccountInteractor
+    val removeAccount: RemoveAccountInteractor
+    val deleteAccount: DeleteAccountInteractor
 
-    val reconnectAccounts: ReconnectAccounts
+    val reconnectAccounts: ReconnectAccountsInteractor
 }
 
 @Module

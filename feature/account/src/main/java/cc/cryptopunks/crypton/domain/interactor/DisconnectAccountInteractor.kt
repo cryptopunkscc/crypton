@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Completable.*
 import javax.inject.Inject
 
-class DisconnectAccount @Inject constructor(
+class DisconnectAccountInteractor @Inject constructor(
     repository: AccountRepository
 ) : (Long) -> Completable by { id ->
     repository.copy().run {

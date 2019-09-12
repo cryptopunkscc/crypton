@@ -2,24 +2,22 @@ package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.domain.repository.AccountRepository
 import cc.cryptopunks.crypton.util.wrap
-import cc.cryptopunks.crypton.entity.Account.Status.Connected
-import cc.cryptopunks.crypton.entity.Account.Status.Connecting
+import cc.cryptopunks.crypton.entity.Account
 import io.reactivex.Completable
+import io.reactivex.Completable.*
 import javax.inject.Inject
 
-class ConnectAccount @Inject constructor(
+class RemoveAccountInteractor @Inject constructor(
     repository: AccountRepository
 ) : (Long) -> Completable by { id ->
     repository.copy().run {
-        Completable.fromAction {
+        fromAction {
             load(id)
-            setStatus(Connecting)
-            update()
-            login()
-            setStatus(Connected)
-            update()
+            if (get().status == Account.Status.Connected)
+                disconnect()
+            remove()
         }.onErrorResumeNext {
-            Completable.error(wrap(it))
+            error(wrap(it))
         }
     }
 }

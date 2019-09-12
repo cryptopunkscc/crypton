@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.interactor.CreateConversation
+import cc.cryptopunks.crypton.domain.interactor.CreateConversationInteractor
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.AsyncExecutor
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @ViewModelScope
 class CreateConversationViewModel @Inject constructor(
     private val async: AsyncExecutor,
-    private val createConversation: CreateConversation
+    private val createConversation: CreateConversationInteractor
 ) : Kache.Provider by KacheManager() {
 
     val users by lazy<List<User>>("users", initial = emptyList())
