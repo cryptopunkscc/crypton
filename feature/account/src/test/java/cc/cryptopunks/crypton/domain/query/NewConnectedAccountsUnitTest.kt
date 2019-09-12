@@ -2,15 +2,19 @@ package cc.cryptopunks.crypton.domain.query
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
-import cc.cryptopunks.crypton.util.Schedulers
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class NewConnectedAccountsUnitTest {
+class NewConnectedAccountsUnitTest: CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
 
     @RelaxedMockK
     lateinit var dao: Account.Dao
@@ -19,42 +23,44 @@ class NewConnectedAccountsUnitTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        newAccountConnected = NewAccountConnected(dao, Schedulers.currentThread)
+        newAccountConnected = NewAccountConnected(dao)
     }
 
     @Test
     operator fun invoke() {
-        // given
-        val subject = PublishProcessor.create<List<Account>>()
-        every { dao.flowableList() } returns subject
+        runBlocking {
+            // given
+            every { dao.flowList() } returns flow<List<Account>> {
+                emit(
+                    emptyList()
+                )
+                emit(
+                    listOf(
+                        Account(id = 1, status = Connected),
+                        Account(id = 2)
+                    )
+                )
+                emit(
+                    listOf(
+                        Account(id = 1, status = Connected),
+                        Account(id = 2, status = Connected)
+                    )
+                )
+                emit(
+                    listOf(
+                        Account(id = 1)
+                    )
+                )
+            }
 
-        // when
-        val addedAccounts = newAccountConnected().test()
+            // when
+            val addedAccounts = newAccountConnected()
 
-        subject.onNext(
-            emptyList()
-        )
-        subject.onNext(
-            listOf(
-                Account(id = 1, status = Connected),
-                Account(id = 2)
+            // then
+            assertEquals(
+                listOf(1L, 2L),
+                addedAccounts.toList(mutableListOf())
             )
-        )
-        subject.onNext(
-            listOf(
-                Account(id = 1, status = Connected),
-                Account(id = 2, status = Connected)
-            )
-        )
-        subject.onNext(
-            listOf(
-                Account(id = 1)
-            )
-        )
-
-        // then
-        addedAccounts
-            .assertNoErrors()
-            .assertValues(1, 2)
+        }
     }
 }

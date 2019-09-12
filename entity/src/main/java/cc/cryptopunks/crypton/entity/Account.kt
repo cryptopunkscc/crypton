@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 @Entity(
     indices = [Index(
@@ -83,6 +84,9 @@ data class Account constructor(
 
         @Query("select * from account")
         fun flowableList(): Flowable<List<Account>>
+
+        @Query("select * from account")
+        fun flowList(): Flow<List<Account>>
     }
 
     companion object {

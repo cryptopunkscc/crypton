@@ -1,24 +1,22 @@
 package cc.cryptopunks.crypton.domain.query
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.util.Schedulers
-import cc.cryptopunks.crypton.util.runOn
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import kotlin.math.max
 
 class NewAccountConnected @Inject constructor(
-    dao: Account.Dao,
-    schedulers: Schedulers
-) : () -> Flowable<Long> by {
-    dao.flowableList()
-        .skip(1)
+    private val dao: Account.Dao
+) : () -> Flow<Long> {
+
+    override fun invoke(): Flow<Long> = dao
+        .flowList()
+        .drop(1)
         .map { it.getConnectedIds() }
         .filter { it.isNotEmpty() }
         .map { it.last() }
-        .scan { t1: Long, t2: Long -> max(t1, t2) }
+        .scanReduce { l, r ->  max(l, r) }
         .distinctUntilChanged()
-        .runOn(schedulers)
 }
 
 private fun List<Account>.getConnectedIds() = this

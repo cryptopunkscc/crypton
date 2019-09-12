@@ -14,7 +14,7 @@ import dagger.Component
         Client.Module::class
     ]
 )
-interface AccountComponent : FeatureComponent {
+interface AccountComponent : ViewModelComponent {
     fun inject(target: SetAccountFragment)
     fun inject(target: SignInFragment)
     fun inject(target: SignUpFragment)

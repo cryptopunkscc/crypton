@@ -14,7 +14,5 @@ class NavigationFragment : BaseAccountFragment() {
     @Inject
     fun init(
         navigationViewModel: AccountNavigationViewModel
-    ) {
-        modelDisposable.addAll(navigationViewModel())
-    }
+    ) = Unit
 }

@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.component.FeatureComponent
 import cc.cryptopunks.crypton.module.ViewModelModule
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.component.ViewModelComponent
 import dagger.Component
 
 @ViewModelScope
@@ -15,7 +16,7 @@ import dagger.Component
         Client.Module::class
     ]
 )
-interface ViewModelComponent : FeatureComponent {
+interface AppViewModelComponent : ViewModelComponent {
     fun inject(target: MainFragment)
     fun inject(target: DashboardFragment)
 }

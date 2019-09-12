@@ -4,16 +4,18 @@ import android.view.MenuItem
 import android.widget.Toolbar
 import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.App
-import cc.cryptopunks.crypton.core.R
 import cc.cryptopunks.crypton.component.*
+import cc.cryptopunks.crypton.core.R
 import cc.cryptopunks.crypton.module.ContextModule
 import cc.cryptopunks.crypton.module.FeatureModule
 import cc.cryptopunks.crypton.util.ext.fragment
 import cc.cryptopunks.kache.rxjava.observable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.cancel
 
 abstract class BaseActivity :
-    DisposableActivity() {
+    DisposableActivity(),
+    Scopes.View by Scopes.View() {
 
     val toolbar by lazy { findViewById<Toolbar>(R.id.action_bar) }
 
@@ -55,5 +57,10 @@ abstract class BaseActivity :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         featureComponent.onOptionItemSelected(item.itemId)
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        cancel()
+        super.onDestroy()
     }
 }

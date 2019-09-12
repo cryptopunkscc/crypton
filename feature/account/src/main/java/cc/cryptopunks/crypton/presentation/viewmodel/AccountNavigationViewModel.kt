@@ -3,14 +3,21 @@ package cc.cryptopunks.crypton.presentation.viewmodel
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.domain.query.NewAccountConnected
 import cc.cryptopunks.crypton.util.Navigate
-import io.reactivex.disposables.Disposable
+import cc.cryptopunks.crypton.util.Scopes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AccountNavigationViewModel @Inject constructor(
-    newAccountConnected: NewAccountConnected,
-    navigate: Navigate
-) : () -> Disposable by {
-    newAccountConnected().subscribe {
-        navigate(R.id.navigateAccountList)
+    scope: Scopes.ViewModel,
+    private val newAccountConnected: NewAccountConnected,
+    private val navigate: Navigate
+) : CoroutineScope {
+
+    override val coroutineContext = scope.launch {
+        newAccountConnected().collect {
+            navigate(R.id.navigateAccountList)
+        }
     }
 }

@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : CoroutineFragment() {
 
     @get:LayoutRes
     open val layoutId
