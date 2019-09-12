@@ -1,13 +1,13 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
 import androidx.paging.RxPagedListBuilder
-import cc.cryptopunks.crypton.domain.selector.ConversationDataSource
+import cc.cryptopunks.crypton.domain.selector.ConversationDataSourceSelector
 import cc.cryptopunks.crypton.module.ViewModelScope
 import javax.inject.Inject
 
 @ViewModelScope
 class ConversationListViewModel @Inject constructor(
-    conversationDataSource: ConversationDataSource,
+    conversationDataSource: ConversationDataSourceSelector,
     createConversationItem: ConversationItemViewModel.Factory
 ) {
 

@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.entity.Account
 import io.reactivex.Flowable
 import javax.inject.Inject
 
-class HasAccounts @Inject constructor(
+class HasAccountsSelector @Inject constructor(
     dao: Account.Dao
 ) : () -> Flowable<Boolean> by {
     dao.flowableList().map { it.isNotEmpty() }

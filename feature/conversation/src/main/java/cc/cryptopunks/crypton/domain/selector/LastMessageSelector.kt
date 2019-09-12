@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.util.runOn
 import io.reactivex.Flowable
 import javax.inject.Inject
 
-class LastMessage @Inject constructor(
+class LastMessageSelector @Inject constructor(
     dao: Message.Dao,
     schedulers: Schedulers
 ) : (Conversation) -> Flowable<Message> by { conversation ->

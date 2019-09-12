@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.selector.LastMessage
+import cc.cryptopunks.crypton.domain.selector.LastMessageSelector
 import cc.cryptopunks.crypton.entity.Conversation
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.Navigate
@@ -10,7 +10,7 @@ import javax.inject.Inject
 class ConversationItemViewModel(
     private val conversation: Conversation,
     private val navigate: Navigate,
-    private val lastMessage: LastMessage
+    private val lastMessage: LastMessageSelector
 ) {
 
     val id = conversation.id
@@ -27,7 +27,7 @@ class ConversationItemViewModel(
 
     @ViewModelScope
     class Factory @Inject constructor(
-        private val lastMessage: LastMessage,
+        private val lastMessage: LastMessageSelector,
         private val navigate: Navigate
     ) : (Conversation) -> ConversationItemViewModel by { conversation ->
         ConversationItemViewModel(
