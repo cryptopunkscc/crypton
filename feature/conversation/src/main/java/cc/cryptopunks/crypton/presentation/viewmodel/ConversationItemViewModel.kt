@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.query.LastMessage
+import cc.cryptopunks.crypton.domain.selector.LastMessage
 import cc.cryptopunks.crypton.entity.Conversation
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.Navigate

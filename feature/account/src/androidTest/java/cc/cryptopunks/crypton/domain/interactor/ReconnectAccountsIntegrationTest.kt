@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.domain.command
+package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.Connected

@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.domain.query.NewAccountConnected
+import cc.cryptopunks.crypton.domain.selector.NewAccountConnected
 import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.Scopes
 import kotlinx.coroutines.CoroutineScope

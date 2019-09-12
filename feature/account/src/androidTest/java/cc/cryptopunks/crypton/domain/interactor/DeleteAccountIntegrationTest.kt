@@ -1,14 +1,17 @@
-package cc.cryptopunks.crypton.domain.command
+package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.IntegrationTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-class RemoveAccountIntegrationTest : IntegrationTest() {
+class DeleteAccountIntegrationTest : IntegrationTest() {
 
     override fun setUp(): Unit = with(client1) {
         insertAccount()
+        connect()
+        create()
+        disconnect()
     }
 
     @Test
@@ -16,9 +19,10 @@ class RemoveAccountIntegrationTest : IntegrationTest() {
         // given
         val id = 1L
         val expected = null
+        connectAccount(id).blockingAwait()
 
         // when
-        val connection = removeAccount(id).test()
+        val connection = deleteAccount(id).test()
 
         // then
         connection

@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.command.ConnectAccount
-import cc.cryptopunks.crypton.domain.command.DeleteAccount
-import cc.cryptopunks.crypton.domain.command.DisconnectAccount
-import cc.cryptopunks.crypton.domain.command.RemoveAccount
+import cc.cryptopunks.crypton.domain.interactor.ConnectAccount
+import cc.cryptopunks.crypton.domain.interactor.DeleteAccount
+import cc.cryptopunks.crypton.domain.interactor.DisconnectAccount
+import cc.cryptopunks.crypton.domain.interactor.RemoveAccount
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting

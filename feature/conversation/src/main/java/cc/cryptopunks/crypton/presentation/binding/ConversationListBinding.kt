@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presentation.binding
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import cc.cryptopunks.crypton.domain.command.LoadMessages
+import cc.cryptopunks.crypton.domain.interactor.LoadMessages
 import cc.cryptopunks.crypton.presentation.adapter.ConversationItemAdapter
 import cc.cryptopunks.crypton.presentation.viewmodel.ConversationListViewModel
 import cc.cryptopunks.crypton.util.AsyncExecutor

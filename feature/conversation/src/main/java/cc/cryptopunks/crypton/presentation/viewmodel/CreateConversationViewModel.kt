@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.command.CreateConversation
+import cc.cryptopunks.crypton.domain.interactor.CreateConversation
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.AsyncExecutor

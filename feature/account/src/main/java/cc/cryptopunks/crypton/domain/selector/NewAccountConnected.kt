@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.domain.query
+package cc.cryptopunks.crypton.domain.selector
 
 import cc.cryptopunks.crypton.entity.Account
 import kotlinx.coroutines.flow.*

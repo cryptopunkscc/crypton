@@ -1,20 +1,23 @@
-package cc.cryptopunks.crypton.domain.command
+package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.domain.repository.AccountRepository
 import cc.cryptopunks.crypton.util.wrap
+import cc.cryptopunks.crypton.entity.Account
 import io.reactivex.Completable
-import io.reactivex.Completable.fromAction
+import io.reactivex.Completable.*
 import javax.inject.Inject
 
-class DeleteAccount @Inject constructor(
+class RemoveAccount @Inject constructor(
     repository: AccountRepository
 ) : (Long) -> Completable by { id ->
     repository.copy().run {
         fromAction {
             load(id)
-            delete()
+            if (get().status == Account.Status.Connected)
+                disconnect()
+            remove()
         }.onErrorResumeNext {
-            Completable.error(wrap(it))
+            error(wrap(it))
         }
     }
 }

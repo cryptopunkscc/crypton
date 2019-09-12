@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.query.AccountList
+import cc.cryptopunks.crypton.domain.selector.AccountList
 import cc.cryptopunks.crypton.util.Schedulers
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.Navigate

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.domain.command.CreateAccount
+import cc.cryptopunks.crypton.domain.interactor.CreateAccount
 import cc.cryptopunks.kache.rxjava.observable
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.AsyncExecutor
