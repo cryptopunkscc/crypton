@@ -17,9 +17,7 @@ class MainFragment : BaseAppFragment() {
         navigationViewModel: MainNavigationViewModel,
         toggleAppServiceViewModel: ToggleAppServiceViewModel
     ) {
-        modelDisposable.addAll(
-            navigationViewModel(),
-            toggleAppServiceViewModel()
-        )
+        navigationViewModel()
+        toggleAppServiceViewModel()
     }
 }

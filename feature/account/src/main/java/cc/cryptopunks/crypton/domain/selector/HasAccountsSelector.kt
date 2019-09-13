@@ -1,12 +1,15 @@
 package cc.cryptopunks.crypton.domain.selector
 
 import cc.cryptopunks.crypton.entity.Account
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HasAccountsSelector @Inject constructor(
     dao: Account.Dao
-) : () -> Flowable<Boolean> by {
-    dao.flowableList().map { it.isNotEmpty() }
+) : () -> Flow<Boolean> by {
+    dao.flowList()
+        .map { it.isNotEmpty() }
         .distinctUntilChanged()
 }
