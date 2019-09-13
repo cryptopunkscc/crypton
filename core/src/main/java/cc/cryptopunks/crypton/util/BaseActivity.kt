@@ -11,11 +11,13 @@ import cc.cryptopunks.crypton.module.FeatureModule
 import cc.cryptopunks.crypton.util.ext.fragment
 import cc.cryptopunks.kache.rxjava.observable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 
 abstract class BaseActivity :
     DisposableActivity(),
-    Scopes.View by Scopes.View() {
+    CoroutineScope by MainScope() {
 
     val toolbar by lazy { findViewById<Toolbar>(R.id.action_bar) }
 

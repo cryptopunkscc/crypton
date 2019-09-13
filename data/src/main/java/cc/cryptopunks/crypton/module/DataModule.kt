@@ -14,7 +14,7 @@ class DataModule {
     @Provides
     @Singleton
     fun appDatabase(context: Application): Database = Room
-        .databaseBuilder(context, Database::class.java, "cryption.db")
+        .databaseBuilder(context, Database::class.java, "crypton.db")
 //        .inMemoryDatabaseBuilder(context, Database::class.java)
         .build()
 }

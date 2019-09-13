@@ -1,26 +1,28 @@
 package cc.cryptopunks.crypton.util
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 abstract class CoroutineFragment :
     Fragment(),
-    Scopes.View {
+    CoroutineScope {
 
-    private var internalCoroutineContext: CoroutineContext? = null
-    override val coroutineContext: CoroutineContext get() = internalCoroutineContext!!
+    private val fragmentContext = SupervisorJob() + Dispatchers.Main
+    private val viewContext = fragmentContext + Dispatchers.Main
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        internalCoroutineContext = MainScope().coroutineContext
-        super.onViewCreated(view, savedInstanceState)
-    }
+    override val coroutineContext: CoroutineContext
+        get() = if (view == null)
+            fragmentContext else
+            viewContext
 
     override fun onDestroyView() {
-        internalCoroutineContext?.cancel()
-        internalCoroutineContext = null
+        viewContext.cancelChildren()
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        fragmentContext.cancel()
+        super.onDestroy()
     }
 }

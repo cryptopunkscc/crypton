@@ -7,10 +7,11 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.presentation.adapter.AccountListAdapter
-import cc.cryptopunks.crypton.presentation.adapter.subscribe
+import cc.cryptopunks.crypton.presentation.adapter.bind
 import cc.cryptopunks.crypton.presentation.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.AccountListViewModel
 import kotlinx.android.synthetic.main.account_list.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -46,9 +47,12 @@ class AccountListFragment : BaseAccountFragment() {
 
         viewDisposable.addAll(
             accountListAdapter,
-            accountListViewModel(),
-            accountListViewModel.observable.subscribe(accountListAdapter)
+            accountListViewModel()
         )
+
+        launch {
+            accountListAdapter.bind(accountListViewModel.flowAccountList)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

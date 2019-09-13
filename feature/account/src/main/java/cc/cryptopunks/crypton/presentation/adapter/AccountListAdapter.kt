@@ -6,19 +6,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.presentation.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.presentation.viewmodel.AccountItemViewModel
-import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.util.DisposableDelegate
-import cc.cryptopunks.kache.rxjava.flowable
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.checkedChanges
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.account_item.*
-import org.reactivestreams.Publisher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Provider
@@ -86,6 +84,6 @@ class AccountListAdapter @Inject constructor(
     }
 }
 
-fun Publisher<List<Account>>.subscribe(adapter: AccountListAdapter): Disposable = flowable().subscribe {
-    adapter.items = it
+suspend fun AccountListAdapter.bind(accountList: Flow<List<Account>>) = accountList.collect {
+    items = it
 }

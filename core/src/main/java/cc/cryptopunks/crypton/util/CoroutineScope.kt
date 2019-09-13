@@ -12,9 +12,6 @@ import kotlin.coroutines.EmptyCoroutineContext
 object Scopes {
 
     @Singleton
-    class Data @Inject constructor() : CoroutineScope by CoroutineScope(Dispatchers.IO)
-
-    @Singleton
     class Feature @Inject constructor(
         private val handleError: HandleError
     ) : CoroutineScope by CoroutineScope(Dispatchers.IO) {
@@ -31,9 +28,4 @@ object Scopes {
 
     @ViewModelScope
     class ViewModel @Inject constructor() : CoroutineScope by MainScope()
-
-    interface View : CoroutineScope {
-        private class Impl : View, CoroutineScope by MainScope()
-        companion object : () -> View by { Impl() }
-    }
 }
