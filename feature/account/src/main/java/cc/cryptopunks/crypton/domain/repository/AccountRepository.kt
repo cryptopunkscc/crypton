@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.domain.repository
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.util.ext.reduce
+import cc.cryptopunks.crypton.util.wrap
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
@@ -49,4 +50,11 @@ data class AccountRepository @Inject constructor(
     fun clear() {
         clientRepository - get()
     }
+
+    inline fun <R> run(block: AccountRepository.() -> R): R =
+        try {
+            block()
+        } catch (throwable: Throwable) {
+            throw wrap(throwable)
+        }
 }

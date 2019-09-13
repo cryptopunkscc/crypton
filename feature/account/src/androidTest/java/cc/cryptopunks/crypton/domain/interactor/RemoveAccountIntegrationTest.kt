@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.IntegrationTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -13,25 +14,23 @@ class RemoveAccountIntegrationTest : IntegrationTest() {
 
     @Test
     fun invoke(): Unit = with(component) {
-        // given
-        val id = 1L
-        val expected = null
+        runBlocking {
+            // given
+            val id = 1L
+            val expected = null
 
-        // when
-        val connection = removeAccount(id).test()
+            // when
+            removeAccount(id).join()
 
-        // then
-        connection
-            .assertComplete()
-            .assertNoErrors()
+            // then
+            assertEquals(
+                expected,
+                accountDao.contains(id)
+            )
 
-        assertEquals(
-            expected,
-            accountDao.contains(id)
-        )
-
-        assertNull(
-            clientCache[id]
-        )
+            assertNull(
+                clientCache[id]
+            )
+        }
     }
 }

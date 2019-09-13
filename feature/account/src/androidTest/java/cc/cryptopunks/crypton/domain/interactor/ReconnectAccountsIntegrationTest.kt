@@ -3,9 +3,9 @@ package cc.cryptopunks.crypton.domain.interactor
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.concurrent.TimeUnit
 
 class ReconnectAccountsIntegrationTest : IntegrationTest() {
 
@@ -24,26 +24,26 @@ class ReconnectAccountsIntegrationTest : IntegrationTest() {
 
     @Test
     fun invoke(): Unit = with(component) {
-        // given
-        val expected = ids.map {
-            account(
-                index = it.toLong(),
-                withId = true
-            ).copy(
-                status = Connected
+        runBlocking {
+            // given
+            val expected = ids.map {
+                account(
+                    index = it.toLong(),
+                    withId = true
+                ).copy(
+                    status = Connected
+                )
+            }
+
+            // when
+            reconnectAccounts().join()
+
+            // then
+            assertEquals(
+                expected,
+                accountDao.list()
             )
         }
-
-        // when
-        val reconnection = reconnectAccounts().test()
-
-        // then
-        reconnection.awaitTerminalEvent(5, TimeUnit.SECONDS)
-
-        assertEquals(
-            expected,
-            accountDao.list()
-        )
     }
 
     override fun tearDown() {

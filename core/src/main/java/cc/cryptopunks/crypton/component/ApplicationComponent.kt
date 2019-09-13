@@ -22,5 +22,5 @@ interface ApplicationComponent :
     Client.Component {
 
     val application: Application
-    val commandScope: Scopes.Command
+    val featureScope: Scopes.Feature
 }

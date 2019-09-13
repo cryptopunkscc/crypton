@@ -3,17 +3,16 @@ package cc.cryptopunks.crypton.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.presentation.component.DaggerAppServiceComponent
-import cc.cryptopunks.crypton.presentation.component.AppServiceComponent
-import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel
-import cc.cryptopunks.crypton.service.notification.ShowAppServiceNotification
+import cc.cryptopunks.crypton.app
 import cc.cryptopunks.crypton.component.DaggerContextComponent
 import cc.cryptopunks.crypton.domain.interactor.ReconnectAccountsInteractor
-import cc.cryptopunks.crypton.app
 import cc.cryptopunks.crypton.module.ContextModule
 import cc.cryptopunks.crypton.module.ServiceModule
 import cc.cryptopunks.crypton.module.ServiceScope
-import cc.cryptopunks.crypton.util.AsyncExecutor
+import cc.cryptopunks.crypton.presentation.component.AppServiceComponent
+import cc.cryptopunks.crypton.presentation.component.DaggerAppServiceComponent
+import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel
+import cc.cryptopunks.crypton.service.notification.ShowAppServiceNotification
 import cc.cryptopunks.crypton.util.DisposableDelegate
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -47,14 +46,13 @@ class AppService :
 
     @Inject
     fun init(
-        async: AsyncExecutor,
         reconnectAccounts: ReconnectAccountsInteractor,
         setupNotificationChannel: SetupNotificationChannel,
         showAppServiceNotification: ShowAppServiceNotification
     ) {
         setupNotificationChannel()
         showAppServiceNotification()
-        async(task = reconnectAccounts)
+        reconnectAccounts()
     }
 
     override fun onHandleIntent(intent: Intent?) {

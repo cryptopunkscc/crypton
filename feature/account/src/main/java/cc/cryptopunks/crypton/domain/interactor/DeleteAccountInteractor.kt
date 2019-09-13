@@ -1,20 +1,18 @@
 package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.domain.repository.AccountRepository
-import cc.cryptopunks.crypton.util.wrap
-import io.reactivex.Completable
-import io.reactivex.Completable.fromAction
+import cc.cryptopunks.crypton.util.Scopes
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class DeleteAccountInteractor @Inject constructor(
-    repository: AccountRepository
-) : (Long) -> Completable by { id ->
-    repository.copy().run {
-        fromAction {
+    repository: AccountRepository,
+    scope: Scopes.Feature
+) : (Long) -> Job by { id ->
+    scope.launch {
+        repository.copy().run {
             load(id)
             delete()
-        }.onErrorResumeNext {
-            Completable.error(wrap(it))
         }
     }
 }

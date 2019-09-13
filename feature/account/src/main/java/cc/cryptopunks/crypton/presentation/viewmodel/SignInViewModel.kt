@@ -1,9 +1,8 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import cc.cryptopunks.crypton.module.ViewModelScope
-import cc.cryptopunks.crypton.util.AsyncExecutor
-import cc.cryptopunks.crypton.util.ViewModel
 import cc.cryptopunks.crypton.domain.interactor.AddAccountInteractor
+import cc.cryptopunks.crypton.module.ViewModelScope
+import cc.cryptopunks.crypton.util.ViewModel
 import cc.cryptopunks.crypton.util.text
 import cc.cryptopunks.kache.rxjava.observable
 import io.reactivex.disposables.CompositeDisposable
@@ -13,7 +12,6 @@ import javax.inject.Inject
 @ViewModelScope
 class SignInViewModel @Inject constructor(
     accountViewModel: AccountViewModel,
-    async: AsyncExecutor,
     addAccount: AddAccountInteractor
 ) : ViewModel, () -> Disposable by {
     CompositeDisposable(
@@ -23,7 +21,8 @@ class SignInViewModel @Inject constructor(
             .observable()
             .filter { it > 0 }
             .map { accountViewModel.getAccount() }
-            .subscribe(async(task = addAccount))
+            .map(addAccount)
+            .subscribe()
     )
 } {
     init {

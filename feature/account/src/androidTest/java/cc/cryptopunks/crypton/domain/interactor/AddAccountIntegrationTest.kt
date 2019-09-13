@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -15,26 +16,24 @@ class AddAccountIntegrationTest : IntegrationTest() {
 
     @Test
     fun invoke(): Unit = with(component) {
-        // given
-        val id = 1L
-        val account = account(id)
-        val expected = account.copy(
-            id = id,
-            status = Connected
-        )
+        runBlocking {
+            // given
+            val id = 1L
+            val account = account(id)
+            val expected = account.copy(
+                id = id,
+                status = Connected
+            )
 
-        // when
-        val addition = addAccount(account).test()
+            // when
+            addAccount(account).join()
 
-        // then
-        addition
-            .assertNoErrors()
-            .assertComplete()
-
-        assertEquals(
-            expected,
-            accountDao.get(id)
-        )
+            // then
+            assertEquals(
+                expected,
+                accountDao.get(id)
+            )
+        }
     }
 
     override fun tearDown(): Unit = with(client1) {

@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -17,29 +18,27 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
 
     @Test
     fun invoke(): Unit = with(component) {
-        // given
-        val id = 1L
-        val expected = account(id).copy(
-            id = id,
-            status = Disconnected
-        )
+        runBlocking {
+            // given
+            val id = 1L
+            val expected = account(id).copy(
+                id = id,
+                status = Disconnected
+            )
 
-        // when
-        val connection = disconnectAccount(id).test()
+            // when
+            disconnectAccount(id).join()
 
-        // then
-        connection
-            .assertComplete()
-            .assertNoErrors()
+            // then
+            assertEquals(
+                expected,
+                accountDao.get(id)
+            )
 
-        assertEquals(
-            expected,
-            accountDao.get(id)
-        )
-
-        assertNull(
-            clientCache[id]
-        )
+            assertNull(
+                clientCache[id]
+            )
+        }
     }
 
     override fun tearDown(): Unit = with(client1) {

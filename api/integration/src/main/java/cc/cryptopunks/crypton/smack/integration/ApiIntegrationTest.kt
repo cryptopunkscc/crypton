@@ -3,8 +3,11 @@ package cc.cryptopunks.crypton.smack.integration
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.RemoteId
 import cc.cryptopunks.crypton.smack.SmackClientFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
-abstract class ApiIntegrationTest {
+abstract class ApiIntegrationTest :
+    CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
 
     val baseId = RemoteId(domain = "test.io")
     private val clients = mutableMapOf<Long, Client>()
