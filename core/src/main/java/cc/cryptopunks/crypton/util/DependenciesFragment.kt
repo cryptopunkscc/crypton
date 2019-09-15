@@ -1,5 +1,8 @@
 package cc.cryptopunks.crypton.util
 
 class DependenciesFragment<D> : BaseFragment() {
-    var component: D? = null
+    private var component: D? = null
+
+    fun init(init: DependenciesFragment<D>.() -> D): D =
+        component ?: init().also { component = it }
 }

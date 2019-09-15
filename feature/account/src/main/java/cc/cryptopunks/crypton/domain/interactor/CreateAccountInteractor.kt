@@ -10,7 +10,7 @@ import javax.inject.Inject
 class CreateAccountInteractor @Inject constructor(
     repository: AccountRepository,
     connect: ConnectAccountInteractor,
-    scope: Scopes.Feature
+    scope: Scopes.UseCase
 ) : (Account) -> Job by { account ->
     scope.launch {
         repository.copy().run {
@@ -18,7 +18,7 @@ class CreateAccountInteractor @Inject constructor(
             setStatus(Disconnected)
             create()
             insert()
-            connect(id).join()
+            connect(get().id).join()
         }
     }
 }

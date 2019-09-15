@@ -22,8 +22,6 @@ abstract class BaseFragment : CoroutineFragment() {
 
     val baseActivity get() = activity as BaseActivity
 
-    val applicationComponent by lazy { baseActivity.applicationComponent }
-
     val viewDisposable = ViewDisposable()
 
     val modelDisposable = ModelDisposable()

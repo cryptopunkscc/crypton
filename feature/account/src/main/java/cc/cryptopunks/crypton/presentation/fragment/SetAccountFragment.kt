@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.set_account.*
 import javax.inject.Inject
 
 
-class SetAccountFragment : BaseAccountFragment() {
+class SetAccountFragment : AccountComponentFragment() {
 
     override val layoutId: Int get() = R.layout.set_account
 

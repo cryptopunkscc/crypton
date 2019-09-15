@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class ConnectAccountInteractor @Inject constructor(
     repository: AccountRepository,
-    scope: Scopes.Feature
+    scope: Scopes.UseCase
 ) : (Long) -> Job by { accountId ->
     scope.launch {
         repository.copy().run {

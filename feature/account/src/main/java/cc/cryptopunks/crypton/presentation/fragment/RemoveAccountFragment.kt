@@ -27,12 +27,12 @@ class RemoveAccountFragment :
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when (which) {
-            BUTTON_POSITIVE -> model.remove(deleteFromServer)
+            BUTTON_POSITIVE -> model.remove(isDeleteFromServerChecked)
             BUTTON_NEGATIVE -> dismiss()
         }
     }
 
-    private val deleteFromServer get() = dialog.deleteOnServerCheckbox?.isChecked ?: false
+    private val isDeleteFromServerChecked get() = dialog.deleteOnServerCheckbox?.isChecked ?: false
 
     companion object : (AccountItemViewModel) -> RemoveAccountFragment by {
         RemoveAccountFragment().apply { model = it }

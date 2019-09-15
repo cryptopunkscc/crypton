@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import cc.cryptopunks.crypton.R
-import cc.cryptopunks.crypton.presentation.viewmodel.DashboardViewModel
+import cc.cryptopunks.crypton.presentation.viewmodel.OptionItemNavigationViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DashboardFragment : BaseAppFragment() {
@@ -18,8 +19,8 @@ class DashboardFragment : BaseAppFragment() {
     }
 
     @Inject
-    fun init(dashboardViewModel: DashboardViewModel) {
-        modelDisposable.add(dashboardViewModel())
+    fun init(navigationViewModel: OptionItemNavigationViewModel) {
+        launch { navigationViewModel() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

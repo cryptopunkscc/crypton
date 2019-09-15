@@ -5,7 +5,6 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.DataModule
 import cc.cryptopunks.crypton.module.KacheModule
-import cc.cryptopunks.crypton.util.Scopes
 import dagger.Component
 import javax.inject.Singleton
 
@@ -17,10 +16,10 @@ import javax.inject.Singleton
 ])
 interface ApplicationComponent :
     UtilsComponent,
-    DaoComponent,
+    DataComponent,
+    DomainComponent,
     KacheComponent,
     Client.Component {
 
     val application: Application
-    val featureScope: Scopes.Feature
 }

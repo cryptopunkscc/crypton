@@ -19,5 +19,5 @@ interface AccountComponent : ViewModelComponent {
     fun inject(target: SignInFragment)
     fun inject(target: SignUpFragment)
     fun inject(target: AccountListFragment)
-    fun inject(target: NavigationFragment)
+    fun inject(target: AccountNavigationFragment)
 }

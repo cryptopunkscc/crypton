@@ -2,9 +2,10 @@ package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
 import cc.cryptopunks.crypton.presentation.viewmodel.AccountNavigationViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NavigationFragment : BaseAccountFragment() {
+class AccountNavigationFragment : AccountComponentFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,5 +15,7 @@ class NavigationFragment : BaseAccountFragment() {
     @Inject
     fun init(
         navigationViewModel: AccountNavigationViewModel
-    ) = Unit
+    ) {
+        launch { navigationViewModel() }
+    }
 }

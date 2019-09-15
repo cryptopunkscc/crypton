@@ -14,16 +14,15 @@ class ReconnectAccountsInteractor @Inject constructor(
     private val dao: Account.Dao,
     private val repository: AccountRepository,
     private val connectAccount: ConnectAccountInteractor,
-    private val scope: Scopes.Feature
+    private val scope: Scopes.UseCase
 ) : () -> Job {
 
     override fun invoke() = scope.launch {
         dao.list()
             .asFlow()
-            .map { repository.copy().invoke(it) }
-            .filter { it.shouldReconnect() }
-            .map { it.id }
-            .collect { connectAccount(it).join() }
+            .map { account -> repository.copy(account) }
+            .filter { repository -> repository.shouldReconnect() }
+            .collect { repository -> connectAccount(repository.get().id).join() }
     }
 
     private fun AccountRepository.shouldReconnect() = listOf(

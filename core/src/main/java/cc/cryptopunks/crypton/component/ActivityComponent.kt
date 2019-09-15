@@ -1,6 +1,8 @@
 package cc.cryptopunks.crypton.component
 
+import android.app.Activity
 import cc.cryptopunks.crypton.module.ActivityModule
+import cc.cryptopunks.crypton.module.ContextModule
 import cc.cryptopunks.crypton.util.ActivityScope
 import dagger.Component
 
@@ -10,3 +12,16 @@ import dagger.Component
     modules = [ActivityModule::class]
 )
 interface ActivityComponent
+
+fun Activity.createActivityComponent(
+    applicationComponent: ApplicationComponent
+): ActivityComponent = DaggerActivityComponent
+    .builder()
+    .contextComponent(
+        DaggerContextComponent
+            .builder()
+            .applicationComponent(applicationComponent)
+            .contextModule(ContextModule(this))
+            .build()
+    )
+    .build()

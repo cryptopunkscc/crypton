@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.domain.repository
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.util.ext.reduce
-import cc.cryptopunks.crypton.util.wrap
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
@@ -13,13 +12,11 @@ data class AccountRepository @Inject constructor(
 ) :
     AtomicReference<Account>(Account.Empty) {
 
-    val id get() = get().id
-
     val isInitialized get() = get() in clientRepository
 
     val client: Client get() = clientRepository[get()]
 
-    operator fun invoke(account: Account) = copy().apply { set(account) }
+    fun copy(account: Account) = copy().apply { set(account) }
 
     fun create(): Unit = client.create()
 
@@ -55,6 +52,6 @@ data class AccountRepository @Inject constructor(
         try {
             block()
         } catch (throwable: Throwable) {
-            throw wrap(throwable)
+            throw get().exception(throwable)
         }
 }

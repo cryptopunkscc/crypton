@@ -58,6 +58,10 @@ data class Account constructor(
         cause
     )
 
+    fun exception(throwable: Throwable): Exception =
+        if (throwable is Exception && throwable.account == this) throwable
+        else Exception(this, throwable)
+
     @androidx.room.Dao
     interface Dao {
 

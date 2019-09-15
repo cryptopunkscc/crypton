@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class DisconnectAccountInteractor @Inject constructor(
     repository: AccountRepository,
-    scope: Scopes.Feature
+    scope: Scopes.UseCase
 ) : (Long) -> Job by { id ->
     scope.launch {
         repository.copy().run {

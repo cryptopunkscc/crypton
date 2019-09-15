@@ -8,12 +8,12 @@ abstract class CoroutineFragment :
     Fragment(),
     CoroutineScope {
 
-    private val fragmentContext = SupervisorJob() + Dispatchers.Main
-    private val viewContext = fragmentContext + Dispatchers.Main
+    private val modelContext = SupervisorJob() + Dispatchers.Main
+    private val viewContext = modelContext + Dispatchers.Main
 
     override val coroutineContext: CoroutineContext
         get() = if (view == null)
-            fragmentContext else
+            modelContext else
             viewContext
 
     override fun onDestroyView() {
@@ -22,7 +22,7 @@ abstract class CoroutineFragment :
     }
 
     override fun onDestroy() {
-        fragmentContext.cancel()
+        modelContext.cancel()
         super.onDestroy()
     }
 }

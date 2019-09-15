@@ -10,12 +10,13 @@ import cc.cryptopunks.crypton.presentation.adapter.AccountListAdapter
 import cc.cryptopunks.crypton.presentation.adapter.bind
 import cc.cryptopunks.crypton.presentation.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.AccountListViewModel
+import cc.cryptopunks.crypton.presentation.viewmodel.OptionItemNavigationViewModel
 import kotlinx.android.synthetic.main.account_list.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-class AccountListFragment : BaseAccountFragment() {
+class AccountListFragment : AccountComponentFragment() {
 
     override val layoutId: Int get() = R.layout.account_list
 
@@ -32,6 +33,7 @@ class AccountListFragment : BaseAccountFragment() {
 
     @Inject
     fun init(
+        navigationViewModel: OptionItemNavigationViewModel,
         accountListViewModel: AccountListViewModel,
         accountItemViewModelProvider: Provider<AccountItemViewModel>
     ) {
@@ -46,13 +48,11 @@ class AccountListFragment : BaseAccountFragment() {
         }
 
         viewDisposable.addAll(
-            accountListAdapter,
-            accountListViewModel()
+            accountListAdapter
         )
 
-        launch {
-            accountListAdapter.bind(accountListViewModel.flowAccountList)
-        }
+        launch { navigationViewModel() }
+        launch { accountListAdapter.bind(accountListViewModel.accounts) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -7,11 +7,11 @@ import javax.inject.Inject
 
 class DeleteAccountInteractor @Inject constructor(
     repository: AccountRepository,
-    scope: Scopes.Feature
-) : (Long) -> Job by { id ->
+    scope: Scopes.UseCase
+) : (Long) -> Job by { accountId ->
     scope.launch {
         repository.copy().run {
-            load(id)
+            load(accountId)
             delete()
         }
     }

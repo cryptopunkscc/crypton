@@ -1,28 +1,57 @@
 package cc.cryptopunks.crypton.util
 
-import cc.cryptopunks.crypton.module.FeatureScope
-import dagger.Binds
-import dagger.Module
-import org.reactivestreams.Publisher
-import javax.inject.Inject
+import androidx.annotation.IdRes
+import dagger.Provides
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 
-interface OptionItemSelected : Publisher<Int> {
+object OptionItemSelected {
 
-    interface Input : (Int) -> Unit
+    interface Input {
+        suspend operator fun invoke(@IdRes idRes: Int)
+    }
 
-    @FeatureScope
-    class Broadcast @Inject constructor() : OptionItemSelected, Input, RxBroadcast<Int>()
+    interface Output : Flow<Int>
 
-    @Module
-    interface Bindings {
-        @Binds
-        fun publisher(broadcast: Broadcast) : OptionItemSelected
-        @Binds
-        fun input(broadcast: Broadcast) : Input
+    @FlowPreview
+    @ObsoleteCoroutinesApi
+    @ExperimentalCoroutinesApi
+    class Broadcast : Input, Output {
+
+        private val channel = BroadcastChannel<Int>(1)
+
+        override suspend fun invoke(idRes: Int) {
+            channel.offer(idRes)
+        }
+
+        @InternalCoroutinesApi
+        override suspend fun collect(collector: FlowCollector<Int>) {
+            channel.consumeEach { collector.emit(it) }
+        }
+    }
+
+    @FlowPreview
+    @ObsoleteCoroutinesApi
+    @ExperimentalCoroutinesApi
+    @dagger.Module
+    class Module {
+        private val broadcast = Broadcast()
+
+        @Provides
+        fun input(): Input = broadcast
+
+        @Provides
+        fun output(): Output = broadcast
     }
 
     interface Component {
-        val optionItemSelected: OptionItemSelected
         val onOptionItemSelected: Input
+        val optionItemSelections: Output
     }
 }

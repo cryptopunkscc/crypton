@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.util.bind
 import kotlinx.android.synthetic.main.sign_up.*
 import javax.inject.Inject
 
-class SignUpFragment : BaseAccountFragment() {
+class SignUpFragment : AccountComponentFragment() {
 
     override val layoutId: Int get() = R.layout.sign_up
 

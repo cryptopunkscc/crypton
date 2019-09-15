@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.presentation.fragment
 import android.os.Bundle
 import cc.cryptopunks.crypton.presentation.viewmodel.MainNavigationViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.ToggleAppServiceViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainFragment : BaseAppFragment() {
@@ -17,7 +18,7 @@ class MainFragment : BaseAppFragment() {
         navigationViewModel: MainNavigationViewModel,
         toggleAppServiceViewModel: ToggleAppServiceViewModel
     ) {
-        navigationViewModel()
-        toggleAppServiceViewModel()
+        launch { navigationViewModel() }
+        launch { toggleAppServiceViewModel() }
     }
 }
