@@ -6,30 +6,34 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-class RemoveAccountIntegrationTest : IntegrationTest() {
+class UnregisterAccountIntegrationTest : IntegrationTest() {
 
     override fun setUp(): Unit = with(client1) {
         insertAccount()
+        connect()
+        create()
+        disconnect()
     }
 
     @Test
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val id = 1L
+            val account = account(1)
             val expected = null
+            connectAccount(account).join()
 
             // when
-            removeAccount(id).join()
+            unregisterAccount(account).join()
 
             // then
             assertEquals(
                 expected,
-                accountDao.contains(id)
+                accountDao.contains(account.id)
             )
 
             assertNull(
-                clientCache[id]
+                clientCache[account.id]
             )
         }
     }

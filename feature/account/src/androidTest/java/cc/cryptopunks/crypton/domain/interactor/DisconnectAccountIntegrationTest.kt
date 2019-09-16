@@ -20,23 +20,22 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val id = 1L
-            val expected = account(id).copy(
-                id = id,
+            val account = account(1)
+            val expected = account.copy(
                 status = Disconnected
             )
 
             // when
-            disconnectAccount(id).join()
+            disconnectAccount(account).join()
 
             // then
             assertEquals(
                 expected,
-                accountDao.get(id)
+                accountDao.get(account.id)
             )
 
             assertNull(
-                clientCache[id]
+                clientCache[account.id]
             )
         }
     }

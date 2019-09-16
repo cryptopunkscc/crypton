@@ -6,16 +6,14 @@ import cc.cryptopunks.crypton.util.Scopes
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
-class RemoveAccountInteractor @Inject constructor(
+class UnregisterAccountInteractor @Inject constructor(
     repository: AccountRepository,
     scope: Scopes.UseCase
-) : (Long) -> Job by { id ->
+) : (Account) -> Job by { account ->
     scope.launch {
         repository.copy().run {
-            load(id)
-            if (get().status == Account.Status.Connected)
-                disconnect()
-            remove()
+            set(account)
+            unregister()
         }
     }
 }

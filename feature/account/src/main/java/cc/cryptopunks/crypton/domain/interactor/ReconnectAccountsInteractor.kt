@@ -22,7 +22,7 @@ class ReconnectAccountsInteractor @Inject constructor(
             .asFlow()
             .map { account -> repository.copy(account) }
             .filter { repository -> repository.shouldReconnect() }
-            .collect { repository -> connectAccount(repository.get().id).join() }
+            .collect { repository -> connectAccount(repository.get()).join() }
     }
 
     private fun AccountRepository.shouldReconnect() = listOf(

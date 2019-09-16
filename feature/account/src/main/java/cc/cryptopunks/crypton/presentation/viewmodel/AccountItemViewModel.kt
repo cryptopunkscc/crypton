@@ -9,8 +9,8 @@ import javax.inject.Inject
 class AccountItemViewModel @Inject constructor(
     private val connectAccount: ConnectAccountInteractor,
     private val disconnectAccount: DisconnectAccountInteractor,
-    private val removeAccount: RemoveAccountInteractor,
-    private val deleteAccount: DeleteAccountInteractor
+    private val deleteAccount: DeleteAccountInteractor,
+    private val unregisterAccount: UnregisterAccountInteractor
 ) {
     var account = Account.Empty
 
@@ -22,23 +22,20 @@ class AccountItemViewModel @Inject constructor(
 
     val isConnected get() = account.status == Connected
 
-    fun toggleConnection() = with(account) {
-        when (status) {
+    fun toggleConnection() =
+        when (account.status) {
             Connected -> disconnectAccount
 
             Connecting -> when (isChecked) {
                 true -> disconnectAccount
                 else -> connectAccount
             }
-
             else -> connectAccount
-        }(id)
-    }
+        }(account)
 
-    fun remove(deleteFromServer: Boolean) = with(account) {
+    fun remove(deleteFromServer: Boolean) =
         when (deleteFromServer) {
-            true -> deleteAccount
-            false -> removeAccount
-        }(id)
-    }
+            true -> unregisterAccount
+            false -> deleteAccount
+        }(account)
 }

@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
 import io.reactivex.Flowable
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
@@ -99,3 +100,9 @@ data class Account constructor(
     }
 }
 
+infix fun Job.onAccountException(handle: (Account) -> Any) = apply {
+    invokeOnCompletion { throwable ->
+        if (throwable is Account.Exception)
+            handle(throwable.account)
+    }
+}

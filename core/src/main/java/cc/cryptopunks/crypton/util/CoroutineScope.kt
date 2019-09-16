@@ -15,7 +15,7 @@ object Scopes {
             handle(throwable)
         }
 
-        fun launch(block: suspend CoroutineScope.() -> Unit) = launch(
+        infix fun launch(block: suspend CoroutineScope.() -> Unit) = launch(
             context = exceptionHandler,
             block = block
         )

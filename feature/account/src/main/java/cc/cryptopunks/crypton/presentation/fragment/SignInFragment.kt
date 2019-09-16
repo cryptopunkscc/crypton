@@ -2,10 +2,10 @@ package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.util.*
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.presentation.viewmodel.AccountViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.SignInViewModel
+import cc.cryptopunks.crypton.util.reactivebindings.bind
 import kotlinx.android.synthetic.main.sign_in.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,15 +24,13 @@ class SignInFragment : AccountComponentFragment() {
         accountViewModel: AccountViewModel,
         signInViewModel: SignInViewModel
     ) {
-        with(accountViewModel) {
-            viewDisposable.addAll(
-                serviceNameLayout.bind(serviceName),
-                userNameLayout.bind(userName),
-                passwordLayout.bind(password),
-                loginButton.bind(onClick),
-                errorOutput.bind(errorMessage)
-            )
-        }
         launch { signInViewModel() }
+        with(accountViewModel) {
+            launch { serviceNameLayout.bind(serviceName) }
+            launch { userNameLayout.bind(userName) }
+            launch { passwordLayout.bind(password) }
+            launch { loginButton.bind(onClick) }
+            launch { errorOutput.bind(errorMessage) }
+        }
     }
 }

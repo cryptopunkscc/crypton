@@ -18,7 +18,7 @@ data class AccountRepository @Inject constructor(
 
     fun copy(account: Account) = copy().apply { set(account) }
 
-    fun create(): Unit = client.create()
+    fun register(): Unit = client.create()
 
     fun login(): Unit = client.login()
 
@@ -34,12 +34,12 @@ data class AccountRepository @Inject constructor(
 
     fun update(): Unit = dao.update(get())
 
-    fun delete() {
+    fun unregister() {
         client.remove()
-        remove()
+        delete()
     }
 
-    fun remove() {
+    fun delete() {
         clear()
         dao.delete(get())
     }

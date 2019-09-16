@@ -19,19 +19,18 @@ class ConnectAccountIntegrationTest : IntegrationTest() {
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val id = 1L
-            val expected = account(id).copy(
-                id = id,
+            val account = account(1)
+            val expected = account.copy(
                 status = Connected
             )
 
             // when
-            connectAccount(id).join()
+            connectAccount(account).join()
 
             // then
             assertEquals(
                 expected,
-                accountDao.get(id)
+                accountDao.get(account.id)
             )
         }
     }

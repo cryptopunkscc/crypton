@@ -73,14 +73,15 @@ fun View.bind(property: Kache<Long>) = clicks().subscribe {
     }
 }
 
-fun View.bind(disposable: CompositeDisposable){
+fun View.bind(disposable: CompositeDisposable) {
     setTag(DISPOSABLE_TAG, disposable)
 }
 
 private val DISPOSABLE_TAG = R.id.viewDisposable
 
-private val View.disposables: CompositeDisposable get() = AtomicReference<CompositeDisposable>().apply {
-    ViewParentIterator(this@disposables).asSequence().firstOrNull {
-        it.getTag(DISPOSABLE_TAG)?.let { set(it as CompositeDisposable) } != null
-    }
-}.get()
+private val View.disposables: CompositeDisposable
+    get() = AtomicReference<CompositeDisposable>().apply {
+        ViewParentIterator(this@disposables).asSequence().firstOrNull {
+            it.getTag(DISPOSABLE_TAG)?.let { set(it as CompositeDisposable) } != null
+        }
+    }.get()

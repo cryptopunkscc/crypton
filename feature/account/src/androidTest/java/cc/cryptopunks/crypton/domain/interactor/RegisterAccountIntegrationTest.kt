@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class CreateAccountIntegrationTest : IntegrationTest() {
+class RegisterAccountIntegrationTest : IntegrationTest() {
 
     @Test
     fun invoke(): Unit = with(component) {
@@ -20,7 +20,7 @@ class CreateAccountIntegrationTest : IntegrationTest() {
             )
 
             // when
-            createAccount(account).join()
+            registerAccount(account).join()
 
             // then
             assertEquals(

@@ -25,10 +25,10 @@ internal interface IntegrationTestComponent {
 
     val addAccount: AddAccountInteractor
     val connectAccount: ConnectAccountInteractor
-    val createAccount: CreateAccountInteractor
+    val registerAccount: RegisterAccountInteractor
     val disconnectAccount: DisconnectAccountInteractor
-    val removeAccount: RemoveAccountInteractor
     val deleteAccount: DeleteAccountInteractor
+    val unregisterAccount: UnregisterAccountInteractor
 
     val reconnectAccounts: ReconnectAccountsInteractor
 }

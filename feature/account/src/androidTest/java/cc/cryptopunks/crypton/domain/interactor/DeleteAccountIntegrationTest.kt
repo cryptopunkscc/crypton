@@ -10,30 +10,26 @@ class DeleteAccountIntegrationTest : IntegrationTest() {
 
     override fun setUp(): Unit = with(client1) {
         insertAccount()
-        connect()
-        create()
-        disconnect()
     }
 
     @Test
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val id = 1L
+            val account = account(1)
             val expected = null
-            connectAccount(id).join()
 
             // when
-            deleteAccount(id).join()
+            deleteAccount(account).join()
 
             // then
             assertEquals(
                 expected,
-                accountDao.contains(id)
+                accountDao.contains(account.id)
             )
 
             assertNull(
-                clientCache[id]
+                clientCache[account.id]
             )
         }
     }

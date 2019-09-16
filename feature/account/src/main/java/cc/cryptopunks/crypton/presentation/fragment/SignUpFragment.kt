@@ -24,16 +24,14 @@ class SignUpFragment : AccountComponentFragment() {
         accountViewModel: AccountViewModel,
         signUpViewModel: SignUpViewModel
     ) {
-        with(accountViewModel) {
-            viewDisposable.addAll(
-                serviceNameLayout.bind(serviceName),
-                userNameLayout.bind(userName),
-                passwordLayout.bind(password),
-                confirmPasswordLayout.bind(confirmPassword),
-                registerButton.bind(onClick),
-                errorOutput.bind(errorMessage)
-            )
-        }
         launch { signUpViewModel() }
+        with(accountViewModel) {
+            launch { serviceNameLayout.bind(serviceName) }
+            launch { userNameLayout.bind(userName) }
+            launch { passwordLayout.bind(password) }
+            launch { confirmPasswordLayout.bind(confirmPassword) }
+            launch { registerButton.bind(onClick) }
+            launch { errorOutput.bind(errorMessage) }
+        }
     }
 }
