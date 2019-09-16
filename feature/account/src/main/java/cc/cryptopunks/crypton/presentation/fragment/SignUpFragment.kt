@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.presentation.viewmodel.AccountViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.SignUpViewModel
 import cc.cryptopunks.crypton.util.bind
 import kotlinx.android.synthetic.main.sign_up.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SignUpFragment : AccountComponentFragment() {
@@ -33,8 +34,6 @@ class SignUpFragment : AccountComponentFragment() {
                 errorOutput.bind(errorMessage)
             )
         }
-        viewDisposable.addAll(
-            signUpViewModel()
-        )
+        launch { signUpViewModel() }
     }
 }

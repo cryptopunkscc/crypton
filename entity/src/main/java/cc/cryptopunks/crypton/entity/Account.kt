@@ -58,7 +58,8 @@ data class Account constructor(
         cause
     )
 
-    fun exception(throwable: Throwable): Exception =
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun exception(throwable: Throwable): Exception =
         if (throwable is Exception && throwable.account == this) throwable
         else Exception(this, throwable)
 

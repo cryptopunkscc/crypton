@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.presentation.viewmodel.SetAccountViewModel
-import com.jakewharton.rxbinding3.view.clicks
 import kotlinx.android.synthetic.main.set_account.*
 import javax.inject.Inject
 
@@ -24,10 +23,8 @@ class SetAccountFragment : AccountComponentFragment() {
         setAccountViewModel: SetAccountViewModel
     ) {
         with(setAccountViewModel) {
-            viewDisposable.addAll(
-                addButton.clicks().subscribe { addAccount() },
-                registerButton.clicks().subscribe { registerAccount() }
-            )
+            addButton.setOnClickListener { addAccount() }
+            registerButton.setOnClickListener { registerAccount() }
         }
     }
 }

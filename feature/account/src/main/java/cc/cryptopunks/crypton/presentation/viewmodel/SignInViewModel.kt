@@ -4,32 +4,36 @@ import cc.cryptopunks.crypton.domain.interactor.AddAccountInteractor
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.ViewModel
 import cc.cryptopunks.crypton.util.text
-import cc.cryptopunks.kache.rxjava.observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import javax.inject.Inject
 
 @ViewModelScope
 class SignInViewModel @Inject constructor(
-    accountViewModel: AccountViewModel,
-    addAccount: AddAccountInteractor
-) : ViewModel, () -> Disposable by {
-    CompositeDisposable(
-        accountViewModel(),
-        accountViewModel
-            .onClick
-            .observable()
-            .filter { it > 0 }
-            .map { accountViewModel.getAccount() }
-            .map(addAccount)
-            .subscribe()
-    )
-} {
+    private val accountViewModel: AccountViewModel,
+    private val addAccount: AddAccountInteractor
+) : ViewModel {
+
     init {
         accountViewModel.apply {
             serviceName.text = "test.io"
             userName.text = "test"
             password.text = "test"
+        }
+    }
+
+    suspend operator fun invoke() = coroutineScope {
+        launch { accountViewModel() }
+        launch {
+            accountViewModel.onClick
+                .asFlow()
+                .filter { it > 0 }
+                .map { accountViewModel.getAccount() }
+                .collect { addAccount(it) }
         }
     }
 }
