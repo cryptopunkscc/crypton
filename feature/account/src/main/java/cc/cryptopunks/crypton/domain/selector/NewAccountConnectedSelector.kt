@@ -11,12 +11,12 @@ class NewAccountConnected @Inject constructor(
 
     override fun invoke(): Flow<Long> = dao
         .flowList()
-        .drop(1)
         .map { it.getConnectedIds() }
         .filter { it.isNotEmpty() }
         .map { it.last() }
         .scanReduce { l, r ->  max(l, r) }
         .distinctUntilChanged()
+        .drop(1)
 }
 
 private fun List<Account>.getConnectedIds() = this
