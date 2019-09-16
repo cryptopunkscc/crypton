@@ -13,17 +13,12 @@ import cc.cryptopunks.crypton.presentation.component.AppServiceComponent
 import cc.cryptopunks.crypton.presentation.component.DaggerAppServiceComponent
 import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel
 import cc.cryptopunks.crypton.service.notification.ShowAppServiceNotification
-import cc.cryptopunks.crypton.util.DisposableDelegate
-import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 
 @ServiceScope
 class AppService :
-    IntentService("AppService"),
-    DisposableDelegate {
-
-    override val disposable = CompositeDisposable()
+    IntentService("AppService") {
 
     private val component: AppServiceComponent by lazy {
         DaggerAppServiceComponent

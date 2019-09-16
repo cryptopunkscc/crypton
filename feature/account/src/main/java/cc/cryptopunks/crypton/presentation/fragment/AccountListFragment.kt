@@ -39,17 +39,14 @@ class AccountListFragment : AccountComponentFragment() {
     ) {
         val accountListAdapter = AccountListAdapter(
             accountItemViewModelProvider = accountItemViewModelProvider,
-            fragmentManager = fragmentManager!!
+            fragmentManager = fragmentManager!!,
+            coroutineContext = coroutineContext
         )
 
         accountRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = accountListAdapter
         }
-
-        viewDisposable.addAll(
-            accountListAdapter
-        )
 
         launch { navigationViewModel() }
         launch { accountListAdapter.bind(accountListViewModel.accounts) }
