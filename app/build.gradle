@@ -23,6 +23,7 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/core_debug.kotlin_module'
+        exclude 'META-INF/core_release.kotlin_module'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
@@ -55,10 +56,6 @@ dependencies {
     implementation "org.igniterealtime.smack:smack-tcp:4.3.0"
     implementation "org.igniterealtime.smack:smack-omemo:4.4.0-alpha1"
     implementation "org.igniterealtime.smack:smack-omemo-signal:4.4.0-alpha1"
-
-
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
     implementation "com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2"
     implementation "com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2"

@@ -8,7 +8,7 @@ import org.junit.Test
 
 class ConnectAccountIntegrationTest : IntegrationTest() {
 
-    override fun setUp(): Unit = with(client(1L)) {
+    override fun setUp(): Unit = with(client1) {
         insertAccount()
         connect()
         create()
@@ -19,7 +19,7 @@ class ConnectAccountIntegrationTest : IntegrationTest() {
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val account = account(1)
+            val account = account(1, withId = true)
             val expected = account.copy(
                 status = Connected
             )

@@ -1,22 +1,17 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
-import androidx.paging.RxPagedListBuilder
-import cc.cryptopunks.crypton.domain.selector.ConversationDataSourceSelector
+import cc.cryptopunks.crypton.domain.interactor.LoadMessagesInteractor
+import cc.cryptopunks.crypton.domain.selector.ConversationPagedListSelector
 import cc.cryptopunks.crypton.module.ViewModelScope
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @ViewModelScope
 class ConversationListViewModel @Inject constructor(
-    conversationDataSource: ConversationDataSourceSelector,
-    createConversationItem: ConversationItemViewModel.Factory
-) {
+    private val loadMessages: LoadMessagesInteractor,
+    private val conversationListFlow: ConversationPagedListSelector,
+    private val createConversationItem: ConversationItemViewModel.Factory
+) : () -> Job by loadMessages {
 
-    val pagedItems = conversationDataSource()
-        .map(createConversationItem)
-        .let { RxPagedListBuilder(it, DEFAULT_PAGE_SIZE) }
-        .buildObservable()
-
-    private companion object {
-        const val DEFAULT_PAGE_SIZE = 20
-    }
+    val pagedItems get() = conversationListFlow(createConversationItem)
 }

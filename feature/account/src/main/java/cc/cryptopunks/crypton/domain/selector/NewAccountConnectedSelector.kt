@@ -16,7 +16,6 @@ class NewAccountConnected @Inject constructor(
         .map { it.last() }
         .scanReduce { l, r ->  max(l, r) }
         .distinctUntilChanged()
-        .drop(1)
 }
 
 private fun List<Account>.getConnectedIds() = this

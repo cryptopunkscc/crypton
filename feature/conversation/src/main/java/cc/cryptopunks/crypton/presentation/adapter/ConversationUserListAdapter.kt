@@ -6,21 +6,20 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.conversation.R
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.util.ext.inflate
-import cc.cryptopunks.kache.rxjava.observable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.conversation_user_item.*
-import org.reactivestreams.Publisher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class ConversationUserListAdapter @Inject constructor() :
     RecyclerView.Adapter<ConversationUserListAdapter.ViewHolder>() {
 
-    private var users = emptyList<User>()
-
-    operator fun invoke(publisher: Publisher<List<User>>) = publisher.observable().subscribe {
-        users = it
-        notifyDataSetChanged()
-    }!!
+    var users = emptyList<User>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getItemCount(): Int =
         users.size
@@ -39,4 +38,10 @@ class ConversationUserListAdapter @Inject constructor() :
             userNameTextView.text = user.remoteId
         }
     }
+}
+
+suspend fun ConversationUserListAdapter.bind(
+    flow: Flow<List<User>>
+) = flow.collect {
+    users = it
 }

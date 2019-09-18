@@ -41,6 +41,10 @@ data class Conversation(
 
         @Delete
         fun delete(ids: List<Conversation>)
+
+        @Query("delete from Conversation")
+        fun deleteAll()
+
     }
 
     companion object {

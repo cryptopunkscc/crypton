@@ -1,23 +1,26 @@
 package cc.cryptopunks.crypton.domain.interactor
 
-import cc.cryptopunks.crypton.util.Schedulers
-import cc.cryptopunks.crypton.util.runOn
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Conversation
 import cc.cryptopunks.crypton.entity.Message
-import io.reactivex.Completable
+import cc.cryptopunks.crypton.util.Scopes
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class LoadMessagesInteractor @Inject constructor(
     messageDao: Message.Dao,
     conversationDao: Conversation.Dao,
     accountDao: Account.Dao,
-    schedulers: Schedulers
-) : () -> Completable by {
+    scope: Scopes.UseCase
+) : () -> Job by {
     //TODO: replace mock witch integration
-    Completable.fromAction {
+    scope.launch {
         accountDao.list().firstOrNull()?.run {
-            (1L..200).forEach {
+            conversationDao.deleteAll()
+            (1L..200).asFlow().collect {
                 conversationDao.insertIfNeeded(
                     Conversation(
                         id = it,
@@ -33,8 +36,8 @@ class LoadMessagesInteractor @Inject constructor(
                         text = "message $it"
                     )
                 )
-                Thread.sleep(50)
+                delay(50)
             }
         }
-    }.runOn(schedulers)
+    }
 }

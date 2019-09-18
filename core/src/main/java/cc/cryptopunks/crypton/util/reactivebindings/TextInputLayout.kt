@@ -11,25 +11,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
 suspend fun TextInputLayout.bind(property: Kache<Input>) {
-    editText!!.run {
-        coroutineScope {
-            var current: String? = null
-            launch {
-                property.asFlow().collect { input ->
-                    if (input.text != current) {
-                        current = input.text
-                        setText(input.text)
-                        error = input.error.takeIf(String::isNotBlank)
-                    }
+    coroutineScope {
+        var current: String? = null
+        launch {
+            property.asFlow().collect { input ->
+                if (input.text != current) {
+                    current = input.text
+                    editText!!.setText(input.text)
+                    error = input.error.takeIf(String::isNotBlank)
                 }
             }
-            launch {
-                textChangesPublisher().asFlow().map { it.toString() }.collect { new ->
-                    if (text.toString() != current) {
-                        current = new
-                        property {
-                            copy(text = new)
-                        }
+        }
+        launch {
+            editText!!.textChangesPublisher().asFlow().map { it.toString() }.collect { new ->
+                if (editText!!.text.toString() != current) {
+                    current = new
+                    property {
+                        copy(text = new)
                     }
                 }
             }

@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
 import cc.cryptopunks.crypton.util.RxPublisher
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 typealias ApiMessage = Message
 
@@ -39,9 +39,8 @@ data class Message(
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertOrUpdate(vararg message: Message): List<Long>
 
-
         @Query("select * from Message where conversationId == :conversationId order by timestamp")
-        fun flowableLatest(conversationId: Long): Flowable<Message>
+        fun flowLatest(conversationId: Long): Flow<Message>
     }
 
     companion object {

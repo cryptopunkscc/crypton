@@ -21,7 +21,7 @@ class ConversationItemViewModel(
 
     val avatarColor get() = letterColors.getValue(letter)
 
-    val lastMessageObservable get() = lastMessage(conversation)
+    val lastMessageFlow get() = lastMessage(conversation)
 
     fun onClick() = navigate(TODO())
 

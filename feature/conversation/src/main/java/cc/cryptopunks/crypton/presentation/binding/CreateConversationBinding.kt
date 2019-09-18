@@ -3,11 +3,13 @@ package cc.cryptopunks.crypton.presentation.binding
 import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.presentation.adapter.ConversationUserListAdapter
+import cc.cryptopunks.crypton.presentation.adapter.bind
 import cc.cryptopunks.crypton.presentation.viewmodel.CreateConversationViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
-import cc.cryptopunks.crypton.util.bind
-import com.jakewharton.rxbinding3.widget.editorActions
+import cc.cryptopunks.crypton.util.reactivebindings.bind
 import kotlinx.android.synthetic.main.create_conversation.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import javax.inject.Inject
 
 class CreateConversationBinding @Inject constructor(
@@ -23,13 +25,15 @@ class CreateConversationBinding @Inject constructor(
                 layoutManager = LinearLayoutManager(context)
                 adapter = userListAdapter
             }
-            viewDisposable.addAll(
-                userListAdapter(model.users),
-                conversationUserEditText.bind(model.userInput),
-                conversationUserEditText.editorActions()
-                    .filter { it == EditorInfo.IME_ACTION_DONE }
-                    .subscribe { model.addFromInput() }
-            )
+            launch { userListAdapter.bind(model.users.asFlow()) }
+            launch { conversationUserEditText.bind(model.userInput) }
+            conversationUserEditText.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    model.addFromInput()
+                    true
+                } else
+                    false
+            }
         }
     }
 }

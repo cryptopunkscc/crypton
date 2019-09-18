@@ -1,22 +1,20 @@
 package cc.cryptopunks.crypton.presentation.binding
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import cc.cryptopunks.crypton.domain.interactor.LoadMessagesInteractor
 import cc.cryptopunks.crypton.presentation.adapter.ConversationItemAdapter
+import cc.cryptopunks.crypton.presentation.adapter.bind
 import cc.cryptopunks.crypton.presentation.viewmodel.ConversationListViewModel
-import cc.cryptopunks.crypton.util.AsyncExecutor
 import cc.cryptopunks.crypton.util.BaseFragment
 import kotlinx.android.synthetic.main.conversations.*
+import kotlinx.coroutines.async
 import javax.inject.Inject
 
 class ConversationListBinding @Inject constructor(
-    loadMessages: LoadMessagesInteractor,
-    async: AsyncExecutor,
     private val conversationListViewModel: ConversationListViewModel
 ) {
 
     init {
-        async(task = loadMessages)
+        conversationListViewModel()
     }
 
     inner class ViewBinding {
@@ -29,11 +27,9 @@ class ConversationListBinding @Inject constructor(
                 layoutManager = LinearLayoutManager(activity)
                 adapter = conversationItemAdapter
             }
-
-            viewDisposable.addAll(
-                conversationItemAdapter,
+            async {
                 conversationItemAdapter.bind(conversationListViewModel.pagedItems)
-            )
+            }
         }
     }
 }

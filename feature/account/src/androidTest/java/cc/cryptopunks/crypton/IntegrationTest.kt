@@ -37,9 +37,7 @@ abstract class IntegrationTest : ApiIntegrationTest() {
     }
 
     fun account(index: Long, withId: Boolean = false) = createAccount(
-        config(
-            index
-        )
+        config(index)
     ).run {
         if (!withId) this
         else copy(id = index)
