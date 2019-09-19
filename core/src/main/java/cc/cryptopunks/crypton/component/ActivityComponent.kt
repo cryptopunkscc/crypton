@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.component
 
 import android.app.Activity
 import cc.cryptopunks.crypton.module.ActivityModule
+import cc.cryptopunks.crypton.module.ActivityScope
 import cc.cryptopunks.crypton.module.ContextModule
-import cc.cryptopunks.crypton.util.ActivityScope
 import dagger.Component
 
 @ActivityScope

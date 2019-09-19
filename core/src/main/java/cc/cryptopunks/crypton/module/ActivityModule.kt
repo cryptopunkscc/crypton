@@ -4,9 +4,13 @@ import android.app.Activity
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import cc.cryptopunks.crypton.util.ActivityScope
 import dagger.Module
 import dagger.Provides
+import javax.inject.Scope
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ActivityScope
 
 @Module
 class ActivityModule(

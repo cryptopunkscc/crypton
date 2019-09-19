@@ -34,6 +34,7 @@ dependencies {
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
+    api "org.reactivestreams:reactive-streams:$rx_version"
     api "io.reactivex.rxjava2:rxjava:$rxjava_version"
     api "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
