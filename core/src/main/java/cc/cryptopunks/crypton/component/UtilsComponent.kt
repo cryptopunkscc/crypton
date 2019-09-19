@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.util.ActivityStack
-import cc.cryptopunks.crypton.util.BroadcastError
 
-interface UtilsComponent : BroadcastError.Component {
+interface UtilsComponent {
     val activityStackCache: ActivityStack.Cache
 }

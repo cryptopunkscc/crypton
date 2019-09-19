@@ -23,7 +23,6 @@ interface FeatureComponent :
     OptionItemSelected.Component,
     Navigate.Component
 
-
 fun FragmentActivity.featureComponent(
     applicationComponent: ApplicationComponent
 ): FeatureComponent = fragment("feature") {

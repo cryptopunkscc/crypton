@@ -4,8 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Query
-import io.reactivex.Flowable
-
+import kotlinx.coroutines.flow.Flow
 
 @Entity
 data class User(
@@ -35,7 +34,7 @@ data class User(
             where ConversationUser.conversationId = :conversationId
             """
         )
-        fun flowableList(conversationId: Long): Flowable<List<User>>
+        fun flowaList(conversationId: Long): Flow<List<User>>
     }
 
     companion object {

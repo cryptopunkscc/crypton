@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
-import io.reactivex.Flowable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 
@@ -83,13 +82,7 @@ data class Account constructor(
         fun delete(vararg accounts: Account)
 
         @Query("select * from account")
-        fun observeChanges(): Flowable<Account>
-
-        @Query("select * from account")
         fun list(): List<Account>
-
-        @Query("select * from account")
-        fun flowableList(): Flowable<List<Account>>
 
         @Query("select * from account")
         fun flowList(): Flow<List<Account>>

@@ -13,14 +13,15 @@ import javax.inject.Singleton
 @Component(modules = [
     ApplicationModule::class,
     KacheModule::class,
-    DataModule::class,
-    BroadcastError.Module::class
+    BroadcastError.Module::class,
+    DataModule::class
 ])
 interface ApplicationComponent :
     UtilsComponent,
     DataComponent,
     DomainComponent,
     KacheComponent,
+    BroadcastError.Component,
     Client.Component {
 
     val application: Application

@@ -1,21 +1,20 @@
 package cc.cryptopunks.crypton.util
 
 import dagger.Provides
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 interface BroadcastError : (Throwable) -> Unit, Flow<Throwable> {
 
-    private class Impl :
-        BroadcastError {
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    private class Impl : BroadcastError {
 
         private val channel = BroadcastChannel<Throwable?>(Channel.CONFLATED)
 
@@ -33,11 +32,13 @@ interface BroadcastError : (Throwable) -> Unit, Flow<Throwable> {
         }
     }
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     @dagger.Module
     class Module {
         private val impl = Impl()
         @Provides
-        fun handle(): BroadcastError = impl
+        fun broadcastError(): BroadcastError = impl
     }
 
     interface Component {
