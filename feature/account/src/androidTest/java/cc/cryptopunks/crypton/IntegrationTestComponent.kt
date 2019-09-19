@@ -7,10 +7,13 @@ import cc.cryptopunks.crypton.data.Database
 import cc.cryptopunks.crypton.domain.interactor.*
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.smack.SmackClientFactory
-import cc.cryptopunks.crypton.util.HandleError
+import cc.cryptopunks.crypton.util.BroadcastError
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import org.jivesoftware.smack.ConnectionConfiguration
 import java.net.InetAddress
 import javax.inject.Singleton
@@ -56,8 +59,10 @@ internal class TestModule(
 
     @Provides
     @Singleton
-    fun handleError(): HandleError = object : HandleError {
+    @InternalCoroutinesApi
+    fun handleError(): BroadcastError = object : BroadcastError, Flow<Throwable> {
         override fun invoke(throwable: Throwable) = throw throwable
+        override suspend fun collect(collector: FlowCollector<Throwable>) {}
     }
 
     @Provides

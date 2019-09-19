@@ -11,10 +11,4 @@ class BaseFragmentModule(
 ) {
     @Provides
     fun BaseFragment.fragmentManager() = childFragmentManager
-
-    @Provides
-    fun BaseFragment.viewDisposable() = viewDisposable
-
-    @Provides
-    fun BaseFragment.modelDisposable() = modelDisposable
 }

@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.DataModule
 import cc.cryptopunks.crypton.module.KacheModule
+import cc.cryptopunks.crypton.util.BroadcastError
 import dagger.Component
 import javax.inject.Singleton
 
@@ -12,7 +13,8 @@ import javax.inject.Singleton
 @Component(modules = [
     ApplicationModule::class,
     KacheModule::class,
-    DataModule::class
+    DataModule::class,
+    BroadcastError.Module::class
 ])
 interface ApplicationComponent :
     UtilsComponent,

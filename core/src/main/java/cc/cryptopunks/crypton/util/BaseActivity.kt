@@ -2,20 +2,16 @@ package cc.cryptopunks.crypton.util
 
 import android.view.MenuItem
 import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.app
 import cc.cryptopunks.crypton.component.createActivityComponent
 import cc.cryptopunks.crypton.component.featureComponent
 import cc.cryptopunks.crypton.core.R
-import cc.cryptopunks.kache.rxjava.observable
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 abstract class BaseActivity :
-    DisposableActivity(),
+    AppCompatActivity(),
     CoroutineScope by MainScope() {
 
     val toolbar by lazy { findViewById<Toolbar>(R.id.action_bar) }
@@ -26,9 +22,15 @@ abstract class BaseActivity :
 
     open val navController by lazy { findNavController(R.id.navHost) }
 
-    override fun CompositeDisposable.onStart() = addAll(
-        featureComponent.navigationPublisher.observable().subscribe(navController)
-    )
+    override fun onStart() {
+        super.onStart()
+        launch { featureComponent.navigateOutput.bind(navController) }
+    }
+
+    override fun onStop() {
+        coroutineContext.cancelChildren()
+        super.onStop()
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         launch { featureComponent.onOptionItemSelected(item.itemId) }

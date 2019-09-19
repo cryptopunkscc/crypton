@@ -9,10 +9,10 @@ import javax.inject.Singleton
 object Scopes {
 
     abstract class  ErrorHandling : CoroutineScope {
-        abstract val handle: HandleError
+        abstract val broadcast: BroadcastError
 
         private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            handle(throwable)
+            broadcast(throwable)
         }
 
         infix fun launch(block: suspend CoroutineScope.() -> Unit) = launch(
@@ -23,20 +23,20 @@ object Scopes {
 
     @Singleton
     class UseCase @Inject constructor(
-        override val handle: HandleError
+        override val broadcast: BroadcastError
     ) : ErrorHandling() {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 
     @FeatureScope
     class Feature @Inject constructor(
-        override val handle: HandleError
+        override val broadcast: BroadcastError
     ) : ErrorHandling(),
         CoroutineScope by MainScope()
 
     @ViewModelScope
     class ViewModel @Inject constructor(
-        override val handle: HandleError
+        override val broadcast: BroadcastError
     ) : ErrorHandling(),
         CoroutineScope by MainScope()
 }

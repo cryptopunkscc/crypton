@@ -15,7 +15,7 @@ import dagger.Component
     modules = [
         FeatureModule::class,
         OptionItemSelected.Module::class,
-        Navigate.Bindings::class
+        Navigate.Module::class
     ]
 )
 interface FeatureComponent :

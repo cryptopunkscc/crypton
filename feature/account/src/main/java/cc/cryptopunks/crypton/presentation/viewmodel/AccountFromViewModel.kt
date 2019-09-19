@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.module.ViewModelScope
-import cc.cryptopunks.crypton.util.HandleError
+import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.Input
 import cc.cryptopunks.crypton.util.ViewModel
 import cc.cryptopunks.kache.core.Kache
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @ViewModelScope
 class AccountViewModel @Inject constructor(
-    private val errorPublisher: HandleError.Publisher
+    private val broadcastError: BroadcastError
 ) : ViewModel,
     Kache.Provider by KacheManager() {
 
@@ -41,7 +41,7 @@ class AccountViewModel @Inject constructor(
 
     suspend operator fun invoke() = coroutineScope {
         launch {
-            errorPublisher.asFlow()
+            broadcastError
                 .mapNotNull { (it as? Account.Exception)?.cause }
                 .collect { throwable ->
                     errorMessage(

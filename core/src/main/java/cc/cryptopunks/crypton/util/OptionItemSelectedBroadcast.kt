@@ -7,9 +7,9 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.asFlow
 
 object OptionItemSelected {
 
@@ -22,7 +22,7 @@ object OptionItemSelected {
     @FlowPreview
     @ObsoleteCoroutinesApi
     @ExperimentalCoroutinesApi
-    class Broadcast : Input, Output {
+    private class Impl : Input, Output {
 
         private val channel = BroadcastChannel<Int>(1)
 
@@ -32,7 +32,7 @@ object OptionItemSelected {
 
         @InternalCoroutinesApi
         override suspend fun collect(collector: FlowCollector<Int>) {
-            channel.consumeEach { collector.emit(it) }
+            channel.asFlow().collect(collector)
         }
     }
 
@@ -41,13 +41,13 @@ object OptionItemSelected {
     @ExperimentalCoroutinesApi
     @dagger.Module
     class Module {
-        private val broadcast = Broadcast()
+        private val impl = Impl()
 
         @Provides
-        fun input(): Input = broadcast
+        fun input(): Input = impl
 
         @Provides
-        fun output(): Output = broadcast
+        fun output(): Output = impl
     }
 
     interface Component {

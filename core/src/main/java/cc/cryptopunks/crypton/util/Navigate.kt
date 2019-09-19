@@ -2,55 +2,54 @@ package cc.cryptopunks.crypton.util
 
 import androidx.annotation.IdRes
 import androidx.navigation.NavController
-import cc.cryptopunks.crypton.module.FeatureScope
-import cc.cryptopunks.crypton.util.ext.isEmpty
-import dagger.Binds
-import dagger.Module
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.processors.PublishProcessor
-import org.reactivestreams.Subscriber
-import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
+import dagger.Provides
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 
 interface Navigate : (@IdRes Int) -> Unit {
 
-    interface Publisher : RxPublisher<Int>
+    interface Output : Flow<Int>
 
-    @Module
-    interface Bindings {
-        @Binds
-        fun navigate(navigationBus: NavigationBus): Navigate
-        @Binds
-        fun publisher(navigationBus: NavigationBus): Publisher
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    private class Impl : Navigate, Output {
+        private val channel = BroadcastChannel<Int?>(Channel.CONFLATED)
+
+        override fun invoke(actionId: Int) {
+            channel.offer(actionId)
+        }
+
+
+        @InternalCoroutinesApi
+        override suspend fun collect(collector: FlowCollector<Int>) {
+            channel.asFlow()
+                .filterNotNull()
+                .onEach { channel.offer(null) }
+                .collect(collector)
+        }
+    }
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    @dagger.Module
+    class Module {
+        private val impl = Impl()
+        @Provides
+        fun navigate(): Navigate = impl
+        @Provides
+        fun output(): Output = impl
     }
 
     interface Component {
         val navigate: Navigate
-        val navigationPublisher: Publisher
+        val navigateOutput: Output
     }
 }
 
-@FeatureScope
-class NavigationBus @Inject constructor(): Navigate, Navigate.Publisher {
-
-    private val cache = AtomicReference<Int>()
-    private val processor = PublishProcessor.create<Int>()
-
-    override fun invoke(actionId: Int) = synchronized(this) {
-        when (!processor.hasSubscribers()) {
-            true -> cache.set(actionId)
-            else -> processor.onNext(actionId)
-        }
-    }
-
-    override fun subscribe(subscriber: Subscriber<in Int>) = synchronized(this) {
-        processor.subscribe(subscriber)
-        if (!cache.isEmpty)
-            processor.onNext(cache.getAndSet(null))
-    }
-}
-
-fun Observable<Int>.subscribe(navController: NavController): Disposable = subscribe { id ->
+suspend fun Navigate.Output.bind(navController: NavController) = collect { id ->
     navController.navigate(id)
 }

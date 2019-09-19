@@ -22,10 +22,6 @@ abstract class BaseFragment : CoroutineFragment() {
 
     val baseActivity get() = activity as BaseActivity
 
-    val viewDisposable = ViewDisposable()
-
-    val modelDisposable = ModelDisposable()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
@@ -44,16 +40,5 @@ abstract class BaseFragment : CoroutineFragment() {
         titleId.takeIf { it > 0 }?.let { id ->
             baseActivity.supportActionBar?.setTitle(id)
         }
-    }
-
-    override fun onDestroyView() {
-        viewDisposable.clear()
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        viewDisposable.dispose()
-        modelDisposable.dispose()
-        super.onDestroy()
     }
 }
