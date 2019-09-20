@@ -27,7 +27,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api project(':entity')
@@ -40,6 +39,7 @@ dependencies {
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "androidx.room:room-compiler:$room_version"
+
     kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 
 }

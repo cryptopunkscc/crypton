@@ -25,32 +25,19 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
-    api "org.reactivestreams:reactive-streams:$rx_version"
-    api "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    api "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
     api "com.google.dagger:dagger:$dagger_version"
     api "com.google.dagger:dagger-android:$dagger_version"
     api "com.google.dagger:dagger-android-support:$dagger_version"
 
     api "com.github.cryptoyang.kache:android:$kache_version"
-    api "com.github.cryptoyang.kache:rxjava:$kache_version"
 
-    api "androidx.room:room-runtime:$room_version"
-    api "androidx.room:room-ktx:$room_version"
-    api "androidx.room:room-rxjava2:$room_version"
+    testImplementation 'junit:junit:4.12'
 
-    api "androidx.paging:paging-runtime:$paging_version"
-    api "androidx.paging:paging-rxjava2:$paging_version"
-
-    testImplementation "androidx.room:room-testing:$room_version"
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

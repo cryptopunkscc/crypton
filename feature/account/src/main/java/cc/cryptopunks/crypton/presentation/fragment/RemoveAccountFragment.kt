@@ -32,7 +32,7 @@ class RemoveAccountFragment :
         }
     }
 
-    private val isDeleteFromServerChecked get() = dialog.deleteOnServerCheckbox?.isChecked ?: false
+    private val isDeleteFromServerChecked get() = deleteOnServerCheckbox?.isChecked ?: false
 
     companion object : (AccountItemViewModel) -> RemoveAccountFragment by {
         RemoveAccountFragment().apply { model = it }

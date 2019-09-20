@@ -27,19 +27,16 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api project(':common')
 
-    implementation "androidx.room:room-common:$room_version"
+    api "androidx.room:room-ktx:$room_version"
+    api "androidx.paging:paging-runtime:$paging_version"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3.kotlin12"
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "androidx.room:room-compiler:$room_version"
 }
