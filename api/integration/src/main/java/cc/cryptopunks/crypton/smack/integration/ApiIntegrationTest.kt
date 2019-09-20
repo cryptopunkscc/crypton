@@ -5,6 +5,8 @@ import cc.cryptopunks.crypton.entity.RemoteId
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 
 abstract class ApiIntegrationTest :
     CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
@@ -59,3 +61,10 @@ abstract class ApiIntegrationTest :
 }
 
 internal typealias createClient = SmackClientFactory
+
+internal fun test(
+    timeout: Long = 2000,
+    block: suspend CoroutineScope.() -> Unit
+) = runBlocking {
+    withTimeout(timeout, block)
+}

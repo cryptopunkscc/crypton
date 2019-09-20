@@ -1,13 +1,13 @@
 package cc.cryptopunks.crypton.smack.integration.test
 
-import cc.cryptopunks.kache.rxjava.observable
-import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.entity.RosterEvent
+import cc.cryptopunks.crypton.entity.RosterEvent.PresenceSubscribed
+import cc.cryptopunks.crypton.entity.RosterEvent.ProcessSubscribe
 import cc.cryptopunks.crypton.smack.integration.IntegrationTest
-import io.reactivex.Observable
+import cc.cryptopunks.crypton.smack.integration.test
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.reactive.openSubscription
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.concurrent.TimeUnit.SECONDS
 
 internal class UserTest : IntegrationTest() {
 
@@ -16,32 +16,16 @@ internal class UserTest : IntegrationTest() {
     }
 
     @Test
-    operator fun invoke() {
-        fun Client.getEvents() = rosterEventPublisher
-            .observable()
-            .replay()
-            .autoConnect()
+    fun invoke() = test(timeout = 5000) {
+        val events1 = client1.rosterEventPublisher.openSubscription()
+        val events2 = client2.rosterEventPublisher.openSubscription()
 
-        val events1 = client1.getEvents()
-        val events2 = client2.getEvents()
-
-        val log = Observable
-            .merge(events1, events2)
-            .doOnNext(::println)
-            .test()
-
-        Observable.just(Unit)
-            .map { client1.invite(client2.user) }
-            .flatMap { events2 }
-            .filter { it is RosterEvent.ProcessSubscribe }
-            .map { client2.invited(client1.user) }
-            .flatMap { events1 }
-            .filter { it is RosterEvent.PresenceSubscribed }
-            .map { client1.invited(client2.user) }
-            .flatMap { events2 }
-            .filter { it is RosterEvent.PresenceSubscribed }
-            .timeout(5, SECONDS)
-            .blockingFirst()
+        client1.invite(client2.user)
+        events2.receiveFiltered { it is ProcessSubscribe }
+        client2.invited(client1.user)
+        events1.receiveFiltered { it is PresenceSubscribed }
+        client1.invited(client2.user)
+        events2.receiveFiltered { it is PresenceSubscribed }
 
         assertEquals(
             client1.user.remoteId,
@@ -52,9 +36,12 @@ internal class UserTest : IntegrationTest() {
             client2.user.remoteId,
             client1.getContacts().first().remoteId
         )
-
-        log.dispose()
     }
-
 }
 
+tailrec suspend fun <T> ReceiveChannel<T>.receiveFiltered(filter: (T) -> Boolean): T {
+    val received = receive()
+    return if (filter(received))
+        received else
+        receiveFiltered(filter)
+}

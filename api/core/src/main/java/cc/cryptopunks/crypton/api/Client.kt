@@ -1,12 +1,14 @@
 package cc.cryptopunks.crypton.api
 
-import cc.cryptopunks.crypton.util.RxPublisher
-import cc.cryptopunks.crypton.util.createDummyClass
-import cc.cryptopunks.kache.rxjava.flowable
 import cc.cryptopunks.crypton.entity.*
+import cc.cryptopunks.crypton.util.createDummyClass
 import dagger.Provides
-import io.reactivex.processors.PublishProcessor
-import org.reactivestreams.Subscriber
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,18 +34,7 @@ interface Client:
     interface Disconnect: () -> Unit
     interface IsAuthenticated: () -> Boolean
 
-    interface Factory : (Config) -> Client {
-        data class Arg(
-            val accountId: Int = EmptyId,
-            val remoteId: RemoteId = RemoteId(),
-            val password: String = ""
-        ) {
-            companion object {
-                const val EmptyId = -1
-                val Empty = Arg()
-            }
-        }
-    }
+    interface Factory : (Config) -> Client
 
     data class Config(
         val id: Long = EmptyId,
@@ -57,39 +48,35 @@ interface Client:
     }
 
     @Singleton
-    class Publisher @Inject constructor(cache: Cache) : RxPublisher<Client> by cache
-
-    @Singleton
     class Cache(
-        private val map: MutableMap<Long, Client>,
-        private val processor: PublishProcessor<Client> = PublishProcessor.create()
+        private val map: MutableMap<Long, Client>
     ) :
         MutableMap<Long, Client> by map,
-        RxPublisher<Client> {
+        Flow<Client> {
+
+        private val channel = BroadcastChannel<Client?>(Channel.CONFLATED)
 
         @Inject
         constructor() : this(mutableMapOf())
 
-
-        override fun subscribe(subscriber: Subscriber<in Client>) {
-            map.values.forEach(subscriber::onNext)
-            processor.subscribe(subscriber)
+        @InternalCoroutinesApi
+        override suspend fun collect(collector: FlowCollector<Client>) {
+            map.values.asFlow().collect(collector)
+            channel.asFlow().filterNotNull().collect(collector)
         }
 
         override fun remove(key: Long) = map
             .remove(key)
-            ?.apply {
-                processor.onNext(
-                    Empty(
-                        id = id
-                    )
-                )
-            }
+            ?.apply { send(Empty(id = id)) }
+
         override fun put(key: Long, value: Client): Client? = map
             .put(key, value)
-            .apply {
-                processor.onNext(value)
-            }
+            .apply { send(value) }
+
+        private fun send(client: Client) = GlobalScope.launch {
+            channel.send(client)
+            channel.send(null)
+        }
     }
 
     class Empty(override val id: Long) : Client by DummyClient
@@ -125,4 +112,4 @@ interface Client:
 
 val Client.isEmpty get() = this is Client.Empty
 
-fun Client.Publisher.filter(user: User) = flowable().filter { it.user == user }!!
+fun Client.Cache.filter(user: User) = filter { it.user == user }

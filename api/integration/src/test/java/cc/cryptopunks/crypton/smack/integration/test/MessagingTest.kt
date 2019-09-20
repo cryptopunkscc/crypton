@@ -1,10 +1,13 @@
 package cc.cryptopunks.crypton.smack.integration.test
 
-import cc.cryptopunks.kache.rxjava.observable
 import cc.cryptopunks.crypton.smack.integration.IntegrationTest
-import io.reactivex.Observable
+import cc.cryptopunks.crypton.smack.integration.test
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.concurrent.TimeUnit.SECONDS
 
 internal class MessagingTest : IntegrationTest() {
 
@@ -13,28 +16,26 @@ internal class MessagingTest : IntegrationTest() {
     }
 
     @Test
-    operator fun invoke() {
-        val messages = client2.messagePublisher.observable()
-            .replay()
-            .autoConnect()
+    fun invoke() = test {
+        val expected = "test"
 
-        val test = messages.test()
-
-        Observable.just(Unit)
-            .doOnNext {
-                client1.sendMessage(
-                    client2.user.remoteId,
-                    "test"
-                )
-            }
-            .flatMap { messages }
-            .doOnNext(::println)
-            .timeout(15, SECONDS)
-            .blockingFirst()
-
-        with(test) {
-            assertNoErrors()
-            assertValueCount(1)
+        val actual = async {
+            client2.messagePublisher
+                .asFlow()
+                .first()
+                .text
         }
+
+        launch {
+            client1.sendMessage(
+                client2.user.remoteId,
+                expected
+            )
+        }
+
+        assertEquals(
+            expected,
+            actual.await()
+        )
     }
 }
