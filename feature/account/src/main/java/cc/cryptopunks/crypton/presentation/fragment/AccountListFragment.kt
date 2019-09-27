@@ -18,7 +18,7 @@ import javax.inject.Provider
 
 class AccountListFragment : AccountComponentFragment() {
 
-    override val layoutId: Int get() = R.layout.account_list
+    override val layoutRes: Int get() = R.layout.account_list
 
     override val titleId: Int get() = R.string.manage_accounts
 

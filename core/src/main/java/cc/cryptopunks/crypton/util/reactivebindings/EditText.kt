@@ -50,8 +50,8 @@ suspend fun EditText.bind(property: Kache<Input>) {
                 if (input.text != current) {
                     current = input.text
                     setText(input.text)
-                    error = input.error.takeIf(String::isNotBlank)
                 }
+                error = input.error.takeIf(String::isNotBlank)
             }
         }
         launch {
@@ -59,7 +59,10 @@ suspend fun EditText.bind(property: Kache<Input>) {
                 if (text.toString() != current) {
                     current = new
                     property {
-                        copy(text = new)
+                        copy(
+                            text = new,
+                            error = ""
+                        )
                     }
                 }
             }

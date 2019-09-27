@@ -10,4 +10,13 @@ data class Input(
 
 var Kache<Input>.text: String
     get() = value.text
-    set(value) = invoke { copy(text = value) }
+    set(value) = invoke {
+        copy(
+            text = value,
+            error = ""
+        )
+    }
+
+var Kache<Input>.error: String
+    get() = value.error
+    set(value) = invoke { copy(error = value) }

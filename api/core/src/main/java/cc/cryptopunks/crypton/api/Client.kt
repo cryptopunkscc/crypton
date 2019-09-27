@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.api
 
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.util.createDummyClass
-import dagger.Provides
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -18,8 +17,8 @@ interface Client:
     Message.Api,
     RosterEvent.Api {
 
-    val id: Long
-    val user: User
+    val accountId: Long
+    val remoteId: RemoteId
     val create: Create
     val remove: Remove
     val login: Login
@@ -37,7 +36,7 @@ interface Client:
     interface Factory : (Config) -> Client
 
     data class Config(
-        val id: Long = EmptyId,
+        val accountId: Long = EmptyId,
         val remoteId: RemoteId = RemoteId.Empty,
         val password: String = ""
     ) {
@@ -67,7 +66,7 @@ interface Client:
 
         override fun remove(key: Long) = map
             .remove(key)
-            ?.apply { send(Empty(id = id)) }
+            ?.apply { send(Empty(accountId = accountId)) }
 
         override fun put(key: Long, value: Client): Client? = map
             .put(key, value)
@@ -79,30 +78,11 @@ interface Client:
         }
     }
 
-    class Empty(override val id: Long) : Client by DummyClient
+    class Empty(override val accountId: Long) : Client by DummyClient
 
     interface Component {
         val createClient: Factory
         val clientCache: Cache
-    }
-
-    @dagger.Module
-    class Module(@get:Provides val client: Client) : Client {
-        override val user: User @Provides get() = client.user
-        override val id: Long @Provides get() = client.id
-        override val create: Create @Provides get() = client.create
-        override val remove: Remove @Provides get() = client.remove
-        override val connect: Connect @Provides get() = client.connect
-        override val disconnect: Disconnect @Provides get() = client.disconnect
-        override val login: Login @Provides get() = client.login
-        override val sendMessage: Message.Api.Send @Provides get() = client.sendMessage
-        override val sendPresence: Presence.Api.Send @Provides get() = client.sendPresence
-        override val isAuthenticated: IsAuthenticated @Provides get() = client.isAuthenticated
-        override val getContacts: User.Api.GetContacts @Provides get() = client.getContacts
-        override val invite: User.Api.Invite @Provides get() = client.invite
-        override val invited: User.Api.Invited @Provides get() = client.invited
-        override val messagePublisher: Message.Api.Publisher @Provides get() = client.messagePublisher
-        override val rosterEventPublisher: RosterEvent.Api.Publisher @Provides get() = client.rosterEventPublisher
     }
 
     companion object {
@@ -111,5 +91,3 @@ interface Client:
 }
 
 val Client.isEmpty get() = this is Client.Empty
-
-fun Client.Cache.filter(user: User) = filter { it.user == user }

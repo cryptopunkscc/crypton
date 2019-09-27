@@ -1,14 +1,14 @@
 package cc.cryptopunks.crypton.smack
 
-import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.ApiScope
+import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.chat.ChatMessagePublisher
 import cc.cryptopunks.crypton.smack.chat.SendChatMessage
-import cc.cryptopunks.crypton.smack.contact.AddContact
 import cc.cryptopunks.crypton.smack.presence.SendPresence
 import cc.cryptopunks.crypton.smack.roster.RosterEventPublisher
+import cc.cryptopunks.crypton.smack.user.AddContactUser
 import cc.cryptopunks.crypton.smack.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.user.UserInvite
 import cc.cryptopunks.crypton.smack.user.UserInvited
@@ -33,18 +33,22 @@ import org.jivesoftware.smackx.omemo.OmemoManager
 internal interface SmackComponent : Client {
 
     @get:ApiQualifier
-    override val id: Long
+    override val accountId: Long
+
+    @get:ApiQualifier
+    override val remoteId: RemoteId
 
     @dagger.Module(includes = [Bindings::class])
     class Module(
         @get:Provides @get:ApiQualifier val accountId: Long,
+        @get:Provides @get:ApiQualifier val remoteId: RemoteId,
         @get:Provides val configuration: XMPPTCPConnectionConfiguration
     ) {
 
         @Provides
         @ApiScope
         fun user(connection: XMPPConnection) = User(
-            resourceId = connection.user.resourceId()
+            remoteId = connection.user.remoteId()
         )
 
         @Provides
@@ -55,9 +59,10 @@ internal interface SmackComponent : Client {
 
         @Provides
         @ApiScope
-        fun accountManager(connection: XMPPConnection) = AccountManager.getInstance(connection)!!.apply {
-            sensitiveOperationOverInsecureConnection(true)
-        }
+        fun accountManager(connection: XMPPConnection) =
+            AccountManager.getInstance(connection)!!.apply {
+                sensitiveOperationOverInsecureConnection(true)
+            }
 
         @Provides
         @ApiScope
@@ -69,12 +74,13 @@ internal interface SmackComponent : Client {
 
         @Provides
         @ApiScope
-        fun multiUserChatManager(connection: XMPPConnection) = MultiUserChatManager.getInstanceFor(connection)!!
+        fun multiUserChatManager(connection: XMPPConnection) =
+            MultiUserChatManager.getInstanceFor(connection)!!
 
         @Provides
         @ApiScope
         fun roster(connection: XMPPConnection) = Roster.getInstanceFor(connection)!!.apply {
-            subscriptionMode = Roster.SubscriptionMode.reject_all
+            subscriptionMode = Roster.SubscriptionMode.accept_all
         }
 
         @Provides
@@ -140,6 +146,6 @@ internal interface SmackComponent : Client {
         fun rosterEventPublisher(instance: RosterEventPublisher): RosterEvent.Api.Publisher
 
         @Binds
-        fun addContact(addContact: AddContact): Contact.Add
+        fun addContact(addContact: AddContactUser): User.Api.AddContact
     }
 }

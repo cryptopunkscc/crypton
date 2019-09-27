@@ -19,7 +19,7 @@
             android:id="@id/navigateAccountManagement"
             app:destination="@id/accountManagementActivity" />
         <action
-            android:id="@+id/action_dashboardFragment_to_createConversationFragment"
+            android:id="@id/navigateCreateChat"
             app:destination="@id/createConversationFragment" />
     </fragment>
     <include app:graph="@navigation/set_account" />
@@ -40,7 +40,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/createConversationFragment"
-        android:name="cc.cryptopunks.crypton.presentation.fragment.CreateConversationFragment"
+        android:name="cc.cryptopunks.crypton.presentation.fragment.CreateChatFragment"
         android:label="CreateConversationFragment"
         tools:layout="@layout/create_conversation"/>
 </navigation>

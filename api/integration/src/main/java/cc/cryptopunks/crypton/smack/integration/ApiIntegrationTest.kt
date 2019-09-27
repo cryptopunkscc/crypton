@@ -54,7 +54,7 @@ abstract class ApiIntegrationTest :
     }
 
     fun config(index: Long) = Client.Config(
-        id = index,
+        accountId = index,
         remoteId = baseId.copy(local = "test$index"),
         password = "test$index"
     )

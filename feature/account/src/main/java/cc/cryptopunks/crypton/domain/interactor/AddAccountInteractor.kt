@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.domain.interactor
 
-import cc.cryptopunks.crypton.domain.repository.AccountRepository
+import cc.cryptopunks.crypton.repository.AccountRepository
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.onAccountException
 import cc.cryptopunks.crypton.util.Scopes

@@ -1,18 +1,14 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.presentation.fragment.*
-import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.module.ViewModelModule
 import cc.cryptopunks.crypton.module.ViewModelScope
+import cc.cryptopunks.crypton.presentation.fragment.*
 import dagger.Component
 
 @ViewModelScope
 @Component(
     dependencies = [FeatureComponent::class],
-    modules = [
-        ViewModelModule::class,
-        Client.Module::class
-    ]
+    modules = [ViewModelModule::class]
 )
 interface AccountComponent : ViewModelComponent {
     fun inject(target: SetAccountFragment)

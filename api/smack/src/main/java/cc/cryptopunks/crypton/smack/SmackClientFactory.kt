@@ -17,7 +17,8 @@ object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
 
     override fun invoke(config: Client.Config): Client = DaggerSmackComponent.builder().module(
         SmackComponent.Module(
-            accountId = config.id,
+            accountId = config.accountId,
+            remoteId = config.remoteId,
             configuration = configBuilder
                 .run(setup)
                 .setUsernameAndPassword(config.remoteId.login, config.password)

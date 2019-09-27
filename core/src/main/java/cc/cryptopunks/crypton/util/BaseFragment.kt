@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 abstract class BaseFragment : CoroutineFragment() {
 
     @get:LayoutRes
-    open val layoutId
+    open val layoutRes
         get() = 0
 
     @get:StringRes
@@ -31,7 +31,7 @@ abstract class BaseFragment : CoroutineFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = layoutId.takeIf { it > 0 }?.let {
+    ): View? = layoutRes.takeIf { it > 0 }?.let {
         inflater.inflate(it, container, false)
     }
 

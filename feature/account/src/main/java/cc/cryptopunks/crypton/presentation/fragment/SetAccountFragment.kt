@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class SetAccountFragment : AccountComponentFragment() {
 
-    override val layoutId: Int get() = R.layout.set_account
+    override val layoutRes: Int get() = R.layout.set_account
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

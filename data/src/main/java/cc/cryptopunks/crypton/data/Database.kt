@@ -4,15 +4,16 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import cc.cryptopunks.crypton.component.DataComponent
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Conversation
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.entity.*
 
 @Database(
     entities = [
         Account::class,
-        Conversation::class,
-        Message::class
+        AccountUser::class,
+        Chat::class,
+        Message::class,
+        User::class,
+        ChatUser::class
     ],
     version = 1
 )

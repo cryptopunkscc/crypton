@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class SignUpFragment : AccountComponentFragment() {
 
-    override val layoutId: Int get() = R.layout.sign_up
+    override val layoutRes: Int get() = R.layout.sign_up
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

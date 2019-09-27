@@ -20,20 +20,20 @@ internal class UserTest : IntegrationTest() {
         val events1 = client1.rosterEventPublisher.openSubscription()
         val events2 = client2.rosterEventPublisher.openSubscription()
 
-        client1.invite(client2.user)
+        client1.invite(client2.remoteId)
         events2.receiveFiltered { it is ProcessSubscribe }
-        client2.invited(client1.user)
+        client2.invited(client1.remoteId)
         events1.receiveFiltered { it is PresenceSubscribed }
-        client1.invited(client2.user)
+        client1.invited(client2.remoteId)
         events2.receiveFiltered { it is PresenceSubscribed }
 
         assertEquals(
-            client1.user.remoteId,
+            client1.remoteId,
             client2.getContacts().first().remoteId
         )
 
         assertEquals(
-            client2.user.remoteId,
+            client2.remoteId,
             client1.getContacts().first().remoteId
         )
     }

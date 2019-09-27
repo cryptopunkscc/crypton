@@ -6,5 +6,5 @@ include ':common',
         ':api:integration',
         ':core',
         ':feature:account',
-        ':feature:conversation',
+        ':feature:chat',
         ':app'

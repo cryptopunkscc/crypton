@@ -9,7 +9,7 @@ import org.jxmpp.jid.impl.JidCreate
 import javax.inject.Inject
 
 @ApiScope
-class SendChatMessage @Inject constructor(
+internal class SendChatMessage @Inject constructor(
     connection: XMPPConnection
 ) : Send, (RemoteId, String) -> Unit by { to, text ->
 

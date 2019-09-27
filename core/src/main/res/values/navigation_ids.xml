@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="navigateDashboard" type="id" />
-    <item name="navigateConversationList" type="id" />
+    <item name="navigateRoster" type="id" />
     <item name="navigateSetAccount" type="id" />
     <item name="navigateLogin" type="id" />
     <item name="navigateRegister" type="id" />
     <item name="navigateAccountList" type="id" />
     <item name="navigateAccountManagement" type="id" />
+    <item name="navigateCreateChat" type="id" />
+    <item name="navigateChat" type="id" />
 </resources>

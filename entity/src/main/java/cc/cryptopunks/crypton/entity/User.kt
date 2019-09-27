@@ -1,47 +1,63 @@
 package cc.cryptopunks.crypton.entity
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
-@Entity
+@Entity(
+    indices = [Index(
+        value = ["local", "domain"],
+        unique = true
+    )]
+)
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @Embedded val resourceId: ResourceId = ResourceId.Empty
+    @Embedded val remoteId: RemoteId = RemoteId.Empty
 ) {
 
-    val remoteId get() = resourceId.remoteId
+    constructor(string: String) : this(
+        remoteId = RemoteId.from(string)
+    )
 
     interface Api {
         val getContacts: GetContacts
+        val addContact: AddContact
         val invite: Invite
         val invited: Invited
 
         interface GetContacts : () -> List<User>
-
-        interface Invite : (User) -> Unit
-        interface Invited : (User) -> Unit
+        interface AddContact : (User) -> Unit
+        interface Invite : (RemoteId) -> Unit
+        interface Invited : (RemoteId) -> Unit
     }
 
-
+    @androidx.room.Dao
     interface Dao {
+        @Insert
+        suspend fun insert(user: User)
+
+        @Insert(onConflict = OnConflictStrategy.IGNORE)
+        suspend fun insertIfNeeded(list: List<User>) : List<Long>
+
         @Query(
             """
             select * from User 
-            inner join ConversationUser on User.id = ConversationUser.userId
-            where ConversationUser.conversationId = :conversationId
+            inner join ChatUser on User.id = ChatUser.userId
+            where ChatUser.chatId = :chatId
             """
         )
-        fun flowaList(conversationId: Long): Flow<List<User>>
+        fun flowListByChatId(chatId: Long): Flow<List<User>>
+
+        @Query(
+            """
+            select * from User 
+            inner join AccountUser on User.id = AccountUser.userId
+            where AccountUser.accountId = :accountId
+            """
+        )
+        fun getByAccountId(accountId: Long): User
     }
 
     companion object {
         val Empty = User()
-
-        fun from(string: String) = User(
-            resourceId = ResourceId.from(string)
-        )
     }
 }

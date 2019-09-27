@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton.util
 
+import android.os.Bundle
+import android.os.Parcelable
 import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import dagger.Provides
@@ -10,22 +12,33 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
-interface Navigate : (@IdRes Int) -> Unit {
+interface Navigate :
+        (@IdRes Int) -> Unit,
+        (@IdRes Int, Any) -> Unit {
 
-    interface Output : Flow<Int>
+    interface Output : Flow<Data>
+
+    data class Data(
+        @IdRes val idRes: Int,
+        val param: Any? = null
+    )
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     private class Impl : Navigate, Output {
-        private val channel = BroadcastChannel<Int?>(Channel.CONFLATED)
+        override fun invoke(actionId: Int, param: Any) {
+            channel.offer(Data(actionId, param))
+        }
+
+        private val channel = BroadcastChannel<Data?>(Channel.CONFLATED)
 
         override fun invoke(actionId: Int) {
-            channel.offer(actionId)
+            channel.offer(Data(actionId))
         }
 
 
         @InternalCoroutinesApi
-        override suspend fun collect(collector: FlowCollector<Int>) {
+        override suspend fun collect(collector: FlowCollector<Data>) {
             channel.asFlow()
                 .filterNotNull()
                 .onEach { channel.offer(null) }
@@ -33,13 +46,12 @@ interface Navigate : (@IdRes Int) -> Unit {
         }
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     @dagger.Module
     class Module {
         private val impl = Impl()
         @Provides
         fun navigate(): Navigate = impl
+
         @Provides
         fun output(): Output = impl
     }
@@ -50,6 +62,14 @@ interface Navigate : (@IdRes Int) -> Unit {
     }
 }
 
-suspend fun Navigate.Output.bind(navController: NavController) = collect { id ->
-    navController.navigate(id)
+suspend fun Navigate.Output.bind(navController: NavController) = collect { data ->
+    val bundle = when (data.param) {
+        is Bundle -> data.param
+        is Parcelable -> Bundle().apply { putParcelable(null, data.param) }
+        else -> null
+    }
+    navController.navigate(
+        data.idRes,
+        bundle
+    )
 }

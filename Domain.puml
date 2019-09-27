@@ -1,0 +1,41 @@
+@startuml
+
+class Resource
+class Address
+class Account
+class User
+enum AccountStatus
+
+
+class Account {
+    status: AccountStatus
+    address: Address
+    password: String
+}
+
+class Address {
+    local: String
+    domain: String
+}
+
+class Resource {
+    string: String
+    address: Address
+}
+
+class User {
+    address: Address
+}
+
+class Chat {
+    accountAddress: Address
+    users: List<User>
+}
+
+Account *-- Address
+Account *-- AccountStatus
+Resource *-- Address
+User *-- Address
+Chat *-- User
+
+@enduml

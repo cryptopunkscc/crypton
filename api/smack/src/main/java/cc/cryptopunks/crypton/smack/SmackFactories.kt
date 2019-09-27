@@ -41,3 +41,5 @@ internal fun SmackJid.remoteId() = RemoteId(
 internal fun SmackPresence.presence() = Presence(
     status = Presence.Status.values()[type.ordinal]
 )
+
+internal fun RemoteId.bareJid() = JidCreate.bareFrom(this)

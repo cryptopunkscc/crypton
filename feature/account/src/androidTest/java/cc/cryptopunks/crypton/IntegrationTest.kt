@@ -45,7 +45,7 @@ abstract class IntegrationTest : ApiIntegrationTest() {
 
     fun Client.insertAccount(
         reduce: Account.() -> Account = { this }
-    ) = account(id).reduce().run {
+    ) = account(accountId).reduce().run {
         copy(id = component.accountDao.insert(this)!!)
     }
 

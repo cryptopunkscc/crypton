@@ -15,10 +15,10 @@ class MainFragment : BaseAppFragment() {
 
     @Inject
     fun init(
-        navigationViewModel: MainNavigationViewModel,
+        mainNavigationViewModel: MainNavigationViewModel,
         toggleAppServiceViewModel: ToggleAppServiceViewModel
     ) {
-        launch { navigationViewModel() }
+        launch { mainNavigationViewModel() }
         launch { toggleAppServiceViewModel() }
     }
 }

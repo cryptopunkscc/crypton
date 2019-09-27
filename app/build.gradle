@@ -41,7 +41,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':feature:account')
-    implementation project(':feature:conversation')
+    implementation project(':feature:chat')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

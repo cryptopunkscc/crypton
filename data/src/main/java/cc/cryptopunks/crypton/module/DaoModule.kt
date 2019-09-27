@@ -11,9 +11,14 @@ class DaoModule {
     fun Database.accountDao() = accountDao
 
     @Provides
-    fun Database.conversationDao() = conversationDao
-
-    @Provides
     fun Database.messageDao() = messageDao
 
+    @Provides
+    fun Database.chatDao() = chatDao
+
+    @Provides
+    fun Database.userDao() = userDao
+
+    @Provides
+    fun Database.chatUserDao() = chatUserDao
 }

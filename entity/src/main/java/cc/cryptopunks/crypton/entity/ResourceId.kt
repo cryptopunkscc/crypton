@@ -14,8 +14,6 @@ data class ResourceId(
     }
 }) {
 
-    val withoutResource get() = remoteId
-
     override fun toString(): String = substring(0, length)
 
     companion object {
