@@ -1,27 +1,17 @@
 package cc.cryptopunks.crypton.entity
 
-import androidx.room.*
+import androidx.room.TypeConverter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 
-@Entity(
-    indices = [Index(
-        value = ["domain", "userName"],
-        unique = true
-    )]
-)
 data class Account constructor(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val domain: String = "",
+    val address: Address = Address.Empty,
     val status: Status = Status.Disconnected,
-    @Embedded val credentials: Credentials = Credentials.Empty
+    val password: String = "",
+    val updateAt: Long = System.currentTimeMillis()
 ) {
 
-    val remoteId
-        @Ignore get() = RemoteId(
-            local = credentials.userName,
-            domain = domain
-        )
+    val domain get() = address.domain
 
     enum class Status {
         Disconnected,
@@ -40,15 +30,6 @@ data class Account constructor(
         }
     }
 
-    data class Credentials(
-        val userName: String = "",
-        val password: String = ""
-    ) {
-        companion object {
-            val Empty = Credentials()
-        }
-    }
-
     data class Exception(
         val account: Account,
         override val cause: Throwable
@@ -64,27 +45,13 @@ data class Account constructor(
         else Exception(this, throwable)
 
     @androidx.room.Dao
-    interface Dao {
-
-        @Query("select id from account where id = :id")
-        fun contains(id: Long): Long?
-
-        @Query("select * from account where id = :id")
-        fun get(id: Long): Account
-
-        @Insert
-        fun insert(account: Account): Long?
-
-        @Update
+    interface Repo {
+        fun contains(address: Address): Boolean
+        fun get(address: Address): Account
+        fun insert(account: Account): Account
         fun update(account: Account)
-
-        @Delete
-        fun delete(vararg accounts: Account)
-
-        @Query("select * from account")
+        fun delete(account: Account)
         fun list(): List<Account>
-
-        @Query("select * from account")
         fun flowList(): Flow<List<Account>>
     }
 

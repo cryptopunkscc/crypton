@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.integration
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.entity.RemoteId
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +11,7 @@ import kotlinx.coroutines.withTimeout
 abstract class ApiIntegrationTest :
     CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
 
-    val baseId = RemoteId(domain = "test.io")
+    val baseId = Address(domain = "test.io")
     private val clients = mutableMapOf<Long, Client>()
     private var autoRemove = false
 
@@ -55,7 +55,7 @@ abstract class ApiIntegrationTest :
 
     fun config(index: Long) = Client.Config(
         accountId = index,
-        remoteId = baseId.copy(local = "test$index"),
+        address = baseId.copy(local = "test$index"),
         password = "test$index"
     )
 }

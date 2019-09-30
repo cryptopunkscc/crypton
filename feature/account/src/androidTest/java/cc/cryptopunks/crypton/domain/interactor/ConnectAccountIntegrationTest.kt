@@ -30,7 +30,7 @@ class ConnectAccountIntegrationTest : IntegrationTest() {
             // then
             assertEquals(
                 expected,
-                accountDao.get(account.id)
+                accountRepo.get(account.address)
             )
         }
     }

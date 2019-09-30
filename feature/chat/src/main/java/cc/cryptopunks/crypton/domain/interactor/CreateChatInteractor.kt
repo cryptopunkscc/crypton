@@ -1,9 +1,7 @@
 package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.ChatUser
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.util.Scopes
 import kotlinx.coroutines.Job
@@ -14,7 +12,7 @@ object CreateChat {
     class Interactor @Inject constructor(
         scope: Scopes.UseCase,
         clientCache: Client.Cache,
-        dao: ChatUser.Dao
+        repo: Chat.Repo
     ) : (Data) -> Job by { data ->
 
         scope.launch {
@@ -23,25 +21,12 @@ object CreateChat {
             val client = clientCache.values.first() // TODO
 //            val user = client.getUser() TODO
 
-            with(dao) {
-                val chat = Chat(
-                    title = data.title,
-                    accountId = client.accountId
-                )
+            val chat = Chat(
+                title = data.title,
+                address = client.address
+            )
 
-                val chatId = insert(chat)
-
-                val chatUserList = insertIfNeeded(data.users/* + client.user*/).map { userId ->
-                    ChatUser(
-                        chatId = chatId,
-                        userId = userId
-                    )
-                }
-
-                insert(chatUserList)
-
-//                data.users.forEach(addContact)
-            }
+            val chatId = repo.insert(chat)
         }
     }
 

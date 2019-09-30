@@ -25,11 +25,11 @@ class DeleteAccountIntegrationTest : IntegrationTest() {
             // then
             assertEquals(
                 expected,
-                accountDao.contains(account.id)
+                accountRepo.contains(account.address)
             )
 
             assertNull(
-                clientCache[account.id]
+                clientCache[account.address.id]
             )
         }
     }

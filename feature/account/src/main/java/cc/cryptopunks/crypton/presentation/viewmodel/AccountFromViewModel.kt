@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.module.ViewModelScope
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.Input
@@ -30,14 +31,16 @@ class AccountViewModel @Inject constructor(
     val confirmPassword by lazy<Input>("confirmPassword")
     val onClick by lazy("loginButton", initial = 0L)
     val errorMessage by lazy("errorMessage", initial = "")
-
-    fun getAccount() = Account(
-        domain = serviceName.value.text,
-        credentials = Account.Credentials(
-            userName = userName.value.text,
+    val address
+        get() = Address(
+            local = userName.value.text,
+            domain = serviceName.value.text
+        )
+    val account
+        get() = Account(
+            address = address,
             password = password.value.text
         )
-    )
 
     suspend operator fun invoke() = coroutineScope {
         launch {

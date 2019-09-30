@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AccountListSelector @Inject constructor(
-    private val dao: Account.Dao
+    private val repo: Account.Repo
 ) : () -> Flow<List<Account>> by {
-    dao.flowList()
+    repo.flowList()
 }

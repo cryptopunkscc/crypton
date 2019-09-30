@@ -1,30 +1,29 @@
-package cc.cryptopunks.crypton.repository
+package cc.cryptopunks.crypton.model
 
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
 import javax.inject.Inject
 
-class ClientRepository @Inject constructor(
+class ClientModel @Inject constructor(
     private val createClient: Client.Factory,
     private val clientCache: Client.Cache
 ) {
     operator fun get(account: Account): Client = account.run {
-        clientCache[id] ?: createClient(
+        clientCache[address.id] ?: createClient(
             Client.Config(
-                accountId = id,
-                remoteId = remoteId,
-                password = credentials.password
+                address = address,
+                password = password
             )
         ).also {
-            clientCache[id] = it
+            clientCache[address.id] = it
         }
     }
 
     operator fun contains(account: Account): Boolean =
-        account.id in clientCache
+        account.address.id in clientCache
 
 
     operator fun minus(account: Account) {
-        clientCache -= account.id
+        clientCache -= account.address.id
     }
 }

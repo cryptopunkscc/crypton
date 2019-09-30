@@ -36,19 +36,19 @@ internal interface SmackComponent : Client {
     override val accountId: Long
 
     @get:ApiQualifier
-    override val remoteId: RemoteId
+    override val address: Address
 
     @dagger.Module(includes = [Bindings::class])
     class Module(
         @get:Provides @get:ApiQualifier val accountId: Long,
-        @get:Provides @get:ApiQualifier val remoteId: RemoteId,
+        @get:Provides @get:ApiQualifier val address: Address,
         @get:Provides val configuration: XMPPTCPConnectionConfiguration
     ) {
 
         @Provides
         @ApiScope
         fun user(connection: XMPPConnection) = User(
-            remoteId = connection.user.remoteId()
+            address = connection.user.remoteId()
         )
 
         @Provides

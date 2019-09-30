@@ -8,7 +8,12 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module(includes = [DaoModule::class])
+@Module(
+    includes = [
+        DaoModule::class,
+        RepoModule.Bindings::class
+    ]
+)
 class DataModule {
 
     @Provides

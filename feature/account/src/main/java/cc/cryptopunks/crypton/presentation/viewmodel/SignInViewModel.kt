@@ -32,7 +32,7 @@ class SignInViewModel @Inject constructor(
             accountViewModel.onClick
                 .asFlow()
                 .filter { it > 0 }
-                .map { accountViewModel.getAccount() }
+                .map { accountViewModel.account }
                 .collect { addAccount(it) }
         }
     }

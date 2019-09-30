@@ -2,13 +2,13 @@ package cc.cryptopunks.crypton
 
 import androidx.test.core.app.ApplicationProvider
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.RemoteId
+import cc.cryptopunks.crypton.entity.Address
 import org.junit.After
 import java.util.concurrent.atomic.AtomicReference
 
 abstract class IntegrationTest {
 
-    private val baseId = RemoteId(domain = "test.io")
+    private val baseId = Address(domain = "test.io")
 
     private val componentRef = AtomicReference<IntegrationTestComponent>()
 
@@ -31,16 +31,12 @@ abstract class IntegrationTest {
         local = "test$index"
     ).run {
         Account(
-            id = index,
-            domain = domain,
-            credentials = Account.Credentials(
-                userName = local,
-                password = local
-            )
+            address = Address(
+                local = local,
+                domain = domain
+            ),
+            password = local
         )
-    }.run {
-        if (!withId) this
-        else copy(id = index)
     }
 
 }

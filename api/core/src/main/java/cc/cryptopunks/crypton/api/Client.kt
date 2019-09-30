@@ -18,7 +18,7 @@ interface Client:
     RosterEvent.Api {
 
     val accountId: Long
-    val remoteId: RemoteId
+    val address: Address
     val create: Create
     val remove: Remove
     val login: Login
@@ -37,7 +37,7 @@ interface Client:
 
     data class Config(
         val accountId: Long = EmptyId,
-        val remoteId: RemoteId = RemoteId.Empty,
+        val address: Address = Address.Empty,
         val password: String = ""
     ) {
         companion object {
@@ -48,9 +48,9 @@ interface Client:
 
     @Singleton
     class Cache(
-        private val map: MutableMap<Long, Client>
+        private val map: MutableMap<String, Client>
     ) :
-        MutableMap<Long, Client> by map,
+        MutableMap<String, Client> by map,
         Flow<Client> {
 
         private val channel = BroadcastChannel<Client?>(Channel.CONFLATED)
@@ -64,11 +64,11 @@ interface Client:
             channel.asFlow().filterNotNull().collect(collector)
         }
 
-        override fun remove(key: Long) = map
+        override fun remove(key: String) = map
             .remove(key)
             ?.apply { send(Empty(accountId = accountId)) }
 
-        override fun put(key: Long, value: Client): Client? = map
+        override fun put(key: String, value: Client): Client? = map
             .put(key, value)
             .apply { send(value) }
 

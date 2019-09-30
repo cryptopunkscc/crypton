@@ -28,7 +28,7 @@ internal class MessagingTest : IntegrationTest() {
 
         launch {
             client1.sendMessage(
-                client2.remoteId,
+                client2.address,
                 expected
             )
         }

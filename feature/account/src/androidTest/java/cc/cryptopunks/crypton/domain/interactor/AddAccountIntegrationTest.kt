@@ -21,7 +21,7 @@ class AddAccountIntegrationTest : IntegrationTest() {
             val id = 1L
             val account = account(id)
             val expected = account.copy(
-                id = id,
+                address = id,
                 status = Connected
             )
 
@@ -31,7 +31,7 @@ class AddAccountIntegrationTest : IntegrationTest() {
             // then
             assertEquals(
                 expected,
-                accountDao.get(id)
+                accountRepo.get(id)
             )
         }
     }

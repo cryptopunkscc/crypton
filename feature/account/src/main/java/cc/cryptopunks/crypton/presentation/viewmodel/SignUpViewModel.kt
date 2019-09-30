@@ -23,7 +23,7 @@ class SignUpViewModel @Inject constructor(
                 .onClick
                 .asFlow()
                 .filter { it > 0 }
-                .map { accountViewModel.getAccount() }
+                .map { accountViewModel.account }
                 .collect { registerAccount(it) }
         }
     }

@@ -1,21 +1,21 @@
 package cc.cryptopunks.crypton.domain.interactor
 
-import cc.cryptopunks.crypton.repository.AccountRepository
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
 import cc.cryptopunks.crypton.entity.onAccountException
+import cc.cryptopunks.crypton.model.AccountModel
 import cc.cryptopunks.crypton.util.Scopes
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class RegisterAccountInteractor @Inject constructor(
     scope: Scopes.UseCase,
-    repository: AccountRepository,
+    model: AccountModel,
     connect: ConnectAccountInteractor,
     deleteAccount: DeleteAccountInteractor
 ) : (Account) -> Job by { account ->
     scope launch {
-        repository.copy().run {
+        model.copy().run {
             set(account)
             setStatus(Disconnected)
             register()

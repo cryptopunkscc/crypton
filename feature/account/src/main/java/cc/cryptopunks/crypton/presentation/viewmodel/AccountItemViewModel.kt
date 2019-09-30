@@ -14,7 +14,7 @@ class AccountItemViewModel @Inject constructor(
 ) {
     var account = Account.Empty
 
-    val name get() = account.remoteId
+    val name get() = account.address
 
     val status get() = account.status.name
 

@@ -40,21 +40,18 @@ abstract class IntegrationTest : ApiIntegrationTest() {
         config(index)
     ).run {
         if (!withId) this
-        else copy(id = index)
+        else copy(address = index)
     }
 
     fun Client.insertAccount(
         reduce: Account.() -> Account = { this }
     ) = account(accountId).reduce().run {
-        copy(id = component.accountDao.insert(this)!!)
+        copy(address = component.accountRepo.insert(this)!!)
     }
 
 }
 
 fun createAccount(config: Client.Config) = Account(
-    domain = config.remoteId.domain,
-    credentials = Account.Credentials(
-        userName = config.remoteId.local,
-        password = config.password
-    )
+    address = config.address,
+    password = config.password
 )

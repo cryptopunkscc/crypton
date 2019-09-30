@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
 class LastMessageSelector @Inject constructor(
-    dao: Message.Dao
-) : (Chat) -> Flow<Message> by { conversation ->
-    dao.flowLatest(conversation.id).filterNotNull()
+    repo: Message.Repo
+) : (Chat) -> Flow<Message> by { chat ->
+    repo.flowLatest(chat.id).filterNotNull()
 }

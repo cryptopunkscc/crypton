@@ -11,28 +11,28 @@ import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class LoadMessagesInteractor @Inject constructor(
-    messageDao: Message.Dao,
-    conversationDao: Chat.Dao,
-    accountDao: Account.Dao,
+    messageRepo: Message.Repo,
+    chatRepo: Chat.Repo,
+    accountRepo: Account.Repo,
     scope: Scopes.UseCase
 ) : () -> Job by {
     //TODO: replace mock witch integration
     scope.launch {
-        accountDao.list().firstOrNull()?.run {
-            conversationDao.deleteAll()
+        accountRepo.list().firstOrNull()?.run {
+            chatRepo.deleteAll()
             (1L..200).asFlow().collect {
-                conversationDao.insertIfNeeded(
+                chatRepo.insert(
                     Chat(
                         id = it,
-                        accountId = id,
+                        address = address,
                         title = "Chat $it"
                     )
                 )
 
-                messageDao.insertOrUpdate(
+                messageRepo.insertOrUpdate(
+                    it,
                     Message(
                         id = it.toString(),
-                        chatId = it,
                         text = "message $it"
                     )
                 )

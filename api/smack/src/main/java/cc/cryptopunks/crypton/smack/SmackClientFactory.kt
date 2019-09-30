@@ -18,11 +18,11 @@ object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
     override fun invoke(config: Client.Config): Client = DaggerSmackComponent.builder().module(
         SmackComponent.Module(
             accountId = config.accountId,
-            remoteId = config.remoteId,
+            address = config.address,
             configuration = configBuilder
                 .run(setup)
-                .setUsernameAndPassword(config.remoteId.login, config.password)
-                .setXmppDomain(config.remoteId.domain)
+                .setUsernameAndPassword(config.address.login, config.password)
+                .setXmppDomain(config.address.domain)
                 .build()
         )
     ).build()

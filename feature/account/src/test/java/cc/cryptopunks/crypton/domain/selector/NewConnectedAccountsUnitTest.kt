@@ -17,38 +17,38 @@ import org.junit.Test
 class NewConnectedAccountsUnitTest: CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
 
     @RelaxedMockK
-    lateinit var dao: Account.Dao
+    lateinit var repo: Account.Repo
     private lateinit var newAccountConnected: NewAccountConnected
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        newAccountConnected = NewAccountConnected(dao)
+        newAccountConnected = NewAccountConnected(repo)
     }
 
     @Test
     operator fun invoke() {
         runBlocking {
             // given
-            every { dao.flowList() } returns flow<List<Account>> {
+            every { repo.flowList() } returns flow<List<Account>> {
                 emit(
                     emptyList()
                 )
                 emit(
                     listOf(
-                        Account(id = 1, status = Connected),
-                        Account(id = 2)
+                        Account(address = 1, status = Connected),
+                        Account(address = 2)
                     )
                 )
                 emit(
                     listOf(
-                        Account(id = 1, status = Connected),
-                        Account(id = 2, status = Connected)
+                        Account(address = 1, status = Connected),
+                        Account(address = 2, status = Connected)
                     )
                 )
                 emit(
                     listOf(
-                        Account(id = 1)
+                        Account(address = 1)
                     )
                 )
             }

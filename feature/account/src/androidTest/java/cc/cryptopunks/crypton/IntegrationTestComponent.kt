@@ -23,7 +23,7 @@ import javax.inject.Singleton
 internal interface IntegrationTestComponent {
 
     val database: Database
-    val accountDao: Account.Dao
+    val accountRepo: Account.Repo
     val clientCache: Client.Cache
 
     val addAccount: AddAccountInteractor
@@ -55,7 +55,7 @@ internal class TestModule(
     @Provides
     @Singleton
     fun accountDao(database: Database) = database
-        .accountDao
+        .accountRepo
 
     @Provides
     @Singleton

@@ -1,10 +1,10 @@
 package cc.cryptopunks.crypton.module
 
-import cc.cryptopunks.crypton.entity.RemoteId
+import cc.cryptopunks.crypton.entity.Address
 import dagger.Module
 import dagger.Provides
 
 @Module
 class ChatModule(
-    @get:Provides val remoteId: RemoteId
+    @get:Provides val address: Address
 )

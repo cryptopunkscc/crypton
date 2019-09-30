@@ -8,7 +8,7 @@ import dagger.Provides
 
 @Module
 class ApiClientModule(@get:Provides val client: Client) : Client {
-    override val remoteId: RemoteId @Provides @ApiQualifier get() = client.remoteId
+    override val address: Address @Provides @ApiQualifier get() = client.address
     override val accountId: Long @Provides @ApiQualifier get() = client.accountId
     override val create: Client.Create @Provides get() = client.create
     override val remove: Client.Remove @Provides get() = client.remove

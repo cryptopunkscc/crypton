@@ -19,6 +19,7 @@ import javax.inject.Singleton
 interface ApplicationComponent :
     UtilsComponent,
     DataComponent,
+    RepoComponent,
     DomainComponent,
     KacheComponent,
     BroadcastError.Component,

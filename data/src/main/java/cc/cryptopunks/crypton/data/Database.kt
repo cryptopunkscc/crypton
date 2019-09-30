@@ -8,14 +8,13 @@ import cc.cryptopunks.crypton.entity.*
 
 @Database(
     entities = [
-        Account::class,
-        AccountUser::class,
-        Chat::class,
-        Message::class,
-        User::class,
-        ChatUser::class
+        AccountData::class,
+        ChatData::class,
+        MessageData::class,
+        UserData::class,
+        ChatUserData::class
     ],
     version = 1
 )
-@TypeConverters(Account.Status.Converter::class)
+@TypeConverters(AccountData.StatusConverter::class)
 abstract class Database : RoomDatabase(), DataComponent

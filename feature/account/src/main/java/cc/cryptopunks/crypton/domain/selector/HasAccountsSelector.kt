@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HasAccountsSelector @Inject constructor(
-    dao: Account.Dao
+    repo: Account.Repo
 ) : () -> Flow<Boolean> by {
-    dao.flowList()
+    repo.flowList()
         .map { it.isNotEmpty() }
         .distinctUntilChanged()
 }

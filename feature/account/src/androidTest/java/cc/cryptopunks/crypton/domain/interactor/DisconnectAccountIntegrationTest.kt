@@ -31,11 +31,11 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
             // then
             assertEquals(
                 expected,
-                accountDao.get(account.id)
+                accountRepo.get(account.address)
             )
 
             assertNull(
-                clientCache[account.id]
+                clientCache[account.address]
             )
         }
     }

@@ -35,7 +35,7 @@ class ConversationUserListAdapter @Inject constructor() :
         LayoutContainer {
 
         fun bind(user: User) {
-            userNameTextView.text = user.remoteId
+            userNameTextView.text = user.address
         }
     }
 }

@@ -11,6 +11,6 @@ class UserGetContacts @Inject constructor(
     roster: Roster
 ) : User.Api.GetContacts, () -> List<User> by {
     roster.entries.map { entry ->
-        User(remoteId = entry.jid.remoteId())
+        User(address = entry.jid.remoteId())
     }
 }

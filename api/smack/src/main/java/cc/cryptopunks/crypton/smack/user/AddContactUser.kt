@@ -11,8 +11,8 @@ class AddContactUser @Inject constructor(
     roster: Roster
 ) : User.Api.AddContact, (User) -> Unit by { user ->
     roster.createEntry(
-        user.remoteId.bareJid(),
-        user.remoteId.local,
+        user.address.bareJid(),
+        user.address.local,
         null
     )
 }

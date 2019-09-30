@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.entity
 
-data class RemoteId(
+data class Address(
     val local: String = "",
     val domain: String = ""
 ) : CharSequence by buildString({
@@ -12,15 +12,17 @@ data class RemoteId(
 }) {
     val login get() = local
 
+    val id by lazy { toString() }
+
     override fun toString(): String = substring(0, length)
 
     companion object {
-        val Empty = RemoteId()
+        val Empty = Address()
 
         fun from(string: String) = string.split("@").run {
-            RemoteId(
+            Address(
                 local = get(0),
-                domain = get(1)
+                domain = getOrNull(1) ?: ""
             )
         }
     }
