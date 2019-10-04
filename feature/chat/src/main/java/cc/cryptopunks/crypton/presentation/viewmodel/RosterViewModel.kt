@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.domain.interactor.LoadMessagesInteractor
 import cc.cryptopunks.crypton.domain.selector.RosterSelector
-import cc.cryptopunks.crypton.module.ViewModelScope
+import cc.cryptopunks.crypton.dagger.ViewModelScope
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.module
+package cc.cryptopunks.crypton.dagger
 
 import android.app.Service
 import dagger.Module
@@ -10,7 +10,7 @@ import javax.inject.Scope
 annotation class ServiceScope
 
 @Module
-class ServiceModule(
+class DaggerServiceModule(
     @get:Provides
     @get:ServiceScope
     val service: Service

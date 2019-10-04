@@ -24,7 +24,7 @@ import androidx.room.*
         )
     ]
 )
-data class ChatUserData(
+internal data class ChatUserData(
     val id: AddressData,
     val chatId: Long
 ) {
@@ -46,11 +46,11 @@ data class ChatUserData(
     }
 }
 
-fun ChatUserData.user() = User(
+internal fun ChatUserData.user() = User(
     address = Address.from(id)
 )
 
-fun User.chatUserData(chatId: Long) = ChatUserData(
+internal fun User.chatUserData(chatId: Long) = ChatUserData(
     chatId = chatId,
     id = address.id
 )

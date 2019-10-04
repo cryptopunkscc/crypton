@@ -14,9 +14,9 @@ data class Chat(
         override val cause: Throwable
     ) : kotlin.Exception(cause) {
         constructor(
-            conversation: Chat,
+            chat: Chat,
             cause: Throwable
-        ) : this(listOf(conversation), cause)
+        ) : this(listOf(chat), cause)
     }
 
     interface Repo {

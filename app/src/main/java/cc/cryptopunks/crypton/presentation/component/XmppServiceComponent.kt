@@ -1,15 +1,15 @@
 package cc.cryptopunks.crypton.presentation.component
 
 import cc.cryptopunks.crypton.service.AppService
-import cc.cryptopunks.crypton.component.ContextComponent
-import cc.cryptopunks.crypton.module.ServiceModule
-import cc.cryptopunks.crypton.module.ServiceScope
+import cc.cryptopunks.crypton.dagger.ContextComponent
+import cc.cryptopunks.crypton.dagger.DaggerServiceModule
+import cc.cryptopunks.crypton.dagger.ServiceScope
 import dagger.Component
 
 @ServiceScope
 @Component(
     dependencies = [ContextComponent::class],
-    modules = [ServiceModule::class]
+    modules = [DaggerServiceModule::class]
 )
 interface AppServiceComponent : ContextComponent {
 

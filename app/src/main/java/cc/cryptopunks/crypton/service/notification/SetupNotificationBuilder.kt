@@ -6,7 +6,7 @@ import android.app.Service
 import android.content.Intent
 import cc.cryptopunks.crypton.R
 import cc.cryptopunks.crypton.presentation.activity.MainActivity
-import cc.cryptopunks.crypton.module.ServiceScope
+import cc.cryptopunks.crypton.dagger.ServiceScope
 import javax.inject.Inject
 
 @ServiceScope

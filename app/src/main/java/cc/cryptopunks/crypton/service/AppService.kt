@@ -4,11 +4,11 @@ import android.app.IntentService
 import android.app.Service
 import android.content.Intent
 import cc.cryptopunks.crypton.app
-import cc.cryptopunks.crypton.component.DaggerContextComponent
+import cc.cryptopunks.crypton.dagger.DaggerContextComponent
 import cc.cryptopunks.crypton.domain.interactor.ReconnectAccountsInteractor
-import cc.cryptopunks.crypton.module.ContextModule
-import cc.cryptopunks.crypton.module.ServiceModule
-import cc.cryptopunks.crypton.module.ServiceScope
+import cc.cryptopunks.crypton.dagger.DaggerContextModule
+import cc.cryptopunks.crypton.dagger.DaggerServiceModule
+import cc.cryptopunks.crypton.dagger.ServiceScope
 import cc.cryptopunks.crypton.presentation.component.AppServiceComponent
 import cc.cryptopunks.crypton.presentation.component.DaggerAppServiceComponent
 import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel
@@ -26,11 +26,11 @@ class AppService :
             .contextComponent(
                 DaggerContextComponent
                     .builder()
-                    .contextModule(ContextModule(this))
-                    .applicationComponent(app.component)
+                    .daggerContextModule(DaggerContextModule(this))
+                    .component(app.component)
                     .build()
             )
-            .serviceModule(ServiceModule(this))
+            .daggerServiceModule(DaggerServiceModule(this))
             .build()
     }
 

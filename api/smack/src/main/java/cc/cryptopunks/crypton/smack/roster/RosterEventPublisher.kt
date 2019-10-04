@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.roster
 
-import cc.cryptopunks.crypton.api.ApiQualifier
-import cc.cryptopunks.crypton.api.ApiScope
+import cc.cryptopunks.crypton.smack.ApiQualifier
+import cc.cryptopunks.crypton.smack.ApiScope
 import cc.cryptopunks.crypton.entity.RosterEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.internal.disposables.CancellableDisposable

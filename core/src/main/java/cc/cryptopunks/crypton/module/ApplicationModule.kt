@@ -1,31 +1,26 @@
 package cc.cryptopunks.crypton.module
 
 import android.app.Application
-import android.os.Handler
+import cc.cryptopunks.crypton.BaseApplication
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.smack.SmackClientFactory
-import dagger.Module
-import dagger.Provides
-import org.jivesoftware.smack.ConnectionConfiguration
-import java.net.InetAddress
-import javax.inject.Singleton
+import cc.cryptopunks.crypton.component.FeatureComponent
+import cc.cryptopunks.crypton.repo.Repo
+import cc.cryptopunks.crypton.util.BroadcastError
+import cc.cryptopunks.crypton.util.Scopes
 
 
-@Module
 class ApplicationModule(
-    @get:Provides
-    @get:Singleton
-    val application: Application
-) {
-    @get:Provides
-    @get:Singleton
-    val handler = Handler()
+    override val application: Application,
+    private val repoComponent: Repo.Component,
+    private val clientComponent: Client.Component,
+    private val broadcastErrorComponent: BroadcastError.Component = BroadcastError.Module()
+) :
+    BaseApplication.Component,
+    Repo.Component by repoComponent,
+    Client.Component by clientComponent,
+    BroadcastError.Component by broadcastErrorComponent {
 
-    @Provides
-    @Singleton
-    fun clientFactory(): Client.Factory = SmackClientFactory {
-        setResource("xmpptest")
-        setHostAddress(InetAddress.getByName("10.0.2.2"))
-        setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-    }
+    override val useCaseScope = Scopes.UseCase(broadcastError)
+
+    override fun featureComponent(): FeatureComponent = FeatureModule(this)
 }

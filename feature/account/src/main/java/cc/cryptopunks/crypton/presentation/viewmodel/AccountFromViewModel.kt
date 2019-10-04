@@ -2,10 +2,9 @@ package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.module.ViewModelScope
+import cc.cryptopunks.crypton.dagger.ViewModelScope
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.Input
-import cc.cryptopunks.crypton.util.ViewModel
 import cc.cryptopunks.kache.core.Kache
 import cc.cryptopunks.kache.core.KacheManager
 import cc.cryptopunks.kache.core.lazy
@@ -22,8 +21,7 @@ import javax.inject.Inject
 @ViewModelScope
 class AccountViewModel @Inject constructor(
     private val broadcastError: BroadcastError
-) : ViewModel,
-    Kache.Provider by KacheManager() {
+) : Kache.Provider by KacheManager() {
 
     val serviceName by lazy<Input>("serviceName")
     val userName by lazy<Input>("userName")
@@ -44,6 +42,11 @@ class AccountViewModel @Inject constructor(
 
     suspend operator fun invoke() = coroutineScope {
         launch {
+            onClick.asFlow().filter { it > 0 }.collect {
+                errorMessage.value = ""
+            }
+        }
+        launch {
             broadcastError
                 .mapNotNull { (it as? Account.Exception)?.cause }
                 .collect { throwable ->
@@ -55,11 +58,6 @@ class AccountViewModel @Inject constructor(
                         }
                     )
                 }
-        }
-        launch {
-            onClick.asFlow().filter { it > 0 }.collect {
-                errorMessage.value = ""
-            }
         }
     }
 }

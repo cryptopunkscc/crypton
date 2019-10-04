@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.module
+package cc.cryptopunks.crypton.dagger
 
 import android.app.NotificationManager
 import android.content.Context
@@ -12,7 +12,7 @@ import javax.inject.Scope
 annotation class ContextScope
 
 @Module
-class ContextModule(
+class DaggerContextModule(
 
     @get:Provides
     @get:ContextScope

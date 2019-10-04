@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.user
 
-import cc.cryptopunks.crypton.api.ApiScope
+import cc.cryptopunks.crypton.smack.ApiScope
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.User
 import org.jivesoftware.smack.packet.Presence

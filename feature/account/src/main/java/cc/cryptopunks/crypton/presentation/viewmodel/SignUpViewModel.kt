@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.domain.interactor.RegisterAccountInteractor
-import cc.cryptopunks.crypton.module.ViewModelScope
-import cc.cryptopunks.crypton.util.ViewModel
+import cc.cryptopunks.crypton.dagger.ViewModelScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -15,7 +14,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val accountViewModel: AccountViewModel,
     private val registerAccount: RegisterAccountInteractor
-) : ViewModel {
+) {
     suspend operator fun invoke() = coroutineScope {
         launch { accountViewModel() }
         launch {

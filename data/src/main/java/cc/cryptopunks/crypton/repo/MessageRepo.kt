@@ -8,9 +8,8 @@ import cc.cryptopunks.crypton.entity.messageData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class MessageRepo @Inject constructor(
+internal class MessageRepo(
     private val dao: MessageData.Dao
 ) : Message.Repo {
 

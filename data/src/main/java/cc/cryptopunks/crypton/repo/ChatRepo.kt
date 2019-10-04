@@ -2,9 +2,8 @@ package cc.cryptopunks.crypton.repo
 
 import androidx.paging.DataSource
 import cc.cryptopunks.crypton.entity.*
-import javax.inject.Inject
 
-class ChatRepo @Inject constructor(
+internal class ChatRepo(
     private val chatDao: ChatData.Dao,
     private val chatUserDao: ChatUserData.Dao,
     private val userDao: UserData.Dao

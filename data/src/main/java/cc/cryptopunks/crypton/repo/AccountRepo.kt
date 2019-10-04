@@ -3,9 +3,8 @@ package cc.cryptopunks.crypton.repo
 import cc.cryptopunks.crypton.entity.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class AccountRepo @Inject constructor(
+internal class AccountRepo(
     private val dao: AccountData.Dao
 ) : Account.Repo {
 

@@ -6,10 +6,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
 
 interface Client:
     User.Api,
@@ -33,7 +34,22 @@ interface Client:
     interface Disconnect: () -> Unit
     interface IsAuthenticated: () -> Boolean
 
-    interface Factory : (Config) -> Client
+    interface Factory : (Config) -> Client {
+        data class Config(
+            val resource: String = "",
+            val hostAddress: String = "",
+            val securityMode: SecurityMode = SecurityMode.required
+        ) {
+            enum class SecurityMode {
+                required,
+                ifpossible,
+                disabled
+            }
+            companion object {
+                val Empty = Config()
+            }
+        }
+    }
 
     data class Config(
         val accountId: Long = EmptyId,
@@ -46,17 +62,13 @@ interface Client:
         }
     }
 
-    @Singleton
     class Cache(
-        private val map: MutableMap<String, Client>
+        private val map: MutableMap<String, Client> = mutableMapOf()
     ) :
         MutableMap<String, Client> by map,
         Flow<Client> {
 
         private val channel = BroadcastChannel<Client?>(Channel.CONFLATED)
-
-        @Inject
-        constructor() : this(mutableMapOf())
 
         @InternalCoroutinesApi
         override suspend fun collect(collector: FlowCollector<Client>) {
@@ -84,6 +96,11 @@ interface Client:
         val createClient: Factory
         val clientCache: Cache
     }
+
+    class Module(
+        override val createClient: Factory,
+        override val clientCache: Cache = Cache()
+    ) : Component
 
     companion object {
         private val DummyClient: Client = createDummyClass()

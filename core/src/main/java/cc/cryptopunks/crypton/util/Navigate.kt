@@ -47,13 +47,10 @@ interface Navigate :
     }
 
     @dagger.Module
-    class Module {
+    class Module : Component {
         private val impl = Impl()
-        @Provides
-        fun navigate(): Navigate = impl
-
-        @Provides
-        fun output(): Output = impl
+        override val navigate: Navigate @Provides get() = impl
+        override val navigateOutput: Output @Provides get() = impl
     }
 
     interface Component {

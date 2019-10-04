@@ -4,7 +4,7 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "account")
-data class AccountData(
+internal data class AccountData(
     @PrimaryKey val id: AddressData,
     val password: String,
     val status: Account.Status = Account.Status.Disconnected,
@@ -45,14 +45,14 @@ data class AccountData(
     }
 }
 
-fun AccountData.toDomain() = Account(
+internal fun AccountData.toDomain() = Account(
     address = Address.from(id),
     status = status,
     password = password,
     updateAt = updateAt
 )
 
-fun Account.chatData() = AccountData(
+internal fun Account.chatData() = AccountData(
     id = address.id,
     password = password,
     status = status,

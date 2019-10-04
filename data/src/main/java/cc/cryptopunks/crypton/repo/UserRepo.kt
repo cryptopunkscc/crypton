@@ -6,9 +6,8 @@ import cc.cryptopunks.crypton.entity.user
 import cc.cryptopunks.crypton.entity.userData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class UserRepo @Inject constructor(
+internal class UserRepo(
     private val dao: UserData.Dao
 ) : User.Repo {
 

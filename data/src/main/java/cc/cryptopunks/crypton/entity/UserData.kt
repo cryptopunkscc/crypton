@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 @Entity(
     tableName = "user"
 )
-data class UserData(
+internal data class UserData(
     @PrimaryKey val id: AddressData
 ) {
 
@@ -32,10 +32,10 @@ data class UserData(
     }
 }
 
-fun UserData.user() = User(
+internal fun UserData.user() = User(
     address = Address.from(id)
 )
 
-fun User.userData() = UserData(
+internal fun User.userData() = UserData(
     id = address.id
 )

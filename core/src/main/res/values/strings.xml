@@ -7,4 +7,6 @@
     <string name="dashboard_title">Dashboard</string>
     <string name="chat_title">Chat</string>
     <string name="contacts_title">Contacts</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

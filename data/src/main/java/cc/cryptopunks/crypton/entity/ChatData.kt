@@ -13,7 +13,7 @@ import androidx.room.*
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class ChatData(
+internal data class ChatData(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val address: AddressData,
     val title: String
@@ -39,14 +39,14 @@ data class ChatData(
     }
 }
 
-fun ChatData.toDomain(users: List<User> = emptyList()) = Chat(
+internal fun ChatData.toDomain(users: List<User> = emptyList()) = Chat(
     id = id,
     title = title,
     address = Address.from(address),
     users = users
 )
 
-fun Chat.chatData() = ChatData(
+internal fun Chat.chatData() = ChatData(
     id = id,
     title = title,
     address = address.id

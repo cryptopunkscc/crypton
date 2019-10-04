@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.chat
 
-import cc.cryptopunks.crypton.api.ApiScope
+import cc.cryptopunks.crypton.smack.ApiScope
 import cc.cryptopunks.crypton.entity.Message.Api.Send
 import cc.cryptopunks.crypton.entity.Address
 import org.jivesoftware.smack.XMPPConnection

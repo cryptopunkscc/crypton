@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.domain.interactor.AddAccountInteractor
-import cc.cryptopunks.crypton.module.ViewModelScope
-import cc.cryptopunks.crypton.util.ViewModel
+import cc.cryptopunks.crypton.dagger.ViewModelScope
 import cc.cryptopunks.crypton.util.text
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
@@ -16,7 +15,7 @@ import javax.inject.Inject
 class SignInViewModel @Inject constructor(
     private val accountViewModel: AccountViewModel,
     private val addAccount: AddAccountInteractor
-) : ViewModel {
+) {
 
     init {
         accountViewModel.apply {

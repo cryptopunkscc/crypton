@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
         )
     ]
 )
-data class MessageData(
+internal data class MessageData(
     @PrimaryKey val id: String = "",
     val chatId: Long = 0,
     val stanzaId: String = "",
@@ -43,7 +43,7 @@ data class MessageData(
     }
 }
 
-fun Message.messageData(chatId: Long) = MessageData(
+internal fun Message.messageData(chatId: Long) = MessageData(
     id = id,
     stanzaId = stanzaId,
     chatId = chatId,
@@ -53,7 +53,7 @@ fun Message.messageData(chatId: Long) = MessageData(
     to = to.id
 )
 
-fun MessageData.message() = Message(
+internal fun MessageData.message() = Message(
     id = id,
     stanzaId = stanzaId,
     to = Resource.from(to),

@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.room.Room
 import cc.cryptopunks.crypton.component.DataComponent
 import cc.cryptopunks.crypton.data.Database
-import cc.cryptopunks.crypton.module.DaoModule
 import dagger.Component
 import dagger.Module
 import dagger.Provides

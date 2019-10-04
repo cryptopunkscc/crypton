@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.presence
 
-import cc.cryptopunks.crypton.api.ApiScope
+import cc.cryptopunks.crypton.smack.ApiScope
 import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.smack.SmackPresence
 import org.jivesoftware.smack.XMPPConnection

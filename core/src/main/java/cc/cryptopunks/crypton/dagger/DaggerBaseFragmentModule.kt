@@ -1,11 +1,11 @@
-package cc.cryptopunks.crypton.module
+package cc.cryptopunks.crypton.dagger
 
 import cc.cryptopunks.crypton.util.BaseFragment
 import dagger.Module
 import dagger.Provides
 
 @Module
-class BaseFragmentModule(
+class DaggerBaseFragmentModule(
     @get:Provides
     val fragment: BaseFragment
 ) {

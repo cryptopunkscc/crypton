@@ -1,3 +1,3 @@
 package cc.cryptopunks.crypton.entity
 
-typealias AddressData = String
+internal typealias AddressData = String

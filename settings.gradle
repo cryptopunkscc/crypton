@@ -1,5 +1,4 @@
-include ':common',
-        ':entity',
+include ':entity',
         ':data',
         ':api:core',
         ':api:smack',

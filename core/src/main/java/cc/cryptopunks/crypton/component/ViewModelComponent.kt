@@ -2,6 +2,6 @@ package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.util.Scopes
 
-interface ViewModelComponent : FeatureComponent {
+interface ViewModelComponent {
     val viewModelScope: Scopes.ViewModel
 }

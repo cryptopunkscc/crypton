@@ -36,18 +36,11 @@ object OptionItemSelected {
         }
     }
 
-    @FlowPreview
-    @ObsoleteCoroutinesApi
-    @ExperimentalCoroutinesApi
     @dagger.Module
-    class Module {
+    class Module: Component {
         private val impl = Impl()
-
-        @Provides
-        fun input(): Input = impl
-
-        @Provides
-        fun output(): Output = impl
+        override val onOptionItemSelected: Input @Provides get() = impl
+        override val optionItemSelections: Output @Provides get() = impl
     }
 
     interface Component {

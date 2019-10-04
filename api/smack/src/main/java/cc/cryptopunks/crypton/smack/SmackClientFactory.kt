@@ -1,29 +1,31 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.api.Client
+import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
+import java.net.InetAddress
 
 
 object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
 
+    private var factoryConfig = Client.Factory.Config.Empty
 
-    private var configBuilder = XMPPTCPConnectionConfiguration.builder()
+    private val connectionConfig
+        get() = XMPPTCPConnectionConfiguration.builder()
+            .setResource(factoryConfig.resource)
+            .setHostAddress(InetAddress.getByName(factoryConfig.hostAddress))
+            .setSecurityMode(ConnectionConfiguration.SecurityMode.valueOf(factoryConfig.securityMode.name))
 
-    private val setup: XMPPTCPConnectionConfiguration.Builder.() -> XMPPTCPConnectionConfiguration.Builder = { this }
-
-    operator fun invoke(setup: XMPPTCPConnectionConfiguration.Builder.() -> XMPPTCPConnectionConfiguration.Builder) = apply {
-        configBuilder = configBuilder.setup()
+    operator fun invoke(setup: Client.Factory.Config.() -> Client.Factory.Config) = apply {
+        factoryConfig = factoryConfig.setup()
     }
 
-    override fun invoke(config: Client.Config): Client = DaggerSmackComponent.builder().module(
-        SmackComponent.Module(
-            accountId = config.accountId,
-            address = config.address,
-            configuration = configBuilder
-                .run(setup)
-                .setUsernameAndPassword(config.address.login, config.password)
-                .setXmppDomain(config.address.domain)
-                .build()
-        )
-    ).build()
+    override fun invoke(config: Client.Config): Client = SmackClient(
+        accountId = config.accountId,
+        address = config.address,
+        configuration = connectionConfig
+            .setUsernameAndPassword(config.address.local, config.password)
+            .setXmppDomain(config.address.domain)
+            .build()
+    )
 }

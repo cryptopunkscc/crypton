@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.smack.chat
 
-import cc.cryptopunks.crypton.api.ApiQualifier
-import cc.cryptopunks.crypton.api.ApiScope
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.User
+import cc.cryptopunks.crypton.smack.ApiQualifier
+import cc.cryptopunks.crypton.smack.ApiScope
 import cc.cryptopunks.crypton.smack.chatMessage
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.internal.disposables.CancellableDisposable
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @ApiScope
 internal class ChatMessagePublisher @Inject constructor(
     private val chatManager: ChatManager,
-    private val user: User,
+    private val address: Address,
     @ApiQualifier private val disposable: CompositeDisposable
 ) :
     Message.Api.Publisher {
@@ -37,7 +37,7 @@ internal class ChatMessagePublisher @Inject constructor(
         processor.onNext(
             chatMessage(
                 message = message.apply {
-                    from = JidCreate.from(user.address)
+                    from = JidCreate.from(address)
                 }
             )
         )

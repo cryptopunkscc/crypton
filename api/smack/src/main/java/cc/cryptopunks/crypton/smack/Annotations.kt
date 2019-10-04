@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.api
+package cc.cryptopunks.crypton.smack
 
 import javax.inject.Qualifier
 import javax.inject.Scope

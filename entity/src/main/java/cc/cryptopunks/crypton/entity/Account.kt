@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.entity
 
-import androidx.room.TypeConverter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 
@@ -20,14 +19,6 @@ data class Account constructor(
         Connecting,
         Connected,
         Error;
-
-        class Converter {
-            @TypeConverter
-            fun toInt(status: Status) = status.ordinal
-
-            @TypeConverter
-            fun toStatus(ordinal: Int) = values()[ordinal]
-        }
     }
 
     data class Exception(

@@ -1,47 +1,38 @@
 package cc.cryptopunks.crypton.util
 
-import dagger.Provides
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
-interface BroadcastError : (Throwable) -> Unit, Flow<Throwable> {
+class BroadcastError internal constructor(): (Throwable) -> Unit, Flow<Throwable> {
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
-    private class Impl : BroadcastError {
+    private val channel = BroadcastChannel<Throwable?>(Channel.CONFLATED)
 
-        private val channel = BroadcastChannel<Throwable?>(Channel.CONFLATED)
-
-        override fun invoke(throwable: Throwable) {
-            GlobalScope.launch {
-                channel.send(throwable)
-                Timber.e(throwable)
-                channel.offer(null)
-            }
-        }
-
-        @InternalCoroutinesApi
-        override suspend fun collect(collector: FlowCollector<Throwable>) {
-            channel.asFlow().filterNotNull().collect(collector)
+    override fun invoke(throwable: Throwable) {
+        GlobalScope.launch {
+            channel.send(throwable)
+            Timber.e(throwable)
+            channel.offer(null)
         }
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
-    @dagger.Module
-    class Module {
-        private val impl = Impl()
-        @Provides
-        fun broadcastError(): BroadcastError = impl
+    @InternalCoroutinesApi
+    override suspend fun collect(collector: FlowCollector<Throwable>) {
+        channel.asFlow().filterNotNull().collect(collector)
     }
 
     interface Component {
         val broadcastError: BroadcastError
+    }
+
+    class Module : Component {
+        override val broadcastError = BroadcastError()
     }
 }

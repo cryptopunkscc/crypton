@@ -1,15 +1,15 @@
-package cc.cryptopunks.crypton.module
+package cc.cryptopunks.crypton.dagger
 
-import cc.cryptopunks.crypton.api.ApiQualifier
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import dagger.Module
 import dagger.Provides
 
 @Module
-class ApiClientModule(@get:Provides val client: Client) : Client {
-    override val address: Address @Provides @ApiQualifier get() = client.address
-    override val accountId: Long @Provides @ApiQualifier get() = client.accountId
+class DaggerClientModule(@get:Provides val client: Client) :
+    Client {
+    override val address: Address @Provides get() = client.address
+    override val accountId: Long @Provides get() = client.accountId
     override val create: Client.Create @Provides get() = client.create
     override val remove: Client.Remove @Provides get() = client.remove
     override val connect: Client.Connect @Provides get() = client.connect
