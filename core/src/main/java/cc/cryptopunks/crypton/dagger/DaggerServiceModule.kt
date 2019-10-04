@@ -1,17 +1,14 @@
 package cc.cryptopunks.crypton.dagger
 
 import android.app.Service
+import android.content.Context
 import dagger.Module
 import dagger.Provides
-import javax.inject.Scope
 
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class ServiceScope
-
-@Module
-class DaggerServiceModule(
-    @get:Provides
-    @get:ServiceScope
-    val service: Service
-)
+@Module(includes = [
+    DaggerContextModule::class
+])
+class DaggerServiceModule {
+    @Provides
+    fun service(context: Context) = context as Service
+}

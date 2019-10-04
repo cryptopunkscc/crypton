@@ -1,17 +1,18 @@
 package cc.cryptopunks.crypton.service.notification
 
+import android.app.Activity
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.R
-import cc.cryptopunks.crypton.presentation.activity.MainActivity
-import cc.cryptopunks.crypton.dagger.ServiceScope
+
+import cc.cryptopunks.crypton.indicator.R
 import javax.inject.Inject
 
-@ServiceScope
-class SetupNotificationBuilder @Inject constructor(
-    private val service: Service
+
+internal class SetupNotificationBuilder @Inject constructor(
+    private val service: Service,
+    private val mainActivityClass: Class<out Activity>
 ) : (Notification.Builder) -> Notification.Builder by { builder ->
 
     builder
@@ -22,7 +23,7 @@ class SetupNotificationBuilder @Inject constructor(
             PendingIntent.getActivity(
                 service,
                 REQUEST_CODE,
-                Intent(service, MainActivity::class.java),
+                Intent(service, mainActivityClass),
                 FLAGS
             )
         )!!

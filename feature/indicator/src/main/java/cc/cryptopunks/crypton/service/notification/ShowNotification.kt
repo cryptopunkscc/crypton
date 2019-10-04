@@ -5,12 +5,11 @@ import android.app.NotificationManager
 import android.app.Service
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N_MR1
-import cc.cryptopunks.crypton.dagger.ServiceScope
+
 import cc.cryptopunks.crypton.service.AppService.Companion.NOTIFICATION_ID
 import javax.inject.Inject
 
-@ServiceScope
-class ShowNotification @Inject constructor(
+internal class ShowNotification @Inject constructor(
     private val service: Service,
     private val notificationManager: NotificationManager
 ) : (Notification) -> Unit by { notification ->

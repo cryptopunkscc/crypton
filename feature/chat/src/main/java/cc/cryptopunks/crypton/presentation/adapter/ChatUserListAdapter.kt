@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.presentation.adapter
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.conversation.R
+import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.extensions.LayoutContainer

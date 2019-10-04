@@ -4,7 +4,6 @@ import android.app.NotificationManager
 import cc.cryptopunks.crypton.BaseApplication
 import dagger.Component
 
-@ContextScope
 @Component(
     dependencies = [BaseApplication.Component::class],
     modules = [DaggerContextModule::class]

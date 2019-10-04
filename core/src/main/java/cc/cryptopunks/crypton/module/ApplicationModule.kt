@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.module
 
+import android.app.Activity
 import android.app.Application
 import cc.cryptopunks.crypton.BaseApplication
 import cc.cryptopunks.crypton.api.Client
@@ -11,6 +12,7 @@ import cc.cryptopunks.crypton.util.Scopes
 
 class ApplicationModule(
     override val application: Application,
+    override val mainActivityClass: Class<out Activity>,
     private val repoComponent: Repo.Component,
     private val clientComponent: Client.Component,
     private val broadcastErrorComponent: BroadcastError.Component = BroadcastError.Module()

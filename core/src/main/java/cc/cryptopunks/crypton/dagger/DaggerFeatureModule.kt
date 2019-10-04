@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.dagger
 
+import android.app.Activity
 import android.app.Application
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.component.FeatureComponent
@@ -58,6 +59,9 @@ class DaggerFeatureModule(
     @get:Provides
     override val broadcastError: BroadcastError
         get() = component.broadcastError
+    @get:Provides
+    override val mainActivityClass: Class<out Activity>
+        get() = component.mainActivityClass
 
     @Provides
     override fun featureComponent(): FeatureComponent =

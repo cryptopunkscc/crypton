@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.conversation.R
+import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.presentation.binding.RosterBinding
 import javax.inject.Inject
 

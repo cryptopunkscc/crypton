@@ -30,6 +30,8 @@ abstract class BaseApplication : Application() {
 
         val application: Application
 
+        val mainActivityClass: Class<out Activity>
+
         val useCaseScope: Scopes.UseCase
 
         fun featureComponent(): FeatureComponent

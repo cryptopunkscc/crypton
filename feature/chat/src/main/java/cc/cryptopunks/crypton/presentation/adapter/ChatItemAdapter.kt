@@ -6,7 +6,7 @@ import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.conversation.R
+import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.presentation.viewmodel.RosterItemViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
 import cc.cryptopunks.crypton.util.ext.inflate

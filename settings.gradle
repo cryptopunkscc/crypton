@@ -4,6 +4,7 @@ include ':entity',
         ':api:smack',
         ':api:integration',
         ':core',
+        ':feature:indicator',
         ':feature:account',
         ':feature:chat',
         ':app'

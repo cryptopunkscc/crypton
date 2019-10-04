@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import cc.cryptopunks.crypton.conversation.R
+import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.presentation.binding.CreateChatBinding
 import javax.inject.Inject
 
