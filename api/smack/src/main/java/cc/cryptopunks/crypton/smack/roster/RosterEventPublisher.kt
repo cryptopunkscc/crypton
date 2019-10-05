@@ -1,17 +1,13 @@
 package cc.cryptopunks.crypton.smack.roster
 
-import cc.cryptopunks.crypton.smack.ApiQualifier
-import cc.cryptopunks.crypton.smack.ApiScope
 import cc.cryptopunks.crypton.entity.RosterEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.internal.disposables.CancellableDisposable
 import org.jivesoftware.smack.roster.Roster
 import org.reactivestreams.Publisher
-import javax.inject.Inject
 
-@ApiScope
-internal class RosterEventPublisher @Inject constructor(
-    @ApiQualifier disposable: CompositeDisposable,
+internal class RosterEventPublisher(
+    disposable: CompositeDisposable,
     roster: Roster,
     adapter: RosterRxAdapter
 ) :
@@ -23,14 +19,12 @@ internal class RosterEventPublisher @Inject constructor(
             subscriptionMode = Roster.SubscriptionMode.reject_all
             disposable.addAll(
                 CancellableDisposable {
-//                    removeRosterListener(adapter)
                     removeRosterLoadedListener(adapter)
                     removePresenceEventListener(adapter)
                     removeSubscribeListener(adapter)
                 }
             )
 
-//            addRosterListener(adapter)
             addRosterLoadedListener(adapter)
             addPresenceEventListener(adapter)
             addSubscribeListener(adapter)

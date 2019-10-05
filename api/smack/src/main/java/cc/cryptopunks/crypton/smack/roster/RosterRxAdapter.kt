@@ -15,18 +15,15 @@ import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.Jid
 import org.reactivestreams.Processor
 import org.reactivestreams.Publisher
-import javax.inject.Inject
 
 class RosterRxAdapter private constructor(
     private val processor: Processor<RosterEvent, RosterEvent>
 ) :
     Publisher<RosterEvent> by processor,
-//    RosterListener,
     RosterLoadedListener,
     PresenceEventListener,
     SubscribeListener {
 
-    @Inject
     constructor() : this(PublishProcessor.create())
 
 
@@ -102,36 +99,4 @@ class RosterRxAdapter private constructor(
                 exception
             )
         )
-
-
-//    override fun entriesDeleted(addresses: Collection<Jid>) =
-//        processor.onNext(
-//            RosterEvent.EntriesDeleted(
-//                addresses.map(Jid::resourceId)
-//            )
-//        )
-//
-//
-//    override fun presenceChanged(presence: Presence) =
-//        processor.onNext(
-//            RosterEvent.PresenceChanged(
-//                presence.presence()
-//            )
-//        )
-//
-//
-//    override fun entriesUpdated(addresses: Collection<Jid>) =
-//        processor.onNext(
-//            RosterEvent.EntriesUpdated(
-//                addresses.map(Jid::resourceId)
-//            )
-//        )
-//
-//
-//    override fun entriesAdded(addresses: Collection<Jid>) =
-//        processor.onNext(
-//            RosterEvent.EntriesAdded(
-//                addresses.map(Jid::resourceId)
-//            )
-//        )
 }

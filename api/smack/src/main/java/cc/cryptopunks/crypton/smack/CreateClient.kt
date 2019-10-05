@@ -4,10 +4,8 @@ import cc.cryptopunks.crypton.api.Client
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jxmpp.jid.parts.Localpart
-import javax.inject.Inject
 
-@ApiScope
-class CreateClient @Inject constructor(
+class CreateClient(
     configuration: XMPPTCPConnectionConfiguration,
     accountManager: AccountManager
 ) : Client.Create, () -> Unit by {
