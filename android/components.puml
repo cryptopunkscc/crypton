@@ -1,0 +1,30 @@
+@startuml
+
+[:android:app]
+[:android:account]
+[:android:chat]
+[:android:dashboard]
+[:android:indicator]
+[:android:core]
+[:android:data]
+[:api:smack]
+
+[:android:app] <-- [:android:core]
+[:android:account] <-- [:android:core]
+[:android:chat] <-- [:android:core]
+[:android:dashboard] <-- [:android:core]
+[:android:indicator] <-- [:android:core]
+
+[:android:app] <-- [:android:account]
+[:android:app] <-- [:android:chat]
+[:android:app] <-- [:android:dashboard]
+[:android:app] <-- [:android:indicator]
+[:android:app] <-- [:android:data]
+[:android:app] <-- [:api:smack]
+
+[:android:core] <-- [:core]
+[:android:data] <-- [:core]
+[:api:smack] <-- [:core]
+
+
+@enduml
