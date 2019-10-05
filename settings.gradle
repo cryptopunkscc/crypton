@@ -1,4 +1,4 @@
-include ':entity',
+include ':core',
         ':data',
         ':api:smack',
         ':api:integration',
