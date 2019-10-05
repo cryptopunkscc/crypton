@@ -35,7 +35,6 @@ dependencies {
     implementation project(':feature:core')
     implementation project(':api:smack')
 
-
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:$mockk_version"
 
