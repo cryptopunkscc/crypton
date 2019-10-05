@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.presentation.binding.RosterBinding
 import javax.inject.Inject
 
-class RosterFragment : BaseChatFragment() {
+class RosterFragment : ChatComponentFragment() {
 
     override val layoutRes: Int get() = R.layout.conversations
 

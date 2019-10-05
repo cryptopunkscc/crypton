@@ -1,37 +1,42 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
-
-
     defaultConfig {
         minSdkVersion 22
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/core_debug.kotlin_module'
+    }
+    androidExtensions {
+        experimental = true
+    }
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
 }
 
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
+    implementation project(':core')
+    implementation project(':feature:chat')
 
-    api "com.github.cryptoyang.kache:core:$kache_version"
-
-    testImplementation 'junit:junit:4.12'
-
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+}
+configurations {
+    all*.exclude group: 'xpp3', module: 'xpp3'
 }

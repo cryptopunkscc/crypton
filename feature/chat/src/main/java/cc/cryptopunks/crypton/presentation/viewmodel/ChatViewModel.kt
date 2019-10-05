@@ -2,14 +2,12 @@ package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.domain.interactor.SendMessageInteractor
 import cc.cryptopunks.crypton.domain.selector.MessagePagedListSelector
-import cc.cryptopunks.crypton.dagger.ViewModelScope
 import cc.cryptopunks.crypton.util.Input
 import cc.cryptopunks.kache.core.Kache
 import cc.cryptopunks.kache.core.KacheManager
 import cc.cryptopunks.kache.core.lazy
 import javax.inject.Inject
 
-@ViewModelScope
 class ChatViewModel @Inject constructor(
     private val sendMessage: SendMessageInteractor,
     private val createMessageViewModel: MessageViewModel.Factory,

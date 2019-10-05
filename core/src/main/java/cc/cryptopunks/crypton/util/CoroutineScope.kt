@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.util
 
-import cc.cryptopunks.crypton.dagger.ViewModelScope
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,7 +26,6 @@ object Scopes {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 
-    @ViewModelScope
     class ViewModel @Inject constructor(
         override val broadcast: BroadcastError
     ) : ErrorHandling(),

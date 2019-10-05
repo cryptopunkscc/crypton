@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.presentation.binding.CreateChatBinding
 import javax.inject.Inject
 
-class CreateChatFragment : BaseChatFragment() {
+class CreateChatFragment : ChatComponentFragment() {
 
     override val layoutRes: Int get() = R.layout.create_conversation
 

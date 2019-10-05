@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.dagger.ViewModelScope
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.Input
 import cc.cryptopunks.kache.core.Kache
@@ -18,7 +17,6 @@ import org.jivesoftware.smack.sasl.SASLErrorException
 import org.jxmpp.stringprep.XmppStringprepException
 import javax.inject.Inject
 
-@ViewModelScope
 class AccountViewModel @Inject constructor(
     private val broadcastError: BroadcastError
 ) : Kache.Provider by KacheManager() {

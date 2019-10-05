@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.presentation.viewmodel
 
 import cc.cryptopunks.crypton.domain.interactor.CreateChat
 import cc.cryptopunks.crypton.entity.User
-import cc.cryptopunks.crypton.dagger.ViewModelScope
 import cc.cryptopunks.crypton.util.Input
 import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.error
@@ -14,7 +13,6 @@ import cc.cryptopunks.kache.core.lazy
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-@ViewModelScope
 class CreateChatViewModel @Inject constructor(
     private val createChat: CreateChat.Interactor,
     private val navigate: Navigate
