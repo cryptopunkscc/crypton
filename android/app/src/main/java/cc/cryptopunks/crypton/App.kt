@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.module.ApplicationModule
+import cc.cryptopunks.crypton.module.ClientModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.presentation.activity.MainActivity
 import cc.cryptopunks.crypton.smack.SmackClientFactory
@@ -22,7 +23,7 @@ class App : BaseApplication() {
             repoComponent = RepoModule(
                 context = this
             ),
-            clientComponent = Client.Module(
+            clientComponent = ClientModule(
                 createClient = SmackClientFactory {
                     copy(
                         resource = "xmpptest",

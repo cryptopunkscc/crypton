@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.module
 
 import android.content.Context
 import androidx.room.Room
+import cc.cryptopunks.crypton.component.RepoComponent
 import cc.cryptopunks.crypton.data.Database
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Chat
@@ -11,7 +12,7 @@ import cc.cryptopunks.crypton.repo.*
 
 class RepoModule(
     context: Context
-) : Repo.Component {
+) : RepoComponent {
 
     private val database: Database = Room
         .databaseBuilder(context, Database::class.java, "crypton.db")

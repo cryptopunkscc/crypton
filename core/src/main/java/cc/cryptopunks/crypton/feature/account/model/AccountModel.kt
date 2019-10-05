@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.feature.account.model
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.api.model.ClientModel
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.util.ext.reduce
@@ -9,14 +8,14 @@ import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 data class AccountModel @Inject constructor(
-    private val repo: Account.Repo,
-    private val clientModel: ClientModel
+    private val accountRepo: Account.Repo,
+    private val clientRepo: Client.Repo
 ) :
     AtomicReference<Account>(Account.Empty) {
 
-    val isInitialized get() = get() in clientModel
+    val isInitialized get() = get() in clientRepo
 
-    val client: Client get() = clientModel[get()]
+    val client: Client get() = clientRepo[get()]
 
     fun copy(account: Account) = copy().apply { set(account) }
 
@@ -30,11 +29,11 @@ data class AccountModel @Inject constructor(
         reduce { copy(status = status) }
     }
 
-    fun load(id: Address): Account = reduce { repo.get(id) }.get()
+    fun load(id: Address): Account = reduce { accountRepo.get(id) }.get()
 
-    fun insert(): Account = repo.insert(get()).also { set(it) }
+    fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 
-    fun update(): Unit = repo.update(get())
+    fun update(): Unit = accountRepo.update(get())
 
     fun unregister() {
         client.remove()
@@ -43,11 +42,11 @@ data class AccountModel @Inject constructor(
 
     fun delete() {
         clear()
-        repo.delete(get())
+        accountRepo.delete(get())
     }
 
     fun clear() {
-        clientModel - get()
+        clientRepo - get()
     }
 
     inline fun <R> run(block: AccountModel.() -> R): R =

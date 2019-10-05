@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 interface Client:
     User.Api,
@@ -90,24 +91,36 @@ interface Client:
         }
     }
 
+    class Repo @Inject constructor(
+        private val createClient: Factory,
+        private val clientCache: Cache
+    ) {
+        operator fun get(account: Account): Client = account.run {
+            clientCache[address.id] ?: createClient(
+                Config(
+                    address = address,
+                    password = password
+                )
+            ).also {
+                clientCache[address.id] = it
+            }
+        }
+
+        operator fun contains(account: Account): Boolean =
+            account.address.id in clientCache
+
+
+        operator fun minus(account: Account) {
+            clientCache -= account.address.id
+        }
+    }
+
     class Exception(
         message: String? = null,
         cause: Throwable? = null
     ) : kotlin.Exception(message, cause)
 
     class Empty(override val accountId: Long) : Client by DummyClient
-
-    interface Component {
-        val createClient: Factory
-        val clientCache: Cache
-        val mapException: MapException
-    }
-
-    class Module(
-        override val createClient: Factory,
-        override val clientCache: Cache = Cache(),
-        override val mapException: MapException
-    ) : Component
 
     companion object {
         private val DummyClient: Client = createDummyClass()
