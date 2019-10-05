@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.service.notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import cc.cryptopunks.crypton.service.AppService
+import cc.cryptopunks.crypton.service.IndicatorService
 
 import javax.inject.Inject
 
@@ -15,8 +15,8 @@ internal class SetupNotificationChannel @Inject constructor(
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         notificationManager.createNotificationChannel(
             NotificationChannel(
-                AppService.NOTIFICATION_CHANNEL_ID,
-                AppService.TAG,
+                IndicatorService.NOTIFICATION_CHANNEL_ID,
+                IndicatorService.TAG,
                 NotificationManager.IMPORTANCE_DEFAULT
             )
         )

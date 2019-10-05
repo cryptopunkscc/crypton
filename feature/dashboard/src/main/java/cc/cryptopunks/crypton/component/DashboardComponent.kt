@@ -1,14 +1,9 @@
-package cc.cryptopunks.crypton.dagger
+package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.presentation.fragment.DashboardFragment
 import dagger.Component
 
-@Component(
-    modules = [
-        DaggerFeatureModule::class,
-        DaggerViewModelModule::class
-    ]
-)
+@Component(dependencies = [ViewModelComponent::class])
 interface DashboardComponent {
     fun inject(target: DashboardFragment)
 }

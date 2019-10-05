@@ -31,7 +31,7 @@
         <activity android:name="cc.cryptopunks.crypton.presentation.activity.AccountManagementActivity" />
 
         <service
-            android:name=".service.AppService"
+            android:name=".service.IndicatorService"
             android:exported="false"
             android:icon="@drawable/ic_https_black_24dp"
             android:label="@string/app_service_title" />

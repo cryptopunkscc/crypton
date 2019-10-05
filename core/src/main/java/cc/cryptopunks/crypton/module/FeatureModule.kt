@@ -1,8 +1,9 @@
 package cc.cryptopunks.crypton.module
 
+import android.app.Service
 import cc.cryptopunks.crypton.BaseApplication
+import cc.cryptopunks.crypton.app
 import cc.cryptopunks.crypton.component.FeatureComponent
-import cc.cryptopunks.crypton.component.ViewModelComponent
 import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.OptionItemSelected
 import cc.cryptopunks.crypton.util.Scopes
@@ -19,9 +20,6 @@ class FeatureModule(
     override val useCaseScope = Scopes.UseCase(broadcastError)
 }
 
-class ViewModelModule(
-    appComponent: BaseApplication.Component
-) : ViewModelComponent,
-    BaseApplication.Component by appComponent {
-    override val viewModelScope = Scopes.ViewModel(broadcastError)
-}
+fun Service.featureComponent() = FeatureModule(
+    applicationComponent = app.component
+)

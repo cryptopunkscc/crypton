@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import cc.cryptopunks.crypton.dagger.DaggerDashboardComponent
-import cc.cryptopunks.crypton.dagger.DaggerFeatureModule
-import cc.cryptopunks.crypton.dagger.DashboardComponent
+import cc.cryptopunks.crypton.component.DaggerDashboardComponent
+import cc.cryptopunks.crypton.component.DashboardComponent
 import cc.cryptopunks.crypton.dashboard.R
+import cc.cryptopunks.crypton.module.viewModelComponent
+import cc.cryptopunks.crypton.presentation.viewmodel.DashboardViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.OptionItemNavigationViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
-import cc.cryptopunks.crypton.presentation.viewmodel.DashboardViewModel
 import kotlinx.android.synthetic.main.dashboard.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class DashboardFragment : BaseFragment() {
 
     private val component: DashboardComponent by lazy {
         DaggerDashboardComponent.builder()
-            .daggerFeatureModule(DaggerFeatureModule(baseActivity.featureComponent))
+            .viewModelComponent(viewModelComponent())
             .build()
     }
 

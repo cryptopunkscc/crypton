@@ -5,7 +5,7 @@ import android.app.Service
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N_MR1
 
-import cc.cryptopunks.crypton.service.AppService
+import cc.cryptopunks.crypton.service.IndicatorService
 import javax.inject.Inject
 
 internal class CreateNotificationBuilder @Inject constructor(
@@ -14,7 +14,7 @@ internal class CreateNotificationBuilder @Inject constructor(
     when {
         SDK_INT > N_MR1 -> Builder(
             service,
-            AppService.NOTIFICATION_CHANNEL_ID
+            IndicatorService.NOTIFICATION_CHANNEL_ID
         )
         else -> Builder(service)
     }

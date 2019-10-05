@@ -1,10 +1,8 @@
 package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
-import cc.cryptopunks.crypton.dagger.DaggerFeatureModule
-import cc.cryptopunks.crypton.dagger.DaggerViewModelModule
-import cc.cryptopunks.crypton.model.ToggleAppServiceModel
-import cc.cryptopunks.crypton.module.ViewModelModule
+import cc.cryptopunks.crypton.model.ToggleIndicatorServiceModel
+import cc.cryptopunks.crypton.module.viewModelComponent
 import cc.cryptopunks.crypton.presentation.dagger.AppComponent
 import cc.cryptopunks.crypton.presentation.dagger.DaggerAppComponent
 import cc.cryptopunks.crypton.presentation.viewmodel.MainNavigationViewModel
@@ -17,9 +15,8 @@ class MainFragment : BaseFragment() {
     private val component: AppComponent by lazy {
         DaggerAppComponent
             .builder()
-            .daggerFeatureModule(DaggerFeatureModule(baseActivity.featureComponent))
-            .daggerViewModelModule(DaggerViewModelModule(ViewModelModule(baseActivity.featureComponent)))
-            .build()!!
+            .viewModelComponent(viewModelComponent())
+            .build()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +27,9 @@ class MainFragment : BaseFragment() {
     @Inject
     fun init(
         mainNavigationViewModel: MainNavigationViewModel,
-        toggleAppServiceModel: ToggleAppServiceModel
+        toggleIndicatorServiceModel: ToggleIndicatorServiceModel
     ) {
         launch { mainNavigationViewModel() }
-        launch { toggleAppServiceModel() }
+        launch { toggleIndicatorServiceModel() }
     }
 }

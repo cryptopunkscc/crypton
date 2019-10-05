@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.util
 
 import androidx.annotation.IdRes
-import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -36,11 +35,10 @@ object OptionItemSelected {
         }
     }
 
-    @dagger.Module
     class Module: Component {
         private val impl = Impl()
-        override val onOptionItemSelected: Input @Provides get() = impl
-        override val optionItemSelections: Output @Provides get() = impl
+        override val onOptionItemSelected: Input get() = impl
+        override val optionItemSelections: Output get() = impl
     }
 
     interface Component {

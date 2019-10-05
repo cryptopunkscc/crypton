@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.IdRes
 import androidx.navigation.NavController
-import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -46,11 +45,10 @@ interface Navigate :
         }
     }
 
-    @dagger.Module
     class Module : Component {
         private val impl = Impl()
-        override val navigate: Navigate @Provides get() = impl
-        override val navigateOutput: Output @Provides get() = impl
+        override val navigate: Navigate get() = impl
+        override val navigateOutput: Output get() = impl
     }
 
     interface Component {

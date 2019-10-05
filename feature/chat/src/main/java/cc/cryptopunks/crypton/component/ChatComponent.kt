@@ -1,7 +1,5 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.dagger.DaggerBaseFragmentModule
-import cc.cryptopunks.crypton.dagger.DaggerViewModelModule
 import cc.cryptopunks.crypton.presentation.binding.CreateChatBinding
 import cc.cryptopunks.crypton.presentation.binding.RosterBinding
 import cc.cryptopunks.crypton.presentation.fragment.ChatFragment
@@ -10,10 +8,9 @@ import cc.cryptopunks.crypton.presentation.fragment.RosterFragment
 import dagger.Component
 
 @Component(
-    dependencies = [FeatureComponent::class],
-    modules = [
-        DaggerViewModelModule::class,
-        DaggerBaseFragmentModule::class
+    dependencies = [
+        ViewModelComponent::class,
+        FragmentComponent::class
     ]
 )
 interface ChatComponent {
