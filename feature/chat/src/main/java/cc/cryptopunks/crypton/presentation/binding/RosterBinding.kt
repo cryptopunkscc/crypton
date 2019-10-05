@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.presentation.binding
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.presentation.adapter.ConversationItemAdapter
 import cc.cryptopunks.crypton.presentation.adapter.bind
-import cc.cryptopunks.crypton.presentation.viewmodel.RosterViewModel
+import cc.cryptopunks.crypton.feature.chat.viewmodel.RosterViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
 import kotlinx.android.synthetic.main.conversations.*
 import kotlinx.coroutines.async

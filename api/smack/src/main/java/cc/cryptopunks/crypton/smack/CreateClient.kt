@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.api.Client
+import org.jivesoftware.smack.sasl.SASLErrorException
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jxmpp.jid.parts.Localpart
@@ -14,3 +15,5 @@ class CreateClient(
         configuration.password
     )
 }
+
+fun SASLErrorException.getErrorMessage() = saslFailure.saslError.toString().replace("_", " ")

@@ -11,10 +11,10 @@
         android:label="SetAccountFragment"
         tools:layout="@layout/set_account">
         <action
-            android:id="@+id/navigateSignIn"
+            android:id="@+id/navigateLogin"
             app:destination="@id/signInFragment" />
         <action
-            android:id="@+id/navigateSignUp"
+            android:id="@+id/navigateRegister"
             app:destination="@id/signUpFragment" />
     </fragment>
     <fragment

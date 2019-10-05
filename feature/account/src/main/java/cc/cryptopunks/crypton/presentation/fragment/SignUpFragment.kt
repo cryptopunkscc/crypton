@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton.presentation.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.presentation.viewmodel.AccountViewModel
-import cc.cryptopunks.crypton.presentation.viewmodel.SignUpViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.AccountViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.SignUpViewModel
 import cc.cryptopunks.crypton.util.reactivebindings.bind
 import kotlinx.android.synthetic.main.sign_up.*
 import kotlinx.coroutines.launch

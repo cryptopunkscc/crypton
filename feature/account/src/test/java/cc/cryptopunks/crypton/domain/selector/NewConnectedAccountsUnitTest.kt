@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.domain.selector
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
+import cc.cryptopunks.crypton.feature.account.selector.NewAccountConnected
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK

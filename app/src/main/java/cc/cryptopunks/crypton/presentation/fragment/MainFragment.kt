@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton.presentation.fragment
 import android.os.Bundle
 import cc.cryptopunks.crypton.model.ToggleIndicatorServiceModel
 import cc.cryptopunks.crypton.module.viewModelComponent
-import cc.cryptopunks.crypton.presentation.dagger.AppComponent
-import cc.cryptopunks.crypton.presentation.dagger.DaggerAppComponent
+import cc.cryptopunks.crypton.presentation.component.AppComponent
+import cc.cryptopunks.crypton.presentation.component.DaggerAppComponent
 import cc.cryptopunks.crypton.presentation.viewmodel.MainNavigationViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
 import kotlinx.coroutines.launch

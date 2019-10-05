@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.model
 
-import cc.cryptopunks.crypton.domain.selector.HasAccountsSelector
+import cc.cryptopunks.crypton.feature.account.selector.HasAccountsSelector
 import cc.cryptopunks.crypton.service.StartIndicatorService
 import cc.cryptopunks.crypton.service.StopIndicatorService
 import kotlinx.coroutines.flow.collect

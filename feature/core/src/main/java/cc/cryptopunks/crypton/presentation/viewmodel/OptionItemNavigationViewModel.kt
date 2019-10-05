@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.presentation.viewmodel
 
+import cc.cryptopunks.crypton.feature.Route
 import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.OptionItemSelected
 import kotlinx.coroutines.flow.collect
@@ -10,6 +11,6 @@ class OptionItemNavigationViewModel @Inject constructor(
     private val optionItemSelections: OptionItemSelected.Output
 ) {
     suspend operator fun invoke() = optionItemSelections.collect {
-        navigate(it)
+        navigate(Route.Raw(it))
     }
 }

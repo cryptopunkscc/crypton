@@ -4,7 +4,7 @@ package cc.cryptopunks.crypton.presentation.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.presentation.viewmodel.SetAccountViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.SetAccountViewModel
 import kotlinx.android.synthetic.main.set_account.*
 import javax.inject.Inject
 

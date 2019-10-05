@@ -5,7 +5,7 @@ import android.app.Service
 import android.content.Intent
 import cc.cryptopunks.crypton.component.DaggerIndicatorComponent
 import cc.cryptopunks.crypton.component.IndicatorComponent
-import cc.cryptopunks.crypton.domain.interactor.ReconnectAccountsInteractor
+import cc.cryptopunks.crypton.feature.account.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.module.featureComponent
 import cc.cryptopunks.crypton.module.serviceComponent
 import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel

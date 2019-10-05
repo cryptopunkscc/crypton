@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.presentation.adapter.AccountListAdapter
 import cc.cryptopunks.crypton.presentation.adapter.bind
-import cc.cryptopunks.crypton.presentation.viewmodel.AccountItemViewModel
-import cc.cryptopunks.crypton.presentation.viewmodel.AccountListViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.AccountItemViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.AccountListViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.OptionItemNavigationViewModel
 import kotlinx.android.synthetic.main.account_list.*
 import kotlinx.coroutines.launch

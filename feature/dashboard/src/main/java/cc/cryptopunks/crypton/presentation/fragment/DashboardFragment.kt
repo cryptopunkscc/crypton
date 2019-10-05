@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.component.DaggerDashboardComponent
 import cc.cryptopunks.crypton.component.DashboardComponent
 import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.module.viewModelComponent
-import cc.cryptopunks.crypton.presentation.viewmodel.DashboardViewModel
+import cc.cryptopunks.crypton.feature.dashboard.viewmodel.DashboardViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.OptionItemNavigationViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
 import kotlinx.android.synthetic.main.dashboard.*

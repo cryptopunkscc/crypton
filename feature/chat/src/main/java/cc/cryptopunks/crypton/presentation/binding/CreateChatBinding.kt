@@ -4,7 +4,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.presentation.adapter.ConversationUserListAdapter
 import cc.cryptopunks.crypton.presentation.adapter.bind
-import cc.cryptopunks.crypton.presentation.viewmodel.CreateChatViewModel
+import cc.cryptopunks.crypton.feature.chat.viewmodel.CreateChatViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
 import cc.cryptopunks.crypton.util.OptionItemSelected
 import cc.cryptopunks.crypton.util.reactivebindings.bind

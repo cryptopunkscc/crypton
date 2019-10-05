@@ -35,7 +35,6 @@ data class Account constructor(
         if (throwable is Exception && throwable.account == this) throwable
         else Exception(this, throwable)
 
-    @androidx.room.Dao
     interface Repo {
         fun contains(address: Address): Boolean
         fun get(address: Address): Account

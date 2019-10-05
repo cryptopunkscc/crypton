@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.presentation.viewmodel.AccountItemViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.AccountItemViewModel
 import kotlinx.android.synthetic.main.delete_account_checkbox.*
 
 class RemoveAccountFragment :

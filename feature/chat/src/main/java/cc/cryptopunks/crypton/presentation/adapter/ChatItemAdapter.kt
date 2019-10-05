@@ -7,9 +7,10 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.presentation.viewmodel.RosterItemViewModel
+import cc.cryptopunks.crypton.feature.chat.viewmodel.RosterItemViewModel
 import cc.cryptopunks.crypton.util.BaseFragment
 import cc.cryptopunks.crypton.util.ext.inflate
+import cc.cryptopunks.crypton.util.letterColors
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.conversation_item.*
 import kotlinx.coroutines.*
@@ -40,7 +41,7 @@ class ConversationItemAdapter @Inject constructor(
             model?.apply {
                 conversationLetter.apply {
                     text = letter.toString()
-                    setBackgroundResource(avatarColor)
+                    setBackgroundResource(letterColors.getValue(letter))
                 }
                 conversationTitleTextView.text = title
                 launch {

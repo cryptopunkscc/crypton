@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presentation.fragment
 
 import android.os.Bundle
-import cc.cryptopunks.crypton.presentation.viewmodel.AccountNavigationViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.AccountNavigationViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

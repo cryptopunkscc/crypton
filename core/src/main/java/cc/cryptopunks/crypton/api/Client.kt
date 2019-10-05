@@ -90,21 +90,30 @@ interface Client:
         }
     }
 
+    class Exception(
+        message: String? = null,
+        cause: Throwable? = null
+    ) : kotlin.Exception(message, cause)
+
     class Empty(override val accountId: Long) : Client by DummyClient
 
     interface Component {
         val createClient: Factory
         val clientCache: Cache
+        val mapException: MapException
     }
 
     class Module(
         override val createClient: Factory,
-        override val clientCache: Cache = Cache()
+        override val clientCache: Cache = Cache(),
+        override val mapException: MapException
     ) : Component
 
     companion object {
         private val DummyClient: Client = createDummyClass()
     }
 }
+
+typealias MapException = (Throwable) -> Throwable
 
 val Client.isEmpty get() = this is Client.Empty

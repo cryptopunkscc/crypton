@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.data.Database
-import cc.cryptopunks.crypton.domain.interactor.*
 import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.feature.account.interactor.*
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import cc.cryptopunks.crypton.util.BroadcastError
 import dagger.Component

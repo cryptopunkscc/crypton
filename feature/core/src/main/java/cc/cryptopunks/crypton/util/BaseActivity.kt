@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.component.featureComponent
 import cc.cryptopunks.crypton.core.R
+import cc.cryptopunks.crypton.util.ext.bind
 import kotlinx.coroutines.*
 
 abstract class BaseActivity :
