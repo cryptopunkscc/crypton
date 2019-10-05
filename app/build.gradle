@@ -42,7 +42,7 @@ dependencies {
 
     implementation project(':api:smack')
     implementation project(':data')
-    implementation project(':core')
+    implementation project(':feature:core')
     implementation project(':feature:dashboard')
     implementation project(':feature:account')
     implementation project(':feature:indicator')
