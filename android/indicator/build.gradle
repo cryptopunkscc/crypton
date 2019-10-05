@@ -27,8 +27,8 @@ android {
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation project(':feature:core')
-    implementation project(':feature:account')
+    implementation project(':android:core')
+    implementation project(':android:account')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

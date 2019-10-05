@@ -41,11 +41,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':api:smack')
-    implementation project(':data')
-    implementation project(':feature:core')
-    implementation project(':feature:dashboard')
-    implementation project(':feature:account')
-    implementation project(':feature:indicator')
+    implementation project(':android:data')
+    implementation project(':android:core')
+    implementation project(':android:dashboard')
+    implementation project(':android:account')
+    implementation project(':android:indicator')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

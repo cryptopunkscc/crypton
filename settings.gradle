@@ -1,10 +1,10 @@
 include ':core',
-        ':data',
         ':api:smack',
         ':api:integration',
-        ':feature:core',
-        ':feature:dashboard',
-        ':feature:indicator',
-        ':feature:account',
-        ':feature:chat',
-        ':app'
+        ':android:app',
+        ':android:data',
+        ':android:core',
+        ':android:dashboard',
+        ':android:indicator',
+        ':android:account',
+        ':android:chat'
