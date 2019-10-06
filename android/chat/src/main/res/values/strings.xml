@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="create_conversation">Create conversation</string>
+    <string name="create_chat">Create conversation</string>
 </resources>

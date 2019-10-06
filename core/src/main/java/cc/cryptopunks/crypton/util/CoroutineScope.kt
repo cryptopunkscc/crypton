@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 
 object Scopes {
 
-    abstract class  ErrorHandling : CoroutineScope {
+    abstract class ErrorHandling : CoroutineScope {
         abstract val broadcast: BroadcastError
 
         private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -24,6 +24,16 @@ object Scopes {
     }
 
     class ViewModel(
+        override val broadcast: BroadcastError
+    ) : ErrorHandling(),
+        CoroutineScope by MainScope()
+
+    class Presenter(
+        override val broadcast: BroadcastError
+    ) : ErrorHandling(),
+        CoroutineScope by MainScope()
+
+    class View(
         override val broadcast: BroadcastError
     ) : ErrorHandling(),
         CoroutineScope by MainScope()

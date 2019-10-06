@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/conversationUserEditText"
+        android:id="@+id/userEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:imeOptions="actionDone"
@@ -20,5 +20,5 @@
         android:id="@+id/userListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/conversation_user_item"/>
+        tools:listitem="@layout/chat_user_item"/>
 </LinearLayout>

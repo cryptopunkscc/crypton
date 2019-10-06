@@ -10,5 +10,9 @@ sealed class Route {
     object AccountList : Route()
     object AccountManagement : Route()
     object CreateChat : Route()
-    object Chat : Route()
+    data class Chat(val id: Long = Last) : Route() {
+        companion object {
+            const val Last = -1L
+        }
+    }
 }

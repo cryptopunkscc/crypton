@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.conversation_user_item.*
+import kotlinx.android.synthetic.main.chat_user_item.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class ConversationUserListAdapter @Inject constructor() :
         users.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(parent.inflate(R.layout.conversation_user_item))
+        ViewHolder(parent.inflate(R.layout.chat_user_item))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(users[position])

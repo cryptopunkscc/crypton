@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-atomicfu'
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -18,8 +19,8 @@ android {
     }
 }
 dependencies {
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlinx:atomicfu-common:$atomicfu_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
     api "com.github.cryptoyang.kache:core:$kache_version"
     api "androidx.paging:paging-common:$paging_version"

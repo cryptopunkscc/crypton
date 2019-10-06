@@ -1,79 +1,80 @@
 package cc.cryptopunks.crypton.presentation.adapter
 
-import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.feature.chat.viewmodel.RosterItemViewModel
-import cc.cryptopunks.crypton.util.BaseFragment
+import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.util.ext.inflate
+import cc.cryptopunks.crypton.util.invoke
 import cc.cryptopunks.crypton.util.letterColors
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.conversation_item.*
+import kotlinx.android.synthetic.main.roster_item.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emptyFlow
 import java.util.*
 import javax.inject.Inject
 
-class ConversationItemAdapter @Inject constructor(
-    private val baseFragment: BaseFragment
+class ChatItemAdapter @Inject constructor(
+    private val scope: CoroutineScope
 ) :
-    PagedListAdapter<RosterItemViewModel, ConversationItemAdapter.ViewHolder>(Diff) {
+    PagedListAdapter<RosterItemPresenter, ChatItemAdapter.ViewHolder>(Diff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(parent.inflate(R.layout.conversation_item))
+        ViewHolder(parent.inflate(R.layout.roster_item))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(getItem(position))
 
     inner class ViewHolder(
-        override val containerView: View
+        override val containerView: android.view.View
     ) : RecyclerView.ViewHolder(containerView),
         LayoutContainer,
-        CoroutineScope by baseFragment + Job() {
+        CoroutineScope by scope + Job() {
 
-        fun bind(model: RosterItemViewModel?) {
-            coroutineContext.cancelChildren()
-            model?.apply {
+        private val view = object : RosterItemPresenter.View {
+
+            override fun setTitle(title: String) {
+                conversationTitleTextView.text = title
+            }
+
+            override fun setLetter(letter: Char) {
                 conversationLetter.apply {
                     text = letter.toString()
                     setBackgroundResource(letterColors.getValue(letter))
                 }
-                conversationTitleTextView.text = title
-                launch {
-                    lastMessageFlow.collect { message ->
-                        lastMessageTextView.text = message.text
-                        dateTextView.text = Date(message.timestamp).toString()
-                    }
-                }
-            } ?: let {
-                conversationLetter.apply {
-                    text = ""
-                    background = null
-                }
             }
+
+            override val setMessage: suspend (Message) -> Unit = { message ->
+                lastMessageTextView.text = message.text
+                dateTextView.text = Date(message.timestamp).toString()
+            }
+
+            override val onClick: Flow<Any> = emptyFlow() // TODO
+
+            fun clear() {
+                setLetter('a')
+                setTitle("")
+            }
+        }
+
+        fun bind(presenter: RosterItemPresenter?) {
+            launch { presenter?.invoke(view) ?: view.clear() }
         }
     }
 
-    private object Diff : DiffUtil.ItemCallback<RosterItemViewModel>() {
+    private object Diff : DiffUtil.ItemCallback<RosterItemPresenter>() {
         override fun areItemsTheSame(
-            oldItem: RosterItemViewModel,
-            newItem: RosterItemViewModel
+            oldItem: RosterItemPresenter,
+            newItem: RosterItemPresenter
         ) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
-            oldItem: RosterItemViewModel,
-            newItem: RosterItemViewModel
+            oldItem: RosterItemPresenter,
+            newItem: RosterItemPresenter
         ) = areItemsTheSame(oldItem, newItem)
     }
-}
-
-suspend fun ConversationItemAdapter.bind(
-    flow: Flow<PagedList<RosterItemViewModel>>
-) = flow.collect {
-    submitList(it)
 }

@@ -6,9 +6,9 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/conversationRecyclerView"
+        android:id="@+id/rosterRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/conversation_item"/>
+        tools:listitem="@layout/roster_item"/>
 
 </LinearLayout>
