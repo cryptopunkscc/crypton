@@ -1,6 +1,5 @@
-package cc.cryptopunks.crypton.presentation.component
+package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.component.ViewModelComponent
 import cc.cryptopunks.crypton.fragment.MainFragment
 import dagger.Component
 

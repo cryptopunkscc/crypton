@@ -8,8 +8,8 @@ import cc.cryptopunks.crypton.component.IndicatorComponent
 import cc.cryptopunks.crypton.feature.account.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.module.featureComponent
 import cc.cryptopunks.crypton.module.serviceComponent
-import cc.cryptopunks.crypton.service.notification.SetupNotificationChannel
-import cc.cryptopunks.crypton.service.notification.ShowAppServiceNotification
+import cc.cryptopunks.crypton.notification.SetupNotificationChannel
+import cc.cryptopunks.crypton.notification.ShowAppServiceNotification
 import timber.log.Timber
 import javax.inject.Inject
 

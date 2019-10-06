@@ -7,16 +7,15 @@ import android.view.View
 import cc.cryptopunks.crypton.component.DaggerDashboardComponent
 import cc.cryptopunks.crypton.component.DashboardComponent
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.module.viewModelComponent
 import cc.cryptopunks.crypton.feature.dashboard.viewmodel.DashboardViewModel
-import cc.cryptopunks.crypton.presentation.viewmodel.OptionItemNavigationViewModel
-import cc.cryptopunks.crypton.util.BaseFragment
+import cc.cryptopunks.crypton.module.viewModelComponent
+import cc.cryptopunks.crypton.util.model.OptionItemNavigationModel
 import kotlinx.android.synthetic.main.dashboard.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class DashboardFragment : BaseFragment() {
+class DashboardFragment : CoreFragment() {
 
     override val layoutRes: Int get() = R.layout.dashboard
 
@@ -38,9 +37,9 @@ class DashboardFragment : BaseFragment() {
     @Inject
     fun init(
         dashboardViewModel: DashboardViewModel,
-        optionItemNavigationViewModel: OptionItemNavigationViewModel
+        optionItemNavigationModel: OptionItemNavigationModel
     ) {
-        launch { optionItemNavigationViewModel() }
+        launch { optionItemNavigationModel() }
         createConversationButton.setOnClickListener {
             dashboardViewModel.createConversation()
         }

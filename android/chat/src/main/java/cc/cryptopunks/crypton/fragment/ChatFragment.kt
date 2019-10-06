@@ -2,9 +2,8 @@ package cc.cryptopunks.crypton.fragment
 
 import cc.cryptopunks.crypton.component.ChatComponent
 import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.util.BaseFragment
 
-abstract class ChatFragment : BaseFragment() {
+abstract class ChatFragment : CoreFragment() {
 
     val component: ChatComponent by lazy {
         TODO()

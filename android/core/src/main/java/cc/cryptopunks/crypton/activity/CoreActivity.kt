@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.util
+package cc.cryptopunks.crypton.activity
 
 import android.view.MenuItem
 import android.widget.Toolbar
@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.core.R
 import cc.cryptopunks.crypton.util.ext.bind
 import kotlinx.coroutines.*
 
-abstract class BaseActivity :
+abstract class CoreActivity :
     AppCompatActivity(),
     CoroutineScope by MainScope() {
 

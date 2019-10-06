@@ -5,7 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import timber.log.Timber
 
-object ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
+internal object ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
     override fun onActivityPaused(activity: Activity) {
         activity log "onPaused"
     }

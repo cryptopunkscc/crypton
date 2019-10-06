@@ -13,6 +13,7 @@
 [:android:account] <-- [:android:core]
 [:android:chat] <-- [:android:core]
 [:android:dashboard] <-- [:android:core]
+[:android:dashboard] <-- [:android:chat]
 [:android:indicator] <-- [:android:core]
 
 [:android:app] <-- [:android:account]

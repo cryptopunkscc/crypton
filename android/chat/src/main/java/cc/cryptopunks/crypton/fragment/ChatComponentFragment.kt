@@ -4,9 +4,8 @@ import cc.cryptopunks.crypton.component.ChatComponent
 import cc.cryptopunks.crypton.component.DaggerChatComponent
 import cc.cryptopunks.crypton.module.fragmentComponent
 import cc.cryptopunks.crypton.module.viewModelComponent
-import cc.cryptopunks.crypton.util.BaseFragment
 
-abstract class ChatComponentFragment : BaseFragment() {
+abstract class ChatComponentFragment : CoreFragment() {
 
     val component: ChatComponent by lazy {
         DaggerChatComponent.builder()

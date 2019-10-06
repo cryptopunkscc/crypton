@@ -1,11 +1,10 @@
-package cc.cryptopunks.crypton.service.notification
+package cc.cryptopunks.crypton.notification
 
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.Service
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N_MR1
-
 import cc.cryptopunks.crypton.service.IndicatorService.Companion.NOTIFICATION_ID
 import javax.inject.Inject
 

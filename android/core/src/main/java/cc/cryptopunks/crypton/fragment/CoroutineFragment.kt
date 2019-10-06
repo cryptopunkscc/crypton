@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.util
+package cc.cryptopunks.crypton.fragment
 
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.*

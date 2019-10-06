@@ -1,14 +1,14 @@
 package cc.cryptopunks.crypton.module
 
 import cc.cryptopunks.crypton.component.FragmentComponent
-import cc.cryptopunks.crypton.util.BaseFragment
+import cc.cryptopunks.crypton.fragment.CoreFragment
 
 class FragmentModule(
-    override val fragment: BaseFragment
+    override val fragment: CoreFragment
 ) : FragmentComponent {
     override val fragmentManager get() = fragment.childFragmentManager
 }
 
-fun BaseFragment.fragmentComponent() = FragmentModule(
+fun CoreFragment.fragmentComponent() = FragmentModule(
     fragment = this
 )

@@ -1,5 +1,4 @@
-package cc.cryptopunks.crypton.service.notification
-
+package cc.cryptopunks.crypton.notification
 
 import javax.inject.Inject
 

@@ -1,16 +1,15 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
+import cc.cryptopunks.crypton.component.AppComponent
+import cc.cryptopunks.crypton.component.DaggerAppComponent
+import cc.cryptopunks.crypton.feature.main.model.MainNavigationModel
 import cc.cryptopunks.crypton.model.ToggleIndicatorServiceModel
 import cc.cryptopunks.crypton.module.viewModelComponent
-import cc.cryptopunks.crypton.presentation.component.AppComponent
-import cc.cryptopunks.crypton.presentation.component.DaggerAppComponent
-import cc.cryptopunks.crypton.presentation.viewmodel.MainNavigationViewModel
-import cc.cryptopunks.crypton.util.BaseFragment
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainFragment : BaseFragment() {
+class MainFragment : CoreFragment() {
 
     private val component: AppComponent by lazy {
         DaggerAppComponent
@@ -26,10 +25,10 @@ class MainFragment : BaseFragment() {
 
     @Inject
     fun init(
-        mainNavigationViewModel: MainNavigationViewModel,
+        mainNavigationModel: MainNavigationModel,
         toggleIndicatorServiceModel: ToggleIndicatorServiceModel
     ) {
-        launch { mainNavigationViewModel() }
+        launch { mainNavigationModel() }
         launch { toggleIndicatorServiceModel() }
     }
 }

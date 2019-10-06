@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.util
+package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.navigation.fragment.findNavController
+import cc.cryptopunks.crypton.activity.CoreActivity
 
-abstract class BaseFragment : CoroutineFragment() {
+abstract class CoreFragment : CoroutineFragment() {
 
     @get:LayoutRes
     open val layoutRes
@@ -20,7 +21,7 @@ abstract class BaseFragment : CoroutineFragment() {
 
     open val navController get() = findNavController()
 
-    val baseActivity get() = activity as BaseActivity
+    val baseActivity get() = activity as CoreActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

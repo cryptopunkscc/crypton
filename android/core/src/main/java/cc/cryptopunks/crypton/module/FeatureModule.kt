@@ -4,9 +4,7 @@ import android.app.Service
 import cc.cryptopunks.crypton.BaseApplication
 import cc.cryptopunks.crypton.app
 import cc.cryptopunks.crypton.component.FeatureComponent
-import cc.cryptopunks.crypton.util.Navigate
-import cc.cryptopunks.crypton.util.OptionItemSelected
-import cc.cryptopunks.crypton.util.Scopes
+import cc.cryptopunks.crypton.util.*
 
 class FeatureModule(
     private val applicationComponent: BaseApplication.Component,
