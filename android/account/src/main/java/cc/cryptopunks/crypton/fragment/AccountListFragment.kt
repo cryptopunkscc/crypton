@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.fragment
+package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.Menu
@@ -6,8 +6,8 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.presentation.adapter.AccountListAdapter
-import cc.cryptopunks.crypton.presentation.adapter.bind
+import cc.cryptopunks.crypton.adapter.AccountListAdapter
+import cc.cryptopunks.crypton.adapter.bind
 import cc.cryptopunks.crypton.feature.account.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.feature.account.viewmodel.AccountListViewModel
 import cc.cryptopunks.crypton.presentation.viewmodel.OptionItemNavigationViewModel

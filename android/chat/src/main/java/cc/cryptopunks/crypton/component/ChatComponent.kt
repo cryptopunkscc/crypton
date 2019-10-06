@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.presentation.fragment.ChatFragment
-import cc.cryptopunks.crypton.presentation.fragment.CreateChatFragment
-import cc.cryptopunks.crypton.presentation.fragment.RosterFragment
+import cc.cryptopunks.crypton.fragment.ChatFragment
+import cc.cryptopunks.crypton.fragment.CreateChatFragment
+import cc.cryptopunks.crypton.fragment.RosterFragment
 import dagger.Component
 
 @Component(

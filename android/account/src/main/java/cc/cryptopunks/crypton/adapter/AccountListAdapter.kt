@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.adapter
+package cc.cryptopunks.crypton.adapter
 
 import android.view.View
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.presentation.fragment.showRemoveAccountFragment
+import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.feature.account.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.extensions.LayoutContainer

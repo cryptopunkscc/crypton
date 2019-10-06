@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.fragment
+package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.Menu
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.feature.chat.presenter.CreateChatPresenter
-import cc.cryptopunks.crypton.presentation.adapter.ConversationUserListAdapter
+import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.util.invoke
 import kotlinx.android.synthetic.main.create_chat.*
 import kotlinx.coroutines.channels.awaitClose
@@ -41,7 +41,7 @@ class CreateChatFragment :
     }
 
     private inner class View : CreateChatPresenter.View {
-        private val userListAdapter = ConversationUserListAdapter()
+        private val userListAdapter = ChatUserListAdapter()
 
         init {
             userListRecyclerView.apply {
@@ -56,7 +56,7 @@ class CreateChatFragment :
                     if (it) channel.offer(view.text.toString())
                 }
             }
-            awaitClose { userEditText.setOnEditorActionListener(null) }
+            awaitClose()
         }
 
         override val removeUserClick: Flow<User> = emptyFlow() // TODO

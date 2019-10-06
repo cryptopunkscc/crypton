@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presentation.component
 
 import cc.cryptopunks.crypton.component.ViewModelComponent
-import cc.cryptopunks.crypton.presentation.fragment.MainFragment
+import cc.cryptopunks.crypton.fragment.MainFragment
 import dagger.Component
 
 @Component(dependencies = [ViewModelComponent::class])

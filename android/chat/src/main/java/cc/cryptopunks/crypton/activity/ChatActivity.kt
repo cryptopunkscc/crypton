@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.activity
+package cc.cryptopunks.crypton.activity
 
 import cc.cryptopunks.crypton.util.BaseActivity
 

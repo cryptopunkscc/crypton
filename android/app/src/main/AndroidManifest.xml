@@ -19,7 +19,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
-            android:name=".presentation.activity.MainActivity"
+            android:name="cc.cryptopunks.crypton.activity.MainActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="cc.cryptopunks.crypton.presentation.activity.AccountManagementActivity" />
+        <activity android:name="cc.cryptopunks.crypton.activity.AccountManagementActivity" />
 
         <service
             android:name=".service.IndicatorService"

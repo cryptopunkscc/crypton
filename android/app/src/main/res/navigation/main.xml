@@ -8,11 +8,11 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="cc.cryptopunks.crypton.presentation.fragment.SplashFragment"
+        android:name="cc.cryptopunks.crypton.fragment.SplashFragment"
         android:label="SplashFragment" />
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="cc.cryptopunks.crypton.presentation.fragment.DashboardFragment"
+        android:name="cc.cryptopunks.crypton.fragment.DashboardFragment"
         android:label="DashboardFragment"
         tools:layout="@layout/dashboard" >
         <action
@@ -25,7 +25,7 @@
     <include app:graph="@navigation/set_account" />
     <activity
         android:id="@+id/accountManagementActivity"
-        android:name="cc.cryptopunks.crypton.presentation.activity.AccountManagementActivity"
+        android:name="cc.cryptopunks.crypton.activity.AccountManagementActivity"
         android:label="AccountManagementActivity"
         tools:layout="@layout/account_list"/>
     <action
@@ -40,7 +40,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/createConversationFragment"
-        android:name="cc.cryptopunks.crypton.presentation.fragment.CreateChatFragment"
+        android:name="cc.cryptopunks.crypton.fragment.CreateChatFragment"
         android:label="CreateConversationFragment"
-        tools:layout="@layout/create_conversation"/>
+        tools:layout="@layout/create_chat"/>
 </navigation>

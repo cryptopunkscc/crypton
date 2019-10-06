@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.fragment
+package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import androidx.paging.PagedList
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
-import cc.cryptopunks.crypton.presentation.adapter.ChatItemAdapter
+import cc.cryptopunks.crypton.adapter.ChatItemAdapter
 import cc.cryptopunks.crypton.util.invoke
 import kotlinx.android.synthetic.main.chat.*
 import kotlinx.coroutines.launch

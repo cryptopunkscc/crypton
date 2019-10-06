@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.fragment
+package cc.cryptopunks.crypton.fragment
 
 import android.app.AlertDialog
 import android.app.Dialog

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.presentation.fragment.*
+import cc.cryptopunks.crypton.fragment.*
 import dagger.Component
 import javax.inject.Singleton
 

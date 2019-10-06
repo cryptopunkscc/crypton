@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.fragment
+package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import cc.cryptopunks.crypton.feature.account.viewmodel.AccountNavigationViewModel

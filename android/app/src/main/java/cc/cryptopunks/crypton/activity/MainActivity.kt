@@ -1,8 +1,8 @@
-package cc.cryptopunks.crypton.presentation.activity
+package cc.cryptopunks.crypton.activity
 
 import android.os.Bundle
 import cc.cryptopunks.crypton.R
-import cc.cryptopunks.crypton.presentation.fragment.MainFragment
+import cc.cryptopunks.crypton.fragment.MainFragment
 import cc.cryptopunks.crypton.util.BaseActivity
 import cc.cryptopunks.crypton.util.ext.fragment
 

@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.adapter
+package cc.cryptopunks.crypton.adapter
 
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter

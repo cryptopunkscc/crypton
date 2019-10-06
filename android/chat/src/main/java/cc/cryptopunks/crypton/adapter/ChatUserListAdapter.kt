@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presentation.adapter
+package cc.cryptopunks.crypton.adapter
 
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class ConversationUserListAdapter @Inject constructor() :
-    RecyclerView.Adapter<ConversationUserListAdapter.ViewHolder>() {
+class ChatUserListAdapter @Inject constructor() :
+    RecyclerView.Adapter<ChatUserListAdapter.ViewHolder>() {
 
     var users = emptyList<User>()
         set(value) {
@@ -40,7 +40,7 @@ class ConversationUserListAdapter @Inject constructor() :
     }
 }
 
-suspend fun ConversationUserListAdapter.bind(
+suspend fun ChatUserListAdapter.bind(
     flow: Flow<List<User>>
 ) = flow.collect {
     users = it
