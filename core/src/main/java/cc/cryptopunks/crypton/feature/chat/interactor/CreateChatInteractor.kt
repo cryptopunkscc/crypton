@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.util.Scopes
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 
 object CreateChat {
@@ -13,9 +13,8 @@ object CreateChat {
         scope: Scopes.UseCase,
         clientCache: Client.Cache,
         repo: Chat.Repo
-    ) : (Data) -> Job by { data ->
-
-        scope.launch {
+    ) : (Data) -> Deferred<Chat> by { data ->
+        scope.async {
             data.validate()
 
             val client = clientCache.values.first() // TODO
@@ -27,11 +26,13 @@ object CreateChat {
             )
 
             val chatId = repo.insert(chat)
+
+            chat.copy(id = chatId)
         }
     }
 
     data class Data(
-        val title: String = "",
+        val title: String,
         val users: List<User>
     ) {
         fun validate() {

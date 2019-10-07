@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
-import cc.cryptopunks.crypton.adapter.ChatItemAdapter
+import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.util.invoke
-import kotlinx.android.synthetic.main.chat.*
+import kotlinx.android.synthetic.main.roster.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RosterFragment : ChatComponentFragment() {
+class RosterFragment : RosterComponentFragment() {
 
-    override val layoutRes: Int get() = R.layout.chat
+    override val layoutRes: Int get() = R.layout.roster
 
     @Inject
     lateinit var present: RosterPresenter
@@ -32,17 +32,17 @@ class RosterFragment : ChatComponentFragment() {
 
     inner class View : RosterPresenter.View {
 
-        private val chatItemAdapter = ChatItemAdapter(this@RosterFragment)
+        private val rosterAdapter = RosterAdapter(this@RosterFragment)
 
         init {
             rosterRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = chatItemAdapter
+                adapter = rosterAdapter
             }
         }
 
         override val setList: suspend (PagedList<RosterItemPresenter>) -> Unit = {
-            chatItemAdapter.submitList(it)
+            rosterAdapter.submitList(it)
         }
     }
 }

@@ -20,6 +20,7 @@ data class Chat(
     }
 
     interface Repo {
+        suspend fun get(id: Long): Chat
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>
         suspend fun insert(chat: Chat): Long
         fun delete(chat: Chat)

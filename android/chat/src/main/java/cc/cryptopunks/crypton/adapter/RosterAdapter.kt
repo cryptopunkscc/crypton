@@ -10,24 +10,36 @@ import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.invoke
 import cc.cryptopunks.crypton.util.letterColors
+import cc.cryptopunks.crypton.util.reactivebindings.flowClicks
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.roster_item.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import java.util.*
 import javax.inject.Inject
 
-class ChatItemAdapter @Inject constructor(
+class RosterAdapter @Inject constructor(
     private val scope: CoroutineScope
 ) :
-    PagedListAdapter<RosterItemPresenter, ChatItemAdapter.ViewHolder>(Diff) {
+    PagedListAdapter<RosterItemPresenter, RosterAdapter.ViewHolder>(Diff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(parent.inflate(R.layout.roster_item))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(getItem(position))
+
+    private object Diff : DiffUtil.ItemCallback<RosterItemPresenter>() {
+        override fun areItemsTheSame(
+            oldItem: RosterItemPresenter,
+            newItem: RosterItemPresenter
+        ) = oldItem.id == newItem.id
+
+        override fun areContentsTheSame(
+            oldItem: RosterItemPresenter,
+            newItem: RosterItemPresenter
+        ) = areItemsTheSame(oldItem, newItem)
+    }
 
     inner class ViewHolder(
         override val containerView: android.view.View
@@ -53,7 +65,7 @@ class ChatItemAdapter @Inject constructor(
                 dateTextView.text = Date(message.timestamp).toString()
             }
 
-            override val onClick: Flow<Any> = emptyFlow() // TODO
+            override val onClick: Flow<Any> = containerView.flowClicks()
 
             fun clear() {
                 setLetter('a')
@@ -61,20 +73,9 @@ class ChatItemAdapter @Inject constructor(
             }
         }
 
-        fun bind(presenter: RosterItemPresenter?) {
-            launch { presenter?.invoke(view) ?: view.clear() }
+        fun bind(present: RosterItemPresenter?) {
+            coroutineContext.cancelChildren()
+            launch { present(view) ?: view.clear() }
         }
-    }
-
-    private object Diff : DiffUtil.ItemCallback<RosterItemPresenter>() {
-        override fun areItemsTheSame(
-            oldItem: RosterItemPresenter,
-            newItem: RosterItemPresenter
-        ) = oldItem.id == newItem.id
-
-        override fun areContentsTheSame(
-            oldItem: RosterItemPresenter,
-            newItem: RosterItemPresenter
-        ) = areItemsTheSame(oldItem, newItem)
     }
 }

@@ -9,18 +9,22 @@ data class MessagePresenter(
     private val message: Message
 ) : Presenter<MessagePresenter.View> {
 
+    val id get() = message.id
     val text get() = message.text
     val date get() = Date(message.timestamp)
 
     override suspend fun View.invoke() = run {
-        setText(message.text)
+        setMessage(message.text)
         setDate(message.timestamp)
     }
 
     interface View {
-        fun setText(text: String)
+        fun setMessage(text: String)
         fun setDate(timestamp: Long)
+        fun setAuthor(name: String)
     }
 
-    class Factory @Inject constructor() : (Message) -> MessagePresenter by ::MessagePresenter
+    class Factory @Inject constructor() : (Message) -> MessagePresenter by { message ->
+        MessagePresenter(message)
+    }
 }

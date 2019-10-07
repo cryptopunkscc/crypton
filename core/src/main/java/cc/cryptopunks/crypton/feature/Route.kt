@@ -1,6 +1,8 @@
 package cc.cryptopunks.crypton.feature
 
-sealed class Route {
+sealed class Route(
+    open val data: MutableMap<String, Any?> = mutableMapOf()
+) {
     class Raw(val id: Int) : Route()
     object Dashboard : Route()
     object Roster : Route()
@@ -10,9 +12,10 @@ sealed class Route {
     object AccountList : Route()
     object AccountManagement : Route()
     object CreateChat : Route()
-    data class Chat(val id: Long = Last) : Route() {
-        companion object {
-            const val Last = -1L
-        }
+    class Chat(
+        data: MutableMap<String, Any?> = mutableMapOf()
+    ) : Route(data) {
+        var accountId: String by data
+        var chatId: Long by data
     }
 }

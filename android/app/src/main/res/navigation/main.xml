@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainNavigation"
     app:startDestination="@id/splashFragment">
-
     <fragment
         android:id="@+id/splashFragment"
         android:name="cc.cryptopunks.crypton.fragment.SplashFragment"
@@ -20,7 +19,10 @@
             app:destination="@id/accountManagementActivity" />
         <action
             android:id="@id/navigateCreateChat"
-            app:destination="@id/createConversationFragment" />
+            app:destination="@id/createChatFragment" />
+        <action
+            android:id="@id/navigateChat"
+            app:destination="@id/chatActivity"/>
     </fragment>
     <include app:graph="@navigation/set_account" />
     <activity
@@ -39,8 +41,17 @@
         app:popUpTo="@id/mainNavigation"
         app:popUpToInclusive="true" />
     <fragment
-        android:id="@+id/createConversationFragment"
+        android:id="@+id/createChatFragment"
         android:name="cc.cryptopunks.crypton.fragment.CreateChatFragment"
-        android:label="CreateConversationFragment"
-        tools:layout="@layout/create_chat"/>
+        android:label="CreateChatFragment"
+        tools:layout="@layout/create_chat">
+        <action
+            android:id="@id/navigateChat"
+            app:destination="@id/chatActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/chatActivity"
+        android:name="cc.cryptopunks.crypton.activity.ChatActivity"
+        android:label="ChatActivity"
+        tools:layout="@layout/chat"/>
 </navigation>

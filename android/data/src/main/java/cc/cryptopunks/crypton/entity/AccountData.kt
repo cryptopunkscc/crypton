@@ -38,7 +38,7 @@ internal data class AccountData(
         fun delete(data: AccountData)
 
         @Query("select * from account")
-        fun list(): List<AccountData>
+        suspend fun list(): List<AccountData>
 
         @Query("select * from account")
         fun flowList(): Flow<List<AccountData>>

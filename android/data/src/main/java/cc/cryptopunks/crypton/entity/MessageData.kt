@@ -34,8 +34,8 @@ internal data class MessageData(
         @Query("select * from message where chatId == :chatId order by timestamp")
         fun flowLatest(chatId: Long): Flow<MessageData?>
 
-        @Query("select * from message")
-        fun dataSourceFactory(): DataSource.Factory<Int, MessageData>
+        @Query("select * from message where chatId == :chatId order by timestamp")
+        fun dataSourceFactory(chatId: Long): DataSource.Factory<Int, MessageData>
     }
 
     companion object {

@@ -4,22 +4,25 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.feature.chat.presenter.CreateChatPresenter
-import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.util.invoke
+import cc.cryptopunks.crypton.util.reactivebindings.flowEditorActions
 import kotlinx.android.synthetic.main.create_chat.*
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CreateChatFragment :
-    ChatComponentFragment() {
+    RosterComponentFragment() {
 
     override val layoutRes: Int get() = R.layout.create_chat
 
@@ -41,6 +44,7 @@ class CreateChatFragment :
     }
 
     private inner class View : CreateChatPresenter.View {
+        private val accountListAdapter = ArrayAdapter<Account>(context, R.layout.account_item)
         private val userListAdapter = ChatUserListAdapter()
 
         init {
@@ -48,16 +52,13 @@ class CreateChatFragment :
                 layoutManager = LinearLayoutManager(context)
                 adapter = userListAdapter
             }
+            accountListSpinner.adapter = accountListAdapter
         }
 
-        override val addUserClick: Flow<String> = callbackFlow {
-            userEditText.setOnEditorActionListener { view, actionId, _ ->
-                (actionId == EditorInfo.IME_ACTION_DONE).also {
-                    if (it) channel.offer(view.text.toString())
-                }
-            }
-            awaitClose()
-        }
+        override val addUserClick: Flow<String> = userEditText
+            .flowEditorActions()
+            .filter { it.id == EditorInfo.IME_ACTION_DONE }
+            .map { it.view.text.toString() }
 
         override val removeUserClick: Flow<User> = emptyFlow() // TODO
         override val createChatClick: Flow<Any> = component.optionItemSelections

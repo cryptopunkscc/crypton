@@ -36,4 +36,4 @@ abstract class BaseApplication : Application() {
 
 val Service.app get() = application as BaseApplication
 val Activity.app get() = application as BaseApplication
-val Fragment.app get() = activity?.app
+val Fragment.app get() = activity!!.app

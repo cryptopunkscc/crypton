@@ -10,7 +10,7 @@
         android:name="cc.cryptopunks.crypton.fragment.RosterFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/chat" />
+        tools:layout="@layout/roster" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createConversationButton"

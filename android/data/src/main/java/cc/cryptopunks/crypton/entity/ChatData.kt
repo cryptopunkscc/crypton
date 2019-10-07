@@ -22,6 +22,9 @@ internal data class ChatData(
     @androidx.room.Dao
     interface Dao {
 
+        @Query("select * from chat where id = :id")
+        fun get(id: Long): ChatData
+
         @Query("select * from chat")
         fun dataSourceFactory(): DataSource.Factory<Int, ChatData>
 

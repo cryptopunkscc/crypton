@@ -9,6 +9,8 @@ internal class ChatRepo(
     private val userDao: UserData.Dao
 ) : Chat.Repo {
 
+    override suspend fun get(id: Long): Chat = chatDao.get(id).toDomain()
+
     override fun dataSourceFactory(): DataSource.Factory<Int, Chat> =
         chatDao.dataSourceFactory().map { chat -> chat.toDomain() }
 

@@ -5,11 +5,9 @@ import cc.cryptopunks.crypton.feature.Route
 import cc.cryptopunks.crypton.feature.chat.interactor.CreateChat
 import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.Presenter
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
+import cc.cryptopunks.crypton.util.cache
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,31 +18,37 @@ class CreateChatPresenter @Inject constructor(
     private val navigate: Navigate
 ) : Presenter<CreateChatPresenter.View> {
 
-    private val usersBroadcast = BroadcastChannel<List<User>>(Channel.CONFLATED)
-    private var users = emptyList<User>()
-    private val data get() = CreateChat.Data(users = users)
+    private val usersCache = emptyList<User>().cache()
 
+    private val data get() = CreateChat.Data(
+        title = "test", //TODO
+        users = usersCache.value
+    )
 
     private val add: suspend (String) -> Unit = { string ->
-        users = users + User(string)
-        usersBroadcast.send(users)
+        usersCache { plus(User(string)) }
     }
 
     private val remove: suspend (User) -> Unit = { user ->
-        users = users + user
-        usersBroadcast.send(users)
+        usersCache { minus(user) }
     }
 
     private val create: suspend (Any) -> Unit = {
-        createChat(data).invokeOnCompletion { error ->
-            if (error == null) navigate(Route.Chat())
+        createChat(data).runCatching {
+            val id = await().id
+
+            navigate(Route.Chat()) {
+                chatId = id
+            }
+        }.onFailure {
+            it.printStackTrace()
         }
     }
 
     override suspend fun View.invoke() = coroutineScope {
         launch { addUserClick.onEach(clearInput).collect(add) }
         launch { removeUserClick.collect(remove) }
-        launch { usersBroadcast.asFlow().collect(setUsers) }
+        launch { usersCache.collect(setUsers) }
         launch { createChatClick.collect(create) }
     }
 
@@ -56,4 +60,3 @@ class CreateChatPresenter @Inject constructor(
         val clearInput: suspend (Any) -> Unit
     }
 }
-

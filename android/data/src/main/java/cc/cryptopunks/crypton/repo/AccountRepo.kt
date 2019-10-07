@@ -23,7 +23,7 @@ internal class AccountRepo(
     override fun delete(account: Account): Unit =
         dao.delete(account.chatData())
 
-    override fun list(): List<Account> =
+    override suspend fun list(): List<Account> =
         dao.list().map { it.toDomain() }
 
     override fun flowList(): Flow<List<Account>> =

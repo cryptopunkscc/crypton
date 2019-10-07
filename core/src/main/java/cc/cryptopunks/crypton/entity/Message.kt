@@ -26,7 +26,7 @@ data class Message(
     interface Repo {
         fun insertOrUpdate(chatId: Long, vararg message: Message)
         fun flowLatest(chatId: Long): Flow<Message>
-        fun dataSourceFactory(): DataSource.Factory<Int, Message>
+        fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message>
     }
 
     companion object {

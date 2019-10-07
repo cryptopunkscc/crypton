@@ -22,9 +22,14 @@ class RosterItemPresenter @Inject constructor(
 
     private val title get() = chat.title
 
-    private val letter get() = title.first().toLowerCase()
+    private val letter get() = title.firstOrNull()?.toLowerCase() ?: '0'
 
-    private val navigateChat: suspend (Any) -> Unit = { navigate(Route.Chat(id)) }
+    private val navigateChat: suspend (Any) -> Unit = {
+        navigate(Route.Chat()) {
+            accountId = chat.address.id
+            chatId = id
+        }
+    }
 
     override suspend fun View.invoke() = coroutineScope {
         setTitle(title)

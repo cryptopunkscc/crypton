@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.util
 
 import kotlinx.coroutines.*
+import kotlin.coroutines.EmptyCoroutineContext
 
 object Scopes {
 
@@ -15,6 +16,15 @@ object Scopes {
             context = exceptionHandler,
             block = block
         )
+
+        infix fun <T> async(block: suspend CoroutineScope.() -> T) = async(
+            context = EmptyCoroutineContext,
+            block = block
+        ).apply {
+            invokeOnCompletion { cause: Throwable? ->
+                cause?.let(broadcast)
+            }
+        }
     }
 
     class UseCase(

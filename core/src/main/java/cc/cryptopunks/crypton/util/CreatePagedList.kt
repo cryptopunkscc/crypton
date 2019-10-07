@@ -38,6 +38,13 @@ class CreatePagedList<K, V>(
 
     operator fun invoke(key: K? = null): PagedList<V> = create(pagedList(key))
 
+    fun <V2> map(f: (V) -> V2) = CreatePagedList<K, V2>(
+        config = config,
+        dataSourceFactory = dataSourceFactory.map(f),
+        fetchExecutor = fetchExecutor,
+        notifyExecutor = notifyExecutor
+    )
+
     private tailrec fun create(
         list: PagedList<V>
     ): PagedList<V> = if (!list.isDetached)

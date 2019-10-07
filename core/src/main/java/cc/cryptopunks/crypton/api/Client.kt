@@ -120,10 +120,10 @@ interface Client:
         cause: Throwable? = null
     ) : kotlin.Exception(message, cause)
 
-    class Empty(override val accountId: Long) : Client by DummyClient
+    class Empty(override val accountId: Long) : Client by Empty
 
     companion object {
-        private val DummyClient: Client = createDummyClass()
+        val Empty: Client = createDummyClass()
     }
 }
 

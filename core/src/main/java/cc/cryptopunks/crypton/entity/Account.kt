@@ -41,7 +41,7 @@ data class Account constructor(
         fun insert(account: Account): Account
         fun update(account: Account)
         fun delete(account: Account)
-        fun list(): List<Account>
+        suspend fun list(): List<Account>
         fun flowList(): Flow<List<Account>>
     }
 

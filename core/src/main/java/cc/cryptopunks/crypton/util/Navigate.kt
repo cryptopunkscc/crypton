@@ -8,34 +8,25 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
-interface Navigate :
-        (Route) -> Unit,
-        (Route, Any) -> Unit {
+interface Navigate : (Route) -> Unit {
 
-    interface Output : Flow<Data>
+    interface Output : Flow<Route>
 
-    data class Data(
-        val route: Route,
-        val param: Any? = null
-    )
+    operator fun <R: Route>invoke(route: R, init: R.() -> Unit) = invoke(route.apply(init))
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     private class Impl : Navigate,
-        Output {
-        override fun invoke(route: Route, param: Any) {
-            channel.offer(Data(route, param))
-        }
 
-        private val channel = BroadcastChannel<Data?>(Channel.CONFLATED)
+        Output {
+        private val channel = BroadcastChannel<Route?>(Channel.CONFLATED)
 
         override fun invoke(route: Route) {
-            channel.offer(Data(route))
+            channel.offer(route)
         }
 
-
         @InternalCoroutinesApi
-        override suspend fun collect(collector: FlowCollector<Data>) {
+        override suspend fun collect(collector: FlowCollector<Route>) {
             channel.asFlow()
                 .filterNotNull()
                 .onEach { channel.offer(null) }

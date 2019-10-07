@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.repo
 
 import androidx.paging.DataSource
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.entity.MessageData
 import cc.cryptopunks.crypton.entity.message
 import cc.cryptopunks.crypton.entity.messageData
@@ -19,6 +19,6 @@ internal class MessageRepo(
     override fun flowLatest(chatId: Long): Flow<Message> =
         dao.flowLatest(chatId).filterNotNull().map { it.message() }
 
-    override fun dataSourceFactory(): DataSource.Factory<Int, Message> =
-        dao.dataSourceFactory().map { it?.message() }
+    override fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message> =
+        dao.dataSourceFactory(chat.id).map { it?.message() }
 }

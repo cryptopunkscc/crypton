@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.feature.chat.presenter
 
 import androidx.paging.PagedList
+import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.feature.chat.interactor.SendMessageInteractor
 import cc.cryptopunks.crypton.feature.chat.selector.MessagePagedListSelector
 import cc.cryptopunks.crypton.util.Presenter
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ChatPresenter @Inject constructor(
+    private val chat: Chat,
     private val sendMessage: SendMessageInteractor,
     private val createMessagePresenter: MessagePresenter.Factory,
     private val messageFlow: MessagePagedListSelector
@@ -23,7 +25,7 @@ class ChatPresenter @Inject constructor(
 
     override suspend fun View.invoke() = coroutineScope {
         launch { sendMessageFlow.collect(send) }
-        launch { messageFlow(createMessagePresenter).collect(setMessages) }
+        launch { messageFlow(chat, createMessagePresenter).collect(setMessages) }
     }
 
     interface View {
