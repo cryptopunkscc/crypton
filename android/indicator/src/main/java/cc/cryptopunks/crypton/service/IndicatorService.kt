@@ -3,10 +3,8 @@ package cc.cryptopunks.crypton.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.DaggerIndicatorComponent
 import cc.cryptopunks.crypton.component.IndicatorComponent
-import cc.cryptopunks.crypton.coreComponent
 import cc.cryptopunks.crypton.module.ServiceModule
 import timber.log.Timber
 
@@ -15,8 +13,6 @@ class IndicatorService :
 
     private val component: IndicatorComponent by lazy {
         DaggerIndicatorComponent.builder()
-            .applicationComponent(applicationComponent)
-            .coreComponent(coreComponent)
             .serviceComponent(ServiceModule(this))
             .build()
     }

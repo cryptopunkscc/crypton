@@ -5,7 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.activity.CoreActivity
 import cc.cryptopunks.crypton.applicationComponent
-import cc.cryptopunks.crypton.component.*
+import cc.cryptopunks.crypton.component.ApplicationComponent
+import cc.cryptopunks.crypton.component.NavigationComponent
+import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.fragment.CoreFragment
 import cc.cryptopunks.crypton.util.Scopes
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +17,7 @@ abstract class PresentationModule(
 ) :
     PresentationComponent,
     ApplicationComponent by applicationComponent,
-    NavigationComponent by activity.featureComponent {
+    NavigationComponent by activity.navigationComponent {
 
     override val presentationScope = Scopes.Presentation(broadcastError)
 }

@@ -4,6 +4,5 @@ import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.OptionItemSelected
 
 interface NavigationComponent :
-    CoreComponent,
     OptionItemSelected.Component,
     Navigate.Component

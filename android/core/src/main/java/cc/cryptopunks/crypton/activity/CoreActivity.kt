@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.component.NavigationComponent
 import cc.cryptopunks.crypton.core.R
-import cc.cryptopunks.crypton.coreComponent
 import cc.cryptopunks.crypton.fragment.ComponentHolderFragment
 import cc.cryptopunks.crypton.module.NavigationModule
 import cc.cryptopunks.crypton.util.ext.bind
@@ -21,17 +20,17 @@ abstract class CoreActivity :
 
     val toolbar by lazy { findViewById<Toolbar>(R.id.action_bar) }
 
-    val featureComponent by lazy {
-        fragment("feature") {
+    val navigationComponent by lazy {
+        fragment("navigation") {
             ComponentHolderFragment<NavigationComponent>()
         }.initComponent {
-            NavigationModule(coreComponent)
+            NavigationModule()
         }
     }
 
     override fun onStart() {
         super.onStart()
-        launch { featureComponent.navigateOutput.bind(navController) }
+        launch { navigationComponent.navigateOutput.bind(navController) }
     }
 
     override fun onStop() {
@@ -40,7 +39,7 @@ abstract class CoreActivity :
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        launch { featureComponent.onOptionItemSelected(item.itemId) }
+        launch { navigationComponent.onOptionItemSelected(item.itemId) }
         return super.onOptionsItemSelected(item)
     }
 

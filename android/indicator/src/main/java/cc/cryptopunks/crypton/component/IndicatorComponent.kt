@@ -6,11 +6,7 @@ import cc.cryptopunks.crypton.notification.ShowAppServiceNotification
 import dagger.Component
 
 @Component(
-    dependencies = [
-        ApplicationComponent::class,
-        CoreComponent::class,
-        ServiceComponent::class
-    ]
+    dependencies = [ServiceComponent::class]
 )
 internal interface IndicatorComponent {
     val reconnectAccounts: ReconnectAccountsInteractor
