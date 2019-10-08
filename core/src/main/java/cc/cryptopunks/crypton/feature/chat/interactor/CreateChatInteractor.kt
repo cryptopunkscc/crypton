@@ -3,14 +3,14 @@ package cc.cryptopunks.crypton.feature.chat.interactor
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.User
-import cc.cryptopunks.crypton.util.Scopes
+import cc.cryptopunks.crypton.util.Scope
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 
 object CreateChat {
 
     class Interactor @Inject constructor(
-        scope: Scopes.UseCase,
+        scope: Scope.UseCase,
         clientCache: Client.Cache,
         repo: Chat.Repo
     ) : (Data) -> Deferred<Chat> by { data ->

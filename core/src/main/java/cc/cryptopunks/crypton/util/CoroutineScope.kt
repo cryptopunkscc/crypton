@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.util
 import kotlinx.coroutines.*
 import kotlin.coroutines.EmptyCoroutineContext
 
-object Scopes {
+object Scope {
 
     abstract class ErrorHandling : CoroutineScope {
         abstract val broadcast: BroadcastError

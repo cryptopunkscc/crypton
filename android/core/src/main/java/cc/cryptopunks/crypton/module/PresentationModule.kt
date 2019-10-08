@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.component.ApplicationComponent
 import cc.cryptopunks.crypton.component.NavigationComponent
 import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.fragment.CoreFragment
-import cc.cryptopunks.crypton.util.Scopes
+import cc.cryptopunks.crypton.util.Scope
 import kotlinx.coroutines.CoroutineScope
 
 abstract class PresentationModule(
@@ -19,7 +19,7 @@ abstract class PresentationModule(
     ApplicationComponent by applicationComponent,
     NavigationComponent by activity.navigationComponent {
 
-    override val presentationScope = Scopes.Presentation(broadcastError)
+    override val presentationScope = Scope.Presentation(broadcastError)
 }
 
 class PresenationActivityModule(

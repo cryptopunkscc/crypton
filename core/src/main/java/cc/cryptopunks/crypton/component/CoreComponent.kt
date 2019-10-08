@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.ExecutorsComponent
-import cc.cryptopunks.crypton.util.Scopes
+import cc.cryptopunks.crypton.util.Scope
 
 interface CoreComponent :
     ExecutorsComponent,
@@ -10,5 +10,5 @@ interface CoreComponent :
     ClientComponent,
     RepoComponent {
 
-    val useCaseScope: Scopes.UseCase
+    val useCaseScope: Scope.UseCase
 }

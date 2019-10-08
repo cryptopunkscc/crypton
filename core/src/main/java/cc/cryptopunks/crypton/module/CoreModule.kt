@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.component.CoreComponent
 import cc.cryptopunks.crypton.component.RepoComponent
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.ExecutorsComponent
-import cc.cryptopunks.crypton.util.Scopes
+import cc.cryptopunks.crypton.util.Scope
 
 class CoreModule(
     private val executorsComponent: ExecutorsComponent,
@@ -18,5 +18,5 @@ class CoreModule(
     ClientComponent by clientComponent,
     BroadcastError.Component by BroadcastError.Module() {
 
-    override val useCaseScope = Scopes.UseCase(broadcastError)
+    override val useCaseScope = Scope.UseCase(broadcastError)
 }

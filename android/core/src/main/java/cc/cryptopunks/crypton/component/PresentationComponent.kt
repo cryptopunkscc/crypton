@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.util.Scopes
+import cc.cryptopunks.crypton.util.Scope
 
 interface PresentationComponent :
     ApplicationComponent,
@@ -8,5 +8,5 @@ interface PresentationComponent :
     NavigationComponent,
     ViewComponent {
 
-    val presentationScope: Scopes.Presentation
+    val presentationScope: Scope.Presentation
 }
