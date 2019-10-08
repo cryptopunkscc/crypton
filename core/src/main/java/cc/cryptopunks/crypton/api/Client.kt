@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.api
 
 import cc.cryptopunks.crypton.entity.*
+import cc.cryptopunks.crypton.util.CacheFlow
 import cc.cryptopunks.crypton.util.createDummyClass
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -11,7 +12,6 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 interface Client:
     User.Api,
@@ -88,7 +88,9 @@ interface Client:
         }
     }
 
-    class Repo @Inject constructor(
+    class Current: CacheFlow<Client> by CacheFlow(Empty)
+
+    class Repo(
         private val createClient: Factory,
         private val clientCache: Cache
     ) {

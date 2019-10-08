@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.activity.CoreActivity
+import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.ApplicationComponent
 import cc.cryptopunks.crypton.component.NavigationComponent
@@ -13,9 +14,11 @@ import cc.cryptopunks.crypton.util.Scope
 import kotlinx.coroutines.CoroutineScope
 
 abstract class PresentationModule(
-    activity: CoreActivity
+    activity: CoreActivity,
+    client: Client
 ) :
     PresentationComponent,
+    Client by client,
     ApplicationComponent by applicationComponent,
     NavigationComponent by activity.navigationComponent {
 
@@ -23,9 +26,10 @@ abstract class PresentationModule(
 }
 
 class PresenationActivityModule(
-    private val activity: CoreActivity
+    private val activity: CoreActivity,
+    client: Client
 ) :
-    PresentationModule(activity) {
+    PresentationModule(activity, client) {
 
     override val arguments: Bundle get() = activity.intent.extras!!
     override val viewScope: CoroutineScope = activity
@@ -34,9 +38,10 @@ class PresenationActivityModule(
 }
 
 class PresentationFragmentModule(
-    private val fragment: CoreFragment
+    private val fragment: CoreFragment,
+    client: Client
 ) :
-    PresentationModule(fragment.coreActivity) {
+    PresentationModule(fragment.coreActivity, client) {
 
     override val arguments: Bundle get() = fragment.arguments!!
     override val viewScope: CoroutineScope get() = fragment

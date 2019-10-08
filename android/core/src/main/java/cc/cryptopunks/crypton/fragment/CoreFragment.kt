@@ -8,7 +8,10 @@ import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import cc.cryptopunks.crypton.activity.CoreActivity
+import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.module.PresentationFragmentModule
+import kotlinx.coroutines.flow.map
 
 
 abstract class CoreFragment : CoroutineFragment() {
@@ -19,7 +22,20 @@ abstract class CoreFragment : CoroutineFragment() {
 
     val coreActivity get() = activity as CoreActivity
 
-    val presentationComponent by lazy { PresentationFragmentModule(this) }
+    val presentationComponent by lazy {
+        applicationComponent.currentClient().let { client ->
+            PresentationFragmentModule(this, client)
+        }
+    }
+
+    val presentationComponentFlow by lazy {
+        applicationComponent.currentClient.map { client ->
+            PresentationFragmentModule(this, client)
+        }
+    }
+
+    private fun createComponent(client: Client) =
+        PresentationFragmentModule(this, client)
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
