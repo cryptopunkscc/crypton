@@ -8,7 +8,6 @@ import cc.cryptopunks.crypton.component.DaggerDashboardComponent
 import cc.cryptopunks.crypton.component.DashboardComponent
 import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.feature.dashboard.viewmodel.DashboardViewModel
-import cc.cryptopunks.crypton.module.viewModelComponent
 import cc.cryptopunks.crypton.util.model.OptionItemNavigationModel
 import kotlinx.android.synthetic.main.dashboard.*
 import kotlinx.coroutines.launch
@@ -20,9 +19,7 @@ class DashboardFragment : CoreFragment() {
     override val layoutRes: Int get() = R.layout.dashboard
 
     private val component: DashboardComponent by lazy {
-        DaggerDashboardComponent.builder()
-            .viewModelComponent(viewModelComponent())
-            .build()
+        DaggerDashboardComponent.builder().presentationComponent(presentationComponent).build()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -19,7 +19,6 @@ interface Client:
     Message.Api,
     RosterEvent.Api {
 
-    val accountId: Long
     val address: Address
     val create: Create
     val remove: Remove
@@ -53,12 +52,10 @@ interface Client:
     }
 
     data class Config(
-        val accountId: Long = EmptyId,
         val address: Address = Address.Empty,
         val password: String = ""
     ) {
         companion object {
-            const val EmptyId = 0L
             val Empty = Config()
         }
     }
@@ -79,7 +76,7 @@ interface Client:
 
         override fun remove(key: String) = map
             .remove(key)
-            ?.apply { send(Empty(accountId = accountId)) }
+            ?.apply { send(Empty(address = address)) }
 
         override fun put(key: String, value: Client): Client? = map
             .put(key, value)
@@ -120,7 +117,7 @@ interface Client:
         cause: Throwable? = null
     ) : kotlin.Exception(message, cause)
 
-    class Empty(override val accountId: Long) : Client by Empty
+    class Empty(override val address: Address) : Client by Empty
 
     companion object {
         val Empty: Client = createDummyClass()

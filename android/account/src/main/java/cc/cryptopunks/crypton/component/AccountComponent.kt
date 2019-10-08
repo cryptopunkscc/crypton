@@ -5,7 +5,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(dependencies = [ViewModelComponent::class])
+@Component(dependencies = [PresentationComponent::class])
 interface AccountComponent {
     fun inject(target: SetAccountFragment)
     fun inject(target: SignInFragment)

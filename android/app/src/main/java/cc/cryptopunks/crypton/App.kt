@@ -3,19 +3,28 @@ package cc.cryptopunks.crypton
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.component.ApplicationComponent
+import cc.cryptopunks.crypton.component.CoreComponent
 import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.ClientModule
+import cc.cryptopunks.crypton.module.CoreModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import cc.cryptopunks.crypton.util.ExecutorsModule
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 
-class App : BaseApplication() {
-    override val component: Component by lazy {
+class App : CoreApplication() {
+
+    override val component: ApplicationComponent by lazy {
         ApplicationModule(
             application = this,
-            mainActivityClass = MainActivity::class.java,
+            mainActivityClass = MainActivity::class.java
+        )
+    }
+
+    override val coreComponent: CoreComponent by lazy {
+        CoreModule(
             executorsComponent = ExecutorsModule(
                 mainExecutor = MainExecutor(ArchTaskExecutor.getMainThreadExecutor()),
                 ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())

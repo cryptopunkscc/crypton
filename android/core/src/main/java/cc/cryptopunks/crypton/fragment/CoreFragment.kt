@@ -7,22 +7,19 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.navigation.fragment.findNavController
 import cc.cryptopunks.crypton.activity.CoreActivity
+import cc.cryptopunks.crypton.module.PresentationFragmentModule
+
 
 abstract class CoreFragment : CoroutineFragment() {
 
-    @get:LayoutRes
-    open val layoutRes
-        get() = 0
+    open val layoutRes @LayoutRes get() = 0
 
-    @get:StringRes
-    open val titleId
-        get() = 0
+    open val titleId @StringRes get() = 0
 
-    open val navController get() = findNavController()
+    val coreActivity get() = activity as CoreActivity
 
-    val baseActivity get() = activity as CoreActivity
+    val presentationComponent by lazy { PresentationFragmentModule(this) }
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +38,7 @@ abstract class CoreFragment : CoroutineFragment() {
     override fun onResume() {
         super.onResume()
         titleId.takeIf { it > 0 }?.let { id ->
-            baseActivity.supportActionBar?.setTitle(id)
+            coreActivity.supportActionBar?.setTitle(id)
         }
     }
 }

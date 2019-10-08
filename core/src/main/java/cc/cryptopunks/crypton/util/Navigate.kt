@@ -16,9 +16,7 @@ interface Navigate : (Route) -> Unit {
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    private class Impl : Navigate,
-
-        Output {
+    private class Impl : Navigate, Output {
         private val channel = BroadcastChannel<Route?>(Channel.CONFLATED)
 
         override fun invoke(route: Route) {

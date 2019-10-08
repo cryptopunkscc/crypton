@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.feature.chat.presenter.CreateChatPresenter
 import cc.cryptopunks.crypton.util.invoke
@@ -32,7 +30,7 @@ class CreateChatFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        component.inject(this)
+        rosterComponent.inject(this)
     }
 
     override fun onViewCreated(view: android.view.View, savedInstanceState: Bundle?) {
@@ -44,7 +42,6 @@ class CreateChatFragment :
     }
 
     private inner class View : CreateChatPresenter.View {
-        private val accountListAdapter = ArrayAdapter<Account>(context, R.layout.account_item)
         private val userListAdapter = ChatUserListAdapter()
 
         init {
@@ -52,7 +49,6 @@ class CreateChatFragment :
                 layoutManager = LinearLayoutManager(context)
                 adapter = userListAdapter
             }
-            accountListSpinner.adapter = accountListAdapter
         }
 
         override val addUserClick: Flow<String> = userEditText
@@ -61,7 +57,7 @@ class CreateChatFragment :
             .map { it.view.text.toString() }
 
         override val removeUserClick: Flow<User> = emptyFlow() // TODO
-        override val createChatClick: Flow<Any> = component.optionItemSelections
+        override val createChatClick: Flow<Any> = rosterComponent.optionItemSelections
         override val setUsers: suspend (List<User>) -> Unit = { userListAdapter.users = it }
         override val clearInput: suspend (Any) -> Unit = { userEditText.text = null }
     }

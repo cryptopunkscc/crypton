@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.component
 import cc.cryptopunks.crypton.fragment.MainFragment
 import dagger.Component
 
-@Component(dependencies = [ViewModelComponent::class])
-interface AppComponent : ViewModelComponent {
+@Component(dependencies = [PresentationComponent::class])
+interface AppComponent {
     fun inject(target: MainFragment)
 }

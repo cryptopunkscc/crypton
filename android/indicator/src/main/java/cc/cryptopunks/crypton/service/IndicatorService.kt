@@ -3,40 +3,31 @@ package cc.cryptopunks.crypton.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
+import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.DaggerIndicatorComponent
 import cc.cryptopunks.crypton.component.IndicatorComponent
-import cc.cryptopunks.crypton.feature.account.interactor.ReconnectAccountsInteractor
-import cc.cryptopunks.crypton.module.featureComponent
-import cc.cryptopunks.crypton.module.serviceComponent
-import cc.cryptopunks.crypton.notification.SetupNotificationChannel
-import cc.cryptopunks.crypton.notification.ShowAppServiceNotification
+import cc.cryptopunks.crypton.coreComponent
+import cc.cryptopunks.crypton.module.ServiceModule
 import timber.log.Timber
-import javax.inject.Inject
 
 class IndicatorService :
     IntentService("IndicatorService") {
 
     private val component: IndicatorComponent by lazy {
         DaggerIndicatorComponent.builder()
-            .featureComponent(featureComponent())
-            .serviceComponent(serviceComponent())
+            .applicationComponent(applicationComponent)
+            .coreComponent(coreComponent)
+            .serviceComponent(ServiceModule(this))
             .build()
     }
 
     override fun onCreate() {
         super.onCreate()
-        component.inject(this)
-    }
-
-    @Inject
-    internal fun init(
-        reconnectAccounts: ReconnectAccountsInteractor,
-        setupNotificationChannel: SetupNotificationChannel,
-        showAppServiceNotification: ShowAppServiceNotification
-    ) {
-        setupNotificationChannel()
-        showAppServiceNotification()
-        reconnectAccounts()
+        component.run {
+            setupNotificationChannel()
+            showAppServiceNotification()
+            reconnectAccounts()
+        }
     }
 
     override fun onHandleIntent(intent: Intent?) {

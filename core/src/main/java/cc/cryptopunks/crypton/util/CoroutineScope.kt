@@ -33,12 +33,7 @@ object Scopes {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 
-    class ViewModel(
-        override val broadcast: BroadcastError
-    ) : ErrorHandling(),
-        CoroutineScope by MainScope()
-
-    class Presenter(
+    class Presentation(
         override val broadcast: BroadcastError
     ) : ErrorHandling(),
         CoroutineScope by MainScope()

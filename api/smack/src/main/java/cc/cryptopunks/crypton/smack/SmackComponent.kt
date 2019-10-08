@@ -19,7 +19,6 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.iqregister.AccountManager
 
 class SmackClient(
-    override val accountId: Long,
     override val address: Address,
     configuration: XMPPTCPConnectionConfiguration
 ) : Client {

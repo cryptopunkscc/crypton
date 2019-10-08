@@ -21,7 +21,6 @@ object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
     }
 
     override fun invoke(config: Client.Config): Client = SmackClient(
-        accountId = config.accountId,
         address = config.address,
         configuration = connectionConfig
             .setUsernameAndPassword(config.address.local, config.password)

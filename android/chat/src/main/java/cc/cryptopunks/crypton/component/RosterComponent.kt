@@ -2,15 +2,11 @@ package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.fragment.CreateChatFragment
 import cc.cryptopunks.crypton.fragment.RosterFragment
+import cc.cryptopunks.crypton.util.OptionItemSelected
 import dagger.Component
 
-@Component(
-    dependencies = [
-        ViewModelComponent::class,
-        FragmentComponent::class
-    ]
-)
-interface RosterComponent: ViewModelComponent {
+@Component(dependencies = [PresentationComponent::class])
+interface RosterComponent : OptionItemSelected.Component {
     fun inject(target: RosterFragment)
     fun inject(target: CreateChatFragment)
 }

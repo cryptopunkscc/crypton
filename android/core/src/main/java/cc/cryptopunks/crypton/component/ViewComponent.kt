@@ -7,5 +7,5 @@ import kotlinx.coroutines.CoroutineScope
 interface ViewComponent {
     val arguments: Bundle
     val view: View
-    val scope: CoroutineScope
+    val viewScope: CoroutineScope
 }

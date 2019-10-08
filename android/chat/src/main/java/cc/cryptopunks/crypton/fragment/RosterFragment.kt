@@ -22,7 +22,7 @@ class RosterFragment : RosterComponentFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        component.inject(this)
+        rosterComponent.inject(this)
         launch { present() }
     }
 

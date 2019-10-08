@@ -1,17 +1,17 @@
 package cc.cryptopunks.crypton.module
 
+import android.app.NotificationManager
 import android.app.Service
+import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.component.ContextComponent
 import cc.cryptopunks.crypton.component.ServiceComponent
 
-class ServiceModule private constructor(
-    contextComponent: ContextComponent
-) : ServiceComponent,
-    ContextComponent by contextComponent {
+class ServiceModule(
+    override val service: Service
+) :
+    ServiceComponent,
+    ContextComponent {
 
-    constructor(
-        context: Service
-    ) : this(ContextModule(context))
+    override val context get() = service
+    override val notificationManager: NotificationManager get() = service.getSystemService()!!
 }
-
-fun Service.serviceComponent() = ServiceModule(this)
