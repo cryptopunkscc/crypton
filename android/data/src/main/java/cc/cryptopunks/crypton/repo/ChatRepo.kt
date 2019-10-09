@@ -11,9 +11,6 @@ internal class ChatRepo(
 
     override suspend fun get(id: Long): Chat = chatDao.get(id).toDomain()
 
-    override fun dataSourceFactory(): DataSource.Factory<Int, Chat> =
-        chatDao.dataSourceFactory().map { chat -> chat.toDomain() }
-
     override suspend fun insert(chat: Chat): Long =
         chatDao.insert(chat.chatData()).also { chatId ->
             userDao.insertIfNeeded(
@@ -28,9 +25,12 @@ internal class ChatRepo(
             )
         }
 
-    override fun delete(chat: Chat): Unit =
+    override fun dataSourceFactory(): DataSource.Factory<Int, Chat> =
+        chatDao.dataSourceFactory().map { chat -> chat.toDomain() }
+
+    override suspend fun delete(chat: Chat): Unit =
         chatDao.delete(chat.chatData())
 
-    override fun deleteAll(): Unit =
+    override suspend fun deleteAll(): Unit =
         chatDao.deleteAll()
 }

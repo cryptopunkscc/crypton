@@ -29,7 +29,7 @@ internal data class MessageData(
     @androidx.room.Dao
     interface Dao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        fun insertOrUpdate(list: List<MessageData>)
+        suspend fun insertOrUpdate(list: List<MessageData>)
 
         @Query("select * from message where chatId == :chatId order by timestamp")
         fun flowLatest(chatId: Long): Flow<MessageData?>

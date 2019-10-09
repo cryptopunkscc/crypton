@@ -33,16 +33,16 @@ internal data class ChatUserData(
     interface Dao {
 
         @Insert
-        fun insert(entity: ChatUserData)
+        suspend fun insert(entity: ChatUserData)
 
         @Insert(onConflict = OnConflictStrategy.IGNORE)
-        fun insertIfNeeded(list: List<ChatUserData>)
+        suspend fun insertIfNeeded(list: List<ChatUserData>)
 
         @Query("select * from chatUser where id = :id")
-        fun get(id: String) : ChatUserData
+        suspend fun get(id: String) : ChatUserData
 
         @Query("select * from chatUser where chatId = :chatId")
-        fun listByChat(chatId: Long) : List<ChatUserData>
+        suspend fun listByChat(chatId: Long) : List<ChatUserData>
     }
 }
 

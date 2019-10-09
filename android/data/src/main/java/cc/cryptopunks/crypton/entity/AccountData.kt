@@ -23,19 +23,19 @@ internal data class AccountData(
     interface Dao {
 
         @Query("select id from account where id = :id")
-        fun contains(id: String): String?
+        suspend fun contains(id: String): String?
 
         @Query("select * from account where id = :id")
-        fun get(id: String): AccountData
+        suspend fun get(id: String): AccountData
 
         @Insert
-        fun insert(data: AccountData)
+        suspend fun insert(data: AccountData)
 
         @Update
-        fun update(data: AccountData)
+        suspend fun update(data: AccountData)
 
         @Delete
-        fun delete(data: AccountData)
+        suspend fun delete(data: AccountData)
 
         @Query("select * from account")
         suspend fun list(): List<AccountData>

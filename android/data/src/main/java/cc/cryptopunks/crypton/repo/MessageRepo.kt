@@ -13,7 +13,7 @@ internal class MessageRepo(
     private val dao: MessageData.Dao
 ) : Message.Repo {
 
-    override fun insertOrUpdate(chatId: Long, vararg message: Message) =
+    override suspend fun insertOrUpdate(chatId: Long, vararg message: Message) =
         dao.insertOrUpdate(message.map { it.messageData(chatId) })
 
     override fun flowLatest(chatId: Long): Flow<Message> =

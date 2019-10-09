@@ -18,6 +18,9 @@ internal data class UserData(
         @Insert(onConflict = OnConflictStrategy.IGNORE)
         suspend fun insertIfNeeded(list: List<UserData>)
 
+        @Query("select * from User where id = :id")
+        suspend fun getById(id: String): UserData
+
         @Query(
             """
             select * from user 
@@ -26,9 +29,6 @@ internal data class UserData(
             """
         )
         fun flowListByChatId(chatId: Long): Flow<List<UserData>>
-
-        @Query("select * from User where id = :id")
-        fun getById(id: String): UserData
     }
 }
 

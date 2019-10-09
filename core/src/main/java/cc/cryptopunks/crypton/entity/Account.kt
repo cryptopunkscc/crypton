@@ -46,11 +46,11 @@ data class Account constructor(
     }
 
     interface Repo {
-        fun contains(address: Address): Boolean
-        fun get(address: Address): Account
-        fun insert(account: Account): Account
-        fun update(account: Account)
-        fun delete(account: Account)
+        suspend fun contains(address: Address): Boolean
+        suspend fun get(address: Address): Account
+        suspend fun insert(account: Account): Account
+        suspend fun update(account: Account)
+        suspend fun delete(account: Account)
         suspend fun list(): List<Account>
         fun flowList(): Flow<List<Account>>
     }

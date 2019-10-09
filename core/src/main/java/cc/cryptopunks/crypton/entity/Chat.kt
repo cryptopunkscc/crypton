@@ -21,10 +21,10 @@ data class Chat(
 
     interface Repo {
         suspend fun get(id: Long): Chat
-        fun dataSourceFactory(): DataSource.Factory<Int, Chat>
         suspend fun insert(chat: Chat): Long
-        fun delete(chat: Chat)
-        fun deleteAll()
+        suspend fun delete(chat: Chat)
+        suspend fun deleteAll()
+        fun dataSourceFactory(): DataSource.Factory<Int, Chat>
     }
 
     companion object {

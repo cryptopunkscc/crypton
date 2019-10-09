@@ -8,19 +8,19 @@ internal class AccountRepo(
     private val dao: AccountData.Dao
 ) : Account.Repo {
 
-    override fun contains(address: Address): Boolean =
+    override suspend fun contains(address: Address): Boolean =
         dao.contains(address.id) != null
 
-    override fun get(address: Address): Account =
+    override suspend fun get(address: Address): Account =
         dao.get(address.id).toDomain()
 
-    override fun insert(account: Account): Account =
+    override suspend fun insert(account: Account): Account =
         account.apply { dao.insert(chatData()) }
 
-    override fun update(account: Account): Unit =
+    override suspend fun update(account: Account): Unit =
         dao.update(account.chatData())
 
-    override fun delete(account: Account): Unit =
+    override suspend fun delete(account: Account): Unit =
         dao.delete(account.chatData())
 
     override suspend fun list(): List<Account> =

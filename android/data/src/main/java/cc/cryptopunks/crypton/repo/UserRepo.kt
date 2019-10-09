@@ -17,9 +17,9 @@ internal class UserRepo(
     override suspend fun insertIfNeeded(list: List<User>) =
         dao.insertIfNeeded(list.map { it.userData() })
 
+    override suspend fun getById(id: String): User =
+        dao.getById(id).user()
+
     override fun flowListByChatId(chatId: Long): Flow<List<User>> =
         dao.flowListByChatId(chatId).map { it.map(UserData::user) }
-
-    override fun getById(id: String): User =
-        dao.getById(id).user()
 }

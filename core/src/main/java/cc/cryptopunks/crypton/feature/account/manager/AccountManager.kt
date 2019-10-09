@@ -21,7 +21,7 @@ data class AccountManager @Inject constructor(
 
     fun setStatus(status: Account.Status): AccountManager = reduce { copy(status = status) }
 
-    fun load(id: Address): Account = reduce { accountRepo.get(id) }.get()
+    suspend fun load(id: Address): Account = accountRepo.get(id).also { set(it) }
 
     fun register(): Unit = client.create()
 
@@ -29,16 +29,16 @@ data class AccountManager @Inject constructor(
 
     fun disconnect(): Unit = client.disconnect()
 
-    fun insert(): Account = accountRepo.insert(get()).also { set(it) }
+    suspend fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 
-    fun update(): Unit = accountRepo.update(get())
+    suspend fun update(): Unit = accountRepo.update(get())
 
-    fun unregister() {
+    suspend fun unregister() {
         client.remove()
         delete()
     }
 
-    fun delete() {
+    suspend fun delete() {
         clear()
         accountRepo.delete(get())
     }
