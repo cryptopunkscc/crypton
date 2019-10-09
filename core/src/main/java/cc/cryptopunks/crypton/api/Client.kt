@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.api
 
-import android.util.Log
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.util.CacheFlow
 import cc.cryptopunks.crypton.util.createDummyClass
@@ -80,7 +79,6 @@ interface Client:
             .apply { send(value) }
 
         private fun send(client: Client) = GlobalScope.launch {
-            Log.d(Cache::class.java.name, "$client")
             channel.send(client)
             channel.send(null)
         }

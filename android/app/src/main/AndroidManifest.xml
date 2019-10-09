@@ -7,6 +7,10 @@
     ImpliedTouchscreenHardware,
     MissingLeanbackLauncher,
     MissingLeanbackSupport">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name="App"
         android:allowBackup="true"
@@ -32,8 +36,4 @@
             android:icon="@drawable/ic_https_black_24dp"
             android:label="@string/app_service_title" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
