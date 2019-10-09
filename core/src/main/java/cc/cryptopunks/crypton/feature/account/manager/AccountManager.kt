@@ -47,10 +47,13 @@ data class AccountManager @Inject constructor(
         clientManager - get()
     }
 
-    inline fun <R> run(block: AccountManager.() -> R): R =
-        try {
-            block()
-        } catch (throwable: Throwable) {
-            throw get().exception(throwable)
-        }
+    inline fun <R> run(
+        onAccountException: (Account) -> Any = {},
+        block: AccountManager.() -> R
+    ): R = try {
+        block()
+    } catch (throwable: Throwable) {
+        onAccountException(get())
+        throw get().exception(throwable)
+    }
 }

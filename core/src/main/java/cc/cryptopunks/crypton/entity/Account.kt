@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.entity
 
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 
 data class Account constructor(
@@ -30,7 +29,7 @@ data class Account constructor(
 
     @Suppress("NOTHING_TO_INLINE")
     inline fun exception(throwable: Throwable): Exception =
-        if (throwable is Exception && throwable.account == this) throwable
+        if (throwable is Exception) throwable
         else Exception(this, throwable)
 
     interface Api {
@@ -59,12 +58,4 @@ data class Account constructor(
     companion object {
         val Empty = Account()
     }
-}
-
-infix fun <T> Result<T>.onAccountException(handle: (Account) -> Any) {
-    exceptionOrNull()?.let { throwable ->
-        if (throwable is Account.Exception)
-            handle(throwable.account)
-    }
-    getOrThrow()
 }
