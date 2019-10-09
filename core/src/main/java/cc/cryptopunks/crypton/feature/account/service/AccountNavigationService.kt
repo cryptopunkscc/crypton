@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.account.viewmodel
+package cc.cryptopunks.crypton.feature.account.service
 
 import cc.cryptopunks.crypton.feature.Route
 import cc.cryptopunks.crypton.feature.account.selector.NewAccountConnectedSelector
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.drop
 import javax.inject.Inject
 
-class AccountNavigationViewModel @Inject constructor(
+class AccountNavigationService @Inject constructor(
     private val newAccountConnected: NewAccountConnectedSelector,
     private val navigate: Navigate
 ) {

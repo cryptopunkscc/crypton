@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
-import cc.cryptopunks.crypton.feature.account.viewmodel.AccountNavigationViewModel
+import cc.cryptopunks.crypton.feature.account.service.AccountNavigationService
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ class AccountNavigationFragment : AccountComponentFragment() {
 
     @Inject
     fun init(
-        navigationViewModel: AccountNavigationViewModel
+        navigationViewModel: AccountNavigationService
     ) {
         launch { navigationViewModel() }
     }

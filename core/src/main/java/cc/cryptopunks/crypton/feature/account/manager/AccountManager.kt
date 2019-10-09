@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.account.model
+package cc.cryptopunks.crypton.feature.account.manager
 
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
@@ -7,19 +7,19 @@ import cc.cryptopunks.crypton.util.ext.reduce
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
-data class AccountModel @Inject constructor(
+data class AccountManager @Inject constructor(
     private val accountRepo: Account.Repo,
-    private val clientRepo: Client.Repo
+    private val clientManager: Client.Manager
 ) :
     AtomicReference<Account>(Account.Empty) {
 
-    private val client: Client get() = clientRepo[get()]
+    private val client: Client get() = clientManager[get()]
 
-    val isInitialized: Boolean get() = get() in clientRepo
+    val isInitialized: Boolean get() = get() in clientManager
 
-    fun copy(account: Account): AccountModel = copy().apply { set(account) }
+    fun copy(account: Account): AccountManager = copy().apply { set(account) }
 
-    fun setStatus(status: Account.Status): AccountModel = reduce { copy(status = status) }
+    fun setStatus(status: Account.Status): AccountManager = reduce { copy(status = status) }
 
     fun load(id: Address): Account = reduce { accountRepo.get(id) }.get()
 
@@ -44,10 +44,10 @@ data class AccountModel @Inject constructor(
     }
 
     fun clear() {
-        clientRepo - get()
+        clientManager - get()
     }
 
-    inline fun <R> run(block: AccountModel.() -> R): R =
+    inline fun <R> run(block: AccountManager.() -> R): R =
         try {
             block()
         } catch (throwable: Throwable) {

@@ -41,7 +41,7 @@ class AccountViewModel @Inject constructor(
     suspend operator fun invoke() = coroutineScope {
         launch {
             onClick.asFlow().filter { it > 0 }.collect {
-                errorMessage.value = ""
+                errorMessage("")
             }
         }
         launch {

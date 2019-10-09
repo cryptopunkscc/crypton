@@ -4,8 +4,8 @@ import android.os.Bundle
 import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.AppComponent
 import cc.cryptopunks.crypton.component.DaggerAppComponent
-import cc.cryptopunks.crypton.feature.main.model.MainNavigationModel
-import cc.cryptopunks.crypton.model.ToggleIndicatorServiceModel
+import cc.cryptopunks.crypton.feature.main.service.MainNavigationService
+import cc.cryptopunks.crypton.service.ToggleIndicatorService
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,10 +26,10 @@ class MainFragment : CoreFragment() {
 
     @Inject
     fun init(
-        mainNavigationModel: MainNavigationModel,
-        toggleIndicatorServiceModel: ToggleIndicatorServiceModel
+        mainNavigationService: MainNavigationService,
+        toggleIndicatorService: ToggleIndicatorService
     ) {
-        launch { mainNavigationModel() }
-        launch { toggleIndicatorServiceModel() }
+        launch { mainNavigationService() }
+        launch { toggleIndicatorService() }
     }
 }

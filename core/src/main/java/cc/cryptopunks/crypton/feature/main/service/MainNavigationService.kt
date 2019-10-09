@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.main.model
+package cc.cryptopunks.crypton.feature.main.service
 
 import cc.cryptopunks.crypton.feature.Route
 import cc.cryptopunks.crypton.feature.account.selector.HasAccountsSelector
@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.util.Navigate
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class MainNavigationModel @Inject constructor(
+class MainNavigationService @Inject constructor(
     private val hasAccounts: HasAccountsSelector,
     private val navigate: Navigate
 ) {

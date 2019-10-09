@@ -1,12 +1,10 @@
-package cc.cryptopunks.crypton.model
+package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.feature.account.selector.HasAccountsSelector
-import cc.cryptopunks.crypton.service.StartIndicatorService
-import cc.cryptopunks.crypton.service.StopIndicatorService
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class ToggleIndicatorServiceModel @Inject constructor(
+class ToggleIndicatorService @Inject constructor(
     private val hasAccounts: HasAccountsSelector,
     private val startIndicatorService: StartIndicatorService,
     private val stopIndicatorService: StopIndicatorService

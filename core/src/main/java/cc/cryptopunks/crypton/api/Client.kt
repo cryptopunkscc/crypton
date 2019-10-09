@@ -86,7 +86,7 @@ interface Client:
         }
     }
 
-    class Repo(
+    class Manager(
         private val createClient: Factory,
         private val clientCache: Cache
     ) {

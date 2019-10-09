@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.adapter.AccountListAdapter
 import cc.cryptopunks.crypton.adapter.bind
 import cc.cryptopunks.crypton.feature.account.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.feature.account.viewmodel.AccountListViewModel
-import cc.cryptopunks.crypton.util.model.OptionItemNavigationModel
+import cc.cryptopunks.crypton.util.service.OptionItemNavigationService
 import kotlinx.android.synthetic.main.account_list.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class AccountListFragment : AccountComponentFragment() {
 
     @Inject
     fun init(
-        navigationModel: OptionItemNavigationModel,
+        navigationService: OptionItemNavigationService,
         accountListViewModel: AccountListViewModel,
         accountItemViewModelProvider: Provider<AccountItemViewModel>
     ) {
@@ -48,7 +48,7 @@ class AccountListFragment : AccountComponentFragment() {
             adapter = accountListAdapter
         }
 
-        launch { navigationModel() }
+        launch { navigationService() }
         launch { accountListAdapter.bind(accountListViewModel.accounts) }
     }
 

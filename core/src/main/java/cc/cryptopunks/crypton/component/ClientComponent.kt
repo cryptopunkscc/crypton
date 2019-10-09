@@ -6,5 +6,5 @@ import cc.cryptopunks.crypton.api.MapException
 interface ClientComponent {
     val mapException: MapException
     val currentClient: Client.Current
-    val clientRepo: Client.Repo
+    val clientManager: Client.Manager
 }
