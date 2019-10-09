@@ -5,7 +5,6 @@ import cc.cryptopunks.crypton.smack.integration.test
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -20,8 +19,7 @@ internal class MessagingTest : IntegrationTest() {
         val expected = "test"
 
         val actual = async {
-            client2.messagePublisher
-                .asFlow()
+            client2.messageBroadcast
                 .first()
                 .text
         }

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.feature.chat.presenter.ChatPresenter
 import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
-import cc.cryptopunks.crypton.util.reactivebindings.flowClicks
+import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.chat.*
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +35,6 @@ class ChatView @Inject constructor(
     }
 
     override val sendMessageFlow: Flow<String> = sendMessageButton
-        .flowClicks()
+        .clicks()
         .map { messageInput.text.toString() }
 }

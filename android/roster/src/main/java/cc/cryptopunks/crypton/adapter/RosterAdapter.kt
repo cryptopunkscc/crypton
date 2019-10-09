@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.invoke
 import cc.cryptopunks.crypton.util.letterColors
-import cc.cryptopunks.crypton.util.reactivebindings.flowClicks
+import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.roster_item.*
 import kotlinx.coroutines.*
@@ -65,7 +65,7 @@ class RosterAdapter @Inject constructor(
                 dateTextView.text = Date(message.timestamp).toString()
             }
 
-            override val onClick: Flow<Any> = containerView.flowClicks()
+            override val onClick: Flow<Any> = containerView.clicks()
 
             fun clear() {
                 setLetter('a')

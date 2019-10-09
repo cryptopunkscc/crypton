@@ -61,9 +61,10 @@ data class Account constructor(
     }
 }
 
-infix fun Job.onAccountException(handle: (Account) -> Any) = apply {
-    invokeOnCompletion { throwable ->
+infix fun <T> Result<T>.onAccountException(handle: (Account) -> Any) {
+    exceptionOrNull()?.let { throwable ->
         if (throwable is Account.Exception)
             handle(throwable.account)
     }
+    getOrThrow()
 }

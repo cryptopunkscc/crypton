@@ -19,7 +19,7 @@ android {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     api "androidx.paging:paging-common:$paging_version"
     api "com.google.dagger:dagger:$dagger_version"
 

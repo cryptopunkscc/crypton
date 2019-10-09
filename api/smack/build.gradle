@@ -31,7 +31,6 @@ dependencies {
     implementation "org.igniterealtime.smack:smack-experimental:4.4.0-alpha1"
     implementation "org.igniterealtime.smack:smack-omemo:4.4.0-alpha1"
     implementation "org.igniterealtime.smack:smack-omemo-signal:4.4.0-alpha1"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

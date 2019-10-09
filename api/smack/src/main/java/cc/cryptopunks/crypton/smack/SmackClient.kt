@@ -3,18 +3,16 @@ package cc.cryptopunks.crypton.smack
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.account.*
-import cc.cryptopunks.crypton.smack.chat.ChatMessagePublisher
+import cc.cryptopunks.crypton.smack.chat.ChatMessageBroadcast
 import cc.cryptopunks.crypton.smack.chat.SendChatMessage
 import cc.cryptopunks.crypton.smack.client.ConnectClient
 import cc.cryptopunks.crypton.smack.client.DisconnectClient
 import cc.cryptopunks.crypton.smack.presence.SendPresence
 import cc.cryptopunks.crypton.smack.roster.RosterEventPublisher
-import cc.cryptopunks.crypton.smack.roster.RosterRxAdapter
 import cc.cryptopunks.crypton.smack.user.AddContactUser
 import cc.cryptopunks.crypton.smack.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.user.UserInvite
 import cc.cryptopunks.crypton.smack.user.UserInvited
-import io.reactivex.disposables.CompositeDisposable
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
@@ -25,8 +23,6 @@ class SmackClient(
     override val address: Address,
     configuration: XMPPTCPConnectionConfiguration
 ) : Client {
-
-    private val disposable = CompositeDisposable()
 
     private val connection by lazy {
         XMPPTCPConnection(configuration)
@@ -47,11 +43,6 @@ class SmackClient(
     private val chatManager by lazy {
         ChatManager.getInstanceFor(connection)
     }
-
-    private val rxAdapter by lazy {
-        RosterRxAdapter()
-    }
-
 
     override val connect: Client.Connect by lazy {
         ConnectClient(connection = connection)
@@ -107,19 +98,14 @@ class SmackClient(
         SendChatMessage(connection = connection)
     }
 
-    override val messagePublisher: Message.Api.Publisher by lazy {
-        ChatMessagePublisher(
+    override val messageBroadcast: Message.Api.Broadcast by lazy {
+        ChatMessageBroadcast(
             chatManager = chatManager,
-            disposable = disposable,
             address = address
         )
     }
 
-    override val rosterEventPublisher: RosterEvent.Api.Publisher by lazy {
-        RosterEventPublisher(
-            disposable = CompositeDisposable(),
-            roster = roster,
-            adapter = rxAdapter
-        )
+    override val rosterEventPublisher: RosterEvent.Api.Broadcast by lazy {
+        RosterEventPublisher(roster = roster)
     }
 }

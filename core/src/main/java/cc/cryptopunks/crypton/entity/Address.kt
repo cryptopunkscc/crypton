@@ -4,10 +4,8 @@ data class Address(
     val local: String = "",
     val domain: String = ""
 ) : CharSequence by buildString({
-    if (local.isNotEmpty()) {
-        append(local)
-        append("@")
-    }
+    append(local)
+    append("@")
     append(domain)
 }) {
     val login get() = local

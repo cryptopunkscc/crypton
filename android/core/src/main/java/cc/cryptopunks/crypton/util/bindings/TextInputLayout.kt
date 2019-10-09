@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.util.reactivebindings
+package cc.cryptopunks.crypton.util.bindings
 
 import cc.cryptopunks.crypton.util.CacheFlow
 import cc.cryptopunks.crypton.util.Input

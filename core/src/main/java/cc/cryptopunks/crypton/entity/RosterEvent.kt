@@ -1,14 +1,13 @@
 package cc.cryptopunks.crypton.entity
 
-import cc.cryptopunks.crypton.util.RxPublisher
-
+import kotlinx.coroutines.flow.Flow
 
 sealed class RosterEvent {
 
     interface Api {
-        val rosterEventPublisher: Publisher
+        val rosterEventPublisher: Broadcast
 
-        interface Publisher : RxPublisher<RosterEvent>
+        interface Broadcast : Flow<RosterEvent>
     }
 
     data class ProcessSubscribe(

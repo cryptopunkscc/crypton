@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.paging.DataSource
-import cc.cryptopunks.crypton.util.RxPublisher
 import kotlinx.coroutines.flow.Flow
 
 typealias ApiMessage = Message
@@ -17,10 +16,10 @@ data class Message(
 
     interface Api {
         val sendMessage: Send
-        val messagePublisher: Publisher
+        val messageBroadcast: Broadcast
 
         interface Send : (Address, String) -> Unit
-        interface Publisher : RxPublisher<Message>
+        interface Broadcast : Flow<Message>
     }
 
     interface Repo {

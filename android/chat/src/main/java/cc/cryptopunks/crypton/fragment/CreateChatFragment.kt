@@ -12,7 +12,7 @@ import cc.cryptopunks.crypton.component.DaggerCreateChatComponent
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.feature.chat.presenter.CreateChatPresenter
 import cc.cryptopunks.crypton.util.invoke
-import cc.cryptopunks.crypton.util.reactivebindings.flowEditorActions
+import cc.cryptopunks.crypton.util.bindings.flowEditorActions
 import kotlinx.android.synthetic.main.create_chat.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow

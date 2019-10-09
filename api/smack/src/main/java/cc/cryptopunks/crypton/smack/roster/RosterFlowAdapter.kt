@@ -2,9 +2,9 @@ package cc.cryptopunks.crypton.smack.roster
 
 import cc.cryptopunks.crypton.entity.RosterEvent
 import cc.cryptopunks.crypton.smack.SmackJid
-import cc.cryptopunks.crypton.smack.resourceId
 import cc.cryptopunks.crypton.smack.presence
-import io.reactivex.processors.PublishProcessor
+import cc.cryptopunks.crypton.smack.resourceId
+import kotlinx.coroutines.channels.SendChannel
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smack.roster.PresenceEventListener
 import org.jivesoftware.smack.roster.Roster
@@ -13,25 +13,19 @@ import org.jivesoftware.smack.roster.SubscribeListener
 import org.jxmpp.jid.BareJid
 import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.Jid
-import org.reactivestreams.Processor
-import org.reactivestreams.Publisher
 
-class RosterRxAdapter private constructor(
-    private val processor: Processor<RosterEvent, RosterEvent>
+class RosterFlowAdapter(
+    private val channel: SendChannel<RosterEvent>
 ) :
-    Publisher<RosterEvent> by processor,
     RosterLoadedListener,
     PresenceEventListener,
     SubscribeListener {
-
-    constructor() : this(PublishProcessor.create())
-
 
     override fun processSubscribe(
         from: SmackJid,
         subscribeRequest: Presence
     ): SubscribeListener.SubscribeAnswer? {
-        processor.onNext(
+        channel.offer(
             RosterEvent.ProcessSubscribe(
                 from.resourceId(),
                 subscribeRequest.presence()
@@ -40,63 +34,70 @@ class RosterRxAdapter private constructor(
         return null
     }
 
-    override fun presenceAvailable(address: FullJid, availablePresence: Presence) =
-        processor.onNext(
+    override fun presenceAvailable(address: FullJid, availablePresence: Presence) {
+        channel.offer(
             RosterEvent.PresenceAvailable(
                 address.resourceId(),
                 availablePresence.presence()
             )
         )
 
+    }
 
-    override fun presenceUnavailable(address: FullJid, presence: Presence) =
-        processor.onNext(
+    override fun presenceUnavailable(address: FullJid, presence: Presence) {
+        channel.offer(
             RosterEvent.PresenceUnavailable(
                 address.resourceId(),
                 presence.presence()
             )
         )
 
+    }
 
-    override fun presenceSubscribed(address: BareJid, subscribedPresence: Presence) =
-        processor.onNext(
+    override fun presenceSubscribed(address: BareJid, subscribedPresence: Presence) {
+        channel.offer(
             RosterEvent.PresenceSubscribed(
                 address.resourceId(),
                 subscribedPresence.presence()
             )
         )
 
+    }
 
-    override fun presenceUnsubscribed(address: BareJid, unsubscribedPresence: Presence) =
-        processor.onNext(
+    override fun presenceUnsubscribed(address: BareJid, unsubscribedPresence: Presence) {
+        channel.offer(
             RosterEvent.PresenceUnsubscribed(
                 address.resourceId(),
                 unsubscribedPresence.presence()
             )
         )
 
+    }
 
-    override fun presenceError(address: Jid, errorPresence: Presence) =
-        processor.onNext(
+    override fun presenceError(address: Jid, errorPresence: Presence) {
+        channel.offer(
             RosterEvent.PresenceError(
                 address.resourceId(),
                 errorPresence.presence()
             )
         )
 
+    }
 
-    override fun onRosterLoaded(roster: Roster) =
-        processor.onNext(
+    override fun onRosterLoaded(roster: Roster) {
+        channel.offer(
             RosterEvent.RosterLoaded(
                 roster
             )
         )
 
+    }
 
-    override fun onRosterLoadingFailed(exception: Exception) =
-        processor.onNext(
+    override fun onRosterLoadingFailed(exception: Exception) {
+        channel.offer(
             RosterEvent.RosterLoadingFailed(
                 exception
             )
         )
+    }
 }

@@ -4,8 +4,9 @@ import cc.cryptopunks.crypton.entity.RosterEvent.PresenceSubscribed
 import cc.cryptopunks.crypton.entity.RosterEvent.ProcessSubscribe
 import cc.cryptopunks.crypton.smack.integration.IntegrationTest
 import cc.cryptopunks.crypton.smack.integration.test
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.reactive.openSubscription
+import kotlinx.coroutines.flow.produceIn
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -17,8 +18,8 @@ internal class UserTest : IntegrationTest() {
 
     @Test
     fun invoke() = test(timeout = 5000) {
-        val events1 = client1.rosterEventPublisher.openSubscription()
-        val events2 = client2.rosterEventPublisher.openSubscription()
+        val events1 = client1.rosterEventPublisher.produceIn(GlobalScope)
+        val events2 = client2.rosterEventPublisher.produceIn(GlobalScope)
 
         client1.invite(client2.address)
         events2.receiveFiltered { it is ProcessSubscribe }

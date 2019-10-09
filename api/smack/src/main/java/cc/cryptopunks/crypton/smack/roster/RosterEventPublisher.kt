@@ -1,33 +1,30 @@
 package cc.cryptopunks.crypton.smack.roster
 
 import cc.cryptopunks.crypton.entity.RosterEvent
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.internal.disposables.CancellableDisposable
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import org.jivesoftware.smack.roster.Roster
-import org.reactivestreams.Publisher
 
-internal class RosterEventPublisher(
-    disposable: CompositeDisposable,
-    roster: Roster,
-    adapter: RosterRxAdapter
-) :
-    RosterEvent.Api.Publisher,
-    Publisher<RosterEvent> by adapter {
+internal class RosterEventPublisher(roster: Roster) :
+    RosterEvent.Api.Broadcast,
+    Flow<RosterEvent> by roster.rosterEventFlow() {
 
     init {
-        roster.apply {
-            subscriptionMode = Roster.SubscriptionMode.reject_all
-            disposable.addAll(
-                CancellableDisposable {
-                    removeRosterLoadedListener(adapter)
-                    removePresenceEventListener(adapter)
-                    removeSubscribeListener(adapter)
-                }
-            )
+        roster.subscriptionMode = Roster.SubscriptionMode.reject_all
+    }
+}
 
-            addRosterLoadedListener(adapter)
-            addPresenceEventListener(adapter)
-            addSubscribeListener(adapter)
-        }
+private fun Roster.rosterEventFlow(): Flow<RosterEvent> = callbackFlow {
+    val adapter = RosterFlowAdapter(channel)
+
+    addRosterLoadedListener(adapter)
+    addPresenceEventListener(adapter)
+    addSubscribeListener(adapter)
+
+    awaitClose {
+        removeRosterLoadedListener(adapter)
+        removePresenceEventListener(adapter)
+        removeSubscribeListener(adapter)
     }
 }

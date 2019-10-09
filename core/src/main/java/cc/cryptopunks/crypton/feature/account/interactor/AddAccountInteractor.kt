@@ -14,11 +14,11 @@ class AddAccountInteractor @Inject constructor(
     deleteAccount: DeleteAccountInteractor
 ) : (Account) -> Job by { account ->
     scope.launch {
-        manager.copy().run {
+        manager.copy().runCatching {
             set(account)
             setStatus(Account.Status.Disconnected)
             insert()
-            connect(get()).join()
-        }
-    } onAccountException deleteAccount
+            connect.suspend(get())
+        } onAccountException deleteAccount
+    }
 }

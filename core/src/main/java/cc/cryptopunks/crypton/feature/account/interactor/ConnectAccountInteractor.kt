@@ -9,10 +9,15 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class ConnectAccountInteractor @Inject constructor(
-    scope: Scope.UseCase,
-    manager: AccountManager
-) : (Account) -> Job by { account ->
-    scope.launch {
+    private val scope: Scope.UseCase,
+    private val manager: AccountManager
+) : (Account) -> Job {
+
+    override fun invoke(account: Account): Job = scope.launch {
+        suspend(account)
+    }
+
+    internal suspend fun suspend(account: Account) {
         manager.copy().run {
             set(account)
             setStatus(Connecting)

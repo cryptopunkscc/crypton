@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.util.reactivebindings
+package cc.cryptopunks.crypton.util.bindings
 
 import android.view.KeyEvent
 import android.widget.TextView

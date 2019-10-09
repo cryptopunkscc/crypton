@@ -3,34 +3,34 @@ package cc.cryptopunks.crypton.smack.chat
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.smack.chatMessage
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.internal.disposables.CancellableDisposable
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener
 import org.jivesoftware.smack.chat2.OutgoingChatMessageListener
 import org.jxmpp.jid.impl.JidCreate
-import org.reactivestreams.Subscriber
 
-internal class ChatMessagePublisher(
-    private val chatManager: ChatManager,
-    private val address: Address,
-    disposable: CompositeDisposable
-) :
-    Message.Api.Publisher {
 
-    private val processor = PublishProcessor.create<Message>()
+internal class ChatMessageBroadcast(
+    chatManager: ChatManager,
+    address: Address
+) : Message.Api.Broadcast,
+    Flow<Message> by chatManager.chatMessageFlow(address)
 
-    private val incomingListener = IncomingChatMessageListener { _, message, _ ->
-        processor.onNext(
+private fun ChatManager.chatMessageFlow(
+    address: Address
+): Flow<Message> = callbackFlow {
+    val incomingListener = IncomingChatMessageListener { _, message, _ ->
+        channel.offer(
             chatMessage(
                 message = message
             )
         )
     }
 
-    private val outgoingListener = OutgoingChatMessageListener { _, message, _ ->
-        processor.onNext(
+    val outgoingListener = OutgoingChatMessageListener { _, message, _ ->
+        channel.offer(
             chatMessage(
                 message = message.apply {
                     from = JidCreate.from(address)
@@ -39,22 +39,11 @@ internal class ChatMessagePublisher(
         )
     }
 
-    init {
-        disposable.add(
-            CancellableDisposable {
-                chatManager.apply {
-                    removeIncomingListener(incomingListener)
-                    removeOutgoingListener(outgoingListener)
-                }
-            }
-        )
-        chatManager.apply {
-            addIncomingListener(incomingListener)
-            addOutgoingListener(outgoingListener)
-        }
-    }
+    addIncomingListener(incomingListener)
+    addOutgoingListener(outgoingListener)
 
-    override fun subscribe(subscriber: Subscriber<in Message>) {
-        processor.subscribe(subscriber)
+    awaitClose {
+        removeIncomingListener(incomingListener)
+        removeOutgoingListener(outgoingListener)
     }
 }
