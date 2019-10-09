@@ -15,11 +15,8 @@ data class Account constructor(
 
     enum class Status {
         Disconnected,
-        RequestConnect,
-        RequestDisconnect,
         Connecting,
         Connected,
-        Error;
     }
 
     data class Exception(
@@ -35,6 +32,19 @@ data class Account constructor(
     inline fun exception(throwable: Throwable): Exception =
         if (throwable is Exception && throwable.account == this) throwable
         else Exception(this, throwable)
+
+    interface Api {
+        val address: Address
+        val create: Create
+        val login: Login
+        val remove: Remove
+        val isAuthenticated: IsAuthenticated
+
+        interface Create: () -> Unit
+        interface Login: () -> Unit
+        interface Remove: () -> Unit
+        interface IsAuthenticated: () -> Boolean
+    }
 
     interface Repo {
         fun contains(address: Address): Boolean

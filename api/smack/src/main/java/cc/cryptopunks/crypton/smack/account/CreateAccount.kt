@@ -1,15 +1,15 @@
-package cc.cryptopunks.crypton.smack.client
+package cc.cryptopunks.crypton.smack.account
 
-import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.entity.Account
 import org.jivesoftware.smack.sasl.SASLErrorException
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jxmpp.jid.parts.Localpart
 
-class CreateClient(
+class CreateAccount(
     configuration: XMPPTCPConnectionConfiguration,
     accountManager: AccountManager
-) : Client.Create, () -> Unit by {
+) : Account.Api.Create, () -> Unit by {
     accountManager.createAccount(
         Localpart.from(configuration.username.toString()),
         configuration.password

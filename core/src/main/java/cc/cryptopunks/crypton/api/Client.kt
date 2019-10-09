@@ -15,26 +15,18 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 interface Client:
+    Account.Api,
     User.Api,
     Presence.Api,
     Message.Api,
     RosterEvent.Api {
 
     val isConnected: IsConnected
-    val address: Address
-    val create: Create
-    val remove: Remove
-    val login: Login
     val connect: Connect
     val disconnect: Disconnect
-    val isAuthenticated: IsAuthenticated
 
-    interface Create: () -> Unit
-    interface Remove: () -> Unit
-    interface Login: () -> Unit
     interface Connect: () -> Unit
     interface Disconnect: () -> Unit
-    interface IsAuthenticated: () -> Boolean
     interface IsConnected: () -> Boolean
 
     interface Factory : (Config) -> Client {

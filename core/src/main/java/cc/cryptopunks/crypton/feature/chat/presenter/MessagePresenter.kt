@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.feature.chat.presenter
 
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.util.Presenter
-import java.util.*
 import javax.inject.Inject
 
 data class MessagePresenter(
@@ -10,8 +9,6 @@ data class MessagePresenter(
 ) : Presenter<MessagePresenter.View> {
 
     val id get() = message.id
-    val text get() = message.text
-    val date get() = Date(message.timestamp)
 
     override suspend fun View.invoke() = run {
         setMessage(message.text)
