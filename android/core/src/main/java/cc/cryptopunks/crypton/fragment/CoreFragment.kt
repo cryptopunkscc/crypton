@@ -57,4 +57,11 @@ abstract class CoreFragment : CoroutineFragment() {
             coreActivity.supportActionBar?.setTitle(id)
         }
     }
+
+    fun restart() {
+        fragmentManager!!.beginTransaction()
+            .detach(this)
+            .attach(this)
+            .commit()
+    }
 }

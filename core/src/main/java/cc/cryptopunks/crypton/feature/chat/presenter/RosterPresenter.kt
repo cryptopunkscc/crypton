@@ -6,7 +6,9 @@ import cc.cryptopunks.crypton.feature.chat.selector.RosterSelector
 import cc.cryptopunks.crypton.util.Presenter
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RosterPresenter @Inject constructor(
     private val loadMessages: LoadMessagesInteractor,
     private val conversationFlow: RosterSelector,
