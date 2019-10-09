@@ -18,7 +18,7 @@ class AddAccountIntegrationTest : IntegrationTest() {
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val id = 1L
+            val id = address(1)
             val account = account(id)
             val expected = account.copy(
                 address = id,

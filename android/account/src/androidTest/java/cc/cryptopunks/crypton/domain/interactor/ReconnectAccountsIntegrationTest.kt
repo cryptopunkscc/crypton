@@ -28,8 +28,7 @@ class ReconnectAccountsIntegrationTest : IntegrationTest() {
             // given
             val expected = ids.map {
                 account(
-                    index = it.toLong(),
-                    withId = true
+                    address = address(it)
                 ).copy(
                     status = Connected
                 )

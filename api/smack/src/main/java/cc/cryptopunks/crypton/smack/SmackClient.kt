@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.chat.ChatMessagePublisher
 import cc.cryptopunks.crypton.smack.chat.SendChatMessage
+import cc.cryptopunks.crypton.smack.client.*
 import cc.cryptopunks.crypton.smack.presence.SendPresence
 import cc.cryptopunks.crypton.smack.roster.RosterEventPublisher
 import cc.cryptopunks.crypton.smack.roster.RosterRxAdapter
@@ -26,26 +27,30 @@ class SmackClient(
     private val disposable = CompositeDisposable()
 
     private val connection by lazy {
-        XMPPTCPConnection(configuration).apply {
-            connect()
-        }
+        XMPPTCPConnection(configuration)
     }
+
     private val accountManager by lazy {
         AccountManager.getInstance(connection).apply {
             sensitiveOperationOverInsecureConnection(true)
         }
     }
+
     private val roster by lazy {
         Roster.getInstanceFor(connection).apply {
             subscriptionMode = Roster.SubscriptionMode.accept_all
         }
     }
+
     private val chatManager by lazy {
         ChatManager.getInstanceFor(connection)
     }
+
     private val rxAdapter by lazy {
         RosterRxAdapter()
     }
+
+
     override val create: Client.Create by lazy {
         CreateClient(
             configuration = configuration,
@@ -70,6 +75,10 @@ class SmackClient(
 
     override val isAuthenticated: Client.IsAuthenticated by lazy {
         IsClientAuthenticated(connection = connection)
+    }
+
+    override val isConnected: Client.IsConnected by lazy {
+        IsClientConnected(connection = connection)
     }
 
     override val getContacts: User.Api.GetContacts by lazy {

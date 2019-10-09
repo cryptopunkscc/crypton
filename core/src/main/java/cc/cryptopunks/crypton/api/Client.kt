@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.api
 
+import android.util.Log
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.util.CacheFlow
 import cc.cryptopunks.crypton.util.createDummyClass
@@ -19,6 +20,7 @@ interface Client:
     Message.Api,
     RosterEvent.Api {
 
+    val isConnected: IsConnected
     val address: Address
     val create: Create
     val remove: Remove
@@ -33,6 +35,7 @@ interface Client:
     interface Connect: () -> Unit
     interface Disconnect: () -> Unit
     interface IsAuthenticated: () -> Boolean
+    interface IsConnected: () -> Boolean
 
     interface Factory : (Config) -> Client {
         data class Config(
@@ -60,7 +63,9 @@ interface Client:
         }
     }
 
-    class Cache(
+    class Current: CacheFlow<Client> by CacheFlow(Empty)
+
+    class Cache internal constructor(
         private val map: MutableMap<String, Client> = mutableMapOf()
     ) :
         MutableMap<String, Client> by map,
@@ -83,33 +88,34 @@ interface Client:
             .apply { send(value) }
 
         private fun send(client: Client) = GlobalScope.launch {
+            Log.d(Cache::class.java.name, "$client")
             channel.send(client)
             channel.send(null)
         }
     }
 
-    class Current: CacheFlow<Client> by CacheFlow(Empty)
-
     class Repo(
         private val createClient: Factory,
         private val clientCache: Cache
     ) {
-        operator fun get(account: Account): Client = account.run {
-            clientCache[address.id] ?: createClient(
-                Config(
-                    address = address,
-                    password = password
-                )
-            ).also {
-                clientCache[address.id] = it
+        operator fun get(account: Account): Client = synchronized(this) {
+            account.run {
+                clientCache[address.id] ?: createClient(
+                    Config(
+                        address = address,
+                        password = password
+                    )
+                )   .apply { connect() }
+                    .also { clientCache[address.id] = it }
             }
         }
 
-        operator fun contains(account: Account): Boolean =
+        operator fun contains(account: Account): Boolean = synchronized(this) {
             account.address.id in clientCache
+        }
 
 
-        operator fun minus(account: Account) {
+        operator fun minus(account: Account) = synchronized(this) {
             clientCache -= account.address.id
         }
     }

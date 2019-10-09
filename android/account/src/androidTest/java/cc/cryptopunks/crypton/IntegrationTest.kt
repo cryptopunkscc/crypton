@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton
 
-import androidx.test.core.app.ApplicationProvider
-import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.smack.integration.ApiIntegrationTest
 import org.junit.After
 import org.junit.Before
@@ -10,19 +10,14 @@ import java.util.concurrent.atomic.AtomicReference
 
 abstract class IntegrationTest : ApiIntegrationTest() {
 
-    init {
-        smackFactory
-    }
-
     private val componentRef = AtomicReference<IntegrationTestComponent>()
 
     internal val component: IntegrationTestComponent
         get() = componentRef.run {
-            get() ?: DaggerIntegrationTestComponent.builder()
-                .testModule(TestModule(ApplicationProvider.getApplicationContext()))
-                .build()
-                .also { set(it) }
+            get() ?: createComponent().also { set(it) }
         }
+
+    private fun createComponent(): IntegrationTestComponent = TODO()
 
     @Before
     override fun setUp() {
@@ -32,21 +27,20 @@ abstract class IntegrationTest : ApiIntegrationTest() {
     @After
     override fun tearDown() {
         super.tearDown()
-        component.database.clearAllTables()
+        component.clearDatabase()
         componentRef.set(null)
     }
 
-    fun account(index: Long, withId: Boolean = false) = createAccount(
-        config(index)
-    ).run {
-        if (!withId) this
-        else copy(address = index)
-    }
+    fun address(id: Int) = Address("$id@test.io")
+
+    fun account(address: Address): Account = createAccount(
+        config(address.local.toLong())
+    )
 
     fun Client.insertAccount(
         reduce: Account.() -> Account = { this }
-    ) = account(accountId).reduce().run {
-        copy(address = component.accountRepo.insert(this)!!)
+    ) = account(address).reduce().run {
+        copy(address = component.accountRepo.insert(this).address)
     }
 
 }

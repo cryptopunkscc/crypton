@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.entity.Account
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-class NewAccountConnected @Inject constructor(
+class NewAccountConnectedSelector @Inject constructor(
     private val repo: Account.Repo
 ) : () -> Flow<Account> {
 

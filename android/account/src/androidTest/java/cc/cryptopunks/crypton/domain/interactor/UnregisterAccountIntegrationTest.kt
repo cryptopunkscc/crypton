@@ -18,7 +18,7 @@ class UnregisterAccountIntegrationTest : IntegrationTest() {
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val account = account(1)
+            val account = account(address(1))
             val expected = null
             connectAccount(account).join()
 
@@ -32,7 +32,7 @@ class UnregisterAccountIntegrationTest : IntegrationTest() {
             )
 
             assertNull(
-                clientCache[account.address]
+                clientCache[account.address.id]
             )
         }
     }

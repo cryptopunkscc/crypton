@@ -13,23 +13,21 @@ data class AccountModel @Inject constructor(
 ) :
     AtomicReference<Account>(Account.Empty) {
 
-    val isInitialized get() = get() in clientRepo
+    private val client: Client get() = clientRepo[get()]
 
-    val client: Client get() = clientRepo[get()]
+    val isInitialized: Boolean get() = get() in clientRepo
 
-    fun copy(account: Account) = copy().apply { set(account) }
+    fun copy(account: Account): AccountModel = copy().apply { set(account) }
+
+    fun setStatus(status: Account.Status): AccountModel = reduce { copy(status = status) }
+
+    fun load(id: Address): Account = reduce { accountRepo.get(id) }.get()
 
     fun register(): Unit = client.create()
 
     fun login(): Unit = client.login()
 
     fun disconnect(): Unit = client.disconnect()
-
-    fun setStatus(status: Account.Status) {
-        reduce { copy(status = status) }
-    }
-
-    fun load(id: Address): Account = reduce { accountRepo.get(id) }.get()
 
     fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 

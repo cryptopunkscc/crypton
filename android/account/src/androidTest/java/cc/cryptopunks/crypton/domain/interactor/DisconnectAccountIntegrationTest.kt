@@ -20,7 +20,7 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val account = account(1, withId = true)
+            val account = account(address(1))
             val expected = account.copy(
                 status = Disconnected
             )
@@ -35,7 +35,7 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
             )
 
             assertNull(
-                clientCache[account.address]
+                clientCache[account.address.id]
             )
         }
     }

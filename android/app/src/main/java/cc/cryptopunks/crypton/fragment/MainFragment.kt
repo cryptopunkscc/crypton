@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
+import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.AppComponent
 import cc.cryptopunks.crypton.component.DaggerAppComponent
 import cc.cryptopunks.crypton.feature.main.model.MainNavigationModel
@@ -13,7 +14,8 @@ class MainFragment : CoreFragment() {
     private val component: AppComponent by lazy {
         DaggerAppComponent
             .builder()
-            .presentationComponent(presentationComponent)
+            .applicationComponent(applicationComponent)
+            .navigationComponent(coreActivity.navigationComponent)
             .build()
     }
 

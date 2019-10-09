@@ -11,13 +11,13 @@ object CreateChat {
 
     class Interactor @Inject constructor(
         scope: Scope.UseCase,
-        clientCache: Client.Cache,
+        currentClient: Client.Current,
         repo: Chat.Repo
     ) : (Data) -> Deferred<Chat> by { data ->
         scope.async {
             data.validate()
 
-            val client = clientCache.values.first() // TODO
+            val client = currentClient()
 //            val user = client.getUser() TODO
 
             val chat = Chat(

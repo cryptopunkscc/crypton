@@ -23,6 +23,7 @@ class IndicatorService :
             setupNotificationChannel()
             showAppServiceNotification()
             reconnectAccounts()
+            updateCurrentClientModel()
         }
     }
 

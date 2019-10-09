@@ -7,15 +7,19 @@ import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.feature.Route
 import cc.cryptopunks.crypton.module.ChatModule
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-class CreateChatComponent @Inject constructor(
+class ChatComponentFactory @Inject constructor(
     arguments: Bundle,
     private val component: PresentationComponent,
     private val chatRepo: Chat.Repo
 ) {
     private val route = Route.Chat(arguments.toMap())
-    private suspend fun getChat() = chatRepo.get(route.chatId)
+    private suspend fun getChat() = runBlocking(Dispatchers.IO) {
+        chatRepo.get(route.chatId)
+    }
 
     suspend operator fun invoke() = DaggerChatComponent
         .builder()

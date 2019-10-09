@@ -1,10 +1,10 @@
-package cc.cryptopunks.crypton.smack
+package cc.cryptopunks.crypton.smack.client
 
 import cc.cryptopunks.crypton.api.Client
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 
-class DisconnectClient(
+class LoginClient(
     connection: XMPPTCPConnection
-) : Client.Disconnect, () -> Unit by {
-    connection.disconnect()
+) : Client.Login, () -> Unit by {
+    connection.login()
 }

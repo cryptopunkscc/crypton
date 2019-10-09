@@ -2,7 +2,8 @@ package cc.cryptopunks.crypton.domain.selector
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
-import cc.cryptopunks.crypton.feature.account.selector.NewAccountConnected
+import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.feature.account.selector.NewAccountConnectedSelector
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
@@ -19,12 +20,12 @@ class NewConnectedAccountsUnitTest: CoroutineScope by CoroutineScope(Dispatchers
 
     @RelaxedMockK
     lateinit var repo: Account.Repo
-    private lateinit var newAccountConnected: NewAccountConnected
+    private lateinit var newAccountConnected: NewAccountConnectedSelector
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        newAccountConnected = NewAccountConnected(repo)
+        newAccountConnected = NewAccountConnectedSelector(repo)
     }
 
     @Test
@@ -37,19 +38,19 @@ class NewConnectedAccountsUnitTest: CoroutineScope by CoroutineScope(Dispatchers
                 )
                 emit(
                     listOf(
-                        Account(address = 1, status = Connected),
-                        Account(address = 2)
+                        Account(address = address(1), status = Connected),
+                        Account(address = address(2))
                     )
                 )
                 emit(
                     listOf(
-                        Account(address = 1, status = Connected),
-                        Account(address = 2, status = Connected)
+                        Account(address = address(1), status = Connected),
+                        Account(address = address(2), status = Connected)
                     )
                 )
                 emit(
                     listOf(
-                        Account(address = 1)
+                        Account(address = address(1))
                     )
                 )
             }
@@ -64,4 +65,6 @@ class NewConnectedAccountsUnitTest: CoroutineScope by CoroutineScope(Dispatchers
             )
         }
     }
+
+    private fun address(id: Int) = Address("$id@test.io")
 }

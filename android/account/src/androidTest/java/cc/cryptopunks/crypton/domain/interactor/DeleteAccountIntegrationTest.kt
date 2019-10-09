@@ -16,7 +16,7 @@ class DeleteAccountIntegrationTest : IntegrationTest() {
     fun invoke(): Unit = with(component) {
         runBlocking {
             // given
-            val account = account(1)
+            val account = account(address(1))
             val expected = null
 
             // when

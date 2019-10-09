@@ -7,7 +7,8 @@ data class Account constructor(
     val address: Address = Address.Empty,
     val status: Status = Status.Disconnected,
     val password: String = "",
-    val updateAt: Long = System.currentTimeMillis()
+    val updateAt: Long = System.currentTimeMillis(),
+    val current: Boolean = true
 ) {
 
     val domain get() = address.domain
