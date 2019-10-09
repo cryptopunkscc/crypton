@@ -7,13 +7,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SignInViewModel @Inject constructor(
-    private val accountViewModel: AccountViewModel,
+    private val accountViewModel: AccountFromViewModel,
     private val addAccount: AddAccountInteractor
 ) {
 
@@ -29,7 +28,6 @@ class SignInViewModel @Inject constructor(
         launch { accountViewModel() }
         launch {
             accountViewModel.onClick
-                .asFlow()
                 .filter { it > 0 }
                 .map { accountViewModel.account }
                 .collect { addAccount(it) }

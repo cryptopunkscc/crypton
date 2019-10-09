@@ -18,7 +18,9 @@ interface CacheFlow<T> : Flow<T> {
         value = arg
     }
 
-    operator fun invoke(reduce: T.() -> T) = value.reduce().also { value = it }
+    operator fun invoke(reduce: T.() -> T) {
+        value = value.reduce()
+    }
 
     companion object {
         operator fun <T> invoke(

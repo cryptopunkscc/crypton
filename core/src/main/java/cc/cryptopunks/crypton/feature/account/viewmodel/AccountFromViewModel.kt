@@ -4,29 +4,27 @@ import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.Input
-import cc.cryptopunks.kache.core.Kache
-import cc.cryptopunks.kache.core.KacheManager
-import cc.cryptopunks.kache.core.lazy
+import cc.cryptopunks.crypton.util.cache
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccountViewModel @Inject constructor(
+class AccountFromViewModel @Inject constructor(
     private val broadcastError: BroadcastError
-) : Kache.Provider by KacheManager() {
+) {
 
-    val serviceName by lazy<Input>("serviceName")
-    val userName by lazy<Input>("userName")
-    val password by lazy<Input>("password")
-    val confirmPassword by lazy<Input>("confirmPassword")
-    val onClick by lazy("loginButton", initial = 0L)
-    val errorMessage by lazy("errorMessage", initial = "")
+    val serviceName = Input().cache()
+    val userName = Input().cache()
+    val password = Input().cache()
+    val confirmPassword = Input().cache()
+    val onClick = 0L.cache()
+    val errorMessage = "".cache()
+
     val address
         get() = Address(
             local = userName.value.text,
@@ -40,7 +38,7 @@ class AccountViewModel @Inject constructor(
 
     suspend operator fun invoke() = coroutineScope {
         launch {
-            onClick.asFlow().filter { it > 0 }.collect {
+            onClick.filter { it > 0 }.collect {
                 errorMessage("")
             }
         }

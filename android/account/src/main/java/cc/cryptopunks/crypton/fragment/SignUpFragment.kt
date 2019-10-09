@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.feature.account.viewmodel.AccountViewModel
+import cc.cryptopunks.crypton.feature.account.viewmodel.AccountFromViewModel
 import cc.cryptopunks.crypton.feature.account.viewmodel.SignUpViewModel
 import cc.cryptopunks.crypton.util.reactivebindings.bind
 import kotlinx.android.synthetic.main.sign_up.*
@@ -21,7 +21,7 @@ class SignUpFragment : AccountComponentFragment() {
 
     @Inject
     fun init(
-        accountViewModel: AccountViewModel,
+        accountViewModel: AccountFromViewModel,
         signUpViewModel: SignUpViewModel
     ) {
         launch { signUpViewModel() }

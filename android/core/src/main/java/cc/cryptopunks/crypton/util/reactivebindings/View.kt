@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton.util.reactivebindings
 
 import android.view.View
-import cc.cryptopunks.kache.core.Kache
-import cc.cryptopunks.kache.core.invoke
+import cc.cryptopunks.crypton.util.CacheFlow
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -26,7 +25,7 @@ internal class ViewClicks(
 
 fun View.clicks(): Publisher<Unit> = ViewClicks(this)
 
-suspend fun View.bind(property: Kache<Long>) = clicks().asFlow().collect {
+suspend fun View.bind(property: CacheFlow<Long>) = clicks().asFlow().collect {
     property { plus(1) }
 }
 
