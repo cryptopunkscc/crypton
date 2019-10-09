@@ -6,26 +6,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.reactive.asFlow
-import org.reactivestreams.Publisher
-import org.reactivestreams.Subscriber
 
-internal class ViewClicks(
-    private val view: View
-) : ViewPublisher<Unit>() {
-
-    override fun onSubscribed(subscriber: Subscriber<in Unit>) {
-        view.setOnClickListener { subscriber.onNext(Unit) }
-    }
-
-    override fun onCanceled() {
-        view.setOnClickListener(null)
-    }
-}
-
-fun View.clicks(): Publisher<Unit> = ViewClicks(this)
-
-suspend fun View.bind(property: CacheFlow<Long>) = clicks().asFlow().collect {
+suspend fun View.bind(property: CacheFlow<Long>) = flowClicks().collect {
     property { plus(1) }
 }
 

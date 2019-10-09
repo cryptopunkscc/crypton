@@ -5,28 +5,21 @@ import android.text.TextWatcher
 import android.widget.EditText
 import cc.cryptopunks.crypton.util.CacheFlow
 import cc.cryptopunks.crypton.util.Input
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
-import org.reactivestreams.Publisher
-import org.reactivestreams.Subscriber
 
 private class TextChanges(
-    private var editText: EditText
-) : ViewPublisher<CharSequence>(), TextWatcher {
-
-    override fun onSubscribed(subscriber: Subscriber<in CharSequence>) {
-        editText.addTextChangedListener(this)
-    }
-
-    override fun onCanceled() {
-        editText.removeTextChangedListener(this)
-    }
+    private val scope: ProducerScope<String>
+) :
+    TextWatcher {
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        subscriber?.onNext(s)
+        scope.channel.offer(s.toString())
     }
 
     override fun afterTextChanged(s: Editable?) {
@@ -38,8 +31,11 @@ private class TextChanges(
     }
 }
 
-fun EditText.textChangesPublisher(): Publisher<CharSequence> =
-    TextChanges(this)
+fun EditText.textChanges(): Flow<String> = callbackFlow {
+    val textChanges = TextChanges(this)
+    addTextChangedListener(textChanges)
+    awaitClose { removeTextChangedListener(textChanges) }
+}
 
 suspend fun EditText.bind(property: CacheFlow<Input>) {
     coroutineScope {
@@ -54,7 +50,7 @@ suspend fun EditText.bind(property: CacheFlow<Input>) {
             }
         }
         launch {
-            textChangesPublisher().asFlow().map { it.toString() }.collect { new ->
+            textChanges().collect { new ->
                 if (text.toString() != current) {
                     current = new
                     property {
