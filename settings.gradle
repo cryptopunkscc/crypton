@@ -7,4 +7,5 @@ include ':core',
         ':android:dashboard',
         ':android:indicator',
         ':android:account',
+        ':android:roster',
         ':android:chat'

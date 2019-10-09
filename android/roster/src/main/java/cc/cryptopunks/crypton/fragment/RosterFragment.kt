@@ -7,14 +7,22 @@ import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
 import cc.cryptopunks.crypton.adapter.RosterAdapter
+import cc.cryptopunks.crypton.component.DaggerRosterComponent
+import cc.cryptopunks.crypton.component.RosterComponent
 import cc.cryptopunks.crypton.util.invoke
 import kotlinx.android.synthetic.main.roster.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RosterFragment : RosterComponentFragment() {
+class RosterFragment : CoreFragment() {
 
     override val layoutRes: Int get() = R.layout.roster
+
+    private val component: RosterComponent by lazy {
+        DaggerRosterComponent.builder()
+            .presentationComponent(presentationComponent)
+            .build()
+    }
 
     @Inject
     lateinit var present: RosterPresenter
@@ -22,7 +30,7 @@ class RosterFragment : RosterComponentFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        rosterComponent.inject(this)
+        component.inject(this)
         launch { present() }
     }
 

@@ -33,6 +33,7 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':android:core')
+    implementation project(':android:roster')
     implementation project(':android:chat')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
