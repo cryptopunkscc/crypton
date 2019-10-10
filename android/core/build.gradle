@@ -34,6 +34,8 @@ dependencies {
     api 'android.arch.navigation:navigation-fragment-ktx:1.0.0'
     api 'android.arch.navigation:navigation-ui-ktx:1.0.0'
 
+    debugApi 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
+
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:$mockk_version"
 

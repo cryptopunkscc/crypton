@@ -22,7 +22,7 @@
             app:destination="@id/createChatFragment" />
         <action
             android:id="@id/navigateChat"
-            app:destination="@id/chatActivity"/>
+            app:destination="@id/chatFragment"/>
     </fragment>
     <include app:graph="@navigation/set_account" />
     <activity
@@ -47,11 +47,13 @@
         tools:layout="@layout/create_chat">
         <action
             android:id="@id/navigateChat"
-            app:destination="@id/chatActivity" />
+            app:destination="@id/chatFragment"
+            app:popUpTo="@+id/dashboardFragment" />
     </fragment>
-    <activity
-        android:id="@+id/chatActivity"
-        android:name="cc.cryptopunks.crypton.activity.ChatActivity"
-        android:label="ChatActivity"
-        tools:layout="@layout/chat"/>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="cc.cryptopunks.crypton.fragment.ChatFragment"
+        android:label="CreateChatFragment"
+        tools:layout="@layout/chat">
+    </fragment>
 </navigation>

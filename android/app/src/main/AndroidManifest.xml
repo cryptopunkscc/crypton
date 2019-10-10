@@ -29,7 +29,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.AccountManagementActivity" />
-        <activity android:name=".activity.ChatActivity" />
         <service
             android:name=".service.IndicatorService"
             android:exported="false"

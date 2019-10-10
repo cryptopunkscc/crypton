@@ -9,7 +9,7 @@ abstract class CoroutineFragment :
     CoroutineScope {
 
     private val modelContext = SupervisorJob() + Dispatchers.Main
-    private val viewContext = modelContext + Dispatchers.Main
+    private val viewContext = SupervisorJob() + Dispatchers.Main
     val scope get() = this
 
     override val coroutineContext: CoroutineContext
