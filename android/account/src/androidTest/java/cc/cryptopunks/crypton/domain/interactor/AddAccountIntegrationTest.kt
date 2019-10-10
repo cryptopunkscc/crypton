@@ -10,7 +10,7 @@ class AddAccountIntegrationTest : IntegrationTest() {
 
     override fun setUp(): Unit = with(client1) {
         connect()
-        create()
+        createAccount()
         disconnect()
     }
 

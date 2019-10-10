@@ -9,7 +9,7 @@ internal class BasicTest : IntegrationTest() {
     @Test
     operator fun invoke() {
         with(client1) {
-            create()
+            createAccount()
             disconnect()
             connect()
             login()

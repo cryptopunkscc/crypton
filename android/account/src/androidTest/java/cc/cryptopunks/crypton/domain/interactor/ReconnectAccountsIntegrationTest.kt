@@ -16,7 +16,7 @@ class ReconnectAccountsIntegrationTest : IntegrationTest() {
             with(it) {
                 insertAccount { copy(status = Connecting) }
                 connect()
-                create()
+                createAccount()
                 disconnect()
             }
         }

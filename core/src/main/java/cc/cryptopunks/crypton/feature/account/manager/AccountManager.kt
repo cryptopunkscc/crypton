@@ -23,7 +23,7 @@ data class AccountManager @Inject constructor(
 
     suspend fun load(id: Address): Account = accountRepo.get(id).also { set(it) }
 
-    fun register(): Unit = client.create()
+    fun register(): Unit = client.createAccount()
 
     fun login(): Unit = client.login()
 

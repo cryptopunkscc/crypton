@@ -26,7 +26,7 @@ abstract class ApiIntegrationTest :
         autoRemove = clients.isNotEmpty()
         clients.values.forEach {
             with(it) {
-                create()
+                createAccount()
                 login()
             }
         }

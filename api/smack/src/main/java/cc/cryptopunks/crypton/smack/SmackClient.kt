@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton.smack
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.account.*
-import cc.cryptopunks.crypton.smack.chat.ChatMessageBroadcast
-import cc.cryptopunks.crypton.smack.chat.SendChatMessage
+import cc.cryptopunks.crypton.smack.chat.MessageBroadcast
+import cc.cryptopunks.crypton.smack.chat.SendMessage
 import cc.cryptopunks.crypton.smack.client.ConnectClient
 import cc.cryptopunks.crypton.smack.client.DisconnectClient
 import cc.cryptopunks.crypton.smack.presence.SendPresence
@@ -56,7 +56,7 @@ class SmackClient(
         IsAccountConnected(connection = connection)
     }
 
-    override val create: Account.Api.Create by lazy {
+    override val createAccount: Account.Api.Create by lazy {
         CreateAccount(
             configuration = configuration,
             accountManager = accountManager
@@ -95,11 +95,11 @@ class SmackClient(
     }
 
     override val sendMessage: Message.Api.Send by lazy {
-        SendChatMessage(connection = connection)
+        SendMessage(connection = connection)
     }
 
     override val messageBroadcast: Message.Api.Broadcast by lazy {
-        ChatMessageBroadcast(
+        MessageBroadcast(
             chatManager = chatManager,
             address = address
         )

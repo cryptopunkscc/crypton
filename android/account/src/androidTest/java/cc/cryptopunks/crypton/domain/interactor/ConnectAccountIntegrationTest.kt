@@ -11,7 +11,7 @@ class ConnectAccountIntegrationTest : IntegrationTest() {
     override fun setUp(): Unit = with(client1) {
         insertAccount()
         connect()
-        create()
+        createAccount()
         disconnect()
     }
 

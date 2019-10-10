@@ -34,7 +34,7 @@ data class Account constructor(
 
     interface Api {
         val address: Address
-        val create: Create
+        val createAccount: Create
         val login: Login
         val remove: Remove
         val isAuthenticated: IsAuthenticated
