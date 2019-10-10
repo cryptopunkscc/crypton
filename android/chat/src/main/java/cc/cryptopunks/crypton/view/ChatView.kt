@@ -6,17 +6,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.feature.chat.presenter.ChatPresenter
 import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
+import cc.cryptopunks.crypton.util.Scope
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.chat.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ChatView @Inject constructor(
     override val containerView: View,
-    scope: CoroutineScope
+    scope: Scope.View
 ) :
     LayoutContainer,
     ChatPresenter.View {
@@ -30,7 +30,7 @@ class ChatView @Inject constructor(
         }
     }
 
-    override val setMessages: suspend (PagedList<MessagePresenter>) -> Unit = {
+    override val setMessages: suspend (PagedList<MessagePresenter>) -> Unit get() = {
         messageAdapter.submitList(it)
     }
 

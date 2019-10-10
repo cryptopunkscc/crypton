@@ -8,13 +8,18 @@ import cc.cryptopunks.crypton.component.NavigationComponent
 import cc.cryptopunks.crypton.core.R
 import cc.cryptopunks.crypton.fragment.ComponentHolderFragment
 import cc.cryptopunks.crypton.module.NavigationModule
+import cc.cryptopunks.crypton.util.Scope
 import cc.cryptopunks.crypton.util.ext.bind
 import cc.cryptopunks.crypton.util.ext.fragment
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 abstract class CoreActivity :
     AppCompatActivity(),
-    CoroutineScope by MainScope() {
+    CoroutineScope {
 
     val navController by lazy { findNavController(R.id.navHost) }
 
@@ -27,6 +32,10 @@ abstract class CoreActivity :
             NavigationModule()
         }
     }
+
+    val scope = Scope.View()
+
+    override val coroutineContext: CoroutineContext get() = scope.coroutineContext
 
     override fun onStart() {
         super.onStart()

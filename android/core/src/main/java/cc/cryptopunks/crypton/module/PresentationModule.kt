@@ -11,7 +11,6 @@ import cc.cryptopunks.crypton.component.NavigationComponent
 import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.fragment.CoreFragment
 import cc.cryptopunks.crypton.util.Scope
-import kotlinx.coroutines.CoroutineScope
 
 abstract class PresentationModule(
     activity: CoreActivity,
@@ -22,7 +21,8 @@ abstract class PresentationModule(
     ApplicationComponent by applicationComponent,
     NavigationComponent by activity.navigationComponent {
 
-    override val presentationScope = Scope.Presentation(broadcastError)
+    override val presentationScope: Scope.Presentation
+        get() = throw NotImplementedError("Scope.Presentation is not available from Activity")
 }
 
 class PresenationActivityModule(
@@ -32,7 +32,7 @@ class PresenationActivityModule(
     PresentationModule(activity, client) {
 
     override val arguments: Bundle get() = activity.intent.extras!!
-    override val viewScope: CoroutineScope = activity
+    override val viewScope: Scope.View get() = activity.scope
     override val view: View
         get() = activity.findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
 }
@@ -44,6 +44,7 @@ class PresentationFragmentModule(
     PresentationModule(fragment.coreActivity, client) {
 
     override val arguments: Bundle get() = fragment.arguments!!
-    override val viewScope: CoroutineScope get() = fragment
+    override val viewScope: Scope.View get() = fragment.viewScope
+    override val presentationScope: Scope.Presentation get() = fragment.presentationScope
     override val view: View get() = fragment.view!!
 }

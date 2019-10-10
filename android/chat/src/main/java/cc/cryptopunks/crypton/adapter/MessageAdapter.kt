@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.adapter
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -37,12 +38,12 @@ class MessageAdapter @Inject constructor(
         ) = areItemsTheSame(oldItem, newItem)
     }
 
-    inner class ViewHolder(
-        override val containerView: android.view.View
-    ) : RecyclerView.ViewHolder(containerView),
-        LayoutContainer,
-        CoroutineScope by scope + Job() {
+    inner class ViewHolder(view: View
+    ) : RecyclerView.ViewHolder(view),
+        LayoutContainer {
 
+        override val containerView: View get() = itemView
+        private val scope = this@MessageAdapter.scope + Job()
         private val view = object : MessagePresenter.View {
 
             override fun setAuthor(name: String) {
@@ -63,7 +64,7 @@ class MessageAdapter @Inject constructor(
             }
         }
 
-        fun bind(present: MessagePresenter?) {
+        fun bind(present: MessagePresenter?): Unit = scope.run {
             coroutineContext.cancelChildren()
             launch { present(view) ?: view.clear() }
         }

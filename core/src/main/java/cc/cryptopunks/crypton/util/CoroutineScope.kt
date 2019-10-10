@@ -5,7 +5,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 object Scope {
 
-    abstract class ErrorHandling : CoroutineScope {
+    abstract class ErrorHandling internal constructor(): CoroutineScope {
         abstract val broadcast: BroadcastError
 
         private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -33,13 +33,7 @@ object Scope {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 
-    class Presentation(
-        override val broadcast: BroadcastError
-    ) : ErrorHandling(),
-        CoroutineScope by MainScope()
+    class Presentation : CoroutineScope by MainScope()
 
-    class View(
-        override val broadcast: BroadcastError
-    ) : ErrorHandling(),
-        CoroutineScope by MainScope()
+    class View : CoroutineScope by MainScope()
 }

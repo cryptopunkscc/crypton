@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.adapter
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
+import cc.cryptopunks.crypton.util.Scope
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.invoke
 import cc.cryptopunks.crypton.util.letterColors
@@ -19,12 +21,12 @@ import java.util.*
 import javax.inject.Inject
 
 class RosterAdapter @Inject constructor(
-    private val scope: CoroutineScope
+    private val scope: Scope.View
 ) :
     PagedListAdapter<RosterItemPresenter, RosterAdapter.ViewHolder>(Diff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(parent.inflate(R.layout.roster_item))
+        ViewHolder(parent.inflate(R.layout.roster_item), scope)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(getItem(position))
@@ -41,12 +43,13 @@ class RosterAdapter @Inject constructor(
         ) = areItemsTheSame(oldItem, newItem)
     }
 
-    inner class ViewHolder(
-        override val containerView: android.view.View
-    ) : RecyclerView.ViewHolder(containerView),
-        LayoutContainer,
-        CoroutineScope by scope + Job() {
+    class ViewHolder(
+        view: View,
+        private val scope: Scope.View
+    ) : RecyclerView.ViewHolder(view),
+        LayoutContainer {
 
+        override val containerView: View get() = itemView
         private val view = object : RosterItemPresenter.View {
 
             override fun setTitle(title: String) {
@@ -73,9 +76,10 @@ class RosterAdapter @Inject constructor(
             }
         }
 
-        fun bind(present: RosterItemPresenter?) {
-            coroutineContext.cancelChildren()
-            launch { present(view) ?: view.clear() }
+        private var job: Job? = null
+        fun bind(present: RosterItemPresenter?): Unit = scope.run {
+            job?.cancel()
+            job = launch { present(view) ?: view.clear() }
         }
     }
 }

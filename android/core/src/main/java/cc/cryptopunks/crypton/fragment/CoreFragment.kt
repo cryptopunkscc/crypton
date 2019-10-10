@@ -24,13 +24,13 @@ abstract class CoreFragment : CoroutineFragment() {
 
     val presentationComponent by lazy {
         applicationComponent.currentClient().let { client ->
-            PresentationFragmentModule(this, client)
+            createComponent(client)
         }
     }
 
     val presentationComponentFlow by lazy {
         applicationComponent.currentClient.map { client ->
-            PresentationFragmentModule(this, client)
+            createComponent(client)
         }
     }
 
