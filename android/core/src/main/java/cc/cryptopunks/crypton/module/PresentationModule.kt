@@ -8,10 +8,10 @@ import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.ApplicationComponent
-import cc.cryptopunks.crypton.component.NavigationComponent
 import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.fragment.CoreFragment
 import cc.cryptopunks.crypton.model.Model
+import cc.cryptopunks.crypton.navigation.Navigation
 
 abstract class PresentationModule(
     activity: CoreActivity,
@@ -20,7 +20,7 @@ abstract class PresentationModule(
     PresentationComponent,
     Client by client,
     ApplicationComponent by applicationComponent,
-    NavigationComponent by activity.navigationComponent {
+    Navigation.Component by activity.navigationComponent {
 
     override val modelScope = Model.Scope()
     override val actorScope = Actor.Scope()

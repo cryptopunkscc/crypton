@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.activity
+package cc.cryptopunks.crypton.util
 
 import android.os.Bundle
 import androidx.core.os.bundleOf

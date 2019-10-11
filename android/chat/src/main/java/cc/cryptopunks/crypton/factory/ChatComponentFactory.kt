@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.factory
 
 import android.os.Bundle
-import cc.cryptopunks.crypton.activity.toMap
+import cc.cryptopunks.crypton.util.toMap
 import cc.cryptopunks.crypton.component.DaggerChatComponent
 import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.entity.Chat

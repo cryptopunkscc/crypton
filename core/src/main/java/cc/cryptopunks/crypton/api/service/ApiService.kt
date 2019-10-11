@@ -1,20 +1,21 @@
-package cc.cryptopunks.crypton.service
+package cc.cryptopunks.crypton.api.service
 
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.feature.chat.service.MessageReceiverService
+import cc.cryptopunks.crypton.service.Service
 import dagger.Component
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class ClientService @Inject constructor(
+class ApiService @Inject constructor(
     val messageReceiverService: MessageReceiverService
 ) : () -> Unit by {
     messageReceiverService()
 } {
 
     @Component
-    interface Factory : (Client) -> ClientService
+    interface Factory : (Client) -> ApiService
 
     class Manager @Inject constructor(
         private val scope: Service.Scope,

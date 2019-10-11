@@ -5,8 +5,8 @@ import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.component.ApplicationComponent
 import cc.cryptopunks.crypton.module.ApplicationModule
-import cc.cryptopunks.crypton.module.ClientModule
-import cc.cryptopunks.crypton.module.CoreModule
+import cc.cryptopunks.crypton.api.ClientModule
+import cc.cryptopunks.crypton.core.CoreModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import cc.cryptopunks.crypton.smack.initSmack

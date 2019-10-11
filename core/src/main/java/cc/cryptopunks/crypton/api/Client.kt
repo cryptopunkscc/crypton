@@ -104,6 +104,12 @@ interface Client: Api {
         }
     }
 
+    interface Component {
+        val mapException: MapException
+        val currentClient: Current
+        val clientManager: Manager
+    }
+
     class Exception(
         message: String? = null,
         cause: Throwable? = null
