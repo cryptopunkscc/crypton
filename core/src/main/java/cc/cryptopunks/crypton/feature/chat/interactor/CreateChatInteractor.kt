@@ -1,35 +1,38 @@
 package cc.cryptopunks.crypton.feature.chat.interactor
 
-import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.util.Scope
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 
-object CreateChat {
+class CreateChatInteractor @Inject constructor(
+    scope: Scope.Client,
+    repo: Chat.Repo,
+    address: Address,
+    createChat: Chat.Api.Create
+) : (CreateChatInteractor.Data) -> Deferred<Chat> by { data ->
+    scope.async {
+        data.run {
 
-    class Interactor @Inject constructor(
-        scope: Scope.UseCase,
-        currentClient: Client.Current,
-        repo: Chat.Repo
-    ) : (Data) -> Deferred<Chat> by { data ->
-        scope.async {
-            data.validate()
-
-            val client = currentClient()
-//            val user = client.getUser() TODO
-
-            val chat = Chat(
-                title = data.title,
-                address = client.address
+            validate()
+            Chat(
+                title = title,
+                users = users + User(address)
             )
+        }.run {
 
-            val chatId = repo.insert(chat)
+            if (!isDirect)
+                createChat(this) else
+                copy(address = data.users.first().address)
 
-            chat.copy(id = chatId)
+        }.let { chat ->
+
+            repo.insertIfNeeded(chat) ?: chat
         }
     }
+} {
 
     data class Data(
         val title: String,

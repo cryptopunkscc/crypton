@@ -1,7 +1,7 @@
-package cc.cryptopunks.crypton.smack
+package cc.cryptopunks.crypton.smack.util
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.smack.account.getErrorMessage
+import cc.cryptopunks.crypton.smack.api.account.getErrorMessage
 import org.jivesoftware.smack.sasl.SASLErrorException
 import org.jxmpp.stringprep.XmppStringprepException
 

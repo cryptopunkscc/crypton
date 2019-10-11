@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack
+package cc.cryptopunks.crypton.smack.util
 
 import org.jivesoftware.smack.packet.Presence
 import org.jxmpp.jid.Jid

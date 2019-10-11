@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.api
 
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.util.CacheFlow
+import cc.cryptopunks.crypton.util.Scope
 import cc.cryptopunks.crypton.util.createDummyClass
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -18,8 +19,10 @@ interface Client:
     User.Api,
     Presence.Api,
     Message.Api,
+    Chat.Api,
     RosterEvent.Api {
 
+    val clientScope: Scope.Client
     val isConnected: IsConnected
     val connect: Connect
     val disconnect: Disconnect
@@ -87,7 +90,8 @@ interface Client:
     class Manager(
         private val createClient: Factory,
         private val clientCache: Cache
-    ) {
+    ): Flow<Client> by clientCache {
+
         operator fun get(account: Account): Client = synchronized(this) {
             account.run {
                 clientCache[address.id] ?: createClient(
@@ -113,7 +117,10 @@ interface Client:
     class Exception(
         message: String? = null,
         cause: Throwable? = null
-    ) : kotlin.Exception(message, cause)
+    ) : kotlin.Exception(message, cause) {
+
+        interface Output : Flow<Exception>
+    }
 
     class Empty(override val address: Address) : Client by Empty
 

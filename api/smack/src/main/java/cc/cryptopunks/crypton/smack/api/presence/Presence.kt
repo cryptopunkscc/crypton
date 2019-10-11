@@ -1,7 +1,7 @@
-package cc.cryptopunks.crypton.smack.presence
+package cc.cryptopunks.crypton.smack.api.presence
 
 import cc.cryptopunks.crypton.entity.Presence
-import cc.cryptopunks.crypton.smack.SmackPresence
+import cc.cryptopunks.crypton.smack.util.SmackPresence
 import org.jivesoftware.smack.XMPPConnection
 
 class SendPresence(

@@ -6,8 +6,12 @@ data class Chat(
     val id: Long = 0,
     val title: String = "",
     val address: Address = Address.Empty,
+    val resource: Resource = Resource.Empty,
     val users: List<User> = emptyList()
 ) {
+
+    val isDirect get() = users.size == 2
+    val accountUser get() = users.last()
 
     data class Exception(
         val conversations: List<Chat>,
@@ -19,9 +23,16 @@ data class Chat(
         ) : this(listOf(chat), cause)
     }
 
+    interface Api {
+        val createChat: Create
+        interface Create: (Chat) -> Chat
+    }
+
     interface Repo {
         suspend fun get(id: Long): Chat
-        suspend fun insert(chat: Chat): Long
+        suspend fun get(address: Address): Chat?
+        suspend fun insert(chat: Chat): Chat
+        suspend fun insertIfNeeded(chat: Chat): Chat?
         suspend fun delete(chat: Chat)
         suspend fun deleteAll()
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>

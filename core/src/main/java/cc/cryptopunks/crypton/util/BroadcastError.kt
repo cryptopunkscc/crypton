@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-class BroadcastError internal constructor(): (Throwable) -> Unit, Flow<Throwable> {
+class BroadcastError /*internal constructor()*/: (Throwable) -> Unit, Flow<Throwable> {
 
     private val channel = BroadcastChannel<Throwable?>(Channel.CONFLATED)
 

@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack.user
+package cc.cryptopunks.crypton.smack.api.user
 
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.User

@@ -1,14 +1,26 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.util.BroadcastError
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
+import org.jivesoftware.smackx.omemo.signal.SignalFileBasedOmemoStore
+import org.jivesoftware.smackx.omemo.signal.SignalOmemoService
+import java.io.File
 import java.net.InetAddress
 
+fun initSmack(omemoStoreFile: File) {
+    SignalOmemoService.acknowledgeLicense()
+    SignalOmemoService.setup()
+    SignalOmemoService.getInstance().apply {
+        omemoStoreBackend = SignalFileBasedOmemoStore(omemoStoreFile)
+    }
+}
 
 object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
 
     private var factoryConfig = Client.Factory.Config.Empty
+    private val broadcastError = BroadcastError() // TODO
 
     private val connectionConfig
         get() = XMPPTCPConnectionConfiguration.builder()
@@ -25,6 +37,7 @@ object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
         configuration = connectionConfig
             .setUsernameAndPassword(config.address.local, config.password)
             .setXmppDomain(config.address.domain)
-            .build()
+            .build(),
+        broadcastError = broadcastError
     )
 }

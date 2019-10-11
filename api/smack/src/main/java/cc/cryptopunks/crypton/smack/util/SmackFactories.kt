@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack
+package cc.cryptopunks.crypton.smack.util
 
 import cc.cryptopunks.crypton.entity.ApiMessage
 import cc.cryptopunks.crypton.entity.Presence

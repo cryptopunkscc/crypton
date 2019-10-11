@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack.roster
+package cc.cryptopunks.crypton.smack.api.roster
 
 import cc.cryptopunks.crypton.entity.RosterEvent
 import kotlinx.coroutines.channels.awaitClose

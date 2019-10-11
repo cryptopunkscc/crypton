@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.feature.chat.presenter
 
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.feature.Route
-import cc.cryptopunks.crypton.feature.chat.interactor.CreateChat
+import cc.cryptopunks.crypton.feature.chat.interactor.CreateChatInteractor
 import cc.cryptopunks.crypton.util.Navigate
 import cc.cryptopunks.crypton.util.Presenter
 import cc.cryptopunks.crypton.util.cache
@@ -14,13 +14,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CreateChatPresenter @Inject constructor(
-    private val createChat: CreateChat.Interactor,
+    private val createChat: CreateChatInteractor,
     private val navigate: Navigate
 ) : Presenter<CreateChatPresenter.View> {
 
     private val usersCache = emptyList<User>().cache()
 
-    private val data get() = CreateChat.Data(
+    private val data get() = CreateChatInteractor.Data(
         title = "test", //TODO
         users = usersCache.value
     )

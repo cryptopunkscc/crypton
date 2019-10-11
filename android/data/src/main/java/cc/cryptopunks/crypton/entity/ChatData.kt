@@ -25,11 +25,17 @@ internal data class ChatData(
         @Query("select * from chat where id = :id")
         fun get(id: Long): ChatData
 
+        @Query("select * from chat where address = :address")
+        fun get(address: AddressData): ChatData
+
         @Query("select * from chat")
         fun dataSourceFactory(): DataSource.Factory<Int, ChatData>
 
         @Insert
         fun insert(data: ChatData): Long
+
+        @Insert(onConflict = OnConflictStrategy.IGNORE)
+        fun insertIfNeeded(data: ChatData): Long?
 
         @Insert
         fun insert(chatList: List<ChatData>): List<Long>

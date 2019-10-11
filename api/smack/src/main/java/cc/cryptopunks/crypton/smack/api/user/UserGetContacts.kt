@@ -1,7 +1,7 @@
-package cc.cryptopunks.crypton.smack.user
+package cc.cryptopunks.crypton.smack.api.user
 
 import cc.cryptopunks.crypton.entity.User
-import cc.cryptopunks.crypton.smack.remoteId
+import cc.cryptopunks.crypton.smack.util.remoteId
 import org.jivesoftware.smack.roster.Roster
 
 class UserGetContacts(

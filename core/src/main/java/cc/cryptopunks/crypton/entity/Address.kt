@@ -8,7 +8,6 @@ data class Address(
     append("@")
     append(domain)
 }) {
-    val login get() = local
 
     val id by lazy { toString() }
 

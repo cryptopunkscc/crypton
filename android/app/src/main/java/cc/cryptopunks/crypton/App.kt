@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.module.ClientModule
 import cc.cryptopunks.crypton.module.CoreModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.smack.SmackClientFactory
+import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.ExecutorsModule
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
@@ -39,5 +40,14 @@ class App : CoreApplication() {
                 )
             )
         )
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        initSmack(getDatabasePath(OMEMO_STORE_NAME))
+    }
+
+    private companion object {
+        private const val OMEMO_STORE_NAME = "omemo_store"
     }
 }

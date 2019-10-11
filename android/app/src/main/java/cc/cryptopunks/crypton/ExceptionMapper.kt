@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.smack.MapClientException
+import cc.cryptopunks.crypton.smack.util.MapClientException
 
 object ExceptionMapper : (Throwable) -> (Throwable) by { throwable ->
     listOf(

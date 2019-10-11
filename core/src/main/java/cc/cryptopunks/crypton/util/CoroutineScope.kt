@@ -33,6 +33,18 @@ object Scope {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 
+    class Service(
+        override val broadcast: BroadcastError
+    ) : ErrorHandling() {
+        override val coroutineContext = SupervisorJob() + Dispatchers.IO
+    }
+
+    class Client (
+        override val broadcast: BroadcastError
+    ) : ErrorHandling() {
+        override val coroutineContext = SupervisorJob() + Dispatchers.IO
+    }
+
     class Presentation : CoroutineScope by MainScope()
 
     class View : CoroutineScope by MainScope()

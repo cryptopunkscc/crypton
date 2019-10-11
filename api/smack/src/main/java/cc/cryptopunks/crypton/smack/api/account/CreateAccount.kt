@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack.account
+package cc.cryptopunks.crypton.smack.api.account
 
 import cc.cryptopunks.crypton.entity.Account
 import org.jivesoftware.smack.sasl.SASLErrorException
