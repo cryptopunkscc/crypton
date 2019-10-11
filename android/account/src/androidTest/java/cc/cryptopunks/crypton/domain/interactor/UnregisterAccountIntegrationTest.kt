@@ -32,7 +32,7 @@ class UnregisterAccountIntegrationTest : IntegrationTest() {
             )
 
             assertNull(
-                clientCache[account.address.id]
+                clientManager[account]
             )
         }
     }

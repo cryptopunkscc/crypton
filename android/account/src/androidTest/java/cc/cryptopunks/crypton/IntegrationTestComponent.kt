@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.feature.account.interactor.*
 internal interface IntegrationTestComponent {
 
     val accountRepo: Account.Repo
-    val clientCache: Client.Cache
+    val clientManager: Client.Manager
 
     val addAccount: AddAccountInteractor
     val connectAccount: ConnectAccountInteractor

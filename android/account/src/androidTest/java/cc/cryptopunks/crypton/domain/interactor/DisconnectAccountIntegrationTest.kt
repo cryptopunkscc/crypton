@@ -35,7 +35,7 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
             )
 
             assertNull(
-                clientCache[account.address.id]
+                clientManager[account]
             )
         }
     }

@@ -19,9 +19,10 @@ class ApiService @Inject constructor(
 
     class Manager @Inject constructor(
         private val scope: Service.Scope,
-        private val clientManager: Client.Manager,
-        private val createClientService: Factory
+        private val clientManager: Client.Manager
     ) : () -> Job {
+
+        private val createClientService: Factory = TODO()
 
         override fun invoke() = scope.launch {
             clientManager.collect { createClientService(it) }
