@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.activity.CoreActivity
+import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.ApplicationComponent
 import cc.cryptopunks.crypton.component.NavigationComponent
 import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.fragment.CoreFragment
-import cc.cryptopunks.crypton.util.Scope
+import cc.cryptopunks.crypton.model.Model
 
 abstract class PresentationModule(
     activity: CoreActivity,
@@ -21,8 +22,8 @@ abstract class PresentationModule(
     ApplicationComponent by applicationComponent,
     NavigationComponent by activity.navigationComponent {
 
-    override val presentationScope: Scope.Presentation
-        get() = throw NotImplementedError("Scope.Presentation is not available from Activity")
+    override val modelScope = Model.Scope()
+    override val actorScope = Actor.Scope()
 }
 
 class PresenationActivityModule(
@@ -32,7 +33,6 @@ class PresenationActivityModule(
     PresentationModule(activity, client) {
 
     override val arguments: Bundle get() = activity.intent.extras!!
-    override val viewScope: Scope.View get() = activity.scope
     override val view: View
         get() = activity.findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
 }
@@ -44,7 +44,5 @@ class PresentationFragmentModule(
     PresentationModule(fragment.coreActivity, client) {
 
     override val arguments: Bundle get() = fragment.arguments!!
-    override val viewScope: Scope.View get() = fragment.viewScope
-    override val presentationScope: Scope.Presentation get() = fragment.presentationScope
     override val view: View get() = fragment.view!!
 }

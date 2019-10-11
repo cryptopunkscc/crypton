@@ -3,17 +3,17 @@ package cc.cryptopunks.crypton.fragment
 import android.view.View
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
+import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
-import cc.cryptopunks.crypton.util.Scope
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.roster.*
 import javax.inject.Inject
 
 class RosterView @Inject constructor(
     override var containerView: View,
-    scope: Scope.View
+    scope: Actor.Scope
 ) : RosterPresenter.View,
     LayoutContainer {
 

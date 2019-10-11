@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.util.Scope
+import cc.cryptopunks.crypton.model.Model
 
 interface PresentationComponent :
     Client,
@@ -10,5 +10,5 @@ interface PresentationComponent :
     NavigationComponent,
     ViewComponent {
 
-    val presentationScope: Scope.Presentation
+    val modelScope: Model.Scope
 }

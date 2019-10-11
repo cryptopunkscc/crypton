@@ -2,27 +2,17 @@ package cc.cryptopunks.crypton.api
 
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.util.CacheFlow
-import cc.cryptopunks.crypton.util.Scope
 import cc.cryptopunks.crypton.util.createDummyClass
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
 
-interface Client:
-    Account.Api,
-    User.Api,
-    Presence.Api,
-    Message.Api,
-    Chat.Api,
-    RosterEvent.Api {
+interface Client: Api {
 
-    val clientScope: Scope.Client
     val isConnected: IsConnected
     val connect: Connect
     val disconnect: Disconnect

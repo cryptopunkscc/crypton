@@ -1,14 +1,14 @@
 package cc.cryptopunks.crypton.feature.chat.interactor
 
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.User
-import cc.cryptopunks.crypton.util.Scope
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 
 class CreateChatInteractor @Inject constructor(
-    scope: Scope.Client,
+    scope: Api.Scope,
     repo: Chat.Repo,
     address: Address,
     createChat: Chat.Api.Create

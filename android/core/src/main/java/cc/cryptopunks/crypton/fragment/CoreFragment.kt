@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.activity.CoreActivity
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.module.PresentationFragmentModule
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 
 
@@ -33,6 +34,9 @@ abstract class CoreFragment : CoroutineFragment() {
             createComponent(client)
         }
     }
+
+    override val modelScope: CoroutineScope get() = presentationComponent.modelScope
+    override val actorScope: CoroutineScope get() = presentationComponent.actorScope
 
     private fun createComponent(client: Client) =
         PresentationFragmentModule(this, client)

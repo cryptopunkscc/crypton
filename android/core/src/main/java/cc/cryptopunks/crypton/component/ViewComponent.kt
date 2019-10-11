@@ -2,10 +2,10 @@ package cc.cryptopunks.crypton.component
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.util.Scope
+import cc.cryptopunks.crypton.actor.Actor
 
 interface ViewComponent {
     val arguments: Bundle
     val view: View
-    val viewScope: Scope.View
+    val actorScope: Actor.Scope
 }

@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.feature.chat.service.MessageReceiverService
-import cc.cryptopunks.crypton.util.Scope
 import dagger.Component
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -18,7 +17,7 @@ class ClientService @Inject constructor(
     interface Factory : (Client) -> ClientService
 
     class Manager @Inject constructor(
-        private val scope: Scope.UseCase,
+        private val scope: Service.Scope,
         private val clientManager: Client.Manager,
         private val createClientService: Factory
     ) : () -> Job {

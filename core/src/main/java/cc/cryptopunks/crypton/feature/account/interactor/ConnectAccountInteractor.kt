@@ -4,12 +4,12 @@ import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting
 import cc.cryptopunks.crypton.feature.account.manager.AccountManager
-import cc.cryptopunks.crypton.util.Scope
+import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class ConnectAccountInteractor @Inject constructor(
-    private val scope: Scope.UseCase,
+    private val scope: Service.Scope,
     private val manager: AccountManager
 ) : (Account) -> Job {
 

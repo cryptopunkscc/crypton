@@ -2,12 +2,12 @@ package cc.cryptopunks.crypton.feature.account.interactor
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.feature.account.manager.AccountManager
-import cc.cryptopunks.crypton.util.Scope
+import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class AddAccountInteractor @Inject constructor(
-    scope: Scope.UseCase,
+    scope: Service.Scope,
     manager: AccountManager,
     connect: ConnectAccountInteractor,
     deleteAccount: DeleteAccountInteractor

@@ -5,23 +5,24 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
-import cc.cryptopunks.crypton.util.Scope
+import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.invoke
 import cc.cryptopunks.crypton.util.letterColors
-import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.roster_item.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 class RosterAdapter @Inject constructor(
-    private val scope: Scope.View
+    private val scope: Actor.Scope
 ) :
     PagedListAdapter<RosterItemPresenter, RosterAdapter.ViewHolder>(Diff) {
 
@@ -45,7 +46,7 @@ class RosterAdapter @Inject constructor(
 
     class ViewHolder(
         view: View,
-        private val scope: Scope.View
+        private val scope: Actor.Scope
     ) : RecyclerView.ViewHolder(view),
         LayoutContainer {
 

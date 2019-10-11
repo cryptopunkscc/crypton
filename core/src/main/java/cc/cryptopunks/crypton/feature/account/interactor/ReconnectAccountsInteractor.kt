@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.feature.account.interactor
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.feature.account.manager.AccountManager
-import cc.cryptopunks.crypton.util.Scope
+import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -14,7 +14,7 @@ class ReconnectAccountsInteractor @Inject constructor(
     private val repo: Account.Repo,
     private val manager: AccountManager,
     private val connectAccount: ConnectAccountInteractor,
-    private val scope: Scope.UseCase
+    private val scope: Service.Scope
 ) : () -> Job {
 
     override fun invoke() = scope.launch {

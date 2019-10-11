@@ -1,22 +1,22 @@
 package cc.cryptopunks.crypton.smack.module
 
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
-import cc.cryptopunks.crypton.smack.component.SmackComponent
 import cc.cryptopunks.crypton.smack.api.account.*
 import cc.cryptopunks.crypton.smack.api.chat.MessageBroadcast
 import cc.cryptopunks.crypton.smack.api.chat.SendMessage
 import cc.cryptopunks.crypton.smack.api.client.ConnectClient
 import cc.cryptopunks.crypton.smack.api.client.DisconnectClient
-import cc.cryptopunks.crypton.smack.component.ApiComponent
 import cc.cryptopunks.crypton.smack.api.presence.SendPresence
 import cc.cryptopunks.crypton.smack.api.roster.RosterEventPublisher
 import cc.cryptopunks.crypton.smack.api.user.AddContactUser
 import cc.cryptopunks.crypton.smack.api.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.api.user.UserInvite
 import cc.cryptopunks.crypton.smack.api.user.UserInvited
+import cc.cryptopunks.crypton.smack.component.ApiComponent
+import cc.cryptopunks.crypton.smack.component.SmackComponent
 import cc.cryptopunks.crypton.util.BroadcastError
-import cc.cryptopunks.crypton.util.Scope
 
 internal class ApiModule(
     override val address: Address,
@@ -25,8 +25,8 @@ internal class ApiModule(
 ) : SmackComponent by smackComponent,
     ApiComponent {
 
-    override val clientScope: Scope.Client by lazy {
-        Scope.Client(broadcastError)
+    override val apiScope: Api.Scope by lazy {
+        Api.Scope(broadcastError)
     }
 
     override val connect: Client.Connect by lazy {
