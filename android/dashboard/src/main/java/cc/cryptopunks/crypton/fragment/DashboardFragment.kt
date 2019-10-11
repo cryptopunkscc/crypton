@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.component.DaggerDashboardComponent
 import cc.cryptopunks.crypton.component.DashboardComponent
 import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.feature.dashboard.viewmodel.DashboardViewModel
-import cc.cryptopunks.crypton.util.service.OptionItemNavigationService
+import cc.cryptopunks.crypton.navigation.service.OptionItemNavigationService
 import kotlinx.android.synthetic.main.dashboard.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject

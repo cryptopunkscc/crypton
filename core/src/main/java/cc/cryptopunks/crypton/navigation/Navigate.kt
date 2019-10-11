@@ -1,6 +1,5 @@
-package cc.cryptopunks.crypton.util
+package cc.cryptopunks.crypton.navigation
 
-import cc.cryptopunks.crypton.feature.Route
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi

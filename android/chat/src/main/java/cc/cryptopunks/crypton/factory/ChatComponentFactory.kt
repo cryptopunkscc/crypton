@@ -5,8 +5,8 @@ import cc.cryptopunks.crypton.activity.toMap
 import cc.cryptopunks.crypton.component.DaggerChatComponent
 import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.feature.Route
 import cc.cryptopunks.crypton.module.ChatModule
+import cc.cryptopunks.crypton.navigation.Route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject

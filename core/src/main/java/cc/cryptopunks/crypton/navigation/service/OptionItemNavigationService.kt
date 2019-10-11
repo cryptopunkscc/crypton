@@ -1,8 +1,8 @@
-package cc.cryptopunks.crypton.util.service
+package cc.cryptopunks.crypton.navigation.service
 
-import cc.cryptopunks.crypton.feature.Route
-import cc.cryptopunks.crypton.util.Navigate
-import cc.cryptopunks.crypton.util.OptionItemSelected
+import cc.cryptopunks.crypton.actor.OptionItemSelected
+import cc.cryptopunks.crypton.navigation.Navigate
+import cc.cryptopunks.crypton.navigation.Route
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 

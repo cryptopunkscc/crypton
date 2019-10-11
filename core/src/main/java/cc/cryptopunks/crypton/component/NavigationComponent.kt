@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.util.Navigate
-import cc.cryptopunks.crypton.util.OptionItemSelected
+import cc.cryptopunks.crypton.actor.OptionItemSelected
+import cc.cryptopunks.crypton.navigation.Navigate
 
 interface NavigationComponent :
     OptionItemSelected.Component,

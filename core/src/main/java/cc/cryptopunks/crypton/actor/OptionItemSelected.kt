@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.util
+package cc.cryptopunks.crypton.actor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

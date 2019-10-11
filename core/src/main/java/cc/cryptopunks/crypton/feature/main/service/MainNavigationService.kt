@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.feature.main.service
 
-import cc.cryptopunks.crypton.feature.Route
 import cc.cryptopunks.crypton.feature.account.selector.HasAccountsSelector
-import cc.cryptopunks.crypton.util.Navigate
+import cc.cryptopunks.crypton.navigation.Navigate
+import cc.cryptopunks.crypton.navigation.Route
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 

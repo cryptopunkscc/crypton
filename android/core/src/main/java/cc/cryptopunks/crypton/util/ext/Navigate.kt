@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.util.ext
 
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import cc.cryptopunks.crypton.feature.Route
-import cc.cryptopunks.crypton.util.Navigate
+import cc.cryptopunks.crypton.navigation.Navigate
+import cc.cryptopunks.crypton.navigation.Route
 import kotlinx.coroutines.flow.collect
 
 suspend fun Navigate.Output.bind(navController: NavController) = collect {

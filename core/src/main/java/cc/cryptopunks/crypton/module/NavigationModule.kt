@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.module
 
+import cc.cryptopunks.crypton.actor.OptionItemSelected
 import cc.cryptopunks.crypton.component.NavigationComponent
-import cc.cryptopunks.crypton.util.Navigate
-import cc.cryptopunks.crypton.util.OptionItemSelected
+import cc.cryptopunks.crypton.navigation.Navigate
 
 class NavigationModule(
     private val optionItemSelectedComponent: OptionItemSelected.Component = OptionItemSelected.Module(),

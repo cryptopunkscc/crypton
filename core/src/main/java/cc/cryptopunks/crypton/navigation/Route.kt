@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature
+package cc.cryptopunks.crypton.navigation
 
 sealed class Route(
     open val data: MutableMap<String, Any?> = mutableMapOf()

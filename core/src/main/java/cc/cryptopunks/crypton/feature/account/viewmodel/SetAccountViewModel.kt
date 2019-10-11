@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.feature.account.viewmodel
 
-import cc.cryptopunks.crypton.feature.Route
-import cc.cryptopunks.crypton.util.Navigate
+import cc.cryptopunks.crypton.navigation.Navigate
+import cc.cryptopunks.crypton.navigation.Route
 import javax.inject.Inject
 
 class SetAccountViewModel @Inject constructor(
