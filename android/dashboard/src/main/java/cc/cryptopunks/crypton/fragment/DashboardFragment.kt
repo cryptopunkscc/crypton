@@ -5,9 +5,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Button
-import cc.cryptopunks.crypton.component.PresentationComponent
+import cc.cryptopunks.crypton.applicationComponent
+import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.feature.dashboard.presenter.DashboardPresenter
+import cc.cryptopunks.crypton.navigation.Navigation
+import cc.cryptopunks.crypton.presenter.ActorPresenterManager
 import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.coroutines.flow.Flow
@@ -15,35 +18,54 @@ import kotlinx.coroutines.flow.Flow
 
 class DashboardFragment :
     DashboardPresenter.View,
-    PresenterFragment<
-            DashboardPresenter.View,
-            DashboardPresenter,
-            DashboardFragment.Component>() {
+    CoreFragment() {
 
     override val layoutRes: Int get() = R.layout.dashboard
 
-    @dagger.Component(dependencies = [PresentationComponent::class])
+    @dagger.Component(dependencies = [
+        Core.Component::class,
+        Navigation.Component::class
+    ])
     interface Component : Presenter.Component<DashboardPresenter>
 
+    private val manager = ActorPresenterManager<DashboardPresenter.View, DashboardPresenter>()
 
-    override suspend fun onCreateComponent(
-        component: PresentationComponent
-    ): Component = DaggerDashboardFragment_Component
-        .builder()
-        .presentationComponent(component)
-        .build()
+    private val component: Component by lazy {
+        DaggerDashboardFragment_Component
+            .builder()
+            .component(applicationComponent)
+            .component(coreActivity.navigationComponent)
+            .build()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        manager.setPresenter(component.presenter)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        manager.setActor(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        manager.clearActor()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        manager.apply {
+            clearPresenter()
+            cancel()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-    override fun onCreateActor(view: View): DashboardPresenter.View = this
 
     override val accountManagementClick get() = coreActivity.navigationComponent.optionItemSelections
 

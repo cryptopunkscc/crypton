@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
-import cc.cryptopunks.crypton.presenter.invoke
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.chat_message_item.*
@@ -67,7 +66,7 @@ class MessageAdapter @Inject constructor(
 
         fun bind(present: MessagePresenter?): Unit = view.run {
             coroutineContext.cancelChildren()
-            launch { present(view) ?: clear() }
+            launch { present?.run { view() } ?: clear() }
         }
     }
 }
