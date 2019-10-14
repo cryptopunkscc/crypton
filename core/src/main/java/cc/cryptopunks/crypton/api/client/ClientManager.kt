@@ -10,24 +10,21 @@ internal class ClientManager(
     private val clientCache: ClientCache
 ): Client.Manager, Flow<Client> by clientCache {
 
-    override fun get(account: Account): Client = synchronized(this) {
-        account.run {
-            clientCache[address.id] ?: createClient(
-                Client.Config(
-                    address = address,
-                    password = password
-                )
-            )   .apply { connect() }
-                .also { clientCache[address.id] = it }
-        }
+    override suspend fun get(account: Account): Client = account.run {
+        clientCache.get(address.id) ?: createClient(
+            Client.Config(
+                address = address,
+                password = password
+            )
+        )   .apply { connect() }
+            .also { clientCache.put(address.id, it) }
     }
 
-    override fun contains(account: Account): Boolean = synchronized(this) {
-        account.address.id in clientCache
-    }
-
-
-    override fun minus(account: Account): Unit = synchronized(this) {
+    override suspend fun minus(account: Account) {
         clientCache.remove(account.address.id)?.run { apiScope.cancel() }
     }
+
+
+    override fun contains(account: Account): Boolean =
+        clientCache.contains(account.address.id)
 }

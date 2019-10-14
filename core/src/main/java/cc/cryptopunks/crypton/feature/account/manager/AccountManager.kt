@@ -13,9 +13,11 @@ data class AccountManager @Inject constructor(
 ) :
     AtomicReference<Account>(Account.Empty) {
 
-    private val client: Client get() = clientManager[get()]
+    private val account get() = get()
 
-    val isInitialized: Boolean get() = get() in clientManager
+    private suspend fun getClient(): Client = clientManager.get(account)
+
+    val isInitialized: Boolean get() = clientManager.contains(account)
 
     fun copy(account: Account): AccountManager = copy().apply { set(account) }
 
@@ -23,18 +25,18 @@ data class AccountManager @Inject constructor(
 
     suspend fun load(id: Address): Account = accountRepo.get(id).also { set(it) }
 
-    fun register(): Unit = client.createAccount()
+    suspend fun register(): Unit = getClient().createAccount()
 
-    fun login(): Unit = client.login()
+    suspend fun login(): Unit = getClient().login()
 
-    fun disconnect(): Unit = client.disconnect()
+    suspend fun disconnect(): Unit = getClient().disconnect()
 
     suspend fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 
     suspend fun update(): Unit = accountRepo.update(get())
 
     suspend fun unregister() {
-        client.remove()
+        getClient().remove()
         delete()
     }
 
@@ -43,8 +45,8 @@ data class AccountManager @Inject constructor(
         accountRepo.delete(get())
     }
 
-    fun clear() {
-        clientManager - get()
+    suspend fun clear() {
+        clientManager.minus(get())
     }
 
     inline fun <R> run(

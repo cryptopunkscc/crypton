@@ -23,9 +23,9 @@ interface Client: Api {
     }
 
     interface Manager: Flow<Client> {
-        operator fun get(account: Account): Client
-        operator fun contains(account: Account): Boolean
-        operator fun minus(account: Account)
+        suspend fun get(account: Account): Client
+        suspend fun minus(account: Account)
+        fun contains(account: Account): Boolean
     }
 
     class Current: CacheFlow<Client> by CacheFlow(Empty)

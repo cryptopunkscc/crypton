@@ -16,7 +16,7 @@ class UpdateCurrentClientService @Inject constructor(
 ) : () -> Job by {
     scope.launch {
         currentAccountFlow()
-            .map { account -> clientManager[account] }
+            .map { account -> clientManager.get(account) }
             .collect(currentClient.set)
     }
 }
