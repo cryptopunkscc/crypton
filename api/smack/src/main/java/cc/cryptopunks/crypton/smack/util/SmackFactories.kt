@@ -1,20 +1,23 @@
 package cc.cryptopunks.crypton.smack.util
 
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.CryptonMessage
 import cc.cryptopunks.crypton.entity.Presence
-import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Resource
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.delay.packet.DelayInformation
 import org.jivesoftware.smackx.sid.element.StanzaIdElement
+import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.impl.JidCreate
 import java.util.*
 
 
 internal fun Message.toCryptonMessage(
+    chatId: EntityBareJid,
     delayInformation: DelayInformation = DelayInformation(Date())
 ) = CryptonMessage(
     id = extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: stanzaId,
+    chatAddress = chatId.remoteId(),
     text = body,
     from = from.resourceId(),
     to = to.resourceId(),

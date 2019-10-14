@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Entity(
     tableName = "message",
-    indices = [Index("to")],
+    indices = [Index("chatId")],
     foreignKeys = [
         ForeignKey(
             entity = ChatData::class,
             parentColumns = ["id"],
-            childColumns = ["to"],
+            childColumns = ["chatId"],
             onDelete = ForeignKey.CASCADE
         )
     ]
@@ -21,8 +21,9 @@ internal data class MessageData(
     val stanzaId: String = "",
     val text: String = "",
     val timestamp: Long = 0,
-    val from: AddressData = "",
-    val to: AddressData = ""
+    val chatId: AddressData = EmptyAddressData,
+    val from: AddressData = EmptyAddressData,
+    val to: AddressData = EmptyAddressData
 ) {
 
     @androidx.room.Dao
@@ -44,6 +45,7 @@ internal data class MessageData(
 
 internal fun Message.messageData() = MessageData(
     id = id,
+    chatId = chatAddress.id,
     stanzaId = stanzaId,
     timestamp = timestamp,
     text = text,
@@ -56,6 +58,7 @@ internal fun MessageData.message() = Message(
     stanzaId = stanzaId,
     to = Resource.from(to),
     from = Resource.from(from),
+    chatAddress = Address.from(chatId),
     text = text,
     timestamp = timestamp
 )

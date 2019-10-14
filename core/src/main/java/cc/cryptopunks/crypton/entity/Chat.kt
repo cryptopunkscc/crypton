@@ -29,7 +29,7 @@ data class Chat(
     }
 
     interface Repo {
-        suspend fun get(address: Address): Chat?
+        suspend fun get(address: Address): Chat
         suspend fun insert(chat: Chat)
         suspend fun insertIfNeeded(chat: Chat)
         suspend fun delete(chat: Chat)

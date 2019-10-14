@@ -22,17 +22,17 @@ internal class MessageBroadcast(
 private fun ChatManager.chatMessageFlow(
     address: Address
 ): Flow<Message> = callbackFlow {
-    val incomingListener = IncomingChatMessageListener { _, message, chat: Chat ->
+    val incomingListener = IncomingChatMessageListener { from, message, chat: Chat ->
         channel.offer(
-            message.toCryptonMessage()
+            message.toCryptonMessage(chatId = chat.xmppAddressOfChatPartner)
         )
     }
 
-    val outgoingListener = OutgoingChatMessageListener { _, message, _ ->
+    val outgoingListener = OutgoingChatMessageListener { from, message, chat ->
         channel.offer(
             message.apply {
-                from = JidCreate.from(address)
-            }.toCryptonMessage()
+                this.from = JidCreate.from(address)
+            }.toCryptonMessage(chatId = chat.xmppAddressOfChatPartner)
         )
     }
 

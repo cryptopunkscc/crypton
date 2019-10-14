@@ -10,6 +10,7 @@ data class Message(
     val stanzaId: String = "",
     val text: String = "",
     val timestamp: Long = 0,
+    val chatAddress: Address = Address.Empty,
     val from: Resource = Resource.Empty,
     val to: Resource = Resource.Empty
 ) {

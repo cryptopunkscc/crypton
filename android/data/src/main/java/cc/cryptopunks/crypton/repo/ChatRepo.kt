@@ -9,8 +9,8 @@ internal class ChatRepo(
     private val userDao: UserData.Dao
 ) : Chat.Repo {
 
-    override suspend fun get(address: Address): Chat? =
-        chatDao.get(address.id)?.toDomain()
+    override suspend fun get(address: Address): Chat =
+        chatDao.get(address.id).toDomain()
 
     override suspend fun insert(chat: Chat)  {
         chat.apply {

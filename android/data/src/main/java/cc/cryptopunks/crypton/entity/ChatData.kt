@@ -23,7 +23,7 @@ internal data class ChatData(
     interface Dao {
 
         @Query("select * from chat where id = :id")
-        suspend fun get(id: AddressData): ChatData?
+        suspend fun get(id: AddressData): ChatData
 
         @Query("select * from chat")
         fun dataSourceFactory(): DataSource.Factory<Int, ChatData>
