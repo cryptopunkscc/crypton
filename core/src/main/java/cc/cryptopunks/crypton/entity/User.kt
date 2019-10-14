@@ -25,8 +25,7 @@ data class User(
     interface Repo {
         suspend fun insert(user: User)
         suspend fun insertIfNeeded(list: List<User>)
-        suspend fun getById(id: String): User
-        fun flowListByChatId(chatId: Long): Flow<List<User>>
+        fun flowListByChat(chat: Chat): Flow<List<User>>
     }
 
     companion object {

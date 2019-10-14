@@ -7,39 +7,44 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.activity.CoreActivity
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.api.isEmpty
 import cc.cryptopunks.crypton.applicationComponent
-import cc.cryptopunks.crypton.module.PresentationFragmentModule
+import cc.cryptopunks.crypton.module.PresentationModule
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
+import kotlin.coroutines.CoroutineContext
 
 
-abstract class CoreFragment : CoroutineFragment() {
+abstract class CoreFragment : Fragment(), CoroutineScope {
 
     open val layoutRes @LayoutRes get() = 0
 
     open val titleId @StringRes get() = 0
 
+    val scope = MainScope()
+    override val coroutineContext: CoroutineContext get() = scope.coroutineContext
+
     val coreActivity get() = activity as CoreActivity
 
-    val presentationComponent by lazy {
-        applicationComponent.currentClient().let { client ->
-            createComponent(client)
-        }
-    }
+    val presentationComponent
+        get() = createComponent(applicationComponent.currentClient())
 
-    val presentationComponentFlow by lazy {
-        applicationComponent.currentClient.map { client ->
-            createComponent(client)
-        }
-    }
+    val presentationComponentFlow
+        get() = applicationComponent.currentClient
+            .filterNot { client -> client.isEmpty }
+            .map { client -> createComponent(client) }
 
-    override val modelScope: CoroutineScope get() = presentationComponent.modelScope
-    override val actorScope: CoroutineScope get() = presentationComponent.actorScope
-
-    private fun createComponent(client: Client) =
-        PresentationFragmentModule(this, client)
+    private fun createComponent(client: Client) = PresentationModule(
+        client = client,
+        navigationComponent = coreActivity.navigationComponent,
+        arguments = arguments ?: Bundle()
+    )
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +65,11 @@ abstract class CoreFragment : CoroutineFragment() {
         titleId.takeIf { it > 0 }?.let { id ->
             coreActivity.supportActionBar?.setTitle(id)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 
     fun restart() {

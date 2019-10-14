@@ -1,11 +1,37 @@
 package cc.cryptopunks.crypton.util
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+
+class ConnectedCachedFlow<T>(
+    scope: CoroutineScope,
+    flow: Flow<T>
+) : Flow<T> {
+    private val channel = BroadcastChannel<T>(Channel.CONFLATED)
+    init {
+        scope.launch {
+            flow.collect {
+                channel.offer(it)
+            }
+        }
+    }
+
+    @InternalCoroutinesApi
+    override suspend fun collect(collector: FlowCollector<T>) {
+        channel.asFlow().collect(collector)
+    }
+}
+
+fun <T> Flow<T>.connectedCache(
+    scope: CoroutineScope
+): Flow<T> = ConnectedCachedFlow(
+    scope = scope,
+    flow = this
+)
 
 fun <T> T.cache(): CacheFlow<T> = Impl(this)
 

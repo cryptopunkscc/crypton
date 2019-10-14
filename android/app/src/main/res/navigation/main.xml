@@ -53,7 +53,7 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="cc.cryptopunks.crypton.fragment.ChatFragment"
-        android:label="CreateChatFragment"
+        android:label="ChatFragment"
         tools:layout="@layout/chat">
     </fragment>
 </navigation>

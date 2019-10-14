@@ -1,6 +1,7 @@
-package cc.cryptopunks.crypton.feature.account.interactor
+package cc.cryptopunks.crypton.feature.account.service
 
 import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.feature.account.interactor.ConnectAccountInteractor
 import cc.cryptopunks.crypton.feature.account.manager.AccountManager
 import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ReconnectAccountsInteractor @Inject constructor(
+class ReconnectAccountsService @Inject constructor(
     private val repo: Account.Repo,
     private val manager: AccountManager,
     private val connectAccount: ConnectAccountInteractor,

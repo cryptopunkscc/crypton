@@ -1,30 +1,36 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.component.DaggerRosterComponent
-import cc.cryptopunks.crypton.component.RosterComponent
-import cc.cryptopunks.crypton.util.invoke
-import kotlinx.coroutines.launch
+import android.view.ViewGroup
+import cc.cryptopunks.crypton.component.PresentationComponent
+import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
+import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.view.RosterView
+import javax.inject.Singleton
 
-class RosterFragment : CoreFragment() {
+class RosterFragment : PresenterFragment<
+        RosterPresenter.View,
+        RosterPresenter,
+        RosterFragment.Component>() {
 
-    override val layoutRes: Int get() = R.layout.roster
+    @Singleton
+    @dagger.Component(
+        dependencies = [PresentationComponent::class]
+    )
+    interface Component : Presenter.Component<RosterPresenter>
 
-    private val component: RosterComponent by lazy {
-        DaggerRosterComponent.builder()
-            .presentationComponent(presentationComponent)
-            .build()
-    }
+    override suspend fun onCreateComponent(
+        component: PresentationComponent
+    ): Component = DaggerRosterFragment_Component
+        .builder()
+        .presentationComponent(component)
+        .build()
 
-    override fun onCreate(savedInstanceState: Bundle?): Unit = with(component) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-        launch { presentRoster() }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) : Unit = with(component) {
-        launch { presentRoster(rosterView) }
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = RosterView(context!!)
 }

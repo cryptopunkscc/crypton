@@ -9,25 +9,25 @@ internal class ChatRepo(
     private val userDao: UserData.Dao
 ) : Chat.Repo {
 
-    override suspend fun get(id: Long): Chat =
-        chatDao.get(id).toDomain()
-
     override suspend fun get(address: Address): Chat? =
-        chatDao.get(address.id).toDomain()
+        chatDao.get(address.id)?.toDomain()
 
-    override suspend fun insert(chat: Chat): Chat =
-        chatDao.insert(chat.chatData()).let { chatId ->
-            chat.insertUsersIfNeeded(chatId)
-            chat.copy(id = chatId)
+    override suspend fun insert(chat: Chat)  {
+        chat.apply {
+            chatDao.insert(chatData())
+            insertUsersIfNeeded()
         }
+    }
 
-    override suspend fun insertIfNeeded(chat: Chat): Chat? =
-        chatDao.insertIfNeeded(chat.chatData())?.let { chatId ->
-            chat.insertUsersIfNeeded(chatId)
-            chat.copy(id = chatId)
+    override suspend fun insertIfNeeded(chat: Chat) {
+        if (!contains(chat)) chat.apply {
+            chatDao.insert(chatData())
+            insertUsersIfNeeded()
         }
+    }
 
-    private suspend fun Chat.insertUsersIfNeeded(chatId: Long) {
+
+    private suspend fun Chat.insertUsersIfNeeded() {
         userDao.insertIfNeeded(
             list = users.map { user ->
                 user.userData()
@@ -35,7 +35,7 @@ internal class ChatRepo(
         )
         chatUserDao.insertIfNeeded(
             list = users.map { user ->
-                user.chatUserData(chatId = chatId)
+                user.chatUserData(chatId = address.id)
             }
         )
     }
@@ -48,4 +48,7 @@ internal class ChatRepo(
 
     override suspend fun deleteAll(): Unit =
         chatDao.deleteAll()
+
+    suspend fun contains(chat: Chat) =
+        chatDao.contains(chat.address.id) != null
 }

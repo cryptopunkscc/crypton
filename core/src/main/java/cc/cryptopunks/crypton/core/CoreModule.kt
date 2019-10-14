@@ -9,13 +9,14 @@ import cc.cryptopunks.crypton.util.ExecutorsComponent
 class CoreModule(
     private val executorsComponent: ExecutorsComponent,
     private val repoComponent: Repo.Component,
-    private val clientComponent: Client.Component
+    private val clientComponent: Client.Component,
+    private val broadcastErrorComponent: BroadcastError.Component
 ) :
     Core.Component,
     ExecutorsComponent by executorsComponent,
     Repo.Component by repoComponent,
     Client.Component by clientComponent,
-    BroadcastError.Component by BroadcastError.Module() {
+    BroadcastError.Component by broadcastErrorComponent {
 
     override val serviceScope = Service.Scope(broadcastError)
 }

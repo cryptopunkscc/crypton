@@ -64,10 +64,11 @@ interface Client: Api {
         interface Output : Flow<Exception>
     }
 
-    class Empty(override val address: Address) : Client by Empty
+    class Empty(override val address: Address) : Client by Dummy
 
     companion object {
-        val Empty: Client = createDummyClass()
+        private val Dummy: Client = createDummyClass()
+        val Empty: Client = Empty(Address.Empty)
     }
 }
 

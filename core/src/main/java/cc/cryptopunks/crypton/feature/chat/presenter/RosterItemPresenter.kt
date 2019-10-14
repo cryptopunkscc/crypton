@@ -1,11 +1,13 @@
 package cc.cryptopunks.crypton.feature.chat.presenter
 
+import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.feature.chat.selector.LastMessageSelector
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
-import cc.cryptopunks.crypton.util.Presenter
+import cc.cryptopunks.crypton.presenter.Presenter
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -18,7 +20,7 @@ class RosterItemPresenter @Inject constructor(
     private val lastMessage: LastMessageSelector
 ) : Presenter<RosterItemPresenter.View> {
 
-    val id = chat.id
+    val id get() = chat.address.id
 
     private val title get() = chat.title
 
@@ -26,19 +28,21 @@ class RosterItemPresenter @Inject constructor(
 
     private val navigateChat: suspend (Any) -> Unit = {
         navigate(Route.Chat()) {
-            accountId = chat.address.id
-            chatId = id
+            accountId = chat.account.id
+            chatAddress = chat.address.id
         }
     }
 
-    override suspend fun View.invoke() = coroutineScope {
-        setTitle(title)
-        setLetter(letter)
-        launch { lastMessage(chat).collect(setMessage) }
-        launch { onClick.collect(navigateChat) }
+    override suspend fun View.invoke(): Job = coroutineScope {
+        launch {
+            setTitle(title)
+            setLetter(letter)
+            launch { lastMessage(chat).collect(setMessage) }
+            launch { onClick.collect(navigateChat) }
+        }
     }
 
-    interface View {
+    interface View : Actor {
         fun setTitle(title: String)
         fun setLetter(letter: Char)
         val setMessage: suspend (message: Message) -> Unit

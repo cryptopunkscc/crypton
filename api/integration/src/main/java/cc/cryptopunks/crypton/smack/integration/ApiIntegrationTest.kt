@@ -11,6 +11,7 @@ import kotlinx.coroutines.withTimeout
 abstract class ApiIntegrationTest :
     CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
 
+    val createClient = SmackClientFactory()
     val baseId = Address(domain = "test.io")
     private val clients = mutableMapOf<Long, Client>()
     private var autoRemove = false
@@ -26,8 +27,12 @@ abstract class ApiIntegrationTest :
         autoRemove = clients.isNotEmpty()
         clients.values.forEach {
             with(it) {
-                createAccount()
-                login()
+                try {
+                    createAccount()
+                    login()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
@@ -45,9 +50,10 @@ abstract class ApiIntegrationTest :
         client(it.toLong())
     }
 
-    fun client(index: Long) = synchronized(clients) {
+    fun client(index: Long): Client = synchronized(clients) {
         clients.getOrElse(index) {
             createClient(config(index)).also {
+                it.connect()
                 clients[index] = it
             }
         }
@@ -62,7 +68,7 @@ abstract class ApiIntegrationTest :
 internal typealias createClient = SmackClientFactory
 
 internal fun test(
-    timeout: Long = 2000,
+    timeout: Long = 5000,
     block: suspend CoroutineScope.() -> Unit
 ) = runBlocking {
     withTimeout(timeout, block)

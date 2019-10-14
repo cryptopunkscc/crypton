@@ -16,6 +16,6 @@ sealed class Route(
         data: MutableMap<String, Any?> = mutableMapOf()
     ) : Route(data) {
         var accountId: String by data
-        var chatId: Long by data
+        var chatAddress: String by data
     }
 }

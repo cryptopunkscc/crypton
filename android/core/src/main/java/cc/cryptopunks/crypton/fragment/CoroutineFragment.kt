@@ -11,10 +11,13 @@ abstract class CoroutineFragment : Fragment(), CoroutineScope {
     abstract val modelScope: CoroutineScope
     abstract val actorScope: CoroutineScope
 
-    override val coroutineContext: CoroutineContext
+    val scope: CoroutineScope
         get() = if (view == null)
-            modelScope.coroutineContext else
-            actorScope.coroutineContext
+            modelScope else
+            actorScope
+
+    override val coroutineContext: CoroutineContext
+        get() = scope.coroutineContext
 
     override fun onDestroyView() {
         actorScope.coroutineContext.cancelChildren()

@@ -21,7 +21,6 @@ internal class MessagingTest : IntegrationTest() {
         val actual = async {
             client2.messageBroadcast
                 .first()
-                .text
         }
 
         launch {
@@ -30,10 +29,9 @@ internal class MessagingTest : IntegrationTest() {
                 expected
             )
         }
-
         assertEquals(
             expected,
-            actual.await()
+            actual.await().text
         )
     }
 }

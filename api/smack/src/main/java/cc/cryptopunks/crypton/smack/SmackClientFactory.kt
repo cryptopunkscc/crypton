@@ -17,10 +17,11 @@ fun initSmack(omemoStoreFile: File) {
     }
 }
 
-object SmackClientFactory : Client.Factory, (Client.Config) -> Client {
+class SmackClientFactory(
+    private val broadcastError: BroadcastError = BroadcastError()
+) : Client.Factory, (Client.Config) -> Client {
 
     private var factoryConfig = Client.Factory.Config.Empty
-    private val broadcastError = BroadcastError() // TODO
 
     private val connectionConfig
         get() = XMPPTCPConnectionConfiguration.builder()

@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
+import cc.cryptopunks.crypton.presenter.invoke
 import cc.cryptopunks.crypton.util.ext.inflate
-import cc.cryptopunks.crypton.util.invoke
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.chat_message_item.*
 import kotlinx.coroutines.*
@@ -38,13 +38,14 @@ class MessageAdapter @Inject constructor(
         ) = areItemsTheSame(oldItem, newItem)
     }
 
-    inner class ViewHolder(view: View
+    inner class ViewHolder(
+        view: View
     ) : RecyclerView.ViewHolder(view),
         LayoutContainer {
 
         override val containerView: View get() = itemView
-        private val scope = this@MessageAdapter.scope + Job()
-        private val view = object : MessagePresenter.View {
+        private val view = object : MessagePresenter.View,
+            CoroutineScope by this@MessageAdapter.scope + Job() {
 
             override fun setAuthor(name: String) {
                 authorTextView.text = name
@@ -64,9 +65,9 @@ class MessageAdapter @Inject constructor(
             }
         }
 
-        fun bind(present: MessagePresenter?): Unit = scope.run {
+        fun bind(present: MessagePresenter?): Unit = view.run {
             coroutineContext.cancelChildren()
-            launch { present(view) ?: view.clear() }
+            launch { present(view) ?: clear() }
         }
     }
 }

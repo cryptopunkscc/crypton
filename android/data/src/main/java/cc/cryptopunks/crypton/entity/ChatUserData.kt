@@ -8,7 +8,7 @@ import androidx.room.*
         "id",
         "chatId"
     ],
-    indices = [Index("chatId")],
+    indices = [Index("id")],
     foreignKeys = [
         ForeignKey(
             entity = ChatData::class,
@@ -26,7 +26,7 @@ import androidx.room.*
 )
 internal data class ChatUserData(
     val id: AddressData,
-    val chatId: Long
+    val chatId: AddressData
 ) {
 
     @androidx.room.Dao
@@ -39,10 +39,10 @@ internal data class ChatUserData(
         suspend fun insertIfNeeded(list: List<ChatUserData>)
 
         @Query("select * from chatUser where id = :id")
-        suspend fun get(id: String) : ChatUserData
+        suspend fun get(id: AddressData) : ChatUserData
 
         @Query("select * from chatUser where chatId = :chatId")
-        suspend fun listByChat(chatId: Long) : List<ChatUserData>
+        suspend fun listByChat(chatId: AddressData) : List<ChatUserData>
     }
 }
 
@@ -50,7 +50,7 @@ internal fun ChatUserData.user() = User(
     address = Address.from(id)
 )
 
-internal fun User.chatUserData(chatId: Long) = ChatUserData(
+internal fun User.chatUserData(chatId: AddressData) = ChatUserData(
     chatId = chatId,
     id = address.id
 )

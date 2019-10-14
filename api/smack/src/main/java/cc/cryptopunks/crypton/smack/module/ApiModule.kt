@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.api.account.*
+import cc.cryptopunks.crypton.smack.api.chat.CreateChat
 import cc.cryptopunks.crypton.smack.api.chat.MessageBroadcast
 import cc.cryptopunks.crypton.smack.api.chat.SendMessage
 import cc.cryptopunks.crypton.smack.api.client.ConnectClient
@@ -21,13 +22,11 @@ import cc.cryptopunks.crypton.util.BroadcastError
 internal class ApiModule(
     override val address: Address,
     broadcastError: BroadcastError,
-    smackComponent: SmackComponent
-) : SmackComponent by smackComponent,
+    private val smack: SmackComponent
+) : SmackComponent by smack,
     ApiComponent {
 
-    override val apiScope: Api.Scope by lazy {
-        Api.Scope(broadcastError)
-    }
+    override val apiScope = Api.Scope(broadcastError)
 
     override val connect: Client.Connect by lazy {
         ConnectClient(connection = connection)
@@ -80,7 +79,7 @@ internal class ApiModule(
     }
 
     override val sendMessage: Message.Api.Send by lazy {
-        SendMessage(connection = connection)
+        SendMessage(smack)
     }
 
     override val messageBroadcast: Message.Api.Broadcast by lazy {
@@ -94,5 +93,7 @@ internal class ApiModule(
         RosterEventPublisher(roster = roster)
     }
 
-    override val createChat: Chat.Api.Create get() = TODO("not implemented")
+    override val createChat: Chat.Api.Create by lazy(::CreateChat)
 }
+
+private fun <T> SmackComponent.lazy(init: SmackComponent.() -> T) = kotlin.lazy { init() }

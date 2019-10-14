@@ -6,19 +6,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
-import cc.cryptopunks.crypton.util.bindings.clicks
-import cc.cryptopunks.crypton.util.ext.inflate
-import cc.cryptopunks.crypton.util.invoke
-import cc.cryptopunks.crypton.util.letterColors
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.roster_item.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import java.util.*
+import cc.cryptopunks.crypton.view.RosterItemView
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class RosterAdapter @Inject constructor(
@@ -27,10 +17,11 @@ class RosterAdapter @Inject constructor(
     PagedListAdapter<RosterItemPresenter, RosterAdapter.ViewHolder>(Diff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(parent.inflate(R.layout.roster_item), scope)
+        ViewHolder(RosterItemView(parent.context))
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        scope.launch { holder.bind(getItem(position)) }
+    }
 
     private object Diff : DiffUtil.ItemCallback<RosterItemPresenter>() {
         override fun areItemsTheSame(
@@ -44,43 +35,27 @@ class RosterAdapter @Inject constructor(
         ) = areItemsTheSame(oldItem, newItem)
     }
 
-    class ViewHolder(
-        view: View,
-        private val scope: Actor.Scope
-    ) : RecyclerView.ViewHolder(view),
-        LayoutContainer {
+    override fun onViewDetachedFromWindow(holder: ViewHolder) {
+        holder.cancel()
+    }
 
-        override val containerView: View get() = itemView
-        private val view = object : RosterItemPresenter.View {
+    inner class ViewHolder(
+        view: View
+    ) : RecyclerView.ViewHolder(view) {
 
-            override fun setTitle(title: String) {
-                conversationTitleTextView.text = title
-            }
+        var job: Job? = null
 
-            override fun setLetter(letter: Char) {
-                conversationLetter.apply {
-                    text = letter.toString()
-                    setBackgroundResource(letterColors.getValue(letter))
-                }
-            }
+        private val view get() = itemView as RosterItemView
 
-            override val setMessage: suspend (Message) -> Unit = { message ->
-                lastMessageTextView.text = message.text
-                dateTextView.text = Date(message.timestamp).toString()
-            }
-
-            override val onClick: Flow<Any> = containerView.clicks()
-
-            fun clear() {
-                setLetter('a')
-                setTitle("")
-            }
+        suspend fun bind(present: RosterItemPresenter?) {
+            job?.cancel()
+            job = present?.run { view.invoke() }
+            job ?: view.clear()
         }
 
-        private var job: Job? = null
-        fun bind(present: RosterItemPresenter?): Unit = scope.run {
+        fun cancel() {
             job?.cancel()
-            job = launch { present(view) ?: view.clear() }
+            job = null
         }
     }
 }

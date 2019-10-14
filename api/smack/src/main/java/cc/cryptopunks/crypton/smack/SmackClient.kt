@@ -13,7 +13,7 @@ class SmackClient internal constructor(
     configuration: XMPPTCPConnectionConfiguration
 ) : ApiComponent by ApiModule(
     address = address,
-    smackComponent = SmackModule(
+    smack = SmackModule(
         configuration = configuration
     ),
     broadcastError = broadcastError

@@ -5,17 +5,17 @@ import androidx.room.*
 
 @Entity(
     tableName = "chat",
-    indices = [Index("address")],
+    indices = [Index("accountId")],
     foreignKeys = [ForeignKey(
         entity = AccountData::class,
         parentColumns = ["id"],
-        childColumns = ["address"],
+        childColumns = ["accountId"],
         onDelete = ForeignKey.CASCADE
     )]
 )
 internal data class ChatData(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val address: AddressData,
+    @PrimaryKey val id: AddressData,
+    val accountId: AddressData,
     val title: String
 ) {
 
@@ -23,40 +23,39 @@ internal data class ChatData(
     interface Dao {
 
         @Query("select * from chat where id = :id")
-        fun get(id: Long): ChatData
-
-        @Query("select * from chat where address = :address")
-        fun get(address: AddressData): ChatData
+        suspend fun get(id: AddressData): ChatData?
 
         @Query("select * from chat")
         fun dataSourceFactory(): DataSource.Factory<Int, ChatData>
 
         @Insert
-        fun insert(data: ChatData): Long
+        suspend fun insert(data: ChatData)
 
         @Insert(onConflict = OnConflictStrategy.IGNORE)
-        fun insertIfNeeded(data: ChatData): Long?
+        suspend fun insertIfNeeded(data: ChatData)
 
         @Insert
-        fun insert(chatList: List<ChatData>): List<Long>
+        suspend fun insert(chatList: List<ChatData>)
 
         @Delete
-        fun delete(data: ChatData)
+        suspend fun delete(data: ChatData)
 
         @Query("delete from chat")
-        fun deleteAll()
+        suspend fun deleteAll()
+
+        @Query("select id from chat where id = :id")
+        suspend fun contains(id: AddressData): AddressData?
     }
 }
 
 internal fun ChatData.toDomain(users: List<User> = emptyList()) = Chat(
-    id = id,
     title = title,
-    address = Address.from(address),
+    address = Address.from(id),
     users = users
 )
 
 internal fun Chat.chatData() = ChatData(
-    id = id,
     title = title,
-    address = address.id
+    id = address.id,
+    accountId = account.id
 )

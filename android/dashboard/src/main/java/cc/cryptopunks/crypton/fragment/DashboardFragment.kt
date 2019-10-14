@@ -4,46 +4,49 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import cc.cryptopunks.crypton.component.DaggerDashboardComponent
-import cc.cryptopunks.crypton.component.DashboardComponent
+import android.widget.Button
+import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.feature.dashboard.viewmodel.DashboardViewModel
-import cc.cryptopunks.crypton.navigation.service.OptionItemNavigationService
-import kotlinx.android.synthetic.main.dashboard.*
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import cc.cryptopunks.crypton.feature.dashboard.presenter.DashboardPresenter
+import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.util.bindings.clicks
+import kotlinx.coroutines.flow.Flow
 
 
-class DashboardFragment : CoreFragment() {
+class DashboardFragment :
+    DashboardPresenter.View,
+    PresenterFragment<
+            DashboardPresenter.View,
+            DashboardPresenter,
+            DashboardFragment.Component>() {
 
     override val layoutRes: Int get() = R.layout.dashboard
 
-    private val component: DashboardComponent by lazy {
-        DaggerDashboardComponent.builder().presentationComponent(presentationComponent).build()
-    }
+    @dagger.Component(dependencies = [PresentationComponent::class])
+    interface Component : Presenter.Component<DashboardPresenter>
+
+
+    override suspend fun onCreateComponent(
+        component: PresentationComponent
+    ): Component = DaggerDashboardFragment_Component
+        .builder()
+        .presentationComponent(component)
+        .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        component.inject(this)
-    }
-
-    @Inject
-    fun init(
-        dashboardViewModel: DashboardViewModel,
-        optionItemNavigationService: OptionItemNavigationService
-    ) {
-        launch { optionItemNavigationService() }
-        createConversationButton.setOnClickListener {
-            dashboardViewModel.createConversation()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+    override fun onCreateActor(view: View): DashboardPresenter.View = this
+
+    override val accountManagementClick get() = coreActivity.navigationComponent.optionItemSelections
+
+    override val createChatClick: Flow<Any>
+        get() = view!!.findViewById<Button>(R.id.createConversationButton).clicks()
 }

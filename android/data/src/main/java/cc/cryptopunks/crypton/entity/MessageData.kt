@@ -6,24 +6,23 @@ import kotlinx.coroutines.flow.Flow
 
 @Entity(
     tableName = "message",
-    indices = [Index("chatId")],
+    indices = [Index("to")],
     foreignKeys = [
         ForeignKey(
             entity = ChatData::class,
             parentColumns = ["id"],
-            childColumns = ["chatId"],
+            childColumns = ["to"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 internal data class MessageData(
     @PrimaryKey val id: String = "",
-    val chatId: Long = 0,
     val stanzaId: String = "",
     val text: String = "",
     val timestamp: Long = 0,
-    val from: String = "",
-    val to: String = ""
+    val from: AddressData = "",
+    val to: AddressData = ""
 ) {
 
     @androidx.room.Dao
@@ -31,11 +30,11 @@ internal data class MessageData(
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun insertOrUpdate(list: List<MessageData>)
 
-        @Query("select * from message where chatId == :chatId order by timestamp")
-        fun flowLatest(chatId: Long): Flow<MessageData?>
+        @Query("select * from message where `to` == :chatId order by timestamp")
+        fun flowLatest(chatId: AddressData): Flow<MessageData?>
 
-        @Query("select * from message where chatId == :chatId order by timestamp")
-        fun dataSourceFactory(chatId: Long): DataSource.Factory<Int, MessageData>
+        @Query("select * from message where `to` == :chatId order by timestamp")
+        fun dataSourceFactory(chatId: AddressData): DataSource.Factory<Int, MessageData>
     }
 
     companion object {
@@ -43,10 +42,9 @@ internal data class MessageData(
     }
 }
 
-internal fun Message.messageData(chatId: Long) = MessageData(
+internal fun Message.messageData() = MessageData(
     id = id,
     stanzaId = stanzaId,
-    chatId = chatId,
     timestamp = timestamp,
     text = text,
     from = from.id,

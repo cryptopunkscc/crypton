@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.feature.account.interactor.*
+import cc.cryptopunks.crypton.feature.account.service.ReconnectAccountsService
 
 internal interface IntegrationTestComponent {
 
@@ -15,7 +16,7 @@ internal interface IntegrationTestComponent {
     val disconnectAccount: DisconnectAccountInteractor
     val deleteAccount: DeleteAccountInteractor
     val unregisterAccount: UnregisterAccountInteractor
-    val reconnectAccounts: ReconnectAccountsInteractor
+    val reconnectAccounts: ReconnectAccountsService
 
     fun clearDatabase()
 }

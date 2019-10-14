@@ -9,5 +9,5 @@ import javax.inject.Inject
 class LastMessageSelector @Inject constructor(
     repo: Message.Repo
 ) : (Chat) -> Flow<Message> by { chat ->
-    repo.flowLatest(chat.id).filterNotNull()
+    repo.flowLatest(chat).filterNotNull()
 }

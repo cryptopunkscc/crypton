@@ -1,7 +1,8 @@
 package cc.cryptopunks.crypton.feature.chat.presenter
 
+import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.util.Presenter
+import cc.cryptopunks.crypton.presenter.Presenter
 import javax.inject.Inject
 
 data class MessagePresenter(
@@ -15,7 +16,7 @@ data class MessagePresenter(
         setDate(message.timestamp)
     }
 
-    interface View {
+    interface View : Actor {
         fun setMessage(text: String)
         fun setDate(timestamp: Long)
         fun setAuthor(name: String)

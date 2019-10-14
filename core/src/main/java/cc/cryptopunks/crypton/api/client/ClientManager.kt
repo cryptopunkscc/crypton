@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.api.client
 
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 
 internal class ClientManager(
@@ -26,7 +27,7 @@ internal class ClientManager(
     }
 
 
-    override fun minus(account: Account) = synchronized(this) {
-        clientCache -= account.address.id
+    override fun minus(account: Account): Unit = synchronized(this) {
+        clientCache.remove(account.address.id)?.run { apiScope.cancel() }
     }
 }

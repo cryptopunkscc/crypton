@@ -19,7 +19,7 @@ internal data class UserData(
         suspend fun insertIfNeeded(list: List<UserData>)
 
         @Query("select * from User where id = :id")
-        suspend fun getById(id: String): UserData
+        suspend fun getById(id: AddressData): UserData
 
         @Query(
             """
@@ -28,7 +28,7 @@ internal data class UserData(
             where chatUser.chatId = :chatId
             """
         )
-        fun flowListByChatId(chatId: Long): Flow<List<UserData>>
+        fun flowListByChatId(chatId: AddressData): Flow<List<UserData>>
     }
 }
 

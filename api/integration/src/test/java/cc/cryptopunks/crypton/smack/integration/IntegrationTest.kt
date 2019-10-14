@@ -1,12 +1,10 @@
 package cc.cryptopunks.crypton.smack.integration
 
 import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.smack.SmackClientFactory
 import org.jivesoftware.smack.util.stringencoder.Base64
 import org.jivesoftware.smack.util.stringencoder.java7.Java7Base64Encoder
 import org.junit.After
 import org.junit.Before
-import java.net.InetAddress
 
 abstract class IntegrationTest : ApiIntegrationTest() {
 
@@ -18,10 +16,10 @@ abstract class IntegrationTest : ApiIntegrationTest() {
 
     @Before
     override fun setUp() {
-        SmackClientFactory {
+        createClient {
             copy(
                 resource = "xmpptest${counter++}",
-                hostAddress = InetAddress.getLocalHost().toString(),
+                hostAddress = "127.0.0.1",
                 securityMode = Client.Factory.Config.SecurityMode.disabled
             )
         }

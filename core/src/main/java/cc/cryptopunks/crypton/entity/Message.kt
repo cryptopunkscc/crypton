@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.entity
 import androidx.paging.DataSource
 import kotlinx.coroutines.flow.Flow
 
-typealias ApiMessage = Message
+typealias CryptonMessage = Message
 
 data class Message(
     val id: String = "",
@@ -23,8 +23,8 @@ data class Message(
     }
 
     interface Repo {
-        suspend fun insertOrUpdate(chatId: Long, vararg message: Message)
-        fun flowLatest(chatId: Long): Flow<Message>
+        suspend fun insertOrUpdate(vararg message: Message)
+        fun flowLatest(chat: Chat): Flow<Message>
         fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message>
     }
 

@@ -1,10 +1,11 @@
 package cc.cryptopunks.crypton.feature.chat.presenter
 
+import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.feature.chat.interactor.CreateChatInteractor
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
-import cc.cryptopunks.crypton.util.Presenter
+import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.cache
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +13,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CreateChatPresenter @Inject constructor(
     private val createChat: CreateChatInteractor,
     private val navigate: Navigate
@@ -21,7 +24,7 @@ class CreateChatPresenter @Inject constructor(
     private val usersCache = emptyList<User>().cache()
 
     private val data get() = CreateChatInteractor.Data(
-        title = "test", //TODO
+        title = usersCache.value.firstOrNull()?.run { address.id } ?: "test",
         users = usersCache.value
     )
 
@@ -35,13 +38,11 @@ class CreateChatPresenter @Inject constructor(
 
     private val create: suspend (Any) -> Unit = {
         createChat(data).runCatching {
-            val id = await().id
+            val address = await().address
 
             navigate(Route.Chat()) {
-                chatId = id
+                chatAddress = address.id
             }
-        }.onFailure {
-            it.printStackTrace()
         }
     }
 
@@ -52,7 +53,7 @@ class CreateChatPresenter @Inject constructor(
         launch { createChatClick.collect(create) }
     }
 
-    interface View {
+    interface View : Actor {
         val addUserClick: Flow<String>
         val removeUserClick: Flow<User>
         val createChatClick: Flow<Any>

@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.smack.api.chat
 
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.smack.util.chatMessage
+import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -24,19 +24,15 @@ private fun ChatManager.chatMessageFlow(
 ): Flow<Message> = callbackFlow {
     val incomingListener = IncomingChatMessageListener { _, message, chat: Chat ->
         channel.offer(
-            chatMessage(
-                message = message
-            )
+            message.toCryptonMessage()
         )
     }
 
     val outgoingListener = OutgoingChatMessageListener { _, message, _ ->
         channel.offer(
-            chatMessage(
-                message = message.apply {
-                    from = JidCreate.from(address)
-                }
-            )
+            message.apply {
+                from = JidCreate.from(address)
+            }.toCryptonMessage()
         )
     }
 

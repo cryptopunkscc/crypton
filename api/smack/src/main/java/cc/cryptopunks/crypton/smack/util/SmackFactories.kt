@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.util
 
-import cc.cryptopunks.crypton.entity.ApiMessage
+import cc.cryptopunks.crypton.entity.CryptonMessage
 import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Resource
@@ -11,16 +11,15 @@ import org.jxmpp.jid.impl.JidCreate
 import java.util.*
 
 
-internal fun chatMessage(
-    message: Message = Message(),
+internal fun Message.toCryptonMessage(
     delayInformation: DelayInformation = DelayInformation(Date())
-) = ApiMessage(
-    id = message.extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: "",
-    text = message.body,
-    from = message.from.resourceId(),
-    to = message.to.resourceId(),
+) = CryptonMessage(
+    id = extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: stanzaId,
+    text = body,
+    from = from.resourceId(),
+    to = to.resourceId(),
     timestamp = delayInformation.stamp.time,
-    stanzaId = message.stanzaId
+    stanzaId = stanzaId
 )
 
 

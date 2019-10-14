@@ -19,7 +19,8 @@ class CreateChatInteractor @Inject constructor(
             validate()
             Chat(
                 title = title,
-                users = users + User(address)
+                users = users + User(address),
+                account = address
             )
         }.run {
 
@@ -27,9 +28,9 @@ class CreateChatInteractor @Inject constructor(
                 createChat(this) else
                 copy(address = data.users.first().address)
 
-        }.let { chat ->
+        }.also { chat ->
 
-            repo.insertIfNeeded(chat) ?: chat
+            repo.insertIfNeeded(chat)
         }
     }
 } {

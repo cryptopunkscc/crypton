@@ -3,9 +3,9 @@ package cc.cryptopunks.crypton.entity
 import androidx.paging.DataSource
 
 data class Chat(
-    val id: Long = 0,
     val title: String = "",
     val address: Address = Address.Empty,
+    val account: Address = Address.Empty,
     val resource: Resource = Resource.Empty,
     val users: List<User> = emptyList()
 ) {
@@ -29,10 +29,9 @@ data class Chat(
     }
 
     interface Repo {
-        suspend fun get(id: Long): Chat
         suspend fun get(address: Address): Chat?
-        suspend fun insert(chat: Chat): Chat
-        suspend fun insertIfNeeded(chat: Chat): Chat?
+        suspend fun insert(chat: Chat)
+        suspend fun insertIfNeeded(chat: Chat)
         suspend fun delete(chat: Chat)
         suspend fun deleteAll()
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>

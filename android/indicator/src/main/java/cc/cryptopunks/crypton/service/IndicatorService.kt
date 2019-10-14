@@ -22,8 +22,6 @@ class IndicatorService :
         component.run {
             setupNotificationChannel()
             showAppServiceNotification()
-            reconnectAccounts()
-            updateCurrentClientService()
         }
     }
 
