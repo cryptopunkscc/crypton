@@ -26,7 +26,7 @@ class SmackClientFactory(
     private val connectionConfig
         get() = XMPPTCPConnectionConfiguration.builder()
             .setResource(factoryConfig.resource)
-            .setHostAddress(InetAddress.getByName(factoryConfig.hostAddress))
+            .setHostAddress(factoryConfig.hostAddress?.let(InetAddress::getByName))
             .setSecurityMode(ConnectionConfiguration.SecurityMode.valueOf(factoryConfig.securityMode.name))
 
     operator fun invoke(setup: Client.Factory.Config.() -> Client.Factory.Config) = apply {

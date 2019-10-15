@@ -33,8 +33,8 @@ interface Client: Api {
     interface Factory : (Config) -> Client {
         data class Config(
             val resource: String = "",
-            val hostAddress: String = "",
-            val securityMode: SecurityMode = SecurityMode.required
+            val hostAddress: String? = null,
+            val securityMode: SecurityMode = SecurityMode.ifpossible
         ) {
             enum class SecurityMode {
                 required,

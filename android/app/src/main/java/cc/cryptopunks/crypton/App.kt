@@ -38,9 +38,9 @@ class App : CoreApplication() {
                         broadcastError = broadcastErrorComponent.broadcastError
                     ).invoke {
                         copy(
-                            resource = "xmpptest",
+//                            securityMode = Client.Factory.Config.SecurityMode.disabled,
                             hostAddress = "10.0.2.2",
-                            securityMode = Client.Factory.Config.SecurityMode.disabled
+                            resource = "xmpptest"
                         )
                     },
                     mapException = ExceptionMapper
