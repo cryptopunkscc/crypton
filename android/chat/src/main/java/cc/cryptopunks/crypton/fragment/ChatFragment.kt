@@ -34,7 +34,7 @@ class ChatFragment : PresenterFragment<
     ): Component = let {
         val route = Route.Chat(arguments.toMap())
         val chat = runBlocking(Dispatchers.IO) {
-            component.chatRepo.get(Address.from(route.chatAddress))!!
+            component.chatRepo.get(Address.from(route.chatAddress))
         }
         DaggerChatFragment_Component
             .builder()

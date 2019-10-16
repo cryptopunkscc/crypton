@@ -1,6 +1,7 @@
-package cc.cryptopunks.crypton.adapter
+package cc.cryptopunks.crypton.view
 
 import android.content.Context
+import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import cc.cryptopunks.crypton.chat.R
@@ -35,8 +36,9 @@ class MessageView(
         timestampTextView.text = Date(timestamp).toString()
     }
 
-    fun clear() {
-        setMessage("")
-        setDate(0)
+    override fun alignRight(value: Boolean) {
+        cardContainer.gravity = if (value)
+            Gravity.RIGHT else
+            Gravity.LEFT
     }
 }

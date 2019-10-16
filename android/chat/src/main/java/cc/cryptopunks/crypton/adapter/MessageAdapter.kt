@@ -6,6 +6,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
+import cc.cryptopunks.crypton.view.MessageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
