@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
@@ -30,7 +31,11 @@ class ChatView(
         View.inflate(context, R.layout.chat, this)
         chatRecyclerView.apply {
             adapter = messageAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(
+                context,
+                RecyclerView.VERTICAL,
+                true
+            )
         }
     }
 
