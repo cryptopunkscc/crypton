@@ -46,5 +46,9 @@ class ChatView(
 
     override val sendMessageFlow: Flow<String> = sendMessageButton
         .clicks()
-        .map { messageInput.text.toString() }
+        .map { getInputAndClear() }
+
+    private fun getInputAndClear() = messageInput.text.run {
+        toString().also { clear() }
+    }
 }
