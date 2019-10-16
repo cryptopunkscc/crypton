@@ -9,8 +9,8 @@ import dagger.Component
 import javax.inject.Inject
 
 class ApiService @Inject constructor(
-    loadArchivedMessagesService: LoadArchivedMessagesService,
-    messageReceiverService: MessageReceiverService
+    messageReceiverService: MessageReceiverService,
+    loadArchivedMessagesService: LoadArchivedMessagesService
 ) : () -> Unit by {
     ApiService::class.log("start")
     messageReceiverService()

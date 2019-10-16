@@ -35,13 +35,13 @@ internal data class MessageData(
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun insertOrUpdate(list: MessageData)
 
-        @Query("select * from message order by timestamp")
+        @Query("select * from message order by timestamp desc")
         fun latest(): MessageData?
 
-        @Query("select * from message where chatId == :chatId order by timestamp")
+        @Query("select * from message where chatId == :chatId order by timestamp desc")
         fun flowLatest(chatId: AddressData): Flow<MessageData?>
 
-        @Query("select * from message where chatId == :chatId order by timestamp")
+        @Query("select * from message where chatId == :chatId order by timestamp desc")
         fun dataSourceFactory(chatId: AddressData): DataSource.Factory<Int, MessageData>
     }
 

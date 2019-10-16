@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.feature.main.service
 
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.feature.account.manager.AccountManager
 import cc.cryptopunks.crypton.feature.account.selector.CurrentAccountFlowSelector
 import cc.cryptopunks.crypton.service.Service
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
@@ -13,15 +14,17 @@ import javax.inject.Inject
 
 class UpdateCurrentClientService @Inject constructor(
     private val currentClient: Client.Current,
-    private val clientManager: Client.Manager,
     private val currentAccountFlow: CurrentAccountFlowSelector,
+    private val accountManager: AccountManager,
     private val scope: Service.Scope
 ) : () -> Job by {
     scope.launch {
         UpdateCurrentClientService::class.log("start")
         invokeOnClose { UpdateCurrentClientService::class.log("stop ") }
         currentAccountFlow()
-            .map { account -> clientManager.get(account) }
+            .map { account -> accountManager.copy(account) }
+            .filter { it.isInitialized }
+            .map { it.client() }
             .filter { it.isAuthenticated() }
             .collect(currentClient.set)
     }

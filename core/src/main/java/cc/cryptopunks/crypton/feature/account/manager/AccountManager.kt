@@ -15,7 +15,7 @@ data class AccountManager @Inject constructor(
 
     private val account get() = get()
 
-    private suspend fun client(): Client = clientManager.get(account)
+    suspend fun client(): Client = clientManager.get(account)
 
     val isInitialized: Boolean get() = clientManager.contains(account)
 
