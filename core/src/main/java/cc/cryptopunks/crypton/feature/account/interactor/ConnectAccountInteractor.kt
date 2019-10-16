@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting
 import cc.cryptopunks.crypton.feature.account.manager.AccountManager
 import cc.cryptopunks.crypton.service.Service
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class ConnectAccountInteractor @Inject constructor(

@@ -24,7 +24,7 @@ private fun ChatManager.chatMessageFlow(
 ): Flow<Message> = callbackFlow {
     val incomingListener = IncomingChatMessageListener { from, message, chat: Chat ->
         channel.offer(
-            message.toCryptonMessage(chatId = chat.xmppAddressOfChatPartner)
+            message.toCryptonMessage()
         )
     }
 

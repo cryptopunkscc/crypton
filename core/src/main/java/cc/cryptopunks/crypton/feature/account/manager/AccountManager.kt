@@ -15,7 +15,7 @@ data class AccountManager @Inject constructor(
 
     private val account get() = get()
 
-    private suspend fun getClient(): Client = clientManager.get(account)
+    private suspend fun client(): Client = clientManager.get(account)
 
     val isInitialized: Boolean get() = clientManager.contains(account)
 
@@ -25,18 +25,18 @@ data class AccountManager @Inject constructor(
 
     suspend fun load(id: Address): Account = accountRepo.get(id).also { set(it) }
 
-    suspend fun register(): Unit = getClient().createAccount()
+    suspend fun register(): Unit = client().createAccount()
 
-    suspend fun login(): Unit = getClient().login()
+    suspend fun login(): Unit = client().login()
 
-    suspend fun disconnect(): Unit = getClient().disconnect()
+    suspend fun disconnect(): Unit = client().disconnect()
 
     suspend fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 
     suspend fun update(): Unit = accountRepo.update(get())
 
     suspend fun unregister() {
-        getClient().remove()
+        client().remove()
         delete()
     }
 

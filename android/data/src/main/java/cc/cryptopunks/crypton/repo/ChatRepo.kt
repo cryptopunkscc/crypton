@@ -12,6 +12,9 @@ internal class ChatRepo(
     override suspend fun get(address: Address): Chat =
         chatDao.get(address.id).toDomain()
 
+    override suspend fun list(addresses: List<Address>): List<Chat> =
+        chatDao.list(addresses.map(Address::id)).map { it.toDomain() }
+
     override suspend fun insert(chat: Chat)  {
         chat.apply {
             chatDao.insert(chatData())

@@ -22,7 +22,7 @@ class RosterItemPresenter @Inject constructor(
 
     val id get() = chat.address.id
 
-    private val title get() = chat.title
+    private val title get() = chat.address.id
 
     private val letter get() = title.firstOrNull()?.toLowerCase() ?: '0'
 

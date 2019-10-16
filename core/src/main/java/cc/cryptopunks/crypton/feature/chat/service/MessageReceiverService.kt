@@ -1,8 +1,10 @@
 package cc.cryptopunks.crypton.feature.chat.service
 
 import cc.cryptopunks.crypton.api.Api
-import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.feature.chat.interactor.SaveMessagesInteractor
+import cc.cryptopunks.crypton.util.ext.invokeOnClose
+import cc.cryptopunks.crypton.util.log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
@@ -13,16 +15,15 @@ import javax.inject.Inject
 class MessageReceiverService @Inject constructor(
     scope: Api.Scope,
     messageBroadcast: Message.Api.Broadcast,
-    messageRepo: Message.Repo,
-    chatRepo: Chat.Repo
+    saveMessages: SaveMessagesInteractor
 ) : () -> Job by {
     scope.plus(SupervisorJob()).launch {
+        MessageReceiverService::class.log("start")
+        invokeOnClose { MessageReceiverService::class.log("stop") }
         messageBroadcast.collect { message ->
             scope.launch {
-                chatRepo.get(message.chatAddress).let {
-                    messageRepo.insertOrUpdate(message)
-                }
-            }
+                saveMessages(listOf(message)).join()
+            }.join()
         }
     }
 }

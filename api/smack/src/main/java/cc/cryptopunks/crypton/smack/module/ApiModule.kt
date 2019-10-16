@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.api.account.*
 import cc.cryptopunks.crypton.smack.api.chat.CreateChat
 import cc.cryptopunks.crypton.smack.api.chat.MessageBroadcast
+import cc.cryptopunks.crypton.smack.api.chat.ReadArchivedMessages
 import cc.cryptopunks.crypton.smack.api.chat.SendMessage
 import cc.cryptopunks.crypton.smack.api.client.ConnectClient
 import cc.cryptopunks.crypton.smack.api.client.DisconnectClient
@@ -87,6 +88,10 @@ internal class ApiModule(
             chatManager = chatManager,
             address = address
         )
+    }
+
+    override val readArchived: Message.Api.ReadArchived by lazy {
+        ReadArchivedMessages(mamManager)
     }
 
     override val rosterEventPublisher: RosterEvent.Api.Broadcast by lazy {

@@ -39,7 +39,7 @@ class App : CoreApplication() {
                     ).invoke {
                         copy(
 //                            securityMode = Client.Factory.Config.SecurityMode.disabled,
-                            hostAddress = "10.0.2.2",
+//                            hostAddress = "10.0.2.2",
                             resource = "xmpptest"
                         )
                     },

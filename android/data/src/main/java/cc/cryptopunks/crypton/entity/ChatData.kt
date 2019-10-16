@@ -45,6 +45,9 @@ internal data class ChatData(
 
         @Query("select id from chat where id = :id")
         suspend fun contains(id: AddressData): AddressData?
+
+        @Query("select * from chat where id in (:ids)")
+        suspend fun list(ids: List<AddressData>): List<ChatData>
     }
 }
 

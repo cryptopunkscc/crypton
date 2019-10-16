@@ -6,6 +6,7 @@ import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.iqregister.AccountManager
+import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
 import org.jivesoftware.smackx.omemo.OmemoService
@@ -17,7 +18,6 @@ import org.jivesoftware.smackx.omemo.trust.TrustState
 internal class SmackModule(
     override val configuration: XMPPTCPConnectionConfiguration
 ) : SmackComponent {
-
     override val connection by lazy {
         XMPPTCPConnection(configuration)
     }
@@ -40,6 +40,10 @@ internal class SmackModule(
 
     override val mucManager by lazy {
         MultiUserChatManager.getInstanceFor(connection)!!
+    }
+
+    override val mamManager: MamManager by lazy {
+        MamManager.getInstanceFor(connection)
     }
 
     override val omemoManager: OmemoManager by lazy {

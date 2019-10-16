@@ -18,7 +18,10 @@ class SignInViewModel @Inject constructor(
 
     init {
         accountViewModel.apply {
-            serviceName.text = "test.io"
+//            serviceName.text = "test.io"
+//            userName.text = "test"
+//            password.text = "test"
+            serviceName.text = "cryptopunks.cc"
             userName.text = "test"
             password.text = "test"
         }
