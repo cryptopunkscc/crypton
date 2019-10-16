@@ -1,12 +1,12 @@
 package cc.cryptopunks.crypton.view
 
 import android.content.Context
-import android.view.View
 import android.widget.FrameLayout
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
+import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
 import kotlinx.android.synthetic.main.roster_item.view.*
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +19,11 @@ class RosterItemView(
     RosterItemPresenter.View {
 
     init {
-        View.inflate(context, R.layout.roster_item, this)
+        layoutParams = LayoutParams(
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.WRAP_CONTENT
+        )
+        inflate(R.layout.roster_item, true)
     }
 
     override fun setTitle(title: String) {

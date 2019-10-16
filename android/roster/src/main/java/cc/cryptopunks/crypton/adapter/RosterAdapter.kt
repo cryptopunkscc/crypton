@@ -39,11 +39,9 @@ class RosterAdapter @Inject constructor(
         holder.cancel()
     }
 
-    inner class ViewHolder(
-        view: View
-    ) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        var job: Job? = null
+        private var job: Job? = null
 
         private val view get() = itemView as RosterItemView
 

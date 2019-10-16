@@ -5,13 +5,9 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
-import cc.cryptopunks.crypton.util.ext.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.chat_message_item.*
-import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MessageAdapter @Inject constructor(
@@ -20,10 +16,11 @@ class MessageAdapter @Inject constructor(
     PagedListAdapter<MessagePresenter, MessageAdapter.ViewHolder>(Diff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(parent.inflate(R.layout.chat_message_item))
+        ViewHolder(MessageView(parent.context))
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        scope.launch { holder.bind(getItem(position)) }
+    }
 
     private object Diff : DiffUtil.ItemCallback<MessagePresenter>() {
         override fun areItemsTheSame(
@@ -37,36 +34,12 @@ class MessageAdapter @Inject constructor(
         ) = areItemsTheSame(oldItem, newItem)
     }
 
-    inner class ViewHolder(
-        view: View
-    ) : RecyclerView.ViewHolder(view),
-        LayoutContainer {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        override val containerView: View get() = itemView
-        private val view = object : MessagePresenter.View,
-            CoroutineScope by this@MessageAdapter.scope + Job() {
+        private val view get() = itemView as MessageView
 
-            override fun setAuthor(name: String) {
-                authorTextView.text = name
-            }
-
-            override fun setMessage(text: String) {
-                bodyTextView.text = text
-            }
-
-            override fun setDate(timestamp: Long) {
-                timestampTextView.text = Date(timestamp).toString()
-            }
-
-            fun clear() {
-                setMessage("")
-                setDate(0)
-            }
-        }
-
-        fun bind(present: MessagePresenter?): Unit = view.run {
-            coroutineContext.cancelChildren()
-            launch { present?.run { view() } ?: clear() }
+        suspend fun bind(present: MessagePresenter?) {
+            present?.run { view() }
         }
     }
 }
