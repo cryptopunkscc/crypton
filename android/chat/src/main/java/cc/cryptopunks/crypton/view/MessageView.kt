@@ -17,9 +17,7 @@ class MessageView(
     FrameLayout(context),
     MessagePresenter.View {
 
-    private val padding by lazy {
-        resources.getDimensionPixelSize(R.dimen.message_padding)
-    }
+    private val padding by lazy { resources.getDimensionPixelSize(R.dimen.message_padding) }
 
     init {
         layoutParams = ViewGroup.LayoutParams(
@@ -41,22 +39,14 @@ class MessageView(
         timestampTextView.text = dateFormat.format(timestamp)
     }
 
-    override fun alignRight(value: Boolean) {
-        linearLayout.apply {
-            gravity = if (value)
-                Gravity.RIGHT else
-                Gravity.LEFT
+    fun setGravity(gravity: Int) = apply {
+        when (gravity) {
+            Gravity.LEFT -> setPadding(0, 0, padding, 0)
+            Gravity.RIGHT -> setPadding(padding, 0, 0, 0)
+            else -> throw Exception("Unsupported gravity")
         }
-
-        cardContainer.apply {
-            gravity = if (value)
-                Gravity.RIGHT else
-                Gravity.LEFT
-
-            if (value)
-                setPadding(padding, 0, 0, 0) else
-                setPadding(0, 0, padding, 0)
-        }
+        linearLayout.gravity = gravity
+        cardContainer.gravity = gravity
     }
 
     private companion object {

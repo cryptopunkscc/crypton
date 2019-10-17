@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.adapter
 
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
@@ -22,11 +23,16 @@ class MessageAdapter @Inject constructor(
     private val dateFormat: DateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(MessageView(parent.context, dateFormat))
+        ViewHolder(MessageView(parent.context, dateFormat).setGravity(viewType))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         scope.launch { holder.bind(getItem(position)) }
     }
+
+    override fun getItemViewType(position: Int): Int =
+        if (getItem(position)!!.isAccountMessage)
+            Gravity.RIGHT else
+            Gravity.LEFT
 
     private object Diff : DiffUtil.ItemCallback<MessagePresenter>() {
         override fun areItemsTheSame(

@@ -13,18 +13,18 @@ data class MessagePresenter(
 
     val id get() = message.id
 
+    val isAccountMessage get() = message.from.address == address
+
     override suspend fun View.invoke(): Unit = message.run {
         setMessage(text)
         setDate(timestamp)
         setAuthor(from.address.local)
-        alignRight(from.address == address)
     }
 
     interface View : Actor {
         fun setMessage(text: String)
         fun setDate(timestamp: Long)
         fun setAuthor(name: String)
-        fun alignRight(value: Boolean)
     }
 
     class Factory @Inject constructor(

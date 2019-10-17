@@ -6,7 +6,7 @@
     android:id="@+id/cardContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/message_padding"
+    tools:paddingLeft="@dimen/message_padding"
     tools:gravity="right">
 
     <androidx.cardview.widget.CardView
