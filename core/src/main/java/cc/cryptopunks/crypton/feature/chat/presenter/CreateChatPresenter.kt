@@ -7,11 +7,12 @@ import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.cache
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,41 +24,50 @@ class CreateChatPresenter @Inject constructor(
 
     private val usersCache = emptyList<User>().cache()
 
-    private val data get() = CreateChatInteractor.Data(
-        title = usersCache.value.firstOrNull()?.run { address.id } ?: "test",
-        users = usersCache.value
-    )
+    private val data
+        get() = CreateChatInteractor.Data(
+            title = usersCache.value.firstOrNull()?.run { address.id } ?: "test",
+            users = usersCache.value
+        )
 
-    private val add: suspend (String) -> Unit = { string ->
-        usersCache { plus(User(string)) }
+    private val add: suspend (User) -> Unit = { user ->
+        user.address.validate()
+        usersCache { plus(user) }
     }
 
     private val remove: suspend (User) -> Unit = { user ->
         usersCache { minus(user) }
     }
 
-    private val create: suspend (Any) -> Unit = {
-        createChat(data).runCatching {
-            val address = await().address
+    private val create: suspend (Any) -> Throwable? = { arg ->
+        runCatching {
+            if (arg is User) add(arg)
 
-            navigate(Route.Chat()) {
-                chatAddress = address.id
+            createChat(data).run {
+                val address = await().address
+
+                navigate(Route.Chat()) {
+                    chatAddress = address.id
+                }
             }
-        }
+        }.exceptionOrNull()
     }
 
-    override suspend fun View.invoke() = coroutineScope {
+    override suspend fun View.invoke() = supervisorScope {
+        launch { init() }
         launch { addUserClick.onEach(clearInput).collect(add) }
         launch { removeUserClick.collect(remove) }
         launch { usersCache.collect(setUsers) }
-        launch { createChatClick.collect(create) }
+        launch { createChatClick.map(create).collect(setError) }
     }
 
     interface View : Actor {
-        val addUserClick: Flow<String>
+        suspend fun init()
+        val addUserClick: Flow<User>
         val removeUserClick: Flow<User>
         val createChatClick: Flow<Any>
         val setUsers: suspend (List<User>) -> Unit
         val clearInput: suspend (Any) -> Unit
+        val setError: suspend (Throwable?) -> Unit
     }
 }

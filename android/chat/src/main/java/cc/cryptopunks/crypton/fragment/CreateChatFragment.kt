@@ -20,8 +20,7 @@ class CreateChatFragment : PresenterFragment<
 
     override suspend fun onCreateComponent(
         component: PresentationComponent
-    ): Component = DaggerCreateChatFragment_Component
-        .builder()
+    ): Component = DaggerCreateChatFragment_Component.builder()
         .presentationComponent(component)
         .build()!!
 
@@ -35,8 +34,7 @@ class CreateChatFragment : PresenterFragment<
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = CreateChatView(
-        context = context!!,
-        createChatClick = coreActivity.navigationComponent.optionItemSelections
+        context = context!!
     )
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

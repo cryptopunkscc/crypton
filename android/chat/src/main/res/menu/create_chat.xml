@@ -6,5 +6,6 @@
         android:id="@id/navigateAccountManagement"
         android:icon="@drawable/ic_done_white_24dp"
         android:title="@string/create_chat"
+        android:visible="false"
         app:showAsAction="always" />
 </menu>

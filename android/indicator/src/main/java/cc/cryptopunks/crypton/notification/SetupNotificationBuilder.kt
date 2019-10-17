@@ -15,7 +15,6 @@ internal class SetupNotificationBuilder @Inject constructor(
 
     builder
         .setContentTitle(service.getText(R.string.app_name))
-        .setContentText("Content text")
         .setSmallIcon(R.mipmap.ic_launcher_round)
         .setContentIntent(
             PendingIntent.getActivity(

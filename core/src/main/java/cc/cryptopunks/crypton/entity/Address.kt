@@ -9,9 +9,20 @@ data class Address(
     append(domain)
 }) {
 
+    fun validate() {
+        local.isNotBlank() || throw Exception.InvalidAddress
+        domain.split('.').size == 2 || throw Exception.InvalidAddress
+    }
+
     val id by lazy { toString() }
 
     override fun toString(): String = substring(0, length)
+
+    class Exception(message: String?) : kotlin.Exception(message) {
+        companion object {
+            val InvalidAddress = Exception("Invalid address")
+        }
+    }
 
     companion object {
         val Empty = Address()

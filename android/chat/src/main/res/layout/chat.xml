@@ -1,52 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:listitem="@layout/chat_message_item"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CACACA" />
+        android:clipToPadding="false"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        tools:listitem="@layout/chat_message_item" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:paddingStart="4dp"
-        android:paddingBottom="2dp"
-        android:orientation="horizontal">
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="2dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            android:layout_weight="1">
 
             <EditText
                 android:id="@+id/messageInput"
+                style="@style/Widget.EditText"
                 android:hint="Type text here..."
-                android:minHeight="48dp"
-                style="@style/Widget.EditText" />
+                android:minHeight="48dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/sendMessageButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_margin="4dp"
             android:src="@drawable/ic_send_black_24dp" />
 
     </LinearLayout>
