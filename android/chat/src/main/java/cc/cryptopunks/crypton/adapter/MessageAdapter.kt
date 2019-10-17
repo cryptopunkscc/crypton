@@ -40,7 +40,7 @@ class MessageAdapter @Inject constructor(
         ) = areItemsTheSame(oldItem, newItem)
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val view get() = itemView as MessageView
 
