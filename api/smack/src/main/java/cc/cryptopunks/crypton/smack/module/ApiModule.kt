@@ -18,7 +18,11 @@ import cc.cryptopunks.crypton.smack.api.user.UserInvite
 import cc.cryptopunks.crypton.smack.api.user.UserInvited
 import cc.cryptopunks.crypton.smack.component.ApiComponent
 import cc.cryptopunks.crypton.smack.component.SmackComponent
+import cc.cryptopunks.crypton.smack.util.ConnectionEvent.ConnectionClosed
+import cc.cryptopunks.crypton.smack.util.connectionEventsFlow
 import cc.cryptopunks.crypton.util.BroadcastError
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 
 internal class ApiModule(
     override val address: Address,
@@ -28,6 +32,20 @@ internal class ApiModule(
     ApiComponent {
 
     override val apiScope = Api.Scope(broadcastError)
+
+    init {
+        apiScope.launch {
+            smack.run {
+                connection
+                    .connectionEventsFlow()
+                    .filter { it is ConnectionClosed && it.withError }
+                    .collect {
+                        connect()
+                        login()
+                    }
+            }
+        }
+    }
 
     override val connect: Client.Connect by lazy {
         ConnectClient(connection = connection)
