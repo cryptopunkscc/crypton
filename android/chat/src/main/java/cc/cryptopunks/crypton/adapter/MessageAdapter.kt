@@ -9,6 +9,9 @@ import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
 import cc.cryptopunks.crypton.view.MessageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class MessageAdapter @Inject constructor(
@@ -16,8 +19,10 @@ class MessageAdapter @Inject constructor(
 ) :
     PagedListAdapter<MessagePresenter, MessageAdapter.ViewHolder>(Diff) {
 
+    private val dateFormat: DateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(MessageView(parent.context))
+        ViewHolder(MessageView(parent.context, dateFormat))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         scope.launch { holder.bind(getItem(position)) }

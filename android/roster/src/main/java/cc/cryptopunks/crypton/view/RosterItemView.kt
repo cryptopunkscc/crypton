@@ -10,10 +10,11 @@ import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
 import kotlinx.android.synthetic.main.roster_item.view.*
 import kotlinx.coroutines.flow.Flow
-import java.util.*
+import java.text.DateFormat
 
 class RosterItemView(
-    context: Context
+    context: Context,
+    private val dateFormat: DateFormat
 ) :
     FrameLayout(context),
     RosterItemPresenter.View {
@@ -39,7 +40,7 @@ class RosterItemView(
 
     override val setMessage: suspend (Message) -> Unit get() = { message ->
         lastMessageTextView.text = message.text
-        dateTextView.text = Date(message.timestamp).toString()
+        dateTextView.text = dateFormat.format(message.timestamp)
     }
 
     override val onClick: Flow<Any> get() = clicks()

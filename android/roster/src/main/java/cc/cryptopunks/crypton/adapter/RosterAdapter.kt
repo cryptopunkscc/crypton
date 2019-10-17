@@ -9,6 +9,9 @@ import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.view.RosterItemView
 import kotlinx.coroutines.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class RosterAdapter @Inject constructor(
@@ -16,8 +19,10 @@ class RosterAdapter @Inject constructor(
 ) :
     PagedListAdapter<RosterItemPresenter, RosterAdapter.ViewHolder>(Diff) {
 
+    private val dateFormat: DateFormat = SimpleDateFormat("d MMM yyyy • HH:mm", Locale.getDefault())
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(RosterItemView(parent.context))
+        ViewHolder(RosterItemView(parent.context, dateFormat))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         scope.launch { holder.bind(getItem(position)) }

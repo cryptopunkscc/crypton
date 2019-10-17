@@ -25,7 +25,7 @@ class ChatView(
     ChatPresenter.View,
     CoroutineScope by scope {
 
-    private val messageAdapter = MessageAdapter(scope)
+    private val messageAdapter: MessageAdapter = MessageAdapter(scope)
 
     init {
         View.inflate(context, R.layout.chat, this)

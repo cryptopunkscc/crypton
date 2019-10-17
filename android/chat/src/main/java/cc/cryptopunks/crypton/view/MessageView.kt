@@ -8,13 +8,18 @@ import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.synthetic.main.chat_message_item.view.*
-import java.util.*
+import java.text.DateFormat
 
 class MessageView(
-    context: Context
+    context: Context,
+    private val dateFormat: DateFormat
 ) :
     FrameLayout(context),
     MessagePresenter.View {
+
+    private val padding by lazy {
+        resources.getDimensionPixelSize(R.dimen.message_padding)
+    }
 
     init {
         layoutParams = ViewGroup.LayoutParams(
@@ -24,21 +29,37 @@ class MessageView(
         inflate(R.layout.chat_message_item, true)
     }
 
-    override fun setAuthor(name: String) {
-        authorTextView.text = name
-    }
-
     override fun setMessage(text: String) {
         bodyTextView.text = text
     }
 
+    override fun setAuthor(name: String) {
+        authorTextView.text = " $BULLET $name"
+    }
+
     override fun setDate(timestamp: Long) {
-        timestampTextView.text = Date(timestamp).toString()
+        timestampTextView.text = dateFormat.format(timestamp)
     }
 
     override fun alignRight(value: Boolean) {
-        cardContainer.gravity = if (value)
-            Gravity.RIGHT else
-            Gravity.LEFT
+        linearLayout.apply {
+            gravity = if (value)
+                Gravity.RIGHT else
+                Gravity.LEFT
+        }
+
+        cardContainer.apply {
+            gravity = if (value)
+                Gravity.RIGHT else
+                Gravity.LEFT
+
+            if (value)
+                setPadding(padding, 0, 0, 0) else
+                setPadding(0, 0, padding, 0)
+        }
+    }
+
+    private companion object {
+        const val BULLET = '•'
     }
 }

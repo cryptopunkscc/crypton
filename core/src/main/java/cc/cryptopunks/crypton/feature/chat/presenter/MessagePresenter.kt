@@ -13,11 +13,11 @@ data class MessagePresenter(
 
     val id get() = message.id
 
-    override suspend fun View.invoke() = run {
-        setMessage(message.text)
-        setDate(message.timestamp)
-        setAuthor(message.from.id)
-        alignRight(message.from.address == address)
+    override suspend fun View.invoke(): Unit = message.run {
+        setMessage(text)
+        setDate(timestamp)
+        setAuthor(from.address.local)
+        alignRight(from.address == address)
     }
 
     interface View : Actor {
