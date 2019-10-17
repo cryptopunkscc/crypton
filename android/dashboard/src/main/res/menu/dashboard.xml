@@ -4,6 +4,7 @@
     <item
         android:id="@id/navigateAccountManagement"
         android:title="@string/manage_accounts"
+        android:visible="false"
         app:showAsAction="always"
         android:icon="@drawable/ic_account_circle_white_24dp"/>
 </menu>
