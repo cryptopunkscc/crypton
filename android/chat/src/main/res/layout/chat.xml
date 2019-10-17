@@ -33,7 +33,7 @@
             <EditText
                 android:id="@+id/messageInput"
                 style="@style/Widget.EditText"
-                android:hint="Type text here..."
+                android:hint="Type message..."
                 android:minHeight="48dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
