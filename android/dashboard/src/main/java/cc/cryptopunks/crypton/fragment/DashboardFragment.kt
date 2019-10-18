@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.feature.dashboard.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.navigation.Navigation
-import cc.cryptopunks.crypton.presenter.ActorPresenterManager
+import cc.cryptopunks.crypton.presentation.Presentation
 import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +28,7 @@ class DashboardFragment :
     ])
     interface Component : Presenter.Component<DashboardPresenter>
 
-    private val manager = ActorPresenterManager<DashboardPresenter.View, DashboardPresenter>()
+    private val manager = Presentation<DashboardPresenter.View, DashboardPresenter>()
 
     private val component: Component by lazy {
         DaggerDashboardFragment_Component

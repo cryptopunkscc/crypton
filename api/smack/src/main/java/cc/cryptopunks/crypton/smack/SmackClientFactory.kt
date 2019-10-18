@@ -21,17 +21,15 @@ fun initSmack(omemoStoreFile: File) {
 }
 
 class SmackClientFactory(
-    private val broadcastError: BroadcastError = BroadcastError()
+    private val broadcastError: BroadcastError = BroadcastError(),
+    setup: Client.Factory.Config.() -> Client.Factory.Config = { this }
 ) : Client.Factory, (Client.Config) -> Client {
 
     private var factoryConfig = Client.Factory.Config.Empty
 
-    private val connectionConfig
-        get() = XMPPTCPConnectionConfiguration.builder()
-            .enableDefaultDebugger()
-            .setResource(factoryConfig.resource)
-            .setHostAddress(factoryConfig.hostAddress?.let(InetAddress::getByName))
-            .setSecurityMode(ConnectionConfiguration.SecurityMode.valueOf(factoryConfig.securityMode.name))
+    init {
+        invoke(setup)
+    }
 
     operator fun invoke(setup: Client.Factory.Config.() -> Client.Factory.Config) = apply {
         factoryConfig = factoryConfig.setup()
@@ -45,4 +43,11 @@ class SmackClientFactory(
             .build(),
         broadcastError = broadcastError
     )
+
+    private val connectionConfig
+        get() = XMPPTCPConnectionConfiguration.builder()
+            .enableDefaultDebugger()
+            .setResource(factoryConfig.resource)
+            .setHostAddress(factoryConfig.hostAddress?.let(InetAddress::getByName))
+            .setSecurityMode(ConnectionConfiguration.SecurityMode.valueOf(factoryConfig.securityMode.name))
 }

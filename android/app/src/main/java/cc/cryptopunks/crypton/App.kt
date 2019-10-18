@@ -11,6 +11,8 @@ import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import cc.cryptopunks.crypton.smack.initSmack
+import cc.cryptopunks.crypton.sys.SysModule
+import cc.cryptopunks.crypton.sys.MessageSys
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.ExecutorsModule
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -25,17 +27,15 @@ class App : CoreApplication() {
             application = this,
             mainActivityClass = MainActivity::class.java,
             coreModule = CoreModule(
+                broadcastErrorComponent = broadcastErrorComponent,
                 executorsComponent = ExecutorsModule(
                     mainExecutor = MainExecutor(ArchTaskExecutor.getMainThreadExecutor()),
                     ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())
                 ),
-                repoComponent = RepoModule(
-                    context = this
-                ),
                 clientComponent = ClientModule(
                     createClient = SmackClientFactory(
                         broadcastError = broadcastErrorComponent.broadcastError
-                    ).invoke {
+                    ) {
                         copy(
 //                            securityMode = Client.Factory.Config.SecurityMode.disabled,
 //                            hostAddress = "10.0.2.2",
@@ -44,7 +44,12 @@ class App : CoreApplication() {
                     },
                     mapException = ExceptionMapper
                 ),
-                broadcastErrorComponent = broadcastErrorComponent
+                repoComponent = RepoModule(
+                    context = this
+                ),
+                sysComponent = SysModule(
+                    message = MessageSys()
+                )
             )
         )
     }

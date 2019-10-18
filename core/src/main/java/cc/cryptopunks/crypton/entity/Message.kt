@@ -44,6 +44,12 @@ data class Message(
         fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message>
     }
 
+    interface Sys {
+        val showNotification: ShowNotification
+
+        interface ShowNotification: (Message) -> Unit
+    }
+
     class Exception(message: String? = null) : kotlin.Exception(message)
 
     companion object {

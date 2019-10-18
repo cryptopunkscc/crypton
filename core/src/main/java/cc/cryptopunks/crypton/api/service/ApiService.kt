@@ -4,18 +4,21 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.feature.chat.service.LoadArchivedMessagesService
 import cc.cryptopunks.crypton.feature.chat.service.MessageReceiverService
+import cc.cryptopunks.crypton.feature.chat.service.ShowMessageNotificationService
 import cc.cryptopunks.crypton.util.log
 import dagger.Component
 import javax.inject.Inject
 
 class ApiService @Inject constructor(
     messageReceiverService: MessageReceiverService,
-    loadArchivedMessagesService: LoadArchivedMessagesService
+    loadArchivedMessagesService: LoadArchivedMessagesService,
+    showMessageNotificationService: ShowMessageNotificationService
 ) : () -> Unit by {
-    ApiService::class.log("start")
+    log<ApiService>("start")
     messageReceiverService()
     loadArchivedMessagesService()
-    ApiService::class.log("stop")
+    showMessageNotificationService()
+    log<ApiService>("stop")
 } {
 
     @Component(dependencies = [Client::class, Core.Component::class])

@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ChatPresenter @Inject constructor(
-    private val chat: Chat,
+    val chat: Chat,
     private val sendMessage: SendMessageInteractor,
     private val createMessagePresenter: MessagePresenter.Factory,
     private val messageFlow: MessagePagedListSelector

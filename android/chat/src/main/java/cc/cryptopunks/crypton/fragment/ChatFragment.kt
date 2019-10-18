@@ -49,6 +49,6 @@ class ChatFragment : PresenterFragment<
         savedInstanceState: Bundle?
     ) = ChatView(
         context = context!!,
-        scope = manager.actorScope
+        scope = presentation.actorScope
     )
 }
