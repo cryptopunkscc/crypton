@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "cc.cryptopunks.crypton"
         minSdkVersion 22
-        targetSdkVersion 28
+        targetSdkVersion 27 // TODO temporary downgraded required by Omemo
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

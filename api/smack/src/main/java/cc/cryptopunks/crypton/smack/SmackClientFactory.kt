@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.util.BroadcastError
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
+import org.jivesoftware.smackx.omemo.signal.SignalCachingOmemoStore
 import org.jivesoftware.smackx.omemo.signal.SignalFileBasedOmemoStore
 import org.jivesoftware.smackx.omemo.signal.SignalOmemoService
 import java.io.File
@@ -13,7 +14,7 @@ fun initSmack(omemoStoreFile: File) {
     SignalOmemoService.acknowledgeLicense()
     SignalOmemoService.setup()
     SignalOmemoService.getInstance().apply {
-        omemoStoreBackend = SignalFileBasedOmemoStore(omemoStoreFile)
+        omemoStoreBackend = SignalCachingOmemoStore(SignalFileBasedOmemoStore(omemoStoreFile))
     }
 }
 

@@ -2,13 +2,12 @@ package cc.cryptopunks.crypton
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.api.Client
-import cc.cryptopunks.crypton.component.ApplicationComponent
-import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.api.client.ClientModule
 import cc.cryptopunks.crypton.component.AppComponent
+import cc.cryptopunks.crypton.component.ApplicationComponent
 import cc.cryptopunks.crypton.component.DaggerAppComponent
 import cc.cryptopunks.crypton.core.CoreModule
+import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import cc.cryptopunks.crypton.smack.initSmack
@@ -58,11 +57,11 @@ class App : CoreApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        initSmack(getDatabasePath(OMEMO_STORE_NAME))
+        initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
         appComponent.coreService()
     }
 
     private companion object {
-        private const val OMEMO_STORE_NAME = "omemo_store"
+        private const val OMEMO_STORE_NAME = "omemo"
     }
 }

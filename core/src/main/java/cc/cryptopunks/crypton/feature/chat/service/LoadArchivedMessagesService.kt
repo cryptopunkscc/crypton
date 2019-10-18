@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.feature.chat.service
 
 import cc.cryptopunks.crypton.api.Api
-import cc.cryptopunks.crypton.api.service.ApiService
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.feature.chat.interactor.SaveMessagesInteractor
 import cc.cryptopunks.crypton.feature.chat.selector.GetLatestMessageTimestampSelector
@@ -18,8 +17,8 @@ class LoadArchivedMessagesService @Inject constructor(
     saveMessages: SaveMessagesInteractor
 ) : () -> Job by {
     scope.launch {
-        ApiService::class.log("start")
-        invokeOnClose { ApiService::class.log("stop") }
+        LoadArchivedMessagesService::class.log("start")
+        invokeOnClose { LoadArchivedMessagesService::class.log("stop") }
         getLatestMessageTimestamp()
             .run { Message.Api.ReadArchived.Query(since = await()) }
             .let(readArchivedMessages)

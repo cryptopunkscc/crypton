@@ -11,10 +11,12 @@ interface Client: Api {
     val isConnected: IsConnected
     val connect: Connect
     val disconnect: Disconnect
+    val initOmemo: InitOmemo
 
     interface Connect: () -> Unit
     interface Disconnect: () -> Unit
     interface IsConnected: () -> Boolean
+    interface InitOmemo: () -> Unit
 
     interface Component {
         val mapException: MapException

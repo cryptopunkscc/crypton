@@ -27,7 +27,10 @@ data class AccountManager @Inject constructor(
 
     suspend fun register(): Unit = client().createAccount()
 
-    suspend fun login(): Unit = client().login()
+    suspend fun login(): Unit = client().run {
+        login()
+        initOmemo()
+    }
 
     suspend fun disconnect(): Unit = client().disconnect()
 

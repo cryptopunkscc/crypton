@@ -5,27 +5,21 @@ import cc.cryptopunks.crypton.entity.CryptonMessage
 import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.entity.Resource
 import org.jivesoftware.smack.packet.Message
-import org.jivesoftware.smackx.delay.packet.DelayInformation
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.sid.element.StanzaIdElement
-import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.impl.JidCreate
-import java.util.*
 
-internal fun Forwarded.toCryptonMessage() = (forwardedStanza as Message)
-    .toCryptonMessage()
-    .copy(timestamp = delayInformation.stamp.time)
+internal fun Forwarded.toCryptonMessage() =
+    (forwardedStanza as Message).toCryptonMessage(delayInformation.stamp.time)
 
 internal fun Message.toCryptonMessage(
-    chatId: EntityBareJid? = null,
-    delayInformation: DelayInformation = DelayInformation(Date())
+    timestamp: Long = System.currentTimeMillis()
 ) = CryptonMessage(
     id = extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: stanzaId,
-    chatAddress = chatId?.remoteId() ?: Address.Empty,
     text = body ?: "",
     from = from.resourceId(),
     to = to.resourceId(),
-    timestamp = delayInformation.stamp.time,
+    timestamp = timestamp,
     stanzaId = stanzaId ?: ""
 )
 

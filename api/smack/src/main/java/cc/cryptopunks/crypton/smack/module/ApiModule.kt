@@ -10,6 +10,7 @@ import cc.cryptopunks.crypton.smack.api.chat.ReadArchivedMessages
 import cc.cryptopunks.crypton.smack.api.chat.SendMessage
 import cc.cryptopunks.crypton.smack.api.client.ConnectClient
 import cc.cryptopunks.crypton.smack.api.client.DisconnectClient
+import cc.cryptopunks.crypton.smack.api.client.InitOmemo
 import cc.cryptopunks.crypton.smack.api.presence.SendPresence
 import cc.cryptopunks.crypton.smack.api.roster.RosterEventPublisher
 import cc.cryptopunks.crypton.smack.api.user.AddContactUser
@@ -59,6 +60,10 @@ internal class ApiModule(
         IsAccountConnected(connection = connection)
     }
 
+    override val initOmemo: Client.InitOmemo by lazy {
+        InitOmemo(omemoManager)
+    }
+
     override val createAccount: Account.Api.Create by lazy {
         CreateAccount(
             configuration = configuration,
@@ -70,7 +75,7 @@ internal class ApiModule(
         RemoveAccount(accountManager = accountManager)
     }
     override val login: Account.Api.Login by lazy {
-        LoginAccount(connection = connection)
+        LoginAccount(connection)
     }
 
     override val isAuthenticated: Account.Api.IsAuthenticated by lazy {
@@ -98,13 +103,18 @@ internal class ApiModule(
     }
 
     override val sendMessage: Message.Api.Send by lazy {
-        SendMessage(smack)
+        SendMessage(
+            connection = connection,
+            roster = roster,
+            omemoManager = omemoManager
+        )
     }
 
     override val messageBroadcast: Message.Api.Broadcast by lazy {
         MessageBroadcast(
             chatManager = chatManager,
-            address = address
+            address = address,
+            omemoManager = omemoManager
         )
     }
 
