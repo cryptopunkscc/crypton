@@ -2,13 +2,17 @@ package cc.cryptopunks.crypton.smack.api.chat
 
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
+import org.jivesoftware.smack.packet.Message as ApiMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
+import org.jivesoftware.smackx.omemo.OmemoManager
 import java.util.*
 
 internal class ReadArchivedMessages(
-    private val mamManager: MamManager
+    private val mamManager: MamManager,
+    private val omemoManager: OmemoManager
 ) : Message.Api.ReadArchived {
 
     override fun invoke(
@@ -24,7 +28,15 @@ internal class ReadArchivedMessages(
 
     private fun MamManager.MamQuery.flowMessages() = flow {
         while (messageCount > 0) {
+            val decryptedQueryResult = omemoManager.decryptMamQueryResult(this@flowMessages)
             page.forwarded
+                .mapIndexed { index: Int, forwarded: Forwarded ->
+                    val decrypted = decryptedQueryResult[index]
+                    forwarded.apply {
+                        if (decrypted.isOmemoMessage)
+                            (forwardedStanza as ApiMessage).body = decrypted.omemoMessage.body
+                    }
+                }
                 .map { it.toCryptonMessage() }
                 .let { emit(it) }
 

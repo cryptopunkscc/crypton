@@ -119,7 +119,10 @@ internal class ApiModule(
     }
 
     override val readArchived: Message.Api.ReadArchived by lazy {
-        ReadArchivedMessages(mamManager)
+        ReadArchivedMessages(
+            mamManager = mamManager,
+            omemoManager = omemoManager
+        )
     }
 
     override val rosterEventPublisher: RosterEvent.Api.Broadcast by lazy {
