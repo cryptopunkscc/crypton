@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.smack.api.chat
 
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message.Api.Send
-import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smackx.omemo.OmemoManager
@@ -11,7 +10,8 @@ import org.jxmpp.jid.impl.JidCreate
 internal class SendMessage(
     connection: XMPPTCPConnection,
     omemoManager: OmemoManager,
-    roster: Roster
+    roster: Roster,
+    encryptedMessageCache: EncryptedMessageCache
 ) : Send, (Address, String) -> Unit by { to, text ->
 
     val jid = JidCreate.bareFrom(to)
@@ -20,7 +20,8 @@ internal class SendMessage(
         roster.createEntry(jid, to.local, emptyArray())
     }
 
-//    val message = omemoManager.encrypt(jid, text).asMessage(jid)
-    val message = Message(jid, text)
+    val message = omemoManager.encrypt(jid, text).asMessage(jid)
+    encryptedMessageCache[message.stanzaId] = text
+//    val message = Message(jid, text)
     connection.sendStanza(message)
 }

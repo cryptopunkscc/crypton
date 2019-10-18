@@ -4,10 +4,7 @@ import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.api.account.*
-import cc.cryptopunks.crypton.smack.api.chat.CreateChat
-import cc.cryptopunks.crypton.smack.api.chat.MessageBroadcast
-import cc.cryptopunks.crypton.smack.api.chat.ReadArchivedMessages
-import cc.cryptopunks.crypton.smack.api.chat.SendMessage
+import cc.cryptopunks.crypton.smack.api.chat.*
 import cc.cryptopunks.crypton.smack.api.client.ConnectClient
 import cc.cryptopunks.crypton.smack.api.client.DisconnectClient
 import cc.cryptopunks.crypton.smack.api.client.InitOmemo
@@ -47,6 +44,8 @@ internal class ApiModule(
             }
         }
     }
+
+    private val encryptedMessageCache by lazy { EncryptedMessageCache() }
 
     override val connect: Client.Connect by lazy {
         ConnectClient(connection = connection)
@@ -106,7 +105,8 @@ internal class ApiModule(
         SendMessage(
             connection = connection,
             roster = roster,
-            omemoManager = omemoManager
+            omemoManager = omemoManager,
+            encryptedMessageCache = encryptedMessageCache
         )
     }
 
@@ -114,7 +114,8 @@ internal class ApiModule(
         MessageBroadcast(
             chatManager = chatManager,
             address = address,
-            omemoManager = omemoManager
+            omemoManager = omemoManager,
+            encryptedMessageCache = encryptedMessageCache
         )
     }
 
