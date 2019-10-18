@@ -1,8 +1,9 @@
 package cc.cryptopunks.crypton.smack.api.chat
 
 import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
+import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
-import org.jivesoftware.smack.packet.Message as ApiMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.jivesoftware.smackx.forward.packet.Forwarded
@@ -17,29 +18,33 @@ internal class ReadArchivedMessages(
 
     override fun invoke(
         query: Message.Api.ReadArchived.Query
-    ): Flow<List<Message>> = MamManager.MamQueryArgs.builder().run {
-        query.since?.let { limitResultsSince(Date(it)) }
-        limitResultsBefore(Date(query.until))
-        setResultPageSizeTo(PAGE_SIZE)
-        build()
-    }.let {
-        mamManager.queryArchive(it).flowMessages()
-    }
+    ): Flow<List<Message>> = query
+        .asMamQueryArgs()
+        .let(mamManager::queryArchive)
+        .flowMessages()
+
+
+    private fun Message.Api.ReadArchived.Query.asMamQueryArgs() = MamManager.MamQueryArgs
+        .builder()
+        .run {
+            since?.let { limitResultsSince(Date(it)) }
+            limitResultsBefore(Date(until))
+            setResultPageSizeTo(PAGE_SIZE)
+        }
+        .build()
 
     private fun MamManager.MamQuery.flowMessages() = flow {
         while (messageCount > 0) {
             val decryptedQueryResult = omemoManager.decryptMamQueryResult(this@flowMessages)
             page.forwarded
-                .mapIndexed { index: Int, forwarded: Forwarded ->
-                    val decrypted = decryptedQueryResult[index]
-                    forwarded.apply {
-                        if (decrypted.isOmemoMessage)
-                            (forwardedStanza as ApiMessage).body = decrypted.omemoMessage.body
+                .mapIndexedNotNull { index: Int, forwarded: Forwarded ->
+                    if (!forwarded.forwardedStanza.hasOmemoExtension) forwarded
+                    else decryptedQueryResult[index].takeIf { it.isOmemoMessage }?.run {
+                        forwarded.takeIf { it.forwardedStanza.replaceBody(omemoMessage) != null }
                     }
                 }
-                .map { it.toCryptonMessage() }
+                .map(Forwarded::toCryptonMessage)
                 .let { emit(it) }
-
             pageNext(PAGE_SIZE)
         }
     }
