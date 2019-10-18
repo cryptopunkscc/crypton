@@ -23,6 +23,7 @@ class ConnectAccountInteractor @Inject constructor(
             setStatus(Connecting)
             update()
             login()
+            initOmemo()
             setStatus(Connected)
             update()
         }

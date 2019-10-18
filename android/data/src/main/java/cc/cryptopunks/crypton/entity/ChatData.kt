@@ -34,9 +34,6 @@ internal data class ChatData(
         @Insert(onConflict = OnConflictStrategy.IGNORE)
         suspend fun insertIfNeeded(data: ChatData)
 
-        @Insert
-        suspend fun insert(chatList: List<ChatData>)
-
         @Delete
         suspend fun delete(data: ChatData)
 

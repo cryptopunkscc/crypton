@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.util.BroadcastError
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
+import org.jivesoftware.smackx.omemo.OmemoConfiguration
 import org.jivesoftware.smackx.omemo.signal.SignalCachingOmemoStore
 import org.jivesoftware.smackx.omemo.signal.SignalFileBasedOmemoStore
 import org.jivesoftware.smackx.omemo.signal.SignalOmemoService
@@ -11,6 +12,7 @@ import java.io.File
 import java.net.InetAddress
 
 fun initSmack(omemoStoreFile: File) {
+    OmemoConfiguration.setRepairBrokenSessionsWithPrekeyMessages(true)
     SignalOmemoService.acknowledgeLicense()
     SignalOmemoService.setup()
     SignalOmemoService.getInstance().apply {

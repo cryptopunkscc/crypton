@@ -19,7 +19,9 @@ internal class SmackModule(
     override val configuration: XMPPTCPConnectionConfiguration
 ) : SmackComponent {
     override val connection by lazy {
-        XMPPTCPConnection(configuration)
+        XMPPTCPConnection(configuration).apply {
+            replyTimeout = 10000 // Omemo initialization can take longer then 5s
+        }
     }
 
     override val accountManager by lazy {

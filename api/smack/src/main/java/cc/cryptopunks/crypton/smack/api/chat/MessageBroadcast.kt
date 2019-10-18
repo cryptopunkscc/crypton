@@ -70,6 +70,10 @@ private fun chatMessageFlow(
             decryptedMessage: OmemoMessage.Received
         ) {
             if (stanza !is ApiMessage) return
+            stanza.removeExtension(
+                org.jivesoftware.smack.packet.Message.Body.ELEMENT,
+                org.jivesoftware.smack.packet.Message.Body.NAMESPACE
+            )
             stanza.body = decryptedMessage.body
             channel.offer(stanza)
         }
