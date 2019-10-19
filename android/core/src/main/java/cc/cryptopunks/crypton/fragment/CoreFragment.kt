@@ -33,6 +33,8 @@ abstract class CoreFragment : Fragment(), CoroutineScope {
 
     val coreActivity get() = activity as CoreActivity
 
+    val navigationComponent get() = coreActivity.navigationComponent
+
     val presentationComponent
         get() = createComponent(applicationComponent.currentClient())
 

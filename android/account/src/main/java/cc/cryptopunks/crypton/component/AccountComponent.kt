@@ -1,12 +1,18 @@
 package cc.cryptopunks.crypton.component
 
+import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.fragment.*
-import cc.cryptopunks.crypton.presentation.PresentationComponent
+import cc.cryptopunks.crypton.navigation.Navigation
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(dependencies = [PresentationComponent::class])
+@Component(
+    dependencies = [
+        Navigation.Component::class,
+        Core.Component::class
+    ]
+)
 interface AccountComponent {
     fun inject(target: SetAccountFragment)
     fun inject(target: SignInFragment)
