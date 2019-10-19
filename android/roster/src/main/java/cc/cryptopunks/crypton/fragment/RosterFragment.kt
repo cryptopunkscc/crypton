@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cc.cryptopunks.crypton.entity.Chat
+import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.navigation.Navigation
 import cc.cryptopunks.crypton.presentation.PresentationComponent
 import cc.cryptopunks.crypton.presenter.RosterPresenter
 import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.util.ExecutorsComponent
 import cc.cryptopunks.crypton.view.RosterView
 import javax.inject.Singleton
 
@@ -17,7 +21,12 @@ class RosterFragment : PresenterFragment<
 
     @Singleton
     @dagger.Component(
-        dependencies = [PresentationComponent::class]
+        dependencies = [
+            ExecutorsComponent::class,
+            Navigation.Component::class,
+            Chat.Repo::class,
+            Message.Repo::class
+        ]
     )
     interface Component : Presenter.Component<RosterPresenter>
 
@@ -25,7 +34,10 @@ class RosterFragment : PresenterFragment<
         component: PresentationComponent
     ): Component = DaggerRosterFragment_Component
         .builder()
-        .presentationComponent(component)
+        .executorsComponent(component)
+        .component(navigationComponent)
+        .repo(component.chatRepo)
+        .repo(component.messageRepo)
         .build()
 
     override fun onCreateView(
