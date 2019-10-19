@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import org.jivesoftware.smack.chat2.Chat
@@ -22,6 +23,7 @@ import org.jivesoftware.smackx.carbons.packet.CarbonExtension
 import org.jivesoftware.smackx.omemo.OmemoManager
 import org.jivesoftware.smackx.omemo.OmemoMessage
 import org.jivesoftware.smackx.omemo.listener.OmemoMessageListener
+import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
 import org.jivesoftware.smack.packet.Message as ApiMessage
 
@@ -40,8 +42,15 @@ internal class MessageBroadcast(
 
     init {
         scope.launch {
-            messageFlow().collect {
-                channel.send(it)
+            messageFlow(
+                userJid = userJid,
+                encryptedMessageCache = encryptedMessageCache,
+                chatManager = chatManager,
+                omemoManager = omemoManager
+            ).map { message ->
+                message.toCryptonMessage()
+            }.collect { message ->
+                channel.send(message)
             }
         }
     }
@@ -50,45 +59,20 @@ internal class MessageBroadcast(
     override suspend fun collect(collector: FlowCollector<Message>) =
         channel.asFlow().collect(collector)
 
+}
 
-    private fun messageFlow() = callbackFlow<ApiMessage> {
-        val incomingListener = IncomingChatMessageListener { _, message, _: Chat ->
-            if (!message.hasOmemoExtension)
-                channel.offer(message)
-        }
+private fun messageFlow(
+    userJid: Jid,
+    encryptedMessageCache: EncryptedMessageCache,
+    chatManager: ChatManager,
+    omemoManager: OmemoManager
+): Flow<ApiMessage> =
 
-        val outgoingListener = OutgoingChatMessageListener { _, message, _ ->
-            channel.offer(
-                message.run {
-                    if (!hasOmemoExtension) message
-                    else apply {
-                        removeOmemoBody()
-                        body = encryptedMessageCache[message.stanzaId]
-                    }
-                }.apply {
-                    from = userJid
-                }
-            )
-        }
+    callbackFlow {
 
-        val omemoListener = object : OmemoMessageListener {
-
-            override fun onOmemoMessageReceived(
-                stanza: Stanza,
-                decryptedMessage: OmemoMessage.Received
-            ) {
-                stanza.let { it as? ApiMessage }
-                    ?.replaceBody(decryptedMessage)
-                    ?.let(channel::offer)
-            }
-
-            override fun onOmemoCarbonCopyReceived(
-                direction: CarbonExtension.Direction,
-                carbonCopy: ApiMessage,
-                wrappingMessage: ApiMessage,
-                decryptedCarbonCopy: OmemoMessage.Received
-            ) = Unit
-        }
+        val incomingListener = incomingListener()
+        val outgoingListener = outgoingListener(userJid, encryptedMessageCache)
+        val omemoListener = omemoListener()
 
         chatManager.addIncomingListener(incomingListener)
         chatManager.addOutgoingListener(outgoingListener)
@@ -99,7 +83,50 @@ internal class MessageBroadcast(
             chatManager.removeOutgoingListener(outgoingListener)
             omemoManager.removeOmemoMessageListener(omemoListener)
         }
-    }.map { message ->
-        message.toCryptonMessage()
     }
+
+
+private fun SendChannel<ApiMessage>.incomingListener() =
+    IncomingChatMessageListener { _, message, _: Chat ->
+        if (!message.hasOmemoExtension)
+            offer(message)
+    }
+
+
+private fun SendChannel<ApiMessage>.outgoingListener(
+    userJid: Jid,
+    encryptedMessageCache: EncryptedMessageCache
+) =
+    OutgoingChatMessageListener { _, message, _ ->
+        offer(
+            message.apply {
+                from = userJid
+            }.run {
+                if (!hasOmemoExtension) message
+                else apply {
+                    removeOmemoBody()
+                    body = encryptedMessageCache[message.stanzaId]
+                }
+            }
+        )
+    }
+
+
+private fun SendChannel<ApiMessage>.omemoListener() = object : OmemoMessageListener {
+
+    override fun onOmemoMessageReceived(
+        stanza: Stanza,
+        decryptedMessage: OmemoMessage.Received
+    ) {
+        stanza.let { it as? ApiMessage }
+            ?.replaceBody(decryptedMessage)
+            ?.let { offer((it)) }
+    }
+
+    override fun onOmemoCarbonCopyReceived(
+        direction: CarbonExtension.Direction,
+        carbonCopy: ApiMessage,
+        wrappingMessage: ApiMessage,
+        decryptedCarbonCopy: OmemoMessage.Received
+    ) = Unit
 }
