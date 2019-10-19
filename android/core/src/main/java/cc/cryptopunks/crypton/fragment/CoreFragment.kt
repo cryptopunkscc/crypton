@@ -12,7 +12,8 @@ import cc.cryptopunks.crypton.activity.CoreActivity
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.api.isEmpty
 import cc.cryptopunks.crypton.applicationComponent
-import cc.cryptopunks.crypton.module.PresentationModule
+import cc.cryptopunks.crypton.core.Core
+import cc.cryptopunks.crypton.presentation.PresentationModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -41,9 +42,9 @@ abstract class CoreFragment : Fragment(), CoroutineScope {
             .map { client -> createComponent(client) }
 
     private fun createComponent(client: Client) = PresentationModule(
-        client = client,
+        api = client as Core.Api,
         navigationComponent = coreActivity.navigationComponent,
-        arguments = arguments ?: Bundle()
+        coreComponent = applicationComponent
     )
 
     @CallSuper

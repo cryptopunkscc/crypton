@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.component.PresentationComponent
+import cc.cryptopunks.crypton.presentation.PresentationComponent
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.presenter.ChatPresenter

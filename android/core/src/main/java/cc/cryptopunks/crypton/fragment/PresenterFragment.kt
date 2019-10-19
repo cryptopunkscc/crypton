@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.applicationComponent
-import cc.cryptopunks.crypton.component.PresentationComponent
+import cc.cryptopunks.crypton.presentation.PresentationComponent
 import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.connectedCache
 import kotlinx.coroutines.flow.Flow
