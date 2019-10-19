@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.util
 import kotlinx.coroutines.*
 import kotlin.coroutines.EmptyCoroutineContext
 
-abstract class ErrorHandlingScope internal constructor(): CoroutineScope {
+abstract class ErrorHandlingScope: CoroutineScope {
     abstract val broadcast: BroadcastError
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
