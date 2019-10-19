@@ -2,7 +2,11 @@ package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.*
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.entity.Chat
+import cc.cryptopunks.crypton.navigation.Navigation
 import cc.cryptopunks.crypton.presentation.PresentationComponent
 import cc.cryptopunks.crypton.presenter.CreateChatPresenter
 import cc.cryptopunks.crypton.presenter.Presenter
@@ -15,13 +19,23 @@ class CreateChatFragment : PresenterFragment<
         CreateChatFragment.Component>() {
 
     @Singleton
-    @dagger.Component(dependencies = [PresentationComponent::class])
+    @dagger.Component(dependencies = [
+        Address::class,
+        Api.Scope::class,
+        Chat.Api::class,
+        Chat.Repo::class,
+        Navigation.Component::class
+    ])
     interface Component : Presenter.Component<CreateChatPresenter>
 
     override suspend fun onCreateComponent(
         component: PresentationComponent
     ): Component = DaggerCreateChatFragment_Component.builder()
-        .presentationComponent(component)
+        .address(component.address)
+        .scope(component.apiScope)
+        .api(component)
+        .repo(component.chatRepo)
+        .component(navigationComponent)
         .build()!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
