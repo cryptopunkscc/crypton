@@ -47,7 +47,7 @@ class ChatView(
             }.let { wasBottomReached ->
                 if (wasBottomReached)
                     scrollToNewMessage() else
-                    displayNewMessageToast()
+                    displayNewMessageInfo()
             }
         }
 
@@ -62,7 +62,7 @@ class ChatView(
     private fun scrollToNewMessage() =
         chatRecyclerView.smoothScrollToPosition(0)
 
-    private fun displayNewMessageToast() =
+    private fun displayNewMessageInfo() =
         Toast.makeText(context, "new message", Toast.LENGTH_SHORT).show()
 
 

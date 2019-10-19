@@ -8,7 +8,6 @@ import android.content.Intent
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.Indicator
 import cc.cryptopunks.crypton.entity.Message
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -19,7 +18,7 @@ internal class ShowMessageNotification @Inject constructor(
     private val mainActivityClass: Class<out Activity>
 ) : Message.Sys.ShowNotification, (Message) -> Unit {
 
-    private val dateFormat: DateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
     override fun invoke(message: Message) = message.showNotification()
 

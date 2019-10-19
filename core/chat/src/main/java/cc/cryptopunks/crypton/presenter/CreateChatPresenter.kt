@@ -1,9 +1,13 @@
 package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
+import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor
 import cc.cryptopunks.crypton.navigation.Navigate
+import cc.cryptopunks.crypton.navigation.Navigation
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.util.cache
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +24,16 @@ class CreateChatPresenter @Inject constructor(
     private val createChat: CreateChatInteractor,
     private val navigate: Navigate
 ) : Presenter<CreateChatPresenter.View> {
+
+    @Singleton
+    @dagger.Component(dependencies = [
+        Address::class,
+        Api.Scope::class,
+        Chat.Api::class,
+        Chat.Repo::class,
+        Navigation.Component::class
+    ])
+    interface Component : Presenter.Component<CreateChatPresenter>
 
     private val usersCache = emptyList<User>().cache()
 

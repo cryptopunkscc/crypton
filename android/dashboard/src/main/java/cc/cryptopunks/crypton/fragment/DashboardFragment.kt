@@ -5,13 +5,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Button
-import cc.cryptopunks.crypton.applicationComponent
-import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.presenter.DashboardPresenter
-import cc.cryptopunks.crypton.navigation.Navigation
 import cc.cryptopunks.crypton.presentation.Presentation
-import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.presenter.DaggerDashboardPresenter_Component
+import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.coroutines.flow.Flow
 
@@ -22,15 +19,10 @@ class DashboardFragment :
 
     override val layoutRes: Int get() = R.layout.dashboard
 
-    @dagger.Component(dependencies = [
-        Navigation.Component::class
-    ])
-    interface Component : Presenter.Component<DashboardPresenter>
-
     private val manager = Presentation<DashboardPresenter.View, DashboardPresenter>()
 
-    private val component: Component by lazy {
-        DaggerDashboardFragment_Component
+    private val component: DashboardPresenter.Component by lazy {
+        DaggerDashboardPresenter_Component
             .builder()
             .component(coreActivity.navigationComponent)
             .build()
