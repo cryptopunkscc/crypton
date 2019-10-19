@@ -1,17 +1,11 @@
 package cc.cryptopunks.crypton.api
 
-import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.ErrorHandlingScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
-interface Api :
-    Account.Api,
-    User.Api,
-    Presence.Api,
-    Message.Api,
-    Chat.Api,
-    RosterEvent.Api {
+interface Api {
 
     val apiScope: Scope
 

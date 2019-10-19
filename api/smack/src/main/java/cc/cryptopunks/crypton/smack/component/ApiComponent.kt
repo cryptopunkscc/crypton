@@ -1,5 +1,5 @@
 package cc.cryptopunks.crypton.smack.component
 
-import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.core.Core
 
-internal interface ApiComponent : Client
+internal interface ApiComponent : Core.Api
