@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.manager.BaseManager
 import cc.cryptopunks.crypton.util.CacheFlow
 import cc.cryptopunks.crypton.util.createDummyClass
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface Client :
@@ -13,7 +14,11 @@ interface Client :
     Presence.Api,
     Message.Api,
     Chat.Api,
-    RosterEvent.Api {
+    RosterEvent.Api,
+    CoroutineScope {
+
+    override val coroutineContext
+        get() = apiScope.coroutineContext
 
     interface Connect : Account.Api.Connect
     interface Disconnect : Account.Api.Disconnect

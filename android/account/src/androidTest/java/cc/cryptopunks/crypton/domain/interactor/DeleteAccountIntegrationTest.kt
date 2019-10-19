@@ -2,8 +2,7 @@ package cc.cryptopunks.crypton.domain.interactor
 
 import cc.cryptopunks.crypton.IntegrationTest
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert.*
 import org.junit.Test
 
 class DeleteAccountIntegrationTest : IntegrationTest() {
@@ -28,8 +27,8 @@ class DeleteAccountIntegrationTest : IntegrationTest() {
                 accountRepo.contains(account.address)
             )
 
-            assertNull(
-                clientManager[account]
+            assertFalse(
+                account in clientManager
             )
         }
     }

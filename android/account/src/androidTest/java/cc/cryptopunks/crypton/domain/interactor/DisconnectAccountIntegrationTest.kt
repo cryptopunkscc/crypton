@@ -3,8 +3,7 @@ package cc.cryptopunks.crypton.domain.interactor
 import cc.cryptopunks.crypton.IntegrationTest
 import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert.*
 import org.junit.Test
 
 class DisconnectAccountIntegrationTest : IntegrationTest() {
@@ -34,8 +33,8 @@ class DisconnectAccountIntegrationTest : IntegrationTest() {
                 accountRepo.get(account.address)
             )
 
-            assertNull(
-                clientManager[account]
+            assertFalse(
+                account in clientManager
             )
         }
     }

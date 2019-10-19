@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.smack.integration.ApiIntegrationTest
+import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Before
 import java.util.concurrent.atomic.AtomicReference
@@ -37,10 +38,12 @@ abstract class IntegrationTest : ApiIntegrationTest() {
         config(address.local.toLong())
     )
 
-    fun Account.Api.insertAccount(
+    fun Client.insertAccount(
         reduce: Account.() -> Account = { this }
-    ) = account(address).reduce().run {
-        copy(address = component.accountRepo.insert(this).address)
+    ) = launch {
+        account(address).reduce().run {
+            copy(address = component.accountRepo.insert(this).address)
+        }
     }
 
 }
