@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import cc.cryptopunks.crypton.smack.initSmack
+import cc.cryptopunks.crypton.sys.SysIndicator
 import cc.cryptopunks.crypton.sys.SysModule
 import cc.cryptopunks.crypton.sys.MessageSys
 import cc.cryptopunks.crypton.util.BroadcastError
@@ -48,7 +49,8 @@ class App : CoreApplication() {
                     context = this
                 ),
                 sysComponent = SysModule(
-                    message = MessageSys()
+                    message = MessageSys(MainActivity::class.java),
+                    indicator = SysIndicator()
                 )
             )
         )
