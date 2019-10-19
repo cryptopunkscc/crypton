@@ -23,7 +23,6 @@ class DashboardFragment :
     override val layoutRes: Int get() = R.layout.dashboard
 
     @dagger.Component(dependencies = [
-        Core.Component::class,
         Navigation.Component::class
     ])
     interface Component : Presenter.Component<DashboardPresenter>
@@ -33,7 +32,6 @@ class DashboardFragment :
     private val component: Component by lazy {
         DaggerDashboardFragment_Component
             .builder()
-            .component(applicationComponent)
             .component(coreActivity.navigationComponent)
             .build()
     }
