@@ -11,6 +11,7 @@ internal class ClientCache(
 ) :
     Flow<Client> {
 
+    val isEmpty get() = map.isEmpty()
     private val channel = BroadcastChannel<Client?>(Channel.CONFLATED)
 
     @InternalCoroutinesApi

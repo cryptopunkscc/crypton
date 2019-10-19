@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.component.PresentationComponent
-import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
+import cc.cryptopunks.crypton.presenter.RosterPresenter
 import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.view.RosterView
 import javax.inject.Singleton

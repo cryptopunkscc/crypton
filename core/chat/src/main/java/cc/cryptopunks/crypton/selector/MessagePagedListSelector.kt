@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.chat.selector
+package cc.cryptopunks.crypton.selector
 
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.entity.Chat

@@ -2,9 +2,9 @@ package cc.cryptopunks.crypton.api.service
 
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.core.Core
-import cc.cryptopunks.crypton.feature.chat.service.LoadArchivedMessagesService
-import cc.cryptopunks.crypton.feature.chat.service.MessageReceiverService
-import cc.cryptopunks.crypton.feature.chat.service.ShowMessageNotificationService
+import cc.cryptopunks.crypton.service.LoadArchivedMessagesService
+import cc.cryptopunks.crypton.service.MessageReceiverService
+import cc.cryptopunks.crypton.service.ShowMessageNotificationService
 import cc.cryptopunks.crypton.util.log
 import dagger.Component
 import javax.inject.Inject

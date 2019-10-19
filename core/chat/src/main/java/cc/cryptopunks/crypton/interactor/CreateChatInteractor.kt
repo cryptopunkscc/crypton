@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.chat.interactor
+package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.entity.Address

@@ -11,6 +11,8 @@ internal class ClientManager(
     private val clientCache: ClientCache
 ) : Client.Manager, Flow<Client> by clientCache {
 
+    override val isEmpty: Boolean get() = clientCache.isEmpty
+
     override suspend fun get(account: Account): Client = account.run {
         synchronized(this@ClientManager) {
             clientCache.get(address.id) ?: createClient(

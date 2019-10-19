@@ -5,7 +5,7 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
+import cc.cryptopunks.crypton.presenter.MessagePresenter
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.synthetic.main.chat_message_item.view.*
 import java.text.DateFormat

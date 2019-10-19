@@ -1,12 +1,11 @@
-package cc.cryptopunks.crypton.feature.chat.presenter
+package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.feature.chat.selector.LastMessageSelector
+import cc.cryptopunks.crypton.selector.LastMessageSelector
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
-import cc.cryptopunks.crypton.presenter.Presenter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow

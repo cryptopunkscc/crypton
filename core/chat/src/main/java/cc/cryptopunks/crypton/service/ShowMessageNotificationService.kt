@@ -1,10 +1,10 @@
-package cc.cryptopunks.crypton.feature.chat.service
+package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.feature.chat.presenter.ChatPresenter
-import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
+import cc.cryptopunks.crypton.presenter.ChatPresenter
+import cc.cryptopunks.crypton.presenter.RosterPresenter
 import cc.cryptopunks.crypton.presentation.Presentation
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.util.ext.any

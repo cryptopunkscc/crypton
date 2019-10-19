@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
-import cc.cryptopunks.crypton.feature.chat.presenter.RosterPresenter
+import cc.cryptopunks.crypton.presenter.RosterItemPresenter
+import cc.cryptopunks.crypton.presenter.RosterPresenter
 import kotlinx.android.synthetic.main.roster.view.*
 import kotlinx.coroutines.cancelChildren
 

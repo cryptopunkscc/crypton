@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.User
-import cc.cryptopunks.crypton.feature.chat.presenter.CreateChatPresenter
+import cc.cryptopunks.crypton.presenter.CreateChatPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import kotlinx.android.synthetic.main.create_chat.view.*

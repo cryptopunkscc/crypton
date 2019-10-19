@@ -1,11 +1,10 @@
-package cc.cryptopunks.crypton.feature.chat.presenter
+package cc.cryptopunks.crypton.presenter
 
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.feature.chat.interactor.SendMessageInteractor
-import cc.cryptopunks.crypton.feature.chat.selector.MessagePagedListSelector
-import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.interactor.SendMessageInteractor
+import cc.cryptopunks.crypton.selector.MessagePagedListSelector
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect

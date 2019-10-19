@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import cc.cryptopunks.crypton.component.PresentationComponent
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.feature.chat.presenter.ChatPresenter
+import cc.cryptopunks.crypton.presenter.ChatPresenter
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.toMap

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.*
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.component.PresentationComponent
-import cc.cryptopunks.crypton.feature.chat.presenter.CreateChatPresenter
+import cc.cryptopunks.crypton.presenter.CreateChatPresenter
 import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.view.CreateChatView
 import javax.inject.Singleton

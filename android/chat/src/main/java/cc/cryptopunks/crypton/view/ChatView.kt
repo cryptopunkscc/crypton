@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.feature.chat.presenter.ChatPresenter
-import cc.cryptopunks.crypton.feature.chat.presenter.MessagePresenter
+import cc.cryptopunks.crypton.presenter.ChatPresenter
+import cc.cryptopunks.crypton.presenter.MessagePresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.flow.Flow

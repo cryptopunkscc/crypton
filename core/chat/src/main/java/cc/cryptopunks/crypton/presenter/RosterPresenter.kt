@@ -1,9 +1,8 @@
-package cc.cryptopunks.crypton.feature.chat.presenter
+package cc.cryptopunks.crypton.presenter
 
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.feature.chat.selector.RosterSelector
-import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.selector.RosterSelector
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope

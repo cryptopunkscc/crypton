@@ -1,8 +1,8 @@
-package cc.cryptopunks.crypton.feature.chat.service
+package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.feature.chat.interactor.SaveMessagesInteractor
+import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.log
 import kotlinx.coroutines.Job

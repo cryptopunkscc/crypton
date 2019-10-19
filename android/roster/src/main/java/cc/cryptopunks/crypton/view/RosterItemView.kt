@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.FrameLayout
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.feature.chat.presenter.RosterItemPresenter
+import cc.cryptopunks.crypton.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors

@@ -1,9 +1,8 @@
-package cc.cryptopunks.crypton.feature.chat.presenter
+package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.presenter.Presenter
 import javax.inject.Inject
 
 data class MessagePresenter(
