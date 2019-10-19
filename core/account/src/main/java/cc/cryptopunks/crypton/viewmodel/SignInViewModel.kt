@@ -1,6 +1,6 @@
-package cc.cryptopunks.crypton.feature.account.viewmodel
+package cc.cryptopunks.crypton.viewmodel
 
-import cc.cryptopunks.crypton.feature.account.interactor.AddAccountInteractor
+import cc.cryptopunks.crypton.interactor.AddAccountInteractor
 import cc.cryptopunks.crypton.util.text
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect

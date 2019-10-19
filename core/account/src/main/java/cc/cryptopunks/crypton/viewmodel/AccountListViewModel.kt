@@ -1,6 +1,6 @@
-package cc.cryptopunks.crypton.feature.account.viewmodel
+package cc.cryptopunks.crypton.viewmodel
 
-import cc.cryptopunks.crypton.feature.account.selector.AccountListSelector
+import cc.cryptopunks.crypton.selector.AccountListSelector
 import javax.inject.Inject
 
 class AccountListViewModel @Inject constructor(

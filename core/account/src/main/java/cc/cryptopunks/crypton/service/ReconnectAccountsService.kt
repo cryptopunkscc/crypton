@@ -1,9 +1,8 @@
-package cc.cryptopunks.crypton.feature.account.service
+package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.feature.account.interactor.ConnectAccountInteractor
-import cc.cryptopunks.crypton.feature.account.manager.AccountManager
-import cc.cryptopunks.crypton.service.Service
+import cc.cryptopunks.crypton.interactor.ConnectAccountInteractor
+import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.log
 import kotlinx.coroutines.Job

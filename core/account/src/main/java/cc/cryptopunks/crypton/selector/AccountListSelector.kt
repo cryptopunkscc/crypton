@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.account.selector
+package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.entity.Account
 import kotlinx.coroutines.flow.Flow

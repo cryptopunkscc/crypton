@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.api
 
 import cc.cryptopunks.crypton.entity.*
+import cc.cryptopunks.crypton.manager.BaseManager
 import cc.cryptopunks.crypton.util.CacheFlow
 import cc.cryptopunks.crypton.util.createDummyClass
 import kotlinx.coroutines.flow.Flow
@@ -14,15 +15,10 @@ interface Client :
     Chat.Api,
     RosterEvent.Api {
 
-    val isConnected: IsConnected
-    val connect: Connect
-    val disconnect: Disconnect
-    val initOmemo: InitOmemo
-
-    interface Connect : () -> Unit
-    interface Disconnect : () -> Unit
-    interface IsConnected : () -> Boolean
-    interface InitOmemo : () -> Unit
+    interface Connect : Account.Api.Connect
+    interface Disconnect : Account.Api.Disconnect
+    interface IsConnected : Account.Api.IsConnected
+    interface InitOmemo : Account.Api.InitOmemo
 
     interface Component {
         val mapException: MapException
@@ -30,11 +26,7 @@ interface Client :
         val currentClient: Current
     }
 
-    interface Manager : Flow<Client> {
-        suspend fun get(account: Account): Client
-        suspend fun minus(account: Account)
-        fun contains(account: Account): Boolean
-    }
+    interface Manager : BaseManager<Account, Client>
 
     class Current : CacheFlow<Client> by CacheFlow(Empty)
 

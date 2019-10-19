@@ -1,6 +1,6 @@
-package cc.cryptopunks.crypton.feature.account.service
+package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.feature.account.selector.NewAccountConnectedSelector
+import cc.cryptopunks.crypton.selector.NewAccountConnectedSelector
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
 import kotlinx.coroutines.flow.collect

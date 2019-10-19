@@ -1,12 +1,12 @@
-package cc.cryptopunks.crypton.feature.account.viewmodel
+package cc.cryptopunks.crypton.viewmodel
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting
-import cc.cryptopunks.crypton.feature.account.interactor.ConnectAccountInteractor
-import cc.cryptopunks.crypton.feature.account.interactor.DeleteAccountInteractor
-import cc.cryptopunks.crypton.feature.account.interactor.DisconnectAccountInteractor
-import cc.cryptopunks.crypton.feature.account.interactor.UnregisterAccountInteractor
+import cc.cryptopunks.crypton.interactor.ConnectAccountInteractor
+import cc.cryptopunks.crypton.interactor.DeleteAccountInteractor
+import cc.cryptopunks.crypton.interactor.DisconnectAccountInteractor
+import cc.cryptopunks.crypton.interactor.UnregisterAccountInteractor
 import javax.inject.Inject
 
 class AccountItemViewModel @Inject constructor(

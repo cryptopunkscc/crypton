@@ -1,19 +1,21 @@
-package cc.cryptopunks.crypton.feature.account.interactor
+package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.feature.account.manager.AccountManager
+import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
-class UnregisterAccountInteractor @Inject constructor(
+class DeleteAccountInteractor @Inject constructor(
     manager: AccountManager,
     scope: Service.Scope
 ) : (Account) -> Job by { account ->
     scope.launch {
         manager.copy().run {
             set(account)
-            unregister()
+            if (get().status == Account.Status.Connected)
+                disconnect()
+            delete()
         }
     }
 }

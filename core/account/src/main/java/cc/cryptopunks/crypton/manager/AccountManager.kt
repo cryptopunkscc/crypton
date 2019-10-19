@@ -1,6 +1,5 @@
-package cc.cryptopunks.crypton.feature.account.manager
+package cc.cryptopunks.crypton.manager
 
-import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.util.ext.reduce
@@ -9,15 +8,15 @@ import javax.inject.Inject
 
 data class AccountManager @Inject constructor(
     private val accountRepo: Account.Repo,
-    private val clientManager: Client.Manager
+    private val apiManager: Account.Api.Manager
 ) :
     AtomicReference<Account>(Account.Empty) {
 
     private val account get() = get()
 
-    suspend fun client(): Client = clientManager.get(account)
+    suspend fun api(): Account.Api = apiManager.get(account)
 
-    val isInitialized: Boolean get() = clientManager.contains(account)
+    val isInitialized: Boolean get() = apiManager.contains(account)
 
     fun copy(account: Account): AccountManager = copy().apply { set(account) }
 
@@ -25,24 +24,24 @@ data class AccountManager @Inject constructor(
 
     suspend fun load(id: Address): Account = accountRepo.get(id).also { set(it) }
 
-    suspend fun register(): Unit = client().createAccount()
+    suspend fun register(): Unit = api().createAccount()
 
-    suspend fun login(): Unit = client().login()
+    suspend fun login(): Unit = api().login()
 
     suspend fun initOmemo() {
         println("init omemo start")
-        client().initOmemo()
+        api().initOmemo()
         println("init omemo stop")
     }
 
-    suspend fun disconnect(): Unit = client().disconnect()
+    suspend fun disconnect(): Unit = api().disconnect()
 
     suspend fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 
     suspend fun update(): Unit = accountRepo.update(get())
 
     suspend fun unregister() {
-        client().remove()
+        api().remove()
         delete()
     }
 
@@ -52,7 +51,7 @@ data class AccountManager @Inject constructor(
     }
 
     suspend fun clear() {
-        clientManager.minus(get())
+        apiManager.minus(get())
     }
 
     inline fun <R> run(

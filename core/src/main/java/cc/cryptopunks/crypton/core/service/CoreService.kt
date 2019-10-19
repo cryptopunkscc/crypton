@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.core.service
 
 import cc.cryptopunks.crypton.api.manager.ApiServiceManager
-import cc.cryptopunks.crypton.feature.account.service.ReconnectAccountsService
+import cc.cryptopunks.crypton.service.ReconnectAccountsService
 import cc.cryptopunks.crypton.feature.indicator.service.ToggleIndicatorService
 import cc.cryptopunks.crypton.feature.main.service.UpdateCurrentClientService
 import cc.cryptopunks.crypton.util.log

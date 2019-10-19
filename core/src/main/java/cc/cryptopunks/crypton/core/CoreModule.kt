@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.repo.Repo
 import cc.cryptopunks.crypton.service.Service
@@ -24,4 +25,5 @@ class CoreModule(
 
     override val serviceScope = Service.Scope(broadcastError)
     override val presentationManager = PresentationManager()
+    override val accountApiManager = Account.Api.Manager(clientManager)
 }

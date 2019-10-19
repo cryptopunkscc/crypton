@@ -1,8 +1,8 @@
-package cc.cryptopunks.crypton.feature.account.interactor
+package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
-import cc.cryptopunks.crypton.feature.account.manager.AccountManager
+import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.account.viewmodel
+package cc.cryptopunks.crypton.viewmodel
 
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route

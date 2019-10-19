@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.entity
 
+import cc.cryptopunks.crypton.manager.BaseManager
 import kotlinx.coroutines.flow.Flow
 
 data class Account constructor(
@@ -34,15 +35,26 @@ data class Account constructor(
 
     interface Api {
         val address: Address
+
+        val isConnected: IsConnected
+        val connect: Connect
+        val disconnect: Disconnect
+        val initOmemo: InitOmemo
         val createAccount: Create
         val login: Login
         val remove: Remove
         val isAuthenticated: IsAuthenticated
 
+        interface Connect : () -> Unit
+        interface Disconnect : () -> Unit
+        interface IsConnected : () -> Boolean
+        interface InitOmemo : () -> Unit
         interface Create: () -> Unit
         interface Login: () -> Unit
         interface Remove: () -> Unit
         interface IsAuthenticated: () -> Boolean
+
+        class Manager(manager: BaseManager<Account, Api>) : BaseManager<Account, Api> by manager
     }
 
     interface Repo {

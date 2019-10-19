@@ -37,7 +37,7 @@ abstract class IntegrationTest : ApiIntegrationTest() {
         config(address.local.toLong())
     )
 
-    fun Client.insertAccount(
+    fun Account.Api.insertAccount(
         reduce: Account.() -> Account = { this }
     ) = account(address).reduce().run {
         copy(address = component.accountRepo.insert(this).address)

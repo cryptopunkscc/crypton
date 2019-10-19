@@ -29,5 +29,6 @@ object Core {
 
         val serviceScope: Service.Scope
         val presentationManager: PresentationManager
+        val accountApiManager: Account.Api.Manager
     }
 }

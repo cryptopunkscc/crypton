@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.interactor.*
+import cc.cryptopunks.crypton.service.ReconnectAccountsService
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.feature.account.interactor.*
-import cc.cryptopunks.crypton.feature.account.service.ReconnectAccountsService
 
 internal interface IntegrationTestComponent {
 

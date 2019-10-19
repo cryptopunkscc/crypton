@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
-import cc.cryptopunks.crypton.feature.account.viewmodel.AccountItemViewModel
+import cc.cryptopunks.crypton.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.account_item.*

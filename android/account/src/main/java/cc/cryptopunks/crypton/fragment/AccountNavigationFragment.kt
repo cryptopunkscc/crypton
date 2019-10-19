@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
-import cc.cryptopunks.crypton.feature.account.service.AccountNavigationService
+import cc.cryptopunks.crypton.service.AccountNavigationService
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
