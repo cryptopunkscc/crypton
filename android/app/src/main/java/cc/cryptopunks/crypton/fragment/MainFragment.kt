@@ -4,7 +4,7 @@ import android.os.Bundle
 import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.component.DaggerMainComponent
 import cc.cryptopunks.crypton.component.MainComponent
-import cc.cryptopunks.crypton.feature.main.service.MainNavigationService
+import cc.cryptopunks.crypton.service.MainNavigationService
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

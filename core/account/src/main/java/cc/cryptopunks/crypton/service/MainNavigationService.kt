@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature.main.service
+package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.selector.HasAccountsSelector
 import cc.cryptopunks.crypton.navigation.Navigate

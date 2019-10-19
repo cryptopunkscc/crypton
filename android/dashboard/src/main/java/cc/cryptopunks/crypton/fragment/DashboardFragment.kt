@@ -8,7 +8,7 @@ import android.widget.Button
 import cc.cryptopunks.crypton.applicationComponent
 import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.feature.dashboard.presenter.DashboardPresenter
+import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.navigation.Navigation
 import cc.cryptopunks.crypton.presentation.Presentation
 import cc.cryptopunks.crypton.presenter.Presenter

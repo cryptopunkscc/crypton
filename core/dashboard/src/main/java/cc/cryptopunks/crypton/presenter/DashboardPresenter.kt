@@ -1,9 +1,8 @@
-package cc.cryptopunks.crypton.feature.dashboard.presenter
+package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
-import cc.cryptopunks.crypton.presenter.Presenter
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
