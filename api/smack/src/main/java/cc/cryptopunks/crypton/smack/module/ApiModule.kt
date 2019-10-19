@@ -112,6 +112,7 @@ internal class ApiModule(
 
     override val messageBroadcast: Message.Api.Broadcast by lazy {
         MessageBroadcast(
+            scope = apiScope,
             chatManager = chatManager,
             address = address,
             omemoManager = omemoManager,
