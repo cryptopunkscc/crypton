@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.User
@@ -28,8 +28,8 @@ class CreateChatPresenter @Inject constructor(
     @Singleton
     @dagger.Component(dependencies = [
         Address::class,
-        Api.Scope::class,
-        Chat.Api::class,
+        Net.Scope::class,
+        Chat.Net::class,
         Chat.Repo::class,
         Navigation.Component::class
     ])

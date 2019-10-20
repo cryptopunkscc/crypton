@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.User
@@ -8,7 +8,7 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class SaveMessagesInteractor @Inject constructor(
-    scope: Api.Scope,
+    scope: Net.Scope,
     address: Address,
     messageRepo: Message.Repo,
     createChat: CreateChatInteractor

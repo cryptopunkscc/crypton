@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.presenter
 
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
@@ -27,10 +27,10 @@ class ChatPresenter @Inject constructor(
     @dagger.Component(
         dependencies = [
             Address::class,
-            Api.Scope::class,
-            Message.Api::class,
+            Net.Scope::class,
+            Message.Net::class,
             Message.Repo::class,
-            Chat.Api::class,
+            Chat.Net::class,
             Chat.Repo::class,
             Navigation.Component::class,
             ExecutorsComponent::class

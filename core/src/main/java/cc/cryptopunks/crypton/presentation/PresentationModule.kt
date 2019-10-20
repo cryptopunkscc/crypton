@@ -1,13 +1,13 @@
 package cc.cryptopunks.crypton.presentation
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 
 class PresentationModule(
-    private val api: Api
+    private val net: Net
 ) :
-    Api by api,
+    Net by net,
     PresentationComponent {
 
-    override fun <T> api() = api as T
+    override fun <T> net() = net as T
 
 }

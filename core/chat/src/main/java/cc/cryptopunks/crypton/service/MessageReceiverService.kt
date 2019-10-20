@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class MessageReceiverService @Inject constructor(
-    scope: Api.Scope,
-    messageBroadcast: Message.Api.Broadcast,
+    scope: Net.Scope,
+    messageBroadcast: Message.Net.Broadcast,
     saveMessages: SaveMessagesInteractor
 ) : () -> Job by {
     scope.launch {

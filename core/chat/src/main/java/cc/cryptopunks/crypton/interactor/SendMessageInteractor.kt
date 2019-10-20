@@ -1,15 +1,15 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class SendMessageInteractor @Inject constructor(
-    scope: Api.Scope,
+    scope: Net.Scope,
     chat: Chat,
-    sendMessage: Message.Api.Send
+    sendMessage: Message.Net.Send
 ) : (String) -> Job by { message ->
     scope.launch {
         sendMessage(

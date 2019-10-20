@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.presenter.ChatPresenter
@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.filterNot
 import javax.inject.Inject
 
 class ShowMessageNotificationService @Inject constructor(
-    private val scope: Api.Scope,
+    private val scope: Net.Scope,
     private val address: Address,
     private val presentationManager: PresentationManager,
     private val showNotification: Message.Sys.ShowNotification,
-    private val messageBroadcast: Message.Api.Broadcast
+    private val messageBroadcast: Message.Net.Broadcast
 ) : () -> Job {
 
     override fun invoke() = scope.launch {

@@ -33,7 +33,7 @@ data class Account constructor(
         if (throwable is Exception) throwable
         else Exception(this, throwable)
 
-    interface Api {
+    interface Net {
 
         val isConnected: IsConnected
         val connect: Connect
@@ -53,7 +53,7 @@ data class Account constructor(
         interface Remove: () -> Unit
         interface IsAuthenticated: () -> Boolean
 
-        class Manager(manager: BaseManager<Account, Api>) : BaseManager<Account, Api> by manager
+        class Manager(manager: BaseManager<Account, Net>) : BaseManager<Account, Net> by manager
     }
 
     interface Repo {

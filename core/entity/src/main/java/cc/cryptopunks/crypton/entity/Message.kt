@@ -21,7 +21,7 @@ data class Message(
         else -> throw Exception("$address is not in party")
     }
 
-    interface Api {
+    interface Net {
         val sendMessage: Send
         val messageBroadcast: Broadcast
         val readArchived: ReadArchived

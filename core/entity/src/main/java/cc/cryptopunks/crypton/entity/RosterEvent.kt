@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 sealed class RosterEvent {
 
-    interface Api {
+    interface Net {
         val rosterEventPublisher: Broadcast
 
         interface Broadcast : Flow<RosterEvent>

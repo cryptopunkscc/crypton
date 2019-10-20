@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.presentation.PresentationManager
@@ -22,11 +22,11 @@ class MessageService @Inject constructor(
 
     @Component(
         dependencies = [
-            Api::class,
-            Message.Api::class,
-            Chat.Api::class,
+            Net::class,
+            Message.Net::class,
+            Chat.Net::class,
             Chat.Repo::class,
-            Message.Api::class,
+            Message.Net::class,
             Message.Repo::class,
             Message.Sys::class,
             PresentationManager::class

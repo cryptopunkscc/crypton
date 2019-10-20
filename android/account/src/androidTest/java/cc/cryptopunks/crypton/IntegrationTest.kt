@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.smack.integration.ApiIntegrationTest
@@ -38,7 +38,7 @@ abstract class IntegrationTest : ApiIntegrationTest() {
         config(address.local.toLong())
     )
 
-    fun Api.insertAccount(
+    fun Net.insertAccount(
         reduce: Account.() -> Account = { this }
     ) = launch {
         account(address).reduce().run {
@@ -48,7 +48,7 @@ abstract class IntegrationTest : ApiIntegrationTest() {
 
 }
 
-fun createAccount(config: Api.Config) = Account(
+fun createAccount(config: Net.Config) = Account(
     address = config.address,
     password = config.password
 )

@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presentation
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 
 interface PresentationComponent :
-    Api,
-    Api.Provider
+    Net,
+    Net.Provider

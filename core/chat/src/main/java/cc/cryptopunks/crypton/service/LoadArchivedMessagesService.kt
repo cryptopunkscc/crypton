@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
 import cc.cryptopunks.crypton.selector.GetLatestMessageTimestampSelector
@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class LoadArchivedMessagesService @Inject constructor(
-    scope: Api.Scope,
+    scope: Net.Scope,
     getLatestMessageTimestamp: GetLatestMessageTimestampSelector,
-    readArchivedMessages: Message.Api.ReadArchived,
+    readArchivedMessages: Message.Net.ReadArchived,
     saveMessages: SaveMessagesInteractor
 ) : () -> Job by {
     scope.launch {
         LoadArchivedMessagesService::class.log("start")
         invokeOnClose { LoadArchivedMessagesService::class.log("stop") }
         getLatestMessageTimestamp()
-            .run { Message.Api.ReadArchived.Query(since = await()) }
+            .run { Message.Net.ReadArchived.Query(since = await()) }
             .let(readArchivedMessages)
             .collect { saveMessages(it) }
     }

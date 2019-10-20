@@ -37,8 +37,8 @@ class ChatFragment : PresenterFragment<
             .address(address)
             .repo(coreComponent.repo<Message.Repo>())
             .repo(coreComponent.repo<Chat.Repo>())
-            .api(api<Message.Api>())
-            .api(api<Chat.Api>())
+            .net(net<Message.Net>())
+            .net(net<Chat.Net>())
             .build()!!
     }
 

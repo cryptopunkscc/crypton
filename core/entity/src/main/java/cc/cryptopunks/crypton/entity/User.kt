@@ -10,7 +10,7 @@ data class User(
         address = Address.from(string)
     )
 
-    interface Api {
+    interface Net {
         val getContacts: GetContacts
         val addContact: AddContact
         val invite: Invite

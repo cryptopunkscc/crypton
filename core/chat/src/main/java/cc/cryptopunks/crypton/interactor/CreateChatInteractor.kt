@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.User
@@ -8,10 +8,10 @@ import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 
 class CreateChatInteractor @Inject constructor(
-    scope: Api.Scope,
+    scope: Net.Scope,
     repo: Chat.Repo,
     address: Address,
-    createChat: Chat.Api.Create
+    createChat: Chat.Net.Create
 ) : (CreateChatInteractor.Data) -> Deferred<Chat> by { data ->
     scope.async {
         data.run {

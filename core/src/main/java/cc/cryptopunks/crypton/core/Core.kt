@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.core
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.repo.Repo
@@ -14,13 +14,13 @@ object Core {
     interface Component :
         ExecutorsComponent,
         BroadcastError.Component,
-        Api.Component,
+        Net.Component,
         Repo.Component,
         Repo.Provider,
         Sys.Component {
 
         val serviceScope: Service.Scope
         val presentationManager: PresentationManager
-        val accountApiManager: Account.Api.Manager
+        val accountNetManager: Account.Net.Manager
     }
 }

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.core.service
 
-import cc.cryptopunks.crypton.api.ApiServiceManager
+import cc.cryptopunks.crypton.net.NetServiceManager
 import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.service.ReconnectAccountsService
 import cc.cryptopunks.crypton.service.ToggleIndicatorService
@@ -12,14 +12,14 @@ class CoreService @Inject constructor(
     private val toggleIndicatorService: ToggleIndicatorService,
     private val reconnectAccountsService: ReconnectAccountsService,
     private val updateCurrentApiService: UpdateCurrentApiService,
-    private val apiServiceManager: ApiServiceManager
+    private val netServiceManager: NetServiceManager
 
 ) : () -> Unit by {
     log<CoreService>("start")
     toggleIndicatorService()
     reconnectAccountsService()
     updateCurrentApiService()
-    apiServiceManager()
+    netServiceManager()
     log<CoreService>("stop")
 } {
 

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.interactor.*
 import cc.cryptopunks.crypton.service.ReconnectAccountsService
@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.service.ReconnectAccountsService
 internal interface IntegrationTestComponent {
 
     val accountRepo: Account.Repo
-    val clientManager: Api.Manager
+    val clientManager: Net.Manager
 
     val addAccount: AddAccountInteractor
     val connectAccount: ConnectAccountInteractor

@@ -20,7 +20,7 @@ class CreateChatFragment : PresenterFragment<
     ) = DaggerCreateChatPresenter_Component.builder()
         .address(component.address)
         .scope(component.apiScope)
-        .api(component.api())
+        .net(component.net())
         .repo(coreComponent.repo())
         .component(navigationComponent)
         .build()!!

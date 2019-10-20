@@ -23,7 +23,7 @@ data class Chat(
         ) : this(listOf(chat), cause)
     }
 
-    interface Api {
+    interface Net {
         val createChat: Create
         interface Create: (Chat) -> Chat
     }

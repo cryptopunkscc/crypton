@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.entity
 data class Presence(
     val status: Status
 ) {
-    interface Api {
+    interface Net {
         val sendPresence: Send
 
         interface Send : (Presence) -> Unit

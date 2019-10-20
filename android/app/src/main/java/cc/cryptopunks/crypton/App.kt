@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.api.ClientModule
+import cc.cryptopunks.crypton.net.NetModule
 import cc.cryptopunks.crypton.component.ApplicationComponent
 import cc.cryptopunks.crypton.core.CoreModule
 import cc.cryptopunks.crypton.core.service.DaggerCoreService_Component
@@ -35,8 +35,8 @@ class App : CoreApplication() {
                     mainExecutor = MainExecutor(ArchTaskExecutor.getMainThreadExecutor()),
                     ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())
                 ),
-                clientComponent = ClientModule(
-                    createApi = SmackClientFactory(
+                clientComponent = NetModule(
+                    createNet = SmackClientFactory(
                         broadcastError = broadcastErrorComponent.broadcastError
                     ) {
                         copy(
