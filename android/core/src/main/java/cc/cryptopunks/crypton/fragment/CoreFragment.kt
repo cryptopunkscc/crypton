@@ -9,10 +9,9 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.activity.CoreActivity
-import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.api.isEmpty
 import cc.cryptopunks.crypton.applicationComponent
-import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.presentation.PresentationModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -37,14 +36,14 @@ abstract class CoreFragment : Fragment(), CoroutineScope {
     val navigationComponent get() = coreActivity.navigationComponent
 
     val presentationComponent
-        get() = createComponent(applicationComponent.currentClient())
+        get() = createComponent(applicationComponent.currentApi())
 
     val presentationComponentFlow
-        get() = applicationComponent.currentClient
-            .filterNot { client -> client.isEmpty }
-            .map { client -> createComponent(client) }
+        get() = applicationComponent.currentApi
+            .filterNot { api -> api.isEmpty }
+            .map { api -> createComponent(api) }
 
-    private fun createComponent(client: Client) = PresentationModule(client)
+    private fun createComponent(api: Api) = PresentationModule(api)
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

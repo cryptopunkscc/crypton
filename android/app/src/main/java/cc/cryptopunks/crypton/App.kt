@@ -2,11 +2,10 @@ package cc.cryptopunks.crypton
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.api.client.ClientModule
+import cc.cryptopunks.crypton.api.ClientModule
 import cc.cryptopunks.crypton.component.ApplicationComponent
-import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.core.CoreModule
-import cc.cryptopunks.crypton.core.service.CoreService
+import cc.cryptopunks.crypton.core.service.DaggerCoreService_Component
 import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.repo.RepoProvider
@@ -37,7 +36,7 @@ class App : CoreApplication() {
                     ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())
                 ),
                 clientComponent = ClientModule(
-                    createClient = SmackClientFactory(
+                    createApi = SmackClientFactory(
                         broadcastError = broadcastErrorComponent.broadcastError
                     ) {
                         copy(
@@ -58,15 +57,10 @@ class App : CoreApplication() {
         )
     }
 
-    @dagger.Component(dependencies = [Core.Component::class])
-    internal interface Component {
-        val coreService: CoreService
-    }
-
     override fun onCreate() {
         super.onCreate()
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        DaggerApp_Component.builder()
+        DaggerCoreService_Component.builder()
             .component(component)
             .build()
             .coreService()

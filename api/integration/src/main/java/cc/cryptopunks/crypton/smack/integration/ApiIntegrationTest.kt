@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.smack.integration
 
-import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import kotlinx.coroutines.CoroutineScope
@@ -11,9 +12,9 @@ import kotlinx.coroutines.withTimeout
 abstract class ApiIntegrationTest :
     CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
 
-    val createClient = SmackClientFactory()
+    val createApi = SmackClientFactory()
     val baseId = Address(domain = "test.io")
-    private val clients = mutableMapOf<Long, Client>()
+    private val clients = mutableMapOf<Long, Account.Api>()
     private var autoRemove = false
 
     val client1 get() = client(1)
@@ -50,22 +51,20 @@ abstract class ApiIntegrationTest :
         client(it.toLong())
     }
 
-    fun client(index: Long): Client = synchronized(clients) {
+    fun client(index: Long): Api = synchronized(clients) {
         clients.getOrElse(index) {
-            createClient(config(index)).also {
+            createApi(config(index)).let { it as Account.Api }.also {
                 it.connect()
                 clients[index] = it
             }
-        }
+        } as Api
     }
 
-    fun config(index: Long) = Client.Config(
+    fun config(index: Long) = Api.Config(
         address = baseId.copy(local = "test$index"),
         password = "test$index"
     )
 }
-
-internal typealias createClient = SmackClientFactory
 
 internal fun test(
     timeout: Long = 5000,

@@ -1,30 +1,29 @@
-package cc.cryptopunks.crypton.api.client
+package cc.cryptopunks.crypton.api
 
-import cc.cryptopunks.crypton.api.Client
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
-internal class ClientCache(
-    private val map: MutableMap<String, Client> = mutableMapOf()
+internal class ApiCache(
+    private val map: MutableMap<String, Api> = mutableMapOf()
 ) :
-    Flow<Client> {
+    Flow<Api> {
 
     val isEmpty get() = map.isEmpty()
-    private val channel = BroadcastChannel<Client?>(Channel.CONFLATED)
+    private val channel = BroadcastChannel<Api?>(Channel.CONFLATED)
 
     @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Client>) {
+    override suspend fun collect(collector: FlowCollector<Api>) {
         map.values.asFlow().collect(collector)
         channel.asFlow().filterNotNull().collect(collector)
     }
 
     suspend fun remove(key: String) = map
         .remove(key)
-        ?.apply { send(Client.Empty(address = address)) }
+        ?.apply { send(Api.Empty(address = address)) }
 
-    suspend fun put(key: String, value: Client): Client? = map
+    suspend fun put(key: String, value: Api): Api? = map
         .put(key, value)
         .apply { send(value) }
 
@@ -32,7 +31,7 @@ internal class ClientCache(
 
     fun contains(address: String) = address in map
 
-    private suspend fun send(client: Client) {
+    private suspend fun send(client: Api) {
         channel.send(client)
         channel.send(null)
     }

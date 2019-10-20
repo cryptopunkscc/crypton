@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.api.Api
-import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.smack.api.account.*
 import cc.cryptopunks.crypton.smack.api.chat.*
@@ -27,7 +26,8 @@ internal class ApiModule(
     broadcastError: BroadcastError,
     private val smack: SmackComponent
 ) : SmackComponent by smack,
-    ApiComponent {
+    ApiComponent,
+    Api.Provider {
 
     override val apiScope = Api.Scope(broadcastError)
 
@@ -45,21 +45,25 @@ internal class ApiModule(
         }
     }
 
+    override fun <T> api(): T = this as T
+
+    override val provider get() = this
+
     private val encryptedMessageCache by lazy { EncryptedMessageCache() }
 
-    override val connect: Client.Connect by lazy {
+    override val connect: Account.Api.Connect by lazy {
         ConnectClient(connection = connection)
     }
 
-    override val disconnect: Client.Disconnect by lazy {
+    override val disconnect: Account.Api.Disconnect by lazy {
         DisconnectClient(connection = connection)
     }
 
-    override val isConnected: Client.IsConnected by lazy {
+    override val isConnected: Account.Api.IsConnected by lazy {
         IsAccountConnected(connection = connection)
     }
 
-    override val initOmemo: Client.InitOmemo by lazy {
+    override val initOmemo: Account.Api.InitOmemo by lazy {
         InitOmemo(omemoManager)
     }
 

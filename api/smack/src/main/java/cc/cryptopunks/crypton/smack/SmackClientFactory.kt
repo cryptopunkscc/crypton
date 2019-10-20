@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack
 
-import cc.cryptopunks.crypton.api.Client
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.util.BroadcastError
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
@@ -22,20 +22,20 @@ fun initSmack(omemoStoreFile: File) {
 
 class SmackClientFactory(
     private val broadcastError: BroadcastError = BroadcastError(),
-    setup: Client.Factory.Config.() -> Client.Factory.Config = { this }
-) : Client.Factory, (Client.Config) -> Client {
+    setup: Api.Factory.Config.() -> Api.Factory.Config = { this }
+) : Api.Factory, (Api.Config) -> Api {
 
-    private var factoryConfig = Client.Factory.Config.Empty
+    private var factoryConfig = Api.Factory.Config.Empty
 
     init {
         invoke(setup)
     }
 
-    operator fun invoke(setup: Client.Factory.Config.() -> Client.Factory.Config) = apply {
+    operator fun invoke(setup: Api.Factory.Config.() -> Api.Factory.Config) = apply {
         factoryConfig = factoryConfig.setup()
     }
 
-    override fun invoke(config: Client.Config): Client = SmackClient(
+    override fun invoke(config: Api.Config): Api = SmackClient(
         address = config.address,
         configuration = connectionConfig
             .setUsernameAndPassword(config.address.local, config.password)

@@ -1,5 +1,13 @@
 package cc.cryptopunks.crypton.smack.component
 
-import cc.cryptopunks.crypton.core.Core
+import cc.cryptopunks.crypton.api.Api
+import cc.cryptopunks.crypton.entity.*
 
-internal interface ApiComponent : Core.Api
+internal interface ApiComponent :
+    Api,
+    Account.Api,
+    User.Api,
+    Presence.Api,
+    Message.Api,
+    Chat.Api,
+    RosterEvent.Api
