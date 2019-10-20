@@ -1,4 +1,4 @@
-include ':core:entity',
+include ':core:api',
         ':core:common',
         ':core:navigation',
         ':core:account',
