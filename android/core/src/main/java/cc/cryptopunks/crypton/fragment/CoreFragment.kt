@@ -29,6 +29,7 @@ abstract class CoreFragment : Fragment(), CoroutineScope {
     open val titleId @StringRes get() = 0
 
     val scope = MainScope()
+
     override val coroutineContext: CoroutineContext get() = scope.coroutineContext
 
     val coreActivity get() = activity as CoreActivity
@@ -43,11 +44,7 @@ abstract class CoreFragment : Fragment(), CoroutineScope {
             .filterNot { client -> client.isEmpty }
             .map { client -> createComponent(client) }
 
-    private fun createComponent(client: Client) = PresentationModule(
-        api = client as Core.Api,
-        navigationComponent = coreActivity.navigationComponent,
-        coreComponent = applicationComponent
-    )
+    private fun createComponent(client: Client) = PresentationModule(client)
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

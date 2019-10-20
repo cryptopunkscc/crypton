@@ -34,7 +34,6 @@ data class Account constructor(
         else Exception(this, throwable)
 
     interface Api {
-        val address: Address
 
         val isConnected: IsConnected
         val connect: Connect

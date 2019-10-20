@@ -14,6 +14,7 @@ class CoreModule(
     private val broadcastErrorComponent: BroadcastError.Component,
     private val clientComponent: Client.Component,
     private val repoComponent: Repo.Component,
+    private val repoProvider: Repo.Provider,
     private val sysComponent: Sys.Component
 ) :
     Core.Component,
@@ -21,6 +22,7 @@ class CoreModule(
     BroadcastError.Component by broadcastErrorComponent,
     Client.Component by clientComponent,
     Repo.Component by repoComponent,
+    Repo.Provider by repoProvider,
     Sys.Component by sysComponent {
 
     override val serviceScope = Service.Scope(broadcastError)

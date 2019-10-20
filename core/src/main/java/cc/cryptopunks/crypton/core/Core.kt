@@ -25,6 +25,7 @@ object Core {
         BroadcastError.Component,
         Client.Component,
         Repo.Component,
+        Repo.Provider,
         Sys.Component {
 
         val serviceScope: Service.Scope

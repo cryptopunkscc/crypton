@@ -1,14 +1,13 @@
 package cc.cryptopunks.crypton.presentation
 
-import cc.cryptopunks.crypton.core.Core
-import cc.cryptopunks.crypton.navigation.Navigation
+import cc.cryptopunks.crypton.api.Api
 
 class PresentationModule(
-    api: Core.Api,
-    coreComponent: Core.Component,
-    navigationComponent: Navigation.Component
+    private val api: Api
 ) :
-    PresentationComponent,
-    Core.Api by api,
-    Core.Component by coreComponent,
-    Navigation.Component by navigationComponent
+    Api by api,
+    PresentationComponent {
+
+    override fun <T> api() = api as T
+
+}

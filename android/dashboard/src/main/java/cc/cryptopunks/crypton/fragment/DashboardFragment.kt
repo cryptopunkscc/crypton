@@ -24,7 +24,7 @@ class DashboardFragment :
     private val component: DashboardPresenter.Component by lazy {
         DaggerDashboardPresenter_Component
             .builder()
-            .component(coreActivity.navigationComponent)
+            .component(navigationComponent)
             .build()
     }
 

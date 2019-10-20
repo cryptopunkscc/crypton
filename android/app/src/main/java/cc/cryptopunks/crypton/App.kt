@@ -3,17 +3,18 @@ package cc.cryptopunks.crypton
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.api.client.ClientModule
-import cc.cryptopunks.crypton.component.AppComponent
 import cc.cryptopunks.crypton.component.ApplicationComponent
-import cc.cryptopunks.crypton.component.DaggerAppComponent
+import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.core.CoreModule
+import cc.cryptopunks.crypton.core.service.CoreService
 import cc.cryptopunks.crypton.module.ApplicationModule
 import cc.cryptopunks.crypton.module.RepoModule
+import cc.cryptopunks.crypton.repo.RepoProvider
 import cc.cryptopunks.crypton.smack.SmackClientFactory
 import cc.cryptopunks.crypton.smack.initSmack
+import cc.cryptopunks.crypton.sys.MessageSys
 import cc.cryptopunks.crypton.sys.SysIndicator
 import cc.cryptopunks.crypton.sys.SysModule
-import cc.cryptopunks.crypton.sys.MessageSys
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.ExecutorsModule
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -22,6 +23,8 @@ import cc.cryptopunks.crypton.util.MainExecutor
 class App : CoreApplication() {
 
     private val broadcastErrorComponent = BroadcastError.Module()
+
+    private val repoComponent by lazy { RepoModule(this) }
 
     override val component: ApplicationComponent by lazy {
         ApplicationModule(
@@ -45,27 +48,28 @@ class App : CoreApplication() {
                     },
                     mapException = ExceptionMapper
                 ),
-                repoComponent = RepoModule(
-                    context = this
-                ),
+                repoComponent = repoComponent,
                 sysComponent = SysModule(
                     message = MessageSys(MainActivity::class.java),
                     indicator = SysIndicator()
-                )
+                ),
+                repoProvider = RepoProvider(repoComponent)
             )
         )
     }
 
-    private val appComponent: AppComponent by lazy {
-        DaggerAppComponent.builder()
-            .component(component)
-            .build()
+    @dagger.Component(dependencies = [Core.Component::class])
+    internal interface Component {
+        val coreService: CoreService
     }
 
     override fun onCreate() {
         super.onCreate()
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        appComponent.coreService()
+        DaggerApp_Component.builder()
+            .component(component)
+            .build()
+            .coreService()
     }
 
     private companion object {
