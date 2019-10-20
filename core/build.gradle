@@ -9,6 +9,7 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     api "androidx.paging:paging-common:$paging_version"
     api "com.google.dagger:dagger:$dagger_version"
+    api project(':core:common')
     api project(':core:navigation')
     api project(':core:account')
     api project(':core:chat')

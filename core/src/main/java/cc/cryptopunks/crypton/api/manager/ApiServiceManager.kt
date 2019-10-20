@@ -1,10 +1,14 @@
 package cc.cryptopunks.crypton.api.manager
 
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.api.Client
 import cc.cryptopunks.crypton.api.client.selector.CurrentClientSelector
-import cc.cryptopunks.crypton.api.service.ApiService
-import cc.cryptopunks.crypton.api.service.DaggerApiService_Factory
+import cc.cryptopunks.crypton.service.MessageService
 import cc.cryptopunks.crypton.core.Core
+import cc.cryptopunks.crypton.entity.Chat
+import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.repo.repo
+import cc.cryptopunks.crypton.service.DaggerMessageService_Factory
 import cc.cryptopunks.crypton.service.Service
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.log
@@ -30,9 +34,13 @@ class ApiServiceManager @Inject constructor(
 
     private fun serviceFactory(
         client: Client
-    ): ApiService.Factory = DaggerApiService_Factory
-        .builder()
-        .client(client)
-        .component(coreComponent)
+    ): MessageService.Factory = DaggerMessageService_Factory.builder()
+        .api(client as Api)
+        .api(client as Chat.Api)
+        .api(client as Message.Api)
+        .repo(coreComponent.repo<Chat.Repo>())
+        .repo(coreComponent.repo<Message.Repo>())
+        .sys(coreComponent as Message.Sys)
+        .presentationManager(coreComponent.presentationManager)
         .build()
 }
