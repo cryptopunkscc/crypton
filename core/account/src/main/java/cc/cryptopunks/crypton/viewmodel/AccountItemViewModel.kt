@@ -3,14 +3,14 @@ package cc.cryptopunks.crypton.viewmodel
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Account.Status.Connected
 import cc.cryptopunks.crypton.entity.Account.Status.Connecting
-import cc.cryptopunks.crypton.interactor.ConnectAccountInteractor
+import cc.cryptopunks.crypton.interactor.LoginAccountInteractor
 import cc.cryptopunks.crypton.interactor.DeleteAccountInteractor
 import cc.cryptopunks.crypton.interactor.DisconnectAccountInteractor
 import cc.cryptopunks.crypton.interactor.UnregisterAccountInteractor
 import javax.inject.Inject
 
 class AccountItemViewModel @Inject constructor(
-    private val connectAccount: ConnectAccountInteractor,
+    private val loginAccount: LoginAccountInteractor,
     private val disconnectAccount: DisconnectAccountInteractor,
     private val deleteAccount: DeleteAccountInteractor,
     private val unregisterAccount: UnregisterAccountInteractor
@@ -31,9 +31,9 @@ class AccountItemViewModel @Inject constructor(
 
             Connecting -> when (isChecked) {
                 true -> disconnectAccount
-                else -> connectAccount
+                else -> loginAccount
             }
-            else -> connectAccount
+            else -> loginAccount
         }(account)
 
     fun remove(deleteFromServer: Boolean) =

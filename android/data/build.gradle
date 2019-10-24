@@ -20,8 +20,9 @@ android {
 }
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':core:api')
     implementation "androidx.room:room-ktx:$room_version"
+
+    implementation project(':core:api')
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3.kotlin12"

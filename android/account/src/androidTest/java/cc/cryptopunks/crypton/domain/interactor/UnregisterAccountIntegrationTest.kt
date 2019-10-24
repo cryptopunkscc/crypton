@@ -20,7 +20,7 @@ class UnregisterAccountIntegrationTest : IntegrationTest() {
             // given
             val account = account(address(1))
             val expected = null
-            connectAccount(account).join()
+            loginAccount(account).join()
 
             // when
             unregisterAccount(account).join()

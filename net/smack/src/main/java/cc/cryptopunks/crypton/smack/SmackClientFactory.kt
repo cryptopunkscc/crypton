@@ -21,9 +21,8 @@ fun initSmack(omemoStoreFile: File) {
 }
 
 class SmackClientFactory(
-    private val broadcastError: BroadcastError = BroadcastError(),
     setup: Net.Factory.Config.() -> Net.Factory.Config = { this }
-) : Net.Factory, (Net.Config) -> Net {
+) : Net.Factory {
 
     private var factoryConfig = Net.Factory.Config.Empty
 
@@ -36,12 +35,12 @@ class SmackClientFactory(
     }
 
     override fun invoke(config: Net.Config): Net = SmackClient(
+        scope = config.scope,
         address = config.address,
         configuration = connectionConfig
             .setUsernameAndPassword(config.address.local, config.password)
             .setXmppDomain(config.address.domain)
-            .build(),
-        broadcastError = broadcastError
+            .build()
     )
 
     private val connectionConfig

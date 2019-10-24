@@ -10,7 +10,7 @@ import javax.inject.Inject
 class RegisterAccountInteractor @Inject constructor(
     scope: Service.Scope,
     manager: AccountManager,
-    connect: ConnectAccountInteractor,
+    login: LoginAccountInteractor,
     deleteAccount: DeleteAccountInteractor
 ) : (Account) -> Job by { account ->
     scope launch {
@@ -19,9 +19,10 @@ class RegisterAccountInteractor @Inject constructor(
         ) {
             set(account)
             setStatus(Disconnected)
+            connect()
             register()
             insert()
-            connect.suspend(get())
+            login.suspend(get())
         }
     }
 }

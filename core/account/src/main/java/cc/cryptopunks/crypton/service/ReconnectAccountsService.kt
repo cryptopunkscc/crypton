@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.interactor.ConnectAccountInteractor
+import cc.cryptopunks.crypton.interactor.LoginAccountInteractor
 import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.log
@@ -16,19 +16,19 @@ class ReconnectAccountsService @Inject constructor(
     private val scope: Service.Scope,
     private val repo: Account.Repo,
     private val manager: AccountManager,
-    private val connectAccount: ConnectAccountInteractor
+    private val loginAccount: LoginAccountInteractor
 ) : () -> Job {
 
     override fun invoke() = scope.launch {
-        ReconnectAccountsService::class.log("start")
-        invokeOnClose { ReconnectAccountsService::class.log("stop $it") }
+        log("start")
+        invokeOnClose { log("stop $it") }
         repo.list()
             .asFlow()
             .map { manager.copy(it) }
             .filter { it.shouldReconnect() }
             .collect {
-                ReconnectAccountsService::class.log("connecting ${it.get()}")
-                connectAccount(it.get()).join()
+                log("connecting ${it.get()}")
+                loginAccount(it.get()).join()
             }
     }
 
@@ -36,4 +36,6 @@ class ReconnectAccountsService @Inject constructor(
         Account.Status.Connecting,
         Account.Status.Connected
     ).contains(get().status) && !isInitialized
+
+    private fun log(message: String) = log<ReconnectAccountsService>(message)
 }

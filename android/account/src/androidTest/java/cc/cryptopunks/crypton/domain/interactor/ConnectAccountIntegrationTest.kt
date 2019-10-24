@@ -25,7 +25,7 @@ class ConnectAccountIntegrationTest : IntegrationTest() {
             )
 
             // when
-            connectAccount(account).join()
+            loginAccount(account).join()
 
             // then
             assertEquals(

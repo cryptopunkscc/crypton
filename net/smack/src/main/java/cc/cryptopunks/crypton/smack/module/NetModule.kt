@@ -1,7 +1,8 @@
 package cc.cryptopunks.crypton.smack.module
 
-import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.*
+import cc.cryptopunks.crypton.net.Net
+import cc.cryptopunks.crypton.smack.component.SmackComponent
 import cc.cryptopunks.crypton.smack.net.account.*
 import cc.cryptopunks.crypton.smack.net.chat.*
 import cc.cryptopunks.crypton.smack.net.client.ConnectClient
@@ -13,26 +14,21 @@ import cc.cryptopunks.crypton.smack.net.user.AddContactUser
 import cc.cryptopunks.crypton.smack.net.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.net.user.UserInvite
 import cc.cryptopunks.crypton.smack.net.user.UserInvited
-import cc.cryptopunks.crypton.smack.component.NetComponent
-import cc.cryptopunks.crypton.smack.component.SmackComponent
 import cc.cryptopunks.crypton.smack.util.ConnectionEvent.ConnectionClosed
 import cc.cryptopunks.crypton.smack.util.connectionEventsFlow
-import cc.cryptopunks.crypton.util.BroadcastError
+import cc.cryptopunks.crypton.util.ErrorHandlingScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 
 internal class NetModule(
-    override val address: Address,
-    broadcastError: BroadcastError,
+    scope: ErrorHandlingScope,
+    private val address: Address,
     private val smack: SmackComponent
 ) : SmackComponent by smack,
-    NetComponent,
-    Net.Provider {
-
-    override val apiScope = Net.Scope(broadcastError)
+    Net {
 
     init {
-        apiScope.launch {
+        scope.launch {
             smack.run {
                 connection
                     .connectionEventsFlow()
@@ -44,10 +40,6 @@ internal class NetModule(
             }
         }
     }
-
-    override fun <T> net(): T = this as T
-
-    override val provider get() = this
 
     private val encryptedMessageCache by lazy { EncryptedMessageCache() }
 
@@ -85,6 +77,10 @@ internal class NetModule(
         IsAccountAuthenticated(connection = connection)
     }
 
+    override val statusFlow: Account.Net.StatusFlow by lazy {
+        AccountStatusFlow(connection)
+    }
+
     override val getContacts: User.Net.GetContacts by lazy {
         UserGetContacts(roster = roster)
     }
@@ -116,7 +112,7 @@ internal class NetModule(
 
     override val messageBroadcast: Message.Net.Broadcast by lazy {
         MessageBroadcast(
-            scope = apiScope,
+            scope = scope,
             chatManager = chatManager,
             address = address,
             omemoManager = omemoManager,

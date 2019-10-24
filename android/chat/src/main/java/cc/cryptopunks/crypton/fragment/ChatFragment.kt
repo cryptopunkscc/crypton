@@ -3,43 +3,55 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.coreComponent
+import cc.cryptopunks.crypton.androidCore
+import cc.cryptopunks.crypton.core
+import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.navigation.Navigation
 import cc.cryptopunks.crypton.navigation.Route
-import cc.cryptopunks.crypton.presentation.PresentationComponent
 import cc.cryptopunks.crypton.presenter.ChatPresenter
-import cc.cryptopunks.crypton.presenter.DaggerChatPresenter_Component
-import cc.cryptopunks.crypton.repo.repo
+import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.toMap
 import cc.cryptopunks.crypton.view.ChatView
+import dagger.Provides
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class ChatFragment : PresenterFragment<
-        ChatPresenter.View,
-        ChatPresenter,
-        ChatPresenter.Component>() {
+class ChatFragment : PresenterFragment<ChatPresenter.View, ChatPresenter>() {
 
-    override suspend fun onCreateComponent(
-        component: PresentationComponent
-    ) = component.run {
+    @dagger.Component(
+        dependencies = [
+            Core::class,
+            Navigation::class,
+            Session::class
+        ],
+        modules = [Module::class]
+    )
+    interface Component : Presenter.Component<ChatPresenter>
+
+    @dagger.Module
+    data class Module(@get:Provides val chat: Chat)
+
+    private suspend fun presenter(): ChatPresenter = androidCore.run {
         val route = Route.Chat(arguments.toMap())
         val chat = runBlocking(Dispatchers.IO) {
-            coreComponent.repo<Chat.Repo>().get(Address.from(route.chatAddress))
+            chatRepo.get(Address.from(route.chatAddress))
         }
-        DaggerChatPresenter_Component.builder()
-            .module(ChatPresenter.Module(chat))
-            .scope(apiScope)
-            .executorsComponent(coreComponent)
-            .component(navigationComponent)
-            .address(address)
-            .repo(coreComponent.repo<Message.Repo>())
-            .repo(coreComponent.repo<Chat.Repo>())
-            .net(net<Message.Net>())
-            .net(net<Chat.Net>())
-            .build()!!
+        DaggerChatFragment_Component.builder()
+            .core(core)
+            .navigation(navigation)
+            .session(currentSession())
+            .module(Module(chat))
+            .build()
+            .presenter
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        launch { presentation.setPresenter(presenter()) }
     }
 
     override fun onCreateView(

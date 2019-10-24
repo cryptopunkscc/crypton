@@ -1,12 +1,12 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.presenter.ChatPresenter
-import cc.cryptopunks.crypton.presenter.RosterPresenter
+import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.presentation.Presentation
 import cc.cryptopunks.crypton.presentation.PresentationManager
+import cc.cryptopunks.crypton.presenter.ChatPresenter
+import cc.cryptopunks.crypton.presenter.RosterPresenter
 import cc.cryptopunks.crypton.util.ext.any
 import cc.cryptopunks.crypton.util.log
 import kotlinx.coroutines.Job
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.filterNot
 import javax.inject.Inject
 
 class ShowMessageNotificationService @Inject constructor(
-    private val scope: Net.Scope,
+    private val scope: Session.Scope,
     private val address: Address,
     private val presentationManager: PresentationManager,
     private val showNotification: Message.Sys.ShowNotification,

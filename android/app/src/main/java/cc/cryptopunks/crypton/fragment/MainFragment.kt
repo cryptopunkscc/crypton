@@ -1,43 +1,30 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
-import cc.cryptopunks.crypton.coreComponent
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.core
+import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.navigation.Navigation
-import cc.cryptopunks.crypton.repo.repo
 import cc.cryptopunks.crypton.service.MainNavigationService
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class MainFragment : CoreFragment() {
 
-
     @dagger.Component(
         dependencies = [
-            Account.Repo::class,
-            Navigation.Component::class
+            Navigation::class,
+            Core::class
         ]
     )
-    interface Component {
-        fun inject(target: MainFragment)
-    }
-
-    private val component: Component by lazy {
-        DaggerMainFragment_Component.builder()
-            .repo(coreComponent.repo())
-            .component(navigationComponent)
-            .build()
-    }
+    interface Component : MainNavigationService.Component
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        component.inject(this)
-    }
-
-    @Inject
-    fun init(
-        mainNavigationService: MainNavigationService
-    ) {
-        launch { mainNavigationService() }
+        launch {
+            DaggerMainFragment_Component.builder()
+                .navigation(navigation)
+                .core(core)
+                .build()
+                .mainNavigationService()
+        }
     }
 }

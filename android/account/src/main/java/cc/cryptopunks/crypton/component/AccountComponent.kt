@@ -9,8 +9,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     dependencies = [
-        Navigation.Component::class,
-        Core.Component::class
+        Navigation::class,
+        Core::class
     ]
 )
 interface AccountComponent {

@@ -1,6 +1,7 @@
 include ':core:api',
         ':core:common',
         ':core:navigation',
+        ':core:session',
         ':core:account',
         ':core:chat',
         ':core:dashboard',

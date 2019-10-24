@@ -23,7 +23,7 @@ abstract class CoreActivity : AppCompatActivity() {
 
     val navigationComponent by lazy {
         fragment("navigation") {
-            ComponentHolderFragment<Navigation.Component>()
+            ComponentHolderFragment<Navigation>()
         }.initComponent {
             NavigationModule()
         }

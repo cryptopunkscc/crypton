@@ -3,8 +3,11 @@ package cc.cryptopunks.crypton.presentation
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.presenter.Presenter
 import java.lang.ref.WeakReference
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PresentationManager {
+@Singleton
+class PresentationManager @Inject constructor() {
 
     private var list = listOf<WeakReference<out Presentation<*, *>>>()
         get() = field.filterNotEmpty().also { list = it }

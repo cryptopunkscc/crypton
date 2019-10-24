@@ -1,31 +1,34 @@
 @startuml
 
-[:android:app]
-[:android:account]
-[:android:chat]
-[:android:dashboard]
-[:android:indicator]
-[:android:core]
-[:android:data]
-[:net:smack]
+[:net:smack] --> [:core:api]
 
-[:android:app] <-- [:android:core]
-[:android:account] <-- [:android:core]
-[:android:chat] <-- [:android:core]
-[:android:dashboard] <-- [:android:core]
-[:android:dashboard] <-- [:android:chat]
-[:android:indicator] <-- [:android:core]
+[:android:app] --> [:core:app]
+[:android:app] --> [:net:smack]
+[:android:app] --> [:android:data]
+[:android:app] --> [:android:dashboard]
+[:android:app] --> [:android:chat]
+[:android:app] --> [:android:account]
+[:android:app] --> [:android:indicator]
 
-[:android:app] <-- [:android:account]
-[:android:app] <-- [:android:chat]
-[:android:app] <-- [:android:dashboard]
-[:android:app] <-- [:android:indicator]
-[:android:app] <-- [:android:data]
-[:android:app] <-- [:net:smack]
+[:android:account] --> [:android:core]
+[:android:account] ---> [:core:account]
 
-[:android:core] <-- [:core]
-[:android:data] <-- [:core]
-[:net:smack] <-- [:core]
+[:android:chat] ---> [:android:core]
+[:android:chat] --> [:core:chat]
+
+[:android:dashboard] --> [:android:roster]
+[:android:dashboard] --> [:core:dashboard]
+
+[:android:roster] --> [:android:core]
+[:android:roster] --> [:core:chat]
+
+[:android:indicator] ---> [:android:core]
+
+[:android:core] --> [:core:session]
+[:android:core] --> [:core:navigation]
+
+[:android:data] --> [:core:api]
+
 
 
 @enduml

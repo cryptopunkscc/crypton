@@ -9,15 +9,9 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.activity.CoreActivity
-import cc.cryptopunks.crypton.net.Net
-import cc.cryptopunks.crypton.net.isEmpty
-import cc.cryptopunks.crypton.applicationComponent
-import cc.cryptopunks.crypton.presentation.PresentationModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.map
 import kotlin.coroutines.CoroutineContext
 
 
@@ -33,17 +27,7 @@ abstract class CoreFragment : Fragment(), CoroutineScope {
 
     val coreActivity get() = activity as CoreActivity
 
-    val navigationComponent get() = coreActivity.navigationComponent
-
-    val presentationComponent
-        get() = createComponent(applicationComponent.currentNet())
-
-    val presentationComponentFlow
-        get() = applicationComponent.currentNet
-            .filterNot { api -> api.isEmpty }
-            .map { api -> createComponent(api) }
-
-    private fun createComponent(net: Net) = PresentationModule(net)
+    val navigation get() = coreActivity.navigationComponent
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

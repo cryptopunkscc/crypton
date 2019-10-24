@@ -9,7 +9,6 @@ import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
-import org.jivesoftware.smackx.omemo.OmemoService
 import org.jivesoftware.smackx.omemo.internal.OmemoDevice
 import org.jivesoftware.smackx.omemo.trust.OmemoFingerprint
 import org.jivesoftware.smackx.omemo.trust.OmemoTrustCallback
@@ -54,8 +53,6 @@ internal class SmackModule(
         }
     }
 }
-
-typealias RawOmemoService = OmemoService<*, *, *, *, *, *, *, *, *>
 
 object OmemoTrustAllCallback: OmemoTrustCallback {
 

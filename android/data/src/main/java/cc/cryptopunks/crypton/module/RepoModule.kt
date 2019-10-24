@@ -15,7 +15,7 @@ import cc.cryptopunks.crypton.repo.UserRepo
 
 class RepoModule(
     context: Context
-) : Repo.Component {
+) : Repo {
 
     private val database: Database = Room
         .databaseBuilder(context, Database::class.java, "crypton.db")

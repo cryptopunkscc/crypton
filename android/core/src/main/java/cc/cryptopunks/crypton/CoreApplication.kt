@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton
 
 import android.app.Application
 import androidx.annotation.CallSuper
-import cc.cryptopunks.crypton.component.ApplicationComponent
+import cc.cryptopunks.crypton.component.AndroidCore
 import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
 import kotlinx.coroutines.GlobalScope
@@ -10,15 +10,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-val applicationComponent: ApplicationComponent get() = INSTANCE.component
-
-val coreComponent: Core.Component get() = INSTANCE.component
+val core: Core get() = INSTANCE.core
+val androidCore: AndroidCore get() = INSTANCE.core
 
 private lateinit var INSTANCE: CoreApplication
 
 abstract class CoreApplication : Application() {
 
-    abstract val component: ApplicationComponent
+    abstract val core: AndroidCore
 
     @CallSuper
     override fun onCreate() {
@@ -29,7 +28,6 @@ abstract class CoreApplication : Application() {
         logErrors()
     }
     private fun logErrors() = GlobalScope.launch {
-        component.broadcastError.collect { Timber.e(it) }
+        core.broadcastError.collect { Timber.e(it) }
     }
-
 }

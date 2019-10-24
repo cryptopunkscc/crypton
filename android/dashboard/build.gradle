@@ -34,7 +34,7 @@ dependencies {
 
     implementation project(':android:core')
     implementation project(':android:roster')
-    implementation project(':android:chat')
+    implementation project(':core:dashboard')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

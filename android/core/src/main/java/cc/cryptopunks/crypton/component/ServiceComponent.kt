@@ -4,6 +4,6 @@ import android.app.Service
 
 interface ServiceComponent :
     ContextComponent,
-    ApplicationComponent {
+    AndroidCore {
     val service: Service
 }

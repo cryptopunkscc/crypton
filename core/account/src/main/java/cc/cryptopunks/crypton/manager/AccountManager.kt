@@ -8,21 +8,23 @@ import javax.inject.Inject
 
 data class AccountManager @Inject constructor(
     private val accountRepo: Account.Repo,
-    private val netManager: Account.Net.Manager
+    private val sessionManager: SessionManager
 ) :
     AtomicReference<Account>(Account.Empty) {
 
     private val account get() = get()
 
-    suspend fun api(): Account.Net = netManager.get(account)
+    private fun api(): Account.Net = sessionManager[account]
 
-    val isInitialized: Boolean get() = netManager.contains(account)
+    val isInitialized: Boolean get() = account in sessionManager
 
     fun copy(account: Account): AccountManager = copy().apply { set(account) }
 
     fun setStatus(status: Account.Status): AccountManager = reduce { copy(status = status) }
 
     suspend fun load(id: Address): Account = accountRepo.get(id).also { set(it) }
+
+    suspend fun connect(): Unit = api().connect()
 
     suspend fun register(): Unit = api().createAccount()
 
@@ -51,7 +53,7 @@ data class AccountManager @Inject constructor(
     }
 
     suspend fun clear() {
-        netManager.minus(get())
+        sessionManager.minus(get())
     }
 
     inline fun <R> run(

@@ -11,6 +11,4 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3.kotlin12"
-
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

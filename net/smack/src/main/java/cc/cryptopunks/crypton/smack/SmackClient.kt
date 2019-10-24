@@ -1,20 +1,20 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.smack.component.NetComponent
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.smack.module.NetModule
 import cc.cryptopunks.crypton.smack.module.SmackModule
-import cc.cryptopunks.crypton.util.BroadcastError
+import cc.cryptopunks.crypton.util.ErrorHandlingScope
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 
 class SmackClient internal constructor(
-    override val address: Address,
-    broadcastError: BroadcastError,
+    scope: ErrorHandlingScope,
+    address: Address,
     configuration: XMPPTCPConnectionConfiguration
-) : NetComponent by NetModule(
+) : Net by NetModule(
+    scope = scope,
     address = address,
     smack = SmackModule(
         configuration = configuration
-    ),
-    broadcastError = broadcastError
+    )
 )
