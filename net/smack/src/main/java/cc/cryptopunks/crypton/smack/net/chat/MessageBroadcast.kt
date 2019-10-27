@@ -98,17 +98,19 @@ private fun SendChannel<SmackMessage>.outgoingListener(
     encryptedMessageCache: EncryptedMessageCache
 ) =
     OutgoingChatMessageListener { _, message, _ ->
-        offer(
-            message.apply {
-                from = userJid
-            }.run {
-                if (!hasOmemoExtension) message
-                else apply {
-                    removeOmemoBody()
-                    body = encryptedMessageCache[message.stanzaId]
-                }
+        message.apply {
+            from = userJid
+        }.run {
+            if (!hasOmemoExtension) message
+            else apply {
+                removeOmemoBody()
+                body = encryptedMessageCache[message.stanzaId]
             }
-        )
+        }.takeIf {
+            it.body.isNotBlank()
+        }?.let {
+            offer(it)
+        }
     }
 
 
