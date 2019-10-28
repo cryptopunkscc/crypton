@@ -38,12 +38,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:$mockk_version"
 
-    androidTestImplementation(project(':net:integration')) {
-        exclude group: 'org.igniterealtime.smack', module: 'smack-resolver-javax'
-        exclude group: 'org.igniterealtime.smack', module: 'smack-resolver-dnsjava'
-        exclude group: 'org.igniterealtime.smack', module: 'smack-java7'
-    }
-
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
