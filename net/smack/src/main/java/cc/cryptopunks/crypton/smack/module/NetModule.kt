@@ -70,7 +70,10 @@ internal class NetModule(
         RemoveAccount(accountManager = accountManager)
     }
     override val login: Account.Net.Login by lazy {
-        LoginAccount(connection)
+        LoginAccount(
+            connection = connection,
+            carbonManager = carbonManager
+        )
     }
 
     override val isAuthenticated: Account.Net.IsAuthenticated by lazy {

@@ -122,7 +122,7 @@ private fun SendChannel<SmackMessage>.omemoListener() = object : OmemoMessageLis
     ) {
         stanza.let { it as? SmackMessage }
             ?.replaceBody(decryptedMessage)
-            ?.let { offer((it)) }
+            ?.let { offer(it) }
     }
 
     override fun onOmemoCarbonCopyReceived(
@@ -130,5 +130,9 @@ private fun SendChannel<SmackMessage>.omemoListener() = object : OmemoMessageLis
         carbonCopy: SmackMessage,
         wrappingMessage: SmackMessage,
         decryptedCarbonCopy: OmemoMessage.Received
-    ) = Unit
+    ) {
+        carbonCopy
+            .replaceBody(decryptedCarbonCopy)
+            ?.let { offer(it) }
+    }
 }
