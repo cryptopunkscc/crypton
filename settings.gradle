@@ -1,3 +1,6 @@
+include 'auto-di:annotations',
+        'auto-di:processor'
+
 include ':core:api',
         ':core:common',
         ':core:navigation',
