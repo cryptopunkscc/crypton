@@ -5,9 +5,9 @@ import cc.cryptopunks.crypton.entity.Session
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 
-class GetLatestMessageTimestampSelector @Inject constructor(
+class GetLatestMessageSelector @Inject constructor(
     private val messageRepo: Message.Repo,
     private val netScope: Session.Scope
-) : () -> Deferred<Long> by {
-    netScope.async { messageRepo.latest()?.timestamp ?: 0 }
+) : () -> Deferred<Message?> by {
+    netScope.async { messageRepo.latest() }
 }

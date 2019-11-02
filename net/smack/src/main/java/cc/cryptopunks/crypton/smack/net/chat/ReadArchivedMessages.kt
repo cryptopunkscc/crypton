@@ -28,6 +28,7 @@ internal class ReadArchivedMessages(
         .builder()
         .run {
             since?.let { limitResultsSince(Date(it)) }
+            afterUid?.let { afterUid(it) }
             limitResultsBefore(Date(until))
             setResultPageSizeTo(PAGE_SIZE)
         }
