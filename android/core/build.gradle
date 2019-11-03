@@ -23,6 +23,7 @@ dependencies {
 
     api project(':core:session')
     api project(':core:navigation')
+    api project(':presentation:common')
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 

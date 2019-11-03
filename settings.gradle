@@ -16,6 +16,7 @@ include 'auto-di:annotations',
         ':service:dashboard',
         ':service:roster',
 
+        ':presentation:common',
         ':presentation:account',
         ':presentation:chat',
         ':presentation:dashboard',

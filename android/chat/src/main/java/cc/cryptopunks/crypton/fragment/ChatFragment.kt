@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.androidCore
-import cc.cryptopunks.crypton.core
 import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Chat

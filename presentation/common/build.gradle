@@ -8,9 +8,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api "androidx.paging:paging-common:$paging_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    api project(':presentation:common')
-    api project(':core:navigation')
-    api project(':core:roster')
+    api project(':core:common')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.navigation.service
 
-import cc.cryptopunks.crypton.actor.OptionItemSelected
+import cc.cryptopunks.crypton.navigation.OptionItemSelected
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
 import kotlinx.coroutines.flow.collect
