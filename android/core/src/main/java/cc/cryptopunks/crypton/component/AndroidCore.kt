@@ -22,6 +22,7 @@ import javax.inject.Singleton
 )
 interface AndroidCore : Core {
 
+    val core: Core
     val currentSession: CurrentSessionSelector
     val sessionsFlow: SessionsSelector
     val sessionManager: SessionManager

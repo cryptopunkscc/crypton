@@ -3,9 +3,7 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.component.AppComponent
 import cc.cryptopunks.crypton.component.AndroidCore
-import cc.cryptopunks.crypton.component.DaggerAppComponent
 import cc.cryptopunks.crypton.component.DaggerAndroidCore
 import cc.cryptopunks.crypton.core.CoreModule
 import cc.cryptopunks.crypton.module.RepoModule
@@ -65,12 +63,6 @@ class Dependencies(
             .core(core)
             .application(application)
             .module(AndroidCore.Module(mainActivityClass))
-            .build()!!
-    }
-
-    val appComponent: AppComponent by lazy {
-        DaggerAppComponent.builder()
-            .androidCore(androidCore)
             .build()!!
     }
 }

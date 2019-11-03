@@ -32,8 +32,8 @@ android {
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation project(':core:chat')
     implementation project(':android:core')
+    implementation project(':presentation:chat')
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:$mockk_version"

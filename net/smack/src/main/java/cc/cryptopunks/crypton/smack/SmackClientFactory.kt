@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.net.Net
-import cc.cryptopunks.crypton.util.BroadcastError
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.omemo.OmemoConfiguration

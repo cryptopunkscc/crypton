@@ -14,8 +14,8 @@ class AccountNavigationFragment : AccountComponentFragment() {
 
     @Inject
     fun init(
-        navigationViewModel: AccountNavigationService
+        accountNavigationService: AccountNavigationService
     ) {
-        launch { navigationViewModel() }
+        launch { accountNavigationService() }
     }
 }

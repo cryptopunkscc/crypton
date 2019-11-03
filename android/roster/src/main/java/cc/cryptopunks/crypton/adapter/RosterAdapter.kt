@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.view.RosterItemView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*

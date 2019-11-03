@@ -1,16 +1,28 @@
 include 'auto-di:annotations',
-        'auto-di:processor'
+        'auto-di:processor',
 
-include ':core:api',
+        ':core:api',
         ':core:common',
         ':core:navigation',
         ':core:session',
         ':core:account',
-        ':core:roster',
         ':core:chat',
-        ':core:dashboard',
-        ':core:app',
+        ':core:roster',
+
+        ':service:account',
+        ':service:session',
+        ':service:app',
+        ':service:chat',
+        ':service:dashboard',
+        ':service:roster',
+
+        ':presentation:account',
+        ':presentation:chat',
+        ':presentation:dashboard',
+        ':presentation:roster',
+
         ':net:smack',
+
         ':android:data',
         ':android:core',
         ':android:dashboard',

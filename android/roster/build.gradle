@@ -33,7 +33,7 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api project(':android:core')
-    api project(':core:chat')
+    api project(':presentation:roster')
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:$mockk_version"
