@@ -34,4 +34,10 @@ data class Presence(
         /** A presence probe as defined in section 4.3 of RFC 6121. */
         Probe
     }
+
+    companion object {
+        val Empty = Presence(
+            status = Status.Unavailable
+        )
+    }
 }

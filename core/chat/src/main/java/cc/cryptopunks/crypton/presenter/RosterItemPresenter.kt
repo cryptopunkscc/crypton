@@ -3,9 +3,11 @@ package cc.cryptopunks.crypton.presenter
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.selector.LastMessageSelector
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
+//import cc.cryptopunks.crypton.selector.PresenceSelector
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class RosterItemPresenter @Inject constructor(
     private val chat: Chat,
     private val navigate: Navigate,
+//    private val presenceOf: PresenceSelector, // TODO: Presence
     private val lastMessage: LastMessageSelector
 ) : Presenter<RosterItemPresenter.View> {
 
@@ -37,6 +40,7 @@ class RosterItemPresenter @Inject constructor(
             setTitle(title)
             setLetter(letter)
             launch { lastMessage(chat).collect(setMessage) }
+//            launch { presenceOf(chat.address).collect(setPresence) } // TODO: Presence
             launch { onClick.collect(navigateChat) }
         }
     }
@@ -45,16 +49,19 @@ class RosterItemPresenter @Inject constructor(
         fun setTitle(title: String)
         fun setLetter(letter: Char)
         val setMessage: suspend (message: Message) -> Unit
+        val setPresence: suspend (presence: Presence.Status) -> Unit
         val onClick: Flow<Any>
     }
 
     class Factory @Inject constructor(
         private val lastMessage: LastMessageSelector,
+//        private val presenceSelector: PresenceSelector, // TODO: Presence
         private val navigate: Navigate
     ) : (Chat) -> RosterItemPresenter by { chat ->
         RosterItemPresenter(
             chat = chat,
             lastMessage = lastMessage,
+//            presenceOf = presenceSelector, // TODO: Presence
             navigate = navigate
         )
     }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.FrameLayout
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.presenter.RosterItemPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
@@ -38,10 +39,16 @@ class RosterItemView(
         }
     }
 
-    override val setMessage: suspend (Message) -> Unit get() = { message ->
-        lastMessageTextView.text = message.text
-        dateTextView.text = dateFormat.format(message.timestamp)
-    }
+    override val setMessage: suspend (Message) -> Unit
+        get() = { message ->
+            lastMessageTextView.text = message.text
+            dateTextView.text = dateFormat.format(message.timestamp)
+        }
+
+    override val setPresence: suspend (presence: Presence.Status) -> Unit
+        get() = { presence ->
+            presenceTextView.text = presence.toString()
+        }
 
     override val onClick: Flow<Any> get() = clicks()
 

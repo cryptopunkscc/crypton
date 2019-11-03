@@ -2,7 +2,10 @@ package cc.cryptopunks.crypton.entity
 
 import kotlinx.coroutines.flow.Flow
 
-sealed class RosterEvent {
+sealed class RosterEvent(
+    open val resource: Resource? = null,
+    open val presence: Presence? = null
+) {
 
     interface Net {
         val rosterEventPublisher: Broadcast
@@ -13,32 +16,43 @@ sealed class RosterEvent {
     data class ProcessSubscribe(
         val from: Resource,
         val subscribeRequest: Presence
-    ) : RosterEvent()
+    ) : RosterEvent(
+        resource = from,
+        presence = subscribeRequest
+    )
 
     data class PresenceAvailable(
-        val address: Resource,
+        override val resource: Resource,
         val availablePresence: Presence
-    ) : RosterEvent()
+    ) : RosterEvent(
+        presence = availablePresence
+    )
 
     data class PresenceUnavailable(
-        val address: Resource,
-        val presence: Presence
+        override val resource: Resource,
+        override val presence: Presence
     ) : RosterEvent()
 
     data class PresenceSubscribed(
-        val address: Resource,
+        override val resource: Resource,
         val subscribedPresence: Presence
-    ) : RosterEvent()
+    ) : RosterEvent(
+        presence = subscribedPresence
+    )
 
     data class PresenceUnsubscribed(
-        val address: Resource,
+        override val resource: Resource,
         val unsubscribedPresence: Presence
-    ) : RosterEvent()
+    ) : RosterEvent(
+        presence = unsubscribedPresence
+    )
 
     data class PresenceError(
-        val address: Resource,
+        override val resource: Resource,
         val errorPresence: Presence
-    ) : RosterEvent()
+    ) : RosterEvent(
+        presence = errorPresence
+    )
 
     data class RosterLoaded(
         val roster: Any
@@ -53,7 +67,7 @@ sealed class RosterEvent {
     ) : RosterEvent()
 
     data class PresenceChanged(
-        val presence: Presence
+        override val presence: Presence
     ) : RosterEvent()
 
     data class EntriesUpdated(

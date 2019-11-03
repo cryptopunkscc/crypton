@@ -10,5 +10,6 @@ class StartSessionServices @Inject constructor(
 
     override fun invoke(session: Session): Unit = createSessionServices(session).run {
         messageService()
+//        presenceService() // TODO: Presence
     }
 }

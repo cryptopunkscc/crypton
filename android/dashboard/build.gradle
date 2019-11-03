@@ -32,9 +32,9 @@ android {
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation project(':android:core')
-    implementation project(':android:roster')
-    implementation project(':core:dashboard')
+    api project(':android:core')
+    api project(':android:roster')
+    api project(':core:dashboard')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }
