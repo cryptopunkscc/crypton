@@ -29,4 +29,8 @@ class ChatPresenter @Inject constructor(
         val sendMessageFlow: Flow<String>
         val setMessages: suspend (PagedList<MessagePresenter>) -> Unit
     }
+
+    interface Component {
+        val chatPresenter: ChatPresenter
+    }
 }

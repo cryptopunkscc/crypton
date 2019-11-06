@@ -29,4 +29,8 @@ class RosterPresenter @Inject constructor(
     interface View : Actor {
         val setList: suspend (PagedList<RosterItemPresenter>) -> Unit
     }
+
+    interface Component {
+        val rosterPresenter: RosterPresenter
+    }
 }

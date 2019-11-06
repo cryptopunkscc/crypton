@@ -19,6 +19,4 @@ class Session(
     class Scope : BroadcastErrorScope() {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
-
-    interface StartServices: (Session) -> Unit
 }

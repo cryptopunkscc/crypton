@@ -22,4 +22,8 @@ class DashboardPresenter @Inject constructor(
         val createChatClick: Flow<Any>
         val accountManagementClick: Flow<Any>
     }
+
+    interface Component {
+        val dashboardPresenter: DashboardPresenter
+    }
 }

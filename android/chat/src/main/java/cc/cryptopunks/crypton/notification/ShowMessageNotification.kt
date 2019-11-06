@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.notification
 
-import android.app.Activity
 import android.app.Application
 import android.app.Notification
 import android.app.PendingIntent
@@ -15,7 +14,7 @@ import javax.inject.Inject
 internal class ShowMessageNotification @Inject constructor(
     private val context: Application,
     private val showNotification: ShowSystemNotification,
-    private val mainActivityClass: Class<out Activity>
+    private val mainActivityClass: Class<*>
 ) : Message.Sys.ShowNotification, (Message) -> Unit {
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())

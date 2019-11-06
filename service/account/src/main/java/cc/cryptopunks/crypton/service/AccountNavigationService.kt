@@ -14,4 +14,8 @@ class AccountNavigationService @Inject constructor(
     suspend operator fun invoke() = newAccountConnected().drop(1).collect {
         navigate(Route.AccountList)
     }
+
+    interface Component {
+        val accountNavigationService: AccountNavigationService
+    }
 }

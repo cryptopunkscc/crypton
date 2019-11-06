@@ -7,13 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
-import cc.cryptopunks.crypton.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.util.ext.inflate
+import cc.cryptopunks.crypton.viewmodel.AccountItemViewModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.account_item.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.coroutines.CoroutineContext
@@ -77,8 +75,4 @@ class AccountListAdapter @Inject constructor(
             }
         }
     }
-}
-
-suspend fun AccountListAdapter.bind(accountList: Flow<List<Account>>) = accountList.collect {
-    items = it
 }

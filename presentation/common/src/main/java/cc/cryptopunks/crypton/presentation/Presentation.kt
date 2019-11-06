@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.presenter.Presenter
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 
-class Presentation<in A : Actor, in P : Presenter<A>> {
+class Presentation<in A, in P : Presenter<A>> {
 
     val actorScope = Actor.Scope()
     val modelScope = Model.Scope()
@@ -43,7 +43,7 @@ class Presentation<in A : Actor, in P : Presenter<A>> {
     )
 
     class Snapshot internal constructor(
-        val actor: Actor?,
+        val actor: Any?,
         val presenter: Presenter<*>?
     ) {
         val isVisible get() = actor != null

@@ -11,9 +11,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class AccountFromViewModel @Inject constructor(
     private val broadcastError: BroadcastError
 ) {

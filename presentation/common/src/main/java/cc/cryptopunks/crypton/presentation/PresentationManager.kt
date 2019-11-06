@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.presentation
 
-import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.presenter.Presenter
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -12,7 +11,7 @@ class PresentationManager @Inject constructor() {
     private var list = listOf<WeakReference<out Presentation<*, *>>>()
         get() = field.filterNotEmpty().also { list = it }
 
-    fun <A : Actor, P : Presenter<A>>create() = synchronized(this) {
+    fun <A, P : Presenter<A>>create() = synchronized(this) {
         Presentation<A, P>().also {
             list = list + WeakReference(it)
         }
@@ -32,5 +31,9 @@ class PresentationManager @Inject constructor() {
 
     private fun <T> List<WeakReference<out T>>.filterNotEmpty() = filterNot {
         it.get() == null
+    }
+
+    interface Component {
+        val presentationManager: PresentationManager
     }
 }

@@ -1,32 +1,32 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.component.AndroidCore
-import cc.cryptopunks.crypton.service.AppService
+import android.app.Application
 import cc.cryptopunks.crypton.smack.initSmack
-import javax.inject.Scope
+import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
-class App : CoreApplication() {
-
-    @Scope
-    annotation class AppScope
-
-    @AppScope
-    @dagger.Component(
-        dependencies = [AndroidCore::class]
-    )
-    interface Component : AppService.Component
+class App :
+    Application(),
+    AppCore {
 
     private val dependencies = Dependencies(this)
 
-    override val core get() = dependencies.androidCore
+    override val component get() = dependencies.applicationComponent
 
     override fun onCreate() {
         super.onCreate()
+        Timber.plant(Timber.DebugTree())
+        registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
+        logErrors()
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        DaggerApp_Component.builder()
-            .androidCore(dependencies.androidCore)
-            .build()
-            .appService()
+        component.appService()
+    }
+
+    private fun logErrors() = GlobalScope.launch {
+        component.broadcastError.collect { Timber.e(it) }
     }
 
     private companion object {

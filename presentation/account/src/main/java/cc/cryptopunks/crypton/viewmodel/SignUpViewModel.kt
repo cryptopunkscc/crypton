@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 
 class SignUpViewModel @Inject constructor(
-    private val accountViewModel: AccountFromViewModel,
+    val accountViewModel: AccountFromViewModel,
     private val registerAccount: RegisterAccountInteractor
 ) {
     suspend operator fun invoke() = coroutineScope {

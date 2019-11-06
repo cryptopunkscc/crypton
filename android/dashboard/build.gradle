@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
 android {
     compileSdkVersion compile_sdk
     defaultConfig {
@@ -28,7 +27,6 @@ android {
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
 }
-
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

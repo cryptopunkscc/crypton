@@ -2,19 +2,20 @@ package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.androidCore
+import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.util.ext.resolve
 
 
-abstract class PresenterFragment<
-        A : Actor,
-        P : Presenter<A>> :
-    CoreFragment() {
+abstract class PresenterFragment<A, P : Presenter<A>> : FeatureFragment() {
 
-    private val presentationManager get() = androidCore.presentationManager
+    private val presentationManager by lazy {
+        appComponent.resolve<PresentationManager.Component>().presentationManager
+    }
 
-    val presentation by lazy { presentationManager.create<A, P>() }
+    val presentation by lazy {
+        presentationManager.create<A, P>()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

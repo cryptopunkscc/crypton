@@ -14,7 +14,6 @@ interface Net:
 
     interface Component {
         val createNet: Factory
-        val mapException: MapException
     }
 
     interface Factory : (Config) -> Net {
@@ -55,4 +54,3 @@ interface Net:
 }
 
 typealias MapException = (Throwable) -> Throwable
-

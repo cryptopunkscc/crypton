@@ -8,11 +8,9 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class SignInViewModel @Inject constructor(
-    private val accountViewModel: AccountFromViewModel,
+    val accountViewModel: AccountFromViewModel,
     private val addAccount: AddAccountInteractor
 ) {
 

@@ -67,4 +67,8 @@ class CreateChatPresenter @Inject constructor(
         val clearInput: suspend (Any) -> Unit
         val setError: suspend (Throwable?) -> Unit
     }
+
+    interface Component {
+        val createChatPresenter: CreateChatPresenter
+    }
 }

@@ -70,4 +70,8 @@ class SessionManager @Inject constructor(
     @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<Session.Status>) =
         broadcast.collect(collector)
+
+    interface Component {
+        val sessionManager: SessionManager
+    }
 }

@@ -6,13 +6,7 @@ sourceSets {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    api "androidx.paging:paging-common:$paging_version"
     api "com.google.dagger:dagger:$dagger_version"
     api project(':core:api')
-
-    testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.9.3.kotlin12"
-
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

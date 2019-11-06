@@ -5,10 +5,12 @@ import cc.cryptopunks.crypton.entity.Indicator
 import dagger.Binds
 import dagger.Component
 import dagger.Module
+import javax.inject.Inject
 
-@Suppress("FunctionName")
-fun Application.SysIndicator(): Indicator.Sys = DaggerSysIndicator.builder()
-    .application(this)
+class SysIndicatorModule @Inject constructor(
+    application: Application
+): Indicator.Sys by DaggerSysIndicator.builder()
+    .application(application)
     .build()
 
 @Component(

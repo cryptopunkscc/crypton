@@ -3,30 +3,34 @@ package cc.cryptopunks.crypton.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.component.ServiceComponent
+import cc.cryptopunks.crypton.AppCore
+import cc.cryptopunks.crypton.ServiceCore
 import cc.cryptopunks.crypton.entity.Indicator
-import cc.cryptopunks.crypton.module.ServiceModule
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel
+import cc.cryptopunks.crypton.notification.CreateNotificationChannel.Importance.Min
 import cc.cryptopunks.crypton.notification.ShowIndicatorNotification
+import cc.cryptopunks.crypton.util.ext.resolve
 
 class IndicatorService : IntentService(Indicator.serviceName) {
 
-    @dagger.Component(dependencies = [ServiceComponent::class])
-    internal interface Component {
+    interface Component {
         val createNotificationChannel: CreateNotificationChannel
         val showIndicatorNotification: ShowIndicatorNotification
     }
 
-    private val component: Component by lazy {
-        DaggerIndicatorService_Component.builder()
-            .serviceComponent(ServiceModule(this))
-            .build()
-    }
+    private val component
+        get() = this
+            .application.resolve<AppCore>()
+            .component.resolve<ServiceCore.Factory.Component>()
+            .createServiceCore(this).resolve<Component>()
 
     override fun onCreate() {
         super.onCreate()
         component.run {
-            createNotificationChannel(Indicator.Notification.channelId)
+            createNotificationChannel(
+                id = Indicator.Notification.channelId,
+                importance = Min
+            )
             showIndicatorNotification()
         }
     }

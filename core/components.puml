@@ -6,17 +6,14 @@
 [:core:account]
 [:core:chat]
 [:core:navigation]
-[:core:dashboard]
-[:core:app]
+[:core:roster]
 
 [:core:common] --> [:core:api]
 [:core:session] --> [:core:common]
 [:core:navigation] --> [:core:common]
-[:core:app] --> [:core:account]
-[:core:app] --> [:core:chat]
 [:core:account] --> [:core:navigation]
 [:core:account] --> [:core:session]
 [:core:chat] --> [:core:navigation]
-[:core:dashboard] --> [:core:navigation]
+[:core:roster] --> [:core:common]
 
 @enduml

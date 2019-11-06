@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.notification
 
-import android.app.Activity
 import android.app.Application
 import android.app.Notification
 import android.app.PendingIntent
@@ -9,10 +8,10 @@ import cc.cryptopunks.crypton.entity.Indicator
 import cc.cryptopunks.crypton.indicator.R
 import javax.inject.Inject
 
-internal class ShowIndicatorNotification @Inject constructor(
+class ShowIndicatorNotification @Inject constructor(
     private val showNotification: ShowForegroundNotification,
     private val context: Application,
-    private val mainActivityClass: Class<out Activity>
+    private val mainActivityClass: Class<*>
 ) : () -> Unit {
 
     override fun invoke() = showNotification(

@@ -4,9 +4,7 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.viewmodel.SetAccountViewModel
 import kotlinx.android.synthetic.main.set_account.*
-import javax.inject.Inject
 
 
 class SetAccountFragment : AccountComponentFragment() {
@@ -15,14 +13,7 @@ class SetAccountFragment : AccountComponentFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        accountComponent.inject(this)
-    }
-
-    @Inject
-    fun init(
-        setAccountViewModel: SetAccountViewModel
-    ) {
-        with(setAccountViewModel) {
+        component.setAccountViewModel.run {
             addButton.setOnClickListener { addAccount() }
             registerButton.setOnClickListener { registerAccount() }
         }

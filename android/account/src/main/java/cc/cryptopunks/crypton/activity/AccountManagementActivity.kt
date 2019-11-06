@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.fragment.AccountNavigationFragment
 import cc.cryptopunks.crypton.util.ext.fragment
 
-class AccountManagementActivity : CoreActivity() {
+class AccountManagementActivity : FeatureActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
