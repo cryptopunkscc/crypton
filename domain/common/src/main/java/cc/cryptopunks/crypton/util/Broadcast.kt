@@ -14,6 +14,10 @@ class Broadcast<T: Any> : Flow<T> {
         channel.offer(null)
     }
 
+    suspend fun send(value: T) {
+        channel.send(value)
+    }
+
     @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<T>) {
         channel.asFlow().filterNotNull().collect(collector)

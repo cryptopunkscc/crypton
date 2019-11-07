@@ -7,6 +7,8 @@ sourceSets {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api project(':domain:session')
+    api project(':domain:feature')
+    api project(':service:roster')
     api project(':service:chat')
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

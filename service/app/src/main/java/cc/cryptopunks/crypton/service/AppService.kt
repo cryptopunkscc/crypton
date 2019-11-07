@@ -6,13 +6,13 @@ import javax.inject.Inject
 class AppService @Inject constructor(
     private val toggleIndicatorService: ToggleIndicatorService,
     private val reconnectAccountsService: ReconnectAccountsService,
-    private val sessionServiceManager: SessionServiceManager
+    private val sessionService: SessionService
 
 ) : () -> Unit by {
     log<AppService>("start")
     toggleIndicatorService()
     reconnectAccountsService()
-    sessionServiceManager()
+    sessionService()
     log<AppService>("stop")
 } {
 

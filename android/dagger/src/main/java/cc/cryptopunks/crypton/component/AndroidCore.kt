@@ -4,10 +4,10 @@ import android.app.Application
 import android.app.NotificationManager
 import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.core.Core
+import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.manager.SessionManager
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
-import cc.cryptopunks.crypton.service.AppService
 import dagger.Component
 import dagger.Provides
 import javax.inject.Singleton
@@ -23,9 +23,9 @@ import javax.inject.Singleton
 )
 interface AndroidCore :
     Core,
-    AppService.Component,
     SessionManager.Component,
-    PresentationManager.Component {
+    PresentationManager.Component,
+    PresenceManager.Component {
 
     val core: Core
     val application: Application

@@ -8,8 +8,9 @@ import cc.cryptopunks.crypton.smack.net.chat.*
 import cc.cryptopunks.crypton.smack.net.client.ConnectClient
 import cc.cryptopunks.crypton.smack.net.client.DisconnectClient
 import cc.cryptopunks.crypton.smack.net.client.InitOmemo
+import cc.cryptopunks.crypton.smack.net.presence.GetCachedPresences
 import cc.cryptopunks.crypton.smack.net.presence.SendPresence
-import cc.cryptopunks.crypton.smack.net.roster.RosterEventPublisher
+import cc.cryptopunks.crypton.smack.net.roster.RosterEventBroadcast
 import cc.cryptopunks.crypton.smack.net.user.AddContactUser
 import cc.cryptopunks.crypton.smack.net.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.net.user.UserInvite
@@ -131,10 +132,14 @@ internal class NetModule(
     }
 
     override val rosterEventPublisher: RosterEvent.Net.Broadcast by lazy {
-        RosterEventPublisher(roster = roster)
+        RosterEventBroadcast(roster = roster)
     }
 
     override val createChat: Chat.Net.Create by lazy(::CreateChat)
+
+    override val getCached: UserPresence.Net.GetCached by lazy {
+        GetCachedPresences(roster)
+    }
 }
 
 private fun <T> SmackComponent.lazy(init: SmackComponent.() -> T) = kotlin.lazy { init() }

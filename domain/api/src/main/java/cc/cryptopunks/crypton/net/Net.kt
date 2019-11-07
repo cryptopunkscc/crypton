@@ -10,7 +10,8 @@ interface Net:
     Presence.Net,
     Message.Net,
     Chat.Net,
-    RosterEvent.Net {
+    RosterEvent.Net,
+    UserPresence.Net {
 
     interface Component {
         val createNet: Factory

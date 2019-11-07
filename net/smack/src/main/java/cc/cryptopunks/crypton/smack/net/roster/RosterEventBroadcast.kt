@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import org.jivesoftware.smack.roster.Roster
 
-internal class RosterEventPublisher(roster: Roster) :
+internal class RosterEventBroadcast(roster: Roster) :
     RosterEvent.Net.Broadcast,
     Flow<RosterEvent> by roster.rosterEventFlow() {
 

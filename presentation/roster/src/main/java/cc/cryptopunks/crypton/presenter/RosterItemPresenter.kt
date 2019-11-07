@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.entity.Presence
 import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
 import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
-//import cc.cryptopunks.crypton.selector.PresenceFlowSelector
+import cc.cryptopunks.crypton.selector.PresenceFlowSelector
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class RosterItemPresenter @Inject constructor(
     private val chat: Chat,
     private val navigate: Navigate,
-//    private val presenceOf: PresenceFlowSelector, // TODO: Presence
+    private val presenceOf: PresenceFlowSelector,
     private val latestMessageFlow: LatestMessageFlowSelector
 ) : Presenter<RosterItemPresenter.View> {
 
@@ -40,7 +40,7 @@ class RosterItemPresenter @Inject constructor(
             setTitle(title)
             setLetter(letter)
             launch { latestMessageFlow(chat).collect(setMessage) }
-//            launch { presenceOf(chat.address).collect(setPresence) } // TODO: Presence
+            launch { presenceOf(chat.address).collect(setPresence) }
             launch { onClick.collect(navigateChat) }
         }
     }
@@ -55,13 +55,13 @@ class RosterItemPresenter @Inject constructor(
 
     class Factory @Inject constructor(
         private val latestMessageFlow: LatestMessageFlowSelector,
-//        private val presenceSelector: PresenceFlowSelector, // TODO: Presence
+        private val presenceSelector: PresenceFlowSelector,
         private val navigate: Navigate
     ) : (Chat) -> RosterItemPresenter by { chat ->
         RosterItemPresenter(
             chat = chat,
             latestMessageFlow = latestMessageFlow,
-//            presenceOf = presenceSelector, // TODO: Presence
+            presenceOf = presenceSelector,
             navigate = navigate
         )
     }

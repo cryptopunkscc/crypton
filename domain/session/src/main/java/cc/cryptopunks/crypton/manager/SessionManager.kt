@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.factory.SessionFactory
 import cc.cryptopunks.crypton.service.Service
 import cc.cryptopunks.crypton.util.Broadcast
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.collect
@@ -24,12 +25,15 @@ class SessionManager @Inject constructor(
     private val statuses = mutableMapOf<Address, Account.Status>()
     private var current: Address? = null
 
+    private val firstConnectedAddress
+        get() = statuses.entries.maxBy { it.value.ordinal }?.key
+
     operator fun get(account: Account): Session = synchronized(this) {
         sessions.getOrPut(account.address) {
             createSession(account).also { session ->
                 scope.launch {
                     session.statusFlow.collect { status ->
-                        broadcast(
+                        broadcast.send(
                             Session.Status(
                                 session = session,
                                 status = status
@@ -49,10 +53,12 @@ class SessionManager @Inject constructor(
 
     operator fun minus(account: Account) = synchronized(this) {
         val address = account.address
-        sessions -= address
+        sessions.remove(address)?.run {
+            scope.cancel()
+        }
         statuses -= address
         if (current == address)
-            current = statuses.entries.maxBy { it.value.ordinal }?.key
+            current = firstConnectedAddress
     }
 
     operator fun set(

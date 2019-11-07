@@ -41,7 +41,6 @@ class RosterFlowAdapter(
                 availablePresence.presence()
             )
         )
-
     }
 
     override fun presenceUnavailable(address: FullJid, presence: Presence) {
