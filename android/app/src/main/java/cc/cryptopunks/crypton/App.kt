@@ -19,6 +19,7 @@ class App :
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         logErrors()
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))

@@ -45,6 +45,7 @@ class CreatePagedList<K, V>(
         notifyExecutor = notifyExecutor
     )
 
+    @Suppress("UNCHECKED_CAST")
     private tailrec fun create(
         list: PagedList<V>
     ): PagedList<V> = if (!list.isDetached)
@@ -77,6 +78,7 @@ private class PagedListFlow<K, V>(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private val lastKey: K? get() = lastPagedList?.lastKey as? K?
 
     private var lastPagedList: PagedList<V>? = null

@@ -15,7 +15,7 @@ buildscript {
         rxjava_version = '2.1.6'
         rxandroid_version = '2.0.1'
         rxkotlin_version = '2.3.0'
-        room_version = "2.2.0-rc01"
+        room_version = "2.2.1"
         paging_version = "2.1.0"
         mockk_version = '1.9.3.kotlin12'
     }
@@ -24,7 +24,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

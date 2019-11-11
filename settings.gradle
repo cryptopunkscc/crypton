@@ -1,7 +1,7 @@
-include 'auto-di:annotations',
-        'auto-di:processor',
+//include 'auto-di:annotations',
+//        'auto-di:processor'
 
-        ':domain:api',
+include ':domain:api',
         ':domain:common',
         ':domain:navigation',
         ':domain:feature',
@@ -24,6 +24,7 @@ include 'auto-di:annotations',
 
         ':net:smack',
 
+        ':android:debug',
         ':android:data',
         ':android:core',
         ':android:notification',

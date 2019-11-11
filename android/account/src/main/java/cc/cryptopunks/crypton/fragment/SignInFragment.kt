@@ -13,9 +13,9 @@ class SignInFragment : AccountComponentFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        component.run {
-            launch { signInViewModel() }
-            signInViewModel.accountViewModel.run {
+        component.signInViewModel.run {
+            launch { invoke() }
+            accountViewModel.run {
                 launch { serviceNameLayout.bind(serviceName) }
                 launch { userNameLayout.bind(userName) }
                 launch { passwordLayout.bind(password) }

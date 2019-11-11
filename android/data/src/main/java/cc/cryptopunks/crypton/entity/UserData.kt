@@ -21,6 +21,7 @@ internal data class UserData(
         @Query("select * from User where id = :id")
         suspend fun getById(id: AddressData): UserData
 
+        @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
         @Query(
             """
             select * from user 

@@ -20,6 +20,7 @@ class RepoModule(
     private val database: Database = Room
         .databaseBuilder(context, Database::class.java, "crypton.db")
 //        .inMemoryDatabaseBuilder(context, Database::class.java)
+        .fallbackToDestructiveMigration()
         .build()
 
     override val accountRepo: Account.Repo = AccountRepo(

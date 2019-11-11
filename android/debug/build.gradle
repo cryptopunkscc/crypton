@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+android {
+    compileSdkVersion compile_sdk
+    defaultConfig {
+        minSdkVersion min_sdk
+        targetSdkVersion target_sdk
+        versionCode version_code
+        versionName version_name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    debugApi "io.palaima.debugdrawer:debugdrawer:0.8.0"
+    releaseApi "io.palaima.debugdrawer:debugdrawer-no-op:0.8.0"
+
+//    debugImplementation 'io.palaima.debugdrawer:debugdrawer-view:0.8.0'
+//    releaseImplementation 'io.palaima.debugdrawer:debugdrawer-view-no-op:0.8.0'
+
+    implementation 'io.palaima.debugdrawer:debugdrawer-base:0.8.0'
+
+    implementation 'io.palaima.debugdrawer:debugdrawer-commons:0.8.0'
+
+    implementation 'io.palaima.debugdrawer:debugdrawer-actions:0.8.0'
+
+    implementation 'com.jakewharton.scalpel:scalpel:1.1.2'
+    implementation 'io.palaima.debugdrawer:debugdrawer-scalpel:0.8.0'
+
+    implementation 'io.palaima.debugdrawer:debugdrawer-timber:0.8.0'
+
+    implementation 'io.palaima.debugdrawer:debugdrawer-fps:0.8.0'
+}

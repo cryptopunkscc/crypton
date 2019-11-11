@@ -8,7 +8,10 @@ import androidx.room.*
         "id",
         "chatId"
     ],
-    indices = [Index("id")],
+    indices = [
+        Index("id"),
+        Index("chatId")
+    ],
     foreignKeys = [
         ForeignKey(
             entity = ChatData::class,
