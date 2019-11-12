@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.presenter
 
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.actor.Actor
+import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.selector.RosterSelector
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
@@ -14,7 +15,9 @@ import javax.inject.Inject
 class RosterPresenter @Inject constructor(
     private val rosterFlow: RosterSelector,
     private val createRosterItem: RosterItemPresenter.Factory
-) : Presenter<RosterPresenter.View> {
+) :
+    Presenter<RosterPresenter.View>,
+    Message.Consumer {
 
     private val items = BroadcastChannel<PagedList<RosterItemPresenter>>(Channel.CONFLATED)
 
@@ -25,6 +28,8 @@ class RosterPresenter @Inject constructor(
     override suspend fun View.invoke() = coroutineScope {
         launch { items.asFlow().collect(setList) }
     }
+
+    override fun canConsume(message: Message) = true
 
     interface View : Actor {
         val setList: suspend (PagedList<RosterItemPresenter>) -> Unit

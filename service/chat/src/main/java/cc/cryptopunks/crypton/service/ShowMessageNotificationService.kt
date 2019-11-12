@@ -3,11 +3,8 @@ package cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.Session
-import cc.cryptopunks.crypton.presentation.Presentation
+import cc.cryptopunks.crypton.entity.canConsume
 import cc.cryptopunks.crypton.presentation.PresentationManager
-import cc.cryptopunks.crypton.presenter.ChatPresenter
-import cc.cryptopunks.crypton.presenter.RosterPresenter
-import cc.cryptopunks.crypton.util.ext.any
 import cc.cryptopunks.crypton.util.log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -26,23 +23,15 @@ class ShowMessageNotificationService @Inject constructor(
         log<ShowMessageNotificationService>("start")
         messageBroadcast
             .filterNot { it.from.address == address }
-            .filterNot { canConsume(it) }
+            .filterNot { canConsumeMessage(it) }
             .collect { showNotification(it) }
         log<ShowMessageNotificationService>("stop")
     }
 
-    private fun canConsume(
+    private fun canConsumeMessage(
         message: Message
     ): Boolean = presentationManager
         .stack()
-        .any { presenter -> presenter.canConsume(message) }
-
-    private fun Presentation.Snapshot.canConsume(
-        message: Message
-    ) = isVisible && presenter.run {
-        listOf(
-            this is RosterPresenter,
-            this is ChatPresenter && message.chatAddress == chat.address
-        ) any true
-    }
+        .filter { it.isVisible }
+        .any { it.presenter.canConsume(message) }
 }

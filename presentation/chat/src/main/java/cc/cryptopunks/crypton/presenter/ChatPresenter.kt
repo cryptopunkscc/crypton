@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.presenter
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Chat
+import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.interactor.SendMessageInteractor
 import cc.cryptopunks.crypton.selector.MessagePagedListSelector
 import kotlinx.coroutines.coroutineScope
@@ -16,7 +17,9 @@ class ChatPresenter @Inject constructor(
     private val sendMessage: SendMessageInteractor,
     private val createMessagePresenter: MessagePresenter.Factory,
     private val messageFlow: MessagePagedListSelector
-) : Presenter<ChatPresenter.View> {
+) :
+    Presenter<ChatPresenter.View>,
+    Message.Consumer {
 
     private val send: suspend (String) -> Unit = { sendMessage(it) }
 
@@ -24,6 +27,9 @@ class ChatPresenter @Inject constructor(
         launch { sendMessageFlow.collect(send) }
         launch { messageFlow(chat, createMessagePresenter).collect(setMessages) }
     }
+
+    override fun canConsume(message: Message): Boolean =
+        message.chatAddress == chat.address
 
     interface View : Actor {
         val sendMessageFlow: Flow<String>

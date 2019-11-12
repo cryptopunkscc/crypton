@@ -21,6 +21,10 @@ data class Message(
         else -> throw Exception("$address is not in party")
     }
 
+    interface Consumer {
+        fun canConsume(message: Message): Boolean
+    }
+
     interface Net {
         val sendMessage: Send
         val messageBroadcast: Broadcast
@@ -57,3 +61,6 @@ data class Message(
         val Empty = Message()
     }
 }
+
+fun Any?.canConsume(message: Message): Boolean =
+    (this is Message.Consumer) && canConsume(message)

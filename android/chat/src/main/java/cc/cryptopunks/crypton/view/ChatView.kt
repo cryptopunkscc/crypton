@@ -25,6 +25,7 @@ class ChatView(
     ChatPresenter.View {
 
     private val messageAdapter: MessageAdapter = MessageAdapter(scope)
+    private val scrollThreshold: Int = (context.resources.displayMetrics.scaledDensity * SCROLL_THRESHOLD_DP).toInt()
 
     init {
         View.inflate(context, R.layout.chat, this)
@@ -55,7 +56,7 @@ class ChatView(
         get() = chatRecyclerView.run {
             val maxScroll = computeVerticalScrollRange()
             val currentScroll = computeVerticalScrollOffset() + computeVerticalScrollExtent()
-            maxScroll - currentScroll < SCROLL_THRESHOLD
+            maxScroll - currentScroll < scrollThreshold
         }
 
 
@@ -75,6 +76,6 @@ class ChatView(
     }
 
     private companion object {
-        const val SCROLL_THRESHOLD = 100
+        const val SCROLL_THRESHOLD_DP = 100
     }
 }
