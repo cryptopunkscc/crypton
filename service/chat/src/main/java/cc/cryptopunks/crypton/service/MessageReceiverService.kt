@@ -15,8 +15,8 @@ class MessageReceiverService @Inject constructor(
     saveMessages: SaveMessagesInteractor
 ) : () -> Job by {
     scope.launch {
-        MessageReceiverService::class.log("start")
-        invokeOnClose { MessageReceiverService::class.log("stop") }
+        log<MessageReceiverService>("start")
+        invokeOnClose { log<MessageReceiverService>("stop") }
         messageBroadcast.collect { message ->
             saveMessages(listOf(message))
         }

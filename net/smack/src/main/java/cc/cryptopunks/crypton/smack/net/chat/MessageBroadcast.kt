@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.removeOmemoBody
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
-import cc.cryptopunks.crypton.util.ErrorHandlingScope
+import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
@@ -27,10 +27,9 @@ import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
 import org.jivesoftware.smack.packet.Message as SmackMessage
 
-
 internal class MessageBroadcast(
     address: Address,
-    scope: ErrorHandlingScope,
+    scope: BroadcastErrorScope,
     private val chatManager: ChatManager,
     private val omemoManager: OmemoManager,
     private val encryptedMessageCache: EncryptedMessageCache

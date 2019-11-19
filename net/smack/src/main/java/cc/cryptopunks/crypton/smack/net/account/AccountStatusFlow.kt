@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.net.account
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.smack.util.ConnectionEvent
+import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.smack.util.connectionEventsFlow
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
@@ -16,8 +16,8 @@ internal class AccountStatusFlow(
         .connectionEventsFlow()
         .mapNotNull {
             when (it) {
-                is ConnectionEvent.Authenticated -> Account.Status.Connected
-                is ConnectionEvent.ConnectionClosed -> Account.Status.Disconnected
+                is Net.Event.Authenticated -> Account.Status.Connected
+                is Net.Event.ConnectionClosed -> Account.Status.Disconnected
                 else -> null
             }
         }

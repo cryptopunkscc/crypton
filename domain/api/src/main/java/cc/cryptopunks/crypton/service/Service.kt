@@ -1,14 +1,11 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.util.BroadcastError
-import cc.cryptopunks.crypton.util.ErrorHandlingScope
+import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
 object Service {
-    class Scope(
-        override val broadcast: BroadcastError
-    ) : ErrorHandlingScope() {
+    class Scope : BroadcastErrorScope() {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 }

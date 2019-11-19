@@ -26,6 +26,7 @@ include ':domain:api',
 
         ':android:debug',
         ':android:data',
+        ':android:log',
         ':android:core',
         ':android:notification',
         ':android:dagger',

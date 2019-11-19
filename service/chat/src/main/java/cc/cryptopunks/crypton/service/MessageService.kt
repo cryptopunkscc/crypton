@@ -6,11 +6,11 @@ import javax.inject.Inject
 class MessageService @Inject constructor(
     messageReceiverService: MessageReceiverService,
     loadArchivedMessagesService: LoadArchivedMessagesService,
-    showMessageNotificationService: ShowMessageNotificationService
+    messageNotificationService: MessageNotificationService
 ) : () -> Unit by {
     log<MessageService>("start")
     messageReceiverService()
     loadArchivedMessagesService()
-    showMessageNotificationService()
+    messageNotificationService()
     log<MessageService>("stop")
 }

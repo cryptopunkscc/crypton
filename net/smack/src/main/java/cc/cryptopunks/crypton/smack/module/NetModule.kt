@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.smack.module
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.smack.component.SmackComponent
+import cc.cryptopunks.crypton.smack.net.NetEventOutput
 import cc.cryptopunks.crypton.smack.net.account.*
 import cc.cryptopunks.crypton.smack.net.chat.*
 import cc.cryptopunks.crypton.smack.net.client.ConnectClient
@@ -15,34 +16,20 @@ import cc.cryptopunks.crypton.smack.net.user.AddContactUser
 import cc.cryptopunks.crypton.smack.net.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.net.user.UserInvite
 import cc.cryptopunks.crypton.smack.net.user.UserInvited
-import cc.cryptopunks.crypton.smack.util.ConnectionEvent.ConnectionClosed
-import cc.cryptopunks.crypton.smack.util.connectionEventsFlow
-import cc.cryptopunks.crypton.util.ErrorHandlingScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
+import cc.cryptopunks.crypton.util.BroadcastErrorScope
 
 internal class NetModule(
-    scope: ErrorHandlingScope,
+    scope: BroadcastErrorScope,
     private val address: Address,
     private val smack: SmackComponent
 ) : SmackComponent by smack,
     Net {
 
-    init {
-        scope.launch {
-            smack.run {
-                connection
-                    .connectionEventsFlow()
-                    .filter { it is ConnectionClosed && it.withError }
-                    .collect {
-                        connect()
-                        login()
-                    }
-            }
-        }
-    }
-
     private val encryptedMessageCache by lazy { EncryptedMessageCache() }
+
+    override val netEvents: Net.Event.Output by lazy {
+        NetEventOutput(connection = connection)
+    }
 
     override val connect: Account.Net.Connect by lazy {
         ConnectClient(connection = connection)

@@ -1,17 +1,20 @@
 package cc.cryptopunks.crypton.util
 
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-class Broadcast<T: Any> : Flow<T> {
+open class Broadcast<T: Any> : (T) -> Unit, Flow<T> {
 
     private val channel = BroadcastChannel<T?>(Channel.CONFLATED)
 
-    operator fun invoke(value: T) = synchronized(this) {
-        channel.offer(value)
-        channel.offer(null)
+    override fun invoke(value: T) {
+        GlobalScope.launch {
+            channel.offer(value)
+        }
     }
 
     suspend fun send(value: T) {

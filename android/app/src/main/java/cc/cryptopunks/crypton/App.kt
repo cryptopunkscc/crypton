@@ -3,10 +3,7 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import cc.cryptopunks.crypton.util.initAndroidLog
 
 class App :
     Application(),
@@ -18,16 +15,11 @@ class App :
 
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
+        initAndroidLog()
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
-        logErrors()
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
         component.appService()
-    }
-
-    private fun logErrors() = GlobalScope.launch {
-        component.broadcastError.collect { Timber.e(it) }
     }
 
     private companion object {

@@ -1,31 +1,24 @@
 package cc.cryptopunks.crypton.smack.util
 
+import cc.cryptopunks.crypton.net.Net
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import org.jivesoftware.smack.ConnectionListener
 import org.jivesoftware.smack.XMPPConnection
 
-internal sealed class ConnectionEvent {
-    object Connected : ConnectionEvent()
-    data class ConnectionClosed(val throwable: Throwable? = null) : ConnectionEvent() {
-        val withError get() = throwable != null
-    }
-    data class Authenticated(val resumed: Boolean) : ConnectionEvent()
-}
-
-internal fun XMPPConnection.connectionEventsFlow() = callbackFlow<ConnectionEvent> {
+internal fun XMPPConnection.connectionEventsFlow() = callbackFlow<Net.Event> {
     val listener = object : ConnectionListener {
         override fun connected(connection: XMPPConnection) {
-            channel.offer(ConnectionEvent.Connected)
+            channel.offer(Net.Event.Connected)
         }
         override fun connectionClosed() {
-            channel.offer(ConnectionEvent.ConnectionClosed())
+            channel.offer(Net.Event.ConnectionClosed())
         }
         override fun connectionClosedOnError(e: Exception) {
-            channel.offer(ConnectionEvent.ConnectionClosed(e))
+            channel.offer(Net.Event.ConnectionClosed(e))
         }
         override fun authenticated(connection: XMPPConnection, resumed: Boolean) {
-            channel.offer(ConnectionEvent.Authenticated(resumed))
+            channel.offer(Net.Event.Authenticated(resumed))
         }
     }
     addConnectionListener(listener)

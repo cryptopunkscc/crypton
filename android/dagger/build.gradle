@@ -24,6 +24,7 @@ dependencies {
     api project(':net:smack')
     api project(':service:app')
     api project(':android:data')
+    api project(':android:log')
     api project(':android:main')
     api project(':android:account')
     api project(':android:dashboard')

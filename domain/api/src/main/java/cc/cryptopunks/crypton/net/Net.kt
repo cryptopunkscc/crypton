@@ -13,6 +13,8 @@ interface Net:
     RosterEvent.Net,
     UserPresence.Net {
 
+    val netEvents: Event.Output
+
     interface Component {
         val createNet: Factory
     }
@@ -42,6 +44,23 @@ interface Net:
     ) {
         companion object {
             val Empty = Config()
+        }
+    }
+
+    sealed class Event {
+
+        interface Output : Flow<Event>
+
+        object Connected : Event()
+
+        data class Authenticated(
+            val resumed: Boolean
+        ) : Event()
+
+        data class ConnectionClosed(
+            val throwable: Throwable? = null
+        ) : Event() {
+            val withError get() = throwable != null
         }
     }
 

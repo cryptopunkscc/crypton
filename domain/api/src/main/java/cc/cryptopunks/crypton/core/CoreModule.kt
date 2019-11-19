@@ -21,5 +21,5 @@ class CoreModule(
     Repo by repo,
     Sys by sys {
 
-    override val serviceScope = Service.Scope(broadcastError)
+    override val serviceScope = Service.Scope()
 }

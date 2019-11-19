@@ -4,11 +4,11 @@ import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.smack.module.NetModule
 import cc.cryptopunks.crypton.smack.module.SmackModule
-import cc.cryptopunks.crypton.util.ErrorHandlingScope
+import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 
 class SmackClient internal constructor(
-    scope: ErrorHandlingScope,
+    scope: BroadcastErrorScope,
     address: Address,
     configuration: XMPPTCPConnectionConfiguration
 ) : Net by NetModule(

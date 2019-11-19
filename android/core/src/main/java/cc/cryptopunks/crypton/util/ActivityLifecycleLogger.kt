@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.util
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import timber.log.Timber
 
 object ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
     override fun onActivityPaused(activity: Activity) {
@@ -35,6 +34,6 @@ object ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
     }
 
     private infix fun Activity.log(message: String) {
-        Timber.d("${javaClass.simpleName}: $message")
+        Log.print(this::class, Log.Level.Debug, message)
     }
 }
