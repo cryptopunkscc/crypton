@@ -6,7 +6,5 @@ sourceSets {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api project(':domain:log')
-    api "androidx.paging:paging-common:$paging_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 }

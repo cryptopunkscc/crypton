@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
 import cc.cryptopunks.crypton.util.initAndroidLog
@@ -16,6 +17,7 @@ class App :
 
     override fun onCreate() {
         super.onCreate()
+        initExceptionService()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         initAndroidLog()
         initAppDebug()
