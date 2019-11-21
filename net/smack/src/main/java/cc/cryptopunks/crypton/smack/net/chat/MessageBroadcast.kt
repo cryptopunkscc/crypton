@@ -46,7 +46,9 @@ internal class MessageBroadcast(
                 encryptedMessageCache = encryptedMessageCache,
                 chatManager = chatManager,
                 omemoManager = omemoManager
-            ).map { message ->
+            ).filter {
+                it.type == SmackMessage.Type.chat
+            }.map { message ->
                 message.toCryptonMessage()
             }.collect { message ->
                 channel.send(message)
