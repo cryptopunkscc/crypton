@@ -6,25 +6,24 @@
     android:id="@+id/cardContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:paddingLeft="@dimen/message_padding"
-    tools:gravity="right">
+    tools:gravity="right"
+    tools:paddingLeft="@dimen/message_padding">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0.5dp">
+        app:cardCornerRadius="10dp">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="right"
+            android:orientation="vertical"
             android:padding="8dp">
 
             <TextView
@@ -52,11 +51,11 @@
                     android:id="@+id/authorTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:gravity="end"
+                    android:lines="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                     tools:text=" • test@jabber.com" />
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </RelativeLayout>

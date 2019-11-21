@@ -1,21 +1,17 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:listDivider">@drawable/horizontal_divider</item>
-        <item name="buttonStyle">@style/Widget.Button</item>
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat.Widget.Button.Colored</item>
-    </style>
-
     <style name="Widget" />
 
     <style name="Widget.Button" parent="Widget.AppCompat.Button" >
         <item name="android:backgroundTint">?colorPrimary</item>
     </style>
+
+    <style name="Widget.Crypton.Toolbar.PrimarySurface" parent="Widget.Crypton.Toolbar.Primary" />
+
+    <style name="Widget.Crypton.Toolbar.Surface" parent="Widget.MaterialComponents.Toolbar.Surface" >
+        <item name="android:elevation">1dp</item>
+    </style>
+
+    <style name="Widget.Crypton.Toolbar.Primary" parent="Widget.MaterialComponents.Toolbar.Primary" />
 
 </resources>

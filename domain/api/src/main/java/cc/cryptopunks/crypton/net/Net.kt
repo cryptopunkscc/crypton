@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import kotlinx.coroutines.flow.Flow
 
-interface Net:
+interface Net :
     Account.Net,
     User.Net,
     Presence.Net,

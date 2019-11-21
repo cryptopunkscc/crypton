@@ -30,19 +30,19 @@ class CreateChatView(context: Context) :
         }
     }
 
-    override suspend fun init() = userEditText.textChanges().map { null }.collect(setError)
+    override suspend fun init() = addressInputView.input.textChanges().map { null }.collect(setError)
 
     override val createChatClick: Flow<Any>
-        get() = inputButton.clicks().map { createUserFromInput() }
+        get() = addressInputView.button.clicks().map { createUserFromInput() }
 
-    private fun createUserFromInput() = User(userEditText.text.toString())
+    private fun createUserFromInput() = User(addressInputView.input.text.toString())
 
 
     override val setUsers: suspend (List<User>) -> Unit
         get() = { userListAdapter.users = it }
 
     override val clearInput: suspend (Any) -> Unit
-        get() = { userEditText.text = null }
+        get() = { addressInputView.input.text = null }
 
     override val setError: suspend (Throwable?) -> Unit
         get() = { throwable -> errorOutput.text = throwable?.message }

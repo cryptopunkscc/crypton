@@ -23,7 +23,10 @@ class ReconnectAccountsService @Inject constructor(
 
     override fun invoke() = scope.launch {
         log.d("start")
-        invokeOnClose { log.d("stop $it") }
+        invokeOnClose { error ->
+            log.d("stop")
+            if (error != null) log.e(error)
+        }
         repo.list()
             .asFlow()
             .map { manager.copy(it) }

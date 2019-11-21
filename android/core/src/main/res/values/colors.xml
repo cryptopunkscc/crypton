@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">@color/md_black_1000</color>
     <color name="colorAccent">@color/md_black_1000</color>
     <color name="error">@color/md_red_700</color>
+
+    <color name="windowBackgroundDark">#121212</color>
 </resources>

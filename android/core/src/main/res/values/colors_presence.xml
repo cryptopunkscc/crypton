@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="presence_unavailable">@color/md_grey_400</color>
+    <color name="presence_available">@color/md_green_A700</color>
+    <color name="presence_error">@color/md_red_700</color>
+</resources>

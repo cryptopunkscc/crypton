@@ -17,6 +17,15 @@ abstract class BaseFragment : Fragment() {
 
     private val baseActivity get() = activity as? BaseActivity
 
+    fun setTitle(title: Any) {
+        baseActivity?.supportActionBar?.apply {
+            when (title) {
+                is Int -> setTitle(title)
+                is CharSequence -> setTitle(title)
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

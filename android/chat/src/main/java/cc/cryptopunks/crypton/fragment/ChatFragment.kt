@@ -25,6 +25,7 @@ class ChatFragment : PresenterFragment<ChatPresenter.View, ChatPresenter>() {
         val chat = runBlocking(Dispatchers.IO) {
             feature.chatRepo.get(Address.from(route.chatAddress))
         }
+        setTitle(chat.address)
         feature
             .sessionFeature()
             .chatFeature(chat)

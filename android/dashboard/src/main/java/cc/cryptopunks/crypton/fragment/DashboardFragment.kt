@@ -26,6 +26,11 @@ class DashboardFragment :
         setHasOptionsMenu(true)
     }
 
+    override fun onStart() {
+        super.onStart()
+        setTitle(R.string.app_name)
+    }
+
     override fun onCreateActor(view: View) = this
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

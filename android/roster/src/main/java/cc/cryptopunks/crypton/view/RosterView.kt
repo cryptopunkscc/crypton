@@ -23,9 +23,16 @@ class RosterView(
 
     private val rosterAdapter = RosterAdapter(scope)
 
+    private val rosterItemDecorator = RosterItemDecorator(
+        context = context,
+        paddingLeft = resources.getDimensionPixelSize(R.dimen.roster_divider_padding_left),
+        paddingRight = resources.getDimensionPixelSize(R.dimen.roster_divider_padding_right)
+    )
+
     init {
         View.inflate(context, R.layout.roster, this)
         rosterRecyclerView.apply {
+            addItemDecoration(rosterItemDecorator)
             layoutManager = LinearLayoutManager(context)
             adapter = rosterAdapter
         }

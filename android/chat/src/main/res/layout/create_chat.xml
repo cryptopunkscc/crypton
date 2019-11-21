@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,7 +32,7 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_chat_black_24dp" />
+                android:src="@drawable/ic_chat_24dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -50,38 +51,14 @@
         android:id="@+id/errorOutput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:textColor="@color/error" />
 
-    <LinearLayout
+    <cc.cryptopunks.crypton.widget.ActionInputView
+        android:id="@+id/addressInputView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/inputLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/userEditText"
-                style="@style/Widget.EditText"
-                android:hint="@string/type_user_address_hint"
-                android:minHeight="48dp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/inputButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="4dp"
-            android:src="@drawable/ic_person_add_black_24dp" />
-
-    </LinearLayout>
+        app:actionIcon="@drawable/ic_person_add_24dp"
+        app:hint="@string/type_user_address_hint" />
 </LinearLayout>

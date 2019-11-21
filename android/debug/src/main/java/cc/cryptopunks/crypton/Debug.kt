@@ -2,6 +2,8 @@ package cc.cryptopunks.crypton
 
 import android.app.Activity
 import android.app.Application
+import android.view.ViewGroup
+import io.palaima.debugdrawer.R
 import io.palaima.debugdrawer.DebugDrawer
 import io.palaima.debugdrawer.commons.BuildModule
 import io.palaima.debugdrawer.commons.DeviceModule
@@ -29,3 +31,12 @@ fun Activity.initDebugDrawer(): DebugDrawer = DebugDrawer
         SettingsModule()
     )
     .build()
+
+
+fun Activity.detachDebugDrawer() {
+    findViewById<ViewGroup>(android.R.id.content).apply {
+        findViewById<ViewGroup>(R.id.dd_drawer_layout)?.let { debugView ->
+            removeView(debugView)
+        }
+    }
+}

@@ -24,6 +24,7 @@ abstract class FeatureActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
+        setSupportActionBar(toolbar)
         scope.launch { feature.navigateOutput.bind(navController) }
     }
 

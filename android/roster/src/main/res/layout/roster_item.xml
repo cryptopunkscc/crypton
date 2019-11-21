@@ -4,22 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:background="?selectableItemBackground"
     android:padding="@dimen/default_padding">
 
-    <TextView
-        android:id="@+id/conversationLetter"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:gravity="center"
-        android:textSize="@dimen/avatar_letter_size"
-        android:textAllCaps="true"
-        tools:background="@color/md_teal_400"
-        tools:text="C"
-        tools:ignore="SpUsage" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/conversationLetter"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textColor="?android:textColorPrimaryInverse"
+            android:textSize="@dimen/avatar_letter_size"
+            android:fontFamily="@string/roboto_medium"
+            android:background="@drawable/no_avatar_drawable"
+            tools:ignore="SpUsage"
+            tools:text="C" />
+
+        <ImageView
+            android:id="@+id/presenceStatusIcon"
+            android:layout_width="@dimen/presence_icon_size"
+            android:layout_height="@dimen/presence_icon_size"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/presence_status_drawable" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,6 +47,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="20sp"
             tools:text="conversation name" />
 
         <TextView
@@ -43,21 +57,17 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:fontFamily="@string/roboto_light"
             tools:text="last message text" />
 
         <TextView
             android:id="@+id/dateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@string/roboto_light"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             tools:text="10 jun, 12:05" />
-
-        <TextView
-            android:id="@+id/presenceTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            tools:text="Available" />
 
     </LinearLayout>
 

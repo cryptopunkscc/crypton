@@ -67,11 +67,11 @@ class ChatView(
         Toast.makeText(context, "new message", Toast.LENGTH_SHORT).show()
 
 
-    override val sendMessageFlow: Flow<String> = sendMessageButton
+    override val sendMessageFlow: Flow<String> = messageInputView.button
         .clicks()
         .map { getInputAndClear() }
 
-    private fun getInputAndClear() = messageInput.text.run {
+    private fun getInputAndClear() = messageInputView.input.text.run {
         toString().also { clear() }
     }
 

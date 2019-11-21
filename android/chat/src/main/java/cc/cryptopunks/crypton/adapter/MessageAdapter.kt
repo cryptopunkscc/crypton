@@ -23,7 +23,7 @@ class MessageAdapter @Inject constructor(
     private val dateFormat: DateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(MessageView(parent.context, dateFormat).setGravity(viewType))
+        ViewHolder(MessageView(parent.context, viewType, dateFormat))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         scope.launch { holder.bind(getItem(position)) }
