@@ -6,17 +6,17 @@
     </style>
 
     <style name="Widget.EditText.Sing.Domain">
-        <item name="android:drawableStart">@drawable/ic_domain_black_24dp</item>
+        <item name="android:drawableStart">@drawable/ic_domain_24dp</item>
         <item name="android:hint">@string/service_name</item>
     </style>
 
     <style name="Widget.EditText.Sing.Login">
-        <item name="android:drawableStart">@drawable/ic_person_black_24dp</item>
+        <item name="android:drawableStart">@drawable/ic_person_24dp</item>
         <item name="android:hint">@string/user_name</item>
     </style>
 
     <style name="Widget.EditText.Sing.Password">
-        <item name="android:drawableStart">@drawable/ic_https_black_24dp</item>
+        <item name="android:drawableStart">@drawable/ic_https_24dp</item>
         <item name="android:hint">@string/password</item>
         <item name="android:inputType">textPassword</item>
     </style>

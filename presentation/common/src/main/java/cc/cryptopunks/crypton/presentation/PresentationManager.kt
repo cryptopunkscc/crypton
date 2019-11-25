@@ -22,7 +22,7 @@ class PresentationManager @Inject constructor() {
     }
 
     fun top(): Presentation.Snapshot? = synchronized(this) {
-        list.last().get()?.Snapshot()
+        list.lastOrNull()?.get()?.Snapshot()
     }
 
     fun stack() = synchronized(this) {

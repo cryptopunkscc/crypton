@@ -32,7 +32,7 @@
         <service
             android:name=".service.IndicatorService"
             android:exported="false"
-            android:icon="@drawable/ic_https_black_24dp"
+            android:icon="@drawable/ic_https_24dp"
             android:label="@string/app_service_title" />
     </application>
 </manifest>
