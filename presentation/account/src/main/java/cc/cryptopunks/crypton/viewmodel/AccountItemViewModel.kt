@@ -1,14 +1,14 @@
 package cc.cryptopunks.crypton.viewmodel
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Account.Status.Connected
-import cc.cryptopunks.crypton.entity.Account.Status.Connecting
-import cc.cryptopunks.crypton.interactor.LoginAccountInteractor
 import cc.cryptopunks.crypton.interactor.DeleteAccountInteractor
 import cc.cryptopunks.crypton.interactor.DisconnectAccountInteractor
+import cc.cryptopunks.crypton.interactor.LoginAccountInteractor
 import cc.cryptopunks.crypton.interactor.UnregisterAccountInteractor
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
+// TODO this class needs some work due to api changes
 class AccountItemViewModel @Inject constructor(
     private val loginAccount: LoginAccountInteractor,
     private val disconnectAccount: DisconnectAccountInteractor,
@@ -19,22 +19,22 @@ class AccountItemViewModel @Inject constructor(
 
     val name get() = account.address
 
-    val status get() = account.status.name
+    val status: String get() = TODO() //account.status.name
 
-    val isChecked get() = account.run { status == Connected || status == Connecting }
+    val isChecked: Boolean get() = TODO() //account.run { status == Connected || status == Connecting }
 
-    val isConnected get() = account.status == Connected
+    val isConnected: Boolean get() = TODO() //account.status == Connected
 
-    fun toggleConnection() =
-        when (account.status) {
-            Connected -> disconnectAccount
-
-            Connecting -> when (isChecked) {
-                true -> disconnectAccount
-                else -> loginAccount
-            }
-            else -> loginAccount
-        }(account)
+    fun toggleConnection(): Job = TODO()
+//        when (account.status) {
+//            Connected -> disconnectAccount
+//
+//            Connecting -> when (isChecked) {
+//                true -> disconnectAccount
+//                else -> loginAccount
+//            }
+//            else -> loginAccount
+//        }(account)
 
     fun remove(deleteFromServer: Boolean) =
         when (deleteFromServer) {

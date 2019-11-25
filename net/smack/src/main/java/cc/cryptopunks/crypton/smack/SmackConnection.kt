@@ -1,17 +1,17 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.net.Net
-import cc.cryptopunks.crypton.smack.module.NetModule
+import cc.cryptopunks.crypton.connection.Connection
+import cc.cryptopunks.crypton.smack.module.ConnectionModule
 import cc.cryptopunks.crypton.smack.module.SmackModule
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 
-class SmackClient internal constructor(
+class SmackConnection internal constructor(
     scope: BroadcastErrorScope,
     address: Address,
     configuration: XMPPTCPConnectionConfiguration
-) : Net by NetModule(
+) : Connection by ConnectionModule(
     scope = scope,
     address = address,
     smack = SmackModule(

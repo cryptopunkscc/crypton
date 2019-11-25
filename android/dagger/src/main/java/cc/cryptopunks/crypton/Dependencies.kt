@@ -9,8 +9,8 @@ import cc.cryptopunks.crypton.component.DaggerAndroidCore
 import cc.cryptopunks.crypton.component.DaggerApplicationComponent
 import cc.cryptopunks.crypton.core.CoreModule
 import cc.cryptopunks.crypton.module.RepoModule
-import cc.cryptopunks.crypton.net.NetModule
-import cc.cryptopunks.crypton.smack.SmackClientFactory
+import cc.cryptopunks.crypton.connection.ConnectionComponent
+import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.sys.MessageSysModule
 import cc.cryptopunks.crypton.sys.SysIndicatorModule
 import cc.cryptopunks.crypton.sys.SysModule
@@ -30,7 +30,7 @@ class Dependencies(
     }
 
     private val createNet by lazy {
-        SmackClientFactory {
+        SmackConnectionFactory {
             copy(
 //                securityMode = Net.Factory.Config.SecurityMode.disabled,
 //                hostAddress = "10.0.2.2",
@@ -47,8 +47,8 @@ class Dependencies(
                 ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())
             ),
             repo = repoComponent,
-            netComponent = NetModule(
-                createNet = createNet
+            connectionComponent = ConnectionComponent(
+                createConnection = createNet
             ),
             sys = SysModule(
                 message = MessageSysModule(

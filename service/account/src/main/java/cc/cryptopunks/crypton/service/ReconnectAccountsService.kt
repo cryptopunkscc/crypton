@@ -37,8 +37,6 @@ class ReconnectAccountsService @Inject constructor(
             }
     }
 
-    private fun AccountManager.shouldReconnect() = listOf(
-        Account.Status.Connecting,
-        Account.Status.Connected
-    ).contains(get().status) && !isInitialized
+    private fun AccountManager.shouldReconnect() =
+        !isInitialized || !isConnected
 }

@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.entity.*
+import cc.cryptopunks.crypton.connection.Connection
 import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.smack.component.SmackComponent
 import cc.cryptopunks.crypton.smack.net.NetEventOutput
@@ -18,12 +19,12 @@ import cc.cryptopunks.crypton.smack.net.user.UserInvite
 import cc.cryptopunks.crypton.smack.net.user.UserInvited
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
 
-internal class NetModule(
+internal class ConnectionModule(
     scope: BroadcastErrorScope,
     private val address: Address,
     private val smack: SmackComponent
 ) : SmackComponent by smack,
-    Net {
+    Connection {
 
     private val encryptedMessageCache by lazy { EncryptedMessageCache() }
 
@@ -31,19 +32,19 @@ internal class NetModule(
         NetEventOutput(connection = connection)
     }
 
-    override val connect: Account.Net.Connect by lazy {
+    override val connect: Net.Connect by lazy {
         ConnectClient(connection = connection)
     }
 
-    override val disconnect: Account.Net.Disconnect by lazy {
+    override val disconnect: Net.Disconnect by lazy {
         DisconnectClient(connection = connection)
     }
 
-    override val isConnected: Account.Net.IsConnected by lazy {
+    override val isConnected: Net.IsConnected by lazy {
         IsAccountConnected(connection = connection)
     }
 
-    override val initOmemo: Account.Net.InitOmemo by lazy {
+    override val initOmemo: Net.InitOmemo by lazy {
         InitOmemo(omemoManager)
     }
 
@@ -53,10 +54,10 @@ internal class NetModule(
             accountManager = accountManager
         )
     }
-
-    override val remove: Account.Net.Remove by lazy {
+    override val removeAccount: Account.Net.Remove by lazy {
         RemoveAccount(accountManager = accountManager)
     }
+
     override val login: Account.Net.Login by lazy {
         LoginAccount(
             connection = connection,
@@ -66,10 +67,6 @@ internal class NetModule(
 
     override val isAuthenticated: Account.Net.IsAuthenticated by lazy {
         IsAccountAuthenticated(connection = connection)
-    }
-
-    override val statusFlow: Account.Net.StatusFlow by lazy {
-        AccountStatusFlow(connection)
     }
 
     override val getContacts: User.Net.GetContacts by lazy {

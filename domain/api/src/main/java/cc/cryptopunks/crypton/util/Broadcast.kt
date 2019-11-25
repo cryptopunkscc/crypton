@@ -13,7 +13,7 @@ open class Broadcast<T: Any> : (T) -> Unit, Flow<T> {
 
     override fun invoke(value: T) {
         GlobalScope.launch {
-            channel.offer(value)
+            channel.send(value)
         }
     }
 

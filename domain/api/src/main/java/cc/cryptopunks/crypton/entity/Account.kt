@@ -1,23 +1,14 @@
 package cc.cryptopunks.crypton.entity
 
+import cc.cryptopunks.crypton.api.Api
 import kotlinx.coroutines.flow.Flow
 
 data class Account(
     val address: Address = Address.Empty,
-    val status: Status = Status.Disconnected,
-    val password: String = "",
-    val updateAt: Long = System.currentTimeMillis(),
-    val current: Boolean = true
+    val password: String = ""
 ) {
 
     val domain get() = address.domain
-
-    enum class Status {
-        Unknown,
-        Disconnected,
-        Connecting,
-        Connected,
-    }
 
     data class Exception(
         val account: Account,
@@ -33,27 +24,24 @@ data class Account(
         if (throwable is Exception) throwable
         else Exception(this, throwable)
 
+    interface Event : Api.Event {
+
+        data class Authenticated(
+            val resumed: Boolean
+        ) : Event
+    }
+
     interface Net {
 
-        val isConnected: IsConnected
-        val connect: Connect
-        val disconnect: Disconnect
-        val initOmemo: InitOmemo
         val createAccount: Create
+        val removeAccount: Remove
         val login: Login
-        val remove: Remove
         val isAuthenticated: IsAuthenticated
-        val statusFlow: StatusFlow
 
-        interface Connect : () -> Unit
-        interface Disconnect : () -> Unit
-        interface IsConnected : () -> Boolean
-        interface InitOmemo : () -> Unit
         interface Create: () -> Unit
-        interface Login: () -> Unit
         interface Remove: () -> Unit
+        interface Login: () -> Unit
         interface IsAuthenticated: () -> Boolean
-        interface StatusFlow: Flow<Status>
     }
 
     interface Repo {

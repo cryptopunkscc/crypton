@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.net
 
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.entity.*
-import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import kotlinx.coroutines.flow.Flow
 
 interface Net :
@@ -13,64 +13,37 @@ interface Net :
     RosterEvent.Net,
     UserPresence.Net {
 
+    val connect: Connect
+    val disconnect: Disconnect
+    val isConnected: IsConnected
+    val initOmemo: InitOmemo
     val netEvents: Event.Output
 
-    interface Component {
-        val createNet: Factory
-    }
+    interface Connect : () -> Unit
+    interface Disconnect : () -> Unit
+    interface IsConnected : () -> Boolean
+    interface InitOmemo : () -> Unit
 
-    interface Factory : (Config) -> Net {
-        data class Config(
-            val resource: String = "",
-            val hostAddress: String? = null,
-            val securityMode: SecurityMode = SecurityMode.ifpossible
-        ) {
-            enum class SecurityMode {
-                required,
-                ifpossible,
-                disabled
-            }
+    interface Event : Api.Event {
 
-            companion object {
-                val Empty = Config()
-            }
-        }
-    }
+        interface Output : Flow<Api.Event>
 
-    data class Config(
-        val scope: BroadcastErrorScope = BroadcastErrorScope(),
-        val address: Address = Address.Empty,
-        val password: String = ""
-    ) {
-        companion object {
-            val Empty = Config()
-        }
-    }
+        object Connected : Event
 
-    sealed class Event {
-
-        interface Output : Flow<Event>
-
-        object Connected : Event()
-
-        data class Authenticated(
-            val resumed: Boolean
-        ) : Event()
-
-        data class ConnectionClosed(
+        data class Disconnected(
             val throwable: Throwable? = null
-        ) : Event() {
+        ) : Event {
             val withError get() = throwable != null
         }
     }
 
-    class Exception(
+    open class Exception(
         message: String? = null,
         cause: Throwable? = null
-    ) : kotlin.Exception(message, cause) {
+    ) :
+        kotlin.Exception(message, cause),
+        Event {
 
         interface Output : Flow<Exception>
     }
 }
-
-typealias MapException = (Throwable) -> Throwable

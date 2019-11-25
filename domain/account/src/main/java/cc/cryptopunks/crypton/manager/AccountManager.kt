@@ -1,8 +1,6 @@
 package cc.cryptopunks.crypton.manager
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.util.ext.reduce
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
@@ -14,36 +12,34 @@ data class AccountManager @Inject constructor(
 
     private val account get() = get()
 
-    private fun api(): Account.Net = sessionManager[account]
+    private val session get() = sessionManager[account]
 
-    val isInitialized: Boolean get() = account in sessionManager
+    val isInitialized get() = account in sessionManager
+
+    val isConnected get() = session.isConnected()
 
     fun copy(account: Account): AccountManager = copy().apply { set(account) }
 
-    fun setStatus(status: Account.Status): AccountManager = reduce { copy(status = status) }
+    suspend fun connect(): Unit = session.connect()
 
-    suspend fun load(id: Address): Account = accountRepo.get(id).also { set(it) }
+    suspend fun register(): Unit = session.createAccount()
 
-    suspend fun connect(): Unit = api().connect()
-
-    suspend fun register(): Unit = api().createAccount()
-
-    suspend fun login(): Unit = api().login()
+    suspend fun login(): Unit = session.login()
 
     suspend fun initOmemo() {
         println("init omemo start")
-        api().initOmemo()
+        session.initOmemo()
         println("init omemo stop")
     }
 
-    suspend fun disconnect(): Unit = api().disconnect()
+    suspend fun disconnect(): Unit = session.disconnect()
 
     suspend fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 
     suspend fun update(): Unit = accountRepo.update(get())
 
     suspend fun unregister() {
-        api().remove()
+        session.removeAccount()
         delete()
     }
 

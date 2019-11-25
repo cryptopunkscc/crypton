@@ -6,18 +6,8 @@ import kotlinx.coroutines.flow.Flow
 @Entity(tableName = "account")
 internal data class AccountData(
     @PrimaryKey val id: AddressData,
-    val password: String,
-    val status: Account.Status = Account.Status.Disconnected,
-    val updateAt: Long
+    val password: String
 ) {
-
-    class StatusConverter {
-        @TypeConverter
-        fun toInt(status: Account.Status) = status.ordinal
-
-        @TypeConverter
-        fun toStatus(ordinal: Int) = Account.Status.values()[ordinal]
-    }
 
     @androidx.room.Dao
     interface Dao {
@@ -47,14 +37,10 @@ internal data class AccountData(
 
 internal fun AccountData.toDomain() = Account(
     address = Address.from(id),
-    status = status,
-    password = password,
-    updateAt = updateAt
+    password = password
 )
 
 internal fun Account.chatData() = AccountData(
     id = address.id,
-    password = password,
-    status = status,
-    updateAt = updateAt
+    password = password
 )

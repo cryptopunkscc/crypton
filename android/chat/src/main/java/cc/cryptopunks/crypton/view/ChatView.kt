@@ -25,7 +25,8 @@ class ChatView(
     ChatPresenter.View {
 
     private val messageAdapter: MessageAdapter = MessageAdapter(scope)
-    private val scrollThreshold: Int = (context.resources.displayMetrics.scaledDensity * SCROLL_THRESHOLD_DP).toInt()
+    private val scrollThreshold: Int =
+        (context.resources.displayMetrics.scaledDensity * SCROLL_THRESHOLD_DP).toInt()
 
     init {
         View.inflate(context, R.layout.chat, this)
@@ -41,15 +42,15 @@ class ChatView(
 
     override val setMessages: suspend (PagedList<MessagePresenter>) -> Unit
         get() = { list ->
-            messageAdapter.run {
-                isBottomReached.also {
-                    submitList(list)
+            isBottomReached
+                .also {
+                    messageAdapter.submitList(list)
                 }
-            }.let { wasBottomReached ->
-                if (wasBottomReached)
-                    scrollToNewMessage() else
-                    displayNewMessageInfo()
-            }
+                .let { wasBottomReached ->
+                    if (wasBottomReached)
+                        scrollToNewMessage() else
+                        displayNewMessageInfo()
+                }
         }
 
     private val isBottomReached

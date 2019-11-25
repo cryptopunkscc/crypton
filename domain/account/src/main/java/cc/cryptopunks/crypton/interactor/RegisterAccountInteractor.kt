@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Account.Status.Disconnected
 import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
@@ -18,7 +17,6 @@ class RegisterAccountInteractor @Inject constructor(
             onAccountException = deleteAccount
         ) {
             set(account)
-            setStatus(Disconnected)
             connect()
             register()
             insert()

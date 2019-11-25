@@ -18,25 +18,24 @@ import javax.inject.Singleton
 class SessionManager @Inject constructor(
     private val createSession: SessionFactory,
     private val scope: Service.Scope
-) : Flow<Session.Status> {
+) : Flow<Session.Event> {
 
-    private val broadcast = Broadcast<Session.Status>()
+    private val broadcast = Broadcast<Session.Event>()
     private val sessions = mutableMapOf<Address, Session>()
-    private val statuses = mutableMapOf<Address, Account.Status>()
     private var current: Address? = null
 
     private val firstConnectedAddress
-        get() = statuses.entries.maxBy { it.value.ordinal }?.key
+        get() = sessions.entries.firstOrNull { it.value.isAuthenticated() }?.key
 
     operator fun get(account: Account): Session = synchronized(this) {
         sessions.getOrPut(account.address) {
             createSession(account).also { session ->
                 scope.launch {
-                    session.statusFlow.collect { status ->
+                    session.netEvents.collect { event ->
                         broadcast.send(
-                            Session.Status(
+                            Session.Event(
                                 session = session,
-                                status = status
+                                event = event
                             )
                         )
                     }
@@ -45,36 +44,25 @@ class SessionManager @Inject constructor(
         }
     }
 
-    operator fun get(session: Session): Account.Status =
-        statuses[session.address] ?: Account.Status.Unknown
-
-    operator fun contains(account: Account) =
+    operator fun contains(account: Account): Boolean =
         account.address in sessions
 
-    operator fun minus(account: Account) = synchronized(this) {
+    operator fun minus(account: Account): Unit = synchronized(this) {
         val address = account.address
         sessions.remove(address)?.run {
             scope.cancel()
         }
-        statuses -= address
         if (current == address)
             current = firstConnectedAddress
     }
 
-    operator fun set(
-        session: Session,
-        status: Account.Status
-    ) = synchronized(this) {
-        statuses[session.address] = status
-    }
-
-    fun getCurrent() = sessions.values.firstOrNull() //sessions[current]
+    fun getCurrent(): Session? = sessions.values.firstOrNull() //sessions[current]
 
     fun isCurrent(session: Session): Boolean =
         session.address == current
 
     @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Session.Status>) =
+    override suspend fun collect(collector: FlowCollector<Session.Event>) =
         broadcast.collect(collector)
 
     interface Component {

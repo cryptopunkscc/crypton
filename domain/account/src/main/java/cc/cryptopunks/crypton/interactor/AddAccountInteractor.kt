@@ -17,7 +17,6 @@ class AddAccountInteractor @Inject constructor(
             onAccountException = deleteAccount
         ) {
             set(account)
-            setStatus(Account.Status.Disconnected)
             insert()
             login.suspend(get())
         }

@@ -9,8 +9,8 @@ import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.sid.element.StanzaIdElement
 import org.jxmpp.jid.impl.JidCreate
 
-internal fun Forwarded.toCryptonMessage() =
-    (forwardedStanza as Message).toCryptonMessage(delayInformation.stamp.time)
+internal fun Forwarded.toCryptonMessage() = (forwardedStanza as Message)
+    .toCryptonMessage(delayInformation.stamp.time)
 
 internal fun Message.toCryptonMessage(
     timestamp: Long = System.currentTimeMillis()

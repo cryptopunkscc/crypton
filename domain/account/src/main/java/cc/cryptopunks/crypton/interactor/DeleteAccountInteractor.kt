@@ -13,7 +13,7 @@ class DeleteAccountInteractor @Inject constructor(
     scope.launch {
         manager.copy().run {
             set(account)
-            if (get().status == Account.Status.Connected)
+            if (isConnected)
                 disconnect()
             delete()
         }

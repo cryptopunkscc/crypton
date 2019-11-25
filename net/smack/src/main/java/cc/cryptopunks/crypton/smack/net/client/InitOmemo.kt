@@ -1,11 +1,11 @@
 package cc.cryptopunks.crypton.smack.net.client
 
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.net.Net
 import org.jivesoftware.smackx.omemo.OmemoManager
 
 class InitOmemo(
     omemoManager: OmemoManager
-) : Account.Net.InitOmemo, () -> Unit by {
+) : Net.InitOmemo, () -> Unit by {
     runCatching {
         omemoManager.initialize()
     }

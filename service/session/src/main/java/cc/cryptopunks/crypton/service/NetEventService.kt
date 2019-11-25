@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.util.BroadcastError
@@ -22,15 +23,15 @@ class NetEventService @Inject constructor(
         }
     }
 
-    private suspend fun handleEvent(event: Net.Event) {
+    private suspend fun handleEvent(event: Api.Event) {
         log.d(event)
 
-        if (event is Net.Event.ConnectionClosed)
+        if (event is Net.Event.Disconnected)
             handleError(event)
     }
 
 
-    private suspend fun handleError(event: Net.Event.ConnectionClosed) {
+    private suspend fun handleError(event: Net.Event.Disconnected) {
         event.throwable?.let { throwable ->
             log.e(throwable)
             broadcastError.send(throwable)

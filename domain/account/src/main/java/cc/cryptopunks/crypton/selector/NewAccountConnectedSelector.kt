@@ -1,21 +1,21 @@
 package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.entity.Account
-import kotlinx.coroutines.flow.*
+import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.manager.SessionManager
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NewAccountConnectedSelector @Inject constructor(
-    private val repo: Account.Repo
-) : () -> Flow<Account> {
+    private val sessionManager: SessionManager
+) : () -> Flow<Address> {
 
-    override fun invoke(): Flow<Account> = repo
-        .flowList()
-        .map { it.filterConnected() }
-        .filter { it.isNotEmpty() }
-        .map { it.last() }
-        .scanReduce { l, r ->  if (r.updateAt > l.updateAt) r else l }
-        .distinctUntilChanged()
+    override fun invoke(): Flow<Address> = mutableSetOf<Address>().run {
+        sessionManager
+            .filter { it.event is Account.Event.Authenticated }
+            .filter { add(it.session.address) }
+            .map { it.session.address }
+    }
 }
-
-private fun List<Account>.filterConnected() = this
-    .filter { it.status == Account.Status.Connected }

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack
 
-import cc.cryptopunks.crypton.net.Net
+import cc.cryptopunks.crypton.connection.Connection
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.omemo.OmemoConfiguration
@@ -19,21 +19,21 @@ fun initSmack(omemoStoreFile: File) {
     }
 }
 
-class SmackClientFactory(
-    setup: Net.Factory.Config.() -> Net.Factory.Config = { this }
-) : Net.Factory {
+class SmackConnectionFactory(
+    setup: Connection.Factory.Config.() -> Connection.Factory.Config = { this }
+) : Connection.Factory {
 
-    private var factoryConfig = Net.Factory.Config.Empty
+    private var factoryConfig = Connection.Factory.Config.Empty
 
     init {
         invoke(setup)
     }
 
-    operator fun invoke(setup: Net.Factory.Config.() -> Net.Factory.Config) = apply {
+    operator fun invoke(setup: Connection.Factory.Config.() -> Connection.Factory.Config) = apply {
         factoryConfig = factoryConfig.setup()
     }
 
-    override fun invoke(config: Net.Config): Net = SmackClient(
+    override fun invoke(config: Connection.Config): Connection = SmackConnection(
         scope = config.scope,
         address = config.address,
         configuration = connectionConfig
