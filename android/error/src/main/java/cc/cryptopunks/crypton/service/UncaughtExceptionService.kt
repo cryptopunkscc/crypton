@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import android.os.Environment
+import android.content.Context
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.d
 import cc.cryptopunks.crypton.util.e
@@ -11,13 +11,18 @@ import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun initExceptionService() = Thread.setDefaultUncaughtExceptionHandler(
-    UncaughtExceptionService(
-        Environment
-            .getExternalStorageDirectory()
-            .resolve(cryptonDirName)
-    )
+fun Context.initExceptionService() = Thread.setDefaultUncaughtExceptionHandler(
+    UncaughtExceptionService(getCryptonDir())
 )
+
+private fun Context.getCryptonDir() = externalCacheDir!!.absolutePath
+    .split("Android")
+    .first()
+    .let(::File)
+    .resolve(cryptonDirName)
+    .takeIf { (it.exists() && it.canWrite()) || it.mkdirs() }
+    ?: getExternalFilesDir(null)!!
+
 
 private class UncaughtExceptionService(
     private val externalFilesDir: File
