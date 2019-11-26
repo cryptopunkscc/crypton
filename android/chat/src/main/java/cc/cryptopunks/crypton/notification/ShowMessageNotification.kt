@@ -35,6 +35,8 @@ internal class ShowMessageNotification @Inject constructor(
         .setSubText(dateFormat.format(timestamp))
         .setSmallIcon(R.mipmap.ic_launcher_round)
         .setContentIntent(pendingIntent())
+        .setGroup(chatAddress.toString())
+        .setGroupSummary(true)
         .setAutoCancel(true)
         .build()
 

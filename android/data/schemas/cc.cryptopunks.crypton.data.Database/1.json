@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a5b3f03802a0e0a9401d80fc2cb864a4",
+    "identityHash": "eaa0915f52ea81a2903979eb62feb547",
     "entities": [
       {
         "tableName": "account",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `password` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `password` BLOB NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -17,7 +17,7 @@
           {
             "fieldPath": "password",
             "columnName": "password",
-            "affinity": "TEXT",
+            "affinity": "BLOB",
             "notNull": true
           }
         ],
@@ -251,7 +251,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a5b3f03802a0e0a9401d80fc2cb864a4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eaa0915f52ea81a2903979eb62feb547')"
     ]
   }
 }

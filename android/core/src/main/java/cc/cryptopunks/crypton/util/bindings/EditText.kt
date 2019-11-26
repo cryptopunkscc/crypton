@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 private class TextChanges(
-    private val scope: ProducerScope<String>
+    private val scope: ProducerScope<CharSequence>
 ) :
     TextWatcher {
 
@@ -31,7 +31,7 @@ private class TextChanges(
     }
 }
 
-fun EditText.textChanges(): Flow<String> = callbackFlow {
+fun EditText.textChanges(): Flow<CharSequence> = callbackFlow {
     val textChanges = TextChanges(this)
     addTextChangedListener(textChanges)
     awaitClose { removeTextChangedListener(textChanges) }
@@ -39,7 +39,7 @@ fun EditText.textChanges(): Flow<String> = callbackFlow {
 
 suspend fun EditText.bind(property: CacheFlow<Input>) {
     coroutineScope {
-        var current: String? = null
+        var current: CharSequence? = null
         launch {
             property.collect { input ->
                 if (input.text != current) {
@@ -51,7 +51,7 @@ suspend fun EditText.bind(property: CacheFlow<Input>) {
         }
         launch {
             textChanges().collect { new ->
-                if (text.toString() != current) {
+                if (text != current) {
                     current = new
                     property {
                         copy(

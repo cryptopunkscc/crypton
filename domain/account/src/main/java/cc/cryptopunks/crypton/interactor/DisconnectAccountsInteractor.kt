@@ -20,7 +20,7 @@ class DisconnectAccountsInteractor @Inject constructor(
     )
 
     override fun invoke(): Job = scope.launch {
-        repo.list().forEach { account ->
+        repo.addressList().forEach { account ->
             disconnectIfNeeded.send(account)
         }
     }

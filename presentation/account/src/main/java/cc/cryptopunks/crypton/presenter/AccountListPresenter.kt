@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.presenter
 
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.navigation.service.OptionItemNavigationService
 import cc.cryptopunks.crypton.selector.AccountListSelector
 import kotlinx.coroutines.coroutineScope
@@ -19,6 +19,6 @@ class AccountListPresenter @Inject constructor(
     }
 
     interface Actor {
-        val setAccounts: suspend (accounts: List<Account>) -> Unit
+        val setAccounts: suspend (List<Address>) -> Unit
     }
 }

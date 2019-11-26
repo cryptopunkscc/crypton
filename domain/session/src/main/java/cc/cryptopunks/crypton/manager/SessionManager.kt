@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.manager
 
-import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.entity.Session.Event.Created
@@ -26,9 +25,9 @@ class SessionManager @Inject constructor(
     private val firstConnectedAddress
         get() = sessions.entries.firstOrNull { it.value.isAuthenticated() }?.key
 
-    operator fun get(account: Account): Session = synchronized(this) {
+    operator fun get(account: Address): Session = synchronized(this) {
         var created = false
-        sessions.getOrPut(account.address) {
+        sessions.getOrPut(account) {
             created = true
             createSession(account)
         }.apply {
@@ -46,16 +45,15 @@ class SessionManager @Inject constructor(
         }
     }
 
-    operator fun contains(account: Account): Boolean = synchronized(this) {
-        account.address in sessions
+    operator fun contains(account: Address): Boolean = synchronized(this) {
+        account in sessions
     }
 
-    operator fun minus(account: Account): Unit = synchronized(this) {
-        val address = account.address
-        sessions.remove(address)?.run {
+    operator fun minus(account: Address): Unit = synchronized(this) {
+        sessions.remove(account)?.run {
             scope.cancel()
         }
-        if (current == address)
+        if (current == account)
             current = firstConnectedAddress
     }
 

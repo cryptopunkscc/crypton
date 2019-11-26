@@ -18,6 +18,12 @@ data class Address(
 
     override fun toString(): String = substring(0, length)
 
+
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun accountException(throwable: Throwable): Account.Exception =
+        if (throwable is Account.Exception) throwable
+        else Account.Exception(this, throwable)
+
     class Exception(message: String?) : kotlin.Exception(message) {
         companion object {
             val InvalidAddress = Exception("Invalid address")

@@ -37,7 +37,10 @@ class SmackConnectionFactory(
         scope = config.scope,
         address = config.address,
         configuration = connectionConfig
-            .setUsernameAndPassword(config.address.local, config.password)
+            .setUsernameAndPassword(
+                config.address.local,
+                config.password.toString()
+            )
             .setXmppDomain(config.address.domain)
             .build()
     )

@@ -23,10 +23,10 @@ class AccountFromViewModel @Inject constructor(
     val onClick = 0L.cache()
     val errorMessage = "".cache()
 
-    val address
+    private val address
         get() = Address(
-            local = userName.value.text,
-            domain = serviceName.value.text
+            local = userName.value.text.toString(),
+            domain = serviceName.value.text.toString()
         )
     val account
         get() = Account(

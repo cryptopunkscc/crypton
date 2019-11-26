@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 suspend fun TextInputLayout.bind(property: CacheFlow<Input>) {
     coroutineScope {
-        var current: String? = null
+        var current: CharSequence? = null
         launch {
             property.collect { input ->
                 if (input.text != current) {

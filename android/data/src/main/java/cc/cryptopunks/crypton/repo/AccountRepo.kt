@@ -11,7 +11,7 @@ internal class AccountRepo(
     override suspend fun contains(address: Address): Boolean =
         dao.contains(address.id) != null
 
-    override suspend fun get(address: Address): Account =
+    override fun get(address: Address): Account =
         dao.get(address.id).toDomain()
 
     override suspend fun insert(account: Account): Account =
@@ -20,12 +20,19 @@ internal class AccountRepo(
     override suspend fun update(account: Account): Unit =
         dao.update(account.chatData())
 
-    override suspend fun delete(account: Account): Unit =
-        dao.delete(account.chatData())
+    override suspend fun delete(address: Address): Unit =
+        dao.delete(address.toString())
 
     override suspend fun list(): List<Account> =
         dao.list().map { it.toDomain() }
 
-    override fun flowList(): Flow<List<Account>> =
-        dao.flowList().map { it.map(AccountData::toDomain) }
+    override suspend fun addressList(): List<Address> =
+        dao.list().map { Address.from(it.id) }
+
+    override fun flowList(): Flow<List<Address>> =
+        dao.flowList().map { list ->
+            list.map {
+                Address.from(it.id)
+            }
+        }
 }

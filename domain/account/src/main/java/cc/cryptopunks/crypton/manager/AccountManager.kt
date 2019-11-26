@@ -1,16 +1,16 @@
 package cc.cryptopunks.crypton.manager
 
 import cc.cryptopunks.crypton.entity.Account
-import java.util.concurrent.atomic.AtomicReference
+import cc.cryptopunks.crypton.entity.Address
 import javax.inject.Inject
 
 data class AccountManager @Inject constructor(
     private val accountRepo: Account.Repo,
     private val sessionManager: SessionManager
-) :
-    AtomicReference<Account>(Account.Empty) {
+) {
 
-    private val account get() = get()
+    var account: Address = Address.Empty
+        private set
 
     val isInitialized get() = account in sessionManager
 
@@ -20,7 +20,9 @@ data class AccountManager @Inject constructor(
 
     val isAuthenticated get() = session.isAuthenticated()
 
-    fun copy(account: Account): AccountManager = copy().apply { set(account) }
+    fun copy(account: Address): AccountManager = copy().apply {
+        this.account = account
+    }
 
     fun connect(): Unit = session.connect()
 
@@ -32,9 +34,10 @@ data class AccountManager @Inject constructor(
 
     fun disconnect(): Unit = session.disconnect()
 
-    suspend fun insert(): Account = accountRepo.insert(get()).also { set(it) }
-
-    suspend fun update(): Unit = accountRepo.update(get())
+    suspend fun insert(account: Account) {
+        accountRepo.insert(account)
+        this.account = account.address
+    }
 
     suspend fun unregister() {
         session.removeAccount()
@@ -43,22 +46,22 @@ data class AccountManager @Inject constructor(
 
     suspend fun delete() {
         clear()
-        accountRepo.delete(get())
+        accountRepo.delete(account)
     }
 
     private fun clear() {
-        sessionManager.minus(get())
+        sessionManager.minus(account)
     }
 
     inline fun <R> run(
-        onAccountException: (Account) -> Any = {},
+        onAccountException: (Address) -> Any = {},
         block: AccountManager.() -> R
     ): R = try {
         block()
     } catch (throwable: Throwable) {
-        onAccountException(get())
-        throw get().exception(throwable)
+        onAccountException(account)
+        throw Account.Exception(account, throwable)
     }
 
-    suspend fun all() = accountRepo.list().map { copy(it) }
+    suspend fun all() = accountRepo.addressList().map { copy(it) }
 }

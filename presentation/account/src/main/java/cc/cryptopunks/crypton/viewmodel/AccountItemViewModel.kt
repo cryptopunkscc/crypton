@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.viewmodel
 
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.interactor.DeleteAccountInteractor
 import cc.cryptopunks.crypton.interactor.DisconnectAccountInteractor
 import cc.cryptopunks.crypton.interactor.LoginAccountInteractor
@@ -15,9 +15,9 @@ class AccountItemViewModel @Inject constructor(
     private val deleteAccount: DeleteAccountInteractor,
     private val unregisterAccount: UnregisterAccountInteractor
 ) {
-    var account = Account.Empty
+    var account = Address.Empty
 
-    val name get() = account.address
+    val name get() = account
 
     val status: String get() = TODO() //account.status.name
 

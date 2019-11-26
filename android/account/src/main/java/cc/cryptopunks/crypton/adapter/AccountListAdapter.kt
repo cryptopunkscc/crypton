@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.viewmodel.AccountItemViewModel
@@ -24,7 +24,7 @@ class AccountListAdapter @Inject constructor(
 ) : RecyclerView.Adapter<AccountListAdapter.ViewHolder>(),
     CoroutineScope {
 
-    var items by observable(listOf<Account>()) { _, _, _ ->
+    var items by observable(listOf<Address>()) { _, _, _ ->
         notifyDataSetChanged()
     }
 
@@ -52,7 +52,7 @@ class AccountListAdapter @Inject constructor(
             }
         }
 
-        fun bind(account: Account) {
+        fun bind(account: Address) {
             coroutineContext.cancelChildren()
 
             model.account = account

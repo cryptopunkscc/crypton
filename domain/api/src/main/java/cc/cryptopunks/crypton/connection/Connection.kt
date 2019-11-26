@@ -32,7 +32,7 @@ interface Connection : Net {
     data class Config(
         val scope: BroadcastErrorScope = BroadcastErrorScope(),
         val address: Address = Address.Empty,
-        val password: String = ""
+        val password: CharSequence = ""
     ) {
         companion object {
             val Empty = Config()

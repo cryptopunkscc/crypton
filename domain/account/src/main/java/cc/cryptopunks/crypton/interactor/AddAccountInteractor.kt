@@ -16,9 +16,8 @@ class AddAccountInteractor @Inject constructor(
         manager.copy().run(
             onAccountException = deleteAccount
         ) {
-            set(account)
-            insert()
-            login.suspend(get())
+            insert(account)
+            login.suspend(account.address)
         }
     }
 }

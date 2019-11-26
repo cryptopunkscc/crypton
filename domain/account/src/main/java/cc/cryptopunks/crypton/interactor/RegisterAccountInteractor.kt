@@ -16,11 +16,10 @@ class RegisterAccountInteractor @Inject constructor(
         manager.copy().run(
             onAccountException = deleteAccount
         ) {
-            set(account)
+            insert(account)
             connect()
             register()
-            insert()
-            login.suspend(get())
+            login.suspend(account.address)
         }
     }
 }
