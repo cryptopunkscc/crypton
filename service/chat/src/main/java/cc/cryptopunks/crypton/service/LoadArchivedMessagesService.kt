@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
@@ -10,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
+@SessionScope
 class LoadArchivedMessagesService @Inject constructor(
     private val scope: Session.Scope,
     private val latestMessage: LatestMessageSelector,
@@ -23,8 +25,8 @@ class LoadArchivedMessagesService @Inject constructor(
         log.d("start")
         invokeOnClose { log.d("stop") }
         latestMessage()
-            .run { await() }
-            .let { Message.Net.ReadArchived.Query(afterUid = it?.id) }
+            .await()
+            .let { Message.Net.ReadArchived.Query(since = it?.timestamp) }
             .let(readArchivedMessages)
             .collect { saveMessages(it) }
     }

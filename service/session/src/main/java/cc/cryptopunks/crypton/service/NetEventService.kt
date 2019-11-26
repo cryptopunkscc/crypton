@@ -1,14 +1,17 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.util.BroadcastError
+import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
+@SessionScope
 class NetEventService @Inject constructor(
     private val sessionScope: Session.Scope,
     private val netEvents: Net.Event.Output,
@@ -18,6 +21,8 @@ class NetEventService @Inject constructor(
     private val log = typedLog()
 
     override fun invoke(): Job = sessionScope.launch {
+        log.d("start")
+        invokeOnClose { log.d("stop") }
         netEvents.collect { event ->
             handleEvent(event)
         }
@@ -27,11 +32,11 @@ class NetEventService @Inject constructor(
         log.d(event)
 
         if (event is Net.Event.Disconnected)
-            handleError(event)
+            handleDisconnected(event)
     }
 
 
-    private suspend fun handleError(event: Net.Event.Disconnected) {
+    private suspend fun handleDisconnected(event: Net.Event.Disconnected) {
         event.throwable?.let { throwable ->
             log.e(throwable)
             broadcastError.send(throwable)

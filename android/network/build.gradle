@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion compile_sdk
     defaultConfig {
@@ -20,17 +19,7 @@ android {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    api project(':net:smack')
-    api project(':service:app')
-    api project(':android:data')
-    api project(':android:log')
-    api project(':android:network')
-    api project(':android:main')
-    api project(':android:account')
-    api project(':android:dashboard')
-    api project(':android:chat')
-    api project(':android:indicator')
-
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "javax.inject:javax.inject:1"
+    implementation project(':domain:api')
+    implementation project(':domain:log')
 }

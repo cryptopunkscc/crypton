@@ -27,6 +27,7 @@ include ':domain:log',
 
         ':android:debug',
         ':android:data',
+        ':android:network',
         ':android:log',
         ':android:error',
         ':android:widget',

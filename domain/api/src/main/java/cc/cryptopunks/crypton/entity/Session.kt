@@ -12,10 +12,17 @@ class Session(
     connection: Connection
 ) : Connection by connection {
 
+    fun sessionEvent(event: Api.Event) = Event(
+        session = this,
+        event = event
+    )
+
     data class Event(
         val session: Session,
         val event: Api.Event
-    )
+    ) {
+        object Created : Api.Event
+    }
 
     class Scope : BroadcastErrorScope() {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO

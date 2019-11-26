@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.component
 import cc.cryptopunks.crypton.FeatureManager
 import cc.cryptopunks.crypton.ServiceCore
 import cc.cryptopunks.crypton.annotation.ApplicationScope
-import cc.cryptopunks.crypton.service.AppService
+import cc.cryptopunks.crypton.service.AppServices
 import dagger.Component
 
 @ApplicationScope
@@ -18,6 +18,6 @@ import dagger.Component
 )
 interface ApplicationComponent :
     AndroidCore,
+    AppServices,
     FeatureManager.Component,
-    AppService.Component,
     ServiceCore.Factory.Component

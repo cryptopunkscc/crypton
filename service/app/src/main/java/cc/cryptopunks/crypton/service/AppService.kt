@@ -1,24 +1,15 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.util.log
-import javax.inject.Inject
+interface AppServices {
+    val errorService: ErrorService
+    val toggleIndicatorService: ToggleIndicatorService
+    val reconnectAccountsService: ReconnectAccountsService
+    val sessionService: SessionService
+}
 
-class AppService @Inject constructor(
-    private val errorService: ErrorService,
-    private val toggleIndicatorService: ToggleIndicatorService,
-    private val reconnectAccountsService: ReconnectAccountsService,
-    private val sessionService: SessionService
-
-) : () -> Unit by {
-    log<AppService>("start")
+fun AppServices.appServices() {
     errorService()
     toggleIndicatorService()
     reconnectAccountsService()
     sessionService()
-    log<AppService>("stop")
-} {
-
-    interface Component {
-        val appService: AppService
-    }
 }

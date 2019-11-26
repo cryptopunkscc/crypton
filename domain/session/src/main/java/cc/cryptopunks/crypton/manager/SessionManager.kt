@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton.manager
 import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.entity.Session.Event.Created
 import cc.cryptopunks.crypton.factory.SessionFactory
-import cc.cryptopunks.crypton.service.Service
 import cc.cryptopunks.crypton.util.Broadcast
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -16,8 +16,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SessionManager @Inject constructor(
-    private val createSession: SessionFactory,
-    private val scope: Service.Scope
+    private val createSession: SessionFactory
 ) : Flow<Session.Event> {
 
     private val broadcast = Broadcast<Session.Event>()
@@ -28,24 +27,28 @@ class SessionManager @Inject constructor(
         get() = sessions.entries.firstOrNull { it.value.isAuthenticated() }?.key
 
     operator fun get(account: Account): Session = synchronized(this) {
+        var created = false
         sessions.getOrPut(account.address) {
-            createSession(account).also { session ->
-                scope.launch {
-                    session.netEvents.collect { event ->
-                        broadcast.send(
-                            Session.Event(
-                                session = session,
-                                event = event
-                            )
-                        )
-                    }
-                }
+            created = true
+            createSession(account)
+        }.apply {
+            if (created)
+                connectBroadcast()
+        }
+    }
+
+    private fun Session.connectBroadcast() {
+        scope.launch {
+            broadcast.send(sessionEvent(Created))
+            netEvents.collect { event ->
+                broadcast.send(sessionEvent(event))
             }
         }
     }
 
-    operator fun contains(account: Account): Boolean =
+    operator fun contains(account: Account): Boolean = synchronized(this) {
         account.address in sessions
+    }
 
     operator fun minus(account: Account): Unit = synchronized(this) {
         val address = account.address

@@ -13,14 +13,30 @@ internal class MessageRepo(
     private val dao: MessageData.Dao
 ) : Message.Repo {
 
-    override suspend fun insert(messages: List<Message>) =
-        dao.insert(messages.map { it.messageData() })
+    private var latest: Message = Message.Empty
 
-    override suspend fun insertOrUpdate(message: Message) =
+    private val updateLatest: (Message) -> Unit = { message ->
+        if (latest.timestamp < message.timestamp)
+            latest = message
+    }
+
+    override suspend fun insert(messages: List<Message>) =
+        dao.insert(messages.map {
+            updateLatest(it)
+            it.messageData()
+        })
+
+    override suspend fun insertOrUpdate(message: Message) {
+        updateLatest(message)
         dao.insertOrUpdate(message.messageData())
+    }
 
     override suspend fun latest(): Message? =
-        dao.latest()?.message()
+        if (latest != Message.Empty)
+            latest else
+            dao.latest()
+                ?.message()
+                ?.also(updateLatest)
 
     override fun flowLatest(chat: Chat): Flow<Message> =
         dao.flowLatest(chat.address.id).filterNotNull().map { it.message() }

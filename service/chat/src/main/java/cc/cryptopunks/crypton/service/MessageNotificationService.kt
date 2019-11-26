@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.Session
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNot
 import javax.inject.Inject
 
+@SessionScope
 class MessageNotificationService @Inject constructor(
     private val scope: Session.Scope,
     private val address: Address,

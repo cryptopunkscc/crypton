@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
@@ -9,6 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
+@SessionScope
 class MessageReceiverService @Inject constructor(
     scope: Session.Scope,
     messageBroadcast: Message.Net.Broadcast,

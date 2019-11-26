@@ -30,6 +30,8 @@ interface Net :
 
         object Connected : Event
 
+        object OmemoInitialized : Event
+
         data class Disconnected(
             val throwable: Throwable? = null
         ) : Event {

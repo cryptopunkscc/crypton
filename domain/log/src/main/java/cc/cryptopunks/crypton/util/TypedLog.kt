@@ -4,6 +4,8 @@ import kotlin.reflect.KClass
 
 fun Any.typedLog() = TypedLog(this::class)
 
+inline fun <reified T: Any> typedLog() = TypedLog(T::class)
+
 class TypedLog(
     private val type: KClass<*>
 ){

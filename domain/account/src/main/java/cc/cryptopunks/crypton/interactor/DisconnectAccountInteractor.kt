@@ -14,8 +14,6 @@ class DisconnectAccountInteractor @Inject constructor(
         manager.copy().run {
             set(id)
             disconnect()
-            update()
-            clear()
         }
     }
 }

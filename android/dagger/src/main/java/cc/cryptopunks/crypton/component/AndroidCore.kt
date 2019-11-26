@@ -2,12 +2,18 @@ package cc.cryptopunks.crypton.component
 
 import android.app.Application
 import android.app.NotificationManager
+import android.net.ConnectivityManager
 import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.core.Core
+import cc.cryptopunks.crypton.entity.Network
+import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
+import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.manager.SessionManager
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
+import cc.cryptopunks.crypton.sys.GetNetworkStatus
+import dagger.Binds
 import dagger.Component
 import dagger.Provides
 import javax.inject.Singleton
@@ -18,7 +24,8 @@ import javax.inject.Singleton
         Core::class,
         Application::class
     ], modules = [
-        AndroidCore.Module::class
+        AndroidCore.Module::class,
+        AndroidCore.Bindings::class
     ]
 )
 interface AndroidCore :
@@ -32,8 +39,14 @@ interface AndroidCore :
     val mainActivityClass: Class<*>
 
     val notificationManager: NotificationManager
+    val connectivityManager: ConnectivityManager
+
+    val getNetworkStatus: Network.Sys.GetStatus
 
     val currentSession: CurrentSessionSelector
+    val reconnectAccounts: ReconnectAccountsInteractor
+    val disconnectAccounts: DisconnectAccountsInteractor
+
 
     @dagger.Module
     class Module(
@@ -41,5 +54,13 @@ interface AndroidCore :
     ) {
         @Provides
         fun Application.notificationManager(): NotificationManager = getSystemService()!!
+        @Provides
+        fun Application.connectivityManager(): ConnectivityManager = getSystemService()!!
+    }
+
+    @dagger.Module
+    interface Bindings {
+        @Binds
+        fun GetNetworkStatus.getStatus(): Network.Sys.GetStatus
     }
 }

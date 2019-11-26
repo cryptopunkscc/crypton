@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import cc.cryptopunks.crypton.service.appServices
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
@@ -23,7 +24,7 @@ class App :
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        component.appService()
+        component.appServices()
     }
 
     private companion object {

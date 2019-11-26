@@ -18,11 +18,9 @@ class LoginAccountInteractor @Inject constructor(
     internal suspend fun suspend(account: Account) {
         manager.copy().run {
             set(account)
-            update()
-            connect()
-            login()
+            if (!isConnected) connect()
+            if (!isAuthenticated) login()
             initOmemo()
-            update()
         }
     }
 }

@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.connection.Connection
 import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.smack.component.SmackComponent
-import cc.cryptopunks.crypton.smack.net.NetEventOutput
+import cc.cryptopunks.crypton.smack.net.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.account.*
 import cc.cryptopunks.crypton.smack.net.chat.*
 import cc.cryptopunks.crypton.smack.net.client.ConnectClient
@@ -29,7 +29,11 @@ internal class ConnectionModule(
     private val encryptedMessageCache by lazy { EncryptedMessageCache() }
 
     override val netEvents: Net.Event.Output by lazy {
-        NetEventOutput(connection = connection)
+        NetEventBroadcast(
+            scope = scope,
+            connection = connection,
+            initOmemo = initOmemo
+        )
     }
 
     override val connect: Net.Connect by lazy {
@@ -44,7 +48,7 @@ internal class ConnectionModule(
         IsAccountConnected(connection = connection)
     }
 
-    override val initOmemo: Net.InitOmemo by lazy {
+    override val initOmemo by lazy {
         InitOmemo(omemoManager)
     }
 

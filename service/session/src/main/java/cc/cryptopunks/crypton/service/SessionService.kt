@@ -1,33 +1,35 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.FeatureCore
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.annotation.ApplicationScope
 import cc.cryptopunks.crypton.selector.SessionEventSelector
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.ext.resolve
-import cc.cryptopunks.crypton.util.log
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 
+@ApplicationScope
 class SessionService @Inject constructor(
     private val serviceScope: Service.Scope,
     private val selectSessionEvent: SessionEventSelector,
     private val createFeatureCore: FeatureCore.Create
 ) : () -> Job {
 
-    override fun invoke() = serviceScope.launch {
-        log<SessionService>("start")
-        invokeOnClose { log<SessionService>("stop") }
+    private val log = typedLog()
 
-        selectSessionEvent()
-            .filter { it.event is Account.Event.Authenticated }
-            .collect { sessionServices.start() }
+    override fun invoke() = serviceScope.launch {
+        log.d("start")
+        invokeOnClose { log.d("stop") }
+        selectSessionEvent().collect {
+            sessionServices.process(it)
+        }
     }
 
-    private val sessionServices
-        get() = createFeatureCore()
+    private val sessionServices by lazy {
+        createFeatureCore()
             .sessionFeature()
             .resolve<SessionServices>()
+    }
 }

@@ -6,5 +6,6 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection
 class DisconnectClient(
     connection: XMPPTCPConnection
 ) : Net.Disconnect, () -> Unit by {
-    connection.disconnect()
+    if (connection.isConnected)
+        connection.instantShutdown()
 }

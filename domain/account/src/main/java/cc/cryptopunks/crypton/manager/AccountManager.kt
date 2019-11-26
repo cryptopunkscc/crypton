@@ -12,27 +12,25 @@ data class AccountManager @Inject constructor(
 
     private val account get() = get()
 
-    private val session get() = sessionManager[account]
-
     val isInitialized get() = account in sessionManager
+
+    val session get() = sessionManager[account]
 
     val isConnected get() = session.isConnected()
 
+    val isAuthenticated get() = session.isAuthenticated()
+
     fun copy(account: Account): AccountManager = copy().apply { set(account) }
 
-    suspend fun connect(): Unit = session.connect()
+    fun connect(): Unit = session.connect()
 
-    suspend fun register(): Unit = session.createAccount()
+    fun register(): Unit = session.createAccount()
 
-    suspend fun login(): Unit = session.login()
+    fun login(): Unit = session.login()
 
-    suspend fun initOmemo() {
-        println("init omemo start")
-        session.initOmemo()
-        println("init omemo stop")
-    }
+    fun initOmemo() = session.initOmemo()
 
-    suspend fun disconnect(): Unit = session.disconnect()
+    fun disconnect(): Unit = session.disconnect()
 
     suspend fun insert(): Account = accountRepo.insert(get()).also { set(it) }
 
@@ -48,7 +46,7 @@ data class AccountManager @Inject constructor(
         accountRepo.delete(get())
     }
 
-    suspend fun clear() {
+    private fun clear() {
         sessionManager.minus(get())
     }
 
@@ -61,4 +59,6 @@ data class AccountManager @Inject constructor(
         onAccountException(get())
         throw get().exception(throwable)
     }
+
+    suspend fun all() = accountRepo.list().map { copy(it) }
 }
