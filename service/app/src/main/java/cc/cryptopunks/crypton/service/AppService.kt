@@ -10,6 +10,6 @@ interface AppServices {
 fun AppServices.appServices() {
     errorService()
     toggleIndicatorService()
-    reconnectAccountsService()
     sessionService()
+    reconnectAccountsService()
 }
