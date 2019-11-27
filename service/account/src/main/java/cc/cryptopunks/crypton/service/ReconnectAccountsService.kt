@@ -5,7 +5,6 @@ import cc.cryptopunks.crypton.entity.Network
 import cc.cryptopunks.crypton.entity.Network.Status.*
 import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
-import cc.cryptopunks.crypton.interactor.LoginAccountInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.manager.SessionManager
 import cc.cryptopunks.crypton.net.Net.Event.Disconnected
@@ -22,9 +21,8 @@ class ReconnectAccountsService @Inject constructor(
     private val scope: Service.Scope,
     private val networkStatusFlow: Network.Sys.GetStatus,
     private val sessionManager: SessionManager,
-    private val loginAccount: LoginAccountInteractor,
-    private val reconnectAccount: ReconnectAccountsInteractor,
-    private val disconnectDisconnect: DisconnectAccountsInteractor
+    private val reconnect: ReconnectAccountsInteractor,
+    private val disconnect: DisconnectAccountsInteractor
 ) : () -> Job {
 
     private val log = typedLog()
@@ -39,8 +37,8 @@ class ReconnectAccountsService @Inject constructor(
     private val onNetworkStatus: suspend (Network.Status) -> Unit = { status ->
         when (status) {
             is Available,
-            is Changed -> reconnectAccount()
-            is Unavailable -> disconnectDisconnect()
+            is Changed -> reconnect()
+            is Unavailable -> disconnect()
         }
     }
 
@@ -49,9 +47,8 @@ class ReconnectAccountsService @Inject constructor(
             is Disconnected ->
                 if (event.hasError) {
                     delay(2000)
-                    if (!reconnectAccount.isWorking)
-                        if (!session.isConnected())
-                            loginAccount(session.address)
+                    if (!session.isConnected())
+                        reconnect(session.address)
                 }
         }
     }

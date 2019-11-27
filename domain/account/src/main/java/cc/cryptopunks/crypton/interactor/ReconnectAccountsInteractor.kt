@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.interactor
 
+import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.service.Service
 import cc.cryptopunks.crypton.util.JobManager
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 class ReconnectAccountsInteractor @Inject constructor(
     private val scope: Service.Scope,
     private val accountManager: AccountManager
-) : () -> Job {
+) : () -> Job, (Address) -> Job {
 
     private val log = typedLog()
 
@@ -27,6 +28,10 @@ class ReconnectAccountsInteractor @Inject constructor(
     }
 
     val isWorking get() = reconnectIfNeeded.isWorking
+
+    override fun invoke(address: Address): Job = scope.launch {
+        reconnectIfNeeded.send(accountManager.copy(address))
+    }
 
     override fun invoke() = scope.launch {
         accountManager.all().forEach { manager ->
