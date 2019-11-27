@@ -2,11 +2,11 @@ package cc.cryptopunks.crypton.util
 
 class BroadcastError: Broadcast<Throwable>() {
 
-    interface Component {
+    interface Core {
         val broadcastError: BroadcastError
     }
 
-    class Module : Component {
+    class Module : Core {
         override val broadcastError = BroadcastError()
     }
 }

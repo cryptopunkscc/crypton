@@ -6,7 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.component.AccountPresentationComponent
+import cc.cryptopunks.crypton.core.AccountPresentationCore
 import cc.cryptopunks.crypton.presenter.AccountListPresenter
 import cc.cryptopunks.crypton.view.AccountListView
 import kotlinx.coroutines.launch
@@ -17,15 +17,15 @@ class AccountListFragment : PresenterFragment<AccountListPresenter.Actor, Accoun
 
     override val titleId: Int get() = R.string.manage_accounts
 
-    private val component get() = feature as AccountPresentationComponent
+    private val core get() = featureCore as AccountPresentationCore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        launch { component.navigationService() }
+        launch { core.navigationService() }
     }
 
-    override fun onCreatePresenter() = component.accountListPresenter
+    override fun onCreatePresenter() = core.accountListPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +35,7 @@ class AccountListFragment : PresenterFragment<AccountListPresenter.Actor, Accoun
         context = activity!!,
         scope = presentation.actorScope,
         fragmentManager = fragmentManager!!,
-        accountItemViewModelProvider = component.accountItemViewModelProvider
+        accountItemViewModelProvider = core.accountItemViewModelProvider
     )
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

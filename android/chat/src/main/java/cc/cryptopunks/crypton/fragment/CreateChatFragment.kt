@@ -19,9 +19,9 @@ class CreateChatFragment : PresenterFragment<
         setHasOptionsMenu(true)
     }
 
-    override fun onCreatePresenter(): CreateChatPresenter = feature
+    override fun onCreatePresenter(): CreateChatPresenter = featureCore
         .sessionFeature()
-        .resolve<CreateChatPresenter.Component>()
+        .resolve<CreateChatPresenter.Core>()
         .createChatPresenter
 
     override fun onCreateView(

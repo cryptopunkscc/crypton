@@ -5,7 +5,8 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
-abstract class CoroutineFragment : BaseFragment(),
+abstract class CoroutineFragment :
+    BaseFragment(),
     CoroutineScope {
 
     private val scope = MainScope()

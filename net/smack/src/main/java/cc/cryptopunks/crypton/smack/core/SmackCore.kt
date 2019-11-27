@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack.component
+package cc.cryptopunks.crypton.smack.core
 
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.roster.Roster
@@ -10,7 +10,7 @@ import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
 
-internal interface SmackComponent {
+internal interface SmackCore {
     val configuration: XMPPTCPConnectionConfiguration
     val connection: XMPPTCPConnection
     val accountManager: AccountManager

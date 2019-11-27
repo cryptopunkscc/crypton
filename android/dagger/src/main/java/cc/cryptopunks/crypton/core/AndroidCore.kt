@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.component
+package cc.cryptopunks.crypton.core
 
 import android.app.Application
 import android.app.NotificationManager
@@ -33,9 +33,9 @@ import javax.inject.Singleton
 )
 interface AndroidCore :
     Core,
-    SessionManager.Component,
-    PresentationManager.Component,
-    PresenceManager.Component {
+    SessionManager.Core,
+    PresentationManager.Core,
+    PresenceManager.Core {
 
     val core: Core
     val application: Application

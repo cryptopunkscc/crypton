@@ -5,12 +5,12 @@ import java.util.concurrent.Executor
 class MainExecutor(executor: Executor) : Executor by executor
 class IOExecutor(executor: Executor) : Executor by executor
 
-interface ExecutorsComponent {
+interface Executors {
     val mainExecutor: MainExecutor
     val ioExecutor: IOExecutor
-}
 
-class ExecutorsModule(
-    override val mainExecutor: MainExecutor,
-    override val ioExecutor: IOExecutor
-) : ExecutorsComponent
+    class Module(
+        override val mainExecutor: MainExecutor,
+        override val ioExecutor: IOExecutor
+    ) : Executors
+}

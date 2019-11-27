@@ -4,13 +4,13 @@ import cc.cryptopunks.crypton.util.BroadcastErrorScope
 
 interface Connection : Net {
 
-    interface Component {
+    interface Core {
         val createConnection: Factory
     }
 
     class Module(
         override val createConnection: Factory
-    ) : Component
+    ) : Core
 
     interface Factory : (Config) -> Connection {
         data class Config(

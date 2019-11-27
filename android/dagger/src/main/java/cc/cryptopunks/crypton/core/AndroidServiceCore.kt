@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.component
+package cc.cryptopunks.crypton.core
 
 import android.app.Service
 import cc.cryptopunks.crypton.ServiceCore
@@ -14,11 +14,11 @@ import javax.inject.Inject
 @FeatureScope
 @Component(
     dependencies = [AndroidCore::class],
-    modules = [ServiceComponent.Module::class]
+    modules = [AndroidServiceCore.Module::class]
 )
-interface ServiceComponent :
+interface AndroidServiceCore :
     ServiceCore,
-    IndicatorService.Component {
+    IndicatorService.Core {
 
     @dagger.Module
     class Module(
@@ -28,17 +28,17 @@ interface ServiceComponent :
 }
 
 @ApplicationScope
-class ServiceComponentFactory @Inject constructor(
+class AndroidServiceCoreFactory @Inject constructor(
     androidCore: AndroidCore
 ) : ServiceCore.Factory, (Service) -> ServiceCore by { service ->
-    DaggerServiceComponent.builder()
+    DaggerAndroidServiceCore.builder()
         .androidCore(androidCore)
-        .module(ServiceComponent.Module(service))
+        .module(AndroidServiceCore.Module(service))
         .build()
 } {
     @Module
     interface Binding {
         @Binds
-        fun ServiceComponentFactory.serviceComponentFactory(): ServiceCore.Factory
+        fun AndroidServiceCoreFactory.serviceCoreFactory(): ServiceCore.Factory
     }
 }

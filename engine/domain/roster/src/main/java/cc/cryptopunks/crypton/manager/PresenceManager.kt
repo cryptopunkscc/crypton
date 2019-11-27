@@ -47,7 +47,7 @@ class PresenceManager @Inject constructor() : Flow<UserPresence> {
         broadcast.collect(collector)
     }
 
-    interface Component {
+    interface Core {
         val presenceManager: PresenceManager
     }
 }

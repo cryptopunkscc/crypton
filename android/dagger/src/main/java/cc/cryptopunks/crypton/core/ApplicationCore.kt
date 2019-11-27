@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.component
+package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.FeatureManager
 import cc.cryptopunks.crypton.ServiceCore
@@ -13,11 +13,11 @@ import dagger.Component
     ],
     modules = [
         CreateAndroidFeatureCore.Bindings::class,
-        ServiceComponentFactory.Binding::class
+        AndroidServiceCoreFactory.Binding::class
     ]
 )
-interface ApplicationComponent :
+interface ApplicationCore :
     AndroidCore,
     AppServices,
-    FeatureManager.Component,
-    ServiceCore.Factory.Component
+    FeatureManager.Core,
+    ServiceCore.Factory.Core

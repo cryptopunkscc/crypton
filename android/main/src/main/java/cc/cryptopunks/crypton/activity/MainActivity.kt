@@ -27,7 +27,7 @@ class MainActivity : FeatureActivity() {
     override fun onBackPressed() {
         // prevent activity from leaking due to android bug
         // https://issuetracker.google.com/issues/139738913
-        core.resolve<PresentationManager.Component>()
+        appCore.resolve<PresentationManager.Core>()
             .presentationManager.top().let {
 
             if (it == null || it.actor is RosterView)

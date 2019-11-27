@@ -66,7 +66,7 @@ class CreateChatPresenter @Inject constructor(
         val setError: suspend (Throwable?) -> Unit
     }
 
-    interface Component {
+    interface Core {
         val createChatPresenter: CreateChatPresenter
     }
 }

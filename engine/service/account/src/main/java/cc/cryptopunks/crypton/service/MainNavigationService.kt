@@ -18,7 +18,7 @@ class MainNavigationService @Inject constructor(
         )
     }
 
-    interface Component {
+    interface Core {
         val mainNavigationService: MainNavigationService
     }
 }

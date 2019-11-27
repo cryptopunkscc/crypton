@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.component
+package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.SessionCore
@@ -27,7 +27,7 @@ import dagger.Provides
 interface AndroidSessionCore :
     SessionCore,
     SessionServices,
-    CreateChatPresenter.Component
+    CreateChatPresenter.Core
 
 
 object CreateAndroidSessionCore {

@@ -7,13 +7,13 @@ import cc.cryptopunks.crypton.util.bindings.bind
 import kotlinx.android.synthetic.main.sign_up.*
 import kotlinx.coroutines.launch
 
-class SignUpFragment : AccountComponentFragment() {
+class SignUpFragment : AccountCoreFragment() {
 
     override val layoutRes: Int get() = R.layout.sign_up
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        component.signUpViewModel.run {
+        core.signUpViewModel.run {
             launch { invoke() }
             accountViewModel.run {
                 launch { serviceNameLayout.bind(serviceName) }

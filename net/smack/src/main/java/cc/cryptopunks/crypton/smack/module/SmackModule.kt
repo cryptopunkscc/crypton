@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.module
 
-import cc.cryptopunks.crypton.smack.component.SmackComponent
+import cc.cryptopunks.crypton.smack.core.SmackCore
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
@@ -17,7 +17,7 @@ import org.jivesoftware.smackx.omemo.trust.TrustState
 
 internal class SmackModule(
     override val configuration: XMPPTCPConnectionConfiguration
-) : SmackComponent {
+) : SmackCore {
     override val connection by lazy {
         XMPPTCPConnection(configuration).apply {
             replyTimeout = 10000 // Omemo initialization can take longer then 5s

@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.component
+package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.annotation.FeatureScope
@@ -26,11 +26,11 @@ import javax.inject.Inject
 )
 interface AndroidFeatureCore :
     FeatureCore,
-    MainNavigationService.Component,
-    AccountNavigationService.Component,
-    AccountPresentationComponent,
-    DashboardPresenter.Component,
-    RosterPresenter.Component {
+    MainNavigationService.Core,
+    AccountNavigationService.Core,
+    AccountPresentationCore,
+    DashboardPresenter.Core,
+    RosterPresenter.Core {
 
     val core: Core
     val featureCore: FeatureCore

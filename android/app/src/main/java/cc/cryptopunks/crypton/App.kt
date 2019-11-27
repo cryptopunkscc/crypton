@@ -10,11 +10,11 @@ import cc.cryptopunks.crypton.util.initAndroidLog
 
 class App :
     Application(),
-    AppCore {
+    Engine {
 
     private val dependencies = Dependencies(this)
 
-    override val component get() = dependencies.applicationComponent
+    override val core get() = dependencies.applicationCore
 
     override fun onCreate() {
         super.onCreate()
@@ -24,7 +24,7 @@ class App :
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        component.appServices()
+        core.appServices()
     }
 
     private companion object {

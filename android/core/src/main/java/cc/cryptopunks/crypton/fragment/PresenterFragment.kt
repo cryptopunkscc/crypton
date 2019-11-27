@@ -7,10 +7,11 @@ import cc.cryptopunks.crypton.presenter.Presenter
 import cc.cryptopunks.crypton.util.ext.resolve
 
 
-abstract class PresenterFragment<A, P : Presenter<A>> : FeatureFragment() {
+abstract class PresenterFragment<A, P : Presenter<A>> :
+    FeatureFragment() {
 
     private val presentationManager by lazy {
-        appComponent.resolve<PresentationManager.Component>().presentationManager
+        appCore.resolve<PresentationManager.Core>().presentationManager
     }
 
     val presentation by lazy {

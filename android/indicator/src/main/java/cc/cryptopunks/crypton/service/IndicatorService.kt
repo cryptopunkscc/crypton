@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.AppCore
+import cc.cryptopunks.crypton.Engine
 import cc.cryptopunks.crypton.ServiceCore
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel
@@ -13,20 +13,20 @@ import cc.cryptopunks.crypton.util.ext.resolve
 
 class IndicatorService : IntentService(Indicator.serviceName) {
 
-    interface Component {
+    interface Core {
         val createNotificationChannel: CreateNotificationChannel
         val showIndicatorNotification: ShowIndicatorNotification
     }
 
-    private val component
+    private val core
         get() = this
-            .application.resolve<AppCore>()
-            .component.resolve<ServiceCore.Factory.Component>()
-            .createServiceCore(this).resolve<Component>()
+            .application.resolve<Engine>()
+            .core.resolve<ServiceCore.Factory.Core>()
+            .createServiceCore(this).resolve<Core>()
 
     override fun onCreate() {
         super.onCreate()
-        component.run {
+        core.run {
             createNotificationChannel(
                 id = Indicator.Notification.channelId,
                 importance = Min

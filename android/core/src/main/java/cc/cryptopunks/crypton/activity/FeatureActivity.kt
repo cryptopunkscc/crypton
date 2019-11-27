@@ -17,15 +17,15 @@ abstract class FeatureActivity : BaseActivity() {
 
     val featureManager
         get() = this
-            .core.resolve<FeatureManager.Component>()
+            .appCore.resolve<FeatureManager.Core>()
             .featureManager
 
-    protected val feature by lazy { featureManager.request(key) }
+    val featureCore by lazy { featureManager.request(key) }
 
     override fun onStart() {
         super.onStart()
         setSupportActionBar(toolbar)
-        scope.launch { feature.navigationOutput.bind(navController) }
+        scope.launch { featureCore.navigationOutput.bind(navController) }
     }
 
     override fun onStop() {
@@ -34,7 +34,7 @@ abstract class FeatureActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        scope.launch { feature.selectOptionItem(item.itemId) }
+        scope.launch { featureCore.selectOptionItem(item.itemId) }
         return super.onOptionsItemSelected(item)
     }
 

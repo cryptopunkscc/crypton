@@ -4,7 +4,7 @@ import android.app.Service
 
 interface ServiceCore {
     interface Factory : (Service) -> ServiceCore {
-        interface Component {
+        interface Core {
             val createServiceCore: Factory
         }
     }

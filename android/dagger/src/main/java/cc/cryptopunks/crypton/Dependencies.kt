@@ -3,10 +3,10 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import androidx.arch.core.executor.ArchTaskExecutor
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.component.AndroidCore
-import cc.cryptopunks.crypton.component.ApplicationComponent
-import cc.cryptopunks.crypton.component.DaggerAndroidCore
-import cc.cryptopunks.crypton.component.DaggerApplicationComponent
+import cc.cryptopunks.crypton.core.AndroidCore
+import cc.cryptopunks.crypton.core.ApplicationCore
+import cc.cryptopunks.crypton.core.DaggerAndroidCore
+import cc.cryptopunks.crypton.core.DaggerApplicationCore
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Sys
@@ -14,18 +14,15 @@ import cc.cryptopunks.crypton.module.RepoModule
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.sys.MessageSysModule
 import cc.cryptopunks.crypton.sys.SysIndicatorModule
-import cc.cryptopunks.crypton.util.BroadcastError
-import cc.cryptopunks.crypton.util.ExecutorsModule
-import cc.cryptopunks.crypton.util.IOExecutor
-import cc.cryptopunks.crypton.util.MainExecutor
+import cc.cryptopunks.crypton.util.*
 
 class Dependencies(
     private val application: Application
 ) {
     private val mainActivityClass = MainActivity::class.java
-    private val broadcastErrorComponent = BroadcastError.Module()
+    private val broadcastErrorCore = BroadcastError.Module()
 
-    private val repoComponent by lazy {
+    private val repoCore by lazy {
         RepoModule(application)
     }
 
@@ -41,13 +38,13 @@ class Dependencies(
 
     private val core by lazy {
         Core.Module(
-            broadcastErrorComponent = broadcastErrorComponent,
-            executorsComponent = ExecutorsModule(
+            broadcastErrorCore = broadcastErrorCore,
+            executorsCore = Executors.Module(
                 mainExecutor = MainExecutor(ArchTaskExecutor.getMainThreadExecutor()),
                 ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())
             ),
-            repo = repoComponent,
-            connectionComponent = Connection.Module(
+            repo = repoCore,
+            connectionCore = Connection.Module(
                 createConnection = createNet
             ),
             sys = Sys.Module(
@@ -70,8 +67,8 @@ class Dependencies(
             .build()!!
     }
 
-    val applicationComponent: ApplicationComponent by lazy {
-        DaggerApplicationComponent.builder()
+    val applicationCore: ApplicationCore by lazy {
+        DaggerApplicationCore.builder()
             .androidCore(androidCore)
             .build()
     }

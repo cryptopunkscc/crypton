@@ -66,7 +66,7 @@ class SessionManager @Inject constructor(
     override suspend fun collect(collector: FlowCollector<Session.Event>) =
         broadcast.collect(collector)
 
-    interface Component {
+    interface Core {
         val sessionManager: SessionManager
     }
 }

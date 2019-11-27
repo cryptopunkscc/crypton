@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.context.*
-import cc.cryptopunks.crypton.smack.component.SmackComponent
+import cc.cryptopunks.crypton.smack.core.SmackCore
 import cc.cryptopunks.crypton.smack.net.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.account.*
 import cc.cryptopunks.crypton.smack.net.chat.*
@@ -20,8 +20,8 @@ import cc.cryptopunks.crypton.util.BroadcastErrorScope
 internal class ConnectionModule(
     scope: BroadcastErrorScope,
     private val address: Address,
-    private val smack: SmackComponent
-) : SmackComponent by smack,
+    private val smack: SmackCore
+) : SmackCore by smack,
     Connection {
 
     private val encryptedMessageCache by lazy { EncryptedMessageCache() }
@@ -128,4 +128,4 @@ internal class ConnectionModule(
     }
 }
 
-private fun <T> SmackComponent.lazy(init: SmackComponent.() -> T) = kotlin.lazy { init() }
+private fun <T> SmackCore.lazy(init: SmackCore.() -> T) = kotlin.lazy { init() }

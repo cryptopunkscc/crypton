@@ -13,7 +13,7 @@ class AccountNavigationService @Inject constructor(
         navigate(Route.AccountList)
     }
 
-    interface Component {
+    interface Core {
         val accountNavigationService: AccountNavigationService
     }
 }

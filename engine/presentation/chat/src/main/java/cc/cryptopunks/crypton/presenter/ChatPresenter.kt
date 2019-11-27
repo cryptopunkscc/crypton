@@ -36,7 +36,7 @@ class ChatPresenter @Inject constructor(
         val setMessages: suspend (PagedList<MessagePresenter>) -> Unit
     }
 
-    interface Component {
+    interface Core {
         val chatPresenter: ChatPresenter
     }
 }

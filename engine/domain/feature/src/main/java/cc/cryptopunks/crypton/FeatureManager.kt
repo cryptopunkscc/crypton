@@ -27,7 +27,7 @@ class FeatureManager @Inject constructor(
             map.remove(key)
     }
 
-    interface Component {
+    interface Core {
         val featureManager: FeatureManager
     }
 }

@@ -35,7 +35,7 @@ class RosterPresenter @Inject constructor(
         val setList: suspend (PagedList<RosterItemPresenter>) -> Unit
     }
 
-    interface Component {
+    interface Core {
         val rosterPresenter: RosterPresenter
     }
 }

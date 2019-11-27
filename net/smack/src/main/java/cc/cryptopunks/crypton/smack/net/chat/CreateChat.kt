@@ -1,14 +1,14 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.smack.component.SmackComponent
+import cc.cryptopunks.crypton.smack.core.SmackCore
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 
 internal class CreateChat(
-    component: SmackComponent
+    core: SmackCore
 ) : Chat.Net.Create, (Chat) -> Chat by { chat ->
-    component.run {
+    core.run {
         mucManager
             .getMultiUserChat(JidCreate.entityBareFrom(chat.address))
             .apply {

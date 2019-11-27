@@ -33,7 +33,7 @@ class PresentationManager @Inject constructor() {
         it.get() == null
     }
 
-    interface Component {
+    interface Core {
         val presentationManager: PresentationManager
     }
 }

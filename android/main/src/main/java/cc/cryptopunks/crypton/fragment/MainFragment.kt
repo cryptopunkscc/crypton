@@ -6,10 +6,10 @@ import kotlinx.coroutines.launch
 
 class MainFragment : FeatureFragment() {
 
-    private val component get() = feature as MainNavigationService.Component
+    private val core get() = featureCore as MainNavigationService.Core
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launch { component.mainNavigationService() }
+        launch { core.mainNavigationService() }
     }
 }

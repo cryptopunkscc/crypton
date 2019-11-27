@@ -23,13 +23,13 @@ class ChatFragment : PresenterFragment<ChatPresenter.View, ChatPresenter>() {
     private suspend fun presenter(): ChatPresenter = let {
         val route = Route.Chat(arguments.toMap())
         val chat = runBlocking(Dispatchers.IO) {
-            feature.chatRepo.get(Address.from(route.chatAddress))
+            featureCore.chatRepo.get(Address.from(route.chatAddress))
         }
         setTitle(chat.address)
-        feature
+        featureCore
             .sessionFeature()
             .chatFeature(chat)
-            .resolve<ChatPresenter.Component>()
+            .resolve<ChatPresenter.Core>()
             .chatPresenter
     }
 

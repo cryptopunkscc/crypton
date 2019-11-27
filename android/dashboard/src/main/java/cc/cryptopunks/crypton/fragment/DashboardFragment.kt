@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.navigation.OptionItem
 import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
+import cc.cryptopunks.crypton.util.ext.resolve
 import kotlinx.coroutines.flow.Flow
 
 class DashboardFragment :
@@ -17,8 +18,8 @@ class DashboardFragment :
 
     override val layoutRes: Int get() = R.layout.dashboard
 
-    override fun onCreatePresenter(): DashboardPresenter = feature
-        .let { it as DashboardPresenter.Component }
+    override fun onCreatePresenter(): DashboardPresenter = featureCore
+        .resolve<DashboardPresenter.Core>()
         .dashboardPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +40,7 @@ class DashboardFragment :
     }
 
     override val accountManagementClick
-        get() = (feature as OptionItem.Api).optionItemSelections
+        get() = (featureCore as OptionItem.Api).optionItemSelections
 
     override val createChatClick: Flow<Any>
         get() = view!!.findViewById<Button>(R.id.createConversationButton).clicks()

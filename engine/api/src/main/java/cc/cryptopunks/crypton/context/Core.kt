@@ -1,28 +1,28 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.util.BroadcastError
-import cc.cryptopunks.crypton.util.ExecutorsComponent
+import cc.cryptopunks.crypton.util.Executors
 
 interface Core :
-    ExecutorsComponent,
-    BroadcastError.Component,
-    Connection.Component,
+    Executors,
+    BroadcastError.Core,
+    Connection.Core,
     Repo,
     Sys {
 
     val serviceScope: Service.Scope
 
     class Module(
-        private val executorsComponent: ExecutorsComponent,
-        private val broadcastErrorComponent: BroadcastError.Component,
-        private val connectionComponent: Connection.Component,
+        private val executorsCore: Executors,
+        private val broadcastErrorCore: BroadcastError.Core,
+        private val connectionCore: Connection.Core,
         private val repo: Repo,
         private val sys: Sys
     ) :
         Core,
-        ExecutorsComponent by executorsComponent,
-        BroadcastError.Component by broadcastErrorComponent,
-        Connection.Component by connectionComponent,
+        Executors by executorsCore,
+        BroadcastError.Core by broadcastErrorCore,
+        Connection.Core by connectionCore,
         Repo by repo,
         Sys by sys {
 

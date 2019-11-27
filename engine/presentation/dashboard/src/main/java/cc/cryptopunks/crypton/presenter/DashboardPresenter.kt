@@ -22,7 +22,7 @@ class DashboardPresenter @Inject constructor(
         val accountManagementClick: Flow<Any>
     }
 
-    interface Component {
+    interface Core {
         val dashboardPresenter: DashboardPresenter
     }
 }
