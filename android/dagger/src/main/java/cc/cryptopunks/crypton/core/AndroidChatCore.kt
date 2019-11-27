@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.core
 import cc.cryptopunks.crypton.ChatCore
 import cc.cryptopunks.crypton.annotation.ChatScope
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.presenter.ChatPresenter
 import dagger.Binds
 import dagger.Component
@@ -26,12 +25,7 @@ interface AndroidChatCore:
     @dagger.Module
     class Module(
         @get:Provides val chat: Chat
-    ) {
-        @Provides
-        fun Session.address() = address
-        @Provides
-        fun Session.scope() = scope
-    }
+    )
 }
 
 class CreateChatCore @Inject constructor(

@@ -1,13 +1,11 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.Core
-import cc.cryptopunks.crypton.context.OptionItem
-import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.Api
+import cc.cryptopunks.crypton.context.Feature
 
 interface FeatureCore :
-    Core,
-    Route.Api,
-    OptionItem.Api {
+    Api.Core,
+    Feature.Core {
 
     fun sessionFeature(): SessionCore
 

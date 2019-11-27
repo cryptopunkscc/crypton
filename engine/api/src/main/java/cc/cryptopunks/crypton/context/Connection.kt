@@ -8,10 +8,6 @@ interface Connection : Net {
         val createConnection: Factory
     }
 
-    class Module(
-        override val createConnection: Factory
-    ) : Core
-
     interface Factory : (Config) -> Connection {
         data class Config(
             val resource: String = "",
@@ -25,8 +21,7 @@ interface Connection : Net {
             }
 
             companion object {
-                val Empty =
-                    Config()
+                val Empty = Config()
             }
         }
     }

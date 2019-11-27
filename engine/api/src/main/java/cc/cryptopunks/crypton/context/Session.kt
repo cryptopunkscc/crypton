@@ -10,6 +10,12 @@ class Session(
     connection: Connection
 ) : Connection by connection {
 
+    interface Core {
+        val session: Session
+        val address: Address
+        val sessionScope: Scope
+    }
+
     fun sessionEvent(event: Api.Event) =
         Event(
             session = this,

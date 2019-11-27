@@ -34,7 +34,7 @@ import javax.inject.Singleton
     ]
 )
 interface AndroidCore :
-    Core,
+    Api.Core,
     SessionManager.Core,
     PresentationManager.Core,
     PresenceManager.Core {
