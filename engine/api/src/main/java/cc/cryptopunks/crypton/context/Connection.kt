@@ -1,7 +1,5 @@
-package cc.cryptopunks.crypton.connection
+package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
 
 interface Connection : Net {
@@ -9,6 +7,10 @@ interface Connection : Net {
     interface Component {
         val createConnection: Factory
     }
+
+    class Module(
+        override val createConnection: Factory
+    ) : Component
 
     interface Factory : (Config) -> Connection {
         data class Config(

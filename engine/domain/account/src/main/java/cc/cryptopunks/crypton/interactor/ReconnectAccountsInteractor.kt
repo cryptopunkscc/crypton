@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.manager.AccountManager
-import cc.cryptopunks.crypton.service.Service
 import cc.cryptopunks.crypton.util.JobManager
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job

@@ -7,13 +7,13 @@ import cc.cryptopunks.crypton.component.AndroidCore
 import cc.cryptopunks.crypton.component.ApplicationComponent
 import cc.cryptopunks.crypton.component.DaggerAndroidCore
 import cc.cryptopunks.crypton.component.DaggerApplicationComponent
-import cc.cryptopunks.crypton.core.CoreModule
+import cc.cryptopunks.crypton.context.Connection
+import cc.cryptopunks.crypton.context.Core
+import cc.cryptopunks.crypton.context.Sys
 import cc.cryptopunks.crypton.module.RepoModule
-import cc.cryptopunks.crypton.connection.ConnectionComponent
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.sys.MessageSysModule
 import cc.cryptopunks.crypton.sys.SysIndicatorModule
-import cc.cryptopunks.crypton.sys.SysModule
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.ExecutorsModule
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -40,17 +40,17 @@ class Dependencies(
     }
 
     private val core by lazy {
-        CoreModule(
+        Core.Module(
             broadcastErrorComponent = broadcastErrorComponent,
             executorsComponent = ExecutorsModule(
                 mainExecutor = MainExecutor(ArchTaskExecutor.getMainThreadExecutor()),
                 ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())
             ),
             repo = repoComponent,
-            connectionComponent = ConnectionComponent(
+            connectionComponent = Connection.Module(
                 createConnection = createNet
             ),
-            sys = SysModule(
+            sys = Sys.Module(
                 message = MessageSysModule(
                     application = application,
                     mainActivityClass = mainActivityClass

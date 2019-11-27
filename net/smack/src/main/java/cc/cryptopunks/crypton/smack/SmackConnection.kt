@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.connection.Connection
+import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.smack.module.ConnectionModule
 import cc.cryptopunks.crypton.smack.module.SmackModule
 import cc.cryptopunks.crypton.util.BroadcastErrorScope

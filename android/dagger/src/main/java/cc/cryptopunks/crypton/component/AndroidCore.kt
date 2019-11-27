@@ -5,8 +5,8 @@ import android.app.NotificationManager
 import android.content.ClipboardManager
 import android.net.ConnectivityManager
 import androidx.core.content.getSystemService
-import cc.cryptopunks.crypton.core.Core
 import cc.cryptopunks.crypton.context.Clipboard
+import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor

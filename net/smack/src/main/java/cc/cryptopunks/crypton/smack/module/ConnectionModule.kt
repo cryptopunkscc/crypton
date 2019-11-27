@@ -1,16 +1,6 @@
 package cc.cryptopunks.crypton.smack.module
 
-import cc.cryptopunks.crypton.entity.*
-import cc.cryptopunks.crypton.connection.Connection
-import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Presence
-import cc.cryptopunks.crypton.context.RosterEvent
-import cc.cryptopunks.crypton.context.User
-import cc.cryptopunks.crypton.context.UserPresence
-import cc.cryptopunks.crypton.net.Net
+import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.smack.component.SmackComponent
 import cc.cryptopunks.crypton.smack.net.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.account.*

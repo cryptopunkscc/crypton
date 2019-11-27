@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.net
 
-import cc.cryptopunks.crypton.api.Api
-import cc.cryptopunks.crypton.net.Net
+import cc.cryptopunks.crypton.context.Api
+import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.smack.net.client.InitOmemo
 import cc.cryptopunks.crypton.smack.util.connectionEventsFlow
 import cc.cryptopunks.crypton.util.BroadcastErrorScope

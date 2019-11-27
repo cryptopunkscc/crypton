@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.annotation.ApplicationScope
+import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.bind
 import cc.cryptopunks.crypton.util.typedLog

@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.annotation.ApplicationScope
+import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.selector.SessionEventSelector
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.ext.resolve

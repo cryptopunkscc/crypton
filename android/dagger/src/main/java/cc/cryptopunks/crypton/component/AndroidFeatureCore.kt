@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.annotation.FeatureScope
-import cc.cryptopunks.crypton.core.Core
+import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.navigation.OptionItem
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.DashboardPresenter

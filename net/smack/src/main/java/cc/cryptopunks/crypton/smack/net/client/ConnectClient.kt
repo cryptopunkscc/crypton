@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.client
 
-import cc.cryptopunks.crypton.net.Net
+import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.util.log
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 

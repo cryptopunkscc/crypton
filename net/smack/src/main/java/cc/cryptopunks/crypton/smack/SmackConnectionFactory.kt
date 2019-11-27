@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack
 
-import cc.cryptopunks.crypton.connection.Connection
+import cc.cryptopunks.crypton.context.Connection
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.omemo.OmemoConfiguration

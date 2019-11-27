@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.factory
 
-import cc.cryptopunks.crypton.connection.Connection
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Session
 import javax.inject.Inject
 

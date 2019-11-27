@@ -2,9 +2,9 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.context.RosterEvent
+import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.context.UserPresence
 import cc.cryptopunks.crypton.manager.PresenceManager
-import cc.cryptopunks.crypton.service.Service
 import cc.cryptopunks.crypton.util.JobManager
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.typedLog

@@ -1,14 +1,5 @@
-package cc.cryptopunks.crypton.net
+package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.api.Api
-import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Presence
-import cc.cryptopunks.crypton.context.RosterEvent
-import cc.cryptopunks.crypton.context.User
-import cc.cryptopunks.crypton.context.UserPresence
-import cc.cryptopunks.crypton.entity.*
 import kotlinx.coroutines.flow.Flow
 
 interface Net :

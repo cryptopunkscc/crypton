@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.smack.util
 
-import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.net.Net
+import cc.cryptopunks.crypton.context.Api
+import cc.cryptopunks.crypton.context.Net
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import org.jivesoftware.smack.ConnectionListener

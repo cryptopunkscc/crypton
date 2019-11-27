@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.manager.AccountManager
-import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 

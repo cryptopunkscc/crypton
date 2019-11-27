@@ -7,8 +7,8 @@ import android.view.MenuInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.component.AccountPresentationComponent
-import cc.cryptopunks.crypton.view.AccountListView
 import cc.cryptopunks.crypton.presenter.AccountListPresenter
+import cc.cryptopunks.crypton.view.AccountListView
 import kotlinx.coroutines.launch
 
 class AccountListFragment : PresenterFragment<AccountListPresenter.Actor, AccountListPresenter>() {

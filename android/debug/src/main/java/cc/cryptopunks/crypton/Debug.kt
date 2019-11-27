@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton
 import android.app.Activity
 import android.app.Application
 import android.view.ViewGroup
-import io.palaima.debugdrawer.R
 import io.palaima.debugdrawer.DebugDrawer
+import io.palaima.debugdrawer.R
 import io.palaima.debugdrawer.commons.BuildModule
 import io.palaima.debugdrawer.commons.DeviceModule
 import io.palaima.debugdrawer.commons.SettingsModule
