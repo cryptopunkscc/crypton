@@ -6,7 +6,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.Button
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.navigation.Navigation
+import cc.cryptopunks.crypton.navigation.OptionItem
 import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.coroutines.flow.Flow
@@ -38,9 +38,8 @@ class DashboardFragment :
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private val navigation get() = (feature as Navigation)
-
-    override val accountManagementClick get() = navigation.optionItemSelections
+    override val accountManagementClick
+        get() = (feature as OptionItem.Api).optionItemSelections
 
     override val createChatClick: Flow<Any>
         get() = view!!.findViewById<Button>(R.id.createConversationButton).clicks()

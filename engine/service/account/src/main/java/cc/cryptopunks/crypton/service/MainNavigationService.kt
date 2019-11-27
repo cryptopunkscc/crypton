@@ -1,14 +1,13 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.selector.HasAccountsSelector
-import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
+import cc.cryptopunks.crypton.selector.HasAccountsSelector
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class MainNavigationService @Inject constructor(
     private val hasAccounts: HasAccountsSelector,
-    private val navigate: Navigate
+    private val navigate: Route.Api.Navigate
 ) {
     suspend operator fun invoke() = hasAccounts().collect { condition ->
         navigate(

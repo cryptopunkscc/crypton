@@ -1,11 +1,10 @@
 package cc.cryptopunks.crypton.viewmodel
 
-import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
 import javax.inject.Inject
 
 class SetAccountViewModel @Inject constructor(
-    private val navigate: Navigate
+    private val navigate: Route.Api.Navigate
 ) {
 
     fun addAccount(): Unit = navigate(Route.Login)

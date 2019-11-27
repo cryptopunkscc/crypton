@@ -4,9 +4,8 @@ import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Message
 import cc.cryptopunks.crypton.entity.Presence
-import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
-import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
+import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
 import cc.cryptopunks.crypton.selector.PresenceFlowSelector
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 class RosterItemPresenter @Inject constructor(
     private val chat: Chat,
-    private val navigate: Navigate,
+    private val navigate: Route.Api.Navigate,
     private val presenceOf: PresenceFlowSelector,
     private val latestMessageFlow: LatestMessageFlowSelector
 ) : Presenter<RosterItemPresenter.View> {
@@ -29,10 +28,10 @@ class RosterItemPresenter @Inject constructor(
     private val letter get() = title.firstOrNull()?.toLowerCase() ?: '0'
 
     private val navigateChat: suspend (Any) -> Unit = {
-        navigate(Route.Chat()) {
+        Route.Chat().apply {
             accountId = chat.account.id
             chatAddress = chat.address.id
-        }
+        }.let(navigate)
     }
 
     override suspend fun View.invoke(): Job = coroutineScope {
@@ -56,7 +55,7 @@ class RosterItemPresenter @Inject constructor(
     class Factory @Inject constructor(
         private val latestMessageFlow: LatestMessageFlowSelector,
         private val presenceSelector: PresenceFlowSelector,
-        private val navigate: Navigate
+        private val navigate: Route.Api.Navigate
     ) : (Chat) -> RosterItemPresenter by { chat ->
         RosterItemPresenter(
             chat = chat,

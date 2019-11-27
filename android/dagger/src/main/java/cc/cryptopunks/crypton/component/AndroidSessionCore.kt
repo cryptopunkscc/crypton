@@ -1,9 +1,11 @@
 package cc.cryptopunks.crypton.component
 
+import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.SessionCore
 import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.entity.Session
-import cc.cryptopunks.crypton.navigation.Navigation
+import cc.cryptopunks.crypton.navigation.OptionItem
+import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.CreateChatPresenter
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
 import cc.cryptopunks.crypton.service.SessionServices
@@ -14,18 +16,21 @@ import dagger.Provides
 @Component(
     dependencies = [
         AndroidCore::class,
-        Navigation::class,
+        Route.Api::class,
+        OptionItem.Api::class,
         Session::class
     ],
     modules = [
-        CreateChatFeature.Binding::class
+        CreateChatCore.Binding::class
     ]
 )
 interface AndroidSessionCore :
     SessionCore,
     SessionServices,
-    CreateChatPresenter.Component {
+    CreateChatPresenter.Component
 
+
+object CreateAndroidSessionCore {
 
     @dagger.Module
     class Module {
@@ -36,13 +41,14 @@ interface AndroidSessionCore :
         ) = currentSessionSelector()!!
 
         @Provides
-        fun sessionFeature(
+        fun sessionCore(
             androidCore: AndroidCore,
-            navigation: Navigation,
+            featureCore: FeatureCore,
             session: Session
         ): SessionCore = DaggerAndroidSessionCore.builder()
             .androidCore(androidCore)
-            .navigation(navigation)
+            .api(featureCore as Route.Api)
+            .api(featureCore as OptionItem.Api)
             .session(session)
             .build()
     }

@@ -1,10 +1,11 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.ChatFeatureCore
+import cc.cryptopunks.crypton.ChatCore
 import cc.cryptopunks.crypton.annotation.ChatScope
 import cc.cryptopunks.crypton.entity.Chat
 import cc.cryptopunks.crypton.entity.Session
-import cc.cryptopunks.crypton.navigation.Navigation
+import cc.cryptopunks.crypton.navigation.OptionItem
+import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.ChatPresenter
 import dagger.Binds
 import dagger.Component
@@ -15,15 +16,16 @@ import javax.inject.Inject
 @Component(
     dependencies = [
         AndroidCore::class,
-        Navigation::class,
+        Route.Api::class,
+        OptionItem.Api::class,
         Session::class
     ],
     modules = [
-        ChatFeatureCoreComponent.Module::class
+        AndroidChatCore.Module::class
     ]
 )
-interface ChatFeatureCoreComponent:
-    ChatFeatureCore,
+interface AndroidChatCore:
+    ChatCore,
     ChatPresenter.Component {
 
     @dagger.Module
@@ -32,22 +34,24 @@ interface ChatFeatureCoreComponent:
     )
 }
 
-class CreateChatFeature @Inject constructor(
-    private val androidCore: AndroidCore,
-    private val navigation: Navigation,
-    private val session: Session
-) : ChatFeatureCore.Factory, (Chat) -> ChatFeatureCore by { chat ->
-    DaggerChatFeatureCoreComponent.builder()
+class CreateChatCore @Inject constructor(
+    androidCore: AndroidCore,
+    routeApi: Route.Api,
+    optionItemApi: OptionItem.Api,
+    session: Session
+) : ChatCore.Factory, (Chat) -> ChatCore by { chat ->
+    DaggerAndroidChatCore.builder()
         .androidCore(androidCore)
-        .navigation(navigation)
+        .api(routeApi)
+        .api(optionItemApi)
         .session(session)
-        .module(ChatFeatureCoreComponent.Module(chat))
+        .module(AndroidChatCore.Module(chat))
         .build()
 } {
 
     @dagger.Module
     interface Binding {
         @Binds
-        fun CreateChatFeature.createChatFeature(): ChatFeatureCore.Factory
+        fun CreateChatCore.createChatCore(): ChatCore.Factory
     }
 }

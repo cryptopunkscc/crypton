@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.factory
 
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.connection.Connection
+import cc.cryptopunks.crypton.entity.Account
 import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.entity.Session
 import javax.inject.Inject
 
 class SessionFactory @Inject constructor(

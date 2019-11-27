@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton.component
 import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.annotation.FeatureScope
 import cc.cryptopunks.crypton.core.Core
-import cc.cryptopunks.crypton.navigation.Navigation
-import cc.cryptopunks.crypton.navigation.NavigationModule
+import cc.cryptopunks.crypton.navigation.OptionItem
+import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.presenter.RosterPresenter
 import cc.cryptopunks.crypton.service.AccountNavigationService
@@ -17,11 +17,11 @@ import javax.inject.Inject
 @FeatureScope
 @Component(
     dependencies = [
-        AndroidCore::class,
-        Navigation::class
+        AndroidCore::class
     ],
     modules = [
-        AndroidSessionCore.Module::class
+        CreateAndroidSessionCore.Module::class,
+        AndroidFeatureCore.Bindings::class
     ]
 )
 interface AndroidFeatureCore :
@@ -33,19 +33,35 @@ interface AndroidFeatureCore :
     RosterPresenter.Component {
 
     val core: Core
+    val featureCore: FeatureCore
+
 
     @Module
     interface Bindings {
         @Binds
-        fun CreateFeature.createFeature() : FeatureCore.Create
+        fun Route.Navigator.navigate() : Route.Api.Navigate
+        @Binds
+        fun Route.Navigator.navigationOutput() : Route.Api.Output
+        @Binds
+        fun OptionItem.Broadcast.selectOptionItem() : OptionItem.Select
+        @Binds
+        fun OptionItem.Broadcast.optionItemOutput() : OptionItem.Output
+        @Binds
+        fun AndroidFeatureCore.featureCore() : FeatureCore
     }
 }
 
-class CreateFeature @Inject constructor(
+class CreateAndroidFeatureCore @Inject constructor(
     private val androidCore: AndroidCore
 ) : FeatureCore.Create {
+
     override fun invoke(): FeatureCore = DaggerAndroidFeatureCore.builder()
         .androidCore(androidCore)
-        .navigation(NavigationModule())
         .build()
+
+    @dagger.Module
+    interface Bindings {
+        @Binds
+        fun CreateAndroidFeatureCore.createFeature() : FeatureCore.Create
+    }
 }

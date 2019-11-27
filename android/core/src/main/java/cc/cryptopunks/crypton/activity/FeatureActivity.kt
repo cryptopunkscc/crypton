@@ -25,7 +25,7 @@ abstract class FeatureActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         setSupportActionBar(toolbar)
-        scope.launch { feature.navigateOutput.bind(navController) }
+        scope.launch { feature.navigationOutput.bind(navController) }
     }
 
     override fun onStop() {
@@ -34,7 +34,7 @@ abstract class FeatureActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        scope.launch { feature.onOptionItemSelected(item.itemId) }
+        scope.launch { feature.selectOptionItem(item.itemId) }
         return super.onOptionsItemSelected(item)
     }
 

@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.presenter
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.entity.User
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor
-import cc.cryptopunks.crypton.navigation.Navigate
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.util.cache
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 class CreateChatPresenter @Inject constructor(
     private val createChat: CreateChatInteractor,
-    private val navigate: Navigate
+    private val navigate: Route.Api.Navigate
 ) : Presenter<CreateChatPresenter.View> {
 
     private val usersCache = emptyList<User>().cache()
@@ -42,10 +41,9 @@ class CreateChatPresenter @Inject constructor(
 
             createChat(data).run {
                 val address = await().address
-
-                navigate(Route.Chat()) {
-                    chatAddress = address.id
-                }
+                Route.Chat()
+                    .apply { chatAddress = address.id }
+                    .let(navigate)
             }
         }.exceptionOrNull()
     }
