@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.service.IndicatorService
 import javax.inject.Inject
 
-internal class StartIndicatorService @Inject constructor(
+class StartIndicatorService @Inject constructor(
     context: Application
 ) : Indicator.Sys.Show, () -> Unit by {
     startForegroundService(context, Intent(context, IndicatorService::class.java))

@@ -12,6 +12,8 @@ object Network {
     }
 
     interface Sys {
+        val getNetworkStatus: GetStatus
+
         interface GetStatus : Flow<Status>, () -> Status
     }
 }

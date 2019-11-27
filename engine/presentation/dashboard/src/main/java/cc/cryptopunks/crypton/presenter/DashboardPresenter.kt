@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.navigation.Route
+import cc.cryptopunks.crypton.context.Route
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect

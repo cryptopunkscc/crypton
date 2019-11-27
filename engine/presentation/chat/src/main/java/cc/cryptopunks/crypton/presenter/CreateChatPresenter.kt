@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.presenter
 import cc.cryptopunks.crypton.actor.Actor
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor
-import cc.cryptopunks.crypton.navigation.Route
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.util.cache
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect

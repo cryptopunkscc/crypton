@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.util.ext
 
 import cc.cryptopunks.crypton.core.R
-import cc.cryptopunks.crypton.navigation.Route
-import cc.cryptopunks.crypton.navigation.Route.*
+import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.Route.*
 
 val Route.resId: Int
     get() = when (this) {

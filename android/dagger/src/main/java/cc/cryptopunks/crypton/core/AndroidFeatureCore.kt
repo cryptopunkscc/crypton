@@ -2,9 +2,12 @@ package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.annotation.FeatureScope
-import cc.cryptopunks.crypton.context.Core
-import cc.cryptopunks.crypton.navigation.OptionItem
-import cc.cryptopunks.crypton.navigation.Route
+import cc.cryptopunks.crypton.context.OptionItem
+import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.manager.PresenceManager
+import cc.cryptopunks.crypton.navigation.Navigator
+import cc.cryptopunks.crypton.navigation.OptionItemBroadcast
+import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.presenter.RosterPresenter
 import cc.cryptopunks.crypton.service.AccountNavigationService
@@ -26,28 +29,30 @@ import javax.inject.Inject
 )
 interface AndroidFeatureCore :
     FeatureCore,
+    PresentationManager.Core,
+    PresenceManager.Core,
     MainNavigationService.Core,
     AccountNavigationService.Core,
     AccountPresentationCore,
     DashboardPresenter.Core,
     RosterPresenter.Core {
 
-    val core: Core
+    val androidCore: AndroidCore
     val featureCore: FeatureCore
 
 
     @Module
     interface Bindings {
         @Binds
-        fun Route.Navigator.navigate() : Route.Api.Navigate
-        @Binds
-        fun Route.Navigator.navigationOutput() : Route.Api.Output
-        @Binds
-        fun OptionItem.Broadcast.selectOptionItem() : OptionItem.Select
-        @Binds
-        fun OptionItem.Broadcast.optionItemOutput() : OptionItem.Output
-        @Binds
         fun AndroidFeatureCore.featureCore() : FeatureCore
+        @Binds
+        fun Navigator.navigate() : Route.Api.Navigate
+        @Binds
+        fun Navigator.navigationOutput() : Route.Api.Output
+        @Binds
+        fun OptionItemBroadcast.selectOptionItem() : OptionItem.Select
+        @Binds
+        fun OptionItemBroadcast.optionItemOutput() : OptionItem.Output
     }
 }
 
@@ -55,9 +60,10 @@ class CreateAndroidFeatureCore @Inject constructor(
     private val androidCore: AndroidCore
 ) : FeatureCore.Create {
 
-    override fun invoke(): FeatureCore = DaggerAndroidFeatureCore.builder()
+    override fun invoke() = DaggerAndroidFeatureCore
+        .builder()
         .androidCore(androidCore)
-        .build()
+        .build()!!
 
     @dagger.Module
     interface Bindings {

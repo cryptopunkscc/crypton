@@ -6,7 +6,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.Button
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.navigation.OptionItem
+import cc.cryptopunks.crypton.context.OptionItem
 import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.resolve

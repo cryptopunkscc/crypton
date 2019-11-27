@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.util.ext
 
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import cc.cryptopunks.crypton.navigation.Route
+import cc.cryptopunks.crypton.context.Route
 import kotlinx.coroutines.flow.collect
 
 suspend fun Route.Api.Output.bind(navController: NavController) = collect { route ->

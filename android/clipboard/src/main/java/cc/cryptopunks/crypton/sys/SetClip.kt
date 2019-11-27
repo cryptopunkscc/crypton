@@ -5,7 +5,7 @@ import android.content.ClipboardManager
 import cc.cryptopunks.crypton.context.Clipboard
 import javax.inject.Inject
 
-class SetClip @Inject constructor(
+class SetToClipboard @Inject constructor(
     clipboard: ClipboardManager
 ) : Clipboard.Sys.SetClip, (String) -> Unit by { text ->
     clipboard.setPrimaryClip(

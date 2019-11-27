@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-internal class ShowMessageNotification @Inject constructor(
+class ShowMessageNotification @Inject constructor(
     private val context: Application,
     private val showNotification: ShowSystemNotification,
     private val mainActivityClass: Class<*>
