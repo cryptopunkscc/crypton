@@ -21,7 +21,7 @@ include ':engine:api',
         ':engine:service:roster',
         ':engine:service:chat',
 
-        ':engine:presentation:common',
+        ':engine:presentation:api',
         ':engine:presentation:account',
         ':engine:presentation:dashboard',
         ':engine:presentation:roster',
