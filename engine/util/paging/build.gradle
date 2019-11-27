@@ -1,7 +1,10 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
+sourceSets {
+    main.java.srcDirs += "$buildDir/generated/source/kapt/main"
+}
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api project(':engine:domain:roster')
+    api project(':engine:api')
 }

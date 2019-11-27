@@ -3,8 +3,11 @@
 
 include ':engine:api',
 
+        ':engine:core',
+
         ':engine:util:log',
         ':engine:util:common',
+        ':engine:util:paging',
 
         ':engine:domain:navigation',
         ':engine:domain:feature',

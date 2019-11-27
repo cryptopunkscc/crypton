@@ -27,7 +27,9 @@ fun pagedListConfig(
     .setEnablePlaceholders(enablePlaceholders)
     .build()
 
-fun <K, V> CreatePagedList<K, V>.asFlow(): Flow<PagedList<V>> = PagedListFlow(this)
+fun <K, V> CreatePagedList<K, V>.asFlow(): Flow<PagedList<V>> = PagedListFlow(
+    this
+)
     .run { onCompletion { cancel() } }
 
 class CreatePagedList<K, V>(
@@ -40,12 +42,13 @@ class CreatePagedList<K, V>(
 
     operator fun invoke(key: K? = null): PagedList<V> = create(pagedList(key))
 
-    fun <V2> map(f: (V) -> V2) = CreatePagedList<K, V2>(
-        config = config,
-        dataSourceFactory = dataSourceFactory.map(f),
-        fetchExecutor = fetchExecutor,
-        notifyExecutor = notifyExecutor
-    )
+    fun <V2> map(f: (V) -> V2) =
+        CreatePagedList<K, V2>(
+            config = config,
+            dataSourceFactory = dataSourceFactory.map(f),
+            fetchExecutor = fetchExecutor,
+            notifyExecutor = notifyExecutor
+        )
 
     @Suppress("UNCHECKED_CAST")
     private tailrec fun create(
