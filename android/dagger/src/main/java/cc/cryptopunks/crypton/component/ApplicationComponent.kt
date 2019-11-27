@@ -12,7 +12,7 @@ import dagger.Component
         AndroidCore::class
     ],
     modules = [
-        FeatureComponent.Bindings::class,
+        AndroidFeatureCore.Bindings::class,
         ServiceComponentFactory.Binding::class
     ]
 )

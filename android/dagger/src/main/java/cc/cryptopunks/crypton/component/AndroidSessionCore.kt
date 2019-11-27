@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.component
 
-import cc.cryptopunks.crypton.SessionFeatureCore
+import cc.cryptopunks.crypton.SessionCore
 import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.entity.Session
 import cc.cryptopunks.crypton.navigation.Navigation
@@ -21,8 +21,8 @@ import dagger.Provides
         CreateChatFeature.Binding::class
     ]
 )
-interface SessionFeatureCoreComponent :
-    SessionFeatureCore,
+interface AndroidSessionCore :
+    SessionCore,
     SessionServices,
     CreateChatPresenter.Component {
 
@@ -40,7 +40,7 @@ interface SessionFeatureCoreComponent :
             androidCore: AndroidCore,
             navigation: Navigation,
             session: Session
-        ): SessionFeatureCore = DaggerSessionFeatureCoreComponent.builder()
+        ): SessionCore = DaggerAndroidSessionCore.builder()
             .androidCore(androidCore)
             .navigation(navigation)
             .session(session)

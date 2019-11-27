@@ -21,10 +21,10 @@ import javax.inject.Inject
         Navigation::class
     ],
     modules = [
-        SessionFeatureCoreComponent.Module::class
+        AndroidSessionCore.Module::class
     ]
 )
-interface FeatureComponent :
+interface AndroidFeatureCore :
     FeatureCore,
     MainNavigationService.Component,
     AccountNavigationService.Component,
@@ -44,7 +44,7 @@ interface FeatureComponent :
 class CreateFeature @Inject constructor(
     private val androidCore: AndroidCore
 ) : FeatureCore.Create {
-    override fun invoke(): FeatureCore = DaggerFeatureComponent.builder()
+    override fun invoke(): FeatureCore = DaggerAndroidFeatureCore.builder()
         .androidCore(androidCore)
         .navigation(NavigationModule())
         .build()
