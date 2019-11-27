@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.navigation
+package cc.cryptopunks.crypton.internal
 
 import cc.cryptopunks.crypton.annotation.FeatureScope
 import cc.cryptopunks.crypton.context.OptionItem

@@ -21,8 +21,9 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api project(':net:smack')
+    api project(':engine:internal')
     api project(':engine:service:app')
+    api project(':net:smack')
     api project(':android:data')
     api project(':android:log')
     api project(':android:clipboard')

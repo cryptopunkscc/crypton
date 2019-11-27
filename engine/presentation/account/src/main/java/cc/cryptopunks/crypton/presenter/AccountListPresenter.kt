@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.navigation.service.OptionItemNavigationService
+import cc.cryptopunks.crypton.util.OptionItemNavigationService
 import cc.cryptopunks.crypton.selector.AccountListSelector
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect

@@ -3,7 +3,6 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api project(':engine:presentation:common')
-    api project(':engine:domain:navigation')
     api project(':engine:domain:roster')
+    api project(':engine:presentation:common')
 }

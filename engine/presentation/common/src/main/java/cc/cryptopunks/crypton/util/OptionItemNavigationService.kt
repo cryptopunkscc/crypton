@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.navigation.service
+package cc.cryptopunks.crypton.util
 
 import cc.cryptopunks.crypton.context.OptionItem
 import cc.cryptopunks.crypton.context.Route

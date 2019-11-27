@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.core
 
-import cc.cryptopunks.crypton.navigation.service.OptionItemNavigationService
+import cc.cryptopunks.crypton.util.OptionItemNavigationService
 import cc.cryptopunks.crypton.presenter.AccountListPresenter
 import cc.cryptopunks.crypton.viewmodel.AccountItemViewModel
 import cc.cryptopunks.crypton.viewmodel.SetAccountViewModel

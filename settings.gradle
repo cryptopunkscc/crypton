@@ -2,14 +2,13 @@
 //        'auto-di:processor'
 
 include ':engine:api',
-
         ':engine:core',
+        ':engine:internal',
 
         ':engine:util:log',
-        ':engine:util:common',
+        ':engine:util:inject',
         ':engine:util:paging',
 
-        ':engine:domain:navigation',
         ':engine:domain:feature',
         ':engine:domain:session',
         ':engine:domain:account',

@@ -5,8 +5,8 @@ import cc.cryptopunks.crypton.annotation.FeatureScope
 import cc.cryptopunks.crypton.context.OptionItem
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.manager.PresenceManager
-import cc.cryptopunks.crypton.navigation.Navigator
-import cc.cryptopunks.crypton.navigation.OptionItemBroadcast
+import cc.cryptopunks.crypton.internal.Navigator
+import cc.cryptopunks.crypton.internal.OptionItemBroadcast
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.presenter.DashboardPresenter
 import cc.cryptopunks.crypton.presenter.RosterPresenter
