@@ -29,7 +29,7 @@ dependencies {
     // TODO: Integrate database encryption
     // https://github.com/commonsguy/cwac-saferoom
     // implementation "com.commonsware.cwac:saferoom.x:1.2.1"
-    implementation project(':domain:api')
+    implementation project(':engine:api')
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "androidx.room:room-compiler:$room_version"
 }

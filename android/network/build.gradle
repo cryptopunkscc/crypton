@@ -20,6 +20,6 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "javax.inject:javax.inject:1"
-    implementation project(':domain:api')
-    implementation project(':domain:log')
+    implementation project(':engine:api')
+    implementation project(':engine:util:log')
 }

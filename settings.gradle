@@ -1,27 +1,29 @@
 //include 'auto-di:annotations',
 //        'auto-di:processor'
 
-include ':domain:log',
-        ':domain:api',
-        ':domain:common',
-        ':domain:navigation',
-        ':domain:feature',
-        ':domain:session',
-        ':domain:account',
-        ':domain:roster',
-        ':domain:chat',
+include ':engine:api',
 
-        ':service:app',
-        ':service:session',
-        ':service:account',
-        ':service:roster',
-        ':service:chat',
+        ':engine:util:log',
+        ':engine:util:common',
 
-        ':presentation:common',
-        ':presentation:account',
-        ':presentation:dashboard',
-        ':presentation:roster',
-        ':presentation:chat',
+        ':engine:domain:navigation',
+        ':engine:domain:feature',
+        ':engine:domain:session',
+        ':engine:domain:account',
+        ':engine:domain:roster',
+        ':engine:domain:chat',
+
+        ':engine:service:app',
+        ':engine:service:session',
+        ':engine:service:account',
+        ':engine:service:roster',
+        ':engine:service:chat',
+
+        ':engine:presentation:common',
+        ':engine:presentation:account',
+        ':engine:presentation:dashboard',
+        ':engine:presentation:roster',
+        ':engine:presentation:chat',
 
         ':net:smack',
 

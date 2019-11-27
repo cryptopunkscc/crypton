@@ -24,7 +24,7 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api project(':domain:common')
+    api project(':engine:util:common')
 
     api "org.igniterealtime.smack:smack-tcp:4.4.0-alpha1"
     implementation "org.igniterealtime.smack:smack-android-extensions:4.4.0-alpha1"

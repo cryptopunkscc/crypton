@@ -32,7 +32,7 @@ dependencies {
 
     api project(':android:core')
     api project(':android:roster')
-    api project(':presentation:dashboard')
+    api project(':engine:presentation:dashboard')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }

@@ -1,0 +1,14 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+sourceSets {
+    main.java.srcDirs += "$buildDir/generated/source/kapt/main"
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api project(':engine:domain:session')
+    api project(':engine:domain:feature')
+    api project(':engine:service:roster')
+    api project(':engine:service:chat')
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+}

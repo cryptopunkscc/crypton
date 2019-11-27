@@ -30,7 +30,7 @@ dependencies {
     implementation project(':android:widget')
     api project(':android:core')
     api project(':android:notification')
-    api project(':presentation:chat')
+    api project(':engine:presentation:chat')
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }
