@@ -5,7 +5,7 @@ import android.app.Service
 import android.content.Intent
 import cc.cryptopunks.crypton.AppCore
 import cc.cryptopunks.crypton.ServiceCore
-import cc.cryptopunks.crypton.entity.Indicator
+import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel.Importance.Min
 import cc.cryptopunks.crypton.notification.ShowIndicatorNotification

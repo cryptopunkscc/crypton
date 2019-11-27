@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Message
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject

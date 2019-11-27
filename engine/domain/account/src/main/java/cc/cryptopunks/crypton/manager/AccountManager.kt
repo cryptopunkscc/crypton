@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.manager
 
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Address
 import javax.inject.Inject
 
 data class AccountManager @Inject constructor(

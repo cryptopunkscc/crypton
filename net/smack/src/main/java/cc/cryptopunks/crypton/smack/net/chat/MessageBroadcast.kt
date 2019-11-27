@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.CryptonMessage
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.CryptonMessage
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.removeOmemoBody
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody

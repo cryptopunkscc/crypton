@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.annotation.SessionScope
-import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
 import cc.cryptopunks.crypton.selector.LatestMessageSelector
 import cc.cryptopunks.crypton.util.ext.invokeOnClose

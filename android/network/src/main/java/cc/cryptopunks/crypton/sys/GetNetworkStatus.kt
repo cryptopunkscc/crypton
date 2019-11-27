@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.sys
 
 import android.net.ConnectivityManager
-import cc.cryptopunks.crypton.entity.Network
-import cc.cryptopunks.crypton.entity.Network.Status.Unavailable
+import cc.cryptopunks.crypton.context.Network
+import cc.cryptopunks.crypton.context.Network.Status.Unavailable
 import cc.cryptopunks.crypton.service.Service
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel

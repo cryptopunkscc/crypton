@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.sys
 
-import cc.cryptopunks.crypton.entity.Network.Status
+import cc.cryptopunks.crypton.context.Network.Status
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.delay
 

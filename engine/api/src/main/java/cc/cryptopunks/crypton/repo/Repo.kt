@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.repo
 
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.User
+import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.User
 
 interface Repo {
     val accountRepo: Account.Repo

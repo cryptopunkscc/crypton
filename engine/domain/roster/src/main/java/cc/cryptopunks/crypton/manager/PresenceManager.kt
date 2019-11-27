@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.manager
 
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.Presence
-import cc.cryptopunks.crypton.entity.UserPresence
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Presence
+import cc.cryptopunks.crypton.context.UserPresence
 import cc.cryptopunks.crypton.util.Broadcast
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -28,7 +28,12 @@ class PresenceManager @Inject constructor() : Flow<UserPresence> {
     suspend fun send(address: Address, presence: Presence) {
         log.d("send: $address $presence")
         presenceMap[address] = presence
-        broadcast.send(UserPresence(address, presence))
+        broadcast.send(
+            UserPresence(
+                address,
+                presence
+            )
+        )
     }
 
     operator fun get(address: Address): Presence =

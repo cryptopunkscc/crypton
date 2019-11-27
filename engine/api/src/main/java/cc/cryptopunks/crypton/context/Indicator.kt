@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.entity
+package cc.cryptopunks.crypton.context
 
 object Indicator {
     const val serviceName = "Indicator Service"

@@ -2,6 +2,9 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.paging.DataSource
 import androidx.room.*
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.User
 
 @Entity(
     tableName = "chat",
@@ -48,11 +51,12 @@ internal data class ChatData(
     }
 }
 
-internal fun ChatData.toDomain(users: List<User> = emptyList()) = Chat(
-    title = title,
-    address = Address.from(id),
-    users = users
-)
+internal fun ChatData.toDomain(users: List<User> = emptyList()) =
+    Chat(
+        title = title,
+        address = Address.from(id),
+        users = users
+    )
 
 internal fun Chat.chatData() = ChatData(
     title = title,

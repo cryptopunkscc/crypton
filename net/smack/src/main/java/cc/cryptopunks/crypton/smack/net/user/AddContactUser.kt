@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.user
 
-import cc.cryptopunks.crypton.entity.User
+import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.smack.util.bareJid
 import org.jivesoftware.smack.roster.Roster
 

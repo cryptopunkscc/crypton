@@ -1,6 +1,8 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.User
 import kotlinx.coroutines.flow.Flow
 
 @Entity(

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.roster
 
-import cc.cryptopunks.crypton.entity.RosterEvent
+import cc.cryptopunks.crypton.context.RosterEvent
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

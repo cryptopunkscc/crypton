@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.viewmodel
 
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.Input
 import cc.cryptopunks.crypton.util.cache

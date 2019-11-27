@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.entity
+package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.api.Api
 import cc.cryptopunks.crypton.connection.Connection
@@ -12,10 +12,11 @@ class Session(
     connection: Connection
 ) : Connection by connection {
 
-    fun sessionEvent(event: Api.Event) = Event(
-        session = this,
-        event = event
-    )
+    fun sessionEvent(event: Api.Event) =
+        Event(
+            session = this,
+            event = event
+        )
 
     data class Event(
         val session: Session,

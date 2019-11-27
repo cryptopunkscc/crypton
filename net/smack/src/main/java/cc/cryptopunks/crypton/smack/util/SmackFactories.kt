@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.smack.util
 
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.CryptonMessage
-import cc.cryptopunks.crypton.entity.Presence
-import cc.cryptopunks.crypton.entity.Resource
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.CryptonMessage
+import cc.cryptopunks.crypton.context.Presence
+import cc.cryptopunks.crypton.context.Resource
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.sid.element.StanzaIdElement

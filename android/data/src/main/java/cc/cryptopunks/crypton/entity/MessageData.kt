@@ -2,6 +2,9 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.paging.DataSource
 import androidx.room.*
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Resource
 import kotlinx.coroutines.flow.Flow
 
 @Entity(

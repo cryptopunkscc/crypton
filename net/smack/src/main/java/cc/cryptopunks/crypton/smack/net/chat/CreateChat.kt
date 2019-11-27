@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
-import cc.cryptopunks.crypton.entity.Chat
+import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.smack.component.SmackComponent
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.context.Account
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

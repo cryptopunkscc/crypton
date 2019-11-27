@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.Message.Net.Send
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Message.Net.Send
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection

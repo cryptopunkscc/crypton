@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.selector
 
 import androidx.paging.PagedList
-import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.util.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

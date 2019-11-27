@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.annotation.ApplicationScope
-import cc.cryptopunks.crypton.entity.Network
-import cc.cryptopunks.crypton.entity.Network.Status.*
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Network
+import cc.cryptopunks.crypton.context.Network.Status.*
+import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.manager.SessionManager

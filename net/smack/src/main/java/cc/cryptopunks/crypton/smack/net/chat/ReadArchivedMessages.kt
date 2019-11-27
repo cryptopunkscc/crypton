@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage

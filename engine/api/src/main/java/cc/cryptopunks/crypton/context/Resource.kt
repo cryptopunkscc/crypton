@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.entity
+package cc.cryptopunks.crypton.context
 
 data class Resource(
     val address: Address = Address.Empty,
@@ -20,7 +20,9 @@ data class Resource(
 
         fun from(string: String) = string.split("/").run {
             Resource(
-                address = Address.from(get(0)),
+                address = Address.from(
+                    get(0)
+                ),
                 resource = getOrNull(1) ?: ""
             )
         }

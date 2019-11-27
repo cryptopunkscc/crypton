@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.entity.User
+import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.presenter.CreateChatPresenter
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
@@ -35,7 +35,8 @@ class CreateChatView(context: Context) :
     override val createChatClick: Flow<Any>
         get() = addressInputView.button.clicks().map { createUserFromInput() }
 
-    private fun createUserFromInput() = User(addressInputView.input.text.toString())
+    private fun createUserFromInput() =
+        User(addressInputView.input.text.toString())
 
 
     override val setUsers: suspend (List<User>) -> Unit

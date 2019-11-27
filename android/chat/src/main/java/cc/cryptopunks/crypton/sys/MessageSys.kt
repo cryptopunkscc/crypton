@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.sys
 import android.app.Application
 import android.app.NotificationManager
 import androidx.core.content.getSystemService
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.notification.ShowMessageNotification
 import dagger.Binds
 import dagger.Component

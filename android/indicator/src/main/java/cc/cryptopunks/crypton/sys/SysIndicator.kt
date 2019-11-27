@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.sys
 
 import android.app.Application
-import cc.cryptopunks.crypton.entity.Indicator
+import cc.cryptopunks.crypton.context.Indicator
 import dagger.Binds
 import dagger.Component
 import dagger.Module

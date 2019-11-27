@@ -1,10 +1,10 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.annotation.SessionScope
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.Session
-import cc.cryptopunks.crypton.entity.canConsume
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.canConsume
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job

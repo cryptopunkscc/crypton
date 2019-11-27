@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import cc.cryptopunks.crypton.repo.Repo
 import cc.cryptopunks.crypton.data.Database
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.User
+import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.repo.AccountRepo
 import cc.cryptopunks.crypton.repo.ChatRepo
 import cc.cryptopunks.crypton.repo.MessageRepo

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.viewmodel
 
-import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.interactor.DeleteAccountInteractor
 import cc.cryptopunks.crypton.interactor.DisconnectAccountInteractor
 import cc.cryptopunks.crypton.interactor.LoginAccountInteractor

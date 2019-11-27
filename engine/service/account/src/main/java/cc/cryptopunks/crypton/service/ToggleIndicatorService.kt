@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.annotation.ApplicationScope
-import cc.cryptopunks.crypton.entity.Indicator
+import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.selector.HasAccountsSelector
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.typedLog

@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.util
 import android.content.Context
 import androidx.core.content.ContextCompat
 import cc.cryptopunks.crypton.core.R
-import cc.cryptopunks.crypton.entity.Presence
+import cc.cryptopunks.crypton.context.Presence
 
 val presenceStatusColorIds = mapOf(
     Presence.Status.Unavailable to R.color.presence_unavailable,

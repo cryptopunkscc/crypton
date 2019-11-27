@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton.repo
 
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.entity.*
 import cc.cryptopunks.crypton.entity.UserData
 import cc.cryptopunks.crypton.entity.user

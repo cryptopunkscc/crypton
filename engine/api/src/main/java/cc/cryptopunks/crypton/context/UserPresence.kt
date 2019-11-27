@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.entity
+package cc.cryptopunks.crypton.context
 
 data class UserPresence(
     val address: Address,

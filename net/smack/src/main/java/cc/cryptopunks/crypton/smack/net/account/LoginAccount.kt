@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.account
 
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.context.Account
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smackx.carbons.CarbonManager
 

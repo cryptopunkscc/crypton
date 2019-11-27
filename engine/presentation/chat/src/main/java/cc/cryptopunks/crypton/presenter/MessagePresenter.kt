@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.Clipboard
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Clipboard
+import cc.cryptopunks.crypton.context.Message
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect

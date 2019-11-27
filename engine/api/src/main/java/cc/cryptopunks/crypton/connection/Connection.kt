@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.connection
 
-import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.net.Net
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
 

@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.component
 
 import cc.cryptopunks.crypton.ChatCore
 import cc.cryptopunks.crypton.annotation.ChatScope
-import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.navigation.OptionItem
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.ChatPresenter

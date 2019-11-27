@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.component
 import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.SessionCore
 import cc.cryptopunks.crypton.annotation.SessionScope
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.navigation.OptionItem
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.presenter.CreateChatPresenter

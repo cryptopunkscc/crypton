@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Session
-import cc.cryptopunks.crypton.entity.User
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.User
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 

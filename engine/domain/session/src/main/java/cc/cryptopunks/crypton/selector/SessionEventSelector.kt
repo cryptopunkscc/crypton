@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.manager.SessionManager
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

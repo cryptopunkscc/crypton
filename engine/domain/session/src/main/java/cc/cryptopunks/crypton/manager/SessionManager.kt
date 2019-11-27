@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.manager
 
-import cc.cryptopunks.crypton.entity.Address
-import cc.cryptopunks.crypton.entity.Session
-import cc.cryptopunks.crypton.entity.Session.Event.Created
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.Session.Event.Created
 import cc.cryptopunks.crypton.factory.SessionFactory
 import cc.cryptopunks.crypton.util.Broadcast
 import kotlinx.coroutines.InternalCoroutinesApi

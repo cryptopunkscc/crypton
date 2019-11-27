@@ -5,8 +5,8 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.entity.Indicator
-import cc.cryptopunks.crypton.entity.Message
+import cc.cryptopunks.crypton.context.Indicator
+import cc.cryptopunks.crypton.context.Message
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject

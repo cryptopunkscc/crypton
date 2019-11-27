@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.sys
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import cc.cryptopunks.crypton.entity.Clipboard
+import cc.cryptopunks.crypton.context.Clipboard
 import javax.inject.Inject
 
 class SetClip @Inject constructor(

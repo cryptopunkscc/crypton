@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.annotation.SessionScope
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.bind
 import cc.cryptopunks.crypton.util.typedLog

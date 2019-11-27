@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.entity
+package cc.cryptopunks.crypton.context
 
 data class Address(
     val local: String = "",
@@ -26,7 +26,8 @@ data class Address(
 
     class Exception(message: String?) : kotlin.Exception(message) {
         companion object {
-            val InvalidAddress = Exception("Invalid address")
+            val InvalidAddress =
+                Exception("Invalid address")
         }
     }
 

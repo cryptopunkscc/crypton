@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.PresenceService
-import cc.cryptopunks.crypton.entity.Account
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.net.Net
 
 

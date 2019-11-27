@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.entity.Address
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.viewmodel.AccountItemViewModel

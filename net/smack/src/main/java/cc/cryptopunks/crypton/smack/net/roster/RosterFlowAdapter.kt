@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.roster
 
-import cc.cryptopunks.crypton.entity.RosterEvent
+import cc.cryptopunks.crypton.context.RosterEvent
 import cc.cryptopunks.crypton.smack.util.SmackJid
 import cc.cryptopunks.crypton.smack.util.presence
 import cc.cryptopunks.crypton.smack.util.resourceId

@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.util
 
 import cc.cryptopunks.crypton.api.Api
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.net.Net
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow

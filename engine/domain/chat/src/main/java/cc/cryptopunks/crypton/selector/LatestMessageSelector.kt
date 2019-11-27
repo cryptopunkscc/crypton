@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.Session
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Session
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject
 

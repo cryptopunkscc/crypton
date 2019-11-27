@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.entity.Chat
-import cc.cryptopunks.crypton.entity.Message
-import cc.cryptopunks.crypton.entity.Presence
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.navigation.Route
 import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
 import cc.cryptopunks.crypton.selector.PresenceFlowSelector

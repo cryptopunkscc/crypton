@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.account
 
-import cc.cryptopunks.crypton.entity.Account
+import cc.cryptopunks.crypton.context.Account
 import org.jivesoftware.smackx.iqregister.AccountManager
 
 class RemoveAccount(
