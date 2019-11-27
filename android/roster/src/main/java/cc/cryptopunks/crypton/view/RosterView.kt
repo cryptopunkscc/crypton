@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import cc.cryptopunks.crypton.actor.Actor
+import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.presenter.RosterItemPresenter

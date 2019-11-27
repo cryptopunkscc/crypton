@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.presentation.PresentationManager
-import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.context.Presenter
 import cc.cryptopunks.crypton.util.ext.resolve
 
 

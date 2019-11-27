@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.actor.Actor
+import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.adapter.AccountListAdapter
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.presenter.AccountListPresenter

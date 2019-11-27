@@ -1,11 +1,13 @@
-package cc.cryptopunks.crypton.model
+package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.presenter.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-object Model {
+interface Presenter<in A> {
+    suspend operator fun invoke(): Any = Unit
+    suspend operator fun A.invoke(): Any = Unit
+
     class Scope : CoroutineScope by MainScope() {
         operator fun <P : Presenter<*>> invoke(
             presenter: P?

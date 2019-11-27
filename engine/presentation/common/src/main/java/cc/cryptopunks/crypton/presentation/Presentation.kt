@@ -2,16 +2,15 @@
 
 package cc.cryptopunks.crypton.presentation
 
-import cc.cryptopunks.crypton.actor.Actor
-import cc.cryptopunks.crypton.model.Model
-import cc.cryptopunks.crypton.presenter.Presenter
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.Presenter
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 
 class Presentation<in A, in P : Presenter<A>> {
 
     val actorScope = Actor.Scope()
-    val modelScope = Model.Scope()
+    val presenterScope = Presenter.Scope()
 
     private var actor: A? = null
     private var presenter: P? = null
@@ -22,9 +21,9 @@ class Presentation<in A, in P : Presenter<A>> {
     }
 
     fun setPresenter(presenter: P?): Unit = synchronized(this) {
-        modelScope.coroutineContext.cancelChildren()
+        presenterScope.coroutineContext.cancelChildren()
         actorScope.coroutineContext.cancelChildren()
-        this.presenter = modelScope(presenter)
+        this.presenter = presenterScope(presenter)
         actorScope(actor, presenter)
     }
 
@@ -33,7 +32,7 @@ class Presentation<in A, in P : Presenter<A>> {
     fun clearPresenter() = setPresenter(null)
 
     fun cancel() {
-        modelScope.cancel()
+        presenterScope.cancel()
         actorScope.cancel()
     }
 

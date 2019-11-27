@@ -1,6 +1,5 @@
-package cc.cryptopunks.crypton.actor
+package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.presenter.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

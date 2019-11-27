@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.actor.Actor
+import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.presenter.ChatPresenter

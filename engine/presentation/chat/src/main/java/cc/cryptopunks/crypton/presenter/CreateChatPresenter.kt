@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.presenter
 
-import cc.cryptopunks.crypton.actor.Actor
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.Presenter
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor
 import cc.cryptopunks.crypton.context.Route
