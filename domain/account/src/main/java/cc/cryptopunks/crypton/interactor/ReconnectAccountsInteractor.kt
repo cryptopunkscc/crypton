@@ -26,9 +26,11 @@ class ReconnectAccountsInteractor @Inject constructor(
         }
     }
 
+    val isWorking get() = reconnectIfNeeded.isWorking
+
     override fun invoke() = scope.launch {
-        accountManager.all().forEach {
-            reconnectIfNeeded.send(it)
+        accountManager.all().forEach { manager ->
+            reconnectIfNeeded.send(manager)
         }
     }
 }

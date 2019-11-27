@@ -45,6 +45,7 @@ internal class ReadArchivedMessages(
                     }
                 }
                 .map(Forwarded::toCryptonMessage)
+                .filter { it.text.isNotBlank() }
                 .let { emit(it) }
             pageNext(PAGE_SIZE)
         }

@@ -6,7 +6,7 @@ import org.jivesoftware.smackx.omemo.OmemoMessage
 import org.jivesoftware.smackx.omemo.element.OmemoElement
 import org.jivesoftware.smackx.omemo.element.OmemoElement_VAxolotl
 
-fun <T: Stanza> T.replaceBody(decrypted: OmemoMessage.Received) =
+fun <T: Stanza> T.replaceBody(decrypted: OmemoMessage.Received): T? =
     if (this !is Message || decrypted.body.isNullOrBlank()) null
     else apply {
         removeOmemoBody()

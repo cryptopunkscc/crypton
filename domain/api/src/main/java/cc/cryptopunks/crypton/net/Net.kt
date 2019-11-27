@@ -35,7 +35,7 @@ interface Net :
         data class Disconnected(
             val throwable: Throwable? = null
         ) : Event {
-            val withError get() = throwable != null
+            val hasError get() = throwable != null
         }
     }
 

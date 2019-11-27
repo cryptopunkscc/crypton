@@ -28,6 +28,8 @@ abstract class AbstractJobManager<T> : (T) -> Job {
 
     private val jobs = mutableMapOf<T, Job>()
 
+    val isWorking get() = jobs.isNotEmpty()
+
     private fun executeIfNeeded(arg: T) = jobs.getOrPut(arg) {
         log?.d("execute $arg")
         execute(arg).apply {

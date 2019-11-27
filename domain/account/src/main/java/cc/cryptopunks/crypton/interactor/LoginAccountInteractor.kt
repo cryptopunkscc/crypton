@@ -3,6 +3,8 @@ package cc.cryptopunks.crypton.interactor
 import cc.cryptopunks.crypton.entity.Address
 import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.service.Service
+import cc.cryptopunks.crypton.util.Log
+import cc.cryptopunks.crypton.util.d
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
@@ -16,6 +18,7 @@ class LoginAccountInteractor @Inject constructor(
     }
 
     internal suspend fun suspend(account: Address) {
+        Log.d<LoginAccountInteractor>("login")
         manager.copy(account).run {
             if (!isConnected) connect()
             if (!isAuthenticated) login()
