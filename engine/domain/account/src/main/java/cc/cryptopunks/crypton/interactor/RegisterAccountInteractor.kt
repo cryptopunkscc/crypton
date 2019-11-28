@@ -11,15 +11,15 @@ class RegisterAccountInteractor @Inject constructor(
     manager: AccountManager,
     login: LoginAccountInteractor,
     deleteAccount: DeleteAccountInteractor
-) : (Account) -> Job by { account ->
+) : (Account) -> Job by { (address, password) ->
     scope launch {
-        manager.copy().run(
+        manager.copy(address = address).run(
             onAccountException = deleteAccount
         ) {
-            insert(account)
+            insert(password)
             connect()
             register()
-            login.suspend(account.address)
+            login(this)
         }
     }
 }

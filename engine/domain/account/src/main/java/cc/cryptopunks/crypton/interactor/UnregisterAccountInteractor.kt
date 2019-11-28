@@ -9,9 +9,12 @@ import javax.inject.Inject
 class UnregisterAccountInteractor @Inject constructor(
     manager: AccountManager,
     scope: Service.Scope
-) : (Address) -> Job by { account ->
+) : (Address) -> Job by { address ->
     scope.launch {
-        manager.copy(account)
-            .unregister()
+        manager.copy(address = address).run {
+            unregister()
+            delete()
+            clear()
+        }
     }
 }

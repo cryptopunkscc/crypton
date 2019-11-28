@@ -11,13 +11,13 @@ class AddAccountInteractor @Inject constructor(
     manager: AccountManager,
     login: LoginAccountInteractor,
     deleteAccount: DeleteAccountInteractor
-) : (Account) -> Job by { account ->
+) : (Account) -> Job by { (address, password) ->
     scope.launch {
-        manager.copy().run(
+        manager.copy(address = address).run(
             onAccountException = deleteAccount
         ) {
-            insert(account)
-            login.suspend(account.address)
+            insert(password)
+            login(this)
         }
     }
 }

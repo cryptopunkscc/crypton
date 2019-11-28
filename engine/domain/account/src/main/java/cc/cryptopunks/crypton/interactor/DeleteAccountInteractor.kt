@@ -9,12 +9,13 @@ import javax.inject.Inject
 class DeleteAccountInteractor @Inject constructor(
     manager: AccountManager,
     scope: Service.Scope
-) : (Address) -> Job by { account ->
+) : (Address) -> Job by { address ->
     scope.launch {
-        manager.copy(account).run {
+        manager.copy(address = address).run {
             if (isConnected)
                 disconnect()
             delete()
+            clear()
         }
     }
 }

@@ -2,56 +2,42 @@ package cc.cryptopunks.crypton.manager
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Session
 import javax.inject.Inject
 
-data class AccountManager @Inject constructor(
+data class AccountManager(
+    val address: Address,
     private val accountRepo: Account.Repo,
     private val sessionManager: SessionManager
+
 ) {
+    val session: Session get() = sessionManager[address]
 
-    var account: Address = Address.Empty
-        private set
+    val isInitialized: Boolean get() = address in sessionManager
 
-    val isInitialized get() = account in sessionManager
+    val isConnected: Boolean get() = session.isConnected()
 
-    val session get() = sessionManager[account]
-
-    val isConnected get() = session.isConnected()
-
-    val isAuthenticated get() = session.isAuthenticated()
-
-    fun copy(account: Address): AccountManager = copy().apply {
-        this.account = account
-    }
+    val isAuthenticated: Boolean get() = session.isAuthenticated()
 
     fun connect(): Unit = session.connect()
 
+    fun disconnect(): Unit = session.disconnect()
+
     fun register(): Unit = session.createAccount()
+
+    fun unregister(): Unit = session.removeAccount()
 
     fun login(): Unit = session.login()
 
-    fun initOmemo() = session.initOmemo()
+    fun initOmemo(): Unit = session.initOmemo()
 
-    fun disconnect(): Unit = session.disconnect()
+    fun clear(): Unit = sessionManager.minus(address)
 
-    suspend fun insert(account: Account) {
-        accountRepo.insert(account)
-        this.account = account.address
-    }
+    suspend fun insert(password: CharSequence) = accountRepo.insert(Account(address, password))
 
-    suspend fun unregister() {
-        session.removeAccount()
-        delete()
-    }
+    suspend fun delete(): Unit = accountRepo.delete(address)
 
-    suspend fun delete() {
-        clear()
-        accountRepo.delete(account)
-    }
-
-    private fun clear() {
-        sessionManager.minus(account)
-    }
+    suspend fun all() = accountRepo.addressList().map { copy(address = it) }
 
     inline fun <R> run(
         onAccountException: (Address) -> Any = {},
@@ -59,9 +45,18 @@ data class AccountManager @Inject constructor(
     ): R = try {
         block()
     } catch (throwable: Throwable) {
-        onAccountException(account)
-        throw Account.Exception(account, throwable)
+        onAccountException(address)
+        throw Account.Exception(address, throwable)
     }
 
-    suspend fun all() = accountRepo.addressList().map { copy(it) }
+
+    @Inject
+    constructor(
+        accountRepo: Account.Repo,
+        sessionManager: SessionManager
+    ) : this(
+        accountRepo = accountRepo,
+        sessionManager = sessionManager,
+        address = Address.Empty
+    )
 }

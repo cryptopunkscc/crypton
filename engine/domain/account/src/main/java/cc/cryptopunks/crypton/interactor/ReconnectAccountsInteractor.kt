@@ -30,7 +30,7 @@ class ReconnectAccountsInteractor @Inject constructor(
     val isWorking get() = reconnectIfNeeded.isWorking
 
     override fun invoke(address: Address): Job = scope.launch {
-        reconnectIfNeeded.send(accountManager.copy(address))
+        reconnectIfNeeded.send(accountManager.copy(address = address))
     }
 
     override fun invoke() = scope.launch {

@@ -13,13 +13,13 @@ class LoginAccountInteractor @Inject constructor(
     private val manager: AccountManager
 ) : (Address) -> Job {
 
-    override fun invoke(account: Address): Job = scope.launch {
-        suspend(account)
+    override fun invoke(address: Address): Job = scope.launch {
+        invoke(manager.copy(address = address))
     }
 
-    internal suspend fun suspend(account: Address) {
+    internal operator fun invoke(manager: AccountManager) {
         Log.d<LoginAccountInteractor>("login")
-        manager.copy(account).run {
+        manager.run {
             if (!isConnected) connect()
             if (!isAuthenticated) login()
             initOmemo()
