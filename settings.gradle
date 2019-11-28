@@ -29,7 +29,7 @@ include ':engine:api',
         ':net:smack',
 
         ':android:debug',
-        ':android:data',
+        ':android:room',
         ':android:network',
         ':android:log',
         ':android:error',

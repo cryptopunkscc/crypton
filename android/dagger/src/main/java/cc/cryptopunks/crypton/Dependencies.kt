@@ -4,7 +4,7 @@ import android.app.Application
 import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.core.AndroidCore
 import cc.cryptopunks.crypton.core.DaggerAndroidCore
-import cc.cryptopunks.crypton.module.RepoModule
+import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 
 class Dependencies(
@@ -14,7 +14,7 @@ class Dependencies(
         MainActivity::class.java
 
     private val repo by lazy {
-        RepoModule(application)
+        RoomRepo(application)
     }
 
     private val createSmackConnection by lazy {

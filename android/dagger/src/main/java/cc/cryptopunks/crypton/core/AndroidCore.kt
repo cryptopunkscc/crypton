@@ -7,7 +7,7 @@ import android.net.ConnectivityManager
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.FeatureManager
-import cc.cryptopunks.crypton.ServiceCore
+import cc.cryptopunks.crypton.context.AndroidService
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
@@ -37,8 +37,8 @@ import javax.inject.Singleton
     ], modules = [
         AndroidCore.Module::class,
         AndroidCore.Bindings::class,
-        CreateAndroidFeatureCore.Bindings::class,
-        AndroidServiceCoreFactory.Binding::class
+        AndroidFeatureCoreFactory.Bindings::class,
+        AndroidServiceCoreFactory.Bindings::class
     ]
 )
 interface AndroidCore :
@@ -47,7 +47,7 @@ interface AndroidCore :
     SessionManager.Core,
     PresentationManager.Core,
     PresenceManager.Core,
-    ServiceCore.Factory.Core,
+    AndroidService.Core.Factory.Core,
     AppServices {
 
     val application: Application

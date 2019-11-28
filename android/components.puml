@@ -4,7 +4,7 @@
 
 [:android:app] --> [:engine:domain:app]
 [:android:app] --> [:net:smack]
-[:android:app] --> [:android:data]
+[:android:app] --> [:android:room]
 [:android:app] --> [:android:dashboard]
 [:android:app] --> [:android:chat]
 [:android:app] --> [:android:account]
@@ -27,7 +27,7 @@
 [:android:core] --> [:engine:domain:session]
 [:android:core] --> [:engine:domain:navigation]
 
-[:android:data] --> [:engine:api]
+[:android:room] --> [:engine:api]
 
 
 

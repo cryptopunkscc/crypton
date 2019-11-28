@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.repo.ChatRepo
 import cc.cryptopunks.crypton.repo.MessageRepo
 import cc.cryptopunks.crypton.repo.UserRepo
 
-class RepoModule(
+class RoomRepo(
     context: Context
 ) : Repo {
 

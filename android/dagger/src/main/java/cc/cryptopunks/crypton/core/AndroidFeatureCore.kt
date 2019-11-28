@@ -22,8 +22,8 @@ import javax.inject.Inject
         AndroidCore::class
     ],
     modules = [
-        CreateAndroidSessionCore.Module::class,
-        AndroidFeatureCore.Bindings::class
+        AndroidFeatureCore.Bindings::class,
+        AndroidSessionCoreFactory.Module::class
     ]
 )
 interface AndroidFeatureCore :
@@ -43,19 +43,23 @@ interface AndroidFeatureCore :
     @Module
     interface Bindings {
         @Binds
-        fun AndroidFeatureCore.featureCore() : FeatureCore
+        fun AndroidFeatureCore.featureCore(): FeatureCore
+
         @Binds
-        fun Navigator.navigate() : Route.Api.Navigate
+        fun Navigator.navigate(): Route.Api.Navigate
+
         @Binds
-        fun Navigator.navigationOutput() : Route.Api.Output
+        fun Navigator.navigationOutput(): Route.Api.Output
+
         @Binds
-        fun OptionItemBroadcast.selectOptionItem() : OptionItem.Select
+        fun OptionItemBroadcast.selectOptionItem(): OptionItem.Select
+
         @Binds
-        fun OptionItemBroadcast.optionItemOutput() : OptionItem.Output
+        fun OptionItemBroadcast.optionItemOutput(): OptionItem.Output
     }
 }
 
-class CreateAndroidFeatureCore @Inject constructor(
+class AndroidFeatureCoreFactory @Inject constructor(
     private val androidCore: AndroidCore
 ) : FeatureCore.Create {
 
@@ -67,6 +71,6 @@ class CreateAndroidFeatureCore @Inject constructor(
     @dagger.Module
     interface Bindings {
         @Binds
-        fun CreateAndroidFeatureCore.createFeature() : FeatureCore.Create
+        fun AndroidFeatureCoreFactory.createFeatureCore(): FeatureCore.Create
     }
 }

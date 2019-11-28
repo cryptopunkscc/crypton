@@ -24,7 +24,7 @@ dependencies {
     api project(':engine:internal')
     api project(':engine:service:app')
     api project(':net:smack')
-    api project(':android:data')
+    api project(':android:room')
     api project(':android:log')
     api project(':android:clipboard')
     api project(':android:network')

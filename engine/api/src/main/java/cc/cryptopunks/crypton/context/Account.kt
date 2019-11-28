@@ -13,7 +13,6 @@ data class Account(
         val account: Address,
         override val cause: Throwable
     ) : kotlin.Exception(
-
         account.toString(),
         cause
     )

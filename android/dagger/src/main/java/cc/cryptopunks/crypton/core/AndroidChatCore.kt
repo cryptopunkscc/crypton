@@ -27,7 +27,7 @@ interface AndroidChatCore:
     )
 }
 
-class CreateChatCore @Inject constructor(
+class AndroidChatCoreFactory @Inject constructor(
     androidSessionCore: AndroidSessionCore
 ) : ChatCore.Factory, (Chat) -> ChatCore by { chat ->
     DaggerAndroidChatCore.builder()
@@ -39,6 +39,6 @@ class CreateChatCore @Inject constructor(
     @dagger.Module
     interface Binding {
         @Binds
-        fun CreateChatCore.createChatCore(): ChatCore.Factory
+        fun AndroidChatCoreFactory.createChatCore(): ChatCore.Factory
     }
 }

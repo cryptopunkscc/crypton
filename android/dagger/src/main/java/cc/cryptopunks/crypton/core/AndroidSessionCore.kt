@@ -16,7 +16,7 @@ import dagger.Provides
         Session::class
     ],
     modules = [
-        CreateChatCore.Binding::class
+        AndroidChatCoreFactory.Binding::class
     ]
 )
 interface AndroidSessionCore :
@@ -26,7 +26,7 @@ interface AndroidSessionCore :
     CreateChatPresenter.Core
 
 
-object CreateAndroidSessionCore {
+object AndroidSessionCoreFactory {
 
     @dagger.Module
     class Module {

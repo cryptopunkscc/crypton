@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.service.appServices
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.smack.initSmack

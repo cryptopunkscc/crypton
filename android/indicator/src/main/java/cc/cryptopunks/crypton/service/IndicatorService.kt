@@ -3,11 +3,11 @@ package cc.cryptopunks.crypton.service
 import android.app.IntentService
 import android.app.Service
 import android.content.Intent
-import cc.cryptopunks.crypton.Engine
-import cc.cryptopunks.crypton.ServiceCore
+import cc.cryptopunks.crypton.context.Engine
+import cc.cryptopunks.crypton.context.AndroidService
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel
-import cc.cryptopunks.crypton.notification.CreateNotificationChannel.Importance.Min
+import cc.cryptopunks.crypton.notification.CreateNotificationChannel.*
 import cc.cryptopunks.crypton.notification.ShowIndicatorNotification
 import cc.cryptopunks.crypton.util.ext.resolve
 
@@ -21,7 +21,7 @@ class IndicatorService : IntentService(Indicator.serviceName) {
     private val core
         get() = this
             .application.resolve<Engine>()
-            .core.resolve<ServiceCore.Factory.Core>()
+            .core.resolve<AndroidService.Core.Factory.Core>()
             .createServiceCore(this).resolve<Core>()
 
     override fun onCreate() {
@@ -29,7 +29,7 @@ class IndicatorService : IntentService(Indicator.serviceName) {
         core.run {
             createNotificationChannel(
                 id = Indicator.Notification.channelId,
-                importance = Min
+                importance = Importance.Min
             )
             showIndicatorNotification()
         }
