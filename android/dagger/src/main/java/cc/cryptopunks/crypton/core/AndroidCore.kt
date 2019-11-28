@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.context.AndroidService
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
+import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.manager.SessionManager
 import cc.cryptopunks.crypton.notification.ShowMessageNotification
@@ -55,6 +56,8 @@ interface AndroidCore :
 
     val notificationManager: NotificationManager
     val connectivityManager: ConnectivityManager
+
+    val accountManager: AccountManager
 
     val currentSession: CurrentSessionSelector
     val reconnectAccounts: ReconnectAccountsInteractor

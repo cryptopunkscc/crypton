@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.activity.BaseActivity
+import cc.cryptopunks.crypton.util.typedLog
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : LoggerFragment() {
+
+    private val log = typedLog()
 
     open val layoutRes @LayoutRes get() = 0
 
@@ -31,6 +33,7 @@ abstract class BaseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = layoutRes.takeIf { it > 0 }?.let {
+        log.d("onCreateView")
         inflater.inflate(it, container, false)
     }
 
@@ -40,7 +43,6 @@ abstract class BaseFragment : Fragment() {
             baseActivity?.supportActionBar?.setTitle(id)
         }
     }
-
     fun restart() {
         fragmentManager!!.beginTransaction()
             .detach(this)

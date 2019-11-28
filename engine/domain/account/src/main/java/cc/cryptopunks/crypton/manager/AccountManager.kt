@@ -4,7 +4,9 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Session
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 data class AccountManager(
     val address: Address,
     private val accountRepo: Account.Repo,
