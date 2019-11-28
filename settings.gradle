@@ -2,7 +2,6 @@
 //        'auto-di:processor'
 
 include ':engine:api',
-        ':engine:core',
         ':engine:internal',
 
         ':engine:util:log',
