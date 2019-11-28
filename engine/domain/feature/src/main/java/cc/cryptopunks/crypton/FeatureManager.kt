@@ -1,12 +1,10 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.annotation.ApplicationScope
+import cc.cryptopunks.crypton.core.FeatureCore
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Inject
 
-@ApplicationScope
-class FeatureManager @Inject constructor(
+class FeatureManager(
     private val createFeatureCore: FeatureCore.Create
 ) {
 
@@ -28,6 +26,7 @@ class FeatureManager @Inject constructor(
     }
 
     interface Core {
+        val createFeatureCore: FeatureCore.Create
         val featureManager: FeatureManager
     }
 }

@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.core
 
-import cc.cryptopunks.crypton.ChatCore
 import cc.cryptopunks.crypton.annotation.ChatScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.presenter.ChatPresenter

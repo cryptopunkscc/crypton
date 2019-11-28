@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.core
 
 import android.app.Service
 import cc.cryptopunks.crypton.ServiceCore
-import cc.cryptopunks.crypton.annotation.ApplicationScope
 import cc.cryptopunks.crypton.annotation.FeatureScope
 import cc.cryptopunks.crypton.service.IndicatorService
 import dagger.Binds
@@ -10,6 +9,7 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @FeatureScope
 @Component(
@@ -27,7 +27,7 @@ interface AndroidServiceCore :
     )
 }
 
-@ApplicationScope
+@Singleton
 class AndroidServiceCoreFactory @Inject constructor(
     androidCore: AndroidCore
 ) : ServiceCore.Factory, (Service) -> ServiceCore by { service ->

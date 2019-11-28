@@ -6,6 +6,8 @@ import android.content.ClipboardManager
 import android.net.ConnectivityManager
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.core.content.getSystemService
+import cc.cryptopunks.crypton.FeatureManager
+import cc.cryptopunks.crypton.ServiceCore
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
@@ -14,7 +16,11 @@ import cc.cryptopunks.crypton.manager.SessionManager
 import cc.cryptopunks.crypton.notification.ShowMessageNotification
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
-import cc.cryptopunks.crypton.sys.*
+import cc.cryptopunks.crypton.service.AppServices
+import cc.cryptopunks.crypton.sys.GetNetworkStatus
+import cc.cryptopunks.crypton.sys.SetToClipboard
+import cc.cryptopunks.crypton.sys.StartIndicatorService
+import cc.cryptopunks.crypton.sys.StopIndicatorService
 import cc.cryptopunks.crypton.util.BroadcastError
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
@@ -30,14 +36,19 @@ import javax.inject.Singleton
         Repo::class
     ], modules = [
         AndroidCore.Module::class,
-        AndroidCore.Bindings::class
+        AndroidCore.Bindings::class,
+        CreateAndroidFeatureCore.Bindings::class,
+        AndroidServiceCoreFactory.Binding::class
     ]
 )
 interface AndroidCore :
     Api.Core,
+    FeatureManager.Core,
     SessionManager.Core,
     PresentationManager.Core,
-    PresenceManager.Core {
+    PresenceManager.Core,
+    ServiceCore.Factory.Core,
+    AppServices {
 
     val application: Application
     val mainActivityClass: Class<*>
@@ -75,6 +86,10 @@ interface AndroidCore :
 
         @Provides
         fun Application.clipboardManager(): ClipboardManager = getSystemService()!!
+
+        @Provides
+        @Singleton
+        fun featureManager(create: FeatureCore.Create) = FeatureManager(create)
     }
 
     @dagger.Module

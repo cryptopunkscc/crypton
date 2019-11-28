@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.core
 
-import cc.cryptopunks.crypton.FeatureCore
 import cc.cryptopunks.crypton.annotation.FeatureScope
 import cc.cryptopunks.crypton.context.OptionItem
 import cc.cryptopunks.crypton.context.Route

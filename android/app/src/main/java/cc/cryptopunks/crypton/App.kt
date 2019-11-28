@@ -14,7 +14,7 @@ class App :
 
     private val dependencies = Dependencies(this)
 
-    override val core get() = dependencies.applicationCore
+    override val core get() = dependencies.androidCore
 
     override fun onCreate() {
         super.onCreate()

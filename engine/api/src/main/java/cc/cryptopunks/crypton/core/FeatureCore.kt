@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Feature

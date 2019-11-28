@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.annotation.ApplicationScope
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.selector.HasAccountsSelector
@@ -9,8 +8,9 @@ import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ApplicationScope
+@Singleton
 class ToggleIndicatorService @Inject constructor(
     private val scope: Service.Scope,
     private val hasAccounts: HasAccountsSelector,

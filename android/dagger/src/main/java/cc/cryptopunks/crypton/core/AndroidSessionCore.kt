@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.core
 
-import cc.cryptopunks.crypton.SessionCore
 import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Session

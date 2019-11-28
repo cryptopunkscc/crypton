@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.annotation.ApplicationScope
 import cc.cryptopunks.crypton.context.Net.Event.Disconnected
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Network.Status.*
@@ -16,8 +15,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ApplicationScope
+@Singleton
 class ReconnectAccountsService @Inject constructor(
     private val scope: Service.Scope,
     private val networkStatusFlow: Network.Sys.GetStatus,
