@@ -7,6 +7,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,17 +18,17 @@ class Navigator @Inject constructor() :
 
     private val scope = MainScope()
 
-    private val channel =
-        ConflatedBroadcastChannel<Route>()
+    private val channel = ConflatedBroadcastChannel<Route?>()
 
     override fun invoke(route: Route) {
         scope.launch {
             channel.send(route)
+            channel.send(null)
         }
     }
 
     @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<Route>) {
-        channel.asFlow().collect(collector)
+        channel.asFlow().filterNotNull().collect(collector)
     }
 }
