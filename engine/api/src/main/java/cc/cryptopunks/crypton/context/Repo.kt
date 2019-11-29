@@ -5,4 +5,5 @@ interface Repo {
     val chatRepo: Chat.Repo
     val messageRepo: Message.Repo
     val userRepo: User.Repo
+    val clipboardRepo: Clip.Board.Repo
 }

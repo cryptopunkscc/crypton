@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.presenter
 
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Clipboard
+import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presenter
 import kotlinx.coroutines.coroutineScope
@@ -14,7 +14,7 @@ import javax.inject.Inject
 data class MessagePresenter(
     private val address: Address,
     private val message: Message,
-    private val copyToClipboard: Clipboard.Sys.SetClip
+    private val copyToClipboard: Clip.Board.Sys.SetClip
 ) : Presenter<MessagePresenter.View> {
 
     val id get() = message.id
@@ -47,7 +47,7 @@ data class MessagePresenter(
 
     class Factory @Inject constructor(
         address: Address,
-        copyToClipboard: Clipboard.Sys.SetClip
+        copyToClipboard: Clip.Board.Sys.SetClip
     ) : (Message) -> MessagePresenter by { message ->
         MessagePresenter(
             address = address,

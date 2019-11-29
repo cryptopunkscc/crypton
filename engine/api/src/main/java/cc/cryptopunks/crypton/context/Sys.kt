@@ -3,5 +3,5 @@ package cc.cryptopunks.crypton.context
 interface Sys :
     Indicator.Sys,
     Message.Sys,
-    Clipboard.Sys,
+    Clip.Board.Sys,
     Network.Sys

@@ -9,6 +9,7 @@ import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.FeatureManager
 import cc.cryptopunks.crypton.context.AndroidService
 import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.intent.IntentProcessor
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.manager.AccountManager
@@ -48,6 +49,7 @@ interface AndroidCore :
     SessionManager.Core,
     PresentationManager.Core,
     PresenceManager.Core,
+    IntentProcessor.Core,
     AndroidService.Core.Factory.Core,
     AppServices {
 
@@ -101,7 +103,7 @@ interface AndroidCore :
         fun GetNetworkStatus.getStatus(): Network.Sys.GetStatus
 
         @Binds
-        fun SetToClipboard.setClip(): Clipboard.Sys.SetClip
+        fun SetToClipboard.setClip(): Clip.Board.Sys.SetClip
 
         @Binds
         fun ShowMessageNotification.bind(): Message.Sys.ShowNotification

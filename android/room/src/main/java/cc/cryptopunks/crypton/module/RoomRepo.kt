@@ -4,10 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.data.Database
-import cc.cryptopunks.crypton.repo.AccountRepo
-import cc.cryptopunks.crypton.repo.ChatRepo
-import cc.cryptopunks.crypton.repo.MessageRepo
-import cc.cryptopunks.crypton.repo.UserRepo
+import cc.cryptopunks.crypton.repo.*
 
 class RoomRepo(
     context: Context
@@ -36,4 +33,6 @@ class RoomRepo(
     override val userRepo: User.Repo = UserRepo(
         dao = database.userDao
     )
+
+    override val clipboardRepo: Clip.Board.Repo = ClipboardRepo()
 }

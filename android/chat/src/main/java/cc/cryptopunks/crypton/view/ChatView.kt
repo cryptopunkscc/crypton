@@ -40,6 +40,11 @@ class ChatView(
         }
     }
 
+    override val setInputMessage: (CharSequence?) -> Unit
+        get() = { text ->
+            messageInputView.input.setText(text)
+        }
+
     override val setMessages: suspend (PagedList<MessagePresenter>) -> Unit
         get() = { list ->
             isBottomReached

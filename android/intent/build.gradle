@@ -17,24 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions {
-        exclude 'META-INF/core_debug.kotlin_module'
-    }
-    androidExtensions {
-        experimental = true
-    }
-    useLibrary 'android.test.runner'
-    useLibrary 'android.test.base'
-    useLibrary 'android.test.mock'
 }
 dependencies {
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation project(':android:intent')
-    implementation project(':android:account')
-    implementation project(':android:dashboard')
-    implementation project(':android:chat')
-}
-configurations {
-    all*.exclude group: 'xpp3', module: 'xpp3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation project(':engine:api')
+    implementation project(':engine:util:log')
 }
