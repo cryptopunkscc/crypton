@@ -1,10 +1,9 @@
 package cc.cryptopunks.crypton.presenter
 
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Presenter
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor
-import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.util.cache
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -17,7 +16,7 @@ import javax.inject.Inject
 class CreateChatPresenter @Inject constructor(
     private val createChat: CreateChatInteractor,
     private val navigate: Route.Api.Navigate
-) : Presenter<CreateChatPresenter.View> {
+) : Presenter<CreateChatPresenter.Actor> {
 
     private val usersCache = emptyList<User>().cache()
 
@@ -49,7 +48,7 @@ class CreateChatPresenter @Inject constructor(
         }.exceptionOrNull()
     }
 
-    override suspend fun View.invoke() = supervisorScope {
+    override suspend fun Actor.invoke() = supervisorScope {
         launch { init() }
         launch { addUserClick.onEach(clearInput).collect(add) }
         launch { removeUserClick.collect(remove) }
@@ -57,7 +56,7 @@ class CreateChatPresenter @Inject constructor(
         launch { createChatClick.map(create).collect(setError) }
     }
 
-    interface View : Actor {
+    interface Actor {
         suspend fun init()
         val addUserClick: Flow<User>
         val removeUserClick: Flow<User>

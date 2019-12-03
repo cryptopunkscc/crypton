@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.presenter
 
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
@@ -20,7 +19,7 @@ class RosterItemPresenter @Inject constructor(
     private val navigate: Route.Api.Navigate,
     private val presenceOf: PresenceFlowSelector,
     private val latestMessageFlow: LatestMessageFlowSelector
-) : Presenter<RosterItemPresenter.View> {
+) : Presenter<RosterItemPresenter.Actor> {
 
     val id get() = chat.address.id
 
@@ -35,7 +34,7 @@ class RosterItemPresenter @Inject constructor(
         }.let(navigate)
     }
 
-    override suspend fun View.invoke(): Job = coroutineScope {
+    override suspend fun Actor.invoke(): Job = coroutineScope {
         launch {
             setTitle(title)
             setLetter(letter)
@@ -48,7 +47,7 @@ class RosterItemPresenter @Inject constructor(
         }
     }
 
-    interface View : Actor {
+    interface Actor {
         fun setTitle(title: String)
         fun setLetter(letter: Char)
         val setMessage: suspend (message: Message) -> Unit

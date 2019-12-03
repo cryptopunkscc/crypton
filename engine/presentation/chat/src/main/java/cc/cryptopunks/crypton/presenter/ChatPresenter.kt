@@ -20,14 +20,14 @@ class ChatPresenter @Inject constructor(
     private val messageFlow: MessagePagedListSelector,
     private val clipboardRepo: Clip.Board.Repo
 ) :
-    Presenter<ChatPresenter.View>,
+    Presenter<ChatPresenter.Actor>,
     Message.Consumer {
 
     private val log = typedLog()
 
     private val send: suspend (String) -> Unit = { sendMessage(it) }
 
-    override suspend fun View.invoke() = coroutineScope {
+    override suspend fun Actor.invoke() = coroutineScope {
         launch { setInputMessage(clipboardRepo.pop()?.data) }
         launch { sendMessageFlow.filter { it.isNotBlank() }.collect(send) }
         launch {
@@ -43,7 +43,7 @@ class ChatPresenter @Inject constructor(
     override fun canConsume(message: Message): Boolean =
         message.chatAddress == chat.address
 
-    interface View : Actor {
+    interface Actor {
         val setInputMessage: (CharSequence?) -> Unit
         val sendMessageFlow: Flow<String>
         val setMessages: suspend (PagedList<MessagePresenter>) -> Unit

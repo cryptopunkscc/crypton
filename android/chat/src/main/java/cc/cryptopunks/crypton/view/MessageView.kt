@@ -28,7 +28,7 @@ class MessageView(
             R.style.Theme_Crypton_Colored
         )
     ),
-    MessagePresenter.View {
+    MessagePresenter.Actor {
 
     private val padding by lazy { resources.getDimensionPixelSize(R.dimen.message_padding) }
 

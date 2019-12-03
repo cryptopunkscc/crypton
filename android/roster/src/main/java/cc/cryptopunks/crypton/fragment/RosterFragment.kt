@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.presenter.RosterPresenter
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.RosterView
 
-class RosterFragment : PresenterFragment<RosterPresenter.View, RosterPresenter>() {
+class RosterFragment : PresenterFragment<RosterPresenter.Actor, RosterPresenter>() {
 
     override fun onCreatePresenter() = featureCore
         .resolve<RosterPresenter.Core>()

@@ -13,8 +13,8 @@ import cc.cryptopunks.crypton.util.ext.resolve
 import kotlinx.coroutines.flow.Flow
 
 class DashboardFragment :
-    DashboardPresenter.View,
-    PresenterFragment<DashboardPresenter.View, DashboardPresenter>() {
+    DashboardPresenter.Actor,
+    PresenterFragment<DashboardPresenter.Actor, DashboardPresenter>() {
 
     override val layoutRes: Int get() = R.layout.dashboard
 

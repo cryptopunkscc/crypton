@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.presenter
 
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Message
@@ -15,7 +14,7 @@ data class MessagePresenter(
     val message: Message,
     private val address: Address,
     private val copyToClipboard: Clip.Board.Sys.SetClip
-) : Presenter<MessagePresenter.View> {
+) : Presenter<MessagePresenter.Actor> {
 
     val id get() = message.id
 
@@ -27,7 +26,7 @@ data class MessagePresenter(
         }
     }
 
-    override suspend fun View.invoke(): Unit = message.run {
+    override suspend fun Actor.invoke(): Unit = message.run {
         setMessage(text)
         setDate(timestamp)
         setAuthor(from.address.local)
@@ -37,7 +36,7 @@ data class MessagePresenter(
         }
     }
 
-    interface View : Actor {
+    interface Actor {
         fun setMessage(text: String)
         fun setDate(timestamp: Long)
         fun setAuthor(name: String)

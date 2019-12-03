@@ -17,7 +17,7 @@ import kotlinx.coroutines.cancelChildren
 class RosterView(
     context: Context
 ) : FrameLayout(context),
-    RosterPresenter.View {
+    RosterPresenter.Actor {
 
     private val scope = Actor.Scope()
 

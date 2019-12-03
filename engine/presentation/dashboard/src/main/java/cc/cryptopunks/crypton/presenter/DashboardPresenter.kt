@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.presenter
 
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Presenter
 import cc.cryptopunks.crypton.context.Route
 import kotlinx.coroutines.coroutineScope
@@ -11,14 +10,14 @@ import javax.inject.Inject
 
 class DashboardPresenter @Inject constructor(
     private val navigate: Route.Api.Navigate
-) : Presenter<DashboardPresenter.View> {
+) : Presenter<DashboardPresenter.Actor> {
 
-    override suspend fun View.invoke() = coroutineScope {
+    override suspend fun Actor.invoke() = coroutineScope {
         launch { accountManagementClick.collect { navigate(Route.AccountManagement) } }
         launch { createChatClick.collect { navigate(Route.CreateChat) } }
     }
 
-    interface View : Actor {
+    interface Actor {
         val createChatClick: Flow<Any>
         val accountManagementClick: Flow<Any>
     }

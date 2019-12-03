@@ -5,7 +5,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 interface Actor {
-    class Scope : Actor, CoroutineScope by MainScope() {
+    class Scope : CoroutineScope by MainScope() {
         operator fun <A, P : Presenter<A>> invoke(actor: A?, presenter: P?) =
             actor?.also { view -> presenter?.run { launch { view() } } }
     }

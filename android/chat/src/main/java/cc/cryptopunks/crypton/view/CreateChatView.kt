@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.map
 
 class CreateChatView(context: Context) :
     FrameLayout(context),
-    CreateChatPresenter.View {
+    CreateChatPresenter.Actor {
 
     private val userListAdapter = ChatUserListAdapter()
 

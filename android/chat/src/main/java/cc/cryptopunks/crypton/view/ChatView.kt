@@ -22,7 +22,7 @@ class ChatView(
     scope: Actor.Scope
 ) :
     FrameLayout(context),
-    ChatPresenter.View {
+    ChatPresenter.Actor {
 
     private val messageAdapter: MessageAdapter = MessageAdapter(scope)
     private val scrollThreshold: Int =

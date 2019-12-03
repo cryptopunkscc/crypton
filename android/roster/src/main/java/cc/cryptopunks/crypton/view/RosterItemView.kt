@@ -21,7 +21,7 @@ class RosterItemView(
     private val dateFormat: DateFormat
 ) :
     FrameLayout(context),
-    RosterItemPresenter.View {
+    RosterItemPresenter.Actor {
 
     private val statusColors = context.presenceStatusColors()
 

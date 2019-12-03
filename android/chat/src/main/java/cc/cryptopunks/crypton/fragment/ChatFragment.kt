@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class ChatFragment : PresenterFragment<ChatPresenter.View, ChatPresenter>() {
+class ChatFragment : PresenterFragment<ChatPresenter.Actor, ChatPresenter>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

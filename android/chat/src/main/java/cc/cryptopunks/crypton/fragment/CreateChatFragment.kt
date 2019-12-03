@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.CreateChatView
 
 class CreateChatFragment : PresenterFragment<
-        CreateChatPresenter.View,
+        CreateChatPresenter.Actor,
         CreateChatPresenter>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
