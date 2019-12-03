@@ -9,6 +9,11 @@ object Network {
         object Changed : Status()
         object Lost : Status()
         object Unavailable: Status()
+
+        val isConnected get() = listOf(
+            Available,
+            Changed
+        ).any { this == it }
     }
 
     interface Sys {

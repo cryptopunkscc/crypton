@@ -1,31 +1,86 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Message.Net.Send
-import org.jivesoftware.smack.packet.Message
+import cc.cryptopunks.crypton.smack.util.toCryptonMessage
+import cc.cryptopunks.crypton.util.Broadcast
+import cc.cryptopunks.crypton.util.typedLog
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import org.jivesoftware.smack.packet.Message as SmackMessage
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smackx.omemo.OmemoManager
 import org.jxmpp.jid.impl.JidCreate
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 internal class SendMessage(
-    connection: XMPPTCPConnection,
-    omemoManager: OmemoManager,
-    roster: Roster,
-    encryptedMessageCache: EncryptedMessageCache
-) : Send, (Address, String) -> Unit by { to, text ->
+    address: Address,
+    private val connection: XMPPTCPConnection,
+    private val omemoManager: OmemoManager,
+    private val roster: Roster,
+    private val outgoingMessageCache: OutgoingMessageCache
+) : Send,
+    Flow<Message.Event>,
+    Executor by Executors.newSingleThreadExecutor() {
 
-    val jid = JidCreate.entityBareFrom(to)
+    private var lastId = 0
 
-    if (!roster.iAmSubscribedTo(jid)) {
-        roster.createEntry(jid, to.local, emptyArray())
+    private val log = typedLog()
+
+    private val fromJid = JidCreate.entityBareFrom(address)
+
+    private val broadcast = Broadcast<Message.Event>()
+
+    override suspend fun invoke(to: Address, text: String) = coroutineScope {
+        val id = lastId++
+
+        log.d("$id start in scope: $this")
+        val toJid = JidCreate.entityBareFrom(to)
+
+        log.d("$id checking subscription")
+        if (!roster.iAmSubscribedTo(toJid) && fromJid != toJid) execute {
+            roster.createEntry(toJid, to.local, emptyArray())
+            log.d("$id subscribed")
+        }
+
+        log.d("$id encrypting")
+        val smackMessage = omemoManager
+            .encrypt(toJid, text)
+            .asMessage(toJid)
+            .apply {
+                from = fromJid
+                type = SmackMessage.Type.chat
+                outgoingMessageCache[stanzaId] = text
+            }
+        val message = smackMessage
+            .toCryptonMessage()
+            .copy(text = text)
+
+        log.d("$id broadcasting")
+        message.broadcast(Message.Event::Sending)
+        log.d("$id sending")
+        if (connection.isAuthenticated) execute {
+            log.d("thread start")
+            connection.sendStanza(smackMessage)
+            log.d("thread stop")
+        }
+        log.d("$id stop")
+        Unit
     }
 
-    val message = omemoManager
-        .encrypt(jid, text)
-        .asMessage(jid)
-        .apply { type = Message.Type.chat }
-    encryptedMessageCache[message.stanzaId] = text
-//    val message = Message(jid, text)
-    connection.sendStanza(message)
+    private suspend fun Message.broadcast(event: Message.() -> Message.Event) {
+        broadcast.run {
+            send(event())
+            flush()
+        }
+    }
+
+    @InternalCoroutinesApi
+    override suspend fun collect(collector: FlowCollector<Message.Event>) {
+        broadcast.collect(collector)
+    }
 }

@@ -8,9 +8,4 @@ class IOExecutor(executor: Executor) : Executor by executor
 interface Executors {
     val mainExecutor: MainExecutor
     val ioExecutor: IOExecutor
-
-    class Module(
-        override val mainExecutor: MainExecutor,
-        override val ioExecutor: IOExecutor
-    ) : Executors
 }

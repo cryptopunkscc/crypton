@@ -25,13 +25,15 @@ data class AccountManager(
 
     fun disconnect(): Unit = session.disconnect()
 
+    fun interrupt(): Unit = session.interrupt()
+
     fun register(): Unit = session.createAccount()
 
     fun unregister(): Unit = session.removeAccount()
 
     fun login(): Unit = session.login()
 
-    fun initOmemo(): Unit = session.initOmemo()
+    fun initOmemo(): Boolean = session.initOmemo()
 
     fun clear(): Unit = sessionManager.minus(address)
 

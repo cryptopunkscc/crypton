@@ -3,9 +3,8 @@ package cc.cryptopunks.crypton.smack.net.client
 import cc.cryptopunks.crypton.context.Net
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 
-class DisconnectClient(
+class InterruptNet(
     connection: XMPPTCPConnection
-) : Net.Disconnect, () -> Unit by {
-    if (connection.isConnected)
-        connection.instantShutdown()
+) : Net.Interrupt, () -> Unit by {
+    connection.instantShutdown()
 }

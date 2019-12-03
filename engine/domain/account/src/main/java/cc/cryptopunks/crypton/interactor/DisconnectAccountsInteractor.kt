@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.util.JobManager
 import kotlinx.coroutines.Job
@@ -12,7 +13,7 @@ class DisconnectAccountsInteractor @Inject constructor(
     disconnectAccount: DisconnectAccountInteractor,
     private val scope: Service.Scope,
     private val repo: Account.Repo
-) : () -> Job {
+) : () -> Job, (Address) -> Job {
 
     private val disconnectIfNeeded = JobManager(
         scope = scope,
@@ -20,8 +21,12 @@ class DisconnectAccountsInteractor @Inject constructor(
     )
 
     override fun invoke(): Job = scope.launch {
-        repo.addressList().forEach { account ->
-            disconnectIfNeeded.send(account)
+        repo.addressList().forEach { address ->
+            disconnectIfNeeded.send(address)
         }
+    }
+
+    override fun invoke(address: Address): Job = scope.launch {
+        disconnectIfNeeded.send(address)
     }
 }

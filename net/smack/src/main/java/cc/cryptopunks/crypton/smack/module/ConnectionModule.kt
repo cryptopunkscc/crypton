@@ -5,9 +5,10 @@ import cc.cryptopunks.crypton.smack.core.SmackCore
 import cc.cryptopunks.crypton.smack.net.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.account.*
 import cc.cryptopunks.crypton.smack.net.chat.*
-import cc.cryptopunks.crypton.smack.net.client.ConnectClient
-import cc.cryptopunks.crypton.smack.net.client.DisconnectClient
+import cc.cryptopunks.crypton.smack.net.client.ConnectNet
+import cc.cryptopunks.crypton.smack.net.client.DisconnectNet
 import cc.cryptopunks.crypton.smack.net.client.InitOmemo
+import cc.cryptopunks.crypton.smack.net.client.InterruptNet
 import cc.cryptopunks.crypton.smack.net.presence.GetCachedPresences
 import cc.cryptopunks.crypton.smack.net.presence.SendPresence
 import cc.cryptopunks.crypton.smack.net.roster.RosterEventBroadcast
@@ -24,7 +25,7 @@ internal class ConnectionModule(
 ) : SmackCore by smack,
     Connection {
 
-    private val encryptedMessageCache by lazy { EncryptedMessageCache() }
+    private val outgoingMessageCache by lazy { OutgoingMessageCache() }
 
     override val netEvents: Net.Event.Output by lazy {
         NetEventBroadcast(
@@ -35,11 +36,15 @@ internal class ConnectionModule(
     }
 
     override val connect: Net.Connect by lazy {
-        ConnectClient(connection = connection)
+        ConnectNet(connection = connection)
     }
 
     override val disconnect: Net.Disconnect by lazy {
-        DisconnectClient(connection = connection)
+        DisconnectNet(connection = connection)
+    }
+
+    override val interrupt: Net.Interrupt by lazy {
+        InterruptNet(connection = connection)
     }
 
     override val isConnected: Net.IsConnected by lazy {
@@ -91,22 +96,24 @@ internal class ConnectionModule(
         SendPresence(connection = connection)
     }
 
-    override val sendMessage: Message.Net.Send by lazy {
+    override val sendMessage by lazy {
         SendMessage(
+            address = address,
             connection = connection,
             roster = roster,
             omemoManager = omemoManager,
-            encryptedMessageCache = encryptedMessageCache
+            outgoingMessageCache = outgoingMessageCache
         )
     }
 
     override val messageBroadcast: Message.Net.Broadcast by lazy {
         MessageBroadcast(
             scope = scope,
+            sendMessage = sendMessage,
             chatManager = chatManager,
             address = address,
             omemoManager = omemoManager,
-            encryptedMessageCache = encryptedMessageCache
+            outgoingMessageCache = outgoingMessageCache
         )
     }
 

@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.CryptonMessage
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.removeOmemoBody
@@ -30,49 +29,78 @@ import org.jivesoftware.smack.packet.Message as SmackMessage
 internal class MessageBroadcast(
     address: Address,
     scope: BroadcastErrorScope,
+    sendMessage: SendMessage,
     private val chatManager: ChatManager,
     private val omemoManager: OmemoManager,
-    private val encryptedMessageCache: EncryptedMessageCache
+    private val outgoingMessageCache: OutgoingMessageCache
 ) : Message.Net.Broadcast {
 
     private val userJid = JidCreate.from(address)
 
-    private val channel = BroadcastChannel<CryptonMessage>(Channel.CONFLATED)
+    private val channel = BroadcastChannel<Message.Event>(Channel.CONFLATED)
 
     init {
         scope.launch {
-            messageFlow(
-                userJid = userJid,
-                encryptedMessageCache = encryptedMessageCache,
-                chatManager = chatManager,
-                omemoManager = omemoManager
-            ).filter {
-                it.type == SmackMessage.Type.chat
-            }.map { message ->
-                message.toCryptonMessage()
-            }.collect { message ->
-                channel.send(message)
-            }
+            flowOf(
+                sendMessage,
+                callbacks
+            )
+                .flattenMerge()
+                .collect(channel::send)
         }
     }
 
-    @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Message>) =
-        channel.asFlow().collect(collector)
+    private val callbacks
+        get() = messageFlow(
+            userJid = userJid,
+            outgoingMessageCache = outgoingMessageCache,
+            chatManager = chatManager,
+            omemoManager = omemoManager
+        ).mapNotNull { (smackMessage, eventType) ->
 
+            val message = smackMessage.toCryptonMessage()
+
+            when (smackMessage.type) {
+
+                SmackMessage.Type.chat
+                -> when (eventType) {
+
+                    MessageType.Outgoing
+                    -> Message.Event.Sent(message)
+
+                    MessageType.Incoming,
+                    MessageType.CarbonCopy
+                    -> Message.Event.Received(message)
+                }
+
+                else -> null
+            }
+        }
+
+    @InternalCoroutinesApi
+    override suspend fun collect(collector: FlowCollector<Message.Event>) =
+        channel.asFlow().collect(collector)
 }
+
+enum class MessageType {
+    Incoming,
+    Outgoing,
+    CarbonCopy
+}
+
+private typealias MessageEvent = Pair<SmackMessage, MessageType>
 
 private fun messageFlow(
     userJid: Jid,
-    encryptedMessageCache: EncryptedMessageCache,
+    outgoingMessageCache: OutgoingMessageCache,
     chatManager: ChatManager,
     omemoManager: OmemoManager
-): Flow<SmackMessage> =
+): Flow<MessageEvent> =
 
     callbackFlow {
 
         val incomingListener = incomingListener()
-        val outgoingListener = outgoingListener(userJid, encryptedMessageCache)
+        val outgoingListener = outgoingListener(userJid, outgoingMessageCache)
         val omemoListener = omemoListener()
 
         chatManager.addIncomingListener(incomingListener)
@@ -87,33 +115,33 @@ private fun messageFlow(
     }
 
 
-private fun SendChannel<SmackMessage>.incomingListener() =
-    IncomingChatMessageListener { _, message, _: Chat ->
-        if (!message.hasOmemoExtension)
-            offer(message)
-    }
-
-
-private fun SendChannel<SmackMessage>.outgoingListener(
+private fun SendChannel<MessageEvent>.outgoingListener(
     userJid: Jid,
-    encryptedMessageCache: EncryptedMessageCache
+    outgoingMessageCache: OutgoingMessageCache
 ) =
     OutgoingChatMessageListener { _, message, _ ->
         message.apply {
             from = userJid
             if (hasOmemoExtension) {
                 removeOmemoBody()
-                body = encryptedMessageCache[message.stanzaId]
+                body = outgoingMessageCache[message.stanzaId]
             }
         }.takeIf {
             it.body.isNotBlank()
         }?.let {
-            offer(it)
+            offer(it to MessageType.Outgoing)
         }
     }
 
 
-private fun SendChannel<SmackMessage>.omemoListener() = object : OmemoMessageListener {
+private fun SendChannel<MessageEvent>.incomingListener() =
+    IncomingChatMessageListener { _, message, _: Chat ->
+        if (!message.hasOmemoExtension)
+            offer(message to MessageType.Incoming)
+    }
+
+
+private fun SendChannel<MessageEvent>.omemoListener() = object : OmemoMessageListener {
 
     override fun onOmemoMessageReceived(
         stanza: Stanza,
@@ -121,7 +149,7 @@ private fun SendChannel<SmackMessage>.omemoListener() = object : OmemoMessageLis
     ) {
         stanza.let { it as? SmackMessage }
             ?.replaceBody(decryptedMessage)
-            ?.let { offer(it) }
+            ?.let { offer(it to MessageType.Incoming) }
     }
 
     override fun onOmemoCarbonCopyReceived(
@@ -132,6 +160,6 @@ private fun SendChannel<SmackMessage>.omemoListener() = object : OmemoMessageLis
     ) {
         carbonCopy
             .replaceBody(decryptedCarbonCopy)
-            ?.let { offer(it) }
+            ?.let { offer(it to MessageType.CarbonCopy) }
     }
 }

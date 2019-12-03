@@ -20,7 +20,7 @@ class ReconnectAccountsInteractor @Inject constructor(
     private val reconnectIfNeeded = JobManager<AccountManager>(scope, log) {
         session.scope.launch {
             log.d("reconnecting: ${session.address}")
-            if (isConnected) disconnect()
+            if (isConnected) interrupt()
             connect()
             if (!isAuthenticated) login()
             initOmemo()

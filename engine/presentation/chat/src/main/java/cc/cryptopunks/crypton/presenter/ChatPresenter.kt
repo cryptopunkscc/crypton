@@ -4,9 +4,12 @@ import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.interactor.SendMessageInteractor
 import cc.cryptopunks.crypton.selector.MessagePagedListSelector
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,21 +23,30 @@ class ChatPresenter @Inject constructor(
     Presenter<ChatPresenter.View>,
     Message.Consumer {
 
+    private val log = typedLog()
+
     private val send: suspend (String) -> Unit = { sendMessage(it) }
 
     override suspend fun View.invoke() = coroutineScope {
         launch { setInputMessage(clipboardRepo.pop()?.data) }
-        launch { sendMessageFlow.collect(send) }
-        launch { messageFlow(chat, createMessagePresenter).collect(setMessages) }
+        launch { sendMessageFlow.filter { it.isNotBlank() }.collect(send) }
+        launch {
+            messageFlow(chat, createMessagePresenter)
+                .onEach { log.d("received ${it.size} messages") }
+                .collect(setMessages)
+        }.invokeOnCompletion {
+            log.d("Message flow completed")
+            it?.let(log::e)
+        }
     }
 
     override fun canConsume(message: Message): Boolean =
         message.chatAddress == chat.address
 
     interface View : Actor {
+        val setInputMessage: (CharSequence?) -> Unit
         val sendMessageFlow: Flow<String>
         val setMessages: suspend (PagedList<MessagePresenter>) -> Unit
-        val setInputMessage: (CharSequence?) -> Unit
     }
 
     interface Core {

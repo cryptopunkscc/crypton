@@ -13,14 +13,16 @@ interface Net :
 
     val connect: Connect
     val disconnect: Disconnect
+    val interrupt: Interrupt
     val isConnected: IsConnected
     val initOmemo: InitOmemo
     val netEvents: Event.Output
 
     interface Connect : () -> Unit
     interface Disconnect : () -> Unit
+    interface Interrupt : () -> Unit
     interface IsConnected : () -> Boolean
-    interface InitOmemo : () -> Unit
+    interface InitOmemo : () -> Boolean
 
     interface Event : Api.Event {
 

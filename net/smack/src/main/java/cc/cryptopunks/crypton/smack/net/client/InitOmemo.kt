@@ -10,14 +10,15 @@ import org.jivesoftware.smackx.omemo.OmemoManager
 
 class InitOmemo(
     omemoManager: OmemoManager
-) : Net.InitOmemo, () -> Unit, Flow<Net.Event> {
+) : Net.InitOmemo, () -> Boolean, Flow<Net.Event> {
 
     private val channel = Channel<Net.Event>()
 
-    private val init by lazy<Unit> {
+    private val init by lazy {
         try {
             omemoManager.initialize()
             channel.offer(Net.Event.OmemoInitialized)
+            true
         } catch (throwable: Throwable) {
             channel.offer(
                 Net.Exception(
@@ -25,6 +26,7 @@ class InitOmemo(
                     cause = throwable
                 )
             )
+            false
         }
     }
 

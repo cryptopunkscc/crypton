@@ -40,7 +40,10 @@ class RosterItemPresenter @Inject constructor(
             setTitle(title)
             setLetter(letter)
             launch { latestMessageFlow(chat).collect(setMessage) }
-            launch { presenceOf(chat.address).collect(setPresence) }
+            launch {
+                setPresence(Presence.Status.Unavailable)
+                presenceOf(chat.address).collect(setPresence)
+            }
             launch { onClick.collect(navigateChat) }
         }
     }

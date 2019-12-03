@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class MessagePresenter(
+    val message: Message,
     private val address: Address,
-    private val message: Message,
     private val copyToClipboard: Clip.Board.Sys.SetClip
 ) : Presenter<MessagePresenter.View> {
 
@@ -31,6 +31,7 @@ data class MessagePresenter(
         setMessage(text)
         setDate(timestamp)
         setAuthor(from.address.local)
+        setStatus(status)
         coroutineScope {
             launch { optionSelections.collect(onOptionSelected) }
         }
@@ -40,6 +41,7 @@ data class MessagePresenter(
         fun setMessage(text: String)
         fun setDate(timestamp: Long)
         fun setAuthor(name: String)
+        fun setStatus(status: Message.Status)
         val optionSelections: Flow<Option>
     }
 

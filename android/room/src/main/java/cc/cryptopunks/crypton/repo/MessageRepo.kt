@@ -21,16 +21,23 @@ internal class MessageRepo(
             latest = message
     }
 
-    override suspend fun insert(messages: List<Message>) =
+    override suspend fun insert(messages: List<Message>) {
         dao.insert(messages.map {
             updateLatest(it)
             it.messageData()
         })
+    }
 
     override suspend fun insertOrUpdate(message: Message) {
         updateLatest(message)
         dao.insertOrUpdate(message.messageData())
     }
+
+    override suspend fun get(id: String): Message? =
+        dao.get(id)?.message()
+
+    override suspend fun delete(message: Message) =
+        dao.delete(message.id)
 
     override suspend fun latest(): Message? =
         if (latest != Message.Empty)
@@ -43,5 +50,5 @@ internal class MessageRepo(
         dao.flowLatest(chat.address.id).filterNotNull().map { it.message() }
 
     override fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message> =
-        dao.dataSourceFactory(chat.address.id).map { it?.message() }
+        dao.dataSourceFactory(chat.address.id).map { it.message() }
 }

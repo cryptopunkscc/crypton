@@ -26,17 +26,21 @@ internal data class MessageData(
     val timestamp: Long = 0,
     val chatId: AddressData = EmptyAddressData,
     val from: AddressData = EmptyAddressData,
-    val to: AddressData = EmptyAddressData
+    val to: AddressData = EmptyAddressData,
+    val status: String = ""
 ) {
 
     @androidx.room.Dao
     interface Dao {
 
         @Insert(onConflict = OnConflictStrategy.IGNORE)
-        fun insert(messages: List<MessageData>)
+        suspend fun insert(messages: List<MessageData>)
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun insertOrUpdate(list: MessageData)
+
+        @Query("select * from message where id == :id")
+        fun get(id: String): MessageData?
 
         @Query("select * from message order by timestamp desc")
         fun latest(): MessageData?
@@ -46,6 +50,9 @@ internal data class MessageData(
 
         @Query("select * from message where chatId == :chatId order by timestamp desc")
         fun dataSourceFactory(chatId: AddressData): DataSource.Factory<Int, MessageData>
+
+        @Query("delete from message where id == :id")
+        fun delete(id: String)
     }
 
     companion object {
@@ -60,7 +67,8 @@ internal fun Message.messageData() = MessageData(
     timestamp = timestamp,
     text = text,
     from = from.id,
-    to = to.id
+    to = to.id,
+    status = status.name
 )
 
 internal fun MessageData.message() = Message(
@@ -70,5 +78,6 @@ internal fun MessageData.message() = Message(
     from = Resource.from(from),
     chatAddress = Address.from(chatId),
     text = text,
-    timestamp = timestamp
+    timestamp = timestamp,
+    status = Message.Status.valueOf(status)
 )

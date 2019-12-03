@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
-internal class EncryptedMessageCache {
+internal class OutgoingMessageCache {
 
     private val map = mutableMapOf<String, String>()
 

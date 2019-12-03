@@ -10,6 +10,7 @@ import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @SessionScope
@@ -26,6 +27,7 @@ class MessageNotificationService @Inject constructor(
     override fun invoke() = scope.launch {
         log.d("start")
         messageBroadcast
+            .map { it.message }
             .filterNot { it.from.address == address }
             .filterNot { canConsumeMessage(it) }
             .collect { showNotification(it) }

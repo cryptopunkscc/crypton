@@ -26,11 +26,12 @@ class MessageAdapter @Inject constructor(
         ViewHolder(MessageView(parent.context, viewType, dateFormat))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        scope.launch { holder.bind(getItem(position)) }
+        val item = item(position)
+        scope.launch { holder.bind(item) }
     }
 
     override fun getItemViewType(position: Int): Int =
-        if (getItem(position)!!.isAccountMessage)
+        if (item(position).isAccountMessage)
             Gravity.RIGHT else
             Gravity.LEFT
 
@@ -43,7 +44,7 @@ class MessageAdapter @Inject constructor(
         override fun areContentsTheSame(
             oldItem: MessagePresenter,
             newItem: MessagePresenter
-        ) = areItemsTheSame(oldItem, newItem)
+        ) = oldItem.message == newItem.message
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -54,4 +55,7 @@ class MessageAdapter @Inject constructor(
             present?.run { view() }
         }
     }
+
+    private fun item(position: Int) = getItem(position)
+        ?: throw Exception("cannot get item of position $position, current size: $itemCount")
 }

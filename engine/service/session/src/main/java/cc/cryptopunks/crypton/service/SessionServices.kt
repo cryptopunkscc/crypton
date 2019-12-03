@@ -9,11 +9,10 @@ import cc.cryptopunks.crypton.context.Session
 interface SessionServices : MessageServices {
     val sessionErrorService: SessionErrorService
     val netEventService: NetEventService
-    val messageService: MessageService
     val presenceService: PresenceService
 }
 
-fun SessionServices.process(sessionEvent: Session.Event) {
+operator fun SessionServices.invoke(sessionEvent: Session.Event) {
     when (sessionEvent.event) {
         is Session.Event.Created -> {
             sessionErrorService()
@@ -23,13 +22,13 @@ fun SessionServices.process(sessionEvent: Session.Event) {
             messageNotificationService()
         }
         is Net.Event.Connected -> {
-
+            // no-op
         }
         is Net.Event.OmemoInitialized -> {
             loadArchivedMessagesService()
         }
         is Account.Event.Authenticated -> {
-//            loadArchivedMessagesService()
+            // no-op
         }
     }
 }

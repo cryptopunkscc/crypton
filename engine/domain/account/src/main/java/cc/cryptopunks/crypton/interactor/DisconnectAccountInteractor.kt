@@ -11,7 +11,8 @@ class DisconnectAccountInteractor @Inject constructor(
     scope: Service.Scope
 ) : (Address) -> Job by { address ->
     scope.launch {
-        manager.copy(address = address)
-            .disconnect()
+        manager
+            .copy(address = address)
+            .interrupt()
     }
 }

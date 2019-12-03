@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class ReconnectAccountsService @Inject constructor(
     private val scope: Service.Scope,
-    private val networkStatusFlow: Network.Sys.GetStatus,
+    private val getNetworkStatus: Network.Sys.GetStatus,
     private val sessionManager: SessionManager,
     private val reconnect: ReconnectAccountsInteractor,
     private val disconnect: DisconnectAccountsInteractor
@@ -31,11 +31,11 @@ class ReconnectAccountsService @Inject constructor(
     override fun invoke() = scope.launch {
         log.d("start")
         invokeOnClose { log.d("stop") }
-        launch { networkStatusFlow.collect(onNetworkStatus) }
-        launch { sessionManager.collect(onSessionEvent) }
+        launch { getNetworkStatus.collect(handleNetworkStatus) }
+        launch { sessionManager.collect(handleSessionEvent) }
     }
 
-    private val onNetworkStatus: suspend (Network.Status) -> Unit = { status ->
+    private val handleNetworkStatus: suspend (Network.Status) -> Unit = { status ->
         when (status) {
             is Available,
             is Changed -> reconnect()
@@ -43,15 +43,18 @@ class ReconnectAccountsService @Inject constructor(
         }
     }
 
-    private val onSessionEvent: suspend (Session.Event) -> Unit = { (session, event) ->
-        when (event) {
-            is Disconnected ->
-                if (event.hasError) {
-                    delay(2000)
-                    if (!session.isConnected())
-                        reconnect(session.address)
-                }
-        }
+    private val handleSessionEvent: suspend (Session.Event) -> Unit = { (session, event) ->
+        if (event is Disconnected)
+            if (event.hasError) {
+                waitForNetworkConnection()
+                if (!session.isConnected())
+                    if (getNetworkStatus().isConnected)
+                        reconnect(session.address) else
+                        disconnect(session.address)
+            }
     }
+
+    private suspend fun waitForNetworkConnection() = delay(2000)
+
 }
 

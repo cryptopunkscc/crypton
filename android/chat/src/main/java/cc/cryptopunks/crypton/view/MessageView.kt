@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.presenter.MessagePresenter
 import cc.cryptopunks.crypton.util.Broadcast
 import cc.cryptopunks.crypton.util.ext.inflate
@@ -71,6 +72,10 @@ class MessageView(
 
     override fun setAuthor(name: String) {
         authorTextView.text = " $BULLET $name"
+    }
+
+    override fun setStatus(status: Message.Status) {
+        authorTextView.text = " $BULLET ${status.name}"
     }
 
     override val optionSelections: Flow<MessagePresenter.Option> get() = optionClickBroadcast

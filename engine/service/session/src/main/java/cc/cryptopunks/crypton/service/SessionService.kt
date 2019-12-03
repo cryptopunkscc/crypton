@@ -23,8 +23,8 @@ class SessionService @Inject constructor(
     override fun invoke() = serviceScope.launch {
         log.d("start")
         invokeOnClose { log.d("stop") }
-        selectSessionEvent().collect {
-            sessionServices.process(it)
+        selectSessionEvent().collect { event ->
+            sessionServices(event)
         }
     }
 

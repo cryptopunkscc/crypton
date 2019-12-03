@@ -10,10 +10,15 @@ class RoomRepo(
     context: Context
 ) : Repo {
 
+    override val queryContext = Repo.Context.Query()
+    override val transactionContext = Repo.Context.Transaction()
+
     private val database: Database = Room
         .databaseBuilder(context, Database::class.java, "crypton.db")
 //        .inMemoryDatabaseBuilder(context, Database::class.java)
         .fallbackToDestructiveMigration()
+        .setQueryExecutor(queryContext.executor)
+        .setTransactionExecutor(transactionContext.executor)
         .build()
 
     override val accountRepo: Account.Repo = AccountRepo(

@@ -17,12 +17,11 @@ internal class ChatRepo(
     override suspend fun list(addresses: List<Address>): List<Chat> =
         chatDao.list(addresses.map(Address::id)).map { it.toDomain() }
 
-    override suspend fun insert(chat: Chat)  {
-        chat.apply {
+    override suspend fun insert(chat: Chat)  =
+        chat.run {
             chatDao.insert(chatData())
             insertUsersIfNeeded()
         }
-    }
 
     override suspend fun insertIfNeeded(chat: Chat) {
         if (!contains(chat)) chat.apply {
@@ -30,7 +29,6 @@ internal class ChatRepo(
             insertUsersIfNeeded()
         }
     }
-
 
     private suspend fun Chat.insertUsersIfNeeded() {
         userDao.insertIfNeeded(
