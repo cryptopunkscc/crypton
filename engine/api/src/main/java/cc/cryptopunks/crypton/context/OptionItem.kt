@@ -10,7 +10,7 @@ object OptionItem {
 
     interface Output : Flow<Int>
 
-    interface Api {
+    interface Core {
         val selectOptionItem: Select
         val optionItemSelections: Output
     }

@@ -22,7 +22,8 @@ data class Message(
         Error,
         Sent,
         Received,
-        Read
+        Read,
+        Queued
     }
 
     fun getParty(address: Address) = when (address) {
@@ -38,6 +39,7 @@ data class Message(
     sealed class Event : Api.Event {
         abstract val message: Message
 
+        data class Queued(override val message: Message) : Event()
         data class Sending(override val message: Message) : Event()
         data class Sent(override val message: Message) : Event()
         data class Received(override val message: Message) : Event()

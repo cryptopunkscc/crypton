@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.util
 
 import timber.log.Timber
-import kotlin.reflect.KClass
 
 fun initAndroidLog() {
     Timber.plant(Timber.DebugTree())
@@ -11,19 +10,21 @@ fun initAndroidLog() {
 private object AndroidLog : Log {
 
     override fun invoke(
-        type: KClass<*>,
+        label: String,
         level: Log.Level,
         message: Any
     ) = if (message is Throwable)
         Timber.e(message) else
         Timber.log(
             level.priority,
-            prepareMessage(type, message)
+            prepareMessage(label, message)
         )
 }
 
-private fun prepareMessage(type: KClass<*>, message: Any) =
-    "${type.java.simpleName}: $message"
+private fun prepareMessage(label: String, message: Any) =
+    "${label}: $message".replace(packageName, "")
+
+private const val packageName = "cc.cryptopunks.crypton."
 
 private val Log.Level.priority
     get() = when (this) {

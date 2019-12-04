@@ -29,6 +29,7 @@ class SaveMessagesInteractor @Inject constructor(
             else -> get() ?: create()
         }.copy(
             status = when (event) {
+                is Message.Event.Queued -> Message.Status.Queued
                 is Message.Event.Sending -> Message.Status.Sending
                 is Message.Event.Sent -> Message.Status.Sent
                 is Message.Event.Received -> Message.Status.Received

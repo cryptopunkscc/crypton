@@ -1,19 +1,22 @@
 package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.annotation.FeatureScope
+import cc.cryptopunks.crypton.context.Feature
 import cc.cryptopunks.crypton.context.OptionItem
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.internal.Navigator
 import cc.cryptopunks.crypton.internal.OptionItemBroadcast
+import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.presentation.PresentationManager
-import cc.cryptopunks.crypton.presenter.DashboardPresenter
-import cc.cryptopunks.crypton.presenter.RosterPresenter
+import cc.cryptopunks.crypton.presenter.DashboardService
+import cc.cryptopunks.crypton.presenter.RosterService
 import cc.cryptopunks.crypton.service.AccountNavigationService
 import cc.cryptopunks.crypton.service.MainNavigationService
+import cc.cryptopunks.crypton.service.ServiceManager
+import cc.cryptopunks.crypton.viewmodel.SetAccountService
 import dagger.Binds
 import dagger.Component
-import dagger.Module
+import dagger.Provides
 import javax.inject.Inject
 
 @FeatureScope
@@ -23,24 +26,32 @@ import javax.inject.Inject
     ],
     modules = [
         AndroidFeatureCore.Bindings::class,
+        AndroidFeatureCore.Module::class,
         AndroidSessionCoreFactory.Module::class
     ]
 )
 interface AndroidFeatureCore :
     FeatureCore,
+    ServiceManager.Core,
     PresentationManager.Core,
     PresenceManager.Core,
     MainNavigationService.Core,
     AccountNavigationService.Core,
     AccountPresentationCore,
-    DashboardPresenter.Core,
-    RosterPresenter.Core {
+    DashboardService.Core,
+    RosterService.Core,
+    SetAccountService.Core {
 
     val androidCore: AndroidCore
     val featureCore: FeatureCore
 
+    @dagger.Module
+    class Module {
+        @Provides
+        fun featureScope() = Feature.Scope()
+    }
 
-    @Module
+    @dagger.Module
     interface Bindings {
         @Binds
         fun AndroidFeatureCore.featureCore(): FeatureCore

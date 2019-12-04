@@ -3,23 +3,23 @@ package cc.cryptopunks.crypton.view
 import android.content.Context
 import android.view.View
 import android.widget.FrameLayout
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.presenter.RosterItemPresenter
-import cc.cryptopunks.crypton.presenter.RosterPresenter
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.presenter.RosterService.Output.RosterItemList
 import kotlinx.android.synthetic.main.roster.view.*
 import kotlinx.coroutines.cancelChildren
-
 
 class RosterView(
     context: Context
 ) : FrameLayout(context),
-    RosterPresenter.Actor {
+    Service.Wrapper {
 
     private val scope = Actor.Scope()
+
+    override val wrapper = wrapper(scope)
 
     private val rosterAdapter = RosterAdapter(scope)
 
@@ -43,9 +43,8 @@ class RosterView(
         super.onDetachedFromWindow()
     }
 
-
-    override val setList: suspend (PagedList<RosterItemPresenter>) -> Unit
-        get() = {
-            rosterAdapter.submitList(it)
-        }
+    override suspend fun Any.onInput() = when (this) {
+        is RosterItemList -> rosterAdapter.submitList(items)
+        else -> null
+    }
 }

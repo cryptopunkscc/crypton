@@ -37,7 +37,6 @@ internal class SendMessage(
 
     override suspend fun invoke(to: Address, text: String) = coroutineScope {
         val id = lastId++
-
         log.d("$id start in scope: $this")
         val toJid = JidCreate.entityBareFrom(to)
 
@@ -61,7 +60,10 @@ internal class SendMessage(
             .copy(text = text)
 
         log.d("$id broadcasting")
-        message.broadcast(Message.Event::Sending)
+        message.run {
+            broadcast(Message.Event::Queued)
+            registerAckCallback()
+        }
         log.d("$id sending")
         if (connection.isAuthenticated) execute {
             log.d("thread start")
@@ -72,6 +74,13 @@ internal class SendMessage(
         Unit
     }
 
+    private fun Message.registerAckCallback() {
+        connection.addStanzaIdAcknowledgedListener(stanzaId) {
+            GlobalScope.launch {
+                broadcast(Message.Event::Sent)
+            }
+        }
+    }
     private suspend fun Message.broadcast(event: Message.() -> Message.Event) {
         broadcast.run {
             send(event())

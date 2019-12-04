@@ -23,6 +23,7 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     api project(':engine:domain:feature')
+    api project(':engine:service:api')
     api project(':engine:presentation:api')
     api project(':android:debug')
 

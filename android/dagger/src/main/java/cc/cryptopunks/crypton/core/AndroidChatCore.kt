@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.core
 
 import cc.cryptopunks.crypton.annotation.ChatScope
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.presenter.ChatPresenter
+import cc.cryptopunks.crypton.presenter.ChatService
 import dagger.Binds
 import dagger.Component
 import dagger.Provides
@@ -19,7 +19,7 @@ import javax.inject.Inject
 )
 interface AndroidChatCore:
     ChatCore,
-    ChatPresenter.Core {
+    ChatService.Core {
 
     @dagger.Module
     class Module(

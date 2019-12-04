@@ -34,6 +34,6 @@ object ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
     }
 
     private infix fun Activity.log(message: String) {
-        Log.print(this::class, Log.Level.Debug, message)
+        Log.print(toString(), Log.Level.Debug, message)
     }
 }

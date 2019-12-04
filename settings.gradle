@@ -14,6 +14,7 @@ include ':engine:api',
         ':engine:domain:roster',
         ':engine:domain:chat',
 
+        ':engine:service:api',
         ':engine:service:app',
         ':engine:service:session',
         ':engine:service:account',

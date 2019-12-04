@@ -19,6 +19,7 @@ import cc.cryptopunks.crypton.notification.ShowMessageNotification
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
 import cc.cryptopunks.crypton.service.AppServices
+import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.sys.GetNetworkStatus
 import cc.cryptopunks.crypton.sys.SetToClipboard
 import cc.cryptopunks.crypton.sys.StartIndicatorService
@@ -47,6 +48,7 @@ interface AndroidCore :
     Api.Core,
     FeatureManager.Core,
     SessionManager.Core,
+    ServiceManager.Core,
     PresentationManager.Core,
     PresenceManager.Core,
     IntentProcessor.Core,

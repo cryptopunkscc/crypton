@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.fragment.MainFragment
 import cc.cryptopunks.crypton.initDebugDrawer
 import cc.cryptopunks.crypton.intent.IntentProcessor
 import cc.cryptopunks.crypton.main.R
-import cc.cryptopunks.crypton.presentation.PresentationManager
+import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.util.ext.fragment
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.RosterView
@@ -41,10 +41,10 @@ class MainActivity : FeatureActivity() {
     override fun onBackPressed() {
         // prevent activity from leaking due to android bug
         // https://issuetracker.google.com/issues/139738913
-        appCore.resolve<PresentationManager.Core>()
-            .presentationManager.top().let {
+        appCore.resolve<ServiceManager.Core>()
+            .serviceManager.top().let {
 
-            if (it == null || it.actor is RosterView)
+            if (it == null || it.left is RosterView)
                 finishAfterTransition() else
                 super.onBackPressed()
         }

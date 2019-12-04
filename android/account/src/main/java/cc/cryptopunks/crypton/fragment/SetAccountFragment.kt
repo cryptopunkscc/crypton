@@ -2,20 +2,22 @@ package cc.cryptopunks.crypton.fragment
 
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import cc.cryptopunks.crypton.account.R
-import kotlinx.android.synthetic.main.set_account.*
+import android.view.ViewGroup
+import cc.cryptopunks.crypton.util.ext.resolve
+import cc.cryptopunks.crypton.view.SetAccountView
+import cc.cryptopunks.crypton.viewmodel.SetAccountService
 
+class SetAccountFragment : ServiceFragment() {
 
-class SetAccountFragment : AccountCoreFragment() {
+    override fun onCreatePresenter() = featureCore
+        .resolve<SetAccountService.Core>()
+        .setAccountService
 
-    override val layoutRes: Int get() = R.layout.set_account
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        core.setAccountViewModel.run {
-            addButton.setOnClickListener { addAccount() }
-            registerButton.setOnClickListener { registerAccount() }
-        }
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = SetAccountView(context!!)
 }

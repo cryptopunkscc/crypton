@@ -4,27 +4,32 @@ import android.content.Context
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.presenter.ChatPresenter
-import cc.cryptopunks.crypton.presenter.MessagePresenter
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.presenter.ChatService.Input.SendMessage
+import cc.cryptopunks.crypton.presenter.ChatService.Output.MessageText
+import cc.cryptopunks.crypton.presenter.ChatService.Output.Messages
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.synthetic.main.chat.view.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class ChatView(
-    context: Context,
-    scope: Actor.Scope
+    context: Context
 ) :
     FrameLayout(context),
-    ChatPresenter.Actor {
+    Service.Wrapper {
+
+    private val scope = Actor.Scope()
+
+    override val wrapper = wrapper(scope)
 
     private val messageAdapter: MessageAdapter = MessageAdapter(scope)
+
     private val scrollThreshold: Int =
         (context.resources.displayMetrics.scaledDensity * SCROLL_THRESHOLD_DP).toInt()
 
@@ -40,42 +45,38 @@ class ChatView(
         }
     }
 
-    override val setInputMessage: (CharSequence?) -> Unit
-        get() = { text ->
-            messageInputView.input.setText(text)
+    override fun onInvoke() {
+        scope.launch {
+            messageInputView.button.clicks().collect {
+                SendMessage(getInputAndClear()).out()
+            }
         }
+    }
 
-    override val setMessages: suspend (PagedList<MessagePresenter>) -> Unit
-        get() = { list ->
-            isBottomReached
-                .also {
-                    messageAdapter.submitList(list)
-                }
+    override suspend fun Any.onInput() {
+        when (this) {
+            is MessageText -> messageInputView.input.setText(text)
+            is Messages -> isBottomReached()
+                .also { messageAdapter.submitList(list) }
                 .let { wasBottomReached ->
                     if (wasBottomReached)
                         scrollToNewMessage() else
                         displayNewMessageInfo()
                 }
         }
+    }
 
-    private val isBottomReached
-        get() = chatRecyclerView.run {
-            val maxScroll = computeVerticalScrollRange()
-            val currentScroll = computeVerticalScrollOffset() + computeVerticalScrollExtent()
-            maxScroll - currentScroll < scrollThreshold
-        }
-
+    private fun isBottomReached() = chatRecyclerView.run {
+        val maxScroll = computeVerticalScrollRange()
+        val currentScroll = computeVerticalScrollOffset() + computeVerticalScrollExtent()
+        maxScroll - currentScroll < scrollThreshold
+    }
 
     private fun scrollToNewMessage() =
         chatRecyclerView.smoothScrollToPosition(0)
 
     private fun displayNewMessageInfo() =
         Toast.makeText(context, "new message", Toast.LENGTH_SHORT).show()
-
-
-    override val sendMessageFlow: Flow<String> = messageInputView.button
-        .clicks()
-        .map { getInputAndClear() }
 
     private fun getInputAndClear() = messageInputView.input.text.run {
         toString().also { clear() }

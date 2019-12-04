@@ -2,41 +2,21 @@ package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.presenter.CreateChatPresenter
+import cc.cryptopunks.crypton.presenter.CreateChatService
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.CreateChatView
 
-class CreateChatFragment : PresenterFragment<
-        CreateChatPresenter.Actor,
-        CreateChatPresenter>() {
+class CreateChatFragment : ServiceFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreatePresenter(): CreateChatPresenter = featureCore
+    override fun onCreatePresenter() = featureCore
         .sessionFeature()
-        .resolve<CreateChatPresenter.Core>()
-        .createChatPresenter
+        .resolve<CreateChatService.Core>()
+        .createChatService
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = CreateChatView(
-        context = context!!
-    )
-
-    override fun onCreateOptionsMenu(
-        menu: Menu,
-        inflater: MenuInflater
-    ) = inflater.inflate(
-        R.menu.create_chat,
-        menu
-    )
+    ) = CreateChatView(context!!)
 }

@@ -66,7 +66,7 @@ internal class MessageBroadcast(
                 -> when (eventType) {
 
                     MessageType.Outgoing
-                    -> Message.Event.Sent(message)
+                    -> Message.Event.Sending(message)
 
                     MessageType.Incoming,
                     MessageType.CarbonCopy
