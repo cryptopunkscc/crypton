@@ -2,30 +2,28 @@ package cc.cryptopunks.crypton.view
 
 import android.content.Context
 import android.view.View
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.presenter.CreateChatService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
+import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.create_chat.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CreateChatView(context: Context) :
-    FrameLayout(context),
-    Service.Wrapper {
+    ServiceLayout(context) {
 
-    private val scope = Actor.Scope()
+    override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
-    override val wrapper = wrapper(scope)
-
-    private val userListAdapter =
-        ChatUserListAdapter()
+    private val userListAdapter = ChatUserListAdapter()
 
     init {
         View.inflate(
@@ -37,9 +35,18 @@ class CreateChatView(context: Context) :
             layoutManager = LinearLayoutManager(context)
             adapter = userListAdapter
         }
-        scope.run {
-            launch { addressInputView.input.textChanges().collect { setError(null) } }
-            launch { addressInputView.button.clicks().collect { createUserFromInput().out() } }
+    }
+
+    override fun Service.Binding.bind(): Job = launch {
+        launch {
+            addressInputView.input.textChanges().collect {
+                setError(null)
+            }
+        }
+        launch {
+            addressInputView.button.clicks().collect {
+                createUserFromInput().out()
+            }
         }
     }
 

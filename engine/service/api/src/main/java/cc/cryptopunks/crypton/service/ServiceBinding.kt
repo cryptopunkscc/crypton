@@ -3,27 +3,35 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Service
+import kotlinx.coroutines.Job
 
 class ServiceBinding {
 
-    private var left: Service? = null
-    private var right: Service? = null
+    private val binding = TwoWayBinding()
 
-    fun setLeft(left: Service?) {
-        this.left?.destroy()
-        this.left = left
-        bind()
-    }
+    private var leftJob: Job = Job()
 
-    fun setRight(right: Service?): Unit = synchronized(this) {
-        this.left?.stop()
-        this.right?.destroy()
-        this.right = right
-        bind()
-    }
+    var left: Service? = null
+        set(value) {
+            leftJob.cancel()
+            field = value?.apply {
+                leftJob = binding.left.bind()
+            }
+        }
 
-    private fun bind() {
-        right?.let { right -> left?.bind(right) }
+    private var rightJob: Job = Job()
+
+    var right: Service? = null
+        set(value) {
+            rightJob.cancel()
+            field = value?.apply {
+                rightJob = binding.right.bind()
+            }
+        }
+
+    fun clear() {
+        left = null
+        right = null
     }
 
     fun snapshot() = Snapshot(left, right)

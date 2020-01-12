@@ -1,21 +1,28 @@
 package cc.cryptopunks.crypton.viewmodel
 
-import cc.cryptopunks.crypton.context.Feature
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.viewmodel.SetAccountService.Input.AddAccount
 import cc.cryptopunks.crypton.viewmodel.SetAccountService.Input.RegisterAccount
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SetAccountService @Inject constructor(
-    override val scope: Feature.Scope,
     private val navigate: Route.Api.Navigate
-) : Service.Abstract() {
+) : Service {
 
-    override suspend fun Any.onInput() {
-        when (this) {
-            is AddAccount -> navigate(Route.Login)
-            is RegisterAccount -> navigate(Route.Register)
+    override val coroutineContext = SupervisorJob() + Dispatchers.IO
+
+    override fun Service.Binding.bind(): Job = launch {
+        input.collect { arg ->
+            when (arg) {
+                is AddAccount -> navigate(Route.Login)
+                is RegisterAccount -> navigate(Route.Register)
+            }
         }
     }
 

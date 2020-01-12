@@ -3,27 +3,29 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ServiceManager
+import cc.cryptopunks.crypton.service.ServiceBindingManager
 import cc.cryptopunks.crypton.util.ext.resolve
+import kotlinx.coroutines.cancel
 
 abstract class ServiceFragment :
     FeatureFragment() {
 
     private val serviceManager by lazy {
-        appCore.resolve<ServiceManager.Core>().serviceManager
+        appCore.resolve<ServiceBindingManager.Core>().serviceBindingManager
     }
 
     val binding by lazy {
-        serviceManager.create()
+        serviceManager.createBinding()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.setRight(onCreatePresenter())
+        binding.right = onCreatePresenter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.setLeft(onCreateActor(view))
+        super.onViewCreated(view, savedInstanceState)
+        binding.left = onCreateActor(view)
     }
 
     open fun onCreatePresenter(): Service? = null
@@ -33,12 +35,19 @@ abstract class ServiceFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.setLeft(null)
+        binding.apply {//            ConnectedService(createRosterItem(it)) as Service
+
+            left?.cancel()
+            left = null
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        binding.apply {
+            right?.cancel()
+            right = null
+        }
         serviceManager.remove(binding)
-        binding.setRight(null)
     }
 }

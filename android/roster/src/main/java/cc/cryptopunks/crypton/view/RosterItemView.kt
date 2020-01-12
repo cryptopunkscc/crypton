@@ -2,32 +2,39 @@ package cc.cryptopunks.crypton.view
 
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
-import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
-import cc.cryptopunks.crypton.presenter.RosterItemPresenter
+import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.RosterItemService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
 import cc.cryptopunks.crypton.util.presenceStatusColors
+import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.roster_item.view.*
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 
 class RosterItemView(
     context: Context,
     private val dateFormat: DateFormat
 ) :
-    FrameLayout(context),
-    RosterItemPresenter.Actor {
+    ServiceLayout(context) {
 
-    private val statusColors = context.presenceStatusColors()
+    private val log = typedLog()
+
+    private val statusColors: Map<Presence.Status, Int> = context.presenceStatusColors()
 
     private val avatarDrawable by lazy {
         conversationLetter.background as GradientDrawable
     }
+
     private val statusDrawable by lazy {
         presenceStatusIcon.drawable as GradientDrawable
     }
@@ -38,36 +45,45 @@ class RosterItemView(
             LayoutParams.WRAP_CONTENT
         )
         inflate(R.layout.roster_item, true)
+        log.d("init")
     }
 
-    override fun setTitle(title: String) {
-        conversationTitleTextView.text = title
-    }
-
-    override fun setLetter(letter: Char) {
-        conversationLetter.text = letter.toString()
-        avatarDrawable.setColor(ContextCompat.getColor(context, letterColors.getValue(letter)))
-    }
-
-    override val setMessage: suspend (Message) -> Unit
-        get() = { message ->
-            lastMessageTextView.text = format(message)
-            dateTextView.text = dateFormat.format(message.timestamp)
+    override fun Service.Binding.bind(): Job = launch {
+        launch {
+            input.collect { arg ->
+                log.d(arg)
+                val (_, state) = arg as Service.Result<RosterItemService.State>
+                setDefaults(state)
+                setMessage(state)
+                setPresence(state)
+            }
         }
-
-    private fun format(message: Message) = message.run {
-        "${from.address.local}: $text"
+        launch {
+            clicks().collect {
+                Route.Chat().out()
+            }
+        }
     }
 
-    override val setPresence: suspend (presence: Presence.Status) -> Unit
-        get() = { presence ->
-            statusDrawable.setColor(statusColors.getValue(presence))
-        }
+    private fun setDefaults(state: RosterItemService.State) {
+        conversationTitleTextView.text = state.title
+        conversationLetter.text = state.letter.toString()
+        avatarDrawable.setColor(
+            ContextCompat.getColor(
+                context,
+                letterColors.getValue(state.letter)
+            )
+        )
+    }
 
-    override val onClick: Flow<Any> get() = clicks()
+    private fun setMessage(state: RosterItemService.State) {
+        lastMessageTextView.text = state.message.formatMessage()
+        dateTextView.text = dateFormat.format(state.message.timestamp)
+    }
 
-    fun clear() {
-        setLetter('a')
-        setTitle("")
+    private fun Message.formatMessage() = "${from.address.local}: $text"
+
+    private fun setPresence(state: RosterItemService.State) {
+        statusDrawable.setColor(statusColors.getValue(state.presence))
     }
 }

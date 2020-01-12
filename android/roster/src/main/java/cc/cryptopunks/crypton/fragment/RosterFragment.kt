@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.presenter.RosterService
+import cc.cryptopunks.crypton.RosterService
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.RosterView
 

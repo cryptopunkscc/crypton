@@ -2,26 +2,25 @@ package cc.cryptopunks.crypton.view
 
 import android.content.Context
 import android.view.View
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.presenter.RosterService.Output.RosterItemList
+import cc.cryptopunks.crypton.RosterService
+import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.roster.view.*
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.launch
 
 class RosterView(
     context: Context
-) : FrameLayout(context),
-    Service.Wrapper {
+) : ServiceLayout(context) {
 
-    private val scope = Actor.Scope()
-
-    override val wrapper = wrapper(scope)
-
-    private val rosterAdapter = RosterAdapter(scope)
+    private val rosterAdapter = RosterAdapter(coroutineContext)
 
     private val rosterItemDecorator = RosterItemDecorator(
         context = context,
@@ -29,7 +28,10 @@ class RosterView(
         paddingRight = resources.getDimensionPixelSize(R.dimen.roster_divider_padding_right)
     )
 
+    private val log = typedLog()
+
     init {
+        log.d("init")
         View.inflate(context, R.layout.roster, this)
         rosterRecyclerView.apply {
             addItemDecoration(rosterItemDecorator)
@@ -38,13 +40,16 @@ class RosterView(
         }
     }
 
-    override fun onDetachedFromWindow() {
-        scope.coroutineContext.cancelChildren()
-        super.onDetachedFromWindow()
+    override fun Service.Binding.bind(): Job = launch {
+        log.d("bind")
+        input.filterIsInstance<RosterService.Items>().collect {
+            log.d("receive: ${it.items.size}")
+            rosterAdapter.submitList(it.items)
+        }
     }
 
-    override suspend fun Any.onInput() = when (this) {
-        is RosterItemList -> rosterAdapter.submitList(items)
-        else -> null
+    override fun onDetachedFromWindow() {
+        coroutineContext.cancelChildren()
+        super.onDetachedFromWindow()
     }
 }

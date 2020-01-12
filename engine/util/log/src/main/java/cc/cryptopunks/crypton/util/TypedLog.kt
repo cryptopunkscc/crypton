@@ -7,7 +7,7 @@ inline fun <reified T: Any> typedLog() = TypedLog(T::class)
 class TypedLog(
     source: Any
 ){
-    private val label = source.toString()
+    val label = source.toString()
 
     fun d(message: Any) = Log.print(
         label,

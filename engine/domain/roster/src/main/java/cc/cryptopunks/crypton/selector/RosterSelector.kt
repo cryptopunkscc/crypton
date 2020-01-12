@@ -11,7 +11,7 @@ data class RosterSelector @Inject constructor(
     private val mainExecutor: MainExecutor,
     private val ioExecutor: IOExecutor
 ) {
-    operator fun <T> invoke(mapper: Chat.() -> T): Flow<PagedList<T>> = CreatePagedList(
+    operator fun <T> invoke(mapper: (Chat) -> T): Flow<PagedList<T>> = CreatePagedList(
         config = pagedListConfig(pageSize = 20),
         dataSourceFactory = repo.dataSourceFactory().map(mapper),
         notifyExecutor = mainExecutor,

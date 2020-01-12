@@ -13,7 +13,7 @@ abstract class FeatureActivity : BaseActivity() {
 
     private val scope = MainScope()
 
-    val key: Any = javaClass.name + System.currentTimeMillis()
+    val key: Any get() = javaClass.name
 
     val featureManager
         get() = this

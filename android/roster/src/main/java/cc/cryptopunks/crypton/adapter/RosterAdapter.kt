@@ -1,65 +1,72 @@
 package cc.cryptopunks.crypton.adapter
 
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.context.Actor
-import cc.cryptopunks.crypton.presenter.RosterItemPresenter
+import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.service.ServiceBindingManager
+import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.view.RosterItemView
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancelChildren
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class RosterAdapter @Inject constructor(
-    private val scope: Actor.Scope
+    override val coroutineContext: CoroutineContext
 ) :
-    PagedListAdapter<RosterItemPresenter, RosterAdapter.ViewHolder>(Diff) {
+    PagedListAdapter<Service, RosterAdapter.ViewHolder>(Diff),
+    CoroutineScope {
 
-    private val dateFormat: DateFormat = SimpleDateFormat("d MMM yyyy • HH:mm", Locale.getDefault())
+    private val serviceManager = ServiceBindingManager()
+
+    private val dateFormat: DateFormat = SimpleDateFormat(
+        "d MMM yyyy • HH:mm",
+        Locale.getDefault()
+    )
+
+    init {
+        invokeOnClose {
+            serviceManager.clear()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(RosterItemView(parent.context, dateFormat))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        scope.launch { holder.bind(getItem(position)) }
+        holder.binding.right = getItem(position)
     }
 
-    private object Diff : DiffUtil.ItemCallback<RosterItemPresenter>() {
+    private object Diff : DiffUtil.ItemCallback<Service>() {
+
         override fun areItemsTheSame(
-            oldItem: RosterItemPresenter,
-            newItem: RosterItemPresenter
+            oldItem: Service,
+            newItem: Service
         ) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
-            oldItem: RosterItemPresenter,
-            newItem: RosterItemPresenter
+            oldItem: Service,
+            newItem: Service
         ) = areItemsTheSame(oldItem, newItem)
     }
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {
-        holder.cancel()
+        holder.binding.left
+            ?.coroutineContext
+            ?.cancelChildren()
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: RosterItemView) : RecyclerView.ViewHolder(view) {
 
-        private var job: Job? = null
+        val binding = serviceManager.createBinding()
 
-        private val view get() = itemView as RosterItemView
-
-        suspend fun bind(present: RosterItemPresenter?) {
-            job?.cancel()
-            job = present?.run { view.invoke() }
-            job ?: view.clear()
-        }
-
-        fun cancel() {
-            job?.cancel()
-            job = null
+        init {
+            binding.left = view
         }
     }
 }

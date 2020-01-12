@@ -14,11 +14,13 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class MessageAdapter @Inject constructor(
-    private val scope: CoroutineScope
+    override val coroutineContext: CoroutineContext
 ) :
-    PagedListAdapter<MessagePresenter, MessageAdapter.ViewHolder>(Diff) {
+    PagedListAdapter<MessagePresenter, MessageAdapter.ViewHolder>(Diff),
+    CoroutineScope {
 
     private val dateFormat: DateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
@@ -27,7 +29,7 @@ class MessageAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = item(position)
-        scope.launch { holder.bind(item) }
+        launch { holder.bind(item) }
     }
 
     override fun getItemViewType(position: Int): Int =
