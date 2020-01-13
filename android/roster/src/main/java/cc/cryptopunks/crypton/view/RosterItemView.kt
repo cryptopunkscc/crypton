@@ -48,7 +48,7 @@ class RosterItemView(
         log.d("init")
     }
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         launch {
             input.collect {
                 handleInput(it)

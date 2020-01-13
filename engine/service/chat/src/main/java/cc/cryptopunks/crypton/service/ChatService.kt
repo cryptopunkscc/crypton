@@ -35,7 +35,7 @@ class ChatService @Inject constructor(
 
     private val log = typedLog()
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         launch {
             input.collect {
                 if (it is SendMessage && it.text.isNotBlank())

@@ -39,7 +39,7 @@ class RosterAdapter @Inject constructor(
         ViewHolder(RosterItemView(parent.context, dateFormat))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.right = getItem(position)
+        holder.binding.slot2 = getItem(position)
     }
 
     private object Diff : DiffUtil.ItemCallback<Service>() {
@@ -56,12 +56,12 @@ class RosterAdapter @Inject constructor(
     }
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {
-        holder.binding.left
+        holder.binding.slot1
             ?.coroutineContext
             ?.cancelChildren()
     }
 
     inner class ViewHolder(view: RosterItemView) : RecyclerView.ViewHolder(view) {
-        val binding = serviceManager.createBinding().apply { left = view }
+        val binding = serviceManager.createBinding().apply { slot1 = view }
     }
 }

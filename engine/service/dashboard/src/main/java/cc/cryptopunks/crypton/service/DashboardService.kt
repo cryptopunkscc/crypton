@@ -18,7 +18,7 @@ class DashboardService @Inject constructor(
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         input.collect { arg ->
             when (arg) {
                 is CreateChat -> navigate(Route.CreateChat)

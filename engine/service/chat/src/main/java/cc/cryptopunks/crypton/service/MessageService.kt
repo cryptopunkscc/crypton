@@ -39,7 +39,7 @@ data class MessageService(
         status = message.status.name
     )
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         state.out()
         input.collect { arg ->
             when (arg) {

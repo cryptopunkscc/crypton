@@ -40,7 +40,7 @@ class ChatView(
         }
     }
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         launch {
             input.collect { arg ->
                 when (arg) {

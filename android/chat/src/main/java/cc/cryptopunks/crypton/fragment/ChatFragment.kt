@@ -17,7 +17,7 @@ class ChatFragment : ServiceFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launch { binding.right = presenter() }
+        launch { binding + presenter() }
     }
 
     private suspend fun presenter(): ChatService = let {

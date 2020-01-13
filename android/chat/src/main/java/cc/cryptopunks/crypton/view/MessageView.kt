@@ -71,7 +71,7 @@ class MessageView(
         cardContainer.gravity = gravity
     }
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         launch {
             input.collect { arg ->
                 setState(arg)

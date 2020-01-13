@@ -33,7 +33,7 @@ S : Service {
         ViewHolder(createView(parent, viewType))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.right = getItem(position)
+        holder.binding.slot2 = getItem(position)
     }
 
     open class DiffItemCallback<S : Service> : DiffUtil.ItemCallback<S>() {
@@ -49,6 +49,6 @@ S : Service {
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = serviceManager.createBinding().apply { left = view as Service }
+        val binding = serviceManager.createBinding().apply { slot1 = view as Service }
     }
 }

@@ -35,7 +35,7 @@ class RosterItemService private constructor(
         title = id
     )
 
-    override fun Service.Binding.bind() = launch {
+    override fun Service.Connector.connect() = launch {
         state.out()
         flowOf(
             input,

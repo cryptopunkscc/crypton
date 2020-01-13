@@ -37,7 +37,7 @@ class CreateChatView(context: Context) :
         }
     }
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         launch {
             addressInputView.input.textChanges().collect {
                 setError(null)

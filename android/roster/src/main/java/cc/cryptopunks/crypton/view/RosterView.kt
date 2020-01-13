@@ -40,7 +40,7 @@ class RosterView(
         }
     }
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         log.d("bind")
         input.filterIsInstance<RosterService.Items>().collect {
             log.d("receive: ${it.items.size}")

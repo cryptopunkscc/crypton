@@ -8,9 +8,9 @@ interface Service : CoroutineScope {
 
     val id: Any get() = Unit
 
-    fun Binding.bind(): Job = launch { }
+    fun Connector.connect(): Job = launch { }
 
-    interface Binding {
+    interface Connector {
         val input: Flow<Any>
         val output: suspend (Any) -> Unit
         suspend fun Any.out() = output(this)

@@ -20,12 +20,12 @@ abstract class ServiceFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.right = onCreatePresenter()
+        binding + onCreatePresenter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.left = onCreateActor(view)
+        binding.slot1 = onCreateActor(view)
     }
 
     open fun onCreatePresenter(): Service? = null
@@ -35,19 +35,15 @@ abstract class ServiceFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.apply {//            ConnectedService(createRosterItem(it)) as Service
-
-            left?.cancel()
-            left = null
+        binding.apply {
+            slot1?.cancel()
+            slot1 = null
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.apply {
-            right?.cancel()
-            right = null
-        }
+        binding.cancel()
         serviceManager.remove(binding)
     }
 }

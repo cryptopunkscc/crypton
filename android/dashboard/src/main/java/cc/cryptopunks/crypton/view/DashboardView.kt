@@ -27,7 +27,7 @@ class DashboardView(
 
     private val createChat get() = createConversationButton.clicks()
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         flowOf(
             optionItems.map { DashboardService.ManageAccounts },
             createChat.map { DashboardService.CreateChat }

@@ -22,7 +22,7 @@ class RosterService @Inject constructor(
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
-    override fun Service.Binding.bind() = launch {
+    override fun Service.Connector.connect() = launch {
         log.d("bind")
         rosterFlow { createRosterItem(it) as Service }
             .map(RosterService::Items)

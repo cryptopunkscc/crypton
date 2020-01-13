@@ -24,7 +24,7 @@ class SetAccountView(
         View.inflate(context, R.layout.set_account, this)
     }
 
-    override fun Service.Binding.bind(): Job = launch {
+    override fun Service.Connector.connect(): Job = launch {
         flowOf(
             addButton.clicks().map { SetAccountService.AddAccount },
             registerButton.clicks().map { SetAccountService.RegisterAccount }
