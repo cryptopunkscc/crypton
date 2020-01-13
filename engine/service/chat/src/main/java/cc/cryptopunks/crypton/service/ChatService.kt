@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.presenter
+package cc.cryptopunks.crypton.service
 
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.Chat
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class ChatService @Inject constructor(
     val chat: Chat,
     private val sendMessage: SendMessageInteractor,
-    private val createMessagePresenter: MessagePresenter.Factory,
+    private val createMessageService: MessageService.Factory,
     private val messageFlow: MessagePagedListSelector,
     private val clipboardRepo: Clip.Board.Repo
 ) :
@@ -32,7 +32,7 @@ class ChatService @Inject constructor(
     }
 
     interface Output {
-        data class Messages(val list: PagedList<MessagePresenter>) : Output
+        data class Messages(val list: PagedList<MessageService>) : Output
         data class MessageText(val text: CharSequence?) : Output
     }
 
@@ -53,7 +53,7 @@ class ChatService @Inject constructor(
             }
         }
         launch {
-            messageFlow(chat, createMessagePresenter)
+            messageFlow(chat, createMessageService)
                 .onEach { log.d("received ${it.size} messages") }
                 .map(Output::Messages)
                 .collect(output)

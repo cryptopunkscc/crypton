@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.presenter.ChatService
+import cc.cryptopunks.crypton.service.ChatService
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.util.toMap
 import cc.cryptopunks.crypton.view.ChatView

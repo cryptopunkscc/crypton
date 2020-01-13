@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.core
 import cc.cryptopunks.crypton.annotation.SessionScope
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.presenter.CreateChatService
+import cc.cryptopunks.crypton.service.CreateChatService
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
 import cc.cryptopunks.crypton.service.SessionServices
 import dagger.Component

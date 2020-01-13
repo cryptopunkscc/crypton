@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.view
 import android.view.View
 import cc.cryptopunks.crypton.context.OptionItem
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.presenter.DashboardService
+import cc.cryptopunks.crypton.service.DashboardService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.dashboard.*

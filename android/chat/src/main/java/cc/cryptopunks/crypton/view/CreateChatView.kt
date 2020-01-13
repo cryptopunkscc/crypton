@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.presenter.CreateChatService
+import cc.cryptopunks.crypton.service.CreateChatService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.widget.ServiceLayout

@@ -5,7 +5,6 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.canConsume
-import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -17,7 +16,7 @@ import javax.inject.Inject
 class MessageNotificationService @Inject constructor(
     private val scope: Session.Scope,
     private val address: Address,
-    private val presentationManager: PresentationManager,
+    private val serviceManager: ServiceBindingManager,
     private val showNotification: Message.Sys.ShowNotification,
     private val messageBroadcast: Message.Net.Broadcast
 ) : () -> Job {
@@ -36,8 +35,8 @@ class MessageNotificationService @Inject constructor(
 
     private fun canConsumeMessage(
         message: Message
-    ): Boolean = presentationManager
+    ): Boolean = serviceManager
         .stack()
         .filter { it.isVisible }
-        .any { it.presenter.canConsume(message) }
+        .any { it.right.canConsume(message) }
 }

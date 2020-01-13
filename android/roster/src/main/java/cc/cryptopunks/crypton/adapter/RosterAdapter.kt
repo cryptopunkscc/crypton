@@ -62,11 +62,6 @@ class RosterAdapter @Inject constructor(
     }
 
     inner class ViewHolder(view: RosterItemView) : RecyclerView.ViewHolder(view) {
-
-        val binding = serviceManager.createBinding()
-
-        init {
-            binding.left = view
-        }
+        val binding = serviceManager.createBinding().apply { left = view }
     }
 }

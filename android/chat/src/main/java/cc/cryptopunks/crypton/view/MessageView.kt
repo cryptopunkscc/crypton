@@ -5,15 +5,18 @@ import android.view.ContextMenu
 import android.view.Gravity
 import android.view.MenuInflater
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.presenter.MessagePresenter
-import cc.cryptopunks.crypton.util.Broadcast
+import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.service.MessageService
 import cc.cryptopunks.crypton.util.ext.inflate
+import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.chat_message_item.view.*
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 
 class MessageView(
@@ -21,18 +24,17 @@ class MessageView(
     type: Int,
     private val dateFormat: DateFormat
 ) :
-    FrameLayout(
+    ServiceLayout(
         if (type == Gravity.RIGHT) context
         else ContextThemeWrapper(
             context,
             R.style.Theme_Crypton_Colored
         )
-    ),
-    MessagePresenter.Actor {
+    ) {
 
     private val padding by lazy { resources.getDimensionPixelSize(R.dimen.message_padding) }
 
-    private val optionClickBroadcast = Broadcast<MessagePresenter.Option>()
+    private val optionClickBroadcast = BroadcastChannel<Any>(1)
 
     init {
         layoutParams = ViewGroup.LayoutParams(
@@ -45,13 +47,16 @@ class MessageView(
     }
 
     override fun onCreateContextMenu(menu: ContextMenu) {
-        MenuInflater(context).inflate(R.menu.message, menu)
+        MenuInflater(context)
+            .inflate(R.menu.message, menu)
         menu.setHeaderTitle(R.string.choose_option_label)
             .findItem(R.id.copyToClipboard).setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.copyToClipboard -> MessagePresenter.Option.Copy
+                    R.id.copyToClipboard -> MessageService.Copy
                     else -> null
-                }?.let(optionClickBroadcast)
+                }?.let { action ->
+                    optionClickBroadcast.offer(action)
+                }
                 true
             }
     }
@@ -66,22 +71,26 @@ class MessageView(
         cardContainer.gravity = gravity
     }
 
-    override fun setMessage(text: String) {
-        bodyTextView.text = text
+    override fun Service.Binding.bind(): Job = launch {
+        launch {
+            input.collect { arg ->
+                setState(arg)
+            }
+        }
+        launch {
+            optionClickBroadcast.asFlow().collect {
+                it.out()
+            }
+        }
     }
 
-    override fun setAuthor(name: String) {
-        authorTextView.text = " $BULLET $name"
-    }
-
-    override fun setStatus(status: Message.Status) {
-        authorTextView.text = " $BULLET ${status.name}"
-    }
-
-    override val optionSelections: Flow<MessagePresenter.Option> get() = optionClickBroadcast
-
-    override fun setDate(timestamp: Long) {
-        timestampTextView.text = dateFormat.format(timestamp)
+    private fun setState(state: Any) {
+        if (state is MessageService.State) state.run {
+            bodyTextView.text = message
+            authorTextView.text = " $BULLET $author"
+            authorTextView.text = " $BULLET $status"
+            timestampTextView.text = dateFormat.format(date)
+        }
     }
 
     private companion object {

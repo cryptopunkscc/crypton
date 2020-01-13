@@ -17,15 +17,13 @@ include ':engine:api',
         ':engine:service:api',
         ':engine:service:app',
         ':engine:service:session',
+        ':engine:service:dashboard',
         ':engine:service:account',
         ':engine:service:roster',
         ':engine:service:chat',
 
         ':engine:presentation:api',
         ':engine:presentation:account',
-        ':engine:presentation:dashboard',
-        ':engine:presentation:roster',
-        ':engine:presentation:chat',
 
         ':net:smack',
 

@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.presenter.ChatService.Input.SendMessage
-import cc.cryptopunks.crypton.presenter.ChatService.Output.MessageText
-import cc.cryptopunks.crypton.presenter.ChatService.Output.Messages
+import cc.cryptopunks.crypton.service.ChatService.Input.SendMessage
+import cc.cryptopunks.crypton.service.ChatService.Output.MessageText
+import cc.cryptopunks.crypton.service.ChatService.Output.Messages
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.chat.view.*
@@ -23,7 +23,7 @@ class ChatView(
 ) :
     ServiceLayout(context) {
 
-    private val messageAdapter: MessageAdapter = MessageAdapter(coroutineContext)
+    private val messageAdapter = MessageAdapter(coroutineContext)
 
     private val scrollThreshold: Int =
         (context.resources.displayMetrics.scaledDensity * SCROLL_THRESHOLD_DP).toInt()

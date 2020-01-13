@@ -5,6 +5,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api project(':engine:util:inject')
     api project(':engine:domain:chat')
-    api project(':engine:presentation:chat')
-    api project(':engine:presentation:roster')
+    api project(':engine:service:api')
 }
