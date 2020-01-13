@@ -8,12 +8,8 @@ import cc.cryptopunks.crypton.internal.Navigator
 import cc.cryptopunks.crypton.internal.OptionItemBroadcast
 import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.presentation.PresentationManager
-import cc.cryptopunks.crypton.service.DashboardService
 import cc.cryptopunks.crypton.RosterService
-import cc.cryptopunks.crypton.service.AccountNavigationService
-import cc.cryptopunks.crypton.service.MainNavigationService
-import cc.cryptopunks.crypton.service.ServiceBindingManager
-import cc.cryptopunks.crypton.viewmodel.SetAccountService
+import cc.cryptopunks.crypton.service.*
 import dagger.Binds
 import dagger.Component
 import dagger.Provides

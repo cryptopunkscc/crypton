@@ -18,12 +18,14 @@ class CreateChatService @Inject constructor(
     private val navigate: Route.Api.Navigate
 ) : Service {
 
+    data class CreateChat(val userAddress: Address)
+
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     override fun Service.Binding.bind(): Job = launch {
         input.collect { arg ->
             when (arg) {
-                is Input.CreateChat -> try {
+                is CreateChat -> try {
                     val data = Data(
                         title = arg.userAddress.id,
                         users = listOf(User(arg.userAddress))
@@ -39,10 +41,6 @@ class CreateChatService @Inject constructor(
                 }
             }
         }
-    }
-
-    interface Input {
-        data class CreateChat(val userAddress: Address) : Input
     }
 
     interface Core {

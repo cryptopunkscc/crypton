@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.Net.Event.Disconnected
+import cc.cryptopunks.crypton.context.Net.Disconnected
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Network.Status.*
 import cc.cryptopunks.crypton.context.Service

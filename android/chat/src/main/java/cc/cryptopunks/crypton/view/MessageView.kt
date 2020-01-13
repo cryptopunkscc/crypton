@@ -52,7 +52,7 @@ class MessageView(
         menu.setHeaderTitle(R.string.choose_option_label)
             .findItem(R.id.copyToClipboard).setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.copyToClipboard -> MessageService.Copy
+                    R.id.copyToClipboard -> MessageService.CopyMessageText
                     else -> null
                 }?.let { action ->
                     optionClickBroadcast.offer(action)

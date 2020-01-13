@@ -1,9 +1,7 @@
-package cc.cryptopunks.crypton.viewmodel
+package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.viewmodel.SetAccountService.Input.AddAccount
-import cc.cryptopunks.crypton.viewmodel.SetAccountService.Input.RegisterAccount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -15,6 +13,9 @@ class SetAccountService @Inject constructor(
     private val navigate: Route.Api.Navigate
 ) : Service {
 
+    object AddAccount
+    object RegisterAccount
+
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     override fun Service.Binding.bind(): Job = launch {
@@ -24,11 +25,6 @@ class SetAccountService @Inject constructor(
                 is RegisterAccount -> navigate(Route.Register)
             }
         }
-    }
-
-    interface Input {
-        object AddAccount : Input
-        object RegisterAccount : Input
     }
 
     interface Core {

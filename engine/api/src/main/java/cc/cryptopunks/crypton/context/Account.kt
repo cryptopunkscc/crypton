@@ -22,12 +22,9 @@ data class Account(
         if (throwable is Exception) throwable
         else Exception(address, throwable)
 
-    interface Event : Api.Event {
+    interface Event : Api.Event
 
-        data class Authenticated(
-            val resumed: Boolean
-        ) : Event
-    }
+    data class Authenticated(val resumed: Boolean) : Event
 
     interface Net {
 

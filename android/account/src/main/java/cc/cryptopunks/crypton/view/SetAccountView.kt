@@ -4,10 +4,9 @@ import android.content.Context
 import android.view.View
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.service.SetAccountService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.map
-import cc.cryptopunks.crypton.viewmodel.SetAccountService.Input.AddAccount
-import cc.cryptopunks.crypton.viewmodel.SetAccountService.Input.RegisterAccount
 import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.set_account.view.*
 import kotlinx.coroutines.Job
@@ -27,8 +26,8 @@ class SetAccountView(
 
     override fun Service.Binding.bind(): Job = launch {
         flowOf(
-            addButton.clicks().map { AddAccount },
-            registerButton.clicks().map { RegisterAccount }
+            addButton.clicks().map { SetAccountService.AddAccount },
+            registerButton.clicks().map { SetAccountService.RegisterAccount }
         )
             .flattenMerge()
             .collect(output)

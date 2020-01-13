@@ -14,20 +14,20 @@ interface SessionServices : MessageServices {
 
 operator fun SessionServices.invoke(sessionEvent: Session.Event) {
     when (sessionEvent.event) {
-        is Session.Event.Created -> {
+        is Session.Created -> {
             sessionErrorService()
             netEventService()
             presenceService()
             messageReceiverService()
             messageNotificationService()
         }
-        is Net.Event.Connected -> {
+        is Net.Connected -> {
             // no-op
         }
-        is Net.Event.OmemoInitialized -> {
+        is Net.OmemoInitialized -> {
             loadArchivedMessagesService()
         }
-        is Account.Event.Authenticated -> {
+        is Account.Authenticated -> {
             // no-op
         }
     }

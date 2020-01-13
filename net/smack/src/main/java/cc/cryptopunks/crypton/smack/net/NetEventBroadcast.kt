@@ -16,7 +16,7 @@ internal class NetEventBroadcast(
     connection: XMPPTCPConnection,
     initOmemo: InitOmemo
 ) : (Api.Event) -> Unit,
-    Net.Event.Output,
+    Net.Output,
     Flow<Api.Event> {
 
     private val channel = BroadcastChannel<Api.Event>(Channel.CONFLATED)

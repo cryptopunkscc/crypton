@@ -19,14 +19,14 @@ class RosterItemService private constructor(
     private val latestMessageFlow: LatestMessageFlowSelector
 ) : Service {
 
-    override val id get() = chat.address.id
-
     data class State(
         val title: String,
         val letter: Char,
         val message: Message = Message.Empty,
         val presence: Presence.Status = Presence.Status.Unavailable
     )
+
+    override val id get() = chat.address.id
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 

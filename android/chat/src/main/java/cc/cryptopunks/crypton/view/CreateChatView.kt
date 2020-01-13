@@ -50,7 +50,7 @@ class CreateChatView(context: Context) :
         }
     }
 
-    private fun createUserFromInput() = CreateChatService.Input.CreateChat(
+    private fun createUserFromInput() = CreateChatService.CreateChat(
         Address.from(addressInputView.input.text.toString())
     )
 

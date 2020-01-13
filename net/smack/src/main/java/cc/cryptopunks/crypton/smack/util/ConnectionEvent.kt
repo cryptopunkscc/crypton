@@ -11,16 +11,16 @@ import org.jivesoftware.smack.XMPPConnection
 internal fun XMPPConnection.connectionEventsFlow() = callbackFlow<Api.Event> {
     val listener = object : ConnectionListener {
         override fun connected(connection: XMPPConnection) {
-            channel.offer(Net.Event.Connected)
+            channel.offer(Net.Connected)
         }
         override fun connectionClosed() {
-            channel.offer(Net.Event.Disconnected())
+            channel.offer(Net.Disconnected())
         }
         override fun connectionClosedOnError(e: Exception) {
-            channel.offer(Net.Event.Disconnected(e))
+            channel.offer(Net.Disconnected(e))
         }
         override fun authenticated(connection: XMPPConnection, resumed: Boolean) {
-            channel.offer(Account.Event.Authenticated(resumed))
+            channel.offer(Account.Authenticated(resumed))
         }
     }
     addConnectionListener(listener)

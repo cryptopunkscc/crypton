@@ -16,29 +16,24 @@ interface Net :
     val interrupt: Interrupt
     val isConnected: IsConnected
     val initOmemo: InitOmemo
-    val netEvents: Event.Output
+    val netEvents: Output
 
     interface Connect : () -> Unit
     interface Disconnect : () -> Unit
     interface Interrupt : () -> Unit
     interface IsConnected : () -> Boolean
     interface InitOmemo : () -> Boolean
+    interface Output : Flow<Api.Event>
 
-    interface Event : Api.Event {
+    interface Event : Api.Event
 
-        interface Output : Flow<Api.Event>
-
-        object Connected : Event
-
-        object OmemoInitialized : Event
-
-        data class Disconnected(
-            val throwable: Throwable? = null
-        ) : Event {
-            val hasError get() = throwable != null
-        }
+    object Connected : Event
+    object OmemoInitialized : Event
+    data class Disconnected(
+        val throwable: Throwable? = null
+    ) : Event {
+        val hasError get() = throwable != null
     }
-
     open class Exception(
         message: String? = null,
         cause: Throwable? = null

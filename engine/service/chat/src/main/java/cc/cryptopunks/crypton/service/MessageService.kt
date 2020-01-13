@@ -17,14 +17,7 @@ data class MessageService(
     private val copyToClipboard: Clip.Board.Sys.SetClip
 ) : Service {
 
-    override val coroutineContext =
-        SupervisorJob() + Dispatchers.Main
-
-    override val id get() = message.id
-
-    val isAccountMessage get() = message.from.address == address
-
-    object Copy
+    object CopyMessageText
 
     class State(
         val message: String,
@@ -32,6 +25,12 @@ data class MessageService(
         val author: String,
         val status: String
     )
+
+    override val coroutineContext = SupervisorJob() + Dispatchers.Main
+
+    override val id get() = message.id
+
+    val isAccountMessage get() = message.from.address == address
 
     private val state = State(
         message = message.text,
@@ -44,7 +43,7 @@ data class MessageService(
         state.out()
         input.collect { arg ->
             when (arg) {
-                is Copy -> copyToClipboard(message.text)
+                is CopyMessageText -> copyToClipboard(message.text)
             }
         }
     }

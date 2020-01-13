@@ -10,26 +10,25 @@ class Session(
     connection: Connection
 ) : Connection by connection {
 
-    interface Core {
-        val session: Session
-        val address: Address
-        val sessionScope: Scope
-    }
+    object Created : Api.Event
 
-    fun sessionEvent(event: Api.Event) =
-        Event(
-            session = this,
-            event = event
-        )
+    fun sessionEvent(event: Api.Event) = Event(
+        session = this,
+        event = event
+    )
 
     data class Event(
         val session: Session,
         val event: Api.Event
-    ) {
-        object Created : Api.Event
-    }
+    )
 
     class Scope : BroadcastErrorScope() {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
+    }
+
+    interface Core {
+        val session: Session
+        val address: Address
+        val sessionScope: Scope
     }
 }

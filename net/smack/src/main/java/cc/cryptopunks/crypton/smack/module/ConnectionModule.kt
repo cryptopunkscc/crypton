@@ -27,7 +27,7 @@ internal class ConnectionModule(
 
     private val outgoingMessageCache by lazy { OutgoingMessageCache() }
 
-    override val netEvents: Net.Event.Output by lazy {
+    override val netEvents: Net.Output by lazy {
         NetEventBroadcast(
             scope = scope,
             connection = connection,

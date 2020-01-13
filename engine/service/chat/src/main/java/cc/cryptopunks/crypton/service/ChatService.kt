@@ -27,14 +27,9 @@ class ChatService @Inject constructor(
     Service,
     Message.Consumer {
 
-    interface Input {
-        data class SendMessage(val text: String) : Input
-    }
-
-    interface Output {
-        data class Messages(val list: PagedList<MessageService>) : Output
-        data class MessageText(val text: CharSequence?) : Output
-    }
+    data class SendMessage(val text: String)
+    data class Messages(val list: PagedList<MessageService>)
+    data class MessageText(val text: CharSequence?)
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
@@ -43,19 +38,19 @@ class ChatService @Inject constructor(
     override fun Service.Binding.bind(): Job = launch {
         launch {
             input.collect {
-                if (it is Input.SendMessage && it.text.isNotBlank())
+                if (it is SendMessage && it.text.isNotBlank())
                     sendMessage(it.text)
             }
         }
         launch {
             clipboardRepo.pop()?.run {
-                output(Output.MessageText(data))
+                output(MessageText(data))
             }
         }
         launch {
             messageFlow(chat, createMessageService)
                 .onEach { log.d("received ${it.size} messages") }
-                .map(Output::Messages)
+                .map(::Messages)
                 .collect(output)
         }.invokeOnCompletion {
             log.d("Message flow completed")

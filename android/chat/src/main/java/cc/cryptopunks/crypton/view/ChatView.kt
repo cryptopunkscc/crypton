@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ChatService.Input.SendMessage
-import cc.cryptopunks.crypton.service.ChatService.Output.MessageText
-import cc.cryptopunks.crypton.service.ChatService.Output.Messages
+import cc.cryptopunks.crypton.service.ChatService.SendMessage
+import cc.cryptopunks.crypton.service.ChatService.MessageText
+import cc.cryptopunks.crypton.service.ChatService.Messages
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.chat.view.*

@@ -14,7 +14,7 @@ import javax.inject.Inject
 @SessionScope
 class NetEventService @Inject constructor(
     private val sessionScope: Session.Scope,
-    private val netEvents: Net.Event.Output,
+    private val netEvents: Net.Output,
     private val broadcastError: BroadcastError
 ) : () -> Job {
 
@@ -31,12 +31,12 @@ class NetEventService @Inject constructor(
     private suspend fun handleEvent(event: Api.Event) {
         log.d(event)
 
-        if (event is Net.Event.Disconnected)
+        if (event is Net.Disconnected)
             handleDisconnected(event)
     }
 
 
-    private suspend fun handleDisconnected(event: Net.Event.Disconnected) {
+    private suspend fun handleDisconnected(event: Net.Disconnected) {
         event.throwable?.let { throwable ->
             log.e(throwable)
             broadcastError.send(throwable)

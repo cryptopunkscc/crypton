@@ -17,7 +17,7 @@ class InitOmemo(
     private val init by lazy {
         try {
             omemoManager.initialize()
-            channel.offer(Net.Event.OmemoInitialized)
+            channel.offer(Net.OmemoInitialized)
             true
         } catch (throwable: Throwable) {
             channel.offer(

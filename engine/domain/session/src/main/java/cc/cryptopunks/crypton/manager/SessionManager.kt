@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.manager
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.context.Session.Event.Created
 import cc.cryptopunks.crypton.factory.SessionFactory
 import cc.cryptopunks.crypton.util.Broadcast
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -38,7 +37,7 @@ class SessionManager @Inject constructor(
 
     private fun Session.connectBroadcast() {
         scope.launch {
-            broadcast.send(sessionEvent(Created))
+            broadcast.send(sessionEvent(Session.Created))
             netEvents.collect { event ->
                 broadcast.send(sessionEvent(event))
             }
