@@ -29,8 +29,8 @@ class DashboardView(
 
     override fun Service.Binding.bind(): Job = launch {
         flowOf(
-            optionItems.map { DashboardService.Input.ManageAccounts },
-            createChat.map { DashboardService.Input.CreateChat }
+            optionItems.map { DashboardService.ManageAccounts },
+            createChat.map { DashboardService.CreateChat }
         )
             .flattenMerge()
             .collect(output)

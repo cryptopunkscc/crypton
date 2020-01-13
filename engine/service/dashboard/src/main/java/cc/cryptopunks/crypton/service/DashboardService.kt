@@ -13,20 +13,18 @@ class DashboardService @Inject constructor(
     private val navigate: Route.Api.Navigate
 ) : Service {
 
+    object CreateChat
+    object ManageAccounts
+
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     override fun Service.Binding.bind(): Job = launch {
         input.collect { arg ->
             when (arg) {
-                is Input.CreateChat -> navigate(Route.CreateChat)
-                is Input.ManageAccounts -> navigate(Route.AccountManagement)
+                is CreateChat -> navigate(Route.CreateChat)
+                is ManageAccounts -> navigate(Route.AccountManagement)
             }
         }
-    }
-
-    interface Input {
-        object CreateChat : Input
-        object ManageAccounts : Input
     }
 
     interface Core {

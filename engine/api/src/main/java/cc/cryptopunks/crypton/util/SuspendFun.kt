@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.context
+package cc.cryptopunks.crypton.util
 
 interface SuspendFun<R> {
     suspend operator fun invoke(): R

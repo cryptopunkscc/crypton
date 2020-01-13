@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
+import cc.cryptopunks.crypton.util.SuspendFun2
 import kotlinx.coroutines.flow.Flow
 
 typealias CryptonMessage = Message

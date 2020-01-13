@@ -3,12 +3,12 @@ package cc.cryptopunks.crypton.view
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import androidx.core.content.ContextCompat
+import cc.cryptopunks.crypton.RosterItemService
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.RosterItemService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
@@ -50,12 +50,8 @@ class RosterItemView(
 
     override fun Service.Binding.bind(): Job = launch {
         launch {
-            input.collect { arg ->
-                log.d(arg)
-                val (_, state) = arg as Service.Result<RosterItemService.State>
-                setDefaults(state)
-                setMessage(state)
-                setPresence(state)
+            input.collect {
+                handleInput(it)
             }
         }
         launch {
@@ -63,6 +59,14 @@ class RosterItemView(
                 Route.Chat().out()
             }
         }
+    }
+
+    private fun handleInput(input: Any) {
+        if (input !is Service.Result<*>) return
+        val state = input.state as? RosterItemService.State ?: return
+        setDefaults(state)
+        setMessage(state)
+        setPresence(state)
     }
 
     private fun setDefaults(state: RosterItemService.State) {
