@@ -23,7 +23,6 @@ abstract class LoggerFragment : Fragment() {
         log.d("onCreate")
     }
 
-    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         log.d("onViewCreated")

@@ -16,7 +16,6 @@ import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.manager.SessionManager
 import cc.cryptopunks.crypton.notification.ShowMessageNotification
-import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
 import cc.cryptopunks.crypton.service.AppServices
 import cc.cryptopunks.crypton.service.ServiceBindingManager
@@ -49,7 +48,6 @@ interface AndroidCore :
     FeatureManager.Core,
     SessionManager.Core,
     ServiceBindingManager.Core,
-    PresentationManager.Core,
     PresenceManager.Core,
     IntentProcessor.Core,
     AndroidService.Core.Factory.Core,

@@ -22,9 +22,6 @@ include ':engine:api',
         ':engine:service:roster',
         ':engine:service:chat',
 
-        ':engine:presentation:api',
-        ':engine:presentation:account',
-
         ':net:smack',
 
         ':android:debug',

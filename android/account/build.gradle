@@ -33,7 +33,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api project(':android:core')
-    api project(':engine:presentation:account')
     api project(':engine:service:account')
 
     testImplementation 'junit:junit:4.12'

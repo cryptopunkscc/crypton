@@ -6,26 +6,23 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.core.AccountPresentationCore
-import cc.cryptopunks.crypton.presenter.AccountListPresenter
+import cc.cryptopunks.crypton.service.AccountListService
+import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.AccountListView
-import kotlinx.coroutines.launch
 
-class AccountListFragment : PresenterFragment<AccountListPresenter.Actor, AccountListPresenter>() {
 
-    override val layoutRes: Int get() = R.layout.account_list
+class AccountListFragment : ServiceFragment() {
 
     override val titleId: Int get() = R.string.manage_accounts
-
-    private val core get() = featureCore as AccountPresentationCore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        launch { core.navigationService() }
     }
 
-    override fun onCreatePresenter() = core.accountListPresenter
+    override fun onCreatePresenter() = featureCore
+        .resolve<AccountListService.Core>()
+        .accountListService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,9 +30,7 @@ class AccountListFragment : PresenterFragment<AccountListPresenter.Actor, Accoun
         savedInstanceState: Bundle?
     ) = AccountListView(
         context = activity!!,
-        scope = presentation.actorScope,
-        fragmentManager = fragmentManager!!,
-        accountItemViewModelProvider = core.accountItemViewModelProvider
+        fragmentManager = fragmentManager!!
     )
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

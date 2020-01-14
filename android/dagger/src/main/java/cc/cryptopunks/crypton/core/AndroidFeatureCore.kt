@@ -7,8 +7,8 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.internal.Navigator
 import cc.cryptopunks.crypton.internal.OptionItemBroadcast
 import cc.cryptopunks.crypton.manager.PresenceManager
-import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.RosterService
+import cc.cryptopunks.crypton.service.AccountListService
 import cc.cryptopunks.crypton.service.*
 import cc.cryptopunks.crypton.service.SignInService
 import cc.cryptopunks.crypton.service.SignUpService
@@ -31,16 +31,15 @@ import javax.inject.Inject
 interface AndroidFeatureCore :
     FeatureCore,
     ServiceBindingManager.Core,
-    PresentationManager.Core,
     PresenceManager.Core,
     MainNavigationService.Core,
     AccountNavigationService.Core,
-    AccountPresentationCore,
     DashboardService.Core,
     RosterService.Core,
     SetAccountService.Core,
     SignInService.Core,
-    SignUpService.Core {
+    SignUpService.Core,
+    AccountListService.Core {
 
     val androidCore: AndroidCore
     val featureCore: FeatureCore
