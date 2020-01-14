@@ -10,6 +10,8 @@ import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.presentation.PresentationManager
 import cc.cryptopunks.crypton.RosterService
 import cc.cryptopunks.crypton.service.*
+import cc.cryptopunks.crypton.service.SignInService
+import cc.cryptopunks.crypton.service.SignUpService
 import dagger.Binds
 import dagger.Component
 import dagger.Provides
@@ -36,7 +38,9 @@ interface AndroidFeatureCore :
     AccountPresentationCore,
     DashboardService.Core,
     RosterService.Core,
-    SetAccountService.Core {
+    SetAccountService.Core,
+    SignInService.Core,
+    SignUpService.Core {
 
     val androidCore: AndroidCore
     val featureCore: FeatureCore

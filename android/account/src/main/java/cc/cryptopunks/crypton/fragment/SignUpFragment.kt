@@ -1,28 +1,21 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
-import android.view.View
-import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.util.bindings.bind
-import kotlinx.android.synthetic.main.sign_up.*
-import kotlinx.coroutines.launch
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import cc.cryptopunks.crypton.service.SignUpService
+import cc.cryptopunks.crypton.util.ext.resolve
+import cc.cryptopunks.crypton.view.SignView
 
-class SignUpFragment : AccountCoreFragment() {
+class SignUpFragment : ServiceFragment() {
 
-    override val layoutRes: Int get() = R.layout.sign_up
+    override fun onCreatePresenter() = featureCore
+        .resolve<SignUpService.Core>()
+        .signUpService
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        core.signUpViewModel.run {
-            launch { invoke() }
-            accountViewModel.run {
-                launch { serviceNameLayout.bind(serviceName) }
-                launch { userNameLayout.bind(userName) }
-                launch { passwordLayout.bind(password) }
-                launch { confirmPasswordLayout.bind(confirmPassword) }
-                launch { registerButton.bind(onClick) }
-                launch { errorOutput.bind(errorMessage) }
-            }
-        }
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = SignView(activity!!).register()
 }

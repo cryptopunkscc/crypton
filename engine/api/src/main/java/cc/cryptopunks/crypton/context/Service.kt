@@ -9,6 +9,7 @@ interface Service : CoroutineScope {
     val id: Any get() = Unit
 
     fun Connector.connect(): Job = launch { }
+    fun Connector.connect(service: Service): Job = launch { service.run { connect() }.join() }
 
     interface Connector {
         val input: Flow<Any>
