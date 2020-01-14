@@ -1,10 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import androidx.paging.PagedList
-import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Clip
-import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.interactor.SendMessageInteractor
 import cc.cryptopunks.crypton.selector.MessagePagedListSelector
 import cc.cryptopunks.crypton.util.ext.map
@@ -19,16 +16,20 @@ import javax.inject.Inject
 
 class ChatService @Inject constructor(
     val chat: Chat,
+    private val account: Address,
     private val sendMessage: SendMessageInteractor,
-    private val createMessageService: MessageService.Factory,
     private val messageFlow: MessagePagedListSelector,
-    private val clipboardRepo: Clip.Board.Repo
+    private val clipboardRepo: Clip.Board.Repo,
+    private val copyToClipboard: Clip.Board.Sys.SetClip
 ) :
     Service,
     Message.Consumer {
 
+    object CopyMessageText
+
+    data class MessageOption(val id: Any, val message: Message)
     data class SendMessage(val text: String)
-    data class Messages(val list: PagedList<MessageService>)
+    data class Messages(val account: Address, val list: PagedList<Message>)
     data class MessageText(val text: CharSequence?)
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
@@ -38,8 +39,15 @@ class ChatService @Inject constructor(
     override fun Service.Connector.connect(): Job = launch {
         launch {
             input.collect {
-                if (it is SendMessage && it.text.isNotBlank())
-                    sendMessage(it.text)
+                when (it) {
+                    is SendMessage -> if (it.text.isNotBlank()) {
+                        sendMessage(it.text)
+                    }
+                    is MessageOption -> when (it.id) {
+                        is CopyMessageText ->
+                            copyToClipboard(it.message.text)
+                    }
+                }
             }
         }
         launch {
@@ -48,9 +56,9 @@ class ChatService @Inject constructor(
             }
         }
         launch {
-            messageFlow(chat, createMessageService)
+            messageFlow(chat)
                 .onEach { log.d("received ${it.size} messages") }
-                .map(::Messages)
+                .map { Messages(account, it)}
                 .collect(output)
         }.invokeOnCompletion {
             log.d("Message flow completed")

@@ -16,8 +16,8 @@ abstract class FeatureActivity : BaseActivity() {
     val key: Any get() = javaClass.name
 
     val featureManager
-        get() = this
-            .appCore.resolve<FeatureManager.Core>()
+        get() = appCore
+            .resolve<FeatureManager.Core>()
             .featureManager
 
     val featureCore by lazy { featureManager.request(key) }

@@ -17,23 +17,19 @@ class ChatFragment : ServiceFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launch { binding + presenter() }
-    }
-
-    private suspend fun presenter(): ChatService = let {
-        val route = Route.Chat(arguments.toMap())
-        val address = Address.from(route.chatAddress)
-        val chat = withContext(Dispatchers.IO) {
-            featureCore
-                .chatRepo
-                .get(address)
+        launch(Dispatchers.IO) {
+            val route = Route.Chat(arguments.toMap())
+            val address = Address.from(route.chatAddress)
+            val chat = featureCore.chatRepo.get(address)
+            withContext(Dispatchers.Main) {
+                setTitle(chat.address)
+            }
+            binding + featureCore
+                .sessionFeature()
+                .chatFeature(chat)
+                .resolve<ChatService.Core>()
+                .chatService
         }
-        setTitle(chat.address)
-        featureCore
-            .sessionFeature()
-            .chatFeature(chat)
-            .resolve<ChatService.Core>()
-            .chatService
     }
 
     override fun onCreateView(

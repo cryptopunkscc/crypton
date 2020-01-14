@@ -8,14 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ChatService.SendMessage
-import cc.cryptopunks.crypton.service.ChatService.MessageText
-import cc.cryptopunks.crypton.service.ChatService.Messages
+import cc.cryptopunks.crypton.service.ChatService.*
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class ChatView(
@@ -25,8 +23,9 @@ class ChatView(
 
     private val messageAdapter = MessageAdapter(coroutineContext)
 
-    private val scrollThreshold: Int =
-        (context.resources.displayMetrics.scaledDensity * SCROLL_THRESHOLD_DP).toInt()
+    private val scrollThreshold: Int = context.resources.displayMetrics.run {
+        scaledDensity * SCROLL_THRESHOLD_DP
+    }.toInt()
 
     init {
         View.inflate(context, R.layout.chat, this)
@@ -45,20 +44,27 @@ class ChatView(
             input.collect { arg ->
                 when (arg) {
                     is MessageText -> messageInputView.input.setText(arg.text)
-                    is Messages -> isBottomReached()
-                        .also { messageAdapter.submitList(arg.list) }
-                        .let { wasBottomReached ->
-                            if (wasBottomReached)
-                                scrollToNewMessage() else
-                                displayNewMessageInfo()
+                    is Messages -> {
+                        val wasBottomReached = isBottomReached()
+                        messageAdapter.apply {
+                            account = arg.account
+                            submitList(arg.list)
                         }
+                        if (wasBottomReached)
+                            scrollToNewMessage() else
+                            displayNewMessageInfo()
+                    }
                 }
             }
         }
         launch {
-            messageInputView.button.clicks().collect {
-                SendMessage(getInputAndClear()).out()
-            }
+            flowOf(
+                messageAdapter.outputChannel.asFlow(),
+                messageInputView.button.clicks().map { SendMessage(getInputAndClear()) }
+            )
+                .flattenMerge()
+                .collect(output)
+
         }
     }
 

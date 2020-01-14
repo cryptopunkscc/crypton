@@ -13,12 +13,11 @@ class MessagePagedListSelector @Inject constructor(
     private val mainExecutor: MainExecutor,
     private val queryContext: Repo.Context.Query
 ) {
-    operator fun <T> invoke(
-        chat: Chat,
-        mapper: Message.() -> T
-    ): Flow<PagedList<T>> = CreatePagedList(
+    operator fun invoke(
+        chat: Chat
+    ): Flow<PagedList<Message>> = CreatePagedList(
         config = pagedListConfig(pageSize = 20),
-        dataSourceFactory = repo.dataSourceFactory(chat).map(mapper),
+        dataSourceFactory = repo.dataSourceFactory(chat),
         fetchExecutor = queryContext.executor,
         notifyExecutor = mainExecutor
     ).asFlow()

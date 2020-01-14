@@ -17,6 +17,8 @@ data class Message(
     val status: Status = Status.None
 ) {
 
+    val author: String get() = from.address.local
+
     enum class Status {
         None,
         Sending,

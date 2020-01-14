@@ -19,6 +19,7 @@ sealed class Route(
     ) : Route(data) {
         var accountId: String by data
         var chatAddress: String by data
+        val address get() = Address.from(chatAddress)
     }
 
     interface Api {
