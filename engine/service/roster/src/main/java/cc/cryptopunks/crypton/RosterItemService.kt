@@ -5,10 +5,7 @@ import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
 import cc.cryptopunks.crypton.selector.PresenceFlowSelector
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flattenMerge
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,15 +13,19 @@ class RosterItemService private constructor(
     private val chat: Chat,
     private val navigate: Route.Api.Navigate,
     private val presenceOf: PresenceFlowSelector,
-    private val latestMessageFlow: LatestMessageFlowSelector
+    private val latestMessageFlow: LatestMessageFlowSelector,
+    private val messageRepo: Message.Repo
 ) : Service {
 
     data class State(
         val title: String,
         val letter: Char,
         val message: Message = Message.Empty,
-        val presence: Presence.Status = Presence.Status.Unavailable
+        val presence: Presence.Status = Presence.Status.Unavailable,
+        val unreadMessagesCount: Int = 0
     )
+
+    private data class UnreadMessages(val count: Int)
 
     override val id get() = chat.address.id
 
@@ -40,7 +41,8 @@ class RosterItemService private constructor(
         flowOf(
             input,
             presenceOf(chat.address),
-            latestMessageFlow(chat)
+            latestMessageFlow(chat),
+            messageRepo.unreadCountFlow(chat).map { UnreadMessages(it) }
         ).flattenMerge().mapNotNull { action ->
             state.reduce(action)?.let { newState ->
                 state = newState
@@ -50,8 +52,15 @@ class RosterItemService private constructor(
     }
 
     private fun State.reduce(action: Any): State? = when (action) {
-        is Presence.Status -> copy(presence = action)
-        is Message -> copy(message = action)
+        is Presence.Status -> {
+            copy(presence = action)
+        }
+        is Message -> {
+            copy(message = action)
+        }
+        is UnreadMessages -> {
+            copy(unreadMessagesCount = action.count)
+        }
         is Route.Chat -> apply {
             action.apply {
                 accountId = chat.account.id
@@ -64,13 +73,15 @@ class RosterItemService private constructor(
     class Factory @Inject constructor(
         private val latestMessageFlow: LatestMessageFlowSelector,
         private val presenceSelector: PresenceFlowSelector,
-        private val navigate: Route.Api.Navigate
+        private val navigate: Route.Api.Navigate,
+        private val messageRepo: Message.Repo
     ) : (Chat) -> RosterItemService by { chat ->
         RosterItemService(
             chat = chat,
             latestMessageFlow = latestMessageFlow,
             presenceOf = presenceSelector,
-            navigate = navigate
+            navigate = navigate,
+            messageRepo = messageRepo
         )
     }
 }

@@ -6,4 +6,5 @@ dependencies {
     api project(':engine:util:inject')
     api project(':engine:service:api')
     api project(':engine:domain:roster')
+    api project(':engine:domain:chat')
 }

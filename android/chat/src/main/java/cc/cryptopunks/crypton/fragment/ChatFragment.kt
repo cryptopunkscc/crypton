@@ -9,9 +9,7 @@ import cc.cryptopunks.crypton.service.ChatService
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.util.toMap
 import cc.cryptopunks.crypton.view.ChatView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class ChatFragment : ServiceFragment() {
 
@@ -37,4 +35,14 @@ class ChatFragment : ServiceFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = ChatView(context!!)
+
+    override fun onStart() {
+        super.onStart()
+        launch { ChatService.Start.out() }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        launch { ChatService.Stop.out() }
+    }
 }

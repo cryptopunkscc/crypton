@@ -4,9 +4,10 @@ import cc.cryptopunks.crypton.context.Service
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.buffer
 
 internal class ServiceConnector : Service.Connector {
     private val channel = BroadcastChannel<Any>(Channel.CONFLATED)
-    override val input get() = channel.asFlow()
-    override val output = channel::send
+    override val input get() = channel.asFlow().buffer()
+    override val output: suspend (Any) -> Unit = channel::send
 }

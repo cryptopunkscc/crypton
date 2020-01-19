@@ -32,7 +32,8 @@ class RoomRepo(
     )
 
     override val messageRepo: Message.Repo = MessageRepo(
-        dao = database.messageDao
+        dao = database.messageDao,
+        coroutineContext = queryContext
     )
 
     override val userRepo: User.Repo = UserRepo(

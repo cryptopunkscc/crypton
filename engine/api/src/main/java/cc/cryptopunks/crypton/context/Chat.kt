@@ -13,16 +13,6 @@ data class Chat(
     val isDirect get() = users.size == 2
     val accountUser get() = users.last()
 
-    data class Exception(
-        val conversations: List<Chat>,
-        override val cause: Throwable
-    ) : kotlin.Exception(cause) {
-        constructor(
-            chat: Chat,
-            cause: Throwable
-        ) : this(listOf(chat), cause)
-    }
-
     interface Net {
         val createChat: Create
         interface Create: (Chat) -> Chat

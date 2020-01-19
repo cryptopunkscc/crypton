@@ -30,14 +30,14 @@ class MessageView(
 
     private val padding by lazy { resources.getDimensionPixelSize(R.dimen.message_padding) }
 
-    val optionClicks = BroadcastChannel<Any>(1)
+    val optionClicks = BroadcastChannel<ChatService.MessageOption>(1)
 
     var message: Message? = null
         set(value) {
             field = value?.apply {
                 bodyTextView.text = text
                 authorTextView.text = " $BULLET $author"
-                authorTextView.text = " $BULLET $status"
+                statusTextView.text = " $BULLET $status"
                 timestampTextView.text = dateFormat.format(timestamp)
             }
         }

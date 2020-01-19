@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
+import cc.cryptopunks.crypton.context.CryptonMessage
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
@@ -34,7 +35,7 @@ internal class ReadArchivedMessages(
         }
         .build()
 
-    private fun MamManager.MamQuery.flowMessages() = flow {
+    private fun MamManager.MamQuery.flowMessages(): Flow<List<CryptonMessage>> = flow {
         while (messageCount > 0) {
             val decryptedQueryResult = omemoManager.decryptMamQueryResult(this@flowMessages)
             page.forwarded
@@ -45,6 +46,7 @@ internal class ReadArchivedMessages(
                     }
                 }
                 .map(Forwarded::toCryptonMessage)
+                .map { it.copy(readAt = System.currentTimeMillis()) }
                 .filter { it.text.isNotBlank() }
                 .let { emit(it) }
             pageNext(PAGE_SIZE)

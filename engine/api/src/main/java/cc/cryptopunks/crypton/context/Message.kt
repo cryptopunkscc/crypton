@@ -14,8 +14,11 @@ data class Message(
     val chatAddress: Address = Address.Empty,
     val from: Resource = Resource.Empty,
     val to: Resource = Resource.Empty,
-    val status: Status = Status.None
+    val status: Status = Status.None,
+    val readAt: Long = 0
 ) {
+
+    val isUnread get() = readAt == 0L && status == Status.Received
 
     val author: String get() = from.address.local
 
@@ -67,19 +70,31 @@ data class Message(
 
     interface Repo {
         suspend fun insertOrUpdate(message: Message)
-        suspend fun insert(messages: List<Message>)
+        suspend fun insertOrUpdate(messages: List<Message>)
         suspend fun latest(): Message?
         suspend fun get(id: String): Message?
         suspend fun delete(message: Message)
+        suspend fun listUnread(): List<Message>
         fun flowLatest(chat: Chat): Flow<Message>
         fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message>
+        fun unreadListFlow(): Flow<List<Message>>
+        fun unreadCountFlow(chat: Chat) : Flow<Int>
+        suspend fun notifyUnread()
     }
 
-    interface Sys {
-        val showNotification: ShowNotification
-
-        interface ShowNotification : (Message) -> Unit
+    object Notification {
+        const val channelId = "Messages"
     }
+
+    interface Notify {
+        val notifyUnreadMessages: Unread
+
+        interface Unread : (List<Message>) -> Unit {
+            fun cancel(messages: List<Message>)
+        }
+    }
+
+    interface Sys : Notify
 
     class Exception(message: String? = null) : kotlin.Exception(message)
 

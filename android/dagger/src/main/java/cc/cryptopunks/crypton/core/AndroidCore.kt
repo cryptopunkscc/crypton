@@ -15,10 +15,10 @@ import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.manager.SessionManager
-import cc.cryptopunks.crypton.notification.ShowMessageNotification
+import cc.cryptopunks.crypton.notification.NotifyUnreadMessages
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
 import cc.cryptopunks.crypton.service.AppServices
-import cc.cryptopunks.crypton.service.ServiceBindingManager
+import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.sys.GetNetworkStatus
 import cc.cryptopunks.crypton.sys.SetToClipboard
 import cc.cryptopunks.crypton.sys.StartIndicatorService
@@ -47,7 +47,7 @@ interface AndroidCore :
     Api.Core,
     FeatureManager.Core,
     SessionManager.Core,
-    ServiceBindingManager.Core,
+    ServiceManager.Core,
     PresenceManager.Core,
     IntentProcessor.Core,
     AndroidService.Core.Factory.Core,
@@ -106,7 +106,7 @@ interface AndroidCore :
         fun SetToClipboard.setClip(): Clip.Board.Sys.SetClip
 
         @Binds
-        fun ShowMessageNotification.bind(): Message.Sys.ShowNotification
+        fun NotifyUnreadMessages.unread(): Message.Notify.Unread
 
         @Binds
         fun StartIndicatorService.start(): Indicator.Sys.Show

@@ -3,20 +3,28 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ServiceBindingManager
+import cc.cryptopunks.crypton.service.ServiceBinding
+import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.util.ext.resolve
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
 
 abstract class ServiceFragment :
-    FeatureFragment() {
+    FeatureFragment(),
+    Service,
+    Service.Connector {
 
-    private val serviceManager by lazy {
-        appCore.resolve<ServiceBindingManager.Core>().serviceBindingManager
+    private val serviceManager: ServiceManager by lazy {
+        appCore.resolve<ServiceManager.Core>().serviceManager
     }
 
-    val binding by lazy {
+    val binding: ServiceBinding by lazy {
         serviceManager.createBinding()
     }
+
+    override val input: Flow<Any> get() = binding.input
+
+    override val output: suspend (Any) -> Unit get() = binding.output
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +47,7 @@ abstract class ServiceFragment :
             slot1?.cancel()
             slot1 = null
         }
+        binding.minus<Service.Actor>()
     }
 
     override fun onDestroy() {

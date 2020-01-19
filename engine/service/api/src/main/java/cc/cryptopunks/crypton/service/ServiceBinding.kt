@@ -8,11 +8,9 @@ import kotlinx.coroutines.cancel
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class ServiceBinding {
+class ServiceBinding : Service.Connector by ServiceConnector() {
 
     private val serviceJobs = mutableMapOf<Service, Job>()
-
-    private val connector = ServiceConnector()
 
     val services get() = serviceJobs.keys
 
@@ -24,7 +22,7 @@ class ServiceBinding {
         takeIf {
             service !in serviceJobs
         }?.let {
-            serviceJobs[service] = connector.connect()
+            serviceJobs[service] = connect()
         }
     } != null
 
@@ -49,17 +47,6 @@ class ServiceBinding {
             values.forEach { it.cancel() }
             clear()
         }
-    }
-
-    fun snapshot() = Snapshot(slot1, slot2)
-
-    class Snapshot internal constructor(
-        val left: Service?,
-        val right: Service?
-    ) {
-        val isVisible get() = left != null
-        val isAttached get() = right != null
-        inline fun <reified T : Any> isTypeOf() = left is T
     }
 
     inner class Slot internal constructor(): ReadWriteProperty<Any, Service?> {

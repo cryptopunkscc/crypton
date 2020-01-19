@@ -19,21 +19,10 @@ class PresenceManager @Inject constructor() : Flow<UserPresence> {
     private val broadcast = Broadcast<UserPresence>()
     private val presenceMap = mutableMapOf<Address, Presence>()
 
-    operator fun set(address: Address, presence: Presence) = synchronized(this) {
-        log.d("set: $address $presence")
-        presenceMap[address] = presence
-        broadcast(UserPresence(address, presence))
-    }
-
     suspend fun send(address: Address, presence: Presence) {
         log.d("send: $address $presence")
         presenceMap[address] = presence
-        broadcast.send(
-            UserPresence(
-                address,
-                presence
-            )
-        )
+        broadcast.send(UserPresence(address, presence))
     }
 
     operator fun get(address: Address): Presence =

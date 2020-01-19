@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import cc.cryptopunks.crypton.activity.FeatureActivity
+import cc.cryptopunks.crypton.core.FeatureCore
 import kotlinx.coroutines.CoroutineScope
 
 abstract class FeatureFragment :
@@ -13,8 +14,8 @@ abstract class FeatureFragment :
     private val key by lazy { featureActivity.key }
     private val featureManager by lazy { featureActivity.featureManager }
 
-    val appCore get() = featureActivity.appCore
-    val featureCore by lazy { featureManager.request(key) }
+    val appCore: Any get() = featureActivity.appCore
+    val featureCore: FeatureCore by lazy { featureManager.request(key) }
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

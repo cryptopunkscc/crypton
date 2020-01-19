@@ -6,7 +6,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ServiceBindingManager
+import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import kotlinx.coroutines.CoroutineScope
 
@@ -19,7 +19,7 @@ V : Service,
 V : View,
 S : Service {
 
-    private val serviceManager = ServiceBindingManager()
+    private val serviceManager = ServiceManager()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         invokeOnClose {

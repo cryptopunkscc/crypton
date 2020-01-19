@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.fragment.MainFragment
 import cc.cryptopunks.crypton.initDebugDrawer
 import cc.cryptopunks.crypton.intent.IntentProcessor
 import cc.cryptopunks.crypton.main.R
-import cc.cryptopunks.crypton.service.ServiceBindingManager
+import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.util.ext.fragment
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.RosterView
@@ -41,10 +41,9 @@ class MainActivity : FeatureActivity() {
     override fun onBackPressed() {
         // prevent activity from leaking due to android bug
         // https://issuetracker.google.com/issues/139738913
-        appCore.resolve<ServiceBindingManager.Core>()
-            .serviceBindingManager.top().let {
-
-            if (it == null || it.left is RosterView)
+        appCore.resolve<ServiceManager.Core>()
+            .serviceManager.top()?.run {
+            if (services.any { it is RosterView })
                 finishAfterTransition() else
                 super.onBackPressed()
         }

@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ServiceBindingManager @Inject constructor() {
+class ServiceManager @Inject constructor() {
 
     private var list = listOf<WeakReference<out ServiceBinding>>()
         get() = field.filterNotEmpty().also { list = it }
@@ -18,9 +18,9 @@ class ServiceBindingManager @Inject constructor() {
         list = list.filter { it.get() != binding }
     }
 
-    fun top(): ServiceBinding.Snapshot? = list.lastOrNull()?.get()?.snapshot()
+    fun top() = list.lastOrNull()?.get()
 
-    fun stack() = list.mapNotNull { it.get()?.snapshot() }
+    fun stack(): List<ServiceBinding> = list.mapNotNull { it.get() }
 
     fun clear() {
         list.mapNotNull { it.get() }.forEach { it.clear() }
@@ -32,6 +32,6 @@ class ServiceBindingManager @Inject constructor() {
     }
 
     interface Core {
-        val serviceBindingManager: ServiceBindingManager
+        val serviceManager: ServiceManager
     }
 }

@@ -19,14 +19,16 @@ class SaveMessagesInteractor @Inject constructor(
 
     override fun invoke(messages: List<Message>) = scope.launch {
         messages
-            .map { Message.Event.Received(it) }
-            .forEach { invoke(it) }
+            .map { it.get() ?: it.create() }
+            .let { messageRepo.insertOrUpdate(it) }
     }
 
-    suspend operator fun invoke(event: Message.Event) = event.run {
-        val message = when(event) {
-            is Message.Event.Sending -> create()
-            else -> get() ?: create()
+    suspend operator fun invoke(event: Message.Event) {
+        val message = event.message.run {
+            when(event) {
+                is Message.Event.Sending -> create()
+                else -> get() ?: create()
+            }
         }.copy(
             status = when (event) {
                 is Message.Event.Queued -> Message.Status.Queued
@@ -37,22 +39,26 @@ class SaveMessagesInteractor @Inject constructor(
         )
 
         log.d("inserting message $message")
-        messageRepo.insertOrUpdate(message)
+        messageRepo.run {
+            insertOrUpdate(message)
+            if (message.status == Message.Status.Received)
+                notifyUnread()
+        }
     }
 
-    private suspend fun Message.Event.get() = messageRepo.run {
-        get(message.stanzaId)?.also {
+    private suspend fun Message.get() = messageRepo.run {
+        get(stanzaId)?.also {
             delete(it)
         }
     }
 
-    private suspend fun Message.Event.create() = message.copy(
+    private suspend fun Message.create() = copy(
         chatAddress = createChat(
             CreateChatInteractor.Data(
-                title = message.chatAddress.id,
+                title = chatAddress.id,
                 users = listOf(
                     User(
-                        message.getParty(address).address
+                        getParty(address).address
                     )
                 )
             )

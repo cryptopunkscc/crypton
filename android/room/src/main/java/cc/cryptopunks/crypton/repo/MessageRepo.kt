@@ -6,31 +6,48 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.entity.MessageData
 import cc.cryptopunks.crypton.entity.message
 import cc.cryptopunks.crypton.entity.messageData
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 internal class MessageRepo(
-    private val dao: MessageData.Dao
-) : Message.Repo {
+    private val dao: MessageData.Dao,
+    override val coroutineContext: CoroutineContext
+) : Message.Repo,
+    CoroutineScope {
 
     private var latest: Message = Message.Empty
+        set(value) {
+            if (field.timestamp < value.timestamp)
+                field = value
+        }
 
-    private val updateLatest: (Message) -> Unit = { message ->
-        if (latest.timestamp < message.timestamp)
-            latest = message
+    private val unreadMessagesChannel = BroadcastChannel<List<Message>>(Channel.CONFLATED)
+
+    init {
+        launch {
+            notifyUnread()
+        }
     }
 
-    override suspend fun insert(messages: List<Message>) {
-        dao.insert(messages.map {
-            updateLatest(it)
+    override suspend fun insertOrUpdate(message: Message) {
+        latest = message
+        dao.insertOrUpdate(message.messageData())
+    }
+
+    override suspend fun insertOrUpdate(messages: List<Message>) {
+        dao.insertOrUpdate(messages.map {
+            latest = it
             it.messageData()
         })
     }
 
-    override suspend fun insertOrUpdate(message: Message) {
-        updateLatest(message)
-        dao.insertOrUpdate(message.messageData())
+    override suspend fun notifyUnread() {
+        val unread = listUnread()
+        unreadMessagesChannel.send(unread)
     }
 
     override suspend fun get(id: String): Message? =
@@ -44,11 +61,25 @@ internal class MessageRepo(
             latest else
             dao.latest()
                 ?.message()
-                ?.also(updateLatest)
+                ?.also { latest = it }
+
+    override suspend fun listUnread(): List<Message> =
+        dao.listUnread().map { it.message() }
 
     override fun flowLatest(chat: Chat): Flow<Message> =
         dao.flowLatest(chat.address.id).filterNotNull().map { it.message() }
 
     override fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message> =
         dao.dataSourceFactory(chat.address.id).map { it.message() }
+
+    override fun unreadListFlow(): Flow<List<Message>> =
+        unreadMessagesChannel.asFlow()
+
+
+    override fun unreadCountFlow(chat: Chat): Flow<Int> =
+        unreadListFlow().map { list ->
+            list.filter { message ->
+                message.chatAddress == chat.address
+            }.size
+        }
 }

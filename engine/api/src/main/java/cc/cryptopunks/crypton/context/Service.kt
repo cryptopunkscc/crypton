@@ -5,6 +5,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
 interface Service : CoroutineScope {
+    interface Connectable : Service
+    interface Actor : Connectable
 
     val id: Any get() = Unit
 

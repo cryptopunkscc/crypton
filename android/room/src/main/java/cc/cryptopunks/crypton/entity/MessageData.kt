@@ -27,7 +27,8 @@ internal data class MessageData(
     val chatId: AddressData = EmptyAddressData,
     val from: AddressData = EmptyAddressData,
     val to: AddressData = EmptyAddressData,
-    val status: String = ""
+    val status: String = "",
+    val readAt: Long = 0
 ) {
 
     @androidx.room.Dao
@@ -37,7 +38,10 @@ internal data class MessageData(
         suspend fun insert(messages: List<MessageData>)
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        suspend fun insertOrUpdate(list: MessageData)
+        suspend fun insertOrUpdate(data: MessageData)
+
+        @Insert(onConflict = OnConflictStrategy.REPLACE)
+        suspend fun insertOrUpdate(list: List<MessageData>)
 
         @Query("select * from message where id == :id")
         fun get(id: String): MessageData?
@@ -53,10 +57,18 @@ internal data class MessageData(
 
         @Query("delete from message where id == :id")
         fun delete(id: String)
-    }
 
-    companion object {
-        val Empty = MessageData()
+        @Query("select * from message where readAt == 0 and status == 'Received'")
+        suspend fun listUnread(): List<MessageData>
+
+        @Query("select * from message where readAt == 0")
+        fun flowUnreadList(): Flow<List<MessageData>>
+
+        @Query("select * from message where readAt == 0 and chatId == :chatId and status == 'Received'")
+        fun flowUnreadList(chatId: AddressData): Flow<List<MessageData>>
+
+        @Query("select id from message where readAt == 0 and chatId == :chatId and status == 'Received'")
+        fun flowUnreadIds(chatId: AddressData): Flow<List<String>>
     }
 }
 
@@ -68,7 +80,8 @@ internal fun Message.messageData() = MessageData(
     text = text,
     from = from.id,
     to = to.id,
-    status = status.name
+    status = status.name,
+    readAt = readAt
 )
 
 internal fun MessageData.message() = Message(
@@ -79,5 +92,6 @@ internal fun MessageData.message() = Message(
     chatAddress = Address.from(chatId),
     text = text,
     timestamp = timestamp,
-    status = Message.Status.valueOf(status)
+    status = Message.Status.valueOf(status),
+    readAt = readAt
 )

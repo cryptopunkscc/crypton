@@ -12,7 +12,7 @@ import cc.cryptopunks.crypton.entity.*
         UserData::class,
         ChatUserData::class
     ],
-    version = 1
+    version = 2
 )
 internal abstract class Database : RoomDatabase() {
     abstract val accountDao: AccountData.Dao

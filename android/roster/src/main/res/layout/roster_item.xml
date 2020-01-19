@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
     android:padding="@dimen/default_padding">
 
     <FrameLayout
+        android:id="@+id/conversationLetterLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
@@ -34,9 +34,21 @@
             android:src="@drawable/presence_status_drawable" />
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/unreadMessagesTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/conversationLetterLayout"
+        android:layout_alignBottom="@+id/conversationLetterLayout"
+        android:gravity="center"
+        tools:text="+14" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/conversationLetterLayout"
+        android:layout_toStartOf="@+id/unreadMessagesTextView"
         android:layout_marginStart="@dimen/default_padding"
         android:orientation="vertical">
 
@@ -71,4 +83,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

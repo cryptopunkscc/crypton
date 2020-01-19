@@ -10,7 +10,7 @@ abstract class ServiceLayout(
     context: Context
 ) :
     FrameLayout(context),
-    Service {
+    Service.Actor {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.Main
 

@@ -5,7 +5,7 @@ object Indicator {
 
     object Notification {
         val id = hashCode()
-        const val channelId = "Indicator channel"
+        const val channelId = "Indicator"
     }
 
     interface Sys {

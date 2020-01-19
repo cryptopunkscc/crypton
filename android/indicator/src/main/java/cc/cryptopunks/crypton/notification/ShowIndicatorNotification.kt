@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
+import androidx.core.app.NotificationCompat
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.indicator.R
 import javax.inject.Inject
@@ -19,11 +20,13 @@ class ShowIndicatorNotification @Inject constructor(
         createNotification()
     )
 
-    private fun createNotification(): Notification = context
-        .notificationBuilder(Indicator.Notification.channelId)
+    private fun createNotification(): Notification = NotificationCompat
+        .Builder(context, Indicator.Notification.channelId)
         .setContentTitle(context.getText(R.string.app_name))
         .setSmallIcon(R.mipmap.ic_launcher_round)
         .setContentIntent(pendingIntent())
+        .setOngoing(true)
+        .setShowWhen(false)
         .build()
 
 

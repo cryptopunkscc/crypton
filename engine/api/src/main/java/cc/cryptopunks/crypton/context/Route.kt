@@ -14,6 +14,7 @@ sealed class Route(
     object AccountList : Route()
     object AccountManagement : Route()
     object CreateChat : Route()
+
     class Chat(
         data: MutableMap<String, Any?> = mutableMapOf()
     ) : Route(data) {

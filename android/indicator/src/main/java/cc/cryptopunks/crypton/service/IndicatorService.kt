@@ -6,6 +6,7 @@ import android.content.Intent
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.AndroidService
 import cc.cryptopunks.crypton.context.Indicator
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel.*
 import cc.cryptopunks.crypton.notification.ShowIndicatorNotification
@@ -30,6 +31,10 @@ class IndicatorService : IntentService(Indicator.serviceName) {
             createNotificationChannel(
                 id = Indicator.Notification.channelId,
                 importance = Importance.Min
+            )
+            createNotificationChannel(
+                id = Message.Notification.channelId,
+                importance = Importance.High
             )
             showIndicatorNotification()
         }

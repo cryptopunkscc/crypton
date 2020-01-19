@@ -67,6 +67,7 @@ class RosterItemView(
         setDefaults(state)
         setMessage(state)
         setPresence(state)
+        setUnreadMessages(state)
     }
 
     private fun setDefaults(state: RosterItemService.State) {
@@ -89,5 +90,13 @@ class RosterItemView(
 
     private fun setPresence(state: RosterItemService.State) {
         statusDrawable.setColor(statusColors.getValue(state.presence))
+    }
+
+    private fun setUnreadMessages(state: RosterItemService.State) {
+        unreadMessagesTextView.text = state.run {
+            if (unreadMessagesCount > 0)
+                "+ $unreadMessagesCount" else
+                null
+        }
     }
 }

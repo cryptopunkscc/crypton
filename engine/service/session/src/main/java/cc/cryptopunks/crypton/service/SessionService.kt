@@ -20,17 +20,17 @@ class SessionService @Inject constructor(
 
     private val log = typedLog()
 
+    private val sessionServices by lazy {
+        createFeatureCore()
+            .sessionFeature()
+            .resolve<SessionServices>()
+    }
+
     override fun invoke() = serviceScope.launch {
         log.d("start")
         invokeOnClose { log.d("stop") }
         selectSessionEvent().collect { event ->
             sessionServices(event)
         }
-    }
-
-    private val sessionServices by lazy {
-        createFeatureCore()
-            .sessionFeature()
-            .resolve<SessionServices>()
     }
 }

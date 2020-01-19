@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.core
 
+import cc.cryptopunks.crypton.RosterService
 import cc.cryptopunks.crypton.annotation.FeatureScope
 import cc.cryptopunks.crypton.context.Feature
 import cc.cryptopunks.crypton.context.OptionItem
@@ -7,11 +8,7 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.internal.Navigator
 import cc.cryptopunks.crypton.internal.OptionItemBroadcast
 import cc.cryptopunks.crypton.manager.PresenceManager
-import cc.cryptopunks.crypton.RosterService
-import cc.cryptopunks.crypton.service.AccountListService
 import cc.cryptopunks.crypton.service.*
-import cc.cryptopunks.crypton.service.SignInService
-import cc.cryptopunks.crypton.service.SignUpService
 import dagger.Binds
 import dagger.Component
 import dagger.Provides
@@ -30,7 +27,7 @@ import javax.inject.Inject
 )
 interface AndroidFeatureCore :
     FeatureCore,
-    ServiceBindingManager.Core,
+    ServiceManager.Core,
     PresenceManager.Core,
     MainNavigationService.Core,
     AccountNavigationService.Core,
