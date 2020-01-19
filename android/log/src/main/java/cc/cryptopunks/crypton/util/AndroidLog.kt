@@ -1,9 +1,6 @@
 package cc.cryptopunks.crypton.util
 
-import timber.log.Timber
-
 fun initAndroidLog() {
-    Timber.plant(Timber.DebugTree())
     Log.init(AndroidLog)
 }
 
@@ -13,12 +10,15 @@ private object AndroidLog : Log {
         label: String,
         level: Log.Level,
         message: Any
-    ) = if (message is Throwable)
-        Timber.e(message) else
-        Timber.log(
-            level.priority,
-            prepareMessage(label, message)
-        )
+    ) {
+        if (message is Throwable)
+            android.util.Log.e(null, "", message) else
+            android.util.Log.println(
+                level.priority,
+                label.split(".").last(),
+                message.toString()
+            )
+    }
 }
 
 private fun prepareMessage(label: String, message: Any) =

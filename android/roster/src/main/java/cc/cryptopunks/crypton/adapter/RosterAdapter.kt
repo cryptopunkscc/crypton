@@ -5,7 +5,6 @@ import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.util.PagedListServiceAdapter
 import cc.cryptopunks.crypton.view.RosterItemView
 import kotlinx.coroutines.CoroutineScope
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -17,7 +16,7 @@ class RosterAdapter @Inject constructor(
     PagedListServiceAdapter<RosterItemView, Service>(),
     CoroutineScope {
 
-    private val dateFormat: DateFormat = SimpleDateFormat(
+    private val dateFormat = SimpleDateFormat(
         "d MMM yyyy • HH:mm",
         Locale.getDefault()
     )

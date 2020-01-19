@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.service.ChatService
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.synthetic.main.chat_message_item.view.*
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import java.text.DateFormat
 
@@ -41,6 +42,8 @@ class MessageView(
                 timestampTextView.text = dateFormat.format(timestamp)
             }
         }
+
+    var job: Job? = null
 
     init {
         layoutParams = ViewGroup.LayoutParams(

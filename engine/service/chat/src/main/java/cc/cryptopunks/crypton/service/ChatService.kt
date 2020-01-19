@@ -9,7 +9,6 @@ import cc.cryptopunks.crypton.util.ext.map
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class ChatService @Inject constructor(
@@ -21,11 +20,9 @@ class ChatService @Inject constructor(
     private val clipboardRepo: Clip.Board.Repo,
     private val copyToClipboard: Clip.Board.Sys.SetClip
 ) :
-    Service,
+    Service.Connectable,
     Message.Consumer {
 
-    object Start
-    object Stop
     object CopyMessageText
 
     data class MessageOption(val id: Any, val message: Message)
@@ -34,21 +31,30 @@ class ChatService @Inject constructor(
     data class Messages(val account: Address, val list: PagedList<Message>)
     data class MessageText(val text: CharSequence?)
 
-    override val coroutineContext = SupervisorJob() + Executors
-        .newSingleThreadExecutor()
-        .asCoroutineDispatcher()
+    override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     private val log = typedLog()
 
-    private var status: Any = Stop
+    private var status: Any = Service.Actor.Stop
 
     override fun Service.Connector.connect(): Job = launch {
         launch {
             input.collect {
+                log.d("in: $it")
                 when (it) {
-                    is Stop,
-                    is Start -> {
+                    is Service.Actor.Stop -> {
                         status = it
+                    }
+                    is Service.Actor.Start -> {
+                        status = it
+                        clipboardRepo.pop()?.run {
+                            output(MessageText(data))
+                        }
+                    }
+                    is Service.Actor.Connected -> {
+                        clipboardRepo.pop()?.run {
+                            output(MessageText(data))
+                        }
                     }
                     is MessagesRead -> {
                         markMessagesAsRead(it.messages)
@@ -64,11 +70,6 @@ class ChatService @Inject constructor(
             }
         }
         launch {
-            clipboardRepo.pop()?.run {
-                output(MessageText(data))
-            }
-        }
-        launch {
             messageFlow(chat)
                 .onEach { log.d("received ${it.size} messages") }
                 .map { Messages(account, it) }
@@ -80,7 +81,7 @@ class ChatService @Inject constructor(
     }
 
     override fun canConsume(message: Message): Boolean =
-        message.chatAddress == chat.address && status == Start
+        message.chatAddress == chat.address && status == Service.Actor.Start
 
 
     interface Core {

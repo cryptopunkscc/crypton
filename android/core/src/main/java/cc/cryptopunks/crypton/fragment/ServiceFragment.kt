@@ -3,11 +3,14 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.service.ConnectableBuffer
 import cc.cryptopunks.crypton.service.ServiceBinding
 import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.util.ext.resolve
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 abstract class ServiceFragment :
     FeatureFragment(),
@@ -18,35 +21,45 @@ abstract class ServiceFragment :
         appCore.resolve<ServiceManager.Core>().serviceManager
     }
 
-    val binding: ServiceBinding by lazy {
+    protected val binding: ServiceBinding by lazy {
         serviceManager.createBinding()
     }
+
+    protected val viewProxy = ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
 
     override val input: Flow<Any> get() = binding.input
 
     override val output: suspend (Any) -> Unit get() = binding.output
 
+    protected open fun onCreatePresenter(): Service? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding + viewProxy
         binding + onCreatePresenter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.slot1 = onCreateActor(view)
+        viewProxy.service = onCreateActor(view)
     }
 
-    open fun onCreatePresenter(): Service? = null
-
     @Suppress("UNCHECKED_CAST")
-    open fun onCreateActor(view: View): Service? = view as? Service
+    protected open fun onCreateActor(view: View): Service? = view as? Service
+
+    override fun onStart() {
+        super.onStart()
+        launch { Service.Actor.Start.out() }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        launch { Service.Actor.Stop.out() }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.apply {
-            slot1?.cancel()
-            slot1 = null
-        }
+        viewProxy.service = null
         binding.minus<Service.Actor>()
     }
 

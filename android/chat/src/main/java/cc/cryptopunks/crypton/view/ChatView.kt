@@ -7,17 +7,17 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.service.ChatService.*
 import cc.cryptopunks.crypton.util.bindings.clicks
-import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ChatView(
@@ -27,8 +27,6 @@ class ChatView(
 
     private val log = typedLog()
 
-    private val messageAdapter = MessageAdapter(coroutineContext)
-
     private val scrollThreshold: Int = context.resources.displayMetrics.run {
         scaledDensity * SCROLL_THRESHOLD_DP
     }.toInt()
@@ -36,7 +34,6 @@ class ChatView(
     init {
         View.inflate(context, R.layout.chat, this)
         chatRecyclerView.apply {
-            adapter = messageAdapter
             layoutManager = LinearLayoutManager(
                 context,
                 RecyclerView.VERTICAL,
@@ -48,9 +45,13 @@ class ChatView(
     override fun Service.Connector.connect(): Job = launch {
         launch {
             input.collect { arg ->
+                log.d("in: $arg")
                 when (arg) {
-                    is Start -> chatRecyclerView.run {
-                        messageAdapter.stop = false
+                    is RecyclerView.Adapter<*> -> {
+                        log.d("set adapter: $arg")
+                        chatRecyclerView.adapter = arg
+                    }
+                    is Service.Actor.Start -> chatRecyclerView.run {
                         val rect = Rect()
                         children.filter { child ->
                             getHitRect(rect)
@@ -59,17 +60,10 @@ class ChatView(
                             MessagesRead(it.toList())
                         }
                     }
-                    is Stop -> {
-                        messageAdapter.stop = true
-                    }
                     is MessageText -> messageInputView.input.setText(arg.text)
                     is Messages -> {
                         val wasBottomReached = isBottomReached()
-                        messageAdapter.apply {
-                            account = arg.account
-                            submitList(arg.list)
-                            log.d("list submitted")
-                        }
+                        delay(50)
                         if (wasBottomReached)
                             scrollToNewMessage() else
                             displayNewMessageInfo()
@@ -78,14 +72,11 @@ class ChatView(
             }
         }
         launch {
-            flowOf(
-                messageAdapter.clicksChannel.asFlow(),
-                messageAdapter.readChannel.asFlow().bufferedThrottle(200).map { MessagesRead(it) },
-                messageInputView.button.clicks().map { SendMessage(getInputAndClear()) }
-            )
-                .flattenMerge()
+            messageInputView.button.clicks().map { SendMessage(getInputAndClear()) }
                 .collect(output)
-
+        }
+        launch {
+            Service.Actor.Connected.out()
         }
     }
 
@@ -103,6 +94,11 @@ class ChatView(
 
     private fun getInputAndClear() = messageInputView.input.text.run {
         toString().also { clear() }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        chatRecyclerView.adapter = null
     }
 
     private companion object {

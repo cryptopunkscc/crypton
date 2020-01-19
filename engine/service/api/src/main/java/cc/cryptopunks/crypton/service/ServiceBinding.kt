@@ -3,12 +3,17 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class ServiceBinding : Service.Connector by ServiceConnector() {
+class ServiceBinding internal constructor(
+    private val provider: ServiceConnectorProvider = ServiceConnectorProvider()
+): Service.Connector by provider {
+
+    private val log = typedLog()
 
     private val serviceJobs = mutableMapOf<Service, Job>()
 
@@ -22,7 +27,8 @@ class ServiceBinding : Service.Connector by ServiceConnector() {
         takeIf {
             service !in serviceJobs
         }?.let {
-            serviceJobs[service] = connect()
+            log.d("connecting $service")
+            serviceJobs[service] = provider.openSubscription().connect()
         }
     } != null
 
