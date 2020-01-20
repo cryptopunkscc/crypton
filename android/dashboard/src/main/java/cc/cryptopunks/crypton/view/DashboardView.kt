@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.view
 
 import android.view.View
 import cc.cryptopunks.crypton.context.OptionItem
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.DashboardService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.dashboard.*
@@ -29,8 +29,8 @@ class DashboardView(
 
     override fun Service.Connector.connect(): Job = launch {
         flowOf(
-            optionItems.map { DashboardService.ManageAccounts },
-            createChat.map { DashboardService.CreateChat }
+            optionItems.map { Route.AccountManagement },
+            createChat.map { Route.CreateChat }
         )
             .flattenMerge()
             .collect(output)

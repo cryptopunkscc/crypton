@@ -6,7 +6,7 @@ import android.view.MenuInflater
 import android.view.View
 import cc.cryptopunks.crypton.context.OptionItem
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.service.DashboardService
+import cc.cryptopunks.crypton.service.RouterService
 import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.DashboardView
 
@@ -21,8 +21,8 @@ class DashboardFragment :
     }
 
     override fun onCreatePresenter() = featureCore
-        .resolve<DashboardService.Core>()
-        .dashboardService
+        .resolve<RouterService.Core>()
+        .routerService
 
     override fun onCreateActor(view: View) = DashboardView(
         containerView = view,

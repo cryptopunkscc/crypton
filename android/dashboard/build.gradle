@@ -32,7 +32,7 @@ dependencies {
 
     api project(':android:core')
     api project(':android:roster')
-    api project(':engine:service:dashboard')
+    api project(':engine:service:route')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

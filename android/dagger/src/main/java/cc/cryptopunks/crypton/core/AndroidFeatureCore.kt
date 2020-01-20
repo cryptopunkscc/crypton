@@ -31,9 +31,8 @@ interface AndroidFeatureCore :
     PresenceManager.Core,
     MainNavigationService.Core,
     AccountNavigationService.Core,
-    DashboardService.Core,
+    RouterService.Core,
     RosterService.Core,
-    SetAccountService.Core,
     SignInService.Core,
     SignUpService.Core,
     AccountListService.Core {

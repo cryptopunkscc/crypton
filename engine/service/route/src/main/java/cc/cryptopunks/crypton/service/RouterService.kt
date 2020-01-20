@@ -6,28 +6,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DashboardService @Inject constructor(
+class RouterService @Inject constructor(
     private val navigate: Route.Api.Navigate
-) : Service {
+) : Service.Connectable {
 
-    object CreateChat
-    object ManageAccounts
-
-    override val coroutineContext = SupervisorJob() + Dispatchers.IO
+    override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
     override fun Service.Connector.connect(): Job = launch {
-        input.collect { arg ->
-            when (arg) {
-                is CreateChat -> navigate(Route.CreateChat)
-                is ManageAccounts -> navigate(Route.AccountManagement)
-            }
+        input.filterIsInstance<Route>().collect {
+            navigate(it)
         }
     }
 
     interface Core {
-        val dashboardService: DashboardService
+        val routerService: RouterService
     }
 }

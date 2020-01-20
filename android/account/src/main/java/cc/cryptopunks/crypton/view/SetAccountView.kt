@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton.view
 import android.content.Context
 import android.view.View
 import cc.cryptopunks.crypton.account.R
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.SetAccountService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.map
 import cc.cryptopunks.crypton.widget.ServiceLayout
@@ -26,8 +26,8 @@ class SetAccountView(
 
     override fun Service.Connector.connect(): Job = launch {
         flowOf(
-            addButton.clicks().map { SetAccountService.AddAccount },
-            registerButton.clicks().map { SetAccountService.RegisterAccount }
+            addButton.clicks().map { Route.Login },
+            registerButton.clicks().map { Route.Register }
         )
             .flattenMerge()
             .collect(output)
