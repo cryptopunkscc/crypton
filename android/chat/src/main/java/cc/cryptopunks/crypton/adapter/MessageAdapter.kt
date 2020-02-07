@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.service.ChatService.*
-import cc.cryptopunks.crypton.util.State
+import cc.cryptopunks.crypton.util.Store
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.ext.map
@@ -43,7 +43,7 @@ class MessageAdapter(
 
     private var account = Address.Empty
 
-    private val state = State<Any>(Service.Actor.Stop)
+    private val store = Store<Any>(Service.Actor.Stop)
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
@@ -53,10 +53,10 @@ class MessageAdapter(
                 log.d("in: $it")
                 when (it) {
                     is Service.Actor.Start -> {
-                        state { it }
+                        store { it }
                     }
                     is Service.Actor.Stop -> {
-                        state { it }
+                        store { it }
                     }
                     is Messages -> {
                         log.d("submit messages $it")
@@ -94,7 +94,7 @@ class MessageAdapter(
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
         holder.view.message?.let { message ->
-            if (state.get() != Service.Actor.Stop && message.isUnread) launch {
+            if (store.get() != Service.Actor.Stop && message.isUnread) launch {
                 readChannel.send(message)
             }
         }

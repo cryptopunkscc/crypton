@@ -15,9 +15,9 @@ abstract class PagedListServiceAdapter<V, S>(
 ) :
     PagedListAdapter<S, PagedListServiceAdapter<V, S>.ViewHolder>(diffCallback),
     CoroutineScope where
-V : Service,
+V : Service.Connectable,
 V : View,
-S : Service {
+S : Service.Connectable {
 
     private val serviceManager = ServiceManager()
 

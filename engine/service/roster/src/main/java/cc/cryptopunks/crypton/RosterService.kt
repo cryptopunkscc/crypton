@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton
 
 import androidx.paging.PagedList
+import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.selector.RosterSelector
 import cc.cryptopunks.crypton.util.ext.map
@@ -15,9 +16,8 @@ import javax.inject.Inject
 class RosterService @Inject constructor(
     private val rosterFlow: RosterSelector,
     private val createRosterItem: RosterItemService.Factory
-) : Service {
+) : Roster.Service {
 
-    object Start
     data class Items(val items: PagedList<Service>)
 
     private val log = typedLog()
@@ -31,8 +31,7 @@ class RosterService @Inject constructor(
         launch {
             input.collect {
                 when (it) {
-                    is Start -> items?.out()
-                    is Service.Actor.Connected -> items?.out()
+                    is Roster.Service.GetItems -> items?.out()
                 }
             }
         }

@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 class RosterAdapter @Inject constructor(
     override val coroutineContext: CoroutineContext
 ) :
-    PagedListServiceAdapter<RosterItemView, Service>(),
+    PagedListServiceAdapter<RosterItemView, Service.Connectable>(),
     CoroutineScope {
 
     private val dateFormat = SimpleDateFormat(

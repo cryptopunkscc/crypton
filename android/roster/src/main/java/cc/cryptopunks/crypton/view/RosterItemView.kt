@@ -3,12 +3,8 @@ package cc.cryptopunks.crypton.view
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import androidx.core.content.ContextCompat
-import cc.cryptopunks.crypton.RosterItemService
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Presence
-import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
@@ -50,53 +46,39 @@ class RosterItemView(
 
     override fun Service.Connector.connect(): Job = launch {
         launch {
-            input.collect {
-                handleInput(it)
-            }
+            input.collect { arg -> handleInput(arg) }
         }
         launch {
-            clicks().collect {
-                Route.Chat().out()
-            }
+            clicks().collect { Route.Chat().out() }
         }
     }
 
     private fun handleInput(input: Any) {
-        if (input !is Service.Result<*>) return
-        val state = input.state as? RosterItemService.State ?: return
-        setDefaults(state)
-        setMessage(state)
-        setPresence(state)
-        setUnreadMessages(state)
-    }
+        (input as? Roster.Item.State)?.run {
 
-    private fun setDefaults(state: RosterItemService.State) {
-        conversationTitleTextView.text = state.title
-        conversationLetter.text = state.letter.toString()
-        avatarDrawable.setColor(
-            ContextCompat.getColor(
-                context,
-                letterColors.getValue(state.letter)
+            conversationTitleTextView.text = title
+
+            conversationLetter.text = letter.toString()
+
+            avatarDrawable.setColor(
+                ContextCompat.getColor(
+                    context,
+                    letterColors.getValue(letter)
+                )
             )
-        )
-    }
 
-    private fun setMessage(state: RosterItemService.State) {
-        lastMessageTextView.text = state.message.formatMessage()
-        dateTextView.text = dateFormat.format(state.message.timestamp)
+            lastMessageTextView.text = message.formatMessage()
+
+            dateTextView.text = dateFormat.format(message.timestamp)
+
+            statusDrawable.setColor(statusColors.getValue(presence))
+
+            unreadMessagesTextView.text =
+                if (unreadMessagesCount > 0)
+                    "+ $unreadMessagesCount" else
+                    null
+        }
     }
 
     private fun Message.formatMessage() = "${from.address.local}: $text"
-
-    private fun setPresence(state: RosterItemService.State) {
-        statusDrawable.setColor(statusColors.getValue(state.presence))
-    }
-
-    private fun setUnreadMessages(state: RosterItemService.State) {
-        unreadMessagesTextView.text = state.run {
-            if (unreadMessagesCount > 0)
-                "+ $unreadMessagesCount" else
-                null
-        }
-    }
 }

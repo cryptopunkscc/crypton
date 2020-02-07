@@ -5,8 +5,8 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.RosterService
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ServiceLayout
 import kotlinx.android.synthetic.main.roster.view.*
@@ -43,13 +43,13 @@ class RosterView(
     override fun Service.Connector.connect(): Job = launch {
         log.d("bind")
         launch {
-            input.filterIsInstance<RosterService.Items>().collect {
+            input.filterIsInstance<Roster.Service.Items>().collect {
                 log.d("receive: ${it.items.size}")
                 rosterAdapter.submitList(it.items)
             }
         }
         launch {
-            Service.Actor.Connected.out()
+            Roster.Service.GetItems.out()
         }
     }
 

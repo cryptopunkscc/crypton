@@ -23,11 +23,6 @@ interface Service : CoroutineScope {
         suspend fun Any.out() = output(this)
     }
 
-    data class Result<S>(
-        val action: Any,
-        val state: S
-    )
-
     class Scope : BroadcastErrorScope() {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }

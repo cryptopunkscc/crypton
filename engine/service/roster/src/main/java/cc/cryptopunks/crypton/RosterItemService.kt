@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
 import cc.cryptopunks.crypton.selector.PresenceFlowSelector
+import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
@@ -15,15 +16,7 @@ class RosterItemService private constructor(
     private val presenceOf: PresenceFlowSelector,
     private val latestMessageFlow: LatestMessageFlowSelector,
     private val messageRepo: Message.Repo
-) : Service {
-
-    data class State(
-        val title: String,
-        val letter: Char,
-        val message: Message = Message.Empty,
-        val presence: Presence.Status = Presence.Status.Unavailable,
-        val unreadMessagesCount: Int = 0
-    )
+) : Roster.Item.Service {
 
     private data class UnreadMessages(val count: Int)
 
@@ -31,43 +24,45 @@ class RosterItemService private constructor(
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
-    private var state = State(
-        letter = id.firstOrNull()?.toLowerCase() ?: 'a',
-        title = id
+    private val store = Store(
+        Roster.Item.State(
+            letter = id.firstOrNull()?.toLowerCase() ?: 'a',
+            title = id
+        )
     )
 
     override fun Service.Connector.connect() = launch {
-        state.out()
+        store.get().out()
         flowOf(
             input,
             presenceOf(chat.address),
             latestMessageFlow(chat),
             messageRepo.unreadCountFlow(chat).map { UnreadMessages(it) }
-        ).flattenMerge().mapNotNull { action ->
-            state.reduce(action)?.let { newState ->
-                state = newState
-                Service.Result(action, newState)
-            }
-        }.collect(output)
+        )
+            .flattenMerge()
+            .mapNotNull { action -> reduce(action) }
+            .collect(output)
     }
 
-    private fun State.reduce(action: Any): State? = when (action) {
-        is Presence.Status -> {
-            copy(presence = action)
+    private fun reduce(action: Any): Roster.Item.State? = store {
+        when (action) {
+            is Presence.Status -> {
+                copy(presence = action)
+            }
+            is Message -> {
+                copy(message = action)
+            }
+            is UnreadMessages -> {
+                copy(unreadMessagesCount = action.count)
+            }
+            is Route.Chat -> null.also {
+                action.apply {
+                    accountId = chat.account.id
+                    chatAddress = chat.address.id
+                }.let(navigate)
+            }
+            else -> null
         }
-        is Message -> {
-            copy(message = action)
-        }
-        is UnreadMessages -> {
-            copy(unreadMessagesCount = action.count)
-        }
-        is Route.Chat -> apply {
-            action.apply {
-                accountId = chat.account.id
-                chatAddress = chat.address.id
-            }.let(navigate)
-        }
-        else -> null
     }
 
     class Factory @Inject constructor(
