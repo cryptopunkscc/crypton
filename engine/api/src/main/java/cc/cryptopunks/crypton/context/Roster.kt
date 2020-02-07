@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.PagedList
+import kotlinx.coroutines.flow.Flow
 
 object Roster {
 
@@ -23,7 +24,25 @@ object Roster {
         interface Input
         interface Output
 
-        object GetItems: Input
+        object GetItems : Input
         data class Items(val items: PagedList<Connectable>) : Output
+    }
+
+    interface Net {
+        val rosterEvents: Events
+
+        interface Events : Flow<Event>
+
+        interface Event
+
+        sealed class Loading : Event {
+            data class Success(val roster: Any): Loading()
+            data class Failed(val exception: Exception): Loading()
+        }
+
+        data class PresenceChanged(
+            val resource: Resource,
+            val presence: Presence
+        ) : Event
     }
 }

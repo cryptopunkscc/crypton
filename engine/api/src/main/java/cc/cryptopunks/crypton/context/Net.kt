@@ -8,7 +8,7 @@ interface Net :
     Presence.Net,
     Message.Net,
     Chat.Net,
-    RosterEvent.Net,
+    Roster.Net,
     UserPresence.Net {
 
     val connect: Connect

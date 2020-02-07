@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.smack.net.client.InitOmemo
 import cc.cryptopunks.crypton.smack.net.client.InterruptNet
 import cc.cryptopunks.crypton.smack.net.presence.GetCachedPresences
 import cc.cryptopunks.crypton.smack.net.presence.SendPresence
-import cc.cryptopunks.crypton.smack.net.roster.RosterEventBroadcast
+import cc.cryptopunks.crypton.smack.net.roster.RosterEvents
 import cc.cryptopunks.crypton.smack.net.user.AddContactUser
 import cc.cryptopunks.crypton.smack.net.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.net.user.UserInvite
@@ -127,8 +127,8 @@ internal class ConnectionModule(
         )
     }
 
-    override val rosterEventPublisher: RosterEvent.Net.Broadcast by lazy {
-        RosterEventBroadcast(roster = roster)
+    override val rosterEvents: Roster.Net.Events by lazy {
+        RosterEvents(roster = roster)
     }
 
     override val createChat: Chat.Net.Create by lazy(::CreateChat)

@@ -1,21 +1,21 @@
 package cc.cryptopunks.crypton.smack.net.roster
 
-import cc.cryptopunks.crypton.context.RosterEvent
+import cc.cryptopunks.crypton.context.Roster
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import org.jivesoftware.smack.roster.Roster
+import org.jivesoftware.smack.roster.Roster as SmackRoster
 
-internal class RosterEventBroadcast(roster: Roster) :
-    RosterEvent.Net.Broadcast,
-    Flow<RosterEvent> by roster.rosterEventFlow() {
+internal class RosterEvents(roster: SmackRoster) :
+    Roster.Net.Events,
+    Flow<Roster.Net.Event> by roster.rosterEventFlow() {
 
     init {
-        roster.subscriptionMode = Roster.SubscriptionMode.reject_all
+        roster.subscriptionMode = SmackRoster.SubscriptionMode.reject_all
     }
 }
 
-private fun Roster.rosterEventFlow(): Flow<RosterEvent> = callbackFlow {
+private fun SmackRoster.rosterEventFlow(): Flow<Roster.Net.Event> = callbackFlow {
     val adapter = RosterFlowAdapter(channel)
 
     addRosterLoadedListener(adapter)
