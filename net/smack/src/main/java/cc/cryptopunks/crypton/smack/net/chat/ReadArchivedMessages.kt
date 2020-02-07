@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
+import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.CryptonMessage
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
@@ -7,25 +8,36 @@ import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
+import org.jivesoftware.smackx.muc.MultiUserChat
+import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
+import org.jxmpp.jid.impl.JidCreate
 import java.util.*
 
 internal class ReadArchivedMessages(
-    private val mamManager: MamManager,
+    private val connection: XMPPConnection,
+    private val multiUserChatManager: MultiUserChatManager,
     private val omemoManager: OmemoManager
 ) : Message.Net.ReadArchived {
 
     override fun invoke(
         query: Message.Net.ReadArchived.Query
-    ): Flow<List<Message>> = query
-        .asMamQueryArgs()
-        .let(mamManager::queryArchive)
-        .flowMessages()
+    ): Flow<List<Message>> = query.run {
+        mamManager().queryArchive(mamQueryArgs()).flowMessages()
+    }
+
+    private fun Message.Net.ReadArchived.Query.mamManager() = chat
+        ?.run { MamManager.getInstanceFor(getMuc()) }
+        ?: MamManager.getInstanceFor(connection)
+
+    private fun Chat.getMuc(): MultiUserChat = multiUserChatManager
+        .getMultiUserChat(JidCreate.entityBareFrom(address))
 
 
-    private fun Message.Net.ReadArchived.Query.asMamQueryArgs() = MamManager.MamQueryArgs
+    private fun Message.Net.ReadArchived.Query.mamQueryArgs() = MamManager.MamQueryArgs
         .builder()
         .run {
             since?.let { limitResultsSince(Date(it)) }

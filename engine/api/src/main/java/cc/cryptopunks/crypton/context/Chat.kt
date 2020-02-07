@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
+import kotlinx.coroutines.flow.Flow
 
 data class Chat(
     val title: String = "",
@@ -10,12 +11,21 @@ data class Chat(
     val users: List<User> = emptyList()
 ) {
 
+    interface Event : Api.Event
+    data class Joined(val chat: Chat) : Event
+
     val isDirect get() = users.size == 2
     val accountUser get() = users.last()
 
     interface Net {
         val createChat: Create
+        val multiUserChatFlow: MultiUserChatFlow
+        val multiUserChatList: MultiUserChatList
+
         interface Create: (Chat) -> Chat
+        interface MultiUserChatFlow: Flow<Chat>
+        interface MultiUserChatList: () -> List<Chat>
+        interface EventFlow: Flow<Event>
     }
 
     interface Repo {

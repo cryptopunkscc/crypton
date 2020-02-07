@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.data.Database
+import cc.cryptopunks.crypton.migrations
 import cc.cryptopunks.crypton.repo.*
 
 class RoomRepo(
@@ -19,6 +20,7 @@ class RoomRepo(
         .fallbackToDestructiveMigration()
         .setQueryExecutor(queryContext.executor)
         .setTransactionExecutor(transactionContext.executor)
+        .addMigrations(*migrations)
         .build()
 
     override val accountRepo: Account.Repo = AccountRepo(

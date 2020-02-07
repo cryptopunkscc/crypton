@@ -1,6 +1,9 @@
 package cc.cryptopunks.crypton.smack.module
 
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.smack.core.SmackCore
+import cc.cryptopunks.crypton.smack.net.chat.MucInvitationManager
+import cc.cryptopunks.crypton.smack.net.omemo.OmemoTrustAllCallback
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
@@ -10,13 +13,10 @@ import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
-import org.jivesoftware.smackx.omemo.internal.OmemoDevice
-import org.jivesoftware.smackx.omemo.trust.OmemoFingerprint
-import org.jivesoftware.smackx.omemo.trust.OmemoTrustCallback
-import org.jivesoftware.smackx.omemo.trust.TrustState
 
 internal class SmackModule(
-    override val configuration: XMPPTCPConnectionConfiguration
+    override val configuration: XMPPTCPConnectionConfiguration,
+    val address: Address
 ) : SmackCore {
     override val connection by lazy {
         XMPPTCPConnection(configuration).apply {
@@ -41,7 +41,14 @@ internal class SmackModule(
     }
 
     override val mucManager by lazy {
-        MultiUserChatManager.getInstanceFor(connection)!!
+        MultiUserChatManager.getInstanceFor(connection)!!.apply {
+            setAutoJoinOnReconnect(true)
+            addInvitationListener(mucInvitationManager)
+        }
+    }
+
+    override val mucInvitationManager: MucInvitationManager by lazy {
+        MucInvitationManager(address)
     }
 
     override val mamManager: MamManager by lazy {
@@ -57,19 +64,4 @@ internal class SmackModule(
     override val carbonManager: CarbonManager by lazy {
         CarbonManager.getInstanceFor(connection)!!
     }
-}
-
-object OmemoTrustAllCallback: OmemoTrustCallback {
-
-    override fun setTrust(
-        device: OmemoDevice,
-        fingerprint: OmemoFingerprint,
-        state: TrustState
-    ) = Unit
-
-    override fun getTrust(
-        device: OmemoDevice,
-        fingerprint: OmemoFingerprint
-    ): TrustState = TrustState.trusted
-
 }

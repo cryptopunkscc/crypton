@@ -15,6 +15,7 @@ class SmackConnection internal constructor(
     scope = scope,
     address = address,
     smack = SmackModule(
-        configuration = configuration
+        configuration = configuration,
+        address = address
     )
 )

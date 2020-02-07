@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.smack.core.SmackCore
-import cc.cryptopunks.crypton.smack.net.NetEventBroadcast
+import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.account.*
 import cc.cryptopunks.crypton.smack.net.chat.*
 import cc.cryptopunks.crypton.smack.net.client.ConnectNet
@@ -25,7 +25,9 @@ internal class ConnectionModule(
 ) : SmackCore by smack,
     Connection {
 
-    private val outgoingMessageCache by lazy { OutgoingMessageCache() }
+    private val outgoingMessageCache by lazy {
+        OutgoingMessageCache()
+    }
 
     override val netEvents: Net.Output by lazy {
         NetEventBroadcast(
@@ -119,8 +121,9 @@ internal class ConnectionModule(
 
     override val readArchived: Message.Net.ReadArchived by lazy {
         ReadArchivedMessages(
-            mamManager = mamManager,
-            omemoManager = omemoManager
+            connection = connection,
+            omemoManager = omemoManager,
+            multiUserChatManager = mucManager
         )
     }
 
@@ -133,6 +136,19 @@ internal class ConnectionModule(
     override val getCached: UserPresence.Net.GetCached by lazy {
         GetCachedPresences(roster)
     }
+
+    private val multiUserChatProvider by lazy {
+        MultiUserChatProvider(
+            account = address,
+            muc = mucManager,
+            invitationManager = mucInvitationManager,
+            connection = connection
+        )
+    }
+
+    override val multiUserChatFlow get() = multiUserChatProvider
+
+    override val multiUserChatList get() = multiUserChatProvider
 }
 
 private fun <T> SmackCore.lazy(init: SmackCore.() -> T) = kotlin.lazy { init() }

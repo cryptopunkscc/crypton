@@ -17,7 +17,7 @@ class Session(
         event = event
     )
 
-    data class Event(
+    data class Event internal constructor(
         val session: Session,
         val event: Api.Event
     )

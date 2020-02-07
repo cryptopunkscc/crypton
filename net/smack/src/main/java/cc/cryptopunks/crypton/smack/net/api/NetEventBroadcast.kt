@@ -1,9 +1,8 @@
-package cc.cryptopunks.crypton.smack.net
+package cc.cryptopunks.crypton.smack.net.api
 
 import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.smack.net.client.InitOmemo
-import cc.cryptopunks.crypton.smack.util.connectionEventsFlow
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel

@@ -20,6 +20,29 @@ buildscript {
         mockk_version = '1.9.3.kotlin12'
         material_version = "1.2.0-alpha02"
         appcompat_version = "1.1.0"
+        espresso_version = "3.2.0"
+        versions = [
+                test: [
+                        core  : "1.2.0",
+                        junit : "1.1.1",
+                        rules : "1.2.0",
+                        runner: "1.2.0",
+                ],
+                room: "2.2.3"
+        ]
+        deps = [
+                test: [
+                        core     : "androidx.test:core:$versions.test.core",
+                        runner   : "androidx.test:runner:$versions.test.runner",
+                        rules    : "androidx.test:rules:$versions.test.rules",
+                        ext_junit: "androidx.test.ext:junit:$versions.test.junit",
+                ],
+                room: [
+                        ktx     : "androidx.room:room-ktx:$versions.room",
+                        compiler: "androidx.room:room-compiler:$versions.room",
+                        testing : "androidx.room:room-testing:$versions.room",
+                ]
+        ]
     }
     repositories {
         google()

@@ -19,7 +19,8 @@ import cc.cryptopunks.crypton.context.User
 internal data class ChatData(
     @PrimaryKey val id: AddressData,
     val accountId: AddressData,
-    val title: String
+    val title: String,
+    val isMultiUser: Boolean
 ) {
 
     @androidx.room.Dao
@@ -61,5 +62,6 @@ internal fun ChatData.toDomain(users: List<User> = emptyList()) =
 internal fun Chat.chatData() = ChatData(
     title = title,
     id = address.id,
-    accountId = account.id
+    accountId = account.id,
+    isMultiUser = !isDirect
 )

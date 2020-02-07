@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack.util
+package cc.cryptopunks.crypton.smack.net.api
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Api

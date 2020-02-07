@@ -1,11 +1,9 @@
 package cc.cryptopunks.crypton.smack.util
 
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.CryptonMessage
-import cc.cryptopunks.crypton.context.Presence
-import cc.cryptopunks.crypton.context.Resource
+import cc.cryptopunks.crypton.context.*
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.forward.packet.Forwarded
+import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.sid.element.StanzaIdElement
 import org.jxmpp.jid.impl.JidCreate
 
@@ -43,3 +41,12 @@ internal fun SmackPresence.presence() = Presence(
 )
 
 internal fun Address.bareJid() = JidCreate.bareFrom(this)
+
+
+internal fun MultiUserChat.toChat(account: Address) = Chat(
+    title = room.toString(),
+    account = account,
+    address = room.resourceId().address,
+    resource = room.resourceId(),
+    users = this.members.map { User(it.jid.resourceId().address) }
+)

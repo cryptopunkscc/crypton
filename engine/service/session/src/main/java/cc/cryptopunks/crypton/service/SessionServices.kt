@@ -18,6 +18,7 @@ operator fun SessionServices.invoke(sessionEvent: Session.Event) {
             sessionErrorService()
             netEventService()
             presenceService()
+            chatSyncService()
             messageReceiverService()
             messageNotificationService()
         }

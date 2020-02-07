@@ -63,7 +63,8 @@ data class Message(
             data class Query(
                 val since: Long? = null,
                 val afterUid: String? = null,
-                val until: Long = System.currentTimeMillis()
+                val until: Long = System.currentTimeMillis(),
+                val chat: Chat? = null
             )
         }
     }
