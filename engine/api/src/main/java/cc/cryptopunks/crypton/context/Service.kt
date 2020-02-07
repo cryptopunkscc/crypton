@@ -32,3 +32,5 @@ interface Service : CoroutineScope {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 }
+
+typealias Connectable = Service.Connectable

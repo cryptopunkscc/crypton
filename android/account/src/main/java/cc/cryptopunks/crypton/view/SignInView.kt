@@ -8,7 +8,6 @@ import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.service.AccountForm.*
-import cc.cryptopunks.crypton.util.Field
 import cc.cryptopunks.crypton.util.Form
 import cc.cryptopunks.crypton.util.TextField
 import cc.cryptopunks.crypton.widget.ServiceLayout
@@ -27,7 +26,7 @@ class SignView(context: Context) : ServiceLayout(context) {
         )
     }
 
-    private val formFields: Map<Field.Id, EditText>
+    private val formFields: Map<Form.Field.Id, EditText>
         get() = mapOf(
             ServiceName to serviceName,
             UserName to userName,
@@ -57,11 +56,11 @@ class SignView(context: Context) : ServiceLayout(context) {
     private fun setForm(form: Form) {
         form.fields
             .mapKeys { (id, _) -> formFields[id] }
-            .map { (view, text) -> view?.setText(text as Field.Text) }
+            .map { (view, text) -> view?.setText(text as Form.Field.Text) }
     }
 
 
-    private fun Map<Field.Id, EditText>.textFieldChanges() = map { (id, editText) ->
+    private fun Map<Form.Field.Id, EditText>.textFieldChanges() = map { (id, editText) ->
         editText.textChanges().map {
             TextField(id, it)
         }
