@@ -8,8 +8,8 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.context.Chat.Service.*
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ChatService.*
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ServiceLayout

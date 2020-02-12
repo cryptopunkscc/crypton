@@ -26,14 +26,14 @@ import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
 import org.jivesoftware.smack.packet.Message as SmackMessage
 
-internal class MessageBroadcast(
+internal class MessageEvents(
     address: Address,
     scope: BroadcastErrorScope,
     sendMessage: SendMessage,
     private val chatManager: ChatManager,
     private val omemoManager: OmemoManager,
     private val outgoingMessageCache: OutgoingMessageCache
-) : Message.Net.Broadcast {
+) : Message.Net.Events {
 
     private val userJid = JidCreate.from(address)
 

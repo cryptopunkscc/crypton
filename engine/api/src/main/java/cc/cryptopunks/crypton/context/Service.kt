@@ -5,11 +5,15 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
 interface Service : CoroutineScope {
-    interface Connectable : Service
+    interface Connectable : Service {
+        interface Input
+        interface Output
+    }
     interface Actor : Connectable {
-        object Start
-        object Stop
-        object Connected
+        interface Status
+        object Start : Status
+        object Stop : Status
+        object Connected : Status
     }
 
     val id: Any get() = Unit
@@ -29,3 +33,5 @@ interface Service : CoroutineScope {
 }
 
 typealias Connectable = Service.Connectable
+typealias In = Service.Connectable.Input
+typealias Out = Service.Connectable.Output

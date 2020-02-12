@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
+import androidx.paging.PagedList
 import kotlinx.coroutines.flow.Flow
 
 data class Chat(
@@ -11,22 +12,47 @@ data class Chat(
     val users: List<User> = emptyList()
 ) {
 
-    interface Event : Api.Event
-    data class Joined(val chat: Chat) : Event
-
     val isDirect get() = users.size == 2
     val accountUser get() = users.last()
+
+
+    interface Service : Connectable {
+
+        data class MessagesRead(val messages: List<Message>) : In
+
+        data class SendMessage(val text: String) : In
+
+        sealed class Option : In {
+            abstract val message: Message
+
+            data class Copy(
+                override val message: Message
+            ) : Option()
+        }
+
+        data class MessageText(val text: CharSequence?) : Out
+
+        data class Messages(
+            val account: Address,
+            val list: PagedList<Message>
+        ) : Out
+    }
+
 
     interface Net {
         val createChat: Create
         val multiUserChatFlow: MultiUserChatFlow
         val multiUserChatList: MultiUserChatList
 
-        interface Create: (Chat) -> Chat
-        interface MultiUserChatFlow: Flow<Chat>
-        interface MultiUserChatList: () -> List<Chat>
-        interface EventFlow: Flow<Event>
+        interface Event : Api.Event
+        data class Joined(val chat: Chat) : Event
+
+        interface Create : (Chat) -> Chat
+        interface MultiUserChatFlow : Flow<Chat>
+        interface MultiUserChatList : () -> List<Chat>
+        interface EventFlow : Flow<Event>
     }
+
 
     interface Repo {
         suspend fun get(address: Address): Chat

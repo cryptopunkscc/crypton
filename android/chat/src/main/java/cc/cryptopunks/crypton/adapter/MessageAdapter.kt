@@ -7,9 +7,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat.Service.*
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ChatService.*
 import cc.cryptopunks.crypton.util.Store
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
@@ -37,7 +37,7 @@ class MessageAdapter(
 
     private val log = typedLog()
 
-    private val clicksChannel = BroadcastChannel<MessageOption>(Channel.BUFFERED)
+    private val clicksChannel = BroadcastChannel<Option>(Channel.BUFFERED)
 
     private val readChannel = BroadcastChannel<Message>(Channel.BUFFERED)
 

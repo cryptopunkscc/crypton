@@ -21,7 +21,7 @@ internal class Join : Chat.Net.EventFlow {
 
 
     @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Chat.Event>) {
+    override suspend fun collect(collector: FlowCollector<Chat.Net.Event>) {
 
     }
 }
@@ -33,7 +33,7 @@ internal class MucInvitationManager(
     InvitationListener,
     Chat.Net.EventFlow {
 
-    private val channel = BroadcastChannel<Chat.Event>(Channel.BUFFERED)
+    private val channel = BroadcastChannel<Chat.Net.Event>(Channel.BUFFERED)
 
     override fun invitationReceived(
         conn: XMPPConnection,
@@ -51,7 +51,7 @@ internal class MucInvitationManager(
                 .build()
             join(config)
         }
-        val event = Chat.Joined(room.toChat(address))
+        val event = Chat.Net.Joined(room.toChat(address))
         channel.sendBlocking(event)
     }
 
@@ -60,7 +60,7 @@ internal class MucInvitationManager(
         .let(Resourcepart::from)
 
     @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Chat.Event>) {
+    override suspend fun collect(collector: FlowCollector<Chat.Net.Event>) {
         channel.asFlow().collect(collector)
     }
 }

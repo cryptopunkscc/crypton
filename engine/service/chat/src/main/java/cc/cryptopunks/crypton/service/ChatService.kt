@@ -1,14 +1,18 @@
 package cc.cryptopunks.crypton.service
 
-import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.context.Chat.Service.*
 import cc.cryptopunks.crypton.interactor.MarkMessagesAsRead
 import cc.cryptopunks.crypton.interactor.SendMessageInteractor
 import cc.cryptopunks.crypton.selector.MessagePagedListSelector
 import cc.cryptopunks.crypton.util.ext.map
 import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ChatService @Inject constructor(
@@ -20,22 +24,14 @@ class ChatService @Inject constructor(
     private val clipboardRepo: Clip.Board.Repo,
     private val copyToClipboard: Clip.Board.Sys.SetClip
 ) :
-    Service.Connectable,
+    Chat.Service,
     Message.Consumer {
-
-    object CopyMessageText
-
-    data class MessageOption(val id: Any, val message: Message)
-    data class SendMessage(val text: String)
-    data class MessagesRead(val messages: List<Message>)
-    data class Messages(val account: Address, val list: PagedList<Message>)
-    data class MessageText(val text: CharSequence?)
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     private val log = typedLog()
 
-    private var status: Any = Service.Actor.Stop
+    private var actorStatus: Any = Service.Actor.Stop
 
     override fun Service.Connector.connect(): Job = launch {
         launch {
@@ -43,18 +39,14 @@ class ChatService @Inject constructor(
                 log.d("in: $it")
                 when (it) {
                     is Service.Actor.Stop -> {
-                        status = it
+                        actorStatus = it
                     }
                     is Service.Actor.Start -> {
-                        status = it
-                        clipboardRepo.pop()?.run {
-                            output(MessageText(data))
-                        }
+                        actorStatus = it
+                        setTextFromClipboard()
                     }
                     is Service.Actor.Connected -> {
-                        clipboardRepo.pop()?.run {
-                            output(MessageText(data))
-                        }
+                        setTextFromClipboard()
                     }
                     is MessagesRead -> {
                         markMessagesAsRead(it.messages)
@@ -62,10 +54,7 @@ class ChatService @Inject constructor(
                     is SendMessage -> if (it.text.isNotBlank()) {
                         sendMessage(it.text)
                     }
-                    is MessageOption -> when (it.id) {
-                        is CopyMessageText ->
-                            copyToClipboard(it.message.text)
-                    }
+                    is Option.Copy -> copyToClipboard(it.message.text)
                 }
             }
         }
@@ -80,8 +69,14 @@ class ChatService @Inject constructor(
         }
     }
 
+    private suspend fun Service.Connector.setTextFromClipboard() {
+        clipboardRepo.pop()?.run {
+            output(MessageText(data))
+        }
+    }
+
     override fun canConsume(message: Message): Boolean =
-        message.chatAddress == chat.address && status == Service.Actor.Start
+        message.chatAddress == chat.address && actorStatus == Service.Actor.Start
 
 
     interface Core {

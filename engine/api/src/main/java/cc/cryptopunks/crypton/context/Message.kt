@@ -54,11 +54,11 @@ data class Message(
 
     interface Net {
         val sendMessage: Send
-        val messageBroadcast: Broadcast
+        val messageEvents: Events
         val readArchived: ReadArchived
 
         interface Send : SuspendFun2<Address, String, Unit>
-        interface Broadcast : Flow<Event>
+        interface Events : Flow<Event>
         interface ReadArchived : (ReadArchived.Query) -> Flow<List<Message>> {
             data class Query(
                 val since: Long? = null,

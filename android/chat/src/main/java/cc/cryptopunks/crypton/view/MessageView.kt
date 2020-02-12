@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.service.ChatService
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.synthetic.main.chat_message_item.view.*
 import kotlinx.coroutines.Job
@@ -31,7 +31,7 @@ class MessageView(
 
     private val padding by lazy { resources.getDimensionPixelSize(R.dimen.message_padding) }
 
-    val optionClicks = BroadcastChannel<ChatService.MessageOption>(1)
+    val optionClicks = BroadcastChannel<Chat.Service.Option>(1)
 
     var message: Message? = null
         set(value) {
@@ -61,10 +61,10 @@ class MessageView(
             .findItem(R.id.copyToClipboard)
             .setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.copyToClipboard -> ChatService.CopyMessageText
+                    R.id.copyToClipboard -> Chat.Service.Option.Copy(message!!)
                     else -> null
-                }?.let { action ->
-                    optionClicks.offer(ChatService.MessageOption(action, message!!))
+                }?.let {
+                    optionClicks.offer(it)
                 }
                 true
             }

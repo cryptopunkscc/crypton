@@ -108,8 +108,8 @@ internal class ConnectionModule(
         )
     }
 
-    override val messageBroadcast: Message.Net.Broadcast by lazy {
-        MessageBroadcast(
+    override val messageEvents: Message.Net.Events by lazy {
+        MessageEvents(
             scope = scope,
             sendMessage = sendMessage,
             chatManager = chatManager,

@@ -13,7 +13,7 @@ import javax.inject.Inject
 @SessionScope
 class MessageReceiverService @Inject constructor(
     private val scope: Session.Scope,
-    private val messageBroadcast: Message.Net.Broadcast,
+    private val messageEvents: Message.Net.Events,
     private val saveMessages: SaveMessagesInteractor
 ) : () -> Job {
 
@@ -22,7 +22,7 @@ class MessageReceiverService @Inject constructor(
     override fun invoke(): Job = scope.launch {
         log.d("start")
         invokeOnClose { log.d("stop") }
-        messageBroadcast.collect { event ->
+        messageEvents.collect { event ->
             log.d("message event received: $event")
             saveMessages(event)
         }
