@@ -24,7 +24,7 @@ internal class SendMessage(
     private val roster: Roster,
     private val outgoingMessageCache: OutgoingMessageCache
 ) : Send,
-    Flow<Message.Event>,
+    Flow<Message.Net.Event>,
     Executor by Executors.newSingleThreadExecutor() {
 
     private var lastId = 0
@@ -33,7 +33,7 @@ internal class SendMessage(
 
     private val fromJid = JidCreate.entityBareFrom(address)
 
-    private val broadcast = Broadcast<Message.Event>()
+    private val broadcast = Broadcast<Message.Net.Event>()
 
     override suspend fun invoke(to: Address, text: String) = coroutineScope {
         val id = lastId++
@@ -61,7 +61,7 @@ internal class SendMessage(
 
         log.d("$id broadcasting")
         message.run {
-            broadcast(Message.Event::Queued)
+            broadcast(Message.Net.Event::Queued)
             registerAckCallback()
         }
         log.d("$id sending")
@@ -77,11 +77,11 @@ internal class SendMessage(
     private fun Message.registerAckCallback() {
         connection.addStanzaIdAcknowledgedListener(stanzaId) {
             GlobalScope.launch {
-                broadcast(Message.Event::Sent)
+                broadcast(Message.Net.Event::Sent)
             }
         }
     }
-    private suspend fun Message.broadcast(event: Message.() -> Message.Event) {
+    private suspend fun Message.broadcast(event: Message.() -> Message.Net.Event) {
         broadcast.run {
             send(event())
             flush()
@@ -89,7 +89,7 @@ internal class SendMessage(
     }
 
     @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Message.Event>) {
+    override suspend fun collect(collector: FlowCollector<Message.Net.Event>) {
         broadcast.collect(collector)
     }
 }

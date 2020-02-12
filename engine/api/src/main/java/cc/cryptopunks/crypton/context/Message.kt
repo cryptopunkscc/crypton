@@ -17,11 +17,6 @@ data class Message(
     val status: Status = Status.None,
     val readAt: Long = 0
 ) {
-
-    val isUnread get() = readAt == 0L && status == Status.Received
-
-    val author: String get() = from.address.local
-
     enum class Status {
         None,
         Sending,
@@ -30,26 +25,6 @@ data class Message(
         Received,
         Read,
         Queued
-    }
-
-    fun getParty(address: Address) = when (address) {
-        from.address -> to
-        to.address -> from
-        else -> throw Exception("$address is not in party")
-    }
-
-    interface Consumer {
-        fun canConsume(message: Message): Boolean
-    }
-
-    sealed class Event : Api.Event {
-        abstract val message: Message
-
-        data class Queued(override val message: Message) : Event()
-        data class Sending(override val message: Message) : Event()
-        data class Sent(override val message: Message) : Event()
-        data class Received(override val message: Message) : Event()
-//        data class Error(override val message: Message, val cause: Throwable) : Event()
     }
 
     interface Net {
@@ -67,6 +42,15 @@ data class Message(
                 val chat: Chat? = null
             )
         }
+
+        sealed class Event : Api.Event {
+            abstract val message: Message
+
+            data class Queued(override val message: Message) : Event()
+            data class Sending(override val message: Message) : Event()
+            data class Sent(override val message: Message) : Event()
+            data class Received(override val message: Message) : Event()
+        }
     }
 
     interface Repo {
@@ -83,8 +67,10 @@ data class Message(
         suspend fun notifyUnread()
     }
 
-    object Notification {
-        const val channelId = "Messages"
+    interface Sys : Notify
+
+    interface Consumer {
+        fun canConsume(message: Message): Boolean
     }
 
     interface Notify {
@@ -95,13 +81,26 @@ data class Message(
         }
     }
 
-    interface Sys : Notify
+    object Notification {
+        const val channelId = "Messages"
+    }
 
     class Exception(message: String? = null) : kotlin.Exception(message)
 
     companion object {
         val Empty = Message()
     }
+
+
+    fun getParty(address: Address) = when (address) {
+        from.address -> to
+        to.address -> from
+        else -> throw Exception("$address is not in party")
+    }
+
+    val isUnread get() = readAt == 0L && status == Status.Received
+
+    val author: String get() = from.address.local
 }
 
 fun Any?.canConsume(message: Message): Boolean =

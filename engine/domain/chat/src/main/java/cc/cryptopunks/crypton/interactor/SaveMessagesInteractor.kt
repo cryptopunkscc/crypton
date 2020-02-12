@@ -23,18 +23,18 @@ class SaveMessagesInteractor @Inject constructor(
             .let { messageRepo.insertOrUpdate(it) }
     }
 
-    suspend operator fun invoke(event: Message.Event) {
+    suspend operator fun invoke(event: Message.Net.Event) {
         val message = event.message.run {
             when(event) {
-                is Message.Event.Sending -> create()
+                is Message.Net.Event.Sending -> create()
                 else -> get() ?: create()
             }
         }.copy(
             status = when (event) {
-                is Message.Event.Queued -> Message.Status.Queued
-                is Message.Event.Sending -> Message.Status.Sending
-                is Message.Event.Sent -> Message.Status.Sent
-                is Message.Event.Received -> Message.Status.Received
+                is Message.Net.Event.Queued -> Message.Status.Queued
+                is Message.Net.Event.Sending -> Message.Status.Sending
+                is Message.Net.Event.Sent -> Message.Status.Sent
+                is Message.Net.Event.Received -> Message.Status.Received
             }
         )
 

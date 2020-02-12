@@ -37,7 +37,7 @@ internal class MessageEvents(
 
     private val userJid = JidCreate.from(address)
 
-    private val channel = BroadcastChannel<Message.Event>(Channel.CONFLATED)
+    private val channel = BroadcastChannel<Message.Net.Event>(Channel.CONFLATED)
 
     init {
         scope.launch {
@@ -66,11 +66,11 @@ internal class MessageEvents(
                 -> when (eventType) {
 
                     MessageType.Outgoing
-                    -> Message.Event.Sending(message)
+                    -> Message.Net.Event.Sending(message)
 
                     MessageType.Incoming,
                     MessageType.CarbonCopy
-                    -> Message.Event.Received(message)
+                    -> Message.Net.Event.Received(message)
                 }
 
                 else -> null
@@ -78,7 +78,7 @@ internal class MessageEvents(
         }
 
     @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Message.Event>) =
+    override suspend fun collect(collector: FlowCollector<Message.Net.Event>) =
         channel.asFlow().collect(collector)
 }
 
