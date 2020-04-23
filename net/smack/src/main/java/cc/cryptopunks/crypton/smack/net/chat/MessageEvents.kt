@@ -42,40 +42,36 @@ internal class MessageEvents(
     init {
         scope.launch {
             flowOf(
-                sendMessage,
-                callbacks
+                sendMessage.eventsFlow(),
+                getCallbacks()
             )
                 .flattenMerge()
                 .collect(channel::send)
         }
     }
 
-    private val callbacks
-        get() = messageFlow(
-            userJid = userJid,
-            outgoingMessageCache = outgoingMessageCache,
-            chatManager = chatManager,
-            omemoManager = omemoManager
-        ).mapNotNull { (smackMessage, eventType) ->
+    private fun getCallbacks() = messageFlow(
+        userJid = userJid,
+        outgoingMessageCache = outgoingMessageCache,
+        chatManager = chatManager,
+        omemoManager = omemoManager
+    ).mapNotNull { (smackMessage, eventType) ->
 
-            val message = smackMessage.toCryptonMessage()
+        val message = smackMessage.toCryptonMessage()
 
-            when (smackMessage.type) {
+        when (smackMessage.type) {
 
-                SmackMessage.Type.chat
-                -> when (eventType) {
+            SmackMessage.Type.chat -> when (eventType) {
 
-                    MessageType.Outgoing
-                    -> Message.Net.Event.Sending(message)
+                MessageType.Outgoing -> Message.Net.Event.Sending(message)
 
-                    MessageType.Incoming,
-                    MessageType.CarbonCopy
-                    -> Message.Net.Event.Received(message)
-                }
-
-                else -> null
+                MessageType.Incoming,
+                MessageType.CarbonCopy -> Message.Net.Event.Received(message)
             }
+
+            else -> null
         }
+    }
 
     @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<Message.Net.Event>) =
@@ -95,43 +91,40 @@ private fun messageFlow(
     outgoingMessageCache: OutgoingMessageCache,
     chatManager: ChatManager,
     omemoManager: OmemoManager
-): Flow<MessageEvent> =
+): Flow<MessageEvent> = callbackFlow {
 
-    callbackFlow {
+    val incomingListener = incomingListener()
+    val outgoingListener = outgoingListener(userJid, outgoingMessageCache)
+    val omemoListener = omemoListener()
 
-        val incomingListener = incomingListener()
-        val outgoingListener = outgoingListener(userJid, outgoingMessageCache)
-        val omemoListener = omemoListener()
+    chatManager.addIncomingListener(incomingListener)
+    chatManager.addOutgoingListener(outgoingListener)
+    omemoManager.addOmemoMessageListener(omemoListener)
 
-        chatManager.addIncomingListener(incomingListener)
-        chatManager.addOutgoingListener(outgoingListener)
-        omemoManager.addOmemoMessageListener(omemoListener)
-
-        awaitClose {
-            chatManager.removeIncomingListener(incomingListener)
-            chatManager.removeOutgoingListener(outgoingListener)
-            omemoManager.removeOmemoMessageListener(omemoListener)
-        }
+    awaitClose {
+        chatManager.removeIncomingListener(incomingListener)
+        chatManager.removeOutgoingListener(outgoingListener)
+        omemoManager.removeOmemoMessageListener(omemoListener)
     }
+}
 
 
 private fun SendChannel<MessageEvent>.outgoingListener(
     userJid: Jid,
     outgoingMessageCache: OutgoingMessageCache
-) =
-    OutgoingChatMessageListener { _, message, _ ->
-        message.apply {
-            from = userJid
-            if (hasOmemoExtension) {
-                removeOmemoBody()
-                body = outgoingMessageCache[message.stanzaId]
-            }
-        }.takeIf {
-            it.body.isNotBlank()
-        }?.let {
-            offer(it to MessageType.Outgoing)
+) = OutgoingChatMessageListener { _, message, _ ->
+    message.apply {
+        from = userJid
+        if (hasOmemoExtension) {
+            removeOmemoBody()
+            body = outgoingMessageCache[message.stanzaId]
         }
+    }.takeIf {
+        it.body.isNotBlank()
+    }?.let {
+        offer(it to MessageType.Outgoing)
     }
+}
 
 
 private fun SendChannel<MessageEvent>.incomingListener() =

@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.Form
-import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -17,7 +17,7 @@ class FormService(
 
     val form get() = store.get()
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         input.filterIsInstance<Form.Service.Input>().collect { arg ->
             when (arg) {
                 is Form.Set -> store { arg.form }

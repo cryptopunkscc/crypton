@@ -56,11 +56,7 @@ class SaveMessagesInteractor @Inject constructor(
         chatAddress = createChat(
             CreateChatInteractor.Data(
                 title = chatAddress.id,
-                users = listOf(
-                    User(
-                        getParty(address).address
-                    )
-                )
+                users = listOf(User(getParty(address).address))
             )
         ).await().address
     )

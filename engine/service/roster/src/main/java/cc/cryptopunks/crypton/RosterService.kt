@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton
 
 import androidx.paging.PagedList
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.selector.RosterSelector
@@ -26,7 +27,7 @@ class RosterService @Inject constructor(
 
     private var items: Items? = null
 
-    override fun Service.Connector.connect() = launch {
+    override fun Connector.connect() = launch {
         log.d("bind")
         launch {
             input.collect {

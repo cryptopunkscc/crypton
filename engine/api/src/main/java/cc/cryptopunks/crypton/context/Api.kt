@@ -10,7 +10,7 @@ object Api {
     interface Core :
         Executors,
         BroadcastError.Core,
-        Connection.Core,
+        Connection.Factory.Core,
         Sys,
         Repo {
 

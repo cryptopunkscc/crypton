@@ -31,21 +31,21 @@ class ChatService @Inject constructor(
 
     private val log = typedLog()
 
-    private var actorStatus: Any = Service.Actor.Stop
+    private var actorStatus: Any = Actor.Stop
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch {
             input.collect {
                 log.d("in: $it")
                 when (it) {
-                    is Service.Actor.Stop -> {
+                    is Actor.Stop -> {
                         actorStatus = it
                     }
-                    is Service.Actor.Start -> {
+                    is Actor.Start -> {
                         actorStatus = it
                         setTextFromClipboard()
                     }
-                    is Service.Actor.Connected -> {
+                    is Actor.Connected -> {
                         setTextFromClipboard()
                     }
                     is MessagesRead -> {
@@ -69,14 +69,14 @@ class ChatService @Inject constructor(
         }
     }
 
-    private suspend fun Service.Connector.setTextFromClipboard() {
+    private suspend fun Connector.setTextFromClipboard() {
         clipboardRepo.pop()?.run {
             output(MessageText(data))
         }
     }
 
     override fun canConsume(message: Message): Boolean =
-        message.chatAddress == chat.address && actorStatus == Service.Actor.Start
+        message.chatAddress == chat.address && actorStatus == Actor.Start
 
 
     interface Core {

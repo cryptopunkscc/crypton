@@ -4,19 +4,19 @@ import android.content.Context
 import android.view.View
 import android.widget.EditText
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.util.bindings.clicks
-import cc.cryptopunks.crypton.util.bindings.textChanges
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.service.AccountForm.*
 import cc.cryptopunks.crypton.util.Form
 import cc.cryptopunks.crypton.util.TextField
-import cc.cryptopunks.crypton.widget.ServiceLayout
+import cc.cryptopunks.crypton.util.bindings.clicks
+import cc.cryptopunks.crypton.util.bindings.textChanges
+import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.sign_up.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class SignView(context: Context) : ServiceLayout(context) {
+class SignView(context: Context) : ActorLayout(context) {
 
     init {
         View.inflate(
@@ -26,7 +26,7 @@ class SignView(context: Context) : ServiceLayout(context) {
         )
     }
 
-    private val formFields: Map<Form.Field.Id, EditText>
+    private val formFields: Map<Form.Field.Id<TextField>, EditText>
         get() = mapOf(
             ServiceName to serviceName,
             UserName to userName,
@@ -34,7 +34,7 @@ class SignView(context: Context) : ServiceLayout(context) {
             ConfirmPassword to confirmPassword
         )
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch {
             input.collect { arg ->
                 when (arg) {
@@ -60,7 +60,7 @@ class SignView(context: Context) : ServiceLayout(context) {
     }
 
 
-    private fun Map<Form.Field.Id, EditText>.textFieldChanges() = map { (id, editText) ->
+    private fun Map<Form.Field.Id<TextField>, EditText>.textFieldChanges() = map { (id, editText) ->
         editText.textChanges().map {
             TextField(id, it)
         }

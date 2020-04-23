@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.adapter
 
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.util.PagedListServiceAdapter
 import cc.cryptopunks.crypton.view.RosterItemView
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 class RosterAdapter @Inject constructor(
     override val coroutineContext: CoroutineContext
 ) :
-    PagedListServiceAdapter<RosterItemView, Service.Connectable>(),
+    PagedListServiceAdapter<RosterItemView, Connectable>(),
     CoroutineScope {
 
     private val dateFormat = SimpleDateFormat(

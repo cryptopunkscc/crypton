@@ -30,9 +30,9 @@ interface Connection : Net {
                 val Empty = Config()
             }
         }
-    }
 
-    interface Core {
-        val createConnection: Factory
+        interface Core {
+            val createConnection: Factory
+        }
     }
 }

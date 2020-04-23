@@ -15,6 +15,7 @@ data class Message(
     val from: Resource = Resource.Empty,
     val to: Resource = Resource.Empty,
     val status: Status = Status.None,
+    val notifiedAt: Long = 0,
     val readAt: Long = 0
 ) {
     enum class Status {
@@ -74,10 +75,12 @@ data class Message(
     }
 
     interface Notify {
-        val notifyUnreadMessages: Unread
+        val notifyReceivedMessages: Received
 
-        interface Unread : (List<Message>) -> Unit {
-            fun cancel(messages: List<Message>)
+        interface Received : (List<Message>) -> Unit {
+            operator fun plus(messages: List<Message>)
+            operator fun minus(messages: List<Message>)
+            override fun invoke(messages: List<Message>) = plus(messages)
         }
     }
 

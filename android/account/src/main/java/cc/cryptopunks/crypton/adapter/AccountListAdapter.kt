@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.service.AccountListService
@@ -28,13 +30,13 @@ class AccountListAdapter @Inject constructor(
     override val coroutineContext: CoroutineContext
 ) : RecyclerView.Adapter<AccountListAdapter.ViewHolder>(),
     CoroutineScope,
-    Service {
+    Connectable {
 
     private var items = listOf<Address>()
 
     private val channel = BroadcastChannel<Any>(1)
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch {
             input.filterIsInstance<AccountListService.Accounts>().collect {
                 items = it.list

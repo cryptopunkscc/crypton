@@ -3,11 +3,13 @@ package cc.cryptopunks.crypton.manager
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.factory.SessionFactory
-import cc.cryptopunks.crypton.util.Broadcast
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,12 +19,9 @@ class SessionManager @Inject constructor(
     private val createSession: SessionFactory
 ) : Flow<Session.Event> {
 
-    private val broadcast = Broadcast<Session.Event>()
-    private val sessions = mutableMapOf<Address, Session>()
     private var current: Address? = null
-
-    private val firstConnectedAddress
-        get() = sessions.entries.firstOrNull { it.value.isAuthenticated() }?.key
+    private val events = BroadcastChannel<Session.Event>(Channel.CONFLATED)
+    private val sessions = mutableMapOf<Address, Session>()
 
     operator fun get(account: Address): Session = synchronized(this) {
         var created = false
@@ -37,9 +36,9 @@ class SessionManager @Inject constructor(
 
     private fun Session.connectBroadcast() {
         scope.launch {
-            broadcast.send(sessionEvent(Session.Created))
+            events.send(Event(Session.Created))
             netEvents.collect { event ->
-                broadcast.send(sessionEvent(event))
+                events.send(Event(event))
             }
         }
     }
@@ -53,17 +52,21 @@ class SessionManager @Inject constructor(
             scope.cancel()
         }
         if (current == account)
-            current = firstConnectedAddress
+            current = getFirstConnectedAddress()
     }
+
+    private fun getFirstConnectedAddress() = sessions.entries
+        .firstOrNull { it.value.isAuthenticated() }?.key
 
     fun getCurrent(): Session? = sessions.values.firstOrNull() //sessions[current]
 
-    fun isCurrent(session: Session): Boolean =
-        session.address == current
+    fun isCurrent(session: Session): Boolean = session.address == current
+
+    fun eventsFlow() = events.asFlow()
 
     @InternalCoroutinesApi
     override suspend fun collect(collector: FlowCollector<Session.Event>) =
-        broadcast.collect(collector)
+        events.asFlow().collect(collector)
 
     interface Core {
         val sessionManager: SessionManager

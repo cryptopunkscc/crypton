@@ -2,7 +2,9 @@ package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.service.ConnectableBuffer
 import cc.cryptopunks.crypton.service.ServiceBinding
 import cc.cryptopunks.crypton.service.ServiceManager
@@ -14,8 +16,8 @@ import kotlinx.coroutines.launch
 
 abstract class ServiceFragment :
     FeatureFragment(),
-    Service,
-    Service.Connector {
+    Connectable,
+    Connector {
 
     private val serviceManager: ServiceManager by lazy {
         appCore.resolve<ServiceManager.Core>().serviceManager
@@ -25,13 +27,10 @@ abstract class ServiceFragment :
         serviceManager.createBinding()
     }
 
-    protected val viewProxy = ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
-
     override val input: Flow<Any> get() = binding.input
-
     override val output: suspend (Any) -> Unit get() = binding.output
 
-    protected open fun onCreatePresenter(): Service? = null
+    protected val viewProxy = ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,28 +38,30 @@ abstract class ServiceFragment :
         binding + onCreatePresenter()
     }
 
+    protected open fun onCreatePresenter(): Connectable? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewProxy.service = onCreateActor(view)
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected open fun onCreateActor(view: View): Service? = view as? Service
+    protected open fun onCreateActor(view: View): Connectable? = view as? Connectable
 
     override fun onStart() {
         super.onStart()
-        launch { Service.Actor.Start.out() }
+        launch { Actor.Start.out() }
     }
 
     override fun onStop() {
         super.onStop()
-        launch { Service.Actor.Stop.out() }
+        launch { Actor.Stop.out() }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewProxy.service = null
-        binding.minus<Service.Actor>()
+        binding.minus<Actor>()
     }
 
     override fun onDestroy() {

@@ -6,16 +6,17 @@ import cc.cryptopunks.crypton.context.Message.Net.Send
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import cc.cryptopunks.crypton.util.Broadcast
 import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import org.jivesoftware.smack.packet.Message as SmackMessage
+import kotlinx.coroutines.launch
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smackx.omemo.OmemoManager
 import org.jxmpp.jid.impl.JidCreate
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import org.jivesoftware.smack.packet.Message as SmackMessage
 
 internal class SendMessage(
     address: Address,
@@ -24,7 +25,6 @@ internal class SendMessage(
     private val roster: Roster,
     private val outgoingMessageCache: OutgoingMessageCache
 ) : Send,
-    Flow<Message.Net.Event>,
     Executor by Executors.newSingleThreadExecutor() {
 
     private var lastId = 0
@@ -88,8 +88,5 @@ internal class SendMessage(
         }
     }
 
-    @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Message.Net.Event>) {
-        broadcast.collect(collector)
-    }
+    fun eventsFlow(): Flow<Message.Net.Event> = broadcast
 }

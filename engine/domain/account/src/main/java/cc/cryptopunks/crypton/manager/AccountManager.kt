@@ -35,7 +35,7 @@ data class AccountManager(
 
     fun initOmemo(): Boolean = session.initOmemo()
 
-    fun clear(): Unit = sessionManager.minus(address)
+    fun clear(): Unit = sessionManager - address
 
     suspend fun insert(password: CharSequence) = accountRepo.insert(Account(address, password))
 

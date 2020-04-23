@@ -13,7 +13,7 @@ class NewAccountConnectedSelector @Inject constructor(
 ) : () -> Flow<Address> {
 
     override fun invoke(): Flow<Address> = mutableSetOf<Address>().run {
-        sessionManager
+        sessionManager.eventsFlow()
             .filter { it.event is Account.Authenticated }
             .filter { add(it.session.address) }
             .map { it.session.address }

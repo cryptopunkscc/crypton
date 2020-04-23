@@ -1,7 +1,8 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -12,11 +13,11 @@ import javax.inject.Inject
 
 class RouterService @Inject constructor(
     private val navigate: Route.Api.Navigate
-) : Service.Connectable {
+) : Connectable {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         input.filterIsInstance<Route>().collect {
             navigate(it)
         }

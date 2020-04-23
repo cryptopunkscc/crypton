@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
 import cc.cryptopunks.crypton.util.presenceStatusColors
 import cc.cryptopunks.crypton.util.typedLog
-import cc.cryptopunks.crypton.widget.ServiceLayout
+import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.roster_item.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -21,7 +21,7 @@ class RosterItemView(
     context: Context,
     private val dateFormat: DateFormat
 ) :
-    ServiceLayout(context) {
+    ActorLayout(context) {
 
     private val log = typedLog()
 
@@ -44,7 +44,7 @@ class RosterItemView(
         log.d("init")
     }
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch {
             input.collect { arg -> handleInput(arg) }
         }

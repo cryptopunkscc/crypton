@@ -4,10 +4,8 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.ClipboardManager
 import android.net.ConnectivityManager
-import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.FeatureManager
-import cc.cryptopunks.crypton.context.AndroidService
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.intent.IntentProcessor
 import cc.cryptopunks.crypton.interactor.DisconnectAccountsInteractor
@@ -15,7 +13,7 @@ import cc.cryptopunks.crypton.interactor.ReconnectAccountsInteractor
 import cc.cryptopunks.crypton.manager.AccountManager
 import cc.cryptopunks.crypton.manager.PresenceManager
 import cc.cryptopunks.crypton.manager.SessionManager
-import cc.cryptopunks.crypton.notification.NotifyUnreadMessages
+import cc.cryptopunks.crypton.notification.NotifyReceivedMessages
 import cc.cryptopunks.crypton.selector.CurrentSessionSelector
 import cc.cryptopunks.crypton.service.AppServices
 import cc.cryptopunks.crypton.service.ServiceManager
@@ -29,6 +27,8 @@ import cc.cryptopunks.crypton.util.MainExecutor
 import dagger.Binds
 import dagger.Component
 import dagger.Provides
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 import javax.inject.Singleton
 
 @Singleton
@@ -75,10 +75,10 @@ interface AndroidCore :
         val serviceScope = Service.Scope()
 
         @get:Provides
-        val mainExecutor = MainExecutor(ArchTaskExecutor.getMainThreadExecutor())
+        val mainExecutor = MainExecutor(Dispatchers.Main.asExecutor())
 
         @get:Provides
-        val ioExecutor = IOExecutor(ArchTaskExecutor.getIOThreadExecutor())
+        val ioExecutor = IOExecutor(Dispatchers.IO.asExecutor())
 
         @get:Provides
         val broadcastError = BroadcastError()
@@ -106,7 +106,7 @@ interface AndroidCore :
         fun SetToClipboard.setClip(): Clip.Board.Sys.SetClip
 
         @Binds
-        fun NotifyUnreadMessages.unread(): Message.Notify.Unread
+        fun NotifyReceivedMessages.unread(): Message.Notify.Received
 
         @Binds
         fun StartIndicatorService.start(): Indicator.Sys.Show

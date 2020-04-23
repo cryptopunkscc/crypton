@@ -1,7 +1,8 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.interactor.DeleteAccountInteractor
 import cc.cryptopunks.crypton.interactor.UnregisterAccountInteractor
 import cc.cryptopunks.crypton.selector.AccountListSelector
@@ -20,7 +21,7 @@ class AccountListService @Inject constructor(
 //    private val disconnectAccount: DisconnectAccountInteractor,
     private val deleteAccount: DeleteAccountInteractor,
     private val unregisterAccount: UnregisterAccountInteractor
-) : Service {
+) : Connectable {
 
     data class ToggleConnection(val account: Address)
     data class Remove(val account: Address, val deleteFromServer: Boolean)
@@ -29,7 +30,7 @@ class AccountListService @Inject constructor(
     override val coroutineContext =
         SupervisorJob() + Dispatchers.IO
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch { navigationService() }
         launch { getAccounts().map { Accounts(it) }.collect(output) }
         launch {

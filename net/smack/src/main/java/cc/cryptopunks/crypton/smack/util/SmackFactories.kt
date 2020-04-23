@@ -21,7 +21,6 @@ internal fun Message.toCryptonMessage(
     stanzaId = stanzaId ?: ""
 )
 
-
 internal fun String.resourceId() = JidCreate.from(toString()).resourceId()
 
 internal fun String.remoteId() = JidCreate.from(toString()).remoteId()

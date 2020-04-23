@@ -1,12 +1,13 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.util.Form
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.util.TextField
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.interactor.AddAccountInteractor
 import cc.cryptopunks.crypton.interactor.RegisterAccountInteractor
 import cc.cryptopunks.crypton.service.AccountForm.*
+import cc.cryptopunks.crypton.util.Form
+import cc.cryptopunks.crypton.util.TextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -18,7 +19,7 @@ import javax.inject.Inject
 open class SignService @Inject constructor(
     private val request: (Account) -> Job,
     private val initial: Form = Form()
-) : Service,
+) : Connectable,
     AccountForm {
 
 
@@ -26,7 +27,7 @@ open class SignService @Inject constructor(
 
     private val formService = FormService(coroutineContext)
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         connect(formService)
         launch {
             if (initial.fields.isNotEmpty()) initial.out()

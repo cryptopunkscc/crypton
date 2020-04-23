@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.service.ServiceManager
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
@@ -15,9 +17,9 @@ abstract class PagedListServiceAdapter<V, S>(
 ) :
     PagedListAdapter<S, PagedListServiceAdapter<V, S>.ViewHolder>(diffCallback),
     CoroutineScope where
-V : Service.Connectable,
+V : Actor,
 V : View,
-S : Service.Connectable {
+S : Connectable {
 
     private val serviceManager = ServiceManager()
 
@@ -49,6 +51,6 @@ S : Service.Connectable {
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = serviceManager.createBinding().apply { slot1 = view as Service }
+        val binding = serviceManager.createBinding().apply { slot1 = view as Connectable }
     }
 }

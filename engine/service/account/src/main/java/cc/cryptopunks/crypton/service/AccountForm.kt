@@ -7,21 +7,19 @@ import cc.cryptopunks.crypton.util.TextField
 
 interface AccountForm {
 
-    object ServiceName : Form.Field.Id
-    object UserName : Form.Field.Id
-    object Password : Form.Field.Id
-    object ConfirmPassword : Form.Field.Id
+    object ServiceName : Form.Field.Id<TextField>
+    object UserName : Form.Field.Id<TextField>
+    object Password : Form.Field.Id<TextField>
+    object ConfirmPassword : Form.Field.Id<TextField>
     object OnClick
 
     data class Error(val message: String?)
 
-    fun Form.address() = Address(
-        local = UserName<TextField>()!!.string,
-        domain = ServiceName<TextField>()!!.string
-    )
-
     fun Form.account() = Account(
-        address = address(),
-        password = Password<TextField>()!!
+        address = Address(
+            local = UserName.get().toString(),
+            domain = ServiceName.get().toString()
+        ),
+        password = Password.get()
     )
 }

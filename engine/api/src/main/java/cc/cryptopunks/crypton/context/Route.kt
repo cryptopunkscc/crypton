@@ -15,9 +15,7 @@ sealed class Route(
     object AccountManagement : Route()
     object CreateChat : Route()
 
-    class Chat(
-        data: MutableMap<String, Any?> = mutableMapOf()
-    ) : Route(data) {
+    class Chat(data: MutableMap<String, Any?> = mutableMapOf()) : Route(data) {
         var accountId: String by data
         var chatAddress: String by data
         val address get() = Address.from(chatAddress)

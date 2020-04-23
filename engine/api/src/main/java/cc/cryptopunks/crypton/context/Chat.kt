@@ -11,9 +11,13 @@ data class Chat(
     val resource: Resource = Resource.Empty,
     val users: List<User> = emptyList()
 ) {
-
     val isDirect get() = users.size == 2
     val accountUser get() = users.last()
+
+
+    companion object {
+        val Empty = Chat()
+    }
 
 
     interface Service : Connectable {
@@ -25,17 +29,12 @@ data class Chat(
         sealed class Option : In {
             abstract val message: Message
 
-            data class Copy(
-                override val message: Message
-            ) : Option()
+            data class Copy(override val message: Message) : Option()
         }
 
         data class MessageText(val text: CharSequence?) : Out
 
-        data class Messages(
-            val account: Address,
-            val list: PagedList<Message>
-        ) : Out
+        data class Messages(val account: Address, val list: PagedList<Message>) : Out
     }
 
 
@@ -62,9 +61,5 @@ data class Chat(
         suspend fun delete(chat: Chat)
         suspend fun deleteAll()
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>
-    }
-
-    companion object {
-        val Empty = Chat()
     }
 }

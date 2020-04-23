@@ -13,15 +13,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-private val List<Message>.notificationId get() = first().chatAddress.hashCode()
-private val List<Message>.address get() = first().chatAddress
-private val List<Message>.timestamp get() = last().timestamp
-
-class NotifyUnreadMessages @Inject constructor(
+class NotifyReceivedMessages @Inject constructor(
     private val context: Application,
     private val notificationManager: NotificationManager,
     private val mainActivityClass: Class<*>
-) : Message.Notify.Unread {
+) : Message.Notify.Received {
 
     private val person = Person.Builder().setName("Me").build()
 
@@ -30,13 +26,13 @@ class NotifyUnreadMessages @Inject constructor(
         Locale.getDefault()
     )
 
-    override fun invoke(messages: List<Message>) {
+    override fun plus(messages: List<Message>) {
         messages.takeIf {
             it.isNotEmpty()
         }?.showNotification()
     }
 
-    override fun cancel(messages: List<Message>) {
+    override fun minus(messages: List<Message>) {
         messages
             .mapTo(mutableSetOf(), Message::chatAddress)
             .forEach { notificationManager.cancel(it.hashCode()) }
@@ -62,30 +58,11 @@ class NotifyUnreadMessages @Inject constructor(
         .setStyle(getMessageStyle())
         .build()
 
-    private fun List<Message>.getMessageStyle() = NotificationCompat
-        .MessagingStyle(person).also { style ->
-            val senders = mutableMapOf<Address, Person>()
-            fun Message.getSenderPerson() = senders.getOrPut(from.address) {
-                Person.Builder()
-                    .setName(from.address.local.capitalize())
-                    .build()
-            }
-            style.isGroupConversation = false
-            forEach { message ->
-                style.addMessage(
-                    message.text,
-                    message.timestamp,
-                    message.getSenderPerson()
-                )
-            }
-        }
-
     private fun List<Message>.formatDate() = dateFormat
         .format(last().timestamp)
 
     private fun List<Message>.formatMessageCount() = context.resources
         .getQuantityText(R.plurals.messages_count, size)
-
 
     private fun pendingIntent() = PendingIntent.getActivity(context, 0, mainActivityIntent(), 0)
 
@@ -93,4 +70,31 @@ class NotifyUnreadMessages @Inject constructor(
         context,
         mainActivityClass
     )
+
+    private fun List<Message>.getMessageStyle() = NotificationCompat.MessagingStyle(person)
+        .also { style ->
+            style.isGroupConversation = false
+
+            mutableMapOf<Address, Person>().also { cache ->
+                forEach { message ->
+                    style.addMessage(
+                        message.text,
+                        message.timestamp,
+                        cache.getOrPut(
+                            message.from.address
+                        ) {
+                            Person.Builder()
+                                .setName(message.from.address.local.capitalize())
+                                .build()
+                        }
+                    )
+                }
+            }
+
+        }
 }
+
+
+private val List<Message>.notificationId get() = first().chatAddress.hashCode()
+private val List<Message>.address get() = first().chatAddress
+private val List<Message>.timestamp get() = last().timestamp

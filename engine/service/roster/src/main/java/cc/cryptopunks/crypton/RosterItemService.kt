@@ -31,7 +31,7 @@ class RosterItemService private constructor(
         )
     )
 
-    override fun Service.Connector.connect() = launch {
+    override fun Connector.connect() = launch {
         store.get().out()
         flowOf(
             input,

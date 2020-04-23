@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.util
 
 data class TextField(
-    override val id: Form.Field.Id,
+    override val id: Form.Field.Id<TextField>,
     val text: CharSequence
 ) : Form.Field,
     Form.Field.Text,

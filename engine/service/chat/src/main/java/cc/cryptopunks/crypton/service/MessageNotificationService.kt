@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MessageNotificationService @Inject constructor(
     private val scope: Session.Scope,
     private val serviceManager: ServiceManager,
-    private val notifyUnreadMessages: Message.Notify.Unread,
+    private val receivedMessages: Message.Notify.Received,
     private val repo: Message.Repo
 ) : () -> Job {
 
@@ -25,9 +25,9 @@ class MessageNotificationService @Inject constructor(
         launch {
             log.d("start")
             repo.unreadListFlow().collect { messages ->
-                notifyUnreadMessages.cancel(current - messages)
+                receivedMessages - (current - messages)
                 current = messages.consume()
-                notifyUnreadMessages(current)
+                receivedMessages(current)
             }
             log.d("stop")
         }

@@ -1,9 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor.Data
 import kotlinx.coroutines.Dispatchers
@@ -16,13 +13,13 @@ import javax.inject.Inject
 class CreateChatService @Inject constructor(
     private val createChat: CreateChatInteractor,
     private val navigate: Route.Api.Navigate
-) : Service {
+) : Connectable {
 
     data class CreateChat(val userAddress: Address)
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         input.collect { arg ->
             when (arg) {
                 is CreateChat -> try {

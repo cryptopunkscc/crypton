@@ -12,14 +12,15 @@ class Session(
 
     object Created : Api.Event
 
-    fun sessionEvent(event: Api.Event) = Event(
-        session = this,
-        event = event
-    )
-
     data class Event internal constructor(
         val session: Session,
         val event: Api.Event
+    )
+
+    @Suppress("FunctionName")
+    fun Event(event: Api.Event) = Event(
+        session = this,
+        event = event
     )
 
     class Scope : BroadcastErrorScope() {

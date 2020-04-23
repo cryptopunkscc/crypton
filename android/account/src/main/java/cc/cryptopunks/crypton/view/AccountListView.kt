@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.adapter.AccountListAdapter
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.widget.ServiceLayout
+import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.account_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,7 +18,7 @@ class AccountListView(
     context: Context,
     fragmentManager: FragmentManager
 ) :
-    ServiceLayout(context) {
+    ActorLayout(context) {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
@@ -35,5 +35,5 @@ class AccountListView(
         }
     }
 
-    override fun Service.Connector.connect(): Job = connect(accountListAdapter)
+    override fun Connector.connect(): Job = connect(accountListAdapter)
 }

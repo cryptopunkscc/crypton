@@ -8,11 +8,12 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Chat.Service.*
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.typedLog
-import cc.cryptopunks.crypton.widget.ServiceLayout
+import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 class ChatView(
     context: Context
 ) :
-    ServiceLayout(context) {
+    ActorLayout(context) {
 
     private val log = typedLog()
 
@@ -42,7 +43,7 @@ class ChatView(
         }
     }
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch {
             input.collect { arg ->
                 log.d("in: $arg")
@@ -51,7 +52,7 @@ class ChatView(
                         log.d("set adapter: $arg")
                         chatRecyclerView.adapter = arg
                     }
-                    is Service.Actor.Start -> chatRecyclerView.run {
+                    is Actor.Start -> chatRecyclerView.run {
                         val rect = Rect()
                         children.filter { child ->
                             getHitRect(rect)
@@ -76,7 +77,7 @@ class ChatView(
                 .collect(output)
         }
         launch {
-            Service.Actor.Connected.out()
+            Actor.Connected.out()
         }
     }
 

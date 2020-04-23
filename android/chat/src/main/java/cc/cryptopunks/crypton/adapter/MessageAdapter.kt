@@ -1,21 +1,17 @@
 package cc.cryptopunks.crypton.adapter
 
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.context.Chat.Service.*
-import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.util.Store
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.ext.map
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.view.MessageView
+import cc.cryptopunks.crypton.widget.GenericViewHolder
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
@@ -28,42 +24,42 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
+private typealias ViewHolder = GenericViewHolder<MessageView>
+
 class MessageAdapter(
     override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.Main
 ) :
-    PagedListAdapter<Message, MessageAdapter.ViewHolder>(Diff),
+    PagedListAdapter<Message, ViewHolder>(Diff),
     CoroutineScope,
-    Service.Connectable {
+    Connectable {
 
     private val log = typedLog()
 
-    private val clicksChannel = BroadcastChannel<Option>(Channel.BUFFERED)
+    private val clicks = BroadcastChannel<Option>(Channel.BUFFERED)
 
-    private val readChannel = BroadcastChannel<Message>(Channel.BUFFERED)
+    private val read = BroadcastChannel<Message>(Channel.BUFFERED)
 
     private var account = Address.Empty
 
-    private val store = Store<Any>(Service.Actor.Stop)
+    private var actorStatus: Any = Actor.Stop
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch {
             input.collect {
                 log.d("in: $it")
                 when (it) {
-                    is Service.Actor.Start -> {
-                        store { it }
-                    }
-                    is Service.Actor.Stop -> {
-                        store { it }
+                    is Actor.Start,
+                    is Actor.Stop -> {
+                        actorStatus = it
                     }
                     is Messages -> {
                         log.d("submit messages $it")
                         account = it.account
                         submitList(it.list)
                     }
-                    is Service.Actor.Connected -> {
+                    is Actor.Connected -> {
                         this@MessageAdapter.out()
                     }
                 }
@@ -71,8 +67,8 @@ class MessageAdapter(
         }
         launch {
             flowOf(
-                clicksChannel.asFlow(),
-                readChannel.asFlow().bufferedThrottle(200).map { MessagesRead(it) }
+                clicks.asFlow(),
+                read.asFlow().bufferedThrottle(200).map { MessagesRead(it) }
             )
                 .flattenMerge()
                 .collect(output)
@@ -82,24 +78,22 @@ class MessageAdapter(
         }
     }
 
-    private fun createView(parent: ViewGroup, viewType: Int) = MessageView(
-        context = parent.context,
-        type = viewType,
-        dateFormat = dateFormat
-    )
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        createView(parent, viewType)
+        MessageView(
+            context = parent.context,
+            type = viewType,
+            dateFormat = dateFormat
+        )
     )
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
         holder.view.message?.let { message ->
-            if (store.get() != Service.Actor.Stop && message.isUnread) launch {
-                readChannel.send(message)
+            if (actorStatus != Actor.Stop && message.isUnread) launch {
+                read.send(message)
             }
         }
         holder.view.apply {
-            job = launch { optionClicks.consumeEach { clicksChannel.send(it) } }
+            job = launch { optionClicks.consumeEach { clicks.send(it) } }
         }
     }
 
@@ -108,13 +102,11 @@ class MessageAdapter(
     }
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {
-        holder.view.apply {
-            job?.cancel()
-        }
+        holder.view.job?.cancel()
     }
 
     override fun getItemViewType(position: Int): Int =
-        if ((getItem(position))?.from?.address == account)
+        if (getItem(position)?.from?.address == account)
             Gravity.RIGHT else
             Gravity.LEFT
 
@@ -128,9 +120,5 @@ class MessageAdapter(
             oldItem: Message,
             newItem: Message
         ) = oldItem == newItem
-    }
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val view get() = itemView as MessageView
     }
 }

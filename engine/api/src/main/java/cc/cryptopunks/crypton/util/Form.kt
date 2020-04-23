@@ -3,12 +3,12 @@ package cc.cryptopunks.crypton.util
 import cc.cryptopunks.crypton.context.Connectable
 
 data class Form(
-    val fields: Map<Field.Id, Field> = emptyMap()
+    val fields: Map<Field.Id<*>, Field> = emptyMap()
 ) {
     interface Field {
-        val id: Id
+        val id: Id<*>
 
-        interface Id
+        interface Id<F: Field>
         interface Text : CharSequence
     }
 
@@ -29,7 +29,5 @@ data class Form(
         fields = fields + (field.id to field)
     )
 
-    val Field.Id.text get() = fields[this] as Field.Text
-
-    operator fun <F: Field> Field.Id.invoke() = fields[this] as? F
+    fun <F: Field> Field.Id<F>.get() = fields[this] as F
 }

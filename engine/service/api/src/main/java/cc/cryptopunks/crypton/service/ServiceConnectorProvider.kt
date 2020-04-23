@@ -1,13 +1,13 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.consumeAsFlow
 
-internal class ServiceConnectorProvider : Service.Connector {
+internal class ServiceConnectorProvider : Connector {
     val log = typedLog()
 
     private val channel = BroadcastChannel<Any>(Channel.BUFFERED)
@@ -19,7 +19,7 @@ internal class ServiceConnectorProvider : Service.Connector {
         channel.send(it)
     }
 
-    fun openSubscription() = object : Service.Connector {
+    fun openSubscription() = object : Connector {
         private val subscription = channel.openSubscription()
 
         override val input get() = subscription.consumeAsFlow()

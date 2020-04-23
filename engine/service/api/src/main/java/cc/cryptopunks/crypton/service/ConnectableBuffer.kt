@@ -1,19 +1,23 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.Service
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class ConnectableBuffer(
     override val coroutineContext: CoroutineContext
-) : Service.Connectable {
+) : Connectable {
 
     private val log = typedLog()
 
@@ -23,7 +27,7 @@ class ConnectableBuffer(
 
     private var subscription: ReceiveChannel<Any> = inputProxy.openSubscription()
 
-    private val connector = object : Service.Connector {
+    private val connector = object : Connector {
 
         override val input: Flow<Any>
             get() = subscription
@@ -34,7 +38,7 @@ class ConnectableBuffer(
         }
     }
 
-    var service: Service? = null
+    var service: Connectable? = null
         set(value) {
             if (value == null) {
                 subscription = inputProxy.openSubscription()
@@ -45,7 +49,7 @@ class ConnectableBuffer(
             }
         }
 
-    override fun Service.Connector.connect(): Job = launch {
+    override fun Connector.connect(): Job = launch {
         launch {
             log.d("bind")
             input.collect {
