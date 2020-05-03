@@ -14,16 +14,11 @@ data class Form(
 
     data class Set(val form: Form) : Service.Input
     data class SetField(val field: Field) : Service.Input
-    object Submit : Service.Input
-
-    data class Error(val message: String?) : Service.Output
 
     interface Service : Connectable {
         interface Input
         interface Output
     }
-
-    constructor(vararg fields: Field) : this(fields.map { it.id to it }.toMap())
 
     fun setField(field: Field) = copy(
         fields = fields + (field.id to field)

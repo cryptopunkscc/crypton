@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.context
 
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 
 object OptionItem {
@@ -9,6 +10,8 @@ object OptionItem {
     }
 
     interface Output : Flow<Int>
+
+    class Selections : Channel<OptionItem> by Channel()
 
     interface Core {
         val selectOptionItem: Select

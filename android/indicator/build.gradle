@@ -29,6 +29,9 @@ dependencies {
 
     api project(':android:core')
     api project(':android:notification')
+
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

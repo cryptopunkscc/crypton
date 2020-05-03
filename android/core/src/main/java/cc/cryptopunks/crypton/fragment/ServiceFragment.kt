@@ -6,25 +6,18 @@ import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.service.ConnectableBuffer
-import cc.cryptopunks.crypton.service.ServiceBinding
-import cc.cryptopunks.crypton.service.ServiceManager
-import cc.cryptopunks.crypton.util.ext.resolve
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import cc.cryptopunks.crypton.service.createBinding
+import cc.cryptopunks.crypton.service.remove
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 abstract class ServiceFragment :
     FeatureFragment(),
     Connectable,
     Connector {
 
-    private val serviceManager: ServiceManager by lazy {
-        appCore.resolve<ServiceManager.Core>().serviceManager
-    }
-
-    protected val binding: ServiceBinding by lazy {
-        serviceManager.createBinding()
+    protected val binding: Connectable.Binding by lazy {
+        runBlocking { appCore.connectableBindingsStore.createBinding() }
     }
 
     override val input: Flow<Any> get() = binding.input
@@ -61,12 +54,17 @@ abstract class ServiceFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         viewProxy.service = null
-        binding.minus<Actor>()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.cancel()
-        serviceManager.remove(binding)
+        runBlocking {
+            viewProxy.cancel()
+            binding.cancel()
+            log.d("binding canceled")
+            appCore.connectableBindingsStore.remove(binding)
+            log.d("binding removed")
+        }
+        log.d("destroyed")
     }
 }

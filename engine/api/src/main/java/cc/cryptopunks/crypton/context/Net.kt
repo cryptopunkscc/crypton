@@ -23,7 +23,7 @@ interface Net :
     interface Interrupt : () -> Unit
     interface IsConnected : () -> Boolean
     interface InitOmemo : () -> Boolean
-    interface Output : Flow<Api.Event>
+    interface Output : () -> Flow<Api.Event>
 
     interface Event : Api.Event
 

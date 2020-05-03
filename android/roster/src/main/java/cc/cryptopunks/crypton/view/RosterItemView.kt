@@ -1,10 +1,13 @@
 package cc.cryptopunks.crypton.view
 
+import android.animation.LayoutTransition
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
+import android.view.View
 import androidx.core.content.ContextCompat
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.service.RosterItemService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
@@ -36,6 +39,8 @@ class RosterItemView(
     }
 
     init {
+        visibility = View.INVISIBLE
+        layoutTransition = LayoutTransition()
         layoutParams = LayoutParams(
             LayoutParams.MATCH_PARENT,
             LayoutParams.WRAP_CONTENT
@@ -50,6 +55,9 @@ class RosterItemView(
         }
         launch {
             clicks().collect { Route.Chat().out() }
+        }
+        launch {
+            RosterItemService.GetState.out()
         }
     }
 
@@ -77,6 +85,8 @@ class RosterItemView(
                 if (unreadMessagesCount > 0)
                     "+ $unreadMessagesCount" else
                     null
+
+            visibility = View.VISIBLE
         }
     }
 

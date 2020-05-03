@@ -2,20 +2,50 @@ package cc.cryptopunks.crypton
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import cc.cryptopunks.crypton.activity.MainActivity
+import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Engine
-import cc.cryptopunks.crypton.service.appServices
+import cc.cryptopunks.crypton.context.Notification
+import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
+import cc.cryptopunks.crypton.mock.net.ConnectionMockFactory
+import cc.cryptopunks.crypton.module.*
 import cc.cryptopunks.crypton.service.initExceptionService
-import cc.cryptopunks.crypton.smack.initSmack
-import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
-import cc.cryptopunks.crypton.util.initAndroidLog
+import cc.cryptopunks.crypton.sys.AndroidSys
+import cc.cryptopunks.crypton.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 
 class App :
     Application(),
     Engine {
 
-    private val dependencies = Dependencies(this)
+    private val mainActivityClass = MainActivity::class
 
-    override val core get() = dependencies.androidCore
+    override val core by lazy {
+        AppModule(
+            mainClass = mainActivityClass,
+            mainExecutor = MainExecutor(Dispatchers.Main.asExecutor()),
+            ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
+            repo = RoomRepo(this),
+            sys = AndroidSys(
+                application = this,
+                notificationFactories = mapOf(
+                    Notification.Messages::class to AndroidChatNotificationFactory(
+                        context = this,
+                        mainActivityClass = mainActivityClass.java
+                    )
+                )
+            ),
+            createConnection = ConnectionMockFactory(),
+            createSessionServices = { sessionCore ->
+                listOf(
+                    ChatBackgroundServiceModule(sessionCore).chatBackgroundService,
+                    RosterBackgroundServiceModule(sessionCore).rosterBackgroundService,
+                    SessionDomainModule(sessionCore).sessionService
+                )
+            }
+        )
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -24,8 +54,8 @@ class App :
         initAndroidLog()
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
-        initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        core.appServices()
+//        initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
+        AppDomainModule(core).appService()
     }
 
     private companion object {

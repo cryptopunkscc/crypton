@@ -68,20 +68,8 @@ data class Message(
         suspend fun notifyUnread()
     }
 
-    interface Sys : Notify
-
     interface Consumer {
         fun canConsume(message: Message): Boolean
-    }
-
-    interface Notify {
-        val notifyReceivedMessages: Received
-
-        interface Received : (List<Message>) -> Unit {
-            operator fun plus(messages: List<Message>)
-            operator fun minus(messages: List<Message>)
-            override fun invoke(messages: List<Message>) = plus(messages)
-        }
     }
 
     object Notification {

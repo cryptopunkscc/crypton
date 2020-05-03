@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.util.OpenStore
+
 class Clip(
     val id: Long = 0,
     val data: String = "",
@@ -7,14 +9,14 @@ class Clip(
 ) {
     object Board {
         interface Sys {
-            val setClip: SetClip
-
-            interface SetClip : (String) -> Unit
+            fun setClip(text: String)
         }
+
+        class Store : OpenStore<List<Clip>>(emptyList())
 
         interface Repo {
             suspend fun put(clip: Clip)
-            suspend fun pop() : Clip?
+            suspend fun pop(): Clip?
         }
     }
 }

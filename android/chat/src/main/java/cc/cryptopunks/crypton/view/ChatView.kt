@@ -46,10 +46,8 @@ class ChatView(
     override fun Connector.connect(): Job = launch {
         launch {
             input.collect { arg ->
-                log.d("in: $arg")
                 when (arg) {
                     is RecyclerView.Adapter<*> -> {
-                        log.d("set adapter: $arg")
                         chatRecyclerView.adapter = arg
                     }
                     is Actor.Start -> chatRecyclerView.run {

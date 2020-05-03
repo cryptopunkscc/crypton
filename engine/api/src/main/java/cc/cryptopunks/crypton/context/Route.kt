@@ -1,7 +1,5 @@
 package cc.cryptopunks.crypton.context
 
-import kotlinx.coroutines.flow.Flow
-
 sealed class Route(
     open val data: MutableMap<String, Any?> = mutableMapOf()
 ) {
@@ -14,18 +12,18 @@ sealed class Route(
     object AccountList : Route()
     object AccountManagement : Route()
     object CreateChat : Route()
-
     class Chat(data: MutableMap<String, Any?> = mutableMapOf()) : Route(data) {
         var accountId: String by data
         var chatAddress: String by data
         val address get() = Address.from(chatAddress)
     }
 
-    interface Api {
-        val navigate: Navigate
-        val navigationOutput: Output
+    interface Sys {
+        fun navigate(route: Route)
+        suspend fun bind(navigator: Any)
+    }
 
-        interface Navigate : (Route) -> Unit
-        interface Output : Flow<Route>
+    class Navigate(private val sys: Sys) : (Route) -> Unit {
+        override fun invoke(route: Route) = sys.navigate(route)
     }
 }

@@ -4,9 +4,8 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
-import javax.inject.Inject
 
-class MarkMessagesAsRead @Inject constructor(
+internal class MarkMessagesAsRead(
     private val scope: Session.Scope,
     private val repo: Message.Repo
 ) : (List<Message>) -> Job {

@@ -8,7 +8,6 @@ import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
-import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.service.AccountListService
 import cc.cryptopunks.crypton.util.ext.inflate
@@ -22,10 +21,9 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class AccountListAdapter @Inject constructor(
+internal class AccountListAdapter(
     private val fragmentManager: FragmentManager,
     override val coroutineContext: CoroutineContext
 ) : RecyclerView.Adapter<AccountListAdapter.ViewHolder>(),

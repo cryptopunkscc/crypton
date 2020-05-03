@@ -41,10 +41,10 @@ class RosterView(
     }
 
     override fun Connector.connect(): Job = launch {
-        log.d("bind")
+        log.d("Connect")
         launch {
             input.filterIsInstance<Roster.Service.Items>().collect {
-                log.d("receive: ${it.items.size}")
+                log.d("Received ${it.items.size} items")
                 rosterAdapter.submitList(it.items)
             }
         }

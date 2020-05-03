@@ -7,11 +7,8 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import cc.cryptopunks.crypton.activity.BaseActivity
-import cc.cryptopunks.crypton.util.typedLog
 
 abstract class BaseFragment : LoggerFragment() {
-
-    private val log = typedLog()
 
     open val layoutRes @LayoutRes get() = 0
 

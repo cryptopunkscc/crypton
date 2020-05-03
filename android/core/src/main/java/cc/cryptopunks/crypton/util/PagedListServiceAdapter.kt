@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.ServiceManager
+import cc.cryptopunks.crypton.service.cancelAll
+import cc.cryptopunks.crypton.service.createBinding
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlin.properties.Delegates
 
 abstract class PagedListServiceAdapter<V, S>(
     diffCallback: DiffUtil.ItemCallback<S> = DiffItemCallback()
@@ -21,11 +24,11 @@ V : Actor,
 V : View,
 S : Connectable {
 
-    private val serviceManager = ServiceManager()
+    private val connectableBindingStore = Connectable.Binding.Store()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         invokeOnClose {
-            serviceManager.clear()
+            runBlocking { connectableBindingStore.cancelAll() }
         }
     }
 
@@ -35,7 +38,7 @@ S : Connectable {
         ViewHolder(createView(parent, viewType))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.slot2 = getItem(position)
+        holder.item = getItem(position)
     }
 
     open class DiffItemCallback<S : Service> : DiffUtil.ItemCallback<S>() {
@@ -51,6 +54,12 @@ S : Connectable {
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = serviceManager.createBinding().apply { slot1 = view as Connectable }
+        private val binding: Connectable.Binding = connectableBindingStore.createBinding().apply {
+            plus(view as Connectable)
+        }
+        var item by Delegates.observable<Connectable?>(null) { _, oldValue, newValue ->
+            oldValue?.let { binding - it }
+            binding + newValue
+        }
     }
 }

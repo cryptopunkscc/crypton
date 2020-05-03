@@ -1,17 +1,19 @@
 package cc.cryptopunks.crypton.util
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 
 class JobManager<T>(
-    override val scope: BroadcastErrorScope,
+    override val scope: CoroutineScope,
     override val log: TypedLog? = null,
     override val execute: T.() -> Job
 ) : AbstractJobManager<T>()
 
 abstract class AbstractJobManager<T> : (T) -> Job {
 
-    protected abstract val scope: BroadcastErrorScope
+    protected abstract val scope: CoroutineScope
 
     protected abstract val execute: (T) -> Job
 

@@ -7,18 +7,15 @@ import cc.cryptopunks.crypton.fragment.MainFragment
 import cc.cryptopunks.crypton.initDebugDrawer
 import cc.cryptopunks.crypton.intent.IntentProcessor
 import cc.cryptopunks.crypton.main.R
-import cc.cryptopunks.crypton.service.ServiceManager
+import cc.cryptopunks.crypton.service.top
 import cc.cryptopunks.crypton.util.ext.fragment
-import cc.cryptopunks.crypton.util.ext.resolve
 import cc.cryptopunks.crypton.view.RosterView
 
 class MainActivity : FeatureActivity() {
 
-    private val processIntent
-        get() = appCore
-            .resolve<IntentProcessor.Core>()
-            .processIntent
-
+    private val processIntent by lazy {
+        IntentProcessor(appCore.clipboardRepo)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +38,7 @@ class MainActivity : FeatureActivity() {
     override fun onBackPressed() {
         // prevent activity from leaking due to android bug
         // https://issuetracker.google.com/issues/139738913
-        appCore.resolve<ServiceManager.Core>()
-            .serviceManager.top()?.run {
+        appCore.connectableBindingsStore.top()?.run {
             if (services.any { it is RosterView })
                 finishAfterTransition() else
                 super.onBackPressed()

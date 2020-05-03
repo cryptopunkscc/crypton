@@ -8,7 +8,6 @@ import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.context.Chat.Service.*
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
-import cc.cryptopunks.crypton.util.ext.map
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.view.MessageView
 import cc.cryptopunks.crypton.widget.GenericViewHolder
@@ -16,10 +15,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flattenMerge
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -54,7 +50,7 @@ class MessageAdapter(
                     is Actor.Stop -> {
                         actorStatus = it
                     }
-                    is Messages -> {
+                    is Messages -> launch {
                         log.d("submit messages $it")
                         account = it.account
                         submitList(it.list)

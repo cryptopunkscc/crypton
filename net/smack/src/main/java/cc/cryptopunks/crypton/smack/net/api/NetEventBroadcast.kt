@@ -14,9 +14,7 @@ internal class NetEventBroadcast(
     private val scope: BroadcastErrorScope,
     connection: XMPPTCPConnection,
     initOmemo: InitOmemo
-) : (Api.Event) -> Unit,
-    Net.Output,
-    Flow<Api.Event> {
+) : Net.Output {
 
     private val channel = BroadcastChannel<Api.Event>(Channel.CONFLATED)
 
@@ -31,12 +29,9 @@ internal class NetEventBroadcast(
         }
     }
 
-    override fun invoke(event: Api.Event) {
+    fun invoke(event: Api.Event) {
         scope.launch { channel.send(event) }
     }
 
-    @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Api.Event>) {
-        channel.asFlow().collect(collector)
-    }
+    override fun invoke() = channel.asFlow()
 }

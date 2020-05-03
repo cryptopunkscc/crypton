@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.util.typedLog
 
 abstract class LoggerFragment : Fragment() {
 
-    private val log = typedLog()
+    val log = typedLog()
 
     @CallSuper
     override fun onAttach(context: Context) {

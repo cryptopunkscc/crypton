@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
+import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
@@ -9,8 +10,6 @@ class Session(
     val scope: Scope,
     connection: Connection
 ) : Connection by connection {
-
-    object Created : Api.Event
 
     data class Event internal constructor(
         val session: Session,
@@ -27,9 +26,9 @@ class Session(
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
     }
 
-    interface Core {
-        val session: Session
-        val address: Address
-        val sessionScope: Scope
+    class Store : OpenStore<Map<Address, Session>>(emptyMap())
+
+    interface BackgroundService {
+        suspend operator fun invoke()
     }
 }

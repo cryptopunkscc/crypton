@@ -6,21 +6,25 @@ data class Account(
     val address: Address = Address.Empty,
     val password: CharSequence = ""
 ) {
-
     val domain get() = address.domain
 
-    data class Exception(
+    companion object {
+        val Empty = Account()
+
+        @Suppress("FunctionName")
+        fun Exception(
+            account: Address,
+            cause: Throwable
+        ): Exception = if (cause is Exception) cause else Exception(account, cause)
+    }
+
+    class Exception private constructor(
         val account: Address,
         override val cause: Throwable
     ) : kotlin.Exception(
         account.toString(),
         cause
     )
-
-    @Suppress("NOTHING_TO_INLINE")
-    inline fun exception(throwable: Throwable): Exception =
-        if (throwable is Exception) throwable
-        else Exception(address, throwable)
 
     interface Event : Api.Event
 
@@ -33,10 +37,10 @@ data class Account(
         val login: Login
         val isAuthenticated: IsAuthenticated
 
-        interface Create: () -> Unit
-        interface Remove: () -> Unit
-        interface Login: () -> Unit
-        interface IsAuthenticated: () -> Boolean
+        interface Create : () -> Unit
+        interface Remove : () -> Unit
+        interface Login : () -> Unit
+        interface IsAuthenticated : () -> Boolean
     }
 
     interface Repo {
@@ -50,7 +54,8 @@ data class Account(
         suspend fun addressList(): List<Address>
     }
 
-    companion object {
-        val Empty = Account()
+    interface Core {
+        val accountRepo: Repo
+        val accountNet: Net
     }
 }

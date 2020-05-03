@@ -35,8 +35,8 @@ fun Activity.initDebugDrawer(): DebugDrawer = DebugDrawer
 
 fun Activity.detachDebugDrawer() {
     findViewById<ViewGroup>(android.R.id.content).apply {
-        findViewById<ViewGroup>(R.id.dd_drawer_layout)?.let { debugView ->
-            removeView(debugView)
-        }
+//        findViewById<ViewGroup>(R.id.dd_drawer_layout)?.let { debugView ->
+//            removeView(debugView)
+//        } TODO
     }
 }
