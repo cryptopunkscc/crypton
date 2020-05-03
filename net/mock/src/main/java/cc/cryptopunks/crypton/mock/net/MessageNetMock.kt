@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.mock.MockState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlin.random.Random
 
 class MessageNetMock(
     private val state: MockState
@@ -16,7 +17,7 @@ class MessageNetMock(
         Message.Net.Send {
         override suspend fun invoke(address: Address, messageText: String) {
             state {
-                val id = System.nanoTime().toString()
+                val id = String(Random.nextBytes(16))
                 messageEvents.send(Message.Net.Event.Sent(
                     Message(
                         id = id,

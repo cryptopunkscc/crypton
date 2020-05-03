@@ -60,8 +60,8 @@ class MockState(
                 "message2"
             ).map { messageText ->
                 Message(
-                    id = messageText,
-                    stanzaId = messageText,
+                    id = messageText + chat.address,
+                    stanzaId = messageText + chat.address,
                     chatAddress = chat.address,
                     from = chat.resource,
                     to = Resource(account, "mock"),
