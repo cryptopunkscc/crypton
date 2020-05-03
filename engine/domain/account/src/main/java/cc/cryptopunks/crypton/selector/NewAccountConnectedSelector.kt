@@ -2,20 +2,27 @@ package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.manager.SessionManager
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import cc.cryptopunks.crypton.context.Session
+import kotlinx.coroutines.flow.*
 
-class NewAccountConnectedSelector @Inject constructor(
-    private val sessionManager: SessionManager
-) : () -> Flow<Address> {
+class NewAccountConnectedSelector internal constructor(
+    private val sessionsStore: Session.Store
+) {
 
-    override fun invoke(): Flow<Address> = mutableSetOf<Address>().run {
-        sessionManager.eventsFlow()
-            .filter { it.event is Account.Authenticated }
-            .filter { add(it.session.address) }
-            .map { it.session.address }
+    operator fun invoke(): Flow<Address> = mutableSetOf<Session>().let { cache ->
+        sessionsStore.changesFlow()
+            .flatMapConcat { map -> map.values.asFlow() }
+            .filterNot { session -> session in cache }
+            .flatMapMerge { session ->
+                session.netEvents()
+                    .produceIn(session.scope)
+                    .consumeAsFlow()
+                    .onCompletion { cache.remove(session) }
+                    .filterIsInstance<Account.Authenticated>()
+                    .mapNotNull {
+                        if (session in cache) null
+                        else session.also { cache.add(it) }.address
+                    }
+            }
     }
 }

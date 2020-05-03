@@ -7,10 +7,9 @@ import cc.cryptopunks.crypton.view.RosterItemView
 import kotlinx.coroutines.CoroutineScope
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class RosterAdapter @Inject constructor(
+class RosterAdapter(
     override val coroutineContext: CoroutineContext
 ) :
     PagedListServiceAdapter<RosterItemView, Connectable>(),

@@ -1,21 +1,24 @@
 package cc.cryptopunks.crypton.interactor
 
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.manager.AccountManager
-import kotlinx.coroutines.Job
-import javax.inject.Inject
+import cc.cryptopunks.crypton.context.Session
+import kotlinx.coroutines.cancel
 
-class DeleteAccountInteractor @Inject constructor(
-    manager: AccountManager,
-    scope: Service.Scope
-) : (Address) -> Job by { address ->
-    scope.launch {
-        manager.copy(address = address).run {
-            if (isConnected)
-                disconnect()
-            delete()
-            clear()
+class DeleteAccountInteractor internal constructor(
+    private val sessionStore: Session.Store,
+    private val accountRepo: Account.Repo
+) {
+    suspend operator fun invoke(address: Address, unregister: Boolean) {
+        sessionStore.apply {
+            get()[address]?.run {
+                if (unregister)
+                    removeAccount() else
+                    disconnect()
+                reduce { minus(address) }
+                scope.cancel()
+            }
         }
+        accountRepo.delete(address)
     }
 }

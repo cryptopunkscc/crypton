@@ -3,12 +3,13 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import cc.cryptopunks.crypton.context.OptionItem
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.service.RouterService
-import cc.cryptopunks.crypton.util.ext.resolve
+import cc.cryptopunks.crypton.module.CommonDomainModule
 import cc.cryptopunks.crypton.view.DashboardView
+import kotlinx.coroutines.runBlocking
 
 class DashboardFragment :
     ServiceFragment() {
@@ -20,16 +21,18 @@ class DashboardFragment :
         setHasOptionsMenu(true)
     }
 
-    override fun onCreatePresenter() = featureCore
-        .resolve<RouterService.Core>()
-        .routerService
+    override fun onCreatePresenter() = CommonDomainModule(
+        appCore = appCore
+    ).routerService
 
     override fun onCreateActor(view: View) = DashboardView(
-        containerView = view,
-        optionItems = featureCore
-            .resolve<OptionItem.Core>()
-            .optionItemSelections
+        containerView = view
     )
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        runBlocking { binding.output(Route.AccountManagement) }
+        return true
+    }
 
     override fun onStart() {
         super.onStart()

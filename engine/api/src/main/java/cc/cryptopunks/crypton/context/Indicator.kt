@@ -9,10 +9,7 @@ object Indicator {
     }
 
     interface Sys {
-        val showIndicator: Show
-        val hideIndicator: Hide
-
-        interface Show : () -> Unit
-        interface Hide : () -> Unit
+        fun showIndicator()
+        fun hideIndicator()
     }
 }

@@ -1,13 +1,9 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.ViewGroup
+import android.view.*
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.service.AccountListService
-import cc.cryptopunks.crypton.util.ext.resolve
+import cc.cryptopunks.crypton.module.AccountDomainModule
 import cc.cryptopunks.crypton.view.AccountListView
 
 
@@ -20,15 +16,15 @@ class AccountListFragment : ServiceFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreatePresenter() = featureCore
-        .resolve<AccountListService.Core>()
-        .accountListService
+    override fun onCreatePresenter() = AccountDomainModule(
+        appCore = appCore
+    ).accountListService
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = AccountListView(
+    ): View = AccountListView(
         context = activity!!,
         fragmentManager = fragmentManager!!
     )

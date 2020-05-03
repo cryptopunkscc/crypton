@@ -13,8 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 
-
-class AccountListView(
+internal class AccountListView(
     context: Context,
     fragmentManager: FragmentManager
 ) :

@@ -7,9 +7,9 @@
     tools:ignore="UnusedNavigation">
     <fragment
         android:id="@+id/setAccountFragment"
-        android:name="cc.cryptopunks.crypton.fragment.SetAccountFragment"
+        android:name="cc.cryptopunks.crypton.fragment.AddAccountFragment"
         android:label="SetAccountFragment"
-        tools:layout="@layout/set_account">
+        tools:layout="@layout/add_account">
         <action
             android:id="@+id/navigateLogin"
             app:destination="@id/signInFragment" />
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="cc.cryptopunks.crypton.fragment.SignInFragment"
+        android:name="cc.cryptopunks.crypton.fragment.LoginAccountFragment"
         android:label="SignInFragment"
         tools:layout="@layout/sign_in" />
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="cc.cryptopunks.crypton.fragment.SignUpFragment"
+        android:name="cc.cryptopunks.crypton.fragment.RegisterAccountFragment"
         android:label="SignUpFragment"
-        tools:layout="@layout/sign_up" />
+        tools:layout="@layout/create_account" />
 </navigation>

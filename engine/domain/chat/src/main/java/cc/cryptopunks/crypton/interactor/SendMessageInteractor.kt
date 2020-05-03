@@ -4,15 +4,14 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
 import kotlinx.coroutines.Job
-import javax.inject.Inject
 
-class SendMessageInteractor @Inject constructor(
+internal class SendMessageInteractor(
     scope: Session.Scope,
     chat: Chat,
-    sendMessage: Message.Net.Send
+    messageNet: Message.Net
 ) : (String) -> Job by { message ->
     scope.launch {
-        sendMessage(
+        messageNet.sendMessage(
             chat.address,
             message
         )

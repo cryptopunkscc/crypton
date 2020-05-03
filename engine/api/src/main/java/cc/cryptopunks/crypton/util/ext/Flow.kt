@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-inline fun <T, R> Flow<T>.map(crossinline transform: (value: T) -> R): Flow<R> = map { transform(it) }
+//inline fun <T, R> Flow<T>.map(crossinline transform: (value: T) -> R): Flow<R> = map { transform(it) }
 
 
 fun <T : Any> Flow<T>.bufferedThrottle(wait: Long): Flow<List<T>> = channelFlow {
@@ -24,7 +24,7 @@ fun <T : Any> Flow<T>.bufferedThrottle(wait: Long): Flow<List<T>> = channelFlow 
                 buffer + it as T
             } else {
                 send(buffer)
-                emptyList()
+                emptyList<T>()
             }
         }
     }

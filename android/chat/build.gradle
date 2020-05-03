@@ -30,7 +30,7 @@ dependencies {
     implementation project(':android:widget')
     api project(':android:core')
     api project(':android:notification')
-    api project(':engine:service:chat')
+    api project(':engine:domain:chat')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

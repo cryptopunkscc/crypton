@@ -14,12 +14,6 @@ interface Connection : Net {
         }
     }
 
-    enum class SecurityMode {
-        required,
-        ifpossible,
-        disabled
-    }
-
     interface Factory : (Config) -> Connection {
         data class Config(
             val resource: String = "",
@@ -28,6 +22,12 @@ interface Connection : Net {
         ) {
             companion object {
                 val Empty = Config()
+            }
+
+            enum class SecurityMode {
+                required,
+                ifpossible,
+                disabled
             }
         }
 

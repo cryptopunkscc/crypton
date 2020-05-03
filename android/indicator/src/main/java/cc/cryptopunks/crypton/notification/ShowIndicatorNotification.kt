@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.notification
 
-import android.app.Application
 import android.app.Notification
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import cc.cryptopunks.crypton.context.Indicator
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class ShowIndicatorNotification @Inject constructor(
     private val showNotification: ShowForegroundNotification,
-    private val context: Application,
+    private val context: Context,
     private val mainActivityClass: Class<*>
 ) : () -> Unit {
 

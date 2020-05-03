@@ -2,12 +2,10 @@ package cc.cryptopunks.crypton.intent
 
 import android.content.Intent
 import cc.cryptopunks.crypton.context.Clip
-import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.util.typedLog
-import javax.inject.Inject
+import kotlinx.coroutines.runBlocking
 
-class IntentProcessor @Inject constructor(
-    private val scope: Service.Scope,
+class IntentProcessor(
     private val clipboardRepo: Clip.Board.Repo
 ) : (Intent) -> Unit {
 
@@ -15,17 +13,18 @@ class IntentProcessor @Inject constructor(
 
     override fun invoke(intent: Intent): Unit = intent.run {
         log.d("processing intent: $intent")
-        when (action) {
-            Intent.ACTION_SEND -> when {
-                type?.startsWith("text/") == true -> scope.launch {
-                    log.d("inserting to clipboard")
-                    clipboardRepo.put(
-                        Clip(data = intent.getStringExtra(Intent.EXTRA_TEXT)!!)
-                    )
-                }
+        when {
+            intent.isCopyToClipboard() -> runBlocking {
+                log.d("inserting to clipboard")
+                clipboardRepo.put(
+                    Clip(data = intent.getStringExtra(Intent.EXTRA_TEXT)!!)
+                )
             }
         }
     }
+
+    private fun Intent.isCopyToClipboard() =
+        action == Intent.ACTION_SEND && type?.startsWith("text") ?: false
 
     interface Core {
         val processIntent: IntentProcessor

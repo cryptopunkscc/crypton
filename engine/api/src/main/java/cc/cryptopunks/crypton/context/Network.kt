@@ -4,6 +4,11 @@ import kotlinx.coroutines.flow.Flow
 
 object Network {
 
+    data class Adapter(
+        val network: String?,
+        val status: Status
+    )
+
     sealed class Status {
         object Available : Status()
         object Changed : Status()
@@ -17,8 +22,7 @@ object Network {
     }
 
     interface Sys {
-        val getNetworkStatus: GetStatus
-
-        interface GetStatus : Flow<Status>, () -> Status
+        val status: Status
+        fun statusFlow() : Flow<Status>
     }
 }

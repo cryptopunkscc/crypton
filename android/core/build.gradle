@@ -22,8 +22,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    api project(':engine:domain:feature')
-    api project(':engine:service:api')
+    api project(':engine:util:feature')
+    api project(':engine:util:service')
     api project(':android:debug')
 
     api "com.google.android.material:material:$material_version"

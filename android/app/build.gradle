@@ -45,7 +45,16 @@ android {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(':engine:api')
+    implementation project(':engine:domain:app')
+    implementation project(':net:mock')
+    implementation project(':android:room')
+    implementation project(':android:sys')
+    implementation project(':android:log')
     implementation project(':android:error')
-    implementation project(':android:dagger')
+    implementation project(':android:main')
+    implementation project(':android:core')
+    implementation project(':android:chat')
+    implementation project(':android:roster')
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 }

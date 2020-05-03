@@ -6,9 +6,8 @@ import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
-import javax.inject.Inject
 
-class SaveMessagesInteractor @Inject constructor(
+internal class SaveMessagesInteractor(
     private val scope: Session.Scope,
     private val address: Address,
     private val messageRepo: Message.Repo,
@@ -25,7 +24,7 @@ class SaveMessagesInteractor @Inject constructor(
 
     suspend operator fun invoke(event: Message.Net.Event) {
         val message = event.message.run {
-            when(event) {
+            when (event) {
                 is Message.Net.Event.Sending -> create()
                 else -> get() ?: create()
             }
@@ -53,11 +52,11 @@ class SaveMessagesInteractor @Inject constructor(
     }
 
     private suspend fun Message.create() = copy(
-        chatAddress = createChat(
+        chatAddress = createChat.invoke(
             CreateChatInteractor.Data(
                 title = chatAddress.id,
                 users = listOf(User(getParty(address).address))
             )
-        ).await().address
+        ).address
     )
 }
