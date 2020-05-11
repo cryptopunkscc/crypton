@@ -23,15 +23,7 @@ class SmackConnectionFactory(
     setup: Connection.Factory.Config.() -> Connection.Factory.Config = { this }
 ) : Connection.Factory {
 
-    private var factoryConfig = Connection.Factory.Config.Empty
-
-    init {
-        invoke(setup)
-    }
-
-    operator fun invoke(setup: Connection.Factory.Config.() -> Connection.Factory.Config) = apply {
-        factoryConfig = factoryConfig.setup()
-    }
+    private val factoryConfig = Connection.Factory.Config().setup()
 
     override fun invoke(config: Connection.Config): Connection = SmackConnection(
         scope = config.scope,

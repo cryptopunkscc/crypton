@@ -32,3 +32,5 @@ typealias OpenStore<T> = Store<T>
 suspend fun <T> Store<List<T>>.pop() = get().also { reduce { dropLast(1) } }.lastOrNull()
 
 suspend fun <T> Store<List<T>>.put(item: T) = reduce { plus(item) }
+
+fun <T> Store<List<T>>.top() = get().lastOrNull()

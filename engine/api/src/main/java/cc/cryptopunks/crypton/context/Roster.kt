@@ -28,6 +28,10 @@ object Roster {
         data class Items(val items: PagedList<Connectable>) : Output
     }
 
+    interface Service2 : Connectable {
+        data class Items(val list: List<Item.State>)
+    }
+
     interface Net {
         val rosterEvents: Events
 

@@ -4,7 +4,6 @@ import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
 import cc.cryptopunks.crypton.selector.PresenceFlowSelector
 import cc.cryptopunks.crypton.util.Store
-import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -35,8 +34,8 @@ class RosterItemService private constructor(
         flowOf(
             input,
             presenceOf(chat.address),
-            latestMessageFlow(chat),
-            messageRepo.unreadCountFlow(chat).map {
+            latestMessageFlow(chat.address),
+            messageRepo.unreadCountFlow(chat.address).map {
                 UnreadMessages(it)
             }
         )

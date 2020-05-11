@@ -39,7 +39,7 @@ internal class ConnectableBinding : Connector, Connectable.Binding {
 
     override operator fun plus(service: Connectable?): Boolean {
         return service.ifNotRunning {
-            log.d("connecting $service")
+            log.d("Connecting $service")
             serviceJobs[it] = connect()
         }
     }
@@ -49,7 +49,7 @@ internal class ConnectableBinding : Connector, Connectable.Binding {
 
     override operator fun plusAssign(service: Connectable) {
         service.ifNotRunning {
-            log.d("connecting $service")
+            log.d("Connecting $service")
             serviceJobs[it] = ReservedConnector().connect()
         }
     }
@@ -61,9 +61,7 @@ internal class ConnectableBinding : Connector, Connectable.Binding {
             block.invoke(it, it)
         } != null
 
-    private inner class ReservedConnector :
-        Connector {
-
+    private inner class ReservedConnector : Connector {
         override val input: Flow<Any> = reserved.poll()
             ?.consumeAsFlow()
             ?: this@ConnectableBinding.input

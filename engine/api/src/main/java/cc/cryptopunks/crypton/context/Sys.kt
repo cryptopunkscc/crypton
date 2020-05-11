@@ -7,4 +7,6 @@ interface Sys {
     val notificationSys: Notification.Sys
     val clipboardSys: Clip.Board.Sys
     val networkSys: Network.Sys
+
+    fun createRouteSys(): Route.Sys
 }

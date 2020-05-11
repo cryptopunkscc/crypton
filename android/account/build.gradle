@@ -36,7 +36,7 @@ dependencies {
     api project(':engine:domain:common')
     api project(':engine:domain:account')
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
 
     // AndroidJUnitRunner and JUnit Rules

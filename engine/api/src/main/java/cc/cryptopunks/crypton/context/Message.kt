@@ -61,10 +61,10 @@ data class Message(
         suspend fun get(id: String): Message?
         suspend fun delete(message: Message)
         suspend fun listUnread(): List<Message>
-        fun flowLatest(chat: Chat): Flow<Message>
-        fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message>
+        fun flowLatest(chatAddress: Address): Flow<Message>
+        fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message>
         fun unreadListFlow(): Flow<List<Message>>
-        fun unreadCountFlow(chat: Chat) : Flow<Int>
+        fun unreadCountFlow(chatAddress: Address) : Flow<Int>
         suspend fun notifyUnread()
     }
 

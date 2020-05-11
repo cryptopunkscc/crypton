@@ -31,14 +31,14 @@ internal class SendMessage(
 
     private val log = typedLog()
 
-    private val fromJid = JidCreate.entityBareFrom(address)
+    private val fromJid = JidCreate.entityBareFrom(address.toString())
 
     private val broadcast = Broadcast<Message.Net.Event>()
 
     override suspend fun invoke(to: Address, text: String) = coroutineScope {
         val id = lastId++
         log.d("$id start in scope: $this")
-        val toJid = JidCreate.entityBareFrom(to)
+        val toJid = JidCreate.entityBareFrom(to.toString())
 
         log.d("$id checking subscription")
         if (!roster.iAmSubscribedTo(toJid) && fromJid != toJid) execute {

@@ -3,17 +3,18 @@ package cc.cryptopunks.crypton.context
 data class Resource(
     val address: Address = Address.Empty,
     val resource: String = ""
-) : CharSequence by buildString({
-    append(address)
-    if (resource.isNotEmpty()) {
-        append("/")
-        append(resource)
+) {
+    private val string = buildString {
+        append(address)
+        if (resource.isNotEmpty()) {
+            append("/")
+            append(resource)
+        }
     }
-}) {
 
-    val id by lazy { toString() }
+    val id get() = toString()
 
-    override fun toString(): String = substring(0, length)
+    override fun toString(): String = string
 
     companion object {
         val Empty = Resource()

@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.util.Executors
-import cc.cryptopunks.crypton.util.FeatureManager
 import kotlin.reflect.KClass
 
 interface AppCore :
@@ -10,26 +9,23 @@ interface AppCore :
     Repo {
 
     val mainClass: KClass<*>
+    val navigate: Route.Navigate
+
     val sessionStore: Session.Store
     val userPresenceStore: UserPresence.Store
-    val createSessionServices: (SessionCore) -> List<Session.BackgroundService>
     val clipboardStore: Clip.Board.Store
-    val createConnection: Connection.Factory
     val connectableBindingsStore: Connectable.Binding.Store
-    val featureManager: FeatureManager
-    fun featureCore(): FeatureCore
-}
 
-interface FeatureCore :
-    AppCore {
+    val createSessionServices: (SessionCore) -> List<Session.BackgroundService>
+    val createConnection: Connection.Factory
 
-    val navigate: Route.Navigate
     fun sessionCore(): SessionCore
     fun sessionCore(session: Session): SessionCore
 }
 
 interface SessionCore :
-    FeatureCore,
+    AppCore,
+    SessionRepo,
     Net {
 
     val session: Session

@@ -1,24 +1,29 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Connection
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.util.typedLog
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 internal class AddAccountInteractor(
     private val createConnection: Connection.Factory,
+    private val createRepo: SessionRepo.Factory,
     private val sessionStore: Session.Store,
     private val accountRepo: Account.Repo
 ) {
+    private val log = typedLog()
+
     suspend operator fun invoke(
         account: Account,
         register: Boolean
-    ) {
+    ) = coroutineScope {
+        log.d("Adding account ${account.address}")
         assertAccountNotExist(account.address)
         val scope = Session.Scope()
         val session = Session(
             address = account.address,
             scope = scope,
+            sessionRepo = createRepo(account.address),
             connection = createConnection(
                 Connection.Config(
                     scope = scope,
@@ -30,7 +35,7 @@ internal class AddAccountInteractor(
             connect()
             if (register) createAccount()
             login()
-            initOmemo()
+            launch { initOmemo() }
             accountRepo.insert(account)
         }
         sessionStore reduce {
@@ -41,7 +46,7 @@ internal class AddAccountInteractor(
     private suspend fun assertAccountNotExist(address: Address) {
         if (accountRepo.contains(address)) throw Account.Exception(
             account = address,
-            cause = IllegalArgumentException("Account already exists")
+            message = "Account already exists"
         )
     }
 }

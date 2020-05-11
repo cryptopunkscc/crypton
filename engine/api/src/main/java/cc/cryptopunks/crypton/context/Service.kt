@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import java.lang.ref.WeakReference
 
 interface Service : CoroutineScope {
@@ -34,9 +35,7 @@ interface Connectable : Service {
 
     fun Connector.connect(): Job = launch { }
     fun Connector.connect(service: Connectable): Job = launch {
-        service.run {
-            connect()
-        }.join()
+        service.run { connect() }.join()
     }
 }
 
@@ -51,4 +50,16 @@ interface Connector {
     val input: Flow<Any>
     val output: suspend (Any) -> Unit
     suspend fun Any.out() = output(this)
+}
+
+fun Connector.actor(): Actor = object : Actor, Connectable by ConnectableConnector(this) {}
+
+private class ConnectableConnector(
+    private val connector: Connector
+) : Connectable {
+    override val coroutineContext = SupervisorJob() + Dispatchers.Unconfined
+    override fun Connector.connect(): Job = launch {
+        launch { input.collect(connector.output) }
+        launch { connector.input.collect(output) }
+    }
 }

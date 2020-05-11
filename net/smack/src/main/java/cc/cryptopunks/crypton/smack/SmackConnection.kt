@@ -4,11 +4,11 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.smack.module.ConnectionModule
 import cc.cryptopunks.crypton.smack.module.SmackModule
-import cc.cryptopunks.crypton.util.BroadcastErrorScope
+import kotlinx.coroutines.CoroutineScope
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 
 class SmackConnection internal constructor(
-    scope: BroadcastErrorScope,
+    scope: CoroutineScope,
     address: Address,
     configuration: XMPPTCPConnectionConfiguration
 ) : Connection by ConnectionModule(

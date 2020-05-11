@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.mock
 
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.mock.net.*
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -14,9 +15,11 @@ class ConnectionMock(
     User.Net by UserNetMock(state),
     Presence.Net by PresenceNetMock(state),
     Message.Net by MessageNetMock(state),
-    Chat.Net by ChatNetMock(),
+    Chat.Net by ChatNetMock(state),
     Roster.Net by RosterNetMock(state),
     UserPresence.Net by UserPresenceNetMock() {
+
+    private val log = typedLog()
 
     override val connect = object : Net.Connect {
         override fun invoke() {
@@ -36,7 +39,11 @@ class ConnectionMock(
     override val initOmemo = object : Net.InitOmemo {
         override fun invoke(): Boolean = runBlocking {
             delay(2000)
-            state { apiEvents.send(Net.OmemoInitialized) }
+            state {
+                omemoInitialized = true
+                apiEvents.send(Net.OmemoInitialized)
+                log.d("Omemo initialized")
+            }
             true
         }
     }

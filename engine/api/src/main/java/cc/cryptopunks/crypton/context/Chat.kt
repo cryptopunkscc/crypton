@@ -61,5 +61,6 @@ data class Chat(
         suspend fun delete(chat: Chat)
         suspend fun deleteAll()
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>
+        fun flowList(): Flow<List<Chat>>
     }
 }

@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.repo
 
 import androidx.paging.DataSource
-import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.entity.MessageData
 import cc.cryptopunks.crypton.entity.message
@@ -66,20 +66,20 @@ internal class MessageRepo(
     override suspend fun listUnread(): List<Message> =
         dao.listUnread().map { it.message() }
 
-    override fun flowLatest(chat: Chat): Flow<Message> =
-        dao.flowLatest(chat.address.id).filterNotNull().map { it.message() }
+    override fun flowLatest(chatAddress: Address): Flow<Message> =
+        dao.flowLatest(chatAddress.id).filterNotNull().map { it.message() }
 
-    override fun dataSourceFactory(chat: Chat): DataSource.Factory<Int, Message> =
-        dao.dataSourceFactory(chat.address.id).map { it.message() }
+    override fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message> =
+        dao.dataSourceFactory(chatAddress.id).map { it.message() }
 
     override fun unreadListFlow(): Flow<List<Message>> =
         unreadMessagesChannel.asFlow()
 
 
-    override fun unreadCountFlow(chat: Chat): Flow<Int> =
+    override fun unreadCountFlow(chatAddress: Address): Flow<Int> =
         unreadListFlow().map { list ->
             list.filter { message ->
-                message.chatAddress == chat.address
+                message.chatAddress == chatAddress
             }.size
         }
 }

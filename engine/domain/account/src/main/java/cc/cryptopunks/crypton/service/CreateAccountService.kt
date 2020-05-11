@@ -1,43 +1,50 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.interactor.AddAccountInteractor
-import cc.cryptopunks.crypton.util.Form
+import cc.cryptopunks.crypton.util.Store
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class CreateAccountService internal constructor(
-    private val addAccount: AddAccountInteractor,
-    private val initial: Form = Form()
+    private val addAccount: AddAccountInteractor
 ) : Connectable,
-    AccountForm {
-
-    interface Action
-    object Register : Action
-    object Login : Action
+    Account.Service {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
-    private val formService = FormService(coroutineContext)
+    private val form = Form()
+
+    private val log = typedLog()
 
     override fun Connector.connect(): Job = launch {
-        connect(formService)
-        launch {
-            if (initial.fields.isNotEmpty()) initial.out()
-            input.onEach {
-                println(it)
-            }.filterIsInstance<Action>().collect { action ->
-                addAccount(
-                    account = formService.form.account(),
-                    register = action is Register
+        log.d("Start")
+        input.collect { arg ->
+            log.d(arg)
+            when (arg) {
+                is Account.Service.Login,
+                is Account.Service.Register -> addAccount(
+                    account = form.account(),
+                    register = arg is Account.Service.Register
                 )
+                is Account.Service.Set -> form reduce {
+                    plus(arg.field to arg.text)
+                }
             }
         }
     }
 }
+
+class Form(fields: Map<Account.Field, CharSequence> = emptyMap()) : Store<Map<Account.Field, CharSequence>>(fields)
+
+private fun Form.account() = Account(
+    address = Address(
+        local = get()[Account.Field.UserName].toString(),
+        domain = get()[Account.Field.ServiceName].toString()
+    ),
+    password = Password(get()[Account.Field.Password]!!)
+)

@@ -4,26 +4,19 @@ import kotlinx.coroutines.flow.Flow
 
 data class Account(
     val address: Address = Address.Empty,
-    val password: CharSequence = ""
+    val password: Password = Password.Empty
 ) {
     val domain get() = address.domain
 
     companion object {
         val Empty = Account()
-
-        @Suppress("FunctionName")
-        fun Exception(
-            account: Address,
-            cause: Throwable
-        ): Exception = if (cause is Exception) cause else Exception(account, cause)
     }
 
-    class Exception private constructor(
+    class Exception(
         val account: Address,
-        override val cause: Throwable
+        message: String
     ) : kotlin.Exception(
-        account.toString(),
-        cause
+        "$account $message"
     )
 
     interface Event : Api.Event
@@ -54,8 +47,16 @@ data class Account(
         suspend fun addressList(): List<Address>
     }
 
-    interface Core {
-        val accountRepo: Repo
-        val accountNet: Net
+    interface Service {
+        data class Set(val field: Field, val text: CharSequence)
+        object Register
+        object Login
+    }
+
+    enum class Field {
+        ServiceName,
+        UserName,
+        Password,
+        ConfirmPassword
     }
 }

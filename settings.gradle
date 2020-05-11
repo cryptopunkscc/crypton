@@ -2,12 +2,12 @@
 //        'auto-di:processor'
 
 include ':engine:api',
+        ':engine:backend',
 
+        ':engine:util:json',
         ':engine:util:log',
-        ':engine:util:inject',
         ':engine:util:paging',
         ':engine:util:service',
-        ':engine:util:feature',
 
         ':engine:domain:app',
         ':engine:domain:common',
@@ -16,8 +16,15 @@ include ':engine:api',
         ':engine:domain:roster',
         ':engine:domain:chat',
 
-        ':net:smack',
+        ':net:smack:android',
+        ':net:smack:jvm',
         ':net:mock',
+
+//        ':repo:jvm', TODO
+        ':repo:mock',
+
+        ':jvm:app',
+        ':jvm:server',
 
         ':android:app',
         ':android:debug',

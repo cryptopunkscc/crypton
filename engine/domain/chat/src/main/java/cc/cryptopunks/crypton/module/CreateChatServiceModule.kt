@@ -5,8 +5,8 @@ import cc.cryptopunks.crypton.interactor.CreateChatInteractor
 import cc.cryptopunks.crypton.service.CreateChatService
 
 class CreateChatServiceModule(
-    core: SessionCore
-) : SessionCore by core {
+    sessionCore: SessionCore
+) : SessionCore by sessionCore {
     val createChatService by lazy {
         CreateChatService(
             navigate = navigate,

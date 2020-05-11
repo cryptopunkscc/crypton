@@ -29,7 +29,7 @@ class AndroidChatNotificationFactory(
             context,
             Message.Notification.channelId
         )
-            .setContentTitle(chatAddress)
+            .setContentTitle(chatAddress.toString())
             .setContentText(formatMessageCount())
             .setContentInfo(formatMessageCount())
             .setSubText(formatDate())
