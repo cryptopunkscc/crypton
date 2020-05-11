@@ -4,11 +4,8 @@ import android.content.Context
 import android.view.View
 import android.widget.EditText
 import cc.cryptopunks.crypton.account.R
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Connector
-import cc.cryptopunks.crypton.service.AccountForm.*
-import cc.cryptopunks.crypton.service.CreateAccountService
-import cc.cryptopunks.crypton.util.Form
-import cc.cryptopunks.crypton.util.TextField
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.widget.ActorLayout
@@ -19,7 +16,7 @@ import kotlinx.coroutines.launch
 
 internal class CreateAccountView(context: Context) : ActorLayout(context) {
 
-    private lateinit var action: CreateAccountService.Action
+    private lateinit var action: Any
 
     init {
         View.inflate(
@@ -29,19 +26,19 @@ internal class CreateAccountView(context: Context) : ActorLayout(context) {
         )
     }
 
-    private val formFields: Map<Form.Field.Id<TextField>, EditText>
+    private val formFields: Map<Account.Field, EditText>
         get() = mapOf(
-            ServiceName to serviceName,
-            UserName to userName,
-            Password to password,
-            ConfirmPassword to confirmPassword
+            Account.Field.ServiceName to serviceName,
+            Account.Field.UserName to userName,
+            Account.Field.Password to password,
+            Account.Field.ConfirmPassword to confirmPassword
         )
 
     override fun Connector.connect(): Job = launch {
         launch {
             input.collect { arg ->
                 when (arg) {
-                    is Form -> setForm(arg)
+                    is Map<*, *> -> setForm(arg as Map<Account.Field, CharSequence>)
                     is Error -> errorOutput.text = arg.message
                 }
             }
@@ -49,34 +46,36 @@ internal class CreateAccountView(context: Context) : ActorLayout(context) {
         launch {
             flowOf(
                 registerButton.clicks().map { action },
-                formFields.textFieldChanges().map { Form.SetField(it) }
+                formFields.textFieldChanges().map { (field, text) ->
+                    Account.Service.Set(field, text)
+                }
             )
                 .flattenMerge()
                 .collect(output)
         }
     }
 
-    private fun setForm(form: Form) {
-        form.fields
+    private fun setForm(form: Map<Account.Field, CharSequence>) {
+        form
             .mapKeys { (id, _) -> formFields[id] }
-            .map { (view, text) -> view?.setText(text as Form.Field.Text) }
+            .map { (view, text) -> view?.setText(text) }
     }
 
 
-    private fun Map<Form.Field.Id<TextField>, EditText>.textFieldChanges() = map { (id, editText) ->
-        editText.textChanges().map {
-            TextField(id, it)
+    private fun Map<Account.Field, EditText>.textFieldChanges() = map { (field, editText) ->
+        editText.textChanges().map { text ->
+            field to text
         }
     }.asFlow().flattenMerge()
 
     fun login() = apply {
-        action = CreateAccountService.Login
+        action = Account.Service.Login
         registerButton.text = "Sing in"
         confirmPasswordLayout.visibility = View.GONE
     }
 
     fun register() = apply {
-        action = CreateAccountService.Register
+        action = Account.Service.Register
         registerButton.text = "Sing up"
         confirmPasswordLayout.visibility = View.VISIBLE
     }

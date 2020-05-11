@@ -35,7 +35,8 @@ class AppDomainModule(
                 sessionStore = sessionStore,
                 createSession = SessionFactory(
                     accountRepo = accountRepo,
-                    createConnection = createConnection
+                    createConnection = createConnection,
+                    createSessionRepo = createSessionRepo
                 )
             ),
             newSessionsFlow = NewSessionsFlowSelector(sessionStore),

@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.mock
 
 import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -14,6 +15,8 @@ class MockState(
     val account: Address
 ) : CoroutineScope {
 
+    var omemoInitialized = false
+
     val defaults = Defaults(account)
 
     val contacts = ConflatedBroadcastChannel(defaults.contacts.toSet())
@@ -23,6 +26,8 @@ class MockState(
     val messageEvents = Channel<Message.Net.Event>(Channel.BUFFERED)
 
     val apiEvents = BroadcastChannel<Api.Event>(Channel.BUFFERED)
+
+    val chatStore = Store<Map<Address, Chat>>(emptyMap())
 
     override val coroutineContext: CoroutineContext =
         SupervisorJob() + newSingleThreadContext(MockState::class.java.simpleName)

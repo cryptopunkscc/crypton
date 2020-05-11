@@ -35,7 +35,7 @@ class ChatUserListAdapter @Inject constructor() :
         LayoutContainer {
 
         fun bind(user: User) {
-            userNameTextView.text = user.address
+            userNameTextView.text = user.address.toString()
         }
     }
 }

@@ -4,6 +4,8 @@ import androidx.paging.DataSource
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.entity.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 internal class ChatRepo(
     private val chatDao: ChatData.Dao,
@@ -45,6 +47,9 @@ internal class ChatRepo(
 
     override fun dataSourceFactory(): DataSource.Factory<Int, Chat> =
         chatDao.dataSourceFactory().map { chat -> chat.toDomain() }
+
+    override fun flowList(): Flow<List<Chat>> =
+        chatDao.flowList().map { list -> list.map { data -> data.toDomain() } }
 
     override suspend fun delete(chat: Chat): Unit =
         chatDao.delete(chat.chatData())

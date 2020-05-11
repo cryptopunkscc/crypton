@@ -1,13 +1,11 @@
 package cc.cryptopunks.crypton.factory
 
-import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Connection
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.*
 
 class SessionFactory(
+    accountRepo: Account.Repo,
     createConnection: Connection.Factory,
-    accountRepo: Account.Repo
+    createSessionRepo: SessionRepo.Factory
 ) : (Address) -> Session by { address ->
     val scope = Session.Scope()
     val account = accountRepo.get(address)
@@ -19,6 +17,7 @@ class SessionFactory(
     Session(
         address = account.address,
         scope = scope,
-        connection = createConnection(config)
+        connection = createConnection(config),
+        sessionRepo = createSessionRepo(account.address)
     )
 }

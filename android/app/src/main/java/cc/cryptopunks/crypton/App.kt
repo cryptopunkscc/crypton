@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
-import cc.cryptopunks.crypton.mock.net.ConnectionMockFactory
+import cc.cryptopunks.crypton.mock.net.MockConnectionFactory
 import cc.cryptopunks.crypton.module.*
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.sys.AndroidSys
@@ -36,7 +36,7 @@ class App :
                     )
                 )
             ),
-            createConnection = ConnectionMockFactory(),
+            createConnection = MockConnectionFactory(),
             createSessionServices = { sessionCore ->
                 listOf(
                     ChatBackgroundServiceModule(sessionCore).chatBackgroundService,

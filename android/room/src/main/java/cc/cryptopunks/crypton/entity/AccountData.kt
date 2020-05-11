@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.entity
 import androidx.room.*
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Password
 import kotlinx.coroutines.flow.Flow
 import java.nio.CharBuffer
 
@@ -54,15 +55,10 @@ internal data class AccountData(
 
 internal fun AccountData.toDomain() = Account(
     address = Address.from(id),
-    password = password
-        .map { it.toChar() }
-        .toCharArray()
-        .let { CharBuffer.wrap(it) }
+    password = Password(password)
 )
 
 internal fun Account.chatData() = AccountData(
     id = address.id,
-    password = password
-        .map { it.toByte() }
-        .toByteArray()
+    password = password.byteArray
 )

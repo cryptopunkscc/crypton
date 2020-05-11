@@ -11,7 +11,7 @@ class UserInvite(
 ) : User.Net.Invite, (Address) -> Unit by { remoteId ->
     connection.sendStanza(
         Presence(
-            JidCreate.from(remoteId),
+            JidCreate.from(remoteId.toString()),
             Presence.Type.subscribe
         )
     )

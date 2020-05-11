@@ -23,7 +23,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation project(':engine:api')
     implementation project(':engine:util:log')
-    implementation project(':engine:util:inject')
 
     api project(':android:core')
     api project(':android:notification')

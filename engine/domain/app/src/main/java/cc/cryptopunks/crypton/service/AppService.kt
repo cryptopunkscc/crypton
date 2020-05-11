@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.interactor.LoadSessionsInteractor
 import cc.cryptopunks.crypton.selector.HasAccountsSelector
 import cc.cryptopunks.crypton.selector.NewSessionsFlowSelector
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -26,8 +27,9 @@ class AppService internal constructor(
     private val newSessionsFlow: NewSessionsFlowSelector,
     private val invokeSessionServices: InvokeSessionServicesInteractor
 ) {
-
+    private val log = typedLog()
     operator fun invoke() = scope.launch {
+        log.d("Start")
         loadSessions()
         launch { hasAccounts().collect { toggleIndicator(it) } }
         launch { networkSys.statusFlow().bufferedThrottle(200).collect { sessionInteractor(it.last()) } }

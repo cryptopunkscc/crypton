@@ -39,7 +39,7 @@ internal fun SmackPresence.presence() = Presence(
     status = Presence.Status.values()[type.ordinal]
 )
 
-internal fun Address.bareJid() = JidCreate.bareFrom(this)
+internal fun Address.bareJid() = JidCreate.bareFrom(toString())
 
 
 internal fun MultiUserChat.toChat(account: Address) = Chat(

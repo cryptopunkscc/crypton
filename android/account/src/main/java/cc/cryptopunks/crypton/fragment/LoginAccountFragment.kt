@@ -11,7 +11,7 @@ class LoginAccountFragment : ServiceFragment() {
 
     override fun onCreatePresenter() = AccountDomainModule(
         appCore = appCore
-    ).addAccountService
+    ).createAccountService
 
     override fun onCreateView(
         inflater: LayoutInflater,

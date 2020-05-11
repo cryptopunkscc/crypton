@@ -10,10 +10,10 @@ internal class CreateChat(
 ) : Chat.Net.Create, (Chat) -> Chat by { chat ->
     core.run {
         mucManager
-            .getMultiUserChat(JidCreate.entityBareFrom(chat.address))
+            .getMultiUserChat(JidCreate.entityBareFrom(chat.address.toString()))
             .apply {
                 chat.users.dropLast(1).forEach { user ->
-                    invite(JidCreate.entityBareFrom(user.address), "")
+                    invite(JidCreate.entityBareFrom(user.address.toString()), "")
                 }
             }
             .create(Resourcepart.from(chat.accountUser.address.local))

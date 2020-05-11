@@ -34,7 +34,7 @@ internal class ReadArchivedMessages(
         ?: MamManager.getInstanceFor(connection)
 
     private fun Chat.getMuc(): MultiUserChat = multiUserChatManager
-        .getMultiUserChat(JidCreate.entityBareFrom(address))
+        .getMultiUserChat(JidCreate.entityBareFrom(address.toString()))
 
 
     private fun Message.Net.ReadArchived.Query.mamQueryArgs() = MamManager.MamQueryArgs

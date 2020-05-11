@@ -37,4 +37,6 @@ class AndroidSys(
             connectivityManager = application.getSystemService()!!
         )
     }
+
+    override fun createRouteSys(): Route.Sys = RouteSys()
 }

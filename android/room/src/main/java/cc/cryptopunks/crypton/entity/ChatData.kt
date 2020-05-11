@@ -5,6 +5,7 @@ import androidx.room.*
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.User
+import kotlinx.coroutines.flow.Flow
 
 @Entity(
     tableName = "chat",
@@ -29,9 +30,6 @@ internal data class ChatData(
         @Query("select * from chat where id = :id")
         suspend fun get(id: AddressData): ChatData
 
-        @Query("select * from chat")
-        fun dataSourceFactory(): DataSource.Factory<Int, ChatData>
-
         @Insert
         suspend fun insert(data: ChatData)
 
@@ -49,6 +47,12 @@ internal data class ChatData(
 
         @Query("select * from chat where id in (:ids)")
         suspend fun list(ids: List<AddressData>): List<ChatData>
+
+        @Query("select * from chat")
+        fun dataSourceFactory(): DataSource.Factory<Int, ChatData>
+
+        @Query("select * from chat")
+        fun flowList(): Flow<List<ChatData>>
     }
 }
 

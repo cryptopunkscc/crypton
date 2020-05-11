@@ -5,24 +5,28 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
 
 interface Repo {
-    val queryContext: Context.Query
-    val transactionContext: Context.Transaction
-
     val accountRepo: Account.Repo
-    val chatRepo: Chat.Repo
-    val messageRepo: Message.Repo
-    val userRepo: User.Repo
     val clipboardRepo: Clip.Board.Repo
+    val createSessionRepo: SessionRepo.Factory
 
     sealed class Context(
         private val dispatcher: ExecutorCoroutineDispatcher
     ) : CoroutineContext by dispatcher {
-
         constructor(name: String) : this(newSingleThreadContext(name))
-
-        val executor get() = dispatcher.executor
-
         class Query : Context("Repo.Query")
         class Transaction : Context("Repo.Transaction")
+
+        val executor get() = dispatcher.executor
     }
+}
+
+interface SessionRepo {
+    val queryContext: Repo.Context.Query
+    val transactionContext: Repo.Context.Transaction
+
+    val chatRepo: Chat.Repo
+    val messageRepo: Message.Repo
+    val userRepo: User.Repo
+
+    interface Factory : (Address) -> SessionRepo
 }

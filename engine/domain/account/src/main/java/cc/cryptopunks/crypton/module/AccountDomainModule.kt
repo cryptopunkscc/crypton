@@ -14,12 +14,13 @@ class AccountDomainModule(
     appCore: AppCore
 ) : AppCore by appCore {
 
-    val addAccountService by lazy {
+    val createAccountService by lazy {
         CreateAccountService(
             addAccount = AddAccountInteractor(
                 accountRepo = accountRepo,
                 createConnection = createConnection,
-                sessionStore = sessionStore
+                sessionStore = sessionStore,
+                createRepo = createSessionRepo
             )
         )
     }

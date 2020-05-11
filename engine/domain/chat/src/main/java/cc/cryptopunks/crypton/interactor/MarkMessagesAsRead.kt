@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 internal class MarkMessagesAsRead(
     private val scope: Session.Scope,
@@ -23,6 +24,5 @@ internal class MarkMessagesAsRead(
             insertOrUpdate(read)
             notifyUnread()
         }
-
     }
 }

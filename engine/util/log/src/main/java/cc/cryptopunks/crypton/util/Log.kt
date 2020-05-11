@@ -12,8 +12,9 @@ interface Log : (String, Log.Level, Any) -> Unit {
             instance = log
         }
 
-        fun print(label: String, level: Level, message: Any) =
+        fun print(label: String, level: Level, message: Any) {
             instance!!.invoke(label, level, message)
+        }
     }
 }
 

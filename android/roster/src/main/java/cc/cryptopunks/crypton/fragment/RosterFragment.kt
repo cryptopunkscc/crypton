@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.view.RosterView
 class RosterFragment : ServiceFragment() {
 
     override fun onCreatePresenter() = RosterDomainModule(
-        core = featureCore
+        appCore = appCore
     ).rosterService
 
     override fun onCreateView(

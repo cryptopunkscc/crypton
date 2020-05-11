@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 internal class SaveMessagesInteractor(
     private val scope: Session.Scope,

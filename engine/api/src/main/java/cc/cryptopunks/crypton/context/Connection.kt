@@ -1,18 +1,14 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.util.BroadcastErrorScope
+import kotlinx.coroutines.CoroutineScope
 
 interface Connection : Net {
 
     data class Config(
-        val scope: BroadcastErrorScope = BroadcastErrorScope(),
+        val scope: CoroutineScope,
         val address: Address = Address.Empty,
         val password: CharSequence = ""
-    ) {
-        companion object {
-            val Empty = Config()
-        }
-    }
+    )
 
     interface Factory : (Config) -> Connection {
         data class Config(

@@ -21,13 +21,14 @@ class ChatFragment : ServiceFragment() {
         binding + MessageAdapter()
         launch {
             val route = Route.Chat(arguments.toMap())
-            val address = Address.from(route.chatAddress)
+            val chatAddress = Address.from(route.chatAddress)
+            val sessionCore = appCore.sessionCore()
             val chat = withContext(Dispatchers.IO) {
-                featureCore.chatRepo.get(address)
+                sessionCore.chatRepo.get(chatAddress)
             }
-            setTitle(chat.address)
+            setTitle(chatAddress)
             binding + ChatServiceModule(
-                featureCore.sessionCore().chatCore(chat)
+                chatCore = sessionCore.chatCore(chat)
             ).chatService
         }
     }

@@ -1,14 +1,21 @@
 package cc.cryptopunks.crypton.context
 
+import kotlinx.coroutines.runBlocking
+
 sealed class Route(
     open val data: MutableMap<String, Any?> = mutableMapOf()
 ) {
+    override fun equals(other: Any?): Boolean = this::class == other?.let { it::class }
+    override fun hashCode(): Int = this::class.hashCode()
+    override fun toString(): String = this::class.qualifiedName!!
+
     class Raw(val id: Int) : Route()
-    object Dashboard : Route()
-    object Roster : Route()
+    object Back : Route()
     object SetAccount : Route()
     object Login : Route()
     object Register : Route()
+    object Dashboard : Route()
+    object Roster : Route()
     object AccountList : Route()
     object AccountManagement : Route()
     object CreateChat : Route()
@@ -16,6 +23,7 @@ sealed class Route(
         var accountId: String by data
         var chatAddress: String by data
         val address get() = Address.from(chatAddress)
+        override fun toString() = "Route.Chat(data=${data})"
     }
 
     interface Sys {
@@ -24,6 +32,6 @@ sealed class Route(
     }
 
     class Navigate(private val sys: Sys) : (Route) -> Unit {
-        override fun invoke(route: Route) = sys.navigate(route)
+        override fun invoke(route: Route) = runBlocking { sys.navigate(route) }
     }
 }

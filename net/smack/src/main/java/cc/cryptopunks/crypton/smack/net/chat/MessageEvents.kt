@@ -6,13 +6,14 @@ import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.removeOmemoBody
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
-import cc.cryptopunks.crypton.util.BroadcastErrorScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.jivesoftware.smack.chat2.Chat
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener
@@ -28,14 +29,14 @@ import org.jivesoftware.smack.packet.Message as SmackMessage
 
 internal class MessageEvents(
     address: Address,
-    scope: BroadcastErrorScope,
+    scope: CoroutineScope,
     sendMessage: SendMessage,
     private val chatManager: ChatManager,
     private val omemoManager: OmemoManager,
     private val outgoingMessageCache: OutgoingMessageCache
 ) : Message.Net.Events {
 
-    private val userJid = JidCreate.from(address)
+    private val userJid = JidCreate.from(address.id)
 
     private val channel = BroadcastChannel<Message.Net.Event>(Channel.CONFLATED)
 

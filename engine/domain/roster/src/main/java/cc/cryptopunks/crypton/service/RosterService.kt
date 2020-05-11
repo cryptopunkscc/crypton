@@ -4,7 +4,7 @@ import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.selector.RosterSelector
+import cc.cryptopunks.crypton.selector.RosterPagedListSelector
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,18 +14,18 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class RosterService internal constructor(
-    private val rosterFlow: RosterSelector,
+    private val rosterPagedListFlow: RosterPagedListSelector,
     private val createRosterItem: RosterItemService.Factory
 ) : Roster.Service {
 
     private val log = typedLog()
 
-    override val coroutineContext = SupervisorJob() + Dispatchers.Main
+    override val coroutineContext = SupervisorJob() + Dispatchers.Unconfined
 
     private var items: Roster.Service.Items? = null
 
     override fun Connector.connect() = launch {
-        log.d("bind")
+        log.d("Start")
         launch {
             input.collect {
                 when (it) {
@@ -34,10 +34,10 @@ class RosterService internal constructor(
             }
         }
         launch {
-            rosterFlow { createRosterItem(it) }
+            rosterPagedListFlow { createRosterItem(it) }
                 .map { Roster.Service.Items(it as PagedList<Connectable>) }
                 .onEach {
-                    log.d("next: ${it.items.size}")
+                    log.d("Received ${it.items.size} items")
                     items = it
                 }
                 .collect(output)

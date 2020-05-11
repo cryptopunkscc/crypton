@@ -19,7 +19,7 @@ internal class MessagePagedListSelector(
         chat: Chat
     ): Flow<PagedList<Message>> = CreatePagedList(
         config = pagedListConfig(pageSize = 20),
-        dataSourceFactory = repo.dataSourceFactory(chat),
+        dataSourceFactory = repo.dataSourceFactory(chat.address),
         fetchExecutor = queryContext.executor,
         notifyExecutor = mainExecutor
     ).asFlow()

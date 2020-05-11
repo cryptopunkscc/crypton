@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.activity
 
-import cc.cryptopunks.crypton.context.FeatureCore
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
@@ -12,16 +11,10 @@ abstract class FeatureActivity : BaseActivity() {
 
     val key: Any get() = javaClass.name
 
-    val featureManager
-        get() = appCore
-            .featureManager
-
-    val featureCore: FeatureCore by lazy { featureManager.request(key) }
-
     override fun onStart() {
         super.onStart()
         setSupportActionBar(toolbar)
-        scope.launch { featureCore.routeSys.bind(navController) }
+        scope.launch { appCore.routeSys.bind(navController) }
     }
 
     override fun onStop() {
@@ -36,7 +29,6 @@ abstract class FeatureActivity : BaseActivity() {
 
     override fun onDestroy() {
         scope.cancel()
-        featureManager.release(key)
         super.onDestroy()
     }
 }

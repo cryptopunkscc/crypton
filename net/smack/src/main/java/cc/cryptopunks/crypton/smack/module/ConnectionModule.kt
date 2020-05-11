@@ -17,9 +17,10 @@ import cc.cryptopunks.crypton.smack.net.user.UserGetContacts
 import cc.cryptopunks.crypton.smack.net.user.UserInvite
 import cc.cryptopunks.crypton.smack.net.user.UserInvited
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
+import kotlinx.coroutines.CoroutineScope
 
 internal class ConnectionModule(
-    scope: BroadcastErrorScope,
+    scope: CoroutineScope,
     private val address: Address,
     private val smack: SmackCore
 ) : SmackCore by smack,
