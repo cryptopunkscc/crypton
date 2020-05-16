@@ -11,15 +11,11 @@ data class User(
     )
 
     interface Net {
-        val getContacts: GetContacts
-        val addContact: AddContact
-        val invite: Invite
-        val invited: Invited
+        fun getContacts(): List<User>
+        fun addContact(user: User)
+        fun invite(address: Address)
+        fun invited(address: Address)
 
-        interface GetContacts : () -> List<User>
-        interface AddContact : (User) -> Unit
-        interface Invite : (Address) -> Unit
-        interface Invited : (Address) -> Unit
     }
 
     interface Repo {

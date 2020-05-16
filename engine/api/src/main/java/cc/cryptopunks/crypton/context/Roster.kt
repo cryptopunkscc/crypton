@@ -33,9 +33,7 @@ object Roster {
     }
 
     interface Net {
-        val rosterEvents: Events
-
-        interface Events : Flow<Event>
+        val rosterEvents: Flow<Event>
 
         interface Event
 

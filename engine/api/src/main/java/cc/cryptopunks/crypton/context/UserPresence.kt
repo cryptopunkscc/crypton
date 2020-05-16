@@ -7,8 +7,7 @@ data class UserPresence(
     val presence: Presence
 ) {
     interface Net {
-        val getCached: GetCached
-        interface GetCached : () -> List<UserPresence>
+        fun getCached(): List<UserPresence>
     }
 
     class Store : OpenStore<Map<Address, Presence>>(emptyMap())

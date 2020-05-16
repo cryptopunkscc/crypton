@@ -26,9 +26,5 @@ interface Connection : Net {
                 disabled
             }
         }
-
-        interface Core {
-            val createConnection: Factory
-        }
     }
 }

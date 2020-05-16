@@ -21,7 +21,7 @@ class ChatBackgroundServiceModule(
                 address = session.address,
                 createChat = CreateChatInteractor(
                     repo = sessionCore.chatRepo,
-                    createChat = session.createChat,
+                    net = session,
                     address = session.address
                 ),
                 messageRepo = sessionCore.messageRepo

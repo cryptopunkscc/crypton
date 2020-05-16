@@ -13,12 +13,11 @@ class MessageNetMock(
     private val state: MockState
 ) : Message.Net {
 
-    override val sendMessage = object :
-        Message.Net.Send {
-        override suspend fun invoke(address: Address, messageText: String) {
-            state {
-                val id = String(Random.nextBytes(16))
-                messageEvents.send(Message.Net.Event.Sent(
+    override suspend fun sendMessage(address: Address, message: String) {
+        state {
+            val id = String(Random.nextBytes(16))
+            messageEvents.send(
+                Message.Net.Event.Sent(
                     Message(
                         id = id,
                         stanzaId = id,
@@ -29,20 +28,17 @@ class MessageNetMock(
                         notifiedAt = System.currentTimeMillis(),
                         readAt = 0,
                         timestamp = System.currentTimeMillis(),
-                        text = messageText
+                        text = message
                     )
-                ))
-            }
+                )
+            )
         }
     }
 
-    override val messageEvents: Message.Net.Events = object :
-        Message.Net.Events,
-        Flow<Message.Net.Event> by state.messageEvents.consumeAsFlow() {}
+    override fun readArchived(
+        query: Message.Net.ReadArchived.Query
+    ): Flow<List<Message>> = state.defaults.messages.asFlow()
 
-    override val readArchived: Message.Net.ReadArchived = object :
-        Message.Net.ReadArchived {
-        override fun invoke(query: Message.Net.ReadArchived.Query): Flow<List<Message>> =
-            state.defaults.messages.asFlow()
-    }
+    override fun messageEvents(): Flow<Message.Net.Event> = state.messageEvents.consumeAsFlow()
+
 }

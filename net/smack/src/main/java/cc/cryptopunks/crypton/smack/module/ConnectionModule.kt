@@ -3,21 +3,17 @@ package cc.cryptopunks.crypton.smack.module
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.smack.core.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
-import cc.cryptopunks.crypton.smack.net.account.*
 import cc.cryptopunks.crypton.smack.net.chat.*
-import cc.cryptopunks.crypton.smack.net.client.ConnectNet
-import cc.cryptopunks.crypton.smack.net.client.DisconnectNet
 import cc.cryptopunks.crypton.smack.net.client.InitOmemo
-import cc.cryptopunks.crypton.smack.net.client.InterruptNet
-import cc.cryptopunks.crypton.smack.net.presence.GetCachedPresences
-import cc.cryptopunks.crypton.smack.net.presence.SendPresence
-import cc.cryptopunks.crypton.smack.net.roster.RosterEvents
-import cc.cryptopunks.crypton.smack.net.user.AddContactUser
-import cc.cryptopunks.crypton.smack.net.user.UserGetContacts
-import cc.cryptopunks.crypton.smack.net.user.UserInvite
-import cc.cryptopunks.crypton.smack.net.user.UserInvited
-import cc.cryptopunks.crypton.util.BroadcastErrorScope
+import cc.cryptopunks.crypton.smack.net.roster.rosterEventFlow
+import cc.cryptopunks.crypton.smack.util.SmackPresence
+import cc.cryptopunks.crypton.smack.util.bareJid
+import cc.cryptopunks.crypton.smack.util.presence
+import cc.cryptopunks.crypton.smack.util.remoteId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import org.jxmpp.jid.impl.JidCreate
+import org.jxmpp.jid.parts.Localpart
 
 internal class ConnectionModule(
     scope: CoroutineScope,
@@ -30,7 +26,10 @@ internal class ConnectionModule(
         OutgoingMessageCache()
     }
 
-    override val netEvents: Net.Output by lazy {
+
+    override fun netEvents(): Flow<Api.Event> = netEvents.flow()
+
+    private val netEvents by lazy {
         NetEventBroadcast(
             scope = scope,
             connection = connection,
@@ -38,68 +37,93 @@ internal class ConnectionModule(
         )
     }
 
-    override val connect: Net.Connect by lazy {
-        ConnectNet(connection = connection)
+    override fun isConnected(): Boolean = connection.isConnected
+
+    override fun initOmemo(): Boolean = initOmemo.invoke()
+
+    private val initOmemo by lazy { InitOmemo(omemoManager) }
+
+    override fun connect() {
+        connection.run {
+            if (!isConnected)
+                connect()
+        }
     }
 
-    override val disconnect: Net.Disconnect by lazy {
-        DisconnectNet(connection = connection)
+    override fun disconnect() {
+        connection.disconnect()
     }
 
-    override val interrupt: Net.Interrupt by lazy {
-        InterruptNet(connection = connection)
+
+    override fun interrupt() {
+        connection.instantShutdown()
     }
 
-    override val isConnected: Net.IsConnected by lazy {
-        IsAccountConnected(connection = connection)
-    }
-
-    override val initOmemo by lazy {
-        InitOmemo(omemoManager)
-    }
-
-    override val createAccount: Account.Net.Create by lazy {
-        CreateAccount(
-            configuration = configuration,
-            accountManager = accountManager
-        )
-    }
-    override val removeAccount: Account.Net.Remove by lazy {
-        RemoveAccount(accountManager = accountManager)
-    }
-
-    override val login: Account.Net.Login by lazy {
-        LoginAccount(
-            connection = connection,
-            carbonManager = carbonManager
+    override fun createAccount() {
+        accountManager.createAccount(
+            Localpart.from(configuration.username.toString()),
+            configuration.password
         )
     }
 
-    override val isAuthenticated: Account.Net.IsAuthenticated by lazy {
-        IsAccountAuthenticated(connection = connection)
+    override fun removeAccount() {
+        accountManager.deleteAccount()
     }
 
-    override val getContacts: User.Net.GetContacts by lazy {
-        UserGetContacts(roster = roster)
+    override fun login() {
+        connection.login()
+        carbonManager.enableCarbons()
     }
 
-    override val addContact: User.Net.AddContact by lazy {
-        AddContactUser(roster = roster)
+    override fun isAuthenticated() =
+        connection.isAuthenticated
+
+    override fun getContacts(): List<User> = roster.entries.map { entry ->
+        User(address = entry.jid.remoteId())
     }
 
-    override val invite: User.Net.Invite by lazy {
-        UserInvite(connection = connection)
+    override fun addContact(user: User) {
+        roster.createEntry(
+            user.address.bareJid(),
+            user.address.local,
+            null
+        )
     }
 
-    override val invited: User.Net.Invited by lazy {
-        UserInvited(connection = connection)
+    override fun invite(address: Address) {
+        connection.sendStanza(
+            SmackPresence(
+                JidCreate.from(address.toString()),
+                org.jivesoftware.smack.packet.Presence.Type.subscribe
+            )
+        )
     }
 
-    override val sendPresence: Presence.Net.Send by lazy {
-        SendPresence(connection = connection)
+    override fun invited(address: Address) {
+        connection.sendStanza(
+            SmackPresence(
+                JidCreate.from(address.toString()),
+                org.jivesoftware.smack.packet.Presence.Type.subscribed
+            )
+        )
     }
 
-    override val sendMessage by lazy {
+    override fun sendPresence(presence: Presence) {
+        connection.sendStanza(
+            SmackPresence(
+                org.jivesoftware.smack.packet.Presence.Type.fromString(
+                    presence.status.name.toLowerCase()
+                )
+            )
+        )
+    }
+
+    override suspend fun sendMessage(
+        address: Address,
+        message: String
+    ) = sendMessage.invoke(address, message)
+
+    private val sendMessage by lazy {
         SendMessage(
             address = address,
             connection = connection,
@@ -109,7 +133,9 @@ internal class ConnectionModule(
         )
     }
 
-    override val messageEvents: Message.Net.Events by lazy {
+    override fun messageEvents(): Flow<Message.Net.Event> = messageEvents.flow()
+
+    private val messageEvents by lazy {
         MessageEvents(
             scope = scope,
             sendMessage = sendMessage,
@@ -120,7 +146,11 @@ internal class ConnectionModule(
         )
     }
 
-    override val readArchived: Message.Net.ReadArchived by lazy {
+    override fun readArchived(
+        query: Message.Net.ReadArchived.Query
+    ): Flow<List<Message>> = readArchived.invoke(query)
+
+    private val readArchived by lazy {
         ReadArchivedMessages(
             connection = connection,
             omemoManager = omemoManager,
@@ -128,28 +158,20 @@ internal class ConnectionModule(
         )
     }
 
-    override val rosterEvents: Roster.Net.Events by lazy {
-        RosterEvents(roster = roster)
+    override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
+
+    override fun createChat(chat: Chat): Chat = createChat.invoke(chat)
+
+    private val createChat: Chat.Net.Create by lazy(::CreateChat)
+
+    override fun getCached(): List<UserPresence> = roster.run {
+        entries.map { entry ->
+            UserPresence(
+                address = Address.from(entry.jid.toString()),
+                presence = getPresence(entry.jid).presence()
+            )
+        }
     }
-
-    override val createChat: Chat.Net.Create by lazy(::CreateChat)
-
-    override val getCached: UserPresence.Net.GetCached by lazy {
-        GetCachedPresences(roster)
-    }
-
-    private val multiUserChatProvider by lazy {
-        MultiUserChatProvider(
-            account = address,
-            muc = mucManager,
-            invitationManager = mucInvitationManager,
-            connection = connection
-        )
-    }
-
-    override val multiUserChatFlow get() = multiUserChatProvider
-
-    override val multiUserChatList get() = multiUserChatProvider
 }
 
 private fun <T> SmackCore.lazy(init: SmackCore.() -> T) = kotlin.lazy { init() }

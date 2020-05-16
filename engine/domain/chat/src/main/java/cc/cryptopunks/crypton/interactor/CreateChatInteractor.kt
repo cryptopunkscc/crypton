@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.User
 internal class CreateChatInteractor(
     private val repo: Chat.Repo,
     private val address: Address,
-    private val createChat: Chat.Net.Create
+    private val net: Chat.Net
 ) {
     suspend operator fun invoke(data: Data) = data.run {
         validate()
@@ -18,7 +18,7 @@ internal class CreateChatInteractor(
         )
     }.run {
         if (!isDirect)
-            createChat(this) else
+            net.createChat(this) else
             copy(address = data.users.first().address)
     }.also { chat ->
         repo.insertIfNeeded(chat)

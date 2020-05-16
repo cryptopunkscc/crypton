@@ -6,17 +6,17 @@ interface Net :
     Account.Net,
     User.Net,
     Presence.Net,
+    UserPresence.Net,
     Message.Net,
     Chat.Net,
-    Roster.Net,
-    UserPresence.Net {
+    Roster.Net {
 
-    val connect: Connect
-    val disconnect: Disconnect
-    val interrupt: Interrupt
-    val isConnected: IsConnected
-    val initOmemo: InitOmemo
-    val netEvents: Output
+    fun connect()
+    fun disconnect()
+    fun interrupt()
+    fun isConnected(): Boolean
+    fun initOmemo(): Boolean
+    fun netEvents(): Flow<Api.Event>
 
     interface Connect : () -> Unit
     interface Disconnect : () -> Unit

@@ -7,7 +7,6 @@ import cc.cryptopunks.crypton.smack.util.ext.removeOmemoBody
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
@@ -34,7 +33,7 @@ internal class MessageEvents(
     private val chatManager: ChatManager,
     private val omemoManager: OmemoManager,
     private val outgoingMessageCache: OutgoingMessageCache
-) : Message.Net.Events {
+) {
 
     private val userJid = JidCreate.from(address.id)
 
@@ -74,9 +73,7 @@ internal class MessageEvents(
         }
     }
 
-    @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Message.Net.Event>) =
-        channel.asFlow().collect(collector)
+    fun flow() = channel.asFlow()
 }
 
 enum class MessageType {

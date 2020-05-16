@@ -4,9 +4,7 @@ data class Presence(
     val status: Status
 ) {
     interface Net {
-        val sendPresence: Send
-
-        interface Send : (Presence) -> Unit
+        fun sendPresence(presence: Presence)
     }
 
     enum class Status {

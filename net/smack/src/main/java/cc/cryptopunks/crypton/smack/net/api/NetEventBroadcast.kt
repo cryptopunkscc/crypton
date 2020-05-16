@@ -17,7 +17,7 @@ internal class NetEventBroadcast(
     private val scope: CoroutineScope,
     connection: XMPPTCPConnection,
     initOmemo: InitOmemo
-) : Net.Output {
+) {
 
     private val channel = BroadcastChannel<Api.Event>(Channel.CONFLATED)
 
@@ -25,7 +25,7 @@ internal class NetEventBroadcast(
         scope.launch {
             flowOf(
                 connection.connectionEventsFlow(),
-                initOmemo
+                initOmemo.flow()
             )
                 .flattenMerge()
                 .collect(channel::send)
@@ -36,5 +36,5 @@ internal class NetEventBroadcast(
         scope.launch { channel.send(event) }
     }
 
-    override fun invoke() = channel.asFlow()
+    fun flow() = channel.asFlow()
 }

@@ -7,7 +7,7 @@ import org.jivesoftware.smack.roster.Roster
 
 class GetCachedPresences(
     roster: Roster
-) : UserPresence.Net.GetCached, () -> List<UserPresence> by {
+) : () -> List<UserPresence> by {
     roster.run {
         entries.map { entry ->
             UserPresence(

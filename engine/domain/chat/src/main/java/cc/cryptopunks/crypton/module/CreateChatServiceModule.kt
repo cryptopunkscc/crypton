@@ -12,7 +12,7 @@ class CreateChatServiceModule(
             navigate = navigate,
             createChat = CreateChatInteractor(
                 repo = chatRepo,
-                createChat = session.createChat,
+                net = session,
                 address = session.address
             )
         )

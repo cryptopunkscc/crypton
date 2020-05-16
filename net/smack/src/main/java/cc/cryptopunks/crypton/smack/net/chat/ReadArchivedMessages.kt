@@ -21,9 +21,9 @@ internal class ReadArchivedMessages(
     private val connection: XMPPConnection,
     private val multiUserChatManager: MultiUserChatManager,
     private val omemoManager: OmemoManager
-) : Message.Net.ReadArchived {
+) {
 
-    override fun invoke(
+    operator fun invoke(
         query: Message.Net.ReadArchived.Query
     ): Flow<List<Message>> = query.run {
         mamManager().queryArchive(mamQueryArgs()).flowMessages()
