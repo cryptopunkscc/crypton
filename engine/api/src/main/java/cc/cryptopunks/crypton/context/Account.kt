@@ -24,16 +24,10 @@ data class Account(
     data class Authenticated(val resumed: Boolean) : Event
 
     interface Net {
-
-        val createAccount: Create
-        val removeAccount: Remove
-        val login: Login
-        val isAuthenticated: IsAuthenticated
-
-        interface Create : () -> Unit
-        interface Remove : () -> Unit
-        interface Login : () -> Unit
-        interface IsAuthenticated : () -> Boolean
+        fun createAccount()
+        fun removeAccount()
+        fun login()
+        fun isAuthenticated(): Boolean
     }
 
     interface Repo {

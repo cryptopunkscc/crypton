@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
-import cc.cryptopunks.crypton.util.SuspendFun2
 import kotlinx.coroutines.flow.Flow
 
 typealias CryptonMessage = Message
@@ -29,13 +28,11 @@ data class Message(
     }
 
     interface Net {
-        val sendMessage: Send
-        val messageEvents: Events
-        val readArchived: ReadArchived
+        suspend fun sendMessage(address: Address, message: String)
+        fun messageEvents(): Flow<Event>
+        fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
 
-        interface Send : SuspendFun2<Address, String, Unit>
-        interface Events : Flow<Event>
-        interface ReadArchived : (ReadArchived.Query) -> Flow<List<Message>> {
+        interface ReadArchived {
             data class Query(
                 val since: Long? = null,
                 val afterUid: String? = null,

@@ -8,6 +8,5 @@ import kotlinx.coroutines.flow.consumeAsFlow
 class RosterNetMock(
     private val state: MockState
 ) : Roster.Net {
-    override val rosterEvents: Roster.Net.Events =
-        object : Roster.Net.Events, Flow<Roster.Net.Event> by state.rosterEvents.consumeAsFlow() {}
+    override val rosterEvents: Flow<Roster.Net.Event> get() = state.rosterEvents.consumeAsFlow()
 }

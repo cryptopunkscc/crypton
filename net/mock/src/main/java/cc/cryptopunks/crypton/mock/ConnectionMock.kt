@@ -21,33 +21,24 @@ class ConnectionMock(
 
     private val log = typedLog()
 
-    override val connect = object : Net.Connect {
-        override fun invoke() {
+    override fun connect() {}
+
+    override fun disconnect() {}
+
+    override fun interrupt() {}
+
+    override fun isConnected(): Boolean = true
+
+    override fun initOmemo(): Boolean = runBlocking {
+        delay(2000)
+        state {
+            omemoInitialized = true
+            apiEvents.send(Net.OmemoInitialized)
+            log.d("Omemo initialized")
         }
+        true
     }
-    override val disconnect = object : Net.Disconnect {
-        override fun invoke() {
-        }
-    }
-    override val interrupt = object : Net.Interrupt {
-        override fun invoke() {
-        }
-    }
-    override val isConnected = object : Net.IsConnected {
-        override fun invoke(): Boolean = true
-    }
-    override val initOmemo = object : Net.InitOmemo {
-        override fun invoke(): Boolean = runBlocking {
-            delay(2000)
-            state {
-                omemoInitialized = true
-                apiEvents.send(Net.OmemoInitialized)
-                log.d("Omemo initialized")
-            }
-            true
-        }
-    }
-    override val netEvents: Net.Output = object : Net.Output, () -> Flow<Api.Event> {
-        override fun invoke() = state.apiEvents.asFlow()
-    }
+
+    override fun netEvents(): Flow<Api.Event> =
+        state.apiEvents.asFlow()
 }

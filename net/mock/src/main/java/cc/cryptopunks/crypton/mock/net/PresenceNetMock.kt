@@ -7,8 +7,5 @@ class PresenceNetMock(
     private val state: MockState
 ) : Presence.Net {
 
-    override val sendPresence = object :
-        Presence.Net.Send {
-        override fun invoke(presence: Presence) = Unit
-    }
+    override fun sendPresence(presence: Presence) = Unit
 }

@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.smack.net.chat
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Message.Net.Send
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import cc.cryptopunks.crypton.util.Broadcast
 import cc.cryptopunks.crypton.util.typedLog
@@ -24,7 +23,7 @@ internal class SendMessage(
     private val omemoManager: OmemoManager,
     private val roster: Roster,
     private val outgoingMessageCache: OutgoingMessageCache
-) : Send,
+) :
     Executor by Executors.newSingleThreadExecutor() {
 
     private var lastId = 0
@@ -35,7 +34,7 @@ internal class SendMessage(
 
     private val broadcast = Broadcast<Message.Net.Event>()
 
-    override suspend fun invoke(to: Address, text: String) = coroutineScope {
+    suspend operator fun invoke(to: Address, text: String) = coroutineScope {
         val id = lastId++
         log.d("$id start in scope: $this")
         val toJid = JidCreate.entityBareFrom(to.toString())

@@ -17,15 +17,6 @@ import org.jivesoftware.smackx.muc.packet.MUCUser
 import org.jxmpp.jid.EntityJid
 import org.jxmpp.jid.parts.Resourcepart
 
-internal class Join : Chat.Net.EventFlow {
-
-
-    @InternalCoroutinesApi
-    override suspend fun collect(collector: FlowCollector<Chat.Net.Event>) {
-
-    }
-}
-
 
 internal class MucInvitationManager(
     private val address: Address

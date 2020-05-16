@@ -39,16 +39,12 @@ data class Chat(
 
 
     interface Net {
-        val createChat: Create
-        val multiUserChatFlow: MultiUserChatFlow
-        val multiUserChatList: MultiUserChatList
+        fun createChat(chat: Chat): Chat
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
 
         interface Create : (Chat) -> Chat
-        interface MultiUserChatFlow : Flow<Chat>
-        interface MultiUserChatList : () -> List<Chat>
         interface EventFlow : Flow<Event>
     }
 
