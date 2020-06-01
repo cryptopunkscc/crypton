@@ -35,25 +35,25 @@ fun createSendMessage(
     if (!roster.iAmSubscribedTo(toJid) && fromJid != toJid) {
         roster.createEntry(toJid, message.to.address.local, emptyArray())
         log.d("$id subscribed")
-    }
+    } else {
+        log.d("$id encrypting")
+        val smackMessage = omemoManager
+            .encrypt(toJid, message.text)
+            .asMessage(toJid)
+            .apply {
+                from = fromJid
+                type = org.jivesoftware.smack.packet.Message.Type.chat
+            }
 
-    log.d("$id encrypting")
-    val smackMessage = omemoManager
-        .encrypt(toJid, message.text)
-        .asMessage(toJid)
-        .apply {
-            from = fromJid
-            type = org.jivesoftware.smack.packet.Message.Type.chat
+        connection.addStanzaIdAcknowledgedListener(smackMessage.stanzaId) {
+            GlobalScope.launch { broadcast.send(Message.Net.Event.Sent(message)) }
         }
 
-    connection.addStanzaIdAcknowledgedListener(smackMessage.stanzaId) {
-        GlobalScope.launch { broadcast.send(Message.Net.Event.Sent(message)) }
+        log.d("$id sending")
+        broadcast.send(Message.Net.Event.Sending(message))
+        connection.sendStanza(smackMessage)
+        log.d("$id send")
+        log.d("$id stop")
     }
-
-    log.d("$id sending")
-    broadcast.send(Message.Net.Event.Sending(message))
-    connection.sendStanza(smackMessage)
-    log.d("$id send")
-    log.d("$id stop")
 }
 

@@ -9,13 +9,14 @@ import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.writePacket
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlin.reflect.KClass
 
 
-suspend fun Socket.connector(log: TypedLog): Connector = let {
+fun Socket.connector(log: TypedLog): Connector = let {
     val readChannel = openReadChannel()
     val writeChannel = openWriteChannel()
     Connector(
@@ -46,10 +47,11 @@ private fun String.parseMessage(): Any = split(":", limit = 2).let { (className,
 
 private suspend fun ByteWriteChannel.send(any: Any) {
     val message = any.formatMessage()
-    write { buffer ->
-        buffer.capacity()
+    write(message.length) { buffer ->
         buffer.putInt(message.length)
-        buffer.put(message.toByteArray())
+    }
+    writePacket {
+        append(message)
     }
     flush()
 }

@@ -5,31 +5,40 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.module.handle
+import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 
+private class SendMessageHandler
+
 internal fun Session.handleSendMessage(
-    chat: Chat
+    chat: Chat,
+    log: TypedLog = SendMessageHandler().typedLog()
 ) = handle<Chat.Service.SendMessage> {
     scope.launch {
-        messageRepo.insertOrUpdate(
-            chat.createQueuedMessage(text)
-        )
+        chat.createQueuedMessage(text).let { message ->
+            log.d("Enqueue message $message")
+            messageRepo.insertOrUpdate(message)
+        }
     }
 }
 
 private fun Chat.createQueuedMessage(text: String) =
     System.currentTimeMillis().let { timestamp ->
         Message(
-            id = (text + address + account + timestamp).md5(),
             text = text,
             from = Resource(account),
             to = Resource(address),
             status = Message.Status.Queued,
             chatAddress = address,
             timestamp = timestamp
-        )
+        ).calculateId()
     }
+
+fun Message.calculateId() = copy(
+    id = (text + from + to + timestamp).md5()
+)
 
 private fun String.md5() = MD5.digest(toByteArray()).printHexBinary()
 
