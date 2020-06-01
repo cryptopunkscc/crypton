@@ -45,6 +45,8 @@ data class Account(
         data class Set(val field: Field, val text: CharSequence)
         object Register
         object Login
+        data class Connecting(val address: Address)
+        data class Connected(val address: Address)
     }
 
     enum class Field {

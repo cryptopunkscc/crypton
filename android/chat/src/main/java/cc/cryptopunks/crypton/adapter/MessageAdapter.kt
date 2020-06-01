@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.context.Chat.Service.*
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
-import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.view.MessageView
 import cc.cryptopunks.crypton.widget.GenericViewHolder
@@ -41,38 +40,16 @@ class MessageAdapter(
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
-    override fun Connector.connect(): Job = launch {
-        launch {
-            input.collect {
-                log.d("in: $it")
-                when (it) {
-                    is Actor.Start,
-                    is Actor.Stop -> {
-                        actorStatus = it
-                    }
-                    is Messages -> launch {
-                        log.d("submit messages $it")
-                        account = it.account
-                        submitList(it.list)
-                    }
-                    is Actor.Connected -> {
-                        this@MessageAdapter.out()
-                    }
-                }
-            }
-        }
-        launch {
-            flowOf(
-                clicks.asFlow(),
-                read.asFlow().bufferedThrottle(200).map { MessagesRead(it) }
-            )
-                .flattenMerge()
-                .collect(output)
-        }
-        invokeOnClose {
-            submitList(null)
-        }
+    fun setMessages(messages: PagedMessages?) {
+        log.d("submit messages $messages")
+        account = messages?.account ?: account
+        submitList(messages?.list)
     }
+
+    fun outputFlow() = flowOf(
+        clicks.asFlow(),
+        read.asFlow().bufferedThrottle(200).map { MessagesRead(it) }
+    ).flattenMerge()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         MessageView(
@@ -84,7 +61,7 @@ class MessageAdapter(
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
         holder.view.message?.let { message ->
-            if (actorStatus != Actor.Stop && message.isUnread) launch {
+            if (message.isUnread) launch {
                 read.send(message)
             }
         }

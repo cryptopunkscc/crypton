@@ -6,9 +6,7 @@ import kotlinx.coroutines.launch
 
 internal class DropBinding(
     private val scope: CoroutineScope,
-    private val stack: Store<List<Context>> = Store(
-        emptyList()
-    )
+    private val stack: Store<List<Context>> = Store(emptyList())
 ) {
     operator fun invoke() = stack.get().lastOrNull()?.also {
         scope.launch { stack reduce { dropLast(1) } }

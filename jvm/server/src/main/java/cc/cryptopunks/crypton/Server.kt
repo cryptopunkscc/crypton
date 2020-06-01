@@ -18,14 +18,14 @@ import io.ktor.network.sockets.Socket
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asExecutor
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import io.ktor.util.cio.write
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import java.io.File
 import java.net.InetSocketAddress
 
 private object Server
+
 private val log = Server.typedLog()
 
 private val createConnectionFactory = SmackConnectionFactory {
@@ -42,8 +42,8 @@ private val core: AppCore by lazy {
         mainClass = Nothing::class,
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
-        createConnection = MockConnectionFactory(),
-//        createConnection = createConnectionFactory,
+//        createConnection = MockConnectionFactory(),
+        createConnection = createConnectionFactory,
         createSessionServices = { sessionCore ->
             listOf(
                 ChatBackgroundServiceModule(sessionCore).chatBackgroundService,
@@ -54,7 +54,7 @@ private val core: AppCore by lazy {
     )
 }
 
-fun startServer() = runBlocking {
+suspend fun startServer() = coroutineScope {
     initSmack(File("./omemo_store"))
 
     val backendService = BackendService(core)
@@ -67,19 +67,29 @@ fun startServer() = runBlocking {
     while (true) {
         val socket = server.accept()
         log.d("Socket accepted: ${socket.remoteAddress}")
+//        launch {
+//            delay(3000)
+//            println("sending dupa")
+//            socket.openWriteChannel().run {
+//                write("dupa")
+//                flush()
+//            }
+//        }
+//        launch(Dispatchers.IO) {
+//            log.d("Receiving")
+//            socket.connector(log).input.collect {
+//                log.d("Received $it")
+//            }
+//        }
         backendService.handle(socket)
     }
 }
 
 private fun BackendService.handle(socket: Socket) = launch {
     try {
-        SocketConnector(
-            log = log,
-            inputChannel = socket.openReadChannel(),
-            outputChannel = socket.openWriteChannel(autoFlush = true)
-        ).apply {
+        socket.connector(log).apply {
             log.d("Initialing")
-            launch { init() }
+//            launch { init() }
             log.d("Initialized")
             connect()
         }

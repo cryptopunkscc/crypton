@@ -20,7 +20,7 @@ open class Store<T>(
         }
     suspend infix fun reduce(f: suspend T.() -> T?): T? = withContext(dispatcher) {
         channel.value.f()?.also {
-            launch { channel.send(it) }
+            channel.send(it)
         }
     }
 

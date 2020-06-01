@@ -29,11 +29,11 @@ dependencies {
 
     api project(':engine:api')
 
-    api "org.igniterealtime.smack:smack-tcp:4.4.0-alpha1"
-    implementation "org.igniterealtime.smack:smack-android-extensions:4.4.0-alpha1"
-    implementation "org.igniterealtime.smack:smack-experimental:4.4.0-alpha1"
-    implementation "org.igniterealtime.smack:smack-omemo:4.4.0-alpha1"
-    implementation "org.igniterealtime.smack:smack-omemo-signal:4.4.0-alpha1"
+    api "org.igniterealtime.smack:smack-tcp:$smack_version"
+    implementation "org.igniterealtime.smack:smack-android-extensions:$smack_version"
+    implementation "org.igniterealtime.smack:smack-experimental:$smack_version"
+    implementation "org.igniterealtime.smack:smack-omemo:$smack_version"
+    implementation "org.igniterealtime.smack:smack-omemo-signal:$smack_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation 'androidx.test:runner:1.2.0'

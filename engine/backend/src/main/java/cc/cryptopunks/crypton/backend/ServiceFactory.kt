@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Route.*
 import cc.cryptopunks.crypton.module.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 internal class ServiceFactory(
@@ -36,14 +37,19 @@ internal class ServiceFactory(
 
         AccountManagement -> null
 
-        CreateChat -> CreateChatServiceModule(
-            sessionCore = appCore.sessionCore()
+        is CreateChat -> CreateChatServiceModule(
+            sessionCore = appCore.sessionCore(
+                address = CreateChat(route.data).accountAddress
+            )
         ).createChatService
 
         is Chat -> ChatServiceModule(
             chatCore = runBlocking {
-                appCore.sessionCore().run {
-                    chatCore(chatRepo.get(route.address))
+                delay(100)
+                appCore.sessionCore(
+                    address = Chat(route.data).accountAddress
+                ).run {
+                    chatCore(chatRepo.get(Chat(route.data).address))
                 }
             }
         ).chatService

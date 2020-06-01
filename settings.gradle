@@ -23,8 +23,9 @@ include ':engine:api',
 //        ':repo:jvm', TODO
         ':repo:mock',
 
-        ':jvm:app',
+        ':jvm:common',
         ':jvm:server',
+        ':jvm:test',
 
         ':android:app',
         ':android:debug',

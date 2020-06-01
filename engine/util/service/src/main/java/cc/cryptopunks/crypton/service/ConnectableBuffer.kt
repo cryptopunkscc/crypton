@@ -27,16 +27,16 @@ class ConnectableBuffer(
 
     private var subscription: ReceiveChannel<Any> = inputProxy.openSubscription()
 
-    private val connector = object : Connector {
-
-        override val input: Flow<Any>
-            get() = subscription
-                .consumeAsFlow()
-
-        override val output: suspend (Any) -> Unit get() = {
-            outputProxy.send(it)
-        }
-    }
+//    private val connector = object : Connector {
+//
+//        override val input: Flow<Any>
+//            get() = subscription
+//                .consumeAsFlow()
+//
+//        override val output: suspend (Any) -> Unit get() = {
+//            outputProxy.send(it)
+//        }
+//    }
 
     var service: Connectable? = null
         set(value) {
@@ -45,7 +45,10 @@ class ConnectableBuffer(
             }
             field?.cancel()
             field = value?.apply {
-                connector.connect()
+                Connector(
+                    input = subscription.consumeAsFlow(),
+                    output = { outputProxy.send(it) }
+                ).connect()
             }
         }
 

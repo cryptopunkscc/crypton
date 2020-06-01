@@ -22,15 +22,14 @@ typealias Out = Connectable.Output
 interface Connectable : Service {
     interface Input
     interface Output
-    interface Binding : Connector {
+    interface Binding {
         class Store : OpenStore<List<WeakReference<out Binding>>>(emptyList())
 
         val services: Set<Connectable>
-        fun reserve(count: Int)
         suspend fun cancel()
         operator fun plus(service: Connectable?): Boolean
         operator fun minus(service: Connectable): Boolean
-        operator fun plusAssign(service: Connectable)
+        fun send(any: Any) = Unit
     }
 
     fun Connector.connect(): Job = launch { }
@@ -46,11 +45,14 @@ interface Actor : Connectable {
     object Connected : Status
 }
 
-interface Connector {
-    val input: Flow<Any>
+data class Connector(
+    val input: Flow<Any>,
     val output: suspend (Any) -> Unit
+) {
     suspend fun Any.out() = output(this)
 }
+
+typealias ConnectorOutput = suspend (Any) -> Unit
 
 fun Connector.actor(): Actor = object : Actor, Connectable by ConnectableConnector(this) {}
 

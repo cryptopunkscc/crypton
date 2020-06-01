@@ -23,6 +23,6 @@ class DashboardView(
     override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
     override fun Connector.connect(): Job = launch {
-        createConversationButton.clicks().map { Route.CreateChat }.collect(output)
+        createConversationButton.clicks().map { Route.CreateChat(); TODO("Add account address") }.collect(output)
     }
 }

@@ -4,24 +4,21 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.service.ConnectableBuffer
 import cc.cryptopunks.crypton.service.createBinding
 import cc.cryptopunks.crypton.service.remove
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.runBlocking
 
 abstract class ServiceFragment :
     FeatureFragment(),
-    Connectable,
-    Connector {
+    Connectable {
 
     protected val binding: Connectable.Binding by lazy {
         runBlocking { appCore.connectableBindingsStore.createBinding() }
     }
-
-    override val input: Flow<Any> get() = binding.input
-    override val output: suspend (Any) -> Unit get() = binding.output
 
     protected val viewProxy = ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
 
@@ -43,12 +40,12 @@ abstract class ServiceFragment :
 
     override fun onStart() {
         super.onStart()
-        launch { Actor.Start.out() }
+        binding.send(Actor.Start)
     }
 
     override fun onStop() {
         super.onStop()
-        launch { Actor.Stop.out() }
+        binding.send(Actor.Stop)
     }
 
     override fun onDestroyView() {

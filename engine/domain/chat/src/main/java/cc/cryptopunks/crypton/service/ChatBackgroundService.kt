@@ -1,13 +1,18 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.interactor.ChatNotificationInteractor
-import cc.cryptopunks.crypton.selector.OmemoInitializationsSelector
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
+import cc.cryptopunks.crypton.module.Handle
+import cc.cryptopunks.crypton.module.handle
 import cc.cryptopunks.crypton.selector.FetchArchivedMessagesSelector
 import cc.cryptopunks.crypton.selector.MessageEventsSelector
+import cc.cryptopunks.crypton.selector.OmemoInitializationsSelector
 import cc.cryptopunks.crypton.selector.UnreadMessagesSelector
 import cc.cryptopunks.crypton.util.typedLog
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -18,7 +23,8 @@ class ChatBackgroundService internal constructor(
     private val fetchArchivedMessages: FetchArchivedMessagesSelector,
     private val saveMessages: SaveMessagesInteractor,
     private val messageEvents: MessageEventsSelector,
-    private val omemoInitializationsSelector: OmemoInitializationsSelector
+    private val omemoInitializationsSelector: OmemoInitializationsSelector,
+    private val flushQueuedMessages: () -> Job
 ) : Session.BackgroundService {
     private val log = typedLog()
 
@@ -29,10 +35,10 @@ class ChatBackgroundService internal constructor(
             launch { messageEvents().collect { event -> saveMessages(event) } }
             launch {
                 omemoInitializationsSelector().collect {
-                    fetchArchivedMessages().collect { messages -> saveMessages(messages) }
+                    flushQueuedMessages()
+                    fetchArchivedMessages().collect { messages -> saveMessages(messages).join() }
                 }
             }
         }
     }
 }
-

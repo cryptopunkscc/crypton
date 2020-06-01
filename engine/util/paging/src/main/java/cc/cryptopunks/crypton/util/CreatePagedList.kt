@@ -14,8 +14,8 @@ import java.util.concurrent.Executor
 
 fun pagedListConfig(
     pageSize: Int,
-    prefetchDistance: Int = -1,
-    initialLoadSizeHint: Int = -1,
+    prefetchDistance: Int = 0,
+    initialLoadSizeHint: Int = 20,
     enablePlaceholders: Boolean = true,
     maxSize: Int = PagedList.Config.MAX_SIZE_UNBOUNDED
 ) = PagedList.Config
@@ -27,9 +27,7 @@ fun pagedListConfig(
     .setEnablePlaceholders(enablePlaceholders)
     .build()
 
-fun <K, V> CreatePagedList<K, V>.asFlow(): Flow<PagedList<V>> = PagedListFlow(
-    this
-)
+fun <K, V> CreatePagedList<K, V>.asFlow(): Flow<PagedList<V>> = PagedListFlow(this)
     .run { onCompletion { cancel() } }
 
 class CreatePagedList<K, V>(

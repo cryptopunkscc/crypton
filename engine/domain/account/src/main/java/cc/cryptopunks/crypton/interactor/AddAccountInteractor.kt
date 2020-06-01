@@ -2,8 +2,7 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.*
 import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 internal class AddAccountInteractor(
     private val createConnection: Connection.Factory,
@@ -16,30 +15,36 @@ internal class AddAccountInteractor(
     suspend operator fun invoke(
         account: Account,
         register: Boolean
-    ) = coroutineScope {
-        log.d("Adding account ${account.address}")
-        assertAccountNotExist(account.address)
-        val scope = Session.Scope()
-        val session = Session(
-            address = account.address,
-            scope = scope,
-            sessionRepo = createRepo(account.address),
-            connection = createConnection(
-                Connection.Config(
-                    scope = scope,
-                    address = account.address,
-                    password = account.password
+    ) {
+        coroutineScope {
+            log.d("Adding account ${account.address}")
+            assertAccountNotExist(account.address)
+            val scope = Session.Scope()
+            val session = Session(
+                address = account.address,
+                scope = scope,
+                sessionRepo = createRepo(account.address),
+                connection = createConnection(
+                    Connection.Config(
+                        scope = scope,
+                        address = account.address,
+                        password = account.password
+                    )
                 )
-            )
-        ).apply {
-            connect()
-            if (register) createAccount()
-            login()
-            launch { initOmemo() }
-            accountRepo.insert(account)
-        }
-        sessionStore reduce {
-            plus(account.address to session)
+            ).apply {
+                log.d("Connecting")
+                connect()
+                log.d("Connected")
+                if (register) createAccount()
+                login()
+                log.d("Logged in")
+                scope.launch { initOmemo() }
+                accountRepo.insert(account)
+                log.d("Account inserted")
+            }
+            sessionStore reduce {
+                plus(account.address to session)
+            }
         }
     }
 

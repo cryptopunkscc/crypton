@@ -15,7 +15,6 @@ data class User(
         fun addContact(user: User)
         fun invite(address: Address)
         fun invited(address: Address)
-
     }
 
     interface Repo {

@@ -12,7 +12,7 @@ internal class SendMessageInteractor(
     messageNet: Message.Net
 ) : (String) -> Job by { message ->
     scope.launch {
-        messageNet.sendMessage(
+        if (message.isNotBlank()) messageNet.sendMessage(
             chat.address,
             message
         )

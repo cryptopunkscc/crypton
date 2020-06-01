@@ -14,17 +14,15 @@ class CreateChatService internal constructor(
     private val navigate: Route.Navigate
 ) : Connectable {
 
-    data class CreateChat(val userAddress: Address)
-
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     override fun Connector.connect(): Job = launch {
         input.collect { arg ->
             when (arg) {
-                is CreateChat -> try {
+                is Chat.Service.CreateChat -> try {
                     val data = Data(
-                        title = arg.userAddress.id,
-                        users = listOf(User(arg.userAddress))
+                        title = arg.address.id,
+                        users = listOf(User(arg.address))
                     )
                     createChat(data).run {
                         Route.Chat().also {

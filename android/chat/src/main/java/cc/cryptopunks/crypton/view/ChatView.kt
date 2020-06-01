@@ -7,17 +7,21 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Chat.Service.*
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.bindings.clicks
+import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -27,6 +31,8 @@ class ChatView(
     ActorLayout(context) {
 
     private val log = typedLog()
+
+    private val messageAdapter = MessageAdapter(coroutineContext)
 
     private val scrollThreshold: Int = context.resources.displayMetrics.run {
         scaledDensity * SCROLL_THRESHOLD_DP
@@ -40,6 +46,7 @@ class ChatView(
                 RecyclerView.VERTICAL,
                 true
             )
+            adapter = messageAdapter
         }
     }
 
@@ -47,9 +54,6 @@ class ChatView(
         launch {
             input.collect { arg ->
                 when (arg) {
-                    is RecyclerView.Adapter<*> -> {
-                        chatRecyclerView.adapter = arg
-                    }
                     is Actor.Start -> chatRecyclerView.run {
                         val rect = Rect()
                         children.filter { child ->
@@ -60,7 +64,8 @@ class ChatView(
                         }
                     }
                     is MessageText -> messageInputView.input.setText(arg.text)
-                    is Messages -> {
+                    is PagedMessages -> {
+                        messageAdapter.setMessages(arg)
                         val wasBottomReached = isBottomReached()
                         delay(50)
                         if (wasBottomReached)
@@ -71,11 +76,17 @@ class ChatView(
             }
         }
         launch {
-            messageInputView.button.clicks().map { SendMessage(getInputAndClear()) }
+            flowOf(
+                messageAdapter.outputFlow(),
+                messageInputView.button.clicks().map { SendMessage(getInputAndClear()) }
+            ).flattenMerge()
                 .collect(output)
         }
         launch {
             Actor.Connected.out()
+        }
+        invokeOnClose {
+            messageAdapter.setMessages(null)
         }
     }
 

@@ -22,7 +22,9 @@ class JsonTest {
             users = listOf(User(address))
         ),
         Route.Back,
-        Route.CreateChat,
+        Route.CreateChat().apply {
+            accountId = "id"
+        },
         Route.Chat().apply {
             accountId = "id"
             chatAddress = "test@test.io"

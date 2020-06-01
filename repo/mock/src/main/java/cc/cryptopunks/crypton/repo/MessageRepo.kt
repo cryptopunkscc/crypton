@@ -48,27 +48,38 @@ class MessageRepo : Message.Repo {
     override suspend fun listUnread(): List<Message> =
         store.get().values.filter { it.isUnread }.sortedBy { it.timestamp }
 
-    override fun flowLatest(chatAddress: Address): Flow<Message> {
+    override suspend fun list(range: LongRange): List<Message> =
+        store.get().values.toList()
+
+    override fun flowLatest(chatAddress: Address?): Flow<Message> {
         var last = emptySet<String>()
         return store.changesFlow().mapNotNull { current ->
             (current - last)
                 .also { last = current.keys }
                 .values.maxBy { it.timestamp }
-        }.filter {
-            it.chatAddress == chatAddress
+        }.run {
+            if (chatAddress == null) this else filter {
+                it.chatAddress == chatAddress
+            }
         }
     }
 
-    override fun dataSourceFactory(chatAddress: Address) = object : DataSource.Factory<Int, Message>() {
-        override fun create(): DataSource<Int, Message> = listDataSource(
-            store.get()
-                .filterValues { it.chatAddress == chatAddress }
-                .values.sortedBy { it.timestamp }
-        ).also { dataSources + it }
+    override fun dataSourceFactory(chatAddress: Address) =
+        object : DataSource.Factory<Int, Message>() {
+            override fun create(): DataSource<Int, Message> = listDataSource(
+                store.get()
+                    .filterValues { it.chatAddress == chatAddress }
+                    .values.sortedBy { it.timestamp }
+            ).also { dataSources + it }
+        }
+
+    override fun unreadListFlow(): Flow<List<Message>> = store.changesFlow().map { map ->
+        map.filterValues { it.isUnread }.values.sortedBy { it.timestamp }
     }
 
-    override fun unreadListFlow(): Flow<List<Message>> = store.changesFlow()
-        .map { it.filterValues { it.isUnread }.values.sortedBy { it.timestamp } }
+    override fun queuedListFlow(): Flow<List<Message>> = store.changesFlow().map { map ->
+        map.filterValues { it.status == Message.Status.Received }.values.sortedBy { it.timestamp }
+    }
 
     override fun unreadCountFlow(chatAddress: Address): Flow<Int> = store.changesFlow()
         .map { it.filterValues { it.chatAddress == chatAddress } }

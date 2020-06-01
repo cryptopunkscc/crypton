@@ -32,9 +32,27 @@ data class Chat(
             data class Copy(override val message: Message) : Option()
         }
 
+        object Subscribe {
+            object PagedMessages : In
+            data class ListMessages(
+                val from: Long = 0,
+                val to: Long = System.currentTimeMillis()
+            ) : In
+            object LastMessage
+        }
+
+        object Get {
+            object ListMessages : In
+        }
+
+        data class CreateChat(val address: Address) : In
+
         data class MessageText(val text: CharSequence?) : Out
 
-        data class Messages(val account: Address, val list: PagedList<Message>) : Out
+        data class PagedMessages(val account: Address, val list: PagedList<Message>) : Out
+
+        data class Messages(val account: Address, val list: List<Message>)
+
     }
 
 

@@ -20,6 +20,7 @@ interface AppCore :
     val createConnection: Connection.Factory
 
     fun sessionCore(): SessionCore
+    fun sessionCore(address: Address): SessionCore
     fun sessionCore(session: Session): SessionCore
 }
 
@@ -32,6 +33,7 @@ interface SessionCore :
     val sessionScope: Session.Scope
     val sessionBackgroundServices: List<Session.BackgroundService>
     fun chatCore(chat: Chat): ChatCore
+    suspend fun chatCore(chat: Address): ChatCore
 }
 
 interface ChatCore :

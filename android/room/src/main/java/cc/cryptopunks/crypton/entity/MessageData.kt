@@ -49,6 +49,9 @@ internal data class MessageData(
         @Query("select * from message order by timestamp desc")
         fun latest(): MessageData?
 
+        @Query("select * from message order by timestamp desc")
+        fun flowLatest(): Flow<MessageData?>
+
         @Query("select * from message where chatId == :chatId order by timestamp desc")
         fun flowLatest(chatId: AddressData): Flow<MessageData?>
 
@@ -61,11 +64,17 @@ internal data class MessageData(
         @Query("select * from message where readAt == 0 and status == 'Received'")
         suspend fun listUnread(): List<MessageData>
 
+        @Query("select * from message where timestamp <= :latest and timestamp >= :oldest")
+        suspend fun list(latest: Long, oldest: Long): List<MessageData>
+
         @Query("select * from message where readAt == 0")
         fun flowUnreadList(): Flow<List<MessageData>>
 
         @Query("select * from message where readAt == 0 and chatId == :chatId and status == 'Received'")
         fun flowUnreadList(chatId: AddressData): Flow<List<MessageData>>
+
+        @Query("select * from message where status == 'Queued'")
+        fun flowQueueList(): Flow<List<MessageData>>
 
         @Query("select id from message where readAt == 0 and chatId == :chatId and status == 'Received'")
         fun flowUnreadIds(chatId: AddressData): Flow<List<String>>
