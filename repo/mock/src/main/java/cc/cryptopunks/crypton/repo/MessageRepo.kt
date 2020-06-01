@@ -78,8 +78,8 @@ class MessageRepo : Message.Repo {
     }
 
     override fun queuedListFlow(): Flow<List<Message>> = store.changesFlow().map { map ->
-        map.filterValues { it.status == Message.Status.Received }.values.sortedBy { it.timestamp }
-    }
+        map.filterValues { it.status == Message.Status.Queued }.values.sortedBy { it.timestamp }
+    }.filter { it.isNotEmpty() }
 
     override fun unreadCountFlow(chatAddress: Address): Flow<Int> = store.changesFlow()
         .map { it.filterValues { it.chatAddress == chatAddress } }

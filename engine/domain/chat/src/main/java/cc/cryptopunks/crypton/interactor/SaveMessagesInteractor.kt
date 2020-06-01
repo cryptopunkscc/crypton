@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.handler.calculateId
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ internal class SaveMessagesInteractor(
                 is Message.Net.Event.Sent -> Message.Status.Sent
                 is Message.Net.Event.Received -> Message.Status.Received
             }
-        )
+        ).calculateId()
 
         log.d("inserting message $message")
         messageRepo.run {
