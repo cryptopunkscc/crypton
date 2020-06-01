@@ -5,13 +5,12 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import cc.cryptopunks.crypton.util.Broadcast
 import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smackx.omemo.OmemoManager
+import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.impl.JidCreate
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -30,7 +29,7 @@ internal class SendMessage(
 
     private val log = typedLog()
 
-    private val fromJid = JidCreate.entityBareFrom(address.toString())
+    private val fromJid: EntityBareJid = JidCreate.entityBareFrom(address.toString())
 
     private val broadcast = Broadcast<Message.Net.Event>()
 
@@ -80,6 +79,7 @@ internal class SendMessage(
             }
         }
     }
+
     private suspend fun Message.broadcast(event: Message.() -> Message.Net.Event) {
         broadcast.run {
             send(event())

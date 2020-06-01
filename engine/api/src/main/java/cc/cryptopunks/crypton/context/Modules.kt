@@ -25,6 +25,7 @@ class AppModule(
     override val connectableBindingsStore = Connectable.Binding.Store()
     override val navigate = Route.Navigate(routeSys)
     override fun sessionCore(): SessionCore = sessionCore(sessionStore.get().values.first())
+    override fun sessionCore(address: Address): SessionCore = sessionCore(sessionStore.get()[address]!!)
     override fun sessionCore(session: Session): SessionCore = SessionModule(this, session)
 }
 
@@ -40,6 +41,7 @@ private data class SessionModule(
     override val sessionScope = Session.Scope()
     override val sessionBackgroundServices by lazy { createSessionServices(this) }
     override fun chatCore(chat: Chat): ChatCore = ChatModule(this, chat)
+    override suspend fun chatCore(chatAddress: Address): ChatCore = chatCore(chatRepo.get(chatAddress))
 }
 
 private class ChatModule(

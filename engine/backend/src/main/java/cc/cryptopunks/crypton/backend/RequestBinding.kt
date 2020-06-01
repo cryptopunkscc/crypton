@@ -7,7 +7,7 @@ internal class RequestBinding(
     private val createService: (Route) -> Connectable?,
     private val createBinding: ConnectableBindingFactory
 ) {
-    suspend operator fun invoke(route: Route) = createBinding(route).apply {
+    operator fun invoke(route: Route) = createBinding(route).apply {
         if (services.isEmpty()) plus(createService(route))
     }
 }

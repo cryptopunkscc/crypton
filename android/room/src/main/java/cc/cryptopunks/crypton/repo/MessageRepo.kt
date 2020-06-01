@@ -66,14 +66,23 @@ internal class MessageRepo(
     override suspend fun listUnread(): List<Message> =
         dao.listUnread().map { it.message() }
 
-    override fun flowLatest(chatAddress: Address): Flow<Message> =
-        dao.flowLatest(chatAddress.id).filterNotNull().map { it.message() }
+    override suspend fun list(range: LongRange): List<Message> =
+        dao.list(oldest = range.first, latest = range.last).map { it.message() }
+
+    override fun flowLatest(chatAddress: Address?): Flow<Message> =
+        dao.run {
+            if (chatAddress == null) flowLatest()
+            else flowLatest(chatAddress.id)
+        }.filterNotNull().map { it.message() }
 
     override fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message> =
         dao.dataSourceFactory(chatAddress.id).map { it.message() }
 
     override fun unreadListFlow(): Flow<List<Message>> =
         unreadMessagesChannel.asFlow()
+
+    override fun queuedListFlow(): Flow<List<Message>> =
+        dao.flowQueueList().map { it.map(MessageData::message) }
 
 
     override fun unreadCountFlow(chatAddress: Address): Flow<Int> =

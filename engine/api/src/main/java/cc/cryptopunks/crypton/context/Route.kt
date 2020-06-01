@@ -18,10 +18,15 @@ sealed class Route(
     object Roster : Route()
     object AccountList : Route()
     object AccountManagement : Route()
-    object CreateChat : Route()
+    class CreateChat(data: MutableMap<String, Any?> = mutableMapOf()) : Route(data) {
+        var accountId: String by data
+        val accountAddress get() = Address.from(accountId)
+        override fun toString() = "Route.CreateChat(data=${data})"
+    }
     class Chat(data: MutableMap<String, Any?> = mutableMapOf()) : Route(data) {
         var accountId: String by data
         var chatAddress: String by data
+        val accountAddress get() = Address.from(accountId)
         val address get() = Address.from(chatAddress)
         override fun toString() = "Route.Chat(data=${data})"
     }

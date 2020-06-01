@@ -5,7 +5,6 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Password
 import kotlinx.coroutines.flow.Flow
-import java.nio.CharBuffer
 
 @Entity(tableName = "account")
 internal data class AccountData(
@@ -58,7 +57,7 @@ internal fun AccountData.toDomain() = Account(
     password = Password(password)
 )
 
-internal fun Account.chatData() = AccountData(
+internal fun Account.accountData() = AccountData(
     id = address.id,
     password = password.byteArray
 )

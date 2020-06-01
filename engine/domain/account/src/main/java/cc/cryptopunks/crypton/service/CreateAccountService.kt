@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 
 class CreateAccountService internal constructor(
     private val addAccount: AddAccountInteractor
-) : Connectable,
-    Account.Service {
+) : Connectable {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
@@ -27,10 +26,14 @@ class CreateAccountService internal constructor(
             log.d(arg)
             when (arg) {
                 is Account.Service.Login,
-                is Account.Service.Register -> addAccount(
-                    account = form.account(),
-                    register = arg is Account.Service.Register
-                )
+                is Account.Service.Register -> form.account().let { account ->
+                    Account.Service.Connecting(account.address).out()
+                    addAccount(
+                        account = account,
+                        register = arg is Account.Service.Register
+                    )
+                    Account.Service.Connected(account.address).out()
+                }
                 is Account.Service.Set -> form reduce {
                     plus(arg.field to arg.text)
                 }
@@ -39,7 +42,8 @@ class CreateAccountService internal constructor(
     }
 }
 
-class Form(fields: Map<Account.Field, CharSequence> = emptyMap()) : Store<Map<Account.Field, CharSequence>>(fields)
+class Form(fields: Map<Account.Field, CharSequence> = emptyMap()) :
+    Store<Map<Account.Field, CharSequence>>(fields)
 
 private fun Form.account() = Account(
     address = Address(

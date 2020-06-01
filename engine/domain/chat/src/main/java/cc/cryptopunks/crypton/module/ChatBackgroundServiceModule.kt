@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.module
 
 import cc.cryptopunks.crypton.context.SessionCore
+import cc.cryptopunks.crypton.interactor.createFlushQueuedMessages
 import cc.cryptopunks.crypton.interactor.ChatNotificationInteractor
 import cc.cryptopunks.crypton.interactor.CreateChatInteractor
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
@@ -38,7 +39,8 @@ class ChatBackgroundServiceModule(
             unreadMessages = UnreadMessagesSelector(
                 messageRepo = sessionCore.messageRepo
             ),
-            omemoInitializationsSelector = OmemoInitializationsSelector(session)
+            omemoInitializationsSelector = OmemoInitializationsSelector(session),
+            flushQueuedMessages = session.createFlushQueuedMessages()
         )
     }
 }

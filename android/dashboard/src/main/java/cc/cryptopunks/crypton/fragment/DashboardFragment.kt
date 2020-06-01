@@ -9,7 +9,6 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.module.CommonDomainModule
 import cc.cryptopunks.crypton.view.DashboardView
-import kotlinx.coroutines.runBlocking
 
 class DashboardFragment :
     ServiceFragment() {
@@ -30,7 +29,7 @@ class DashboardFragment :
     )
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        runBlocking { binding.output(Route.AccountManagement) }
+        binding.send(Route.AccountManagement)
         return true
     }
 

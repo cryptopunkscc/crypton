@@ -1,0 +1,64 @@
+package cc.cryptopunks.crypton
+
+import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.json.formatJson
+import cc.cryptopunks.crypton.json.parseJson
+import cc.cryptopunks.crypton.util.TypedLog
+import io.ktor.network.sockets.Socket
+import io.ktor.network.sockets.openReadChannel
+import io.ktor.network.sockets.openWriteChannel
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.ByteWriteChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlin.reflect.KClass
+
+
+suspend fun Socket.connector(log: TypedLog): Connector = let {
+    val readChannel = openReadChannel()
+    val writeChannel = openWriteChannel()
+    Connector(
+        input = readChannel.flowParsedMessages(),
+        output = {
+            log.d("Sending $it")
+            writeChannel.send(it)
+        }
+    )
+}
+
+fun ByteReadChannel.flowParsedMessages(): Flow<Any> =
+    flowMessages().map { it.parseMessage() }
+
+private fun ByteReadChannel.flowMessages(): Flow<String> = flow {
+    while (true) {
+        val len = readInt()
+        val arr = ByteArray(len)
+        readFully(arr, 0, len)
+        val message = arr.toString(Charsets.UTF_8)
+        emit(message)
+    }
+}
+
+private fun String.parseMessage(): Any = split(":", limit = 2).let { (className, json) ->
+    json.parseJson(Class.forName(PREFIX + className).kotlin as KClass<Any>)
+}
+
+private suspend fun ByteWriteChannel.send(any: Any) {
+    val message = any.formatMessage()
+    write { buffer ->
+        buffer.capacity()
+        buffer.putInt(message.length)
+        buffer.put(message.toByteArray())
+    }
+    flush()
+}
+
+private const val PREFIX = "cc.cryptopunks.crypton."
+
+private fun Any.formatMessage(): String {
+    val className = this::class.java.name.removePrefix(PREFIX)
+    val json = formatJson()
+    return "$className:$json"
+}
+

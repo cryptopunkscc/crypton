@@ -29,6 +29,7 @@ data class Message(
 
     interface Net {
         suspend fun sendMessage(address: Address, message: String)
+        suspend fun sendMessage(message: Message)
         fun messageEvents(): Flow<Event>
         fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
 
@@ -58,9 +59,11 @@ data class Message(
         suspend fun get(id: String): Message?
         suspend fun delete(message: Message)
         suspend fun listUnread(): List<Message>
-        fun flowLatest(chatAddress: Address): Flow<Message>
+        suspend fun list(range: LongRange = 0..System.currentTimeMillis()): List<Message>
+        fun flowLatest(chatAddress: Address? = null): Flow<Message>
         fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message>
         fun unreadListFlow(): Flow<List<Message>>
+        fun queuedListFlow(): Flow<List<Message>>
         fun unreadCountFlow(chatAddress: Address) : Flow<Int>
         suspend fun notifyUnread()
     }

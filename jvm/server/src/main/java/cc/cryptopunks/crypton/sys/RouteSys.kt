@@ -3,10 +3,7 @@ package cc.cryptopunks.crypton.sys
 import cc.cryptopunks.crypton.backend.Backend
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class RouteSys :
@@ -23,7 +20,7 @@ class RouteSys :
         backend?.run {
             when (route) {
                 is Route.Back -> drop()
-                else -> launch { request(route) }
+                else -> request(route)
             }
         }
     }

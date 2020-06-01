@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
@@ -14,7 +15,7 @@ internal class RosterItemStateListFlowSelector(
 ) {
     operator fun invoke(): Flow<List<Roster.Item.State>> =
         mutableMapOf<Address, Set<Roster.Item.State>>().let { currentItems ->
-            newSessionsFlow().flatMapMerge { session ->
+            sessionStore.newSessionsFlow().flatMapMerge { session ->
                 session.rosterItemStateFlow().map { states ->
                     session.address to states
                 }
@@ -25,12 +26,12 @@ internal class RosterItemStateListFlowSelector(
             }
         }
 
-    private fun newSessionsFlow(): Flow<Session> {
-        var sessions = emptyMap<Address, Session>()
-        return sessionStore.changesFlow().flatMapConcat { current ->
-            val new = (current - sessions.keys)
-            sessions = current
-            new.map { it.value }.asFlow()
+    private fun Session.Store.newSessionsFlow(): Flow<Session> {
+        var previous = emptyMap<Address, Session>()
+        return changesFlow().flatMapConcat { current ->
+            val new = current - previous.keys
+            previous = current
+            new.values.asFlow()
         }
     }
 
@@ -42,14 +43,10 @@ internal class RosterItemStateListFlowSelector(
         return channelFlow {
             chatRepo.flowList().collect { currentChats ->
 
-                val currentAddresses: Set<Address> = currentChats.map { chat ->
-                    chat.address
-                }.toSet()
+                val currentAddresses: Set<Address> = currentChats.map(Chat::address).toSet()
 
-                // Cancel removed chat jobs
-                chatJobs.filterKeys {
-                    !currentAddresses.contains(it)
-                }.forEach { (address, job) ->
+                // Cancel jobs of removed chats
+                chatJobs.minus(currentAddresses).map { (address, job) ->
                     job.cancel()
                     chatItems -= address
                     chatJobs -= address

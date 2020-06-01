@@ -9,9 +9,7 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.module.ChatServiceModule
 import cc.cryptopunks.crypton.util.toMap
 import cc.cryptopunks.crypton.view.ChatView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ChatFragment : ServiceFragment() {
 
@@ -21,14 +19,13 @@ class ChatFragment : ServiceFragment() {
         binding + MessageAdapter()
         launch {
             val route = Route.Chat(arguments.toMap())
+            val accountAddress = Address.from(route.accountId)
             val chatAddress = Address.from(route.chatAddress)
-            val sessionCore = appCore.sessionCore()
-            val chat = withContext(Dispatchers.IO) {
-                sessionCore.chatRepo.get(chatAddress)
-            }
             setTitle(chatAddress)
             binding + ChatServiceModule(
-                chatCore = sessionCore.chatCore(chat)
+                chatCore = appCore
+                    .sessionCore(accountAddress)
+                    .chatCore(chatAddress)
             ).chatService
         }
     }

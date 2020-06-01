@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.smack.util.presence
 import cc.cryptopunks.crypton.smack.util.remoteId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Localpart
 
@@ -123,6 +124,10 @@ internal class ConnectionModule(
         message: String
     ) = sendMessage.invoke(address, message)
 
+    override suspend fun sendMessage(
+        message: Message
+    ) = sendMessage2.invoke(message)
+
     private val sendMessage by lazy {
         SendMessage(
             address = address,
@@ -133,7 +138,27 @@ internal class ConnectionModule(
         )
     }
 
-    override fun messageEvents(): Flow<Message.Net.Event> = messageEvents.flow()
+    private val messageEventBroadcast by lazy {
+        createMessageEventBroadcast(
+            scope = scope,
+            chatManager = chatManager,
+            address = address,
+            omemoManager = omemoManager,
+            outgoingMessageCache = outgoingMessageCache
+        )
+    }
+
+    private val sendMessage2 by lazy {
+        createSendMessage(
+            address = address,
+            connection = connection,
+            roster = roster,
+            omemoManager = omemoManager,
+            broadcast = messageEventBroadcast
+        )
+    }
+
+    override fun messageEvents(): Flow<Message.Net.Event> = messageEventBroadcast.asFlow()
 
     private val messageEvents by lazy {
         MessageEvents(

@@ -1,30 +1,21 @@
 package cc.cryptopunks.crypton.util.ext
 
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-//inline fun <T, R> Flow<T>.map(crossinline transform: (value: T) -> R): Flow<R> = map { transform(it) }
 
-
+@Suppress("UNCHECKED_CAST")
 fun <T : Any> Flow<T>.bufferedThrottle(wait: Long): Flow<List<T>> = channelFlow {
     val flush = Unit
-    var buffer = emptyList<T>()
     val channel = Channel<Any>()
-    var job: Job = launch { }
+    var job = launch { }
     launch {
-        channel.consumeEach {
-            buffer = if (it != flush) {
-                buffer + it as T
-            } else {
-                send(buffer)
-                emptyList<T>()
+        channel.consumeAsFlow().fold(emptyList<T>()) { buffer, next ->
+            when (next) {
+                flush -> emptyList<T>().also { send(buffer) }
+                else -> buffer + next as T
             }
         }
     }

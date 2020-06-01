@@ -1,0 +1,10 @@
+apply plugin: 'application'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+mainClassName = "cc.cryptopunks.crypton.MainKt"
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation project(':engine:api')
+    implementation project(':jvm:common')
+    implementation project(':jvm:server')
+}

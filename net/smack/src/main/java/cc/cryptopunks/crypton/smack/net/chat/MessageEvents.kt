@@ -55,26 +55,26 @@ internal class MessageEvents(
         outgoingMessageCache = outgoingMessageCache,
         chatManager = chatManager,
         omemoManager = omemoManager
-    ).mapNotNull { (smackMessage, eventType) ->
-
-        val message = smackMessage.toCryptonMessage()
-
-        when (smackMessage.type) {
-
-            SmackMessage.Type.chat -> when (eventType) {
-
-                MessageType.Outgoing -> Message.Net.Event.Sending(message)
-
-                MessageType.Incoming,
-                MessageType.CarbonCopy -> Message.Net.Event.Received(message)
-            }
-
-            else -> null
-        }
-    }
+    ).mapToEvents()
 
     fun flow() = channel.asFlow()
 }
+
+internal fun createMessageEventBroadcast(
+    address: Address,
+    scope: CoroutineScope,
+    chatManager: ChatManager,
+    omemoManager: OmemoManager,
+    outgoingMessageCache: OutgoingMessageCache
+): BroadcastChannel<Message.Net.Event> =
+    messageFlow(
+        userJid = JidCreate.from(address.id),
+        outgoingMessageCache = outgoingMessageCache,
+        chatManager = chatManager,
+        omemoManager = omemoManager
+    )
+        .mapToEvents()
+        .broadcastIn(scope)
 
 enum class MessageType {
     Incoming,
@@ -96,13 +96,26 @@ private fun messageFlow(
     val omemoListener = omemoListener()
 
     chatManager.addIncomingListener(incomingListener)
-    chatManager.addOutgoingListener(outgoingListener)
+//    chatManager.addOutgoingListener(outgoingListener)
     omemoManager.addOmemoMessageListener(omemoListener)
 
     awaitClose {
         chatManager.removeIncomingListener(incomingListener)
-        chatManager.removeOutgoingListener(outgoingListener)
+//        chatManager.removeOutgoingListener(outgoingListener)
         omemoManager.removeOmemoMessageListener(omemoListener)
+    }
+}
+
+private fun Flow<MessageEvent>.mapToEvents() = mapNotNull { (smackMessage, eventType) ->
+    val message = smackMessage.toCryptonMessage()
+    when (smackMessage.type) {
+        SmackMessage.Type.chat -> when (eventType) {
+            MessageType.Incoming,
+            MessageType.CarbonCopy -> Message.Net.Event.Received(message)
+//            MessageType.Outgoing -> Message.Net.Event.Sending(message)
+            MessageType.Outgoing -> null
+        }
+        else -> null
     }
 }
 

@@ -5,12 +5,11 @@ import androidx.paging.listDataSource
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.util.Store
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ChatRepo : Chat.Repo {
 
@@ -29,7 +28,8 @@ class ChatRepo : Chat.Repo {
         }
     }
 
-    override suspend fun get(address: Address): Chat = store.get()[address]!!
+    override suspend fun get(address: Address): Chat =
+        store.get()[address] ?: throw Exception("Not chat for address $address: ${store.get().keys}")
 
     override suspend fun list(addresses: List<Address>): List<Chat> =
         (store.get() - addresses).values.toList()
