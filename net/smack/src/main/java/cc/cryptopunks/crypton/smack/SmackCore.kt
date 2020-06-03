@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack.core
+package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.smack.net.chat.MucInvitationManager
 import org.jivesoftware.smack.chat2.ChatManager

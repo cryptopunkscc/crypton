@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.smack.core.SmackCore
+import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.chat.MucInvitationManager
 import cc.cryptopunks.crypton.smack.net.omemo.OmemoTrustAllCallback
 import org.jivesoftware.smack.chat2.ChatManager
@@ -18,6 +18,8 @@ internal class SmackModule(
     override val configuration: XMPPTCPConnectionConfiguration,
     val address: Address
 ) : SmackCore {
+
+    // Smack
     override val connection by lazy {
         XMPPTCPConnection(configuration).apply {
             replyTimeout = 10000 // Omemo initialization can take longer then 5s
@@ -64,4 +66,6 @@ internal class SmackModule(
     override val carbonManager: CarbonManager by lazy {
         CarbonManager.getInstanceFor(connection)!!
     }
+
+    // Crypton
 }

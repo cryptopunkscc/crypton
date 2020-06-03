@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.context.*
-import cc.cryptopunks.crypton.smack.core.SmackCore
+import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.*
 import cc.cryptopunks.crypton.smack.net.client.InitOmemo
@@ -23,12 +23,11 @@ internal class ConnectionModule(
 ) : SmackCore by smack,
     Connection {
 
+    private val initOmemo by lazy { InitOmemo(omemoManager) }
+
     private val outgoingMessageCache by lazy {
         OutgoingMessageCache()
     }
-
-
-    override fun netEvents(): Flow<Api.Event> = netEvents.flow()
 
     private val netEvents by lazy {
         NetEventBroadcast(
@@ -38,11 +37,50 @@ internal class ConnectionModule(
         )
     }
 
+    private val sendMessage by lazy {
+        SendMessage(
+            address = address,
+            connection = connection,
+            roster = roster,
+            omemoManager = omemoManager,
+            outgoingMessageCache = outgoingMessageCache
+        )
+    }
+
+    private val messageEventBroadcast by lazy {
+        createMessageEventBroadcast(
+            scope = scope,
+            chatManager = chatManager,
+            address = address,
+            omemoManager = omemoManager,
+            outgoingMessageCache = outgoingMessageCache
+        )
+    }
+
+    private val sendMessage2 by lazy {
+        createSendMessage(
+            address = address,
+            connection = connection,
+            roster = roster,
+            omemoManager = omemoManager,
+            broadcast = messageEventBroadcast
+        )
+    }
+
+    private val readArchived by lazy {
+        ReadArchivedMessages(
+            connection = connection,
+            omemoManager = omemoManager,
+            multiUserChatManager = mucManager
+        )
+    }
+
+
+    override fun netEvents(): Flow<Api.Event> = netEvents.flow()
+
     override fun isConnected(): Boolean = connection.isConnected
 
     override fun initOmemo(): Boolean = initOmemo.invoke()
-
-    private val initOmemo by lazy { InitOmemo(omemoManager) }
 
     override fun connect() {
         connection.run {
@@ -124,70 +162,17 @@ internal class ConnectionModule(
         message: String
     ) = sendMessage.invoke(address, message)
 
-    override suspend fun sendMessage(
-        message: Message
-    ) = sendMessage2.invoke(message)
-
-    private val sendMessage by lazy {
-        SendMessage(
-            address = address,
-            connection = connection,
-            roster = roster,
-            omemoManager = omemoManager,
-            outgoingMessageCache = outgoingMessageCache
-        )
-    }
-
-    private val messageEventBroadcast by lazy {
-        createMessageEventBroadcast(
-            scope = scope,
-            chatManager = chatManager,
-            address = address,
-            omemoManager = omemoManager,
-            outgoingMessageCache = outgoingMessageCache
-        )
-    }
-
-    private val sendMessage2 by lazy {
-        createSendMessage(
-            address = address,
-            connection = connection,
-            roster = roster,
-            omemoManager = omemoManager,
-            broadcast = messageEventBroadcast
-        )
-    }
+    override suspend fun sendMessage(message: Message) = sendMessage2.invoke(message)
 
     override fun messageEvents(): Flow<Message.Net.Event> = messageEventBroadcast.asFlow()
-
-    private val messageEvents by lazy {
-        MessageEvents(
-            scope = scope,
-            sendMessage = sendMessage,
-            chatManager = chatManager,
-            address = address,
-            omemoManager = omemoManager,
-            outgoingMessageCache = outgoingMessageCache
-        )
-    }
 
     override fun readArchived(
         query: Message.Net.ReadArchived.Query
     ): Flow<List<Message>> = readArchived.invoke(query)
 
-    private val readArchived by lazy {
-        ReadArchivedMessages(
-            connection = connection,
-            omemoManager = omemoManager,
-            multiUserChatManager = mucManager
-        )
-    }
-
     override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
 
-    override fun createChat(chat: Chat): Chat = createChat.invoke(chat)
-
-    private val createChat: Chat.Net.Create by lazy(::CreateChat)
+    override fun createChat(chat: Chat): Chat = smack.createChat(chat)
 
     override fun getCached(): List<UserPresence> = roster.run {
         entries.map { entry ->
