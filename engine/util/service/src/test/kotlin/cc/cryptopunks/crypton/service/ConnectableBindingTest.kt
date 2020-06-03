@@ -15,7 +15,7 @@ class ConnectableBindingTest {
         // given
         val connectable = EchoConnectable()
         val channels = Channels()
-        val binding = ConnectableBinding3(channels)
+        val binding = ConnectableBinding(channels)
         val output = mutableListOf<Any>()
         launch { channels.actor.openSubscription().consumeAsFlow().toCollection(output) }
 

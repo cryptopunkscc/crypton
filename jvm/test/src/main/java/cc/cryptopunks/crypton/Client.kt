@@ -11,7 +11,7 @@ private class Client
 suspend fun connectClient(
     host: String = "127.0.0.1",
     port: Int = 2323,
-    block: suspend SocketConnectorDsl.() -> Unit
+    block: suspend ClientDsl.() -> Unit
 ) {
     val client = Client()
     val log = client.typedLog()
@@ -20,8 +20,7 @@ suspend fun connectClient(
             .connect(InetSocketAddress(host, port))
             .connector(log)
             .apply {
-//                launch { init() }
-                launch { SocketConnectorDsl(this@apply, log).block() }
+                launch { ClientDsl(this@apply, log).block() }
             }
     }
 }
