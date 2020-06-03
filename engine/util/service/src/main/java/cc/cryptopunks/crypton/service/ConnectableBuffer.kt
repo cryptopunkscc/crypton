@@ -8,7 +8,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -26,17 +25,6 @@ class ConnectableBuffer(
     private val outputProxy = BroadcastChannel<Any>(Channel.BUFFERED)
 
     private var subscription: ReceiveChannel<Any> = inputProxy.openSubscription()
-
-//    private val connector = object : Connector {
-//
-//        override val input: Flow<Any>
-//            get() = subscription
-//                .consumeAsFlow()
-//
-//        override val output: suspend (Any) -> Unit get() = {
-//            outputProxy.send(it)
-//        }
-//    }
 
     var service: Connectable? = null
         set(value) {

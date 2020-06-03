@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.Connectable
 import java.lang.ref.WeakReference
 
-fun Connectable.Binding.Store.createBinding(): Connectable.Binding = ConnectableBinding3().also { binding ->
+fun Connectable.Binding.Store.createBinding(): Connectable.Binding = ConnectableBinding().also { binding ->
     invoke { plus(WeakReference(binding)) }
 }
 

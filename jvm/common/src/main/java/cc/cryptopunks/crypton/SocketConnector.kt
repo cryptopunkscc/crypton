@@ -28,7 +28,7 @@ fun Socket.connector(log: TypedLog): Connector = let {
     )
 }
 
-fun ByteReadChannel.flowParsedMessages(): Flow<Any> =
+private fun ByteReadChannel.flowParsedMessages(): Flow<Any> =
     flowMessages().map { it.parseMessage() }
 
 private fun ByteReadChannel.flowMessages(): Flow<String> = flow {

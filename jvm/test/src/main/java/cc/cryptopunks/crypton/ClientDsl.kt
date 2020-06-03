@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlin.coroutines.CoroutineContext
 
-class SocketConnectorDsl(
+class ClientDsl(
     private val connector: Connector,
     val log: TypedLog
 ) : CoroutineScope {
     private val input = BroadcastChannel<Any>(Channel.BUFFERED)
-    private var sub: ReceiveChannel<Any>? = null
+    private var subscription: ReceiveChannel<Any> = Channel()
     private val actions = Channel<() -> Job>(Channel.BUFFERED)
     override val coroutineContext: CoroutineContext =
         SupervisorJob() + newSingleThreadContext(log.label)
@@ -31,18 +31,19 @@ class SocketConnectorDsl(
         }
     }
 
-    fun output() = let {
-        sub?.takeUnless { it.isClosedForReceive } ?: input.openSubscription()
+    fun invoke(block: ClientDsl.() -> Unit) {
+        subscription = input.openSubscription()
+        block()
+    }
+
+    fun output() = when {
+        subscription.isClosedForReceive.not() -> subscription
+        else -> input.openSubscription()
     }.consumeAsFlow()
 
     fun openSubscription() {
-        if (sub?.isClosedForReceive == true) throw Exception()
-        sub = input.openSubscription()
-    }
-
-    fun invoke(block: SocketConnectorDsl.() -> Unit) {
-        sub = input.openSubscription()
-        block()
+        if (subscription.isClosedForReceive) throw Exception()
+        subscription = input.openSubscription()
     }
 
     fun send(vararg any: Any) = apply {
@@ -59,7 +60,7 @@ class SocketConnectorDsl(
     }
 
     suspend inline fun <reified T> waitFor(
-        timeout: Long = 10_000,
+        timeout: Long = 20_000,
         crossinline filter: T.() -> Boolean = { true }
     ): T = withTimeout(timeout) {
         flush()

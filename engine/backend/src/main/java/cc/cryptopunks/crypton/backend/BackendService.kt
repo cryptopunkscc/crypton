@@ -16,6 +16,7 @@ class BackendService(
 ) : Connectable {
 
     private val log = typedLog()
+
     override val coroutineContext =
         SupervisorJob() + newSingleThreadContext(this::class.simpleName!!)
 
@@ -23,38 +24,36 @@ class BackendService(
         Backend(appCore).appService()
     }
 
-    override fun Connector.connect(): Job = run {
+    override fun Connector.connect(): Job = Backend(appCore).run {
         log.d("Connect")
         val proxy = Proxy(output)
         var actor = actor()
-        Backend(appCore).run {
-            launch {
-                routeSys.bind(this@run)
-                log.d("Start collecting")
-                input.collect { arg ->
-                    log.d("Received $arg")
-                    if (arg is Route) {
-                        top()?.minus(actor)
-                        actor = proxy()
-                        navigate(arg)
-                        top()?.plus(actor)
-                    } else {
-                        proxy.send(arg)
-                    }
+        launch {
+            routeSys.bind(this@run)
+            log.d("Start collecting")
+            input.collect { arg ->
+                log.d("Received $arg")
+                if (arg is Route) {
+                    top()?.minus(actor)
+                    actor = proxy()
+                    navigate(arg)
+                    top()?.plus(actor)
+                } else {
+                    proxy.send(arg)
                 }
             }
         }
     }
+}
 
-    private class Proxy(
-        private val output: suspend (Any) -> Unit
-    ) {
-        private val channel = BroadcastChannel<Any>(Channel.BUFFERED)
-        val send = channel::send
+private class Proxy(
+    private val output: suspend (Any) -> Unit
+) {
+    private val channel = BroadcastChannel<Any>(Channel.BUFFERED)
+    val send = channel::send
 
-        operator fun invoke() = Connector(
-            input = channel.asFlow(),
-            output = output
-        ).actor()
-    }
+    operator fun invoke(): Actor = Connector(
+        input = channel.asFlow(),
+        output = output
+    ).actor()
 }

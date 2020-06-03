@@ -52,7 +52,9 @@ suspend fun startClient1() = connectClient {
         Chat.Service.Subscribe.LastMessage
     )
     send(Chat.Service.SendMessage("yo"))
-    waitFor<Chat.Service.Messages> { list.any { it.text == "yo yo" } }
+    waitFor<Chat.Service.Messages> {
+        list.any { it.text == "yo yo" }
+    }
 
     flush()
     delay(2000)
@@ -73,7 +75,9 @@ suspend fun startClient2() = connectClient {
         address.id == "$test2@janek-latitude"
     }
     send(Route.Roster)
-    waitFor<Roster.Service2.Items> { list.any { it.message.chatAddress.local == test1 } }
+    waitFor<Roster.Service2.Items> {
+        list.any { it.message.chatAddress.local == test1 }
+    }
     send(
         Route.Chat().apply {
             accountId = "$test2@janek-latitude"
