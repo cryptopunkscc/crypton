@@ -2,9 +2,13 @@ package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import cc.cryptopunks.crypton.util.OpenStore
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
 interface Service : CoroutineScope {
@@ -43,6 +47,12 @@ interface Actor : Connectable {
     object Start : Status
     object Stop : Status
     object Connected : Status
+
+    companion object {
+        val Empty = object : Actor {
+            override val coroutineContext get() = Dispatchers.Unconfined
+        }
+    }
 }
 
 data class Connector(

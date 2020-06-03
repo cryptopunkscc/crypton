@@ -1,10 +1,19 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Presence
+import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.selector.LatestMessageFlowSelector
 import cc.cryptopunks.crypton.selector.PresenceFlowSelector
 import cc.cryptopunks.crypton.util.Store
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
 class RosterItemService private constructor(
@@ -22,7 +31,7 @@ class RosterItemService private constructor(
     override val id get() = chat.address.id
 
     private val store = Store(
-        Roster.Item.State(
+        Roster.Item.Chat(
             letter = id.firstOrNull()?.toLowerCase() ?: 'a',
             title = id
         )
@@ -44,7 +53,7 @@ class RosterItemService private constructor(
             .collect(output)
     }
 
-    private suspend fun reduce(action: Any): Roster.Item.State? = store reduce {
+    private suspend fun reduce(action: Any): Roster.Item.Chat? = store reduce {
         when (action) {
             is Presence.Status -> {
                 copy(presence = action)

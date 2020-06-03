@@ -7,7 +7,7 @@ object Roster {
 
     object Item {
 
-        data class State(
+        data class Chat(
             val title: String,
             val letter: Char,
             val message: Message = Message.Empty,
@@ -29,7 +29,7 @@ object Roster {
     }
 
     interface Service2 : Connectable {
-        data class Items(val list: List<Item.State>)
+        data class Items(val list: List<Item.Chat>)
     }
 
     interface Net {

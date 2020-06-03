@@ -4,13 +4,14 @@ import cc.cryptopunks.crypton.context.AppCore
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.factory.SessionFactory
-import cc.cryptopunks.crypton.interactor.*
 import cc.cryptopunks.crypton.interactor.IndicatorInteractor
 import cc.cryptopunks.crypton.interactor.InterruptSessionsInteractor
+import cc.cryptopunks.crypton.interactor.InvokeSessionServicesInteractor
 import cc.cryptopunks.crypton.interactor.LoadSessionsInteractor
 import cc.cryptopunks.crypton.interactor.ReconnectSessionsInteractor
 import cc.cryptopunks.crypton.interactor.SessionInteractor
 import cc.cryptopunks.crypton.selector.HasAccountsSelector
+import cc.cryptopunks.crypton.selector.NetworkStatusFlowSelector
 import cc.cryptopunks.crypton.selector.NewSessionsFlowSelector
 import cc.cryptopunks.crypton.service.AppService
 import cc.cryptopunks.crypton.service.MainNavigationService
@@ -28,7 +29,7 @@ class AppDomainModule(
                 interrupt = InterruptSessionsInteractor(sessionStore)
             ),
             hasAccounts = HasAccountsSelector(accountRepo),
-            networkSys = networkSys,
+            networkStatusFlow = NetworkStatusFlowSelector(networkSys),
             toggleIndicator = IndicatorInteractor(indicatorSys),
             loadSessions = LoadSessionsInteractor(
                 accountRepo = accountRepo,

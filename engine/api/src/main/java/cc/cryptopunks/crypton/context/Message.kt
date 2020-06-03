@@ -28,7 +28,6 @@ data class Message(
     }
 
     interface Net {
-        suspend fun sendMessage(address: Address, message: String)
         suspend fun sendMessage(message: Message)
         fun messageEvents(): Flow<Event>
         fun readArchived(query: ReadArchived.Query): Flow<List<Message>>

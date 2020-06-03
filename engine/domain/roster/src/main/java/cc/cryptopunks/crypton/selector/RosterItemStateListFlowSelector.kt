@@ -6,15 +6,22 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 internal class RosterItemStateListFlowSelector(
     private val sessionStore: Session.Store,
     private val createRosterItemStateFlowSelector: RosterItemStateFlowSelector.Factory
 ) {
-    operator fun invoke(): Flow<List<Roster.Item.State>> =
-        mutableMapOf<Address, Set<Roster.Item.State>>().let { currentItems ->
+    operator fun invoke(): Flow<List<Roster.Item.Chat>> =
+        mutableMapOf<Address, Set<Roster.Item.Chat>>().let { currentItems ->
             sessionStore.newSessionsFlow().flatMapMerge { session ->
                 session.rosterItemStateFlow().map { states ->
                     session.address to states
@@ -35,9 +42,9 @@ internal class RosterItemStateListFlowSelector(
         }
     }
 
-    private fun Session.rosterItemStateFlow(): Flow<Set<Roster.Item.State>> {
+    private fun Session.rosterItemStateFlow(): Flow<Set<Roster.Item.Chat>> {
         val chatJobs = mutableMapOf<Address, Job>()
-        val chatItems = mutableMapOf<Address, Roster.Item.State>()
+        val chatItems = mutableMapOf<Address, Roster.Item.Chat>()
         val rosterItemStateFlow = createRosterItemStateFlowSelector(this)
 
         return channelFlow {

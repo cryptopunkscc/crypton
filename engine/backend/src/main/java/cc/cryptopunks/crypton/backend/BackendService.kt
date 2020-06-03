@@ -1,13 +1,20 @@
 package cc.cryptopunks.crypton.backend
 
-import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.AppCore
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.actor
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 
@@ -18,29 +25,22 @@ class BackendService(
     private val log = typedLog()
 
     override val coroutineContext =
-        SupervisorJob() + newSingleThreadContext(this::class.simpleName!!)
+        SupervisorJob() + newSingleThreadContext(this::class.java.simpleName)
 
     init {
         Backend(appCore).appService()
     }
 
-    override fun Connector.connect(): Job = Backend(appCore).run {
+    override fun Connector.connect(): Job = Proxy(output).run {
         log.d("Connect")
-        val proxy = Proxy(output)
-        var actor = actor()
+        val backend = Backend(appCore)
         launch {
-            routeSys.bind(this@run)
-            log.d("Start collecting")
-            input.collect { arg ->
-                log.d("Received $arg")
-                if (arg is Route) {
-                    top()?.minus(actor)
-                    actor = proxy()
-                    navigate(arg)
-                    top()?.plus(actor)
-                } else {
-                    proxy.send(arg)
-                }
+            backend.routeSys.bind(backend)
+            input.map {
+                log.d("Received $it")
+                it as? Route ?: send(it)
+            }.filterIsInstance<Route>().fold(Actor.Empty) { old, route ->
+                newActor().also { new -> backend.switchContext(route, old, new) }
             }
         }
     }
@@ -50,10 +50,16 @@ private class Proxy(
     private val output: suspend (Any) -> Unit
 ) {
     private val channel = BroadcastChannel<Any>(Channel.BUFFERED)
-    val send = channel::send
+    val send: suspend (Any) -> Unit = channel::send
 
-    operator fun invoke(): Actor = Connector(
+    fun newActor(): Actor = Connector(
         input = channel.asFlow(),
         output = output
     ).actor()
+}
+
+private fun Backend.switchContext(route: Route, old: Actor, new: Actor) {
+    top()?.minus(old)
+    navigate(route)
+    top()?.plus(new)
 }

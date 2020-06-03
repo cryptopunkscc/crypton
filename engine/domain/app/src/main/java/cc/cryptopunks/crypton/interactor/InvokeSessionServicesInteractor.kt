@@ -10,7 +10,7 @@ class InvokeSessionServicesInteractor(
 ) {
     private val log = typedLog()
     suspend operator fun invoke(session: Session) = appCore
-        .also { log.d("Invoke session services for: ${session.address}") }
+        .also { log.d("Invoke session services for ${session.address}") }
         .sessionCore(session)
         .sessionBackgroundServices
         .forEach { service ->

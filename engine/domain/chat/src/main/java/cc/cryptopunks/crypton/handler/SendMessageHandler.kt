@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.module.handle
+import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.util.TypedLog
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.launch

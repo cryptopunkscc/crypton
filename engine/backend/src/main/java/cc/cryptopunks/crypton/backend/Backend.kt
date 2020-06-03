@@ -1,5 +1,11 @@
 package cc.cryptopunks.crypton.backend
 
+import cc.cryptopunks.crypton.backend.internal.ConnectableBindingFactory
+import cc.cryptopunks.crypton.backend.internal.Context
+import cc.cryptopunks.crypton.backend.internal.ServiceFactory
+import cc.cryptopunks.crypton.backend.internal.dropBindingInteractor
+import cc.cryptopunks.crypton.backend.internal.getTopBindingSelector
+import cc.cryptopunks.crypton.backend.internal.requestBindingInteractor
 import cc.cryptopunks.crypton.context.AppCore
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Route
@@ -9,8 +15,6 @@ import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
 
 class Backend(
     appCore: AppCore
@@ -24,26 +28,24 @@ class Backend(
 
     override val navigate: Route.Navigate = Route.Navigate(routeSys)
 
-    val request = RequestBinding(
+    val request: (Route) -> Connectable.Binding = requestBindingInteractor(
         createService = ServiceFactory(this),
         createBinding = ConnectableBindingFactory(
             bindingStore = connectableBindingsStore,
             stack = stack
         )
-    )::invoke
+    )
 
-    val drop = DropBinding(
+    val drop: () -> Connectable.Binding? = dropBindingInteractor(
         scope = scope,
         stack = stack
-    )::invoke
+    )
 
-    val top = GetTopBinding(stack)::invoke
+    val top: () -> Connectable.Binding? = getTopBindingSelector(
+        stack = stack
+    )
 
     val appService: AppService by lazy {
         AppDomainModule(this).appService
-    }
-
-    val bindingFlow: () -> Flow<Connectable.Binding> = {
-        stack.changesFlow().mapNotNull { it.lastOrNull()?.binding }
     }
 }
