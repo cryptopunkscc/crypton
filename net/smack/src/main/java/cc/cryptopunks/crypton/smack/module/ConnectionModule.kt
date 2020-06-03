@@ -1,9 +1,21 @@
 package cc.cryptopunks.crypton.smack.module
 
-import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Api
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Connection
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Presence
+import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.context.UserPresence
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
-import cc.cryptopunks.crypton.smack.net.chat.*
+import cc.cryptopunks.crypton.smack.net.chat.OutgoingMessageCache
+import cc.cryptopunks.crypton.smack.net.chat.ReadArchivedMessages
+import cc.cryptopunks.crypton.smack.net.chat.createChat
+import cc.cryptopunks.crypton.smack.net.chat.createMessageEventBroadcast
+import cc.cryptopunks.crypton.smack.net.chat.createSendMessage
 import cc.cryptopunks.crypton.smack.net.client.InitOmemo
 import cc.cryptopunks.crypton.smack.net.roster.rosterEventFlow
 import cc.cryptopunks.crypton.smack.util.SmackPresence
@@ -37,16 +49,6 @@ internal class ConnectionModule(
         )
     }
 
-    private val sendMessage by lazy {
-        SendMessage(
-            address = address,
-            connection = connection,
-            roster = roster,
-            omemoManager = omemoManager,
-            outgoingMessageCache = outgoingMessageCache
-        )
-    }
-
     private val messageEventBroadcast by lazy {
         createMessageEventBroadcast(
             scope = scope,
@@ -57,7 +59,7 @@ internal class ConnectionModule(
         )
     }
 
-    private val sendMessage2 by lazy {
+    private val sendMessage by lazy {
         createSendMessage(
             address = address,
             connection = connection,
@@ -157,12 +159,7 @@ internal class ConnectionModule(
         )
     }
 
-    override suspend fun sendMessage(
-        address: Address,
-        message: String
-    ) = sendMessage.invoke(address, message)
-
-    override suspend fun sendMessage(message: Message) = sendMessage2.invoke(message)
+    override suspend fun sendMessage(message: Message) = sendMessage.invoke(message)
 
     override fun messageEvents(): Flow<Message.Net.Event> = messageEventBroadcast.asFlow()
 

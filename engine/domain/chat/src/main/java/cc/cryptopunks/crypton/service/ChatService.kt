@@ -1,13 +1,22 @@
 package cc.cryptopunks.crypton.service
 
 import androidx.paging.PagedList
-import cc.cryptopunks.crypton.context.*
-import cc.cryptopunks.crypton.context.Chat.Service.*
+import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Chat.Service.Get
+import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
+import cc.cryptopunks.crypton.context.Chat.Service.Option
+import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
+import cc.cryptopunks.crypton.context.Chat.Service.Subscribe
+import cc.cryptopunks.crypton.context.Clip
+import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.context.HandlerRegistry
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.dispatch
 import cc.cryptopunks.crypton.interactor.MarkMessagesAsRead
 import cc.cryptopunks.crypton.interactor.SaveActorStatusInteractor
-import cc.cryptopunks.crypton.interactor.SendMessageInteractor
-import cc.cryptopunks.crypton.module.HandlerRegistry
-import cc.cryptopunks.crypton.module.dispatch
 import cc.cryptopunks.crypton.selector.CanConsumeSelector
 import cc.cryptopunks.crypton.selector.MessageListSelector
 import cc.cryptopunks.crypton.selector.MessagePagedListFlowSelector
@@ -24,7 +33,6 @@ import kotlinx.coroutines.launch
 class ChatService internal constructor(
     val chat: Chat,
     private val account: Address,
-    private val sendMessage: SendMessageInteractor,
     private val markMessagesAsRead: MarkMessagesAsRead,
     private val messageFlow: MessagePagedListFlowSelector,
     private val messageList: MessageListSelector,
@@ -48,7 +56,6 @@ class ChatService internal constructor(
                 is Actor.Start,
                 is Actor.Connected -> popClipboardMessage()?.out()
                 is MessagesRead -> markMessagesAsRead(it.messages)
-//                is SendMessage -> sendMessage(it.text)
                 is Option.Copy -> clipboardSys.setClip(it.message.text)
                 is Subscribe.PagedMessages -> collectPagedMessages(output)
                 is Get.ListMessages -> messageList(chat).out()
@@ -70,4 +77,3 @@ class ChatService internal constructor(
     private val logPagedMessagesReceived: suspend (PagedList<Message>) -> Unit =
         { list -> log.d("Received ${list.size} messages") }
 }
-

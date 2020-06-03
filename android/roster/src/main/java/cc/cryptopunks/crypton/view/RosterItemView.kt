@@ -6,7 +6,11 @@ import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Presence
+import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.service.RosterItemService
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.inflate
@@ -62,7 +66,7 @@ class RosterItemView(
     }
 
     private fun handleInput(input: Any) {
-        (input as? Roster.Item.State)?.run {
+        (input as? Roster.Item.Chat)?.run {
 
             conversationTitleTextView.text = title
 
