@@ -8,11 +8,12 @@ import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.broadcastIn
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.mapNotNull
 import org.jivesoftware.smack.chat2.Chat
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener
@@ -25,40 +26,6 @@ import org.jivesoftware.smackx.omemo.listener.OmemoMessageListener
 import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
 import org.jivesoftware.smack.packet.Message as SmackMessage
-
-internal class MessageEvents(
-    address: Address,
-    scope: CoroutineScope,
-    sendMessage: SendMessage,
-    private val chatManager: ChatManager,
-    private val omemoManager: OmemoManager,
-    private val outgoingMessageCache: OutgoingMessageCache
-) {
-
-    private val userJid = JidCreate.from(address.id)
-
-    private val channel = BroadcastChannel<Message.Net.Event>(Channel.CONFLATED)
-
-    init {
-        scope.launch {
-            flowOf(
-                sendMessage.eventsFlow(),
-                getCallbacks()
-            )
-                .flattenMerge()
-                .collect(channel::send)
-        }
-    }
-
-    private fun getCallbacks() = messageFlow(
-        userJid = userJid,
-        outgoingMessageCache = outgoingMessageCache,
-        chatManager = chatManager,
-        omemoManager = omemoManager
-    ).mapToEvents()
-
-    fun flow() = channel.asFlow()
-}
 
 internal fun createMessageEventBroadcast(
     address: Address,
@@ -75,14 +42,6 @@ internal fun createMessageEventBroadcast(
     )
         .mapToEvents()
         .broadcastIn(scope)
-
-enum class MessageType {
-    Incoming,
-    Outgoing,
-    CarbonCopy
-}
-
-private typealias MessageEvent = Pair<SmackMessage, MessageType>
 
 private fun messageFlow(
     userJid: Jid,

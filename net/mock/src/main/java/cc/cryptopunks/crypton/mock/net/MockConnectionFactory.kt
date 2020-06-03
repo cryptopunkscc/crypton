@@ -6,9 +6,5 @@ import cc.cryptopunks.crypton.mock.MockState
 
 class MockConnectionFactory : Connection.Factory {
     override fun invoke(config: Connection.Config): Connection =
-        ConnectionMock(
-            MockState(
-                config.address
-            )
-        )
+        ConnectionMock(MockState(config.address))
 }

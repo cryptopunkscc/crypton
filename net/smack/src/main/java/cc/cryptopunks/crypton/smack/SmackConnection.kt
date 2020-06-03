@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.smack.module.SmackModule
 import kotlinx.coroutines.CoroutineScope
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 
-class SmackConnection internal constructor(
+internal class SmackConnection(
     scope: CoroutineScope,
     address: Address,
     configuration: XMPPTCPConnectionConfiguration
