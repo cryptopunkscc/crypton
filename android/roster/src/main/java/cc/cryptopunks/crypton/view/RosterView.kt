@@ -43,13 +43,13 @@ class RosterView(
     override fun Connector.connect(): Job = launch {
         log.d("Connect")
         launch {
-            input.filterIsInstance<Roster.Service.Items>().collect {
+            input.filterIsInstance<Roster.Service.PagedItems>().collect {
                 log.d("Received ${it.items.size} items")
                 rosterAdapter.submitList(it.items)
             }
         }
         launch {
-            Roster.Service.GetItems.out()
+            Roster.Service.GetPagedItems.out()
         }
     }
 

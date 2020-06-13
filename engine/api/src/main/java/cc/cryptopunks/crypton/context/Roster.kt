@@ -13,15 +13,11 @@ object Roster {
         val unreadMessagesCount: Int = 0
     )
 
-    interface Service : Connectable {
-        interface Input
-        interface Output
+    object Service {
 
-        object GetItems : Input
-        data class Items(val items: PagedList<Connectable>) : Output
-    }
+        object GetPagedItems
+        data class PagedItems(val items: PagedList<Connectable>)
 
-    interface Service2 : Connectable {
         object GetItems
         data class Items(val list: List<Item>)
     }

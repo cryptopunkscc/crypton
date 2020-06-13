@@ -75,7 +75,7 @@ suspend fun startClient2() = connectClient {
         address.id == "$test2@janek-latitude"
     }
     send(Route.Roster)
-    waitFor<Roster.Service2.Items> {
+    waitFor<Roster.Service.Items> {
         list.any { it.message.chatAddress.local == test1 }
     }
     send(

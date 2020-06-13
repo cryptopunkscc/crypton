@@ -10,7 +10,7 @@ class RosterFragment : ServiceFragment() {
 
     override fun onCreatePresenter() = RosterDomainModule(
         appCore = appCore
-    ).rosterService
+    ).rosterPagedService
 
     override fun onCreateView(
         inflater: LayoutInflater,

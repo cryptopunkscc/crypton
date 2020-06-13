@@ -1,45 +1,37 @@
 package cc.cryptopunks.crypton.service
 
-import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.selector.RosterPagedListSelector
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.selector.RosterItemStateListFlowSelector
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 class RosterService internal constructor(
-    private val rosterPagedListFlow: RosterPagedListSelector,
-    private val createRosterItem: RosterItemService.Factory
-) : Roster.Service {
+    private val rosterListFlowSelector: RosterItemStateListFlowSelector
+) : Connectable {
+    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.Unconfined
 
-    private val log = typedLog()
+    private var lastItems = Roster.Service.Items(emptyList())
 
-    override val coroutineContext = SupervisorJob() + Dispatchers.Unconfined
-
-    private var items: Roster.Service.Items? = null
-
-    override fun Connector.connect() = launch {
-        log.d("Start")
+    override fun Connector.connect(): Job = launch {
         launch {
             input.collect {
-                when (it) {
-                    is Roster.Service.GetItems -> items?.out()
+                when(it) {
+                    is Roster.Service.GetItems -> lastItems.out()
                 }
             }
         }
         launch {
-            rosterPagedListFlow { createRosterItem(it) }
-                .map { Roster.Service.Items(it as PagedList<Connectable>) }
-                .onEach {
-                    log.d("Received ${it.items.size} items")
-                    items = it
-                }
+            rosterListFlowSelector()
+                .map { Roster.Service.Items(it) }
+                .onEach { lastItems = it }
                 .collect(output)
         }
     }
