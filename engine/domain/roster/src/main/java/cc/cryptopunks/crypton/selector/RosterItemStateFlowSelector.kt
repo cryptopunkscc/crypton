@@ -16,14 +16,14 @@ internal class RosterItemStateFlowSelector(
     private val messageRepo: Message.Repo
 ) {
 
-    operator fun invoke(chatAddress: Address): Flow<Roster.Item.Chat> = run {
+    operator fun invoke(chatAddress: Address): Flow<Roster.Item> = run {
         flowOf(
             flowOf(Unit),
             presenceFlow(chatAddress),
             latestMessageFlow(chatAddress),
             messageRepo.unreadCountFlow(chatAddress)
         ).flattenMerge().scan(
-            Roster.Item.Chat(
+            Roster.Item(
                 letter = chatAddress.toString().firstOrNull()?.toLowerCase() ?: 'a',
                 title = chatAddress.toString()
             )

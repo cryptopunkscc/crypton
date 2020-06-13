@@ -113,14 +113,14 @@ class RosterItemStateListFlowSelectorTest {
         result.forEach(::println)
         Assert.assertEquals(
             setOf(
-                Roster.Item.Chat(
+                Roster.Item(
                     title = addresses[2].toString(),
                     unreadMessagesCount = 1,
                     message = messages[0],
                     presence = Presence.Status.Available,
                     letter = 't'
                 ),
-                Roster.Item.Chat(
+                Roster.Item(
                     title = addresses[3].toString(),
                     unreadMessagesCount = 1,
                     message = messages[1],

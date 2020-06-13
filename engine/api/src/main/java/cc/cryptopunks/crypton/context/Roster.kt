@@ -5,20 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 object Roster {
 
-    object Item {
-
-        data class Chat(
-            val title: String,
-            val letter: Char,
-            val message: Message = Message.Empty,
-            val presence: Presence.Status = Presence.Status.Unavailable,
-            val unreadMessagesCount: Int = 0
-        ) : Service.Output
-
-        interface Service : Connectable {
-            interface Output
-        }
-    }
+    data class Item(
+        val title: String,
+        val letter: Char,
+        val message: Message = Message.Empty,
+        val presence: Presence.Status = Presence.Status.Unavailable,
+        val unreadMessagesCount: Int = 0
+    )
 
     interface Service : Connectable {
         interface Input
@@ -30,7 +23,7 @@ object Roster {
 
     interface Service2 : Connectable {
         object GetItems
-        data class Items(val list: List<Item.Chat>)
+        data class Items(val list: List<Item>)
     }
 
     interface Net {

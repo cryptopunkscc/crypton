@@ -20,8 +20,8 @@ internal class RosterItemStateListFlowSelector(
     private val sessionStore: Session.Store,
     private val createRosterItemStateFlowSelector: RosterItemStateFlowSelector.Factory
 ) {
-    operator fun invoke(): Flow<List<Roster.Item.Chat>> =
-        mutableMapOf<Address, Set<Roster.Item.Chat>>().let { currentItems ->
+    operator fun invoke(): Flow<List<Roster.Item>> =
+        mutableMapOf<Address, Set<Roster.Item>>().let { currentItems ->
             sessionStore.newSessionsFlow().flatMapMerge { session ->
                 session.rosterItemStateFlow().map { states ->
                     session.address to states
@@ -33,9 +33,9 @@ internal class RosterItemStateListFlowSelector(
             }
         }
 
-    private fun Session.rosterItemStateFlow(): Flow<Set<Roster.Item.Chat>> {
+    private fun Session.rosterItemStateFlow(): Flow<Set<Roster.Item>> {
         val chatJobs = mutableMapOf<Address, Job>()
-        val chatItems = mutableMapOf<Address, Roster.Item.Chat>()
+        val chatItems = mutableMapOf<Address, Roster.Item>()
         val rosterItemStateFlow = createRosterItemStateFlowSelector(this)
 
         return channelFlow {
