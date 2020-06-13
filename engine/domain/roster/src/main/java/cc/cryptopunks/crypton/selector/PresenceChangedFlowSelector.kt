@@ -4,18 +4,14 @@ import cc.cryptopunks.crypton.context.*
 import kotlinx.coroutines.flow.*
 
 internal class PresenceChangedFlowSelector(
-    private val userPresenceNet: UserPresence.Net,
+    private val presenceNet: Presence.Net,
     private val rosterNet: Roster.Net
 ) : () -> Flow<Roster.Net.PresenceChanged> {
     override fun invoke(): Flow<Roster.Net.PresenceChanged> =
         flowOf(
-            userPresenceNet.getCached().map {
+            presenceNet.getCached().map { presence ->
                 Roster.Net.PresenceChanged(
-                    resource = Resource(
-                        it.address,
-                        "unknown"
-                    ), // TODO
-                    presence = it.presence
+                    presence = presence
                 )
             }.asFlow(),
             rosterNet.rosterEvents.filterIsInstance()

@@ -12,7 +12,7 @@ interface AppCore :
     val navigate: Route.Navigate
 
     val sessionStore: Session.Store
-    val userPresenceStore: UserPresence.Store
+    val userPresenceStore: Presence.Store
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
 

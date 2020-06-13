@@ -1,11 +1,17 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.util.OpenStore
+
 data class Presence(
+    val resource: Resource,
     val status: Status
 ) {
     interface Net {
         fun sendPresence(presence: Presence)
+        fun getCached(): List<Presence>
     }
+
+    class Store : OpenStore<Map<Address, Presence>>(emptyMap())
 
     enum class Status {
         /** The user is available to receive messages (default). */
@@ -35,6 +41,7 @@ data class Presence(
 
     companion object {
         val Empty = Presence(
+            resource = Resource.Empty,
             status = Status.Unavailable
         )
     }

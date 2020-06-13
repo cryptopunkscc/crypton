@@ -34,7 +34,8 @@ internal fun SmackJid.remoteId() = Address(
     domain = domain.toString()
 )
 
-internal fun SmackPresence.presence() = Presence(
+internal fun SmackPresence.presence(address: SmackJid) = Presence(
+    resource = address.resourceId(),
     status = Presence.Status.values()[type.ordinal]
 )
 

@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.context.UserPresence
+import cc.cryptopunks.crypton.context.Presence
 
-internal class StoreUserPresenceInteractor(private val store: UserPresence.Store) {
-    suspend operator fun invoke(userPresence: UserPresence) = store reduce {
-        plus(userPresence.address to userPresence.presence)
+internal class StorePresenceInteractor(private val store: Presence.Store) {
+    suspend operator fun invoke(presence: Presence) = store reduce {
+        plus(presence.resource.address to presence)
     }
 }
