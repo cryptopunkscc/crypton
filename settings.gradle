@@ -23,6 +23,7 @@ include ':engine:api',
         ':repo:mock',
 
         ':jvm:common',
+        ':jvm:translator',
         ':jvm:server',
         ':jvm:test',
 
