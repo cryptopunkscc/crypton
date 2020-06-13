@@ -10,10 +10,7 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 dependencies {
-    //noinspection DifferentStdlibGradleVersion
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-//    implementation "io.ktor:ktor-server-netty:$ktor_version"
-//    implementation 'com.google.code.gson:gson:2.8.6'
     api project(':repo:mock')
     api project(':net:mock')
     api project(':net:smack:jvm')

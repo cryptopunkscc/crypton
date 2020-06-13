@@ -33,15 +33,6 @@ internal class RosterItemStateListFlowSelector(
             }
         }
 
-    private fun Session.Store.newSessionsFlow(): Flow<Session> {
-        var previous = emptyMap<Address, Session>()
-        return changesFlow().flatMapConcat { current ->
-            val new = current - previous.keys
-            previous = current
-            new.values.asFlow()
-        }
-    }
-
     private fun Session.rosterItemStateFlow(): Flow<Set<Roster.Item.Chat>> {
         val chatJobs = mutableMapOf<Address, Job>()
         val chatItems = mutableMapOf<Address, Roster.Item.Chat>()
@@ -72,5 +63,15 @@ internal class RosterItemStateListFlowSelector(
                 }
             }
         }
+    }
+}
+
+
+private fun Session.Store.newSessionsFlow(): Flow<Session> {
+    var previous = emptyMap<Address, Session>()
+    return changesFlow().flatMapConcat { current ->
+        val new = current - previous.keys
+        previous = current
+        new.values.asFlow()
     }
 }
