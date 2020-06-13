@@ -66,7 +66,7 @@ class RosterItemView(
     }
 
     private fun handleInput(input: Any) {
-        (input as? Roster.Item.Chat)?.run {
+        (input as? Roster.Item)?.run {
 
             conversationTitleTextView.text = title
 

@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
@@ -22,7 +23,7 @@ class RosterItemService private constructor(
     private val presenceOf: PresenceFlowSelector,
     private val latestMessageFlow: LatestMessageFlowSelector,
     private val messageRepo: Message.Repo
-) : Roster.Item.Service {
+) : Connectable {
 
     private data class UnreadMessages(val count: Int)
 
@@ -31,7 +32,7 @@ class RosterItemService private constructor(
     override val id get() = chat.address.id
 
     private val store = Store(
-        Roster.Item.Chat(
+        Roster.Item(
             letter = id.firstOrNull()?.toLowerCase() ?: 'a',
             title = id
         )
@@ -53,7 +54,7 @@ class RosterItemService private constructor(
             .collect(output)
     }
 
-    private suspend fun reduce(action: Any): Roster.Item.Chat? = store reduce {
+    private suspend fun reduce(action: Any): Roster.Item? = store reduce {
         when (action) {
             is Presence.Status -> {
                 copy(presence = action)
