@@ -3,17 +3,17 @@ package cc.cryptopunks.crypton.module
 import cc.cryptopunks.crypton.context.AppCore
 import cc.cryptopunks.crypton.selector.*
 import cc.cryptopunks.crypton.service.RosterItemService
+import cc.cryptopunks.crypton.service.RosterPagedService
 import cc.cryptopunks.crypton.service.RosterService
-import cc.cryptopunks.crypton.service.RosterService2
 
 class RosterDomainModule(
     appCore: AppCore
 ) : AppCore by appCore {
 
-    val rosterService by lazy {
+    val rosterPagedService by lazy {
         // TODO
         val sessionCore = appCore.sessionCore()
-        RosterService(
+        RosterPagedService(
             rosterPagedListFlow = RosterPagedListSelector(
                 mainExecutor = mainExecutor,
                 ioExecutor = ioExecutor,
@@ -28,8 +28,8 @@ class RosterDomainModule(
         )
     }
 
-    val rosterService2 by lazy {
-        RosterService2(
+    val rosterService by lazy {
+        RosterService(
             rosterListFlowSelector = RosterItemStateListFlowSelector(
                 sessionStore = sessionStore,
                 createRosterItemStateFlowSelector = RosterItemStateFlowSelector.Factory(

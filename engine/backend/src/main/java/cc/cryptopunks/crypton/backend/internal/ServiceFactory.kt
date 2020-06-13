@@ -41,7 +41,7 @@ internal class ServiceFactory(
 
         Roster -> RosterDomainModule(
             appCore = appCore
-        ).rosterService2
+        ).rosterService
 
         AccountList -> AccountDomainModule(
             appCore = appCore
