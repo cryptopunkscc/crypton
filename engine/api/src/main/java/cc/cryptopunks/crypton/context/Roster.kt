@@ -29,6 +29,7 @@ object Roster {
     }
 
     interface Service2 : Connectable {
+        object GetItems
         data class Items(val list: List<Item.Chat>)
     }
 
