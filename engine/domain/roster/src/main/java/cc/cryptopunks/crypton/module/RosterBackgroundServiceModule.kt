@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.module
 
 import cc.cryptopunks.crypton.context.SessionCore
-import cc.cryptopunks.crypton.interactor.StoreUserPresenceInteractor
+import cc.cryptopunks.crypton.interactor.StorePresenceInteractor
 import cc.cryptopunks.crypton.selector.PresenceChangedFlowSelector
 import cc.cryptopunks.crypton.service.RosterBackgroundService
 
@@ -11,10 +11,10 @@ class RosterBackgroundServiceModule(
     val rosterBackgroundService by lazy {
         RosterBackgroundService(
             presenceChangedFlow = PresenceChangedFlowSelector(
-                userPresenceNet = sessionCore,
-                rosterNet = sessionCore
+                rosterNet = sessionCore,
+                presenceNet = sessionCore
             ),
-            storeUserPresence = StoreUserPresenceInteractor(
+            storePresence = StorePresenceInteractor(
                 store = userPresenceStore
             )
         )

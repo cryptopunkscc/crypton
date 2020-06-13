@@ -8,7 +8,6 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.User
-import cc.cryptopunks.crypton.context.UserPresence
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.OutgoingMessageCache
@@ -171,13 +170,8 @@ internal class ConnectionModule(
 
     override fun createChat(chat: Chat): Chat = smack.createChat(chat)
 
-    override fun getCached(): List<UserPresence> = roster.run {
-        entries.map { entry ->
-            UserPresence(
-                address = Address.from(entry.jid.toString()),
-                presence = getPresence(entry.jid).presence()
-            )
-        }
+    override fun getCached(): List<Presence> = roster.run {
+        entries.map { entry -> getPresence(entry.jid).presence(entry.jid) }
     }
 }
 

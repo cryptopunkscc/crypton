@@ -26,8 +26,7 @@ class RosterFlowAdapter(
     ): SubscribeListener.SubscribeAnswer? {
         channel.offer(
             Roster.Net.PresenceChanged(
-                from.resourceId(),
-                subscribeRequest.presence()
+                subscribeRequest.presence(from)
             )
         )
         return null
@@ -36,8 +35,7 @@ class RosterFlowAdapter(
     override fun presenceAvailable(address: FullJid, availablePresence: Presence) {
         channel.offer(
             Roster.Net.PresenceChanged(
-                address.resourceId(),
-                availablePresence.presence()
+                availablePresence.presence(address)
             )
         )
     }
@@ -45,8 +43,7 @@ class RosterFlowAdapter(
     override fun presenceUnavailable(address: FullJid, presence: Presence) {
         channel.offer(
             Roster.Net.PresenceChanged(
-                address.resourceId(),
-                presence.presence()
+                presence.presence(address)
             )
         )
     }
@@ -54,8 +51,7 @@ class RosterFlowAdapter(
     override fun presenceSubscribed(address: BareJid, subscribedPresence: Presence) {
         channel.offer(
             Roster.Net.PresenceChanged(
-                address.resourceId(),
-                subscribedPresence.presence()
+                subscribedPresence.presence(address)
             )
         )
     }
@@ -63,18 +59,14 @@ class RosterFlowAdapter(
     override fun presenceUnsubscribed(address: BareJid, unsubscribedPresence: Presence) {
         channel.offer(
             Roster.Net.PresenceChanged(
-                address.resourceId(),
-                unsubscribedPresence.presence()
+                unsubscribedPresence.presence(address)
             )
         )
     }
 
     override fun presenceError(address: Jid, errorPresence: Presence) {
         channel.offer(
-            Roster.Net.PresenceChanged(
-                resource = address.resourceId(),
-                presence = errorPresence.presence()
-            )
+            Roster.Net.PresenceChanged(errorPresence.presence(address))
         )
     }
 

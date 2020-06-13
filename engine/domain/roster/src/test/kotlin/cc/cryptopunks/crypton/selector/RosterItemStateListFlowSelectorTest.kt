@@ -10,7 +10,6 @@ import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.User
-import cc.cryptopunks.crypton.context.UserPresence
 import cc.cryptopunks.crypton.mock.net.MockConnectionFactory
 import cc.cryptopunks.crypton.util.Log
 import io.mockk.mockk
@@ -78,7 +77,7 @@ class RosterItemStateListFlowSelectorTest {
     operator fun invoke() = runBlocking {
         // given
         val sessionStore = Session.Store()
-        val userPresenceStore = UserPresence.Store()
+        val userPresenceStore = Presence.Store()
 
         val selector = RosterItemStateListFlowSelector(
             sessionStore = sessionStore,
@@ -94,7 +93,7 @@ class RosterItemStateListFlowSelectorTest {
             sessions.associateBy { it.address }
         }
         userPresenceStore.reduce {
-            (2..3).associate { addresses[it] to Presence(Presence.Status.Available) }
+            (2..3).associate { addresses[it] to Presence(Resource(addresses[it]), Presence.Status.Available) }
         }
         (0..1).forEach {
             sessionRepos[it].run {

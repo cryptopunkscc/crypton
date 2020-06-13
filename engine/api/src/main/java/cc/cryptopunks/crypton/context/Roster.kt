@@ -43,9 +43,6 @@ object Roster {
             data class Failed(val exception: Exception): Loading()
         }
 
-        data class PresenceChanged(
-            val resource: Resource,
-            val presence: Presence
-        ) : Event
+        data class PresenceChanged(val presence: Presence) : Event
     }
 }

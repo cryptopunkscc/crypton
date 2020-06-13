@@ -6,7 +6,6 @@ interface Net :
     Account.Net,
     User.Net,
     Presence.Net,
-    UserPresence.Net,
     Message.Net,
     Chat.Net,
     Roster.Net {
