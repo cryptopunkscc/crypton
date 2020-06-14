@@ -22,7 +22,7 @@ typealias HandlerRegistry = Map<KClass<*>, Handle<*>>
 
 typealias HandlerRegistryBuilder = MutableMap<KClass<*>, Handle<*>>
 
-fun handlerRegistry(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
+fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
     mutableMapOf<KClass<*>, Handle<*>>().apply(build)
 
 inline operator fun <reified T> HandlerRegistryBuilder.plus(handle: Handle<T>) =
