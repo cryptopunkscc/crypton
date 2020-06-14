@@ -22,6 +22,8 @@ data class Chat(
 
     interface Service : Connectable {
 
+        object PopClipboard
+
         data class MessagesRead(val messages: List<Message>)
 
         data class SendMessage(val text: String)
@@ -38,7 +40,7 @@ data class Chat(
             val to: Long = System.currentTimeMillis()
         ) : Subscription
 
-        object GetMessages
+        data class GetMessages(val address: Address? = null)
 
         data class CreateChat(val address: Address)
 

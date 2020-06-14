@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-fun Session.subscribeLastMessage() = handle<Chat.Service.SubscribeLastMessage> { output ->
+internal fun Session.handleLastMessageSubscription() = handle<Chat.Service.SubscribeLastMessage> { output ->
     scope.launch {
         flowOf(
             messageRepo.list().asFlow(),
@@ -24,4 +24,3 @@ fun Session.subscribeLastMessage() = handle<Chat.Service.SubscribeLastMessage> {
         }.collect(output)
     }
 }
-private const val SEVEN_DAYS_MILLIS = 1000 * 60 * 60 * 24 * 7

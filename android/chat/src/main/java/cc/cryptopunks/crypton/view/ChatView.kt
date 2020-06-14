@@ -10,11 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Actor
-import cc.cryptopunks.crypton.context.Chat.Service.*
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat.Service.MessageText
+import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
+import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
+import cc.cryptopunks.crypton.context.Chat.Service.SendMessage
 import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
-import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
@@ -26,11 +30,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ChatView(
-    context: Context
+    context: Context,
+    private val address: Address
 ) :
-    ActorLayout(context) {
-
-    private val log = typedLog()
+    ActorLayout(context),
+    Message.Consumer {
 
     private val messageAdapter = MessageAdapter(coroutineContext)
 
@@ -114,4 +118,6 @@ class ChatView(
     private companion object {
         const val SCROLL_THRESHOLD_DP = 100
     }
+
+    override fun canConsume(message: Message): Boolean = message.chatAddress == address
 }
