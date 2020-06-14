@@ -32,7 +32,7 @@ data class Message(
         fun messageEvents(): Flow<Event>
         fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
 
-        interface ReadArchived {
+        object ReadArchived {
             data class Query(
                 val since: Long? = null,
                 val afterUid: String? = null,
@@ -41,14 +41,9 @@ data class Message(
             )
         }
 
-        sealed class Event : Api.Event {
-            abstract val message: Message
-
-            data class Queued(override val message: Message) : Event()
-            data class Sending(override val message: Message) : Event()
-            data class Sent(override val message: Message) : Event()
-            data class Received(override val message: Message) : Event()
-        }
+        data class Event(
+            val message: Message
+        ) : Api.Event
     }
 
     interface Repo {

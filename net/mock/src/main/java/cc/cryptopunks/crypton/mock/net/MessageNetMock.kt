@@ -11,7 +11,7 @@ class MessageNetMock(
 ) : Message.Net {
 
     override suspend fun sendMessage(message: Message) {
-        state { messageEvents.send(Message.Net.Event.Sent(message)) }
+        state { messageEvents.send(Message.Net.Event(message.copy(status = Message.Status.Sent))) }
     }
 
     override fun readArchived(

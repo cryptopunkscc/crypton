@@ -52,9 +52,7 @@ internal class ConnectionModule(
         createMessageEventBroadcast(
             scope = scope,
             chatManager = chatManager,
-            address = address,
-            omemoManager = omemoManager,
-            outgoingMessageCache = outgoingMessageCache
+            omemoManager = omemoManager
         )
     }
 
