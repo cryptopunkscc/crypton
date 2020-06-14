@@ -28,7 +28,7 @@ class MessageView(
 
     private val padding by lazy { resources.getDimensionPixelSize(R.dimen.message_padding) }
 
-    val optionClicks = BroadcastChannel<Chat.Service.Option>(1)
+    val optionClicks = BroadcastChannel<Any>(1)
 
     var message: Message? = null
         set(value) {
@@ -58,7 +58,7 @@ class MessageView(
             .findItem(R.id.copyToClipboard)
             .setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.copyToClipboard -> Chat.Service.Option.Copy(message!!)
+                    R.id.copyToClipboard -> Chat.Service.Copy(message!!)
                     else -> null
                 }?.let {
                     optionClicks.offer(it)

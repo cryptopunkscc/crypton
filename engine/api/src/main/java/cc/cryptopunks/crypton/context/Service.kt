@@ -20,7 +20,6 @@ interface Service : CoroutineScope {
     }
 }
 
-typealias In = Connectable.Input
 typealias Out = Connectable.Output
 
 interface Connectable : Service {

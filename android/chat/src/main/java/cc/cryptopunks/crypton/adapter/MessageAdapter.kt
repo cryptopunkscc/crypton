@@ -30,7 +30,7 @@ class MessageAdapter(
 
     private val log = typedLog()
 
-    private val clicks = BroadcastChannel<Option>(Channel.BUFFERED)
+    private val clicks = BroadcastChannel<Any>(Channel.BUFFERED)
 
     private val read = BroadcastChannel<Message>(Channel.BUFFERED)
 

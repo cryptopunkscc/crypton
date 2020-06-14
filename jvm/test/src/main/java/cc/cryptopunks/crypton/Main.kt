@@ -49,7 +49,7 @@ suspend fun startClient1() = connectClient {
             accountId = "$test1@janek-latitude"
             chatAddress = "$test2@janek-latitude"
         },
-        Chat.Service.Subscribe.LastMessage
+        Chat.Service.SubscribeLastMessage(true)
     )
     send(Chat.Service.SendMessage("yo"))
     waitFor<Chat.Service.Messages> {
@@ -83,7 +83,7 @@ suspend fun startClient2() = connectClient {
             accountId = "$test2@janek-latitude"
             chatAddress = "$test1@janek-latitude"
         },
-        Chat.Service.Subscribe.LastMessage,
+        Chat.Service.SubscribeLastMessage(true),
         Chat.Service.SendMessage("yo yo")
     )
     flush()
