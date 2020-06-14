@@ -26,18 +26,11 @@ internal class SaveMessagesInteractor(
 
     suspend operator fun invoke(event: Message.Net.Event) {
         val message = event.message.run {
-            when (event) {
-                is Message.Net.Event.Sending -> create()
+            when (status) {
+                Message.Status.Sending -> create()
                 else -> get() ?: create()
             }
-        }.copy(
-            status = when (event) {
-                is Message.Net.Event.Queued -> Message.Status.Queued
-                is Message.Net.Event.Sending -> Message.Status.Sending
-                is Message.Net.Event.Sent -> Message.Status.Sent
-                is Message.Net.Event.Received -> Message.Status.Received
-            }
-        ).calculateId()
+        }.calculateId()
 
         log.d("inserting message $message")
         messageRepo.run {

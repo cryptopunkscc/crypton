@@ -46,11 +46,11 @@ internal fun createSendMessage(
             }
 
         connection.addStanzaIdAcknowledgedListener(smackMessage.stanzaId) {
-            GlobalScope.launch { broadcast.send(Message.Net.Event.Sent(message)) }
+            GlobalScope.launch { broadcast.send(Message.Net.Event(message.copy(status = Message.Status.Sent))) }
         }
 
         log.d("$id sending")
-        broadcast.send(Message.Net.Event.Sending(message))
+        broadcast.send(Message.Net.Event(message.copy(status = Message.Status.Sending)))
         connection.sendStanza(smackMessage)
         log.d("$id send")
         log.d("$id stop")

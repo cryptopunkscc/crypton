@@ -1,9 +1,7 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
-import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
-import cc.cryptopunks.crypton.smack.util.ext.removeOmemoBody
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import kotlinx.coroutines.CoroutineScope
@@ -13,89 +11,57 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.broadcastIn
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import org.jivesoftware.smack.chat2.Chat
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener
-import org.jivesoftware.smack.chat2.OutgoingChatMessageListener
 import org.jivesoftware.smack.packet.Stanza
 import org.jivesoftware.smackx.carbons.packet.CarbonExtension
 import org.jivesoftware.smackx.omemo.OmemoManager
 import org.jivesoftware.smackx.omemo.OmemoMessage
 import org.jivesoftware.smackx.omemo.listener.OmemoMessageListener
-import org.jxmpp.jid.Jid
-import org.jxmpp.jid.impl.JidCreate
 import org.jivesoftware.smack.packet.Message as SmackMessage
 
 internal fun createMessageEventBroadcast(
-    address: Address,
     scope: CoroutineScope,
     chatManager: ChatManager,
-    omemoManager: OmemoManager,
-    outgoingMessageCache: OutgoingMessageCache
+    omemoManager: OmemoManager
 ): BroadcastChannel<Message.Net.Event> =
     messageFlow(
-        userJid = JidCreate.from(address.id),
-        outgoingMessageCache = outgoingMessageCache,
         chatManager = chatManager,
         omemoManager = omemoManager
     )
-        .mapToEvents()
+        .mapNotNull { it.cryptonMessage() }
+        .map { Message.Net.Event(it) }
         .broadcastIn(scope)
 
 private fun messageFlow(
-    userJid: Jid,
-    outgoingMessageCache: OutgoingMessageCache,
     chatManager: ChatManager,
     omemoManager: OmemoManager
 ): Flow<MessageEvent> = callbackFlow {
 
     val incomingListener = incomingListener()
-    val outgoingListener = outgoingListener(userJid, outgoingMessageCache)
     val omemoListener = omemoListener()
 
     chatManager.addIncomingListener(incomingListener)
-//    chatManager.addOutgoingListener(outgoingListener)
     omemoManager.addOmemoMessageListener(omemoListener)
 
     awaitClose {
         chatManager.removeIncomingListener(incomingListener)
-//        chatManager.removeOutgoingListener(outgoingListener)
         omemoManager.removeOmemoMessageListener(omemoListener)
     }
 }
 
-private fun Flow<MessageEvent>.mapToEvents() = mapNotNull { (smackMessage, eventType) ->
-    val message = smackMessage.toCryptonMessage()
-    when (smackMessage.type) {
-        SmackMessage.Type.chat -> when (eventType) {
-            MessageType.Incoming,
-            MessageType.CarbonCopy -> Message.Net.Event.Received(message)
-//            MessageType.Outgoing -> Message.Net.Event.Sending(message)
-            MessageType.Outgoing -> null
-        }
-        else -> null
+private fun MessageEvent.cryptonMessage(): Message? =
+    if (first.type != SmackMessage.Type.chat) null
+    else when (second) {
+        MessageType.Incoming -> Message.Status.Received
+        MessageType.CarbonCopy -> Message.Status.Sent
+        MessageType.Outgoing -> null
+    }?.let { status ->
+        first.toCryptonMessage().copy(status = status)
     }
-}
-
-
-private fun SendChannel<MessageEvent>.outgoingListener(
-    userJid: Jid,
-    outgoingMessageCache: OutgoingMessageCache
-) = OutgoingChatMessageListener { _, message, _ ->
-    message.apply {
-        from = userJid
-        if (hasOmemoExtension) {
-            removeOmemoBody()
-            body = outgoingMessageCache[message.stanzaId]
-        }
-    }.takeIf {
-        it.body.isNotBlank()
-    }?.let {
-        offer(it to MessageType.Outgoing)
-    }
-}
-
 
 private fun SendChannel<MessageEvent>.incomingListener() =
     IncomingChatMessageListener { _, message, _: Chat ->
