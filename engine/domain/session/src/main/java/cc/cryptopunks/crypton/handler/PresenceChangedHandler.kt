@@ -4,9 +4,9 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.interactor.StorePresenceInteractor
-import cc.cryptopunks.crypton.interactor.createChat
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
 import kotlinx.coroutines.launch
 
