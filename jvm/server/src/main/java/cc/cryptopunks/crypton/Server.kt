@@ -4,10 +4,7 @@ import cc.cryptopunks.crypton.backend.BackendService
 import cc.cryptopunks.crypton.context.AppCore
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Connection
-import cc.cryptopunks.crypton.mock.net.MockConnectionFactory
-import cc.cryptopunks.crypton.module.ChatBackgroundServiceModule
-import cc.cryptopunks.crypton.module.RosterBackgroundServiceModule
-import cc.cryptopunks.crypton.module.SessionDomainModule
+import cc.cryptopunks.crypton.service.SessionService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -45,11 +42,7 @@ private val core: AppCore by lazy {
 //        createConnection = MockConnectionFactory(),
         createConnection = createConnectionFactory,
         createSessionServices = { sessionCore ->
-            listOf(
-                SessionDomainModule(sessionCore).chatBackgroundService,
-                RosterBackgroundServiceModule(sessionCore).rosterBackgroundService,
-                SessionDomainModule(sessionCore).sessionService
-            )
+            listOf(SessionService(sessionCore))
         }
     )
 }

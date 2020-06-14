@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SessionEventHandler(
+internal class SessionEventHandler(
     private val session: Session,
     private val networkSys: Network.Sys
 ) {

@@ -168,7 +168,7 @@ internal class ConnectionModule(
 
     override fun createChat(chat: Chat): Chat = smack.createChat(chat)
 
-    override fun getCached(): List<Presence> = roster.run {
+    override fun getCachedPresences(): List<Presence> = roster.run {
         entries.map { entry -> getPresence(entry.jid).presence(entry.jid) }
     }
 }

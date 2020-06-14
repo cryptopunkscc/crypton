@@ -50,6 +50,21 @@ data class Chat(
 
         data class Messages(val account: Address, val list: List<Message>)
 
+        data class CreateChatData(
+            val title: String,
+            val users: List<Address>
+        ) {
+            fun validate() = users.isNotEmpty() || throw Exception.EmptyUsers
+
+            data class Exception(
+                override val message: String
+            ) : kotlin.Exception() {
+
+                companion object {
+                    val EmptyUsers = Exception("Users cannot be empty")
+                }
+            }
+        }
     }
 
 
