@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.selector
+package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.util.typedLog

@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
 import kotlinx.coroutines.flow.Flow
+import java.security.MessageDigest
 
 typealias CryptonMessage = Message
 
@@ -88,5 +89,17 @@ data class Message(
     val author: String get() = from.address.local
 }
 
-fun Any?.canConsume(message: Message): Boolean =
-    (this is Message.Consumer) && canConsume(message)
+fun Message.calculateId() = copy(
+    id = (text + from + to + timestamp).md5()
+)
+
+private fun String.md5() = MD5.digest(toByteArray()).printHexBinary()
+
+private val MD5 = MessageDigest.getInstance("MD5")
+
+private fun ByteArray.printHexBinary(): String =
+    asSequence().map(Byte::toInt).fold(StringBuilder(size * 2)) { acc, i ->
+        acc.append(HEX_CHARS[i shr 4 and 0xF]).append(HEX_CHARS[i and 0xF])
+    }.toString()
+
+private val HEX_CHARS = "0123456789ABCDEF".toCharArray()

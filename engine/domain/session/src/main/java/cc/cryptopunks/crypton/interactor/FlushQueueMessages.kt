@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 private class FlushQueueMessages
 
-fun Session.createFlushQueuedMessages(
+internal fun Session.createFlushQueuedMessages(
     log: TypedLog = FlushQueueMessages().typedLog()
 ): () -> Job = {
     scope.launch {
