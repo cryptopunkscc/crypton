@@ -17,7 +17,7 @@ fun main() {
                 startClient1()
             },
             launch {
-                delay(2000)
+                delay(200)
                 startClient2()
             }
         ).joinAll()
@@ -37,8 +37,15 @@ suspend fun startClient1() = connectClient {
         Account.Service.Set(Account.Field.Password, "test"),
         Account.Service.Login
     )
-    waitFor<Account.Service.Connected> {
-        address.id == "$test1@janek-latitude"
+    waitFor<Account.Service.Status> {
+        address.id == "$test1@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error)
+    }.let { status ->
+        if (status is Account.Service.Error) {
+            send(Account.Service.Register)
+            waitFor<Account.Service.Connected> {
+                address.id == "$test1@janek-latitude"
+            }
+        }
     }
     send(
         Route.CreateChat().apply {
@@ -71,8 +78,15 @@ suspend fun startClient2() = connectClient {
         Account.Service.Set(Account.Field.Password, "test"),
         Account.Service.Login
     )
-    waitFor<Account.Service.Connected> {
-        address.id == "$test2@janek-latitude"
+    waitFor<Account.Service.Status> {
+        address.id == "$test2@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error)
+    }.let { status ->
+        if (status is Account.Service.Error) {
+            send(Account.Service.Register)
+            waitFor<Account.Service.Connected> {
+                address.id == "$test2@janek-latitude"
+            }
+        }
     }
     send(Route.Roster)
     waitFor<Roster.Service.Items> {

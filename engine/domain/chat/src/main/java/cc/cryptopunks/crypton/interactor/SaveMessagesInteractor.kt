@@ -19,29 +19,24 @@ internal class SaveMessagesInteractor(
     private val log = typedLog()
 
     override fun invoke(messages: List<Message>) = scope.launch {
-        messages
-            .map { it.get() ?: it.create() }
-            .let { messageRepo.insertOrUpdate(it) }
+        messages.forEach { invoke(it) }
     }
 
-    suspend operator fun invoke(event: Message.Net.Event) {
-        val message = event.message.run {
-            when (status) {
-                Message.Status.Sending -> null
-                else -> get()
-            } ?: create()
-        }.calculateId()
-
-        log.d("inserting message $message")
-        messageRepo.run {
-            insertOrUpdate(message)
-            if (message.status == Message.Status.Received)
-                notifyUnread()
+    suspend operator fun invoke(message: Message) {
+        message.calculateId().run {
+            get() ?: create()
+        }.let { prepared ->
+            messageRepo.run {
+                log.d("inserting message $message")
+                insertOrUpdate(prepared)
+                if (prepared.status == Message.Status.Received)
+                    notifyUnread()
+            }
         }
     }
 
     private suspend fun Message.get() = messageRepo.run {
-        get(stanzaId)?.also {
+        get(id)?.also {
             delete(it)
         }
     }

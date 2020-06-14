@@ -28,7 +28,7 @@ class ChatBackgroundService internal constructor(
         log.d("Start")
         coroutineScope {
             launch { unreadMessages().collect { messages -> chatNotification(messages) } }
-            launch { messageEvents().collect { event -> saveMessages(event) } }
+            launch { messageEvents().collect { event -> saveMessages(event.message) } }
             launch {
                 omemoInitializationsSelector().collect {
                     flushQueuedMessages()
