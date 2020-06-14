@@ -46,7 +46,7 @@ private val core: AppCore by lazy {
         createConnection = createConnectionFactory,
         createSessionServices = { sessionCore ->
             listOf(
-                ChatBackgroundServiceModule(sessionCore).chatBackgroundService,
+                SessionDomainModule(sessionCore).chatBackgroundService,
                 RosterBackgroundServiceModule(sessionCore).rosterBackgroundService,
                 SessionDomainModule(sessionCore).sessionService
             )

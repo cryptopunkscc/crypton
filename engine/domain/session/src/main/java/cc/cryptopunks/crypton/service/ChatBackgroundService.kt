@@ -4,7 +4,6 @@ import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.interactor.ChatNotificationInteractor
 import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
 import cc.cryptopunks.crypton.selector.FetchArchivedMessagesSelector
-import cc.cryptopunks.crypton.selector.MessageEventsSelector
 import cc.cryptopunks.crypton.selector.OmemoInitializationsSelector
 import cc.cryptopunks.crypton.selector.UnreadMessagesSelector
 import cc.cryptopunks.crypton.util.typedLog
