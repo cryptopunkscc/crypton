@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.scan
 
 internal class RosterItemStateFlowSelector(
+    private val account: Address,
     private val presenceFlow: PresenceFlowSelector,
     private val latestMessageFlow: LatestMessageFlowSelector,
     private val messageRepo: Message.Repo
@@ -24,6 +25,7 @@ internal class RosterItemStateFlowSelector(
             messageRepo.unreadCountFlow(chatAddress)
         ).flattenMerge().scan(
             Roster.Item(
+                account = account,
                 letter = chatAddress.toString().firstOrNull()?.toLowerCase() ?: 'a',
                 title = chatAddress.toString()
             )
@@ -42,6 +44,7 @@ internal class RosterItemStateFlowSelector(
     ) {
         operator fun invoke(session: Session) =
             RosterItemStateFlowSelector(
+                account = session.address,
                 presenceFlow = presenceFlow,
                 latestMessageFlow = LatestMessageFlowSelector(
                     session.messageRepo

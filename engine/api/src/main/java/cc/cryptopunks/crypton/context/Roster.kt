@@ -8,6 +8,7 @@ object Roster {
     data class Item(
         val title: String,
         val letter: Char,
+        val account: Address = Address.Empty,
         val message: Message = Message.Empty,
         val presence: Presence.Status = Presence.Status.Unavailable,
         val unreadMessagesCount: Int = 0

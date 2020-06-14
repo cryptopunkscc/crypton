@@ -33,6 +33,7 @@ class RosterItemService private constructor(
 
     private val store = Store(
         Roster.Item(
+            account = chat.account,
             letter = id.firstOrNull()?.toLowerCase() ?: 'a',
             title = id
         )
