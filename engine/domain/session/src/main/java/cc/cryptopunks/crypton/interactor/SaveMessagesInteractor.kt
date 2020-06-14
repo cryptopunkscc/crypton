@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.calculateId
+import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
