@@ -28,11 +28,16 @@ class CreateAccountService internal constructor(
                 is Account.Service.Login,
                 is Account.Service.Register -> form.account().let { account ->
                     Account.Service.Connecting(account.address).out()
-                    addAccount(
-                        account = account,
-                        register = arg is Account.Service.Register
-                    )
-                    Account.Service.Connected(account.address).out()
+                    try {
+                        addAccount(
+                            account = account,
+                            register = arg is Account.Service.Register
+                        )
+                        Account.Service.Connected(account.address).out()
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
+                        Account.Service.Error(account.address, e.message).out()
+                    }
                 }
                 is Account.Service.Set -> form reduce {
                     plus(arg.field to arg.text)

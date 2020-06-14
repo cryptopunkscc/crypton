@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlin.coroutines.CoroutineContext
@@ -64,6 +65,6 @@ class ClientDsl(
         crossinline filter: T.() -> Boolean = { true }
     ): T = withTimeout(timeout) {
         flush()
-        output().filterIsInstance<T>().first { it.filter() }
+        output().filterIsInstance<T>().filter { it.filter() }.first()
     }
 }

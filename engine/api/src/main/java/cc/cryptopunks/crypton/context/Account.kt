@@ -42,11 +42,18 @@ data class Account(
     }
 
     interface Service {
+
         data class Set(val field: Field, val text: CharSequence)
         object Register
         object Login
-        data class Connecting(val address: Address)
-        data class Connected(val address: Address)
+
+        interface Status {
+            val address: Address
+        }
+
+        data class Connecting(override val address: Address) : Status
+        data class Connected(override val address: Address) : Status
+        data class Error(override val address: Address, val message: String? = null) : Status
     }
 
     enum class Field {
