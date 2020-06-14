@@ -20,7 +20,7 @@ class RosterDomainModule(
                 repo = sessionCore.chatRepo
             ),
             createRosterItem = RosterItemService.Factory(
-                presenceSelector = PresenceFlowSelector(userPresenceStore),
+                presenceSelector = PresenceFlowSelector(presenceStore),
                 navigate = navigate,
                 messageRepo = sessionCore.messageRepo,
                 latestMessageFlow = LatestMessageFlowSelector(sessionCore.messageRepo)
@@ -33,7 +33,7 @@ class RosterDomainModule(
             rosterListFlowSelector = RosterItemStateListFlowSelector(
                 sessionStore = sessionStore,
                 createRosterItemStateFlowSelector = RosterItemStateFlowSelector.Factory(
-                    presenceFlow = PresenceFlowSelector(userPresenceStore)
+                    presenceFlow = PresenceFlowSelector(presenceStore)
                 )
             )
         )

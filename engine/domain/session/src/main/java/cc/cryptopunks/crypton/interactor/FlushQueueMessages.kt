@@ -1,24 +1,28 @@
 package cc.cryptopunks.crypton.interactor
 
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.util.TypedLog
-import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
-private class FlushQueueMessages
+internal suspend fun Session.flushQueuedMessages() =
+    flushQueuedMessages { true }
 
-internal fun Session.createFlushQueuedMessages(
-    log: TypedLog = FlushQueueMessages().typedLog()
-): () -> Job = {
-    scope.launch {
-        log.d("Start")
-        messageRepo.queuedListFlow().collect { list ->
-            log.d("Flush queue $list")
-            list.forEach { message ->
-                sendMessage(message)
-            }
+internal suspend fun Session.flushQueuedMessages(
+    address: Address
+) = flushQueuedMessages { message: Message ->
+    message.chatAddress == address
+}
+
+internal suspend fun Session.flushQueuedMessages(
+    filter: (Message) -> Boolean
+) {
+    log.d("Start")
+
+    messageRepo.queuedListFlow().collect { list: List<Message> ->
+        log.d("Flush queue $list")
+        list.filter(filter).forEach { message ->
+            sendMessage(message)
         }
     }
 }

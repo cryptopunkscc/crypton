@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.service.top
 
-internal class ChatNotificationInteractor(
+internal class UpdateChatNotificationInteractor(
     private val sys: Notification.Sys,
     private val store: Connectable.Binding.Store
 ) {

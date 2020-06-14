@@ -20,7 +20,7 @@ class AppModule(
     Repo by repo {
 
     override val sessionStore = Session.Store()
-    override val userPresenceStore = Presence.Store()
+    override val presenceStore = Presence.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
     override val navigate = Route.Navigate(routeSys)

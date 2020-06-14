@@ -8,5 +8,5 @@ class PresenceNetMock(
 ) : Presence.Net {
 
     override fun sendPresence(presence: Presence) = Unit
-    override fun getCached(): List<Presence> = emptyList()
+    override fun getCachedPresences(): List<Presence> = emptyList()
 }

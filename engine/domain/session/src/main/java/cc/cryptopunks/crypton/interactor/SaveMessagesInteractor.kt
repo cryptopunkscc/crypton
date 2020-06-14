@@ -1,24 +1,20 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.context.calculateId
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class SaveMessagesInteractor(
-    private val scope: Session.Scope,
-    private val address: Address,
-    private val messageRepo: Message.Repo,
-    private val createChat: CreateChatInteractor
+    private val session: Session
 ) : (List<Message>) -> Job {
 
     private val log = typedLog()
 
-    override fun invoke(messages: List<Message>) = scope.launch {
+    override fun invoke(messages: List<Message>) = session.scope.launch {
         messages.forEach { invoke(it) }
     }
 
@@ -26,7 +22,7 @@ internal class SaveMessagesInteractor(
         message.calculateId().run {
             get() ?: create()
         }.let { prepared ->
-            messageRepo.run {
+            session.messageRepo.run {
                 log.d("inserting message $message")
                 insertOrUpdate(prepared)
                 if (prepared.status == Message.Status.Received)
@@ -35,17 +31,17 @@ internal class SaveMessagesInteractor(
         }
     }
 
-    private suspend fun Message.get() = messageRepo.run {
+    private suspend fun Message.get() = session.messageRepo.run {
         get(id)?.also {
             delete(it)
         }
     }
 
     private suspend fun Message.create() = copy(
-        chatAddress = createChat.invoke(
-            CreateChatInteractor.Data(
+        chatAddress = session.createChat(
+            Chat.Service.CreateChatData(
                 title = chatAddress.id,
-                users = listOf(User(getParty(address).address))
+                users = listOf(getParty(session.address).address)
             )
         ).address
     )

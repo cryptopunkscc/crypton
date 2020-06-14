@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.util.OpenStore
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,6 +13,8 @@ class Session(
     sessionRepo: SessionRepo
 ) : Connection by connection,
     SessionRepo by sessionRepo {
+
+    val log = typedLog()
 
     data class Event internal constructor(
         val session: Session,

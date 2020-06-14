@@ -1,18 +1,73 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.interactor.SessionEventHandler
+import cc.cryptopunks.crypton.context.SessionCore
+import cc.cryptopunks.crypton.context.collect
+import cc.cryptopunks.crypton.handler.handleApiEvent
+import cc.cryptopunks.crypton.handler.handleOmemoInitialized
+import cc.cryptopunks.crypton.handler.handlePresenceChange
+import cc.cryptopunks.crypton.interactor.SaveMessagesInteractor
+import cc.cryptopunks.crypton.interactor.StorePresenceInteractor
+import cc.cryptopunks.crypton.interactor.UpdateChatNotificationInteractor
 import cc.cryptopunks.crypton.selector.ApiEventSelector
+import cc.cryptopunks.crypton.selector.FetchArchivedMessagesSelector
+import cc.cryptopunks.crypton.selector.OmemoInitializationsSelector
+import cc.cryptopunks.crypton.selector.PresenceChangedFlowSelector
+import cc.cryptopunks.crypton.selector.UnreadMessagesSelector
 import cc.cryptopunks.crypton.util.typedLog
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class SessionService(
-    private val apiEventSelector: ApiEventSelector,
-    private val sessionEventHandler: SessionEventHandler
-) : Session.BackgroundService {
+    sessionCore: SessionCore
+) :
+    SessionCore by sessionCore,
+    Session.BackgroundService {
+
     private val log = typedLog()
-    override suspend fun invoke(){
+
+    override suspend fun invoke() = coroutineScope {
         log.d("Start")
-        apiEventSelector().collect { sessionEventHandler(it) }
+        launch { apiEventSelector().collect(handleApiEvent) }
+        launch { omemoInitializationsSelector().collect(handleOmemoInitialized) }
+        launch { unreadMessages().collect { messages -> updateChatNotification(messages) } }
+        launch { messageEvents().collect { event -> saveMessages(event.message) } }
+        launch { presenceChangedFlow().collect(handlePresenceChanged) }
+        Unit
+    }
+
+    private val apiEventSelector = ApiEventSelector(session)
+
+    private val handleApiEvent = session.handleApiEvent(networkSys)
+
+
+    private val omemoInitializationsSelector by lazy { OmemoInitializationsSelector(session) }
+
+    private val handleOmemoInitialized by lazy {
+        session.handleOmemoInitialized(
+            fetchArchivedMessages = FetchArchivedMessagesSelector(messageRepo, session),
+            saveMessages = saveMessages
+        )
+    }
+
+
+    private val unreadMessages by lazy { UnreadMessagesSelector(sessionCore.messageRepo) }
+
+    private val updateChatNotification by lazy {
+        UpdateChatNotificationInteractor(
+            sys = notificationSys,
+            store = connectableBindingsStore
+        )
+    }
+
+
+    private val saveMessages by lazy { SaveMessagesInteractor(session) }
+
+
+    private val presenceChangedFlow = PresenceChangedFlowSelector(session)
+
+    private val handlePresenceChanged by lazy {
+        session.handlePresenceChange(StorePresenceInteractor(presenceStore))
     }
 }
