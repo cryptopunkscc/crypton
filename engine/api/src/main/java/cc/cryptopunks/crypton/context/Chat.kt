@@ -22,30 +22,25 @@ data class Chat(
 
     interface Service : Connectable {
 
-        data class MessagesRead(val messages: List<Message>) : In
+        data class MessagesRead(val messages: List<Message>)
 
-        data class SendMessage(val text: String) : In
+        data class SendMessage(val text: String)
 
-        sealed class Option : In {
-            abstract val message: Message
+        data class Copy(val message: Message)
 
-            data class Copy(override val message: Message) : Option()
-        }
+        data class SubscribePagedMessages(override var enable: Boolean) : Subscription
 
-        object Subscribe {
-            object PagedMessages : In
-            data class ListMessages(
-                val from: Long = 0,
-                val to: Long = System.currentTimeMillis()
-            ) : In
-            object LastMessage
-        }
+        data class SubscribeLastMessage(override var enable: Boolean) : Subscription
 
-        object Get {
-            object ListMessages : In
-        }
+        data class SubscribeListMessages(
+            override var enable: Boolean = true,
+            val from: Long = 0,
+            val to: Long = System.currentTimeMillis()
+        ) : Subscription
 
-        data class CreateChat(val address: Address) : In
+        object GetMessages
+
+        data class CreateChat(val address: Address)
 
         data class MessageText(val text: CharSequence?) : Out
 
@@ -62,7 +57,6 @@ data class Chat(
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
 
-        interface Create : (Chat) -> Chat
         interface EventFlow : Flow<Event>
     }
 
@@ -77,4 +71,8 @@ data class Chat(
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>
         fun flowList(): Flow<List<Chat>>
     }
+}
+
+interface Subscription {
+    var enable: Boolean
 }

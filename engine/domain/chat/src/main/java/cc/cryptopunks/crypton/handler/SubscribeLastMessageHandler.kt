@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-fun Session.subscribeLastMessage() = handle<Chat.Service.Subscribe.LastMessage> { output ->
+fun Session.subscribeLastMessage() = handle<Chat.Service.SubscribeLastMessage> { output ->
     scope.launch {
         flowOf(
             messageRepo.list().asFlow(),

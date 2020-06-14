@@ -4,11 +4,10 @@ import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Chat.Service.Get
+import cc.cryptopunks.crypton.context.Chat.Service.GetMessages
 import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
-import cc.cryptopunks.crypton.context.Chat.Service.Option
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
-import cc.cryptopunks.crypton.context.Chat.Service.Subscribe
+import cc.cryptopunks.crypton.context.Chat.Service.SubscribePagedMessages
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
@@ -56,9 +55,9 @@ class ChatService internal constructor(
                 is Actor.Start,
                 is Actor.Connected -> popClipboardMessage()?.out()
                 is MessagesRead -> markMessagesAsRead(it.messages)
-                is Option.Copy -> clipboardSys.setClip(it.message.text)
-                is Subscribe.PagedMessages -> collectPagedMessages(output)
-                is Get.ListMessages -> messageList(chat).out()
+                is Chat.Service.Copy -> clipboardSys.setClip(it.message.text)
+                is SubscribePagedMessages -> collectPagedMessages(output)
+                is GetMessages -> messageList(chat).out()
                 else -> handlers.dispatch(it, output)
             }
         }

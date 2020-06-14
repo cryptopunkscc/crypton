@@ -26,7 +26,7 @@ internal fun createMessageEventBroadcast(
     scope: CoroutineScope,
     chatManager: ChatManager,
     omemoManager: OmemoManager
-): BroadcastChannel<Message.Net.Event> = callbackFlow {
+): BroadcastChannel<Message.Net.Event> = callbackFlow<MessageEvent> {
 
     val incomingListener = incomingListener()
     val omemoListener = omemoListener()
