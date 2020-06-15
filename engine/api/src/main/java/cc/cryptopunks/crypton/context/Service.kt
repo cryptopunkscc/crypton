@@ -20,6 +20,10 @@ interface Service : CoroutineScope {
     }
 }
 
+interface Subscription {
+    var enable: Boolean
+}
+
 typealias Out = Connectable.Output
 
 interface Connectable : Service {

@@ -90,10 +90,6 @@ data class Chat(
     }
 }
 
-interface Subscription {
-    var enable: Boolean
-}
-
 suspend fun Session.createChat(data: Chat.Service.CreateChatData) =
     data.run {
         log.d("Chat $users creating")
