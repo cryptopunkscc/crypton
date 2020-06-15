@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.roster.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
@@ -43,13 +44,16 @@ class RosterView(
     override fun Connector.connect(): Job = launch {
         log.d("Connect")
         launch {
-            input.filterIsInstance<Roster.Service.PagedItems>().collect {
-                log.d("Received ${it.items.size} items")
-                rosterAdapter.submitList(it.items)
+            input.filterIsInstance<Roster.Service.Items>().collect {
+                log.d("Received ${it.list.size} items")
+                rosterAdapter.submitList(it.list)
             }
         }
         launch {
-            Roster.Service.GetPagedItems.out()
+            Roster.Service.SubscribeItems(true).out()
+        }
+        launch {
+            rosterAdapter.clicks.asFlow().collect(output)
         }
     }
 

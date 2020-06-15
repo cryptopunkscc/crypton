@@ -16,7 +16,7 @@ import cc.cryptopunks.crypton.module.AccountDomainModule
 import cc.cryptopunks.crypton.service.ChatService
 import cc.cryptopunks.crypton.module.CommonDomainModule
 import cc.cryptopunks.crypton.service.CreateChatService
-import cc.cryptopunks.crypton.module.RosterDomainModule
+import cc.cryptopunks.crypton.service.RosterService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -39,9 +39,7 @@ internal class ServiceFactory(
 
         Dashboard -> null
 
-        Roster -> RosterDomainModule(
-            appCore = appCore
-        ).rosterService
+        Roster -> RosterService(appCore)
 
         AccountList -> AccountDomainModule(
             appCore = appCore

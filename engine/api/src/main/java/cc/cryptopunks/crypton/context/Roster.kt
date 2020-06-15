@@ -16,10 +16,10 @@ object Roster {
 
     object Service {
 
-        object GetPagedItems
-        data class PagedItems(val items: PagedList<Connectable>)
+        data class Select(val item: Item)
 
         object GetItems
+        data class SubscribeItems(override var enable: Boolean) : Subscription
         data class Items(val list: List<Item>)
     }
 
