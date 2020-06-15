@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.context
 
-import androidx.paging.PagedList
 import kotlinx.coroutines.flow.Flow
 
 object Roster {
@@ -16,6 +15,7 @@ object Roster {
 
     object Service {
 
+        data class AcceptSubscription(val account: Address, val accept: Address)
         data class Select(val item: Item)
 
         object GetItems

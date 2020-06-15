@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.dispatch
 import cc.cryptopunks.crypton.context.plus
 import cc.cryptopunks.crypton.handler.handleGetRosterItems
 import cc.cryptopunks.crypton.handler.handleRosterItemsSubscription
+import cc.cryptopunks.crypton.handler.handleSubscriptionAccept
 import cc.cryptopunks.crypton.selector.PresenceFlowSelector
 import cc.cryptopunks.crypton.selector.RosterItemStateFlowSelector
 import cc.cryptopunks.crypton.selector.RosterItemStateListFlowSelector
@@ -34,6 +35,7 @@ class RosterService(
         createHandlers {
             plus(handleGetRosterItems(rosterItemsStore))
             plus(handleRosterItemsSubscription(rosterListFlowSelector, rosterItemsStore))
+            plus(handleSubscriptionAccept(sessionStore))
         }
     }
 

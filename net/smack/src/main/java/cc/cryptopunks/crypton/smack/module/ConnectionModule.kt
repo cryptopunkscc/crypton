@@ -152,7 +152,10 @@ internal class ConnectionModule(
                 org.jivesoftware.smack.packet.Presence.Type.fromString(
                     presence.status.name.toLowerCase()
                 )
-            )
+            ).apply {
+                if (presence.status == Presence.Status.Subscribed)
+                    to = presence.resource.address.bareJid()
+            }
         )
     }
 
