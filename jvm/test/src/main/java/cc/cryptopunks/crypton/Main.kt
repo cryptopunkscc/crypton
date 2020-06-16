@@ -1,8 +1,16 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.context.Account
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Presence
+import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.util.Log
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 fun main() {
     Log.init(JvmLog)
@@ -17,36 +25,26 @@ fun main() {
                 startClient1()
             },
             launch {
-                delay(200)
+                delay(1000)
                 startClient2()
             }
         ).joinAll()
     }
 }
 
+object Client1
+object Client2
 private const val test1 = "test3"
 private const val test2 = "test4"
+private const val pass = "pass"
+private const val domain = "janek-latitude"
+private val address1 = Address(test1, domain)
+private val address2 = Address(test2, domain)
 
-suspend fun startClient1() = connectClient {
+suspend fun startClient1() = Client1.connectClient {
     openSubscription()
     log.d("Start client 1")
-    send(
-        Route.Login,
-        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
-        Account.Service.Set(Account.Field.UserName, test1),
-        Account.Service.Set(Account.Field.Password, "test"),
-        Account.Service.Login
-    )
-    waitFor<Account.Service.Status> {
-        address.id == "$test1@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error)
-    }.let { status ->
-        if (status is Account.Service.Error) {
-            send(Account.Service.Register)
-            waitFor<Account.Service.Connected> {
-                address.id == "$test1@janek-latitude"
-            }
-        }
-    }
+    loginOrRegister(test1, pass)
     send(
         Route.CreateChat().apply {
             accountId = "$test1@janek-latitude"
@@ -68,29 +66,20 @@ suspend fun startClient1() = connectClient {
     log.d("Stop client 1")
 }
 
-suspend fun startClient2() = connectClient {
+suspend fun startClient2() = Client2.connectClient {
     openSubscription()
     log.d("Start client 2")
+    loginOrRegister(test2, pass)
     send(
-        Route.Login,
-        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
-        Account.Service.Set(Account.Field.UserName, test2),
-        Account.Service.Set(Account.Field.Password, "test"),
-        Account.Service.Login
+        Route.Roster,
+        Roster.Service.SubscribeItems(true)
     )
-    waitFor<Account.Service.Status> {
-        address.id == "$test2@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error)
-    }.let { status ->
-        if (status is Account.Service.Error) {
-            send(Account.Service.Register)
-            waitFor<Account.Service.Connected> {
-                address.id == "$test2@janek-latitude"
-            }
-        }
-    }
-    send(Route.Roster)
     waitFor<Roster.Service.Items> {
-        list.any { it.message.chatAddress.local == test1 }
+        list.any { it.presence == Presence.Status.Subscribe }
+    }
+    send(Roster.Service.AcceptSubscription(address2, address1))
+    waitFor<Roster.Service.Items> {
+        list.any { it.presence != Presence.Status.Subscribe }
     }
     send(
         Route.Chat().apply {
@@ -103,3 +92,38 @@ suspend fun startClient2() = connectClient {
     flush()
     log.d("Stop client 2")
 }
+
+
+suspend fun ClientDsl.loginOrRegister(
+    local: String,
+    password: String
+) {
+    send(
+        Route.Login,
+        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
+        Account.Service.Set(Account.Field.UserName, local),
+        Account.Service.Set(Account.Field.Password, password)
+    )
+    var command: Any = Account.Service.Login
+    send(command)
+    while (true) {
+        val status = waitFor<Account.Service.Status> {
+            (address.id == "$local@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error))
+        }
+        when (status) {
+            is Account.Service.Error -> when {
+                status.message?.contains("wait") == true -> {
+                    delay(10000)
+                    send(command)
+                }
+                status.message?.contains("not-authorized") == true -> {
+                    command = Account.Service.Register
+                    send(command)
+                }
+            }
+            is Account.Service.Connected -> return
+            else -> Unit
+        }
+    }
+}
+

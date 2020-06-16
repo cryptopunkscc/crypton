@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.interactor
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Session
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 
 internal suspend fun Session.flushQueuedMessages() =
     flushQueuedMessages { true }
@@ -17,10 +17,8 @@ internal suspend fun Session.flushQueuedMessages(
 internal suspend fun Session.flushQueuedMessages(
     filter: (Message) -> Boolean
 ) {
-    log.d("Start")
-
-    messageRepo.queuedListFlow().collect { list: List<Message> ->
-        log.d("Flush queue $list")
+    messageRepo.queuedListFlow().first().let { list: List<Message> ->
+        log.d("Flush pending messages $list")
         list.filter(filter).forEach { message ->
             sendMessage(message)
         }

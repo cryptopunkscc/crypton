@@ -20,7 +20,7 @@ internal class SaveMessagesInteractor(
     }
 
     suspend operator fun invoke(message: Message) {
-        message.calculateId().run {
+        message.run {
             get() ?: create()
         }.let { prepared ->
             session.messageRepo.run {
@@ -35,7 +35,9 @@ internal class SaveMessagesInteractor(
     private suspend fun Message.get() = session.messageRepo.run {
         get(id)?.also {
             delete(it)
-        }
+        }?.copy(
+            status = status
+        )
     }
 
     private suspend fun Message.create() = copy(

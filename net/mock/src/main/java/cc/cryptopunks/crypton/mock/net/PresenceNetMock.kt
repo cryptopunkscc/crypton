@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.mock.net
 
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.mock.MockState
 
@@ -9,4 +10,5 @@ class PresenceNetMock(
 
     override fun sendPresence(presence: Presence) = Unit
     override fun getCachedPresences(): List<Presence> = emptyList()
+    override fun iAmSubscribed(address: Address): Boolean = false
 }

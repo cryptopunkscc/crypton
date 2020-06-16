@@ -9,6 +9,7 @@ data class Presence(
     interface Net {
         fun sendPresence(presence: Presence)
         fun getCachedPresences(): List<Presence>
+        fun iAmSubscribed(address: Address): Boolean
     }
 
     class Store : OpenStore<Map<Address, Presence>>(emptyMap())

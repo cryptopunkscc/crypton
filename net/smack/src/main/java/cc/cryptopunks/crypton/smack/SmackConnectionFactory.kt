@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.smack
 
 import cc.cryptopunks.crypton.context.Connection
+import cc.cryptopunks.crypton.smack.module.createConnection
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.omemo.OmemoConfiguration
@@ -25,7 +26,7 @@ class SmackConnectionFactory(
 
     private val factoryConfig = Connection.Factory.Config().setup()
 
-    override fun invoke(config: Connection.Config): Connection = SmackConnection(
+    override fun invoke(config: Connection.Config): Connection = createConnection(
         scope = config.scope,
         address = config.address,
         configuration = connectionConfig

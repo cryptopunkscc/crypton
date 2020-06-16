@@ -20,15 +20,28 @@ internal fun Session.handlePresenceChange(
         when (presence.status) {
 
             Presence.Status.Subscribe ->
-                createChat(
-                    Chat.Service.CreateChatData(
-                        title = presence.resource.address.toString(),
-                        users = listOf(presence.resource.address)
+                if (iAmSubscribed(presence.resource.address)) {
+                    log.d("Auto accepting feedback subscription from ${presence.resource}")
+                    sendPresence(
+                        Presence(
+                            resource = presence.resource,
+                            status = Presence.Status.Subscribed
+                        )
                     )
-                )
+                } else {
+                    log.d("Received subscription request from ${presence.resource}")
+                    createChat(
+                        Chat.Service.CreateChatData(
+                            title = presence.resource.address.toString(),
+                            users = listOf(presence.resource.address)
+                        )
+                    )
+                }
 
-            Presence.Status.Subscribed ->
+            Presence.Status.Subscribed -> {
+                log.d("${presence.resource} accepted subscription")
                 flushQueuedMessages(presence.resource.address)
+            }
 
             else -> Unit
         }

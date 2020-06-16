@@ -80,6 +80,7 @@ data class Chat(
 
     interface Repo {
         suspend fun get(address: Address): Chat
+        suspend fun contains(address: Address): Boolean
         suspend fun list(addresses: List<Address>): List<Chat>
         suspend fun insert(chat: Chat)
         suspend fun insertIfNeeded(chat: Chat)

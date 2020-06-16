@@ -31,6 +31,9 @@ class ChatRepo : Chat.Repo {
     override suspend fun get(address: Address): Chat =
         store.get()[address] ?: throw Exception("Not chat for address $address: ${store.get().keys}")
 
+    override suspend fun contains(address: Address): Boolean =
+        store.get().contains(address)
+
     override suspend fun list(addresses: List<Address>): List<Chat> =
         (store.get() - addresses).values.toList()
 

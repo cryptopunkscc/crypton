@@ -34,7 +34,7 @@ internal fun createSendMessage(
     log.d("$id checking subscription")
     if (!roster.iAmSubscribedTo(toJid) && fromJid != toJid) {
         roster.createEntry(toJid, message.to.address.local, emptyArray())
-        log.d("$id subscribed")
+        log.d("$id subscribe")
     } else {
         log.d("$id encrypting")
         val smackMessage = omemoManager
