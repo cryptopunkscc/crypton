@@ -13,12 +13,15 @@ internal fun Forwarded.toCryptonMessage() = (forwardedStanza as Message)
 internal fun Message.toCryptonMessage(
     timestamp: Long = System.currentTimeMillis()
 ) = CryptonMessage(
+    id = stanzaElementId(),
     text = body ?: "",
     from = from.resourceId(),
     to = to.resourceId(),
     timestamp = timestamp,
-    stanzaId = extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: stanzaId ?: ""
+    stanzaId = stanzaElementId()
 )
+
+internal fun Message.stanzaElementId() = extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: stanzaId ?: ""
 
 internal fun String.resourceId() = JidCreate.from(toString()).resourceId()
 

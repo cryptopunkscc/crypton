@@ -14,8 +14,14 @@ internal fun handleSubscriptionAccept(
         scope.launch {
             sendPresence(
                 Presence(
-                    resource = Resource(address),
+                    resource = Resource(accepted),
                     status = Presence.Status.Subscribed
+                )
+            )
+            sendPresence(
+                Presence(
+                    resource = Resource(accepted),
+                    status = Presence.Status.Subscribe
                 )
             )
         }

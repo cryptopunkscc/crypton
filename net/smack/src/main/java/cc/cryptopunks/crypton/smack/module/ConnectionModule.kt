@@ -21,11 +21,27 @@ import cc.cryptopunks.crypton.smack.util.SmackPresence
 import cc.cryptopunks.crypton.smack.util.bareJid
 import cc.cryptopunks.crypton.smack.util.presence
 import cc.cryptopunks.crypton.smack.util.remoteId
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Localpart
+
+
+internal fun createConnection(
+    scope: CoroutineScope,
+    address: Address,
+    configuration: XMPPTCPConnectionConfiguration
+) = ConnectionModule(
+    scope = scope,
+    address = address,
+    smack = SmackModule(
+        configuration = configuration,
+        address = address
+    )
+)
 
 internal class ConnectionModule(
     scope: CoroutineScope,
@@ -34,6 +50,7 @@ internal class ConnectionModule(
 ) : SmackCore by smack,
     Connection {
 
+    private val log = typedLog()
     private val initOmemo by lazy { InitOmemo(omemoManager) }
 
     private val outgoingMessageCache by lazy {
@@ -153,11 +170,17 @@ internal class ConnectionModule(
                     presence.status.name.toLowerCase()
                 )
             ).apply {
-                if (presence.status == Presence.Status.Subscribed)
-                    to = presence.resource.address.bareJid()
+                when (presence.status) {
+                    Presence.Status.Subscribed,
+                    Presence.Status.Subscribe -> to = presence.resource.address.bareJid()
+                }
+            }.also {
+                log.d("Sending $presence")
             }
         )
     }
+
+    override fun iAmSubscribed(address: Address) = roster.iAmSubscribedTo(address.bareJid())
 
     override suspend fun sendMessage(message: Message) = sendMessage.invoke(message)
 

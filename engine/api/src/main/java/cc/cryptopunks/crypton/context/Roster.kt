@@ -15,7 +15,7 @@ object Roster {
 
     object Service {
 
-        data class AcceptSubscription(val account: Address, val accept: Address)
+        data class AcceptSubscription(val account: Address, val accepted: Address)
         data class Select(val item: Item)
 
         object GetItems

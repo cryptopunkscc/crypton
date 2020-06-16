@@ -2,15 +2,19 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.TypedLog
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.withTimeout
 import kotlin.coroutines.CoroutineContext
 
 class ClientDsl(
@@ -38,7 +42,8 @@ class ClientDsl(
     }
 
     fun output() = when {
-        subscription.isClosedForReceive.not() -> subscription
+//        subscription.isClosedForReceive.not() -> subscription TODO
+        subscription.isClosedForReceive.not() -> input.openSubscription()
         else -> input.openSubscription()
     }.consumeAsFlow()
 
@@ -65,6 +70,6 @@ class ClientDsl(
         crossinline filter: T.() -> Boolean = { true }
     ): T = withTimeout(timeout) {
         flush()
-        output().filterIsInstance<T>().filter { it.filter() }.first()
+        output().filterIsInstance<T>().first { it.filter() }
     }
 }
