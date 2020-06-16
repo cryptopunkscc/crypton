@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.view.CreateChatView
 class CreateChatFragment : ServiceFragment() {
 
     override fun onCreatePresenter() =
-        CreateChatService(appCore.sessionCore())
+        CreateChatService(appScope.sessionScope())
 
     override fun onCreateView(
         inflater: LayoutInflater,

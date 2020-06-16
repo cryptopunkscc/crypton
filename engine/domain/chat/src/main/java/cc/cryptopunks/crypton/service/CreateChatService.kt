@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
-import cc.cryptopunks.crypton.context.SessionCore
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createHandlers
 import cc.cryptopunks.crypton.context.dispatch
 import cc.cryptopunks.crypton.context.plus
@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CreateChatService(
-    sessionCore: SessionCore
-) : SessionCore by sessionCore,
+    sessionScope: SessionScope
+) : SessionScope by sessionScope,
     Connectable {
 
     private val handlers by lazy {

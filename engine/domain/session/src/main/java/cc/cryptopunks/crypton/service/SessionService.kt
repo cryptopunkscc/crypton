@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.context.SessionCore
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.collect
 import cc.cryptopunks.crypton.handler.handleApiEvent
 import cc.cryptopunks.crypton.handler.handleOmemoInitialized
@@ -20,9 +20,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SessionService(
-    sessionCore: SessionCore
+    sessionScope: SessionScope
 ) :
-    SessionCore by sessionCore,
+    SessionScope by sessionScope,
     Session.BackgroundService {
 
     private val log = typedLog()
@@ -52,7 +52,7 @@ class SessionService(
     }
 
 
-    private val unreadMessages by lazy { UnreadMessagesSelector(sessionCore.messageRepo) }
+    private val unreadMessages by lazy { UnreadMessagesSelector(sessionScope.messageRepo) }
 
     private val updateChatNotification by lazy {
         UpdateChatNotificationInteractor(

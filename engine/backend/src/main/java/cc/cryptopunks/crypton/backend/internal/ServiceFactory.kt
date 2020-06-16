@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.backend.internal
 
-import cc.cryptopunks.crypton.context.AppCore
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Route.AccountList
@@ -21,45 +21,45 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 internal class ServiceFactory(
-    private val appCore: AppCore
+    private val appScope: AppScope
 ): (Route) -> Connectable? {
     override fun invoke(route: Route): Connectable? = when (route) {
 
         SetAccount -> CommonDomainModule(
-            appCore = appCore
+            appScope = appScope
         ).routerService
 
         Login -> AccountDomainModule(
-            appCore = appCore
+            appScope = appScope
         ).createAccountService
 
         Register -> AccountDomainModule(
-            appCore = appCore
+            appScope = appScope
         ).createAccountService
 
         Dashboard -> null
 
-        Roster -> RosterService(appCore)
+        Roster -> RosterService(appScope)
 
         AccountList -> AccountDomainModule(
-            appCore = appCore
+            appScope = appScope
         ).accountListService
 
         AccountManagement -> null
 
         is CreateChat -> CreateChatService(
-            sessionCore = appCore.sessionCore(
+            sessionScope = appScope.sessionScope(
                 address = CreateChat(route.data).accountAddress
             )
         )
 
         is Chat -> ChatService(
-            chatCore = runBlocking {
+            chatScope = runBlocking {
                 delay(100)
-                appCore.sessionCore(
+                appScope.sessionScope(
                     address = Chat(route.data).accountAddress
                 ).run {
-                    chatCore(chatRepo.get(Chat(route.data).address))
+                    chatScope(chatRepo.get(Chat(route.data).address))
                 }
             }
         )

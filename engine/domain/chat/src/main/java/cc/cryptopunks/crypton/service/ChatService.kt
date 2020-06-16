@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.ChatCore
+import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.createHandlers
@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ChatService(
-    chatCore: ChatCore
-) : ChatCore by chatCore,
+    chatScope: ChatScope
+) : ChatScope by chatScope,
     Connectable {
 
     private val log = typedLog()

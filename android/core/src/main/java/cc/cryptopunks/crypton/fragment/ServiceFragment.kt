@@ -17,7 +17,7 @@ abstract class ServiceFragment :
     Connectable {
 
     protected val binding: Connectable.Binding by lazy {
-        runBlocking { appCore.connectableBindingsStore.createBinding() }
+        runBlocking { appScope.connectableBindingsStore.createBinding() }
     }
 
     protected val viewProxy = ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
@@ -59,7 +59,7 @@ abstract class ServiceFragment :
             viewProxy.cancel()
             binding.cancel()
             log.d("binding canceled")
-            appCore.connectableBindingsStore.remove(binding)
+            appScope.connectableBindingsStore.remove(binding)
             log.d("binding removed")
         }
         log.d("destroyed")

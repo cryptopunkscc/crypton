@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.module
 
-import cc.cryptopunks.crypton.context.AppCore
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.factory.SessionFactory
@@ -17,8 +17,8 @@ import cc.cryptopunks.crypton.service.AppService
 import cc.cryptopunks.crypton.service.MainNavigationService
 
 class AppDomainModule(
-    private val appCore: AppCore
-) : AppCore by appCore {
+    private val appScope: AppScope
+) : AppScope by appScope {
 
     val appService by lazy {
         val scope = Service.Scope()
@@ -41,7 +41,7 @@ class AppDomainModule(
                 )
             ),
             newSessionsFlow = NewSessionsFlowSelector(sessionStore),
-            invokeSessionServices = InvokeSessionServicesInteractor(appCore)
+            invokeSessionServices = InvokeSessionServicesInteractor(appScope)
         )
     }
 

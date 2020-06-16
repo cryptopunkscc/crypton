@@ -22,7 +22,7 @@ class App :
 
     private val mainActivityClass = MainActivity::class
 
-    override val core by lazy {
+    override val scope by lazy {
         AppModule(
             mainClass = mainActivityClass,
             mainExecutor = MainExecutor(Dispatchers.Main.asExecutor()),
@@ -38,8 +38,8 @@ class App :
                 )
             ),
             createConnection = MockConnectionFactory(),
-            createSessionServices = { sessionCore ->
-                listOf(SessionService(sessionCore))
+            createSessionServices = { sessionScope ->
+                listOf(SessionService(sessionScope))
             }
         )
     }
@@ -52,7 +52,7 @@ class App :
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
 //        initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        AppDomainModule(core).appService()
+        AppDomainModule(scope).appService()
     }
 
     private companion object {

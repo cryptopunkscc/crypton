@@ -21,7 +21,7 @@ class DashboardFragment :
     }
 
     override fun onCreatePresenter() = CommonDomainModule(
-        appCore = appCore
+        appScope = appScope
     ).routerService
 
     override fun onCreateActor(view: View) = DashboardView(

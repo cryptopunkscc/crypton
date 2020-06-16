@@ -1,5 +1,5 @@
 package cc.cryptopunks.crypton.context
 
 interface Engine {
-    val core: AppCore
+    val scope: AppScope
 }

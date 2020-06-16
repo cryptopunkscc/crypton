@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.context
 import cc.cryptopunks.crypton.util.Executors
 import kotlin.reflect.KClass
 
-interface AppCore :
+interface AppScope :
     Executors,
     Sys,
     Repo {
@@ -16,28 +16,28 @@ interface AppCore :
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
 
-    val createSessionServices: (SessionCore) -> List<Session.BackgroundService>
+    val createSessionServices: (SessionScope) -> List<Session.BackgroundService>
     val createConnection: Connection.Factory
 
-    fun sessionCore(): SessionCore
-    fun sessionCore(address: Address): SessionCore
-    fun sessionCore(session: Session): SessionCore
+    fun sessionScope(): SessionScope
+    fun sessionScope(address: Address): SessionScope
+    fun sessionScope(session: Session): SessionScope
 }
 
-interface SessionCore :
-    AppCore,
+interface SessionScope :
+    AppScope,
     SessionRepo,
     Net {
 
     val session: Session
     val sessionScope: Session.Scope
     val sessionBackgroundServices: List<Session.BackgroundService>
-    fun chatCore(chat: Chat): ChatCore
-    suspend fun chatCore(chat: Address): ChatCore
+    fun chatScope(chat: Chat): ChatScope
+    suspend fun chatScope(chat: Address): ChatScope
 }
 
-interface ChatCore :
-    SessionCore {
+interface ChatScope :
+    SessionScope {
 
     val chat: Chat
 }

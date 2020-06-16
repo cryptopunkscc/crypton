@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 class AccountNavigationFragment : FeatureFragment() {
 
     private val accountNavigationService
-        get() = AccountDomainModule(appCore).accountNavigationService
+        get() = AccountDomainModule(appScope).accountNavigationService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

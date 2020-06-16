@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.view.CreateAccountView
 class LoginAccountFragment : ServiceFragment() {
 
     override fun onCreatePresenter() = AccountDomainModule(
-        appCore = appCore
+        appScope = appScope
     ).createAccountService
 
     override fun onCreateView(

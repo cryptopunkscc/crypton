@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.backend.BackendService
-import cc.cryptopunks.crypton.context.AppCore
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.service.SessionService
@@ -32,7 +32,7 @@ private val createConnectionFactory = SmackConnectionFactory {
     )
 }
 
-private val core: AppCore by lazy {
+private val SCOPE: AppScope by lazy {
     AppModule(
         sys = JvmSys(),
         repo = MockRepo(),
@@ -41,8 +41,8 @@ private val core: AppCore by lazy {
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
 //        createConnection = MockConnectionFactory(),
         createConnection = createConnectionFactory,
-        createSessionServices = { sessionCore ->
-            listOf(SessionService(sessionCore))
+        createSessionServices = { sessionScope ->
+            listOf(SessionService(sessionScope))
         }
     )
 }
@@ -50,7 +50,7 @@ private val core: AppCore by lazy {
 suspend fun startServer() = coroutineScope {
     initSmack(File("./omemo_store"))
     startServerSocket().run {
-        val service = BackendService(core)
+        val service = BackendService(SCOPE)
         while (true) {
             val socket = accept()
             log.d("Socket accepted: ${socket.remoteAddress}")

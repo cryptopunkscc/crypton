@@ -10,11 +10,11 @@ class AppModule(
     val repo: Repo,
     override val mainClass: KClass<*>,
     override val createConnection: Connection.Factory,
-    override val createSessionServices: (SessionCore) -> List<Session.BackgroundService>,
+    override val createSessionServices: (SessionScope) -> List<Session.BackgroundService>,
     override val mainExecutor: MainExecutor,
     override val ioExecutor: IOExecutor
 ) :
-    AppCore,
+    AppScope,
     Executors,
     Sys by sys,
     Repo by repo {
@@ -24,29 +24,29 @@ class AppModule(
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
     override val navigate = Route.Navigate(routeSys)
-    override fun sessionCore(): SessionCore = sessionCore(sessionStore.get().values.first())
-    override fun sessionCore(address: Address): SessionCore = sessionCore(sessionStore.get()[address]!!)
-    override fun sessionCore(session: Session): SessionCore = SessionModule(this, session)
+    override fun sessionScope(): SessionScope = sessionScope(sessionStore.get().values.first())
+    override fun sessionScope(address: Address): SessionScope = sessionScope(sessionStore.get()[address]!!)
+    override fun sessionScope(session: Session): SessionScope = SessionModule(this, session)
 }
 
 private data class SessionModule(
-    val appCore: AppCore,
+    val appScope: AppScope,
     override val session: Session
 ) :
-    SessionCore,
-    AppCore by appCore,
+    SessionScope,
+    AppScope by appScope,
     Net by session,
     SessionRepo by session {
 
     override val sessionScope = Session.Scope()
     override val sessionBackgroundServices by lazy { createSessionServices(this) }
-    override fun chatCore(chat: Chat): ChatCore = ChatModule(this, chat)
-    override suspend fun chatCore(chatAddress: Address): ChatCore = chatCore(chatRepo.get(chatAddress))
+    override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
+    override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
 }
 
 private class ChatModule(
-    sessionCore: SessionCore,
+    sessionScope: SessionScope,
     override val chat: Chat
 ) :
-    SessionCore by sessionCore,
-    ChatCore
+    SessionScope by sessionScope,
+    ChatScope

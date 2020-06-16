@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.module
 
-import cc.cryptopunks.crypton.context.AppCore
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.interactor.AddAccountInteractor
 import cc.cryptopunks.crypton.interactor.DeleteAccountInteractor
@@ -11,8 +11,8 @@ import cc.cryptopunks.crypton.service.AccountNavigationService
 import cc.cryptopunks.crypton.service.CreateAccountService
 
 class AccountDomainModule(
-    appCore: AppCore
-) : AppCore by appCore {
+    appScope: AppScope
+) : AppScope by appScope {
 
     val createAccountService by lazy {
         CreateAccountService(

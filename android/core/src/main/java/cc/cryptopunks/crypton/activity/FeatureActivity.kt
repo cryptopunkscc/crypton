@@ -14,7 +14,7 @@ abstract class FeatureActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         setSupportActionBar(toolbar)
-        scope.launch { appCore.routeSys.bind(navController) }
+        scope.launch { appScope.routeSys.bind(navController) }
     }
 
     override fun onStop() {
