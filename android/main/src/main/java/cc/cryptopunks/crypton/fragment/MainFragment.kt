@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 
 class MainFragment : FeatureFragment() {
 
-    private val core get() = AppDomainModule(appCore)
+    private val core get() = AppDomainModule(appScope)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

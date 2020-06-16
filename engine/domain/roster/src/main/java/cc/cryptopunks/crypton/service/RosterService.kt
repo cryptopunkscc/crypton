@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.AppCore
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Roster
@@ -21,8 +21,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RosterService(
-    appCore: AppCore
-) : AppCore by appCore,
+    appScope: AppScope
+) : AppScope by appScope,
     Connectable {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.Unconfined

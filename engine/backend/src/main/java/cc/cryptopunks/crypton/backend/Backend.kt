@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.backend.internal.ServiceFactory
 import cc.cryptopunks.crypton.backend.internal.dropBindingInteractor
 import cc.cryptopunks.crypton.backend.internal.getTopBindingSelector
 import cc.cryptopunks.crypton.backend.internal.requestBindingInteractor
-import cc.cryptopunks.crypton.context.AppCore
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.module.AppDomainModule
@@ -17,8 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
 class Backend(
-    appCore: AppCore
-) : AppCore by appCore {
+    appScope: AppScope
+) : AppScope by appScope {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
 

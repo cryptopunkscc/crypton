@@ -14,7 +14,7 @@ import cc.cryptopunks.crypton.view.RosterView
 class MainActivity : FeatureActivity() {
 
     private val processIntent by lazy {
-        IntentProcessor(appCore.clipboardRepo)
+        IntentProcessor(appScope.clipboardRepo)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +38,7 @@ class MainActivity : FeatureActivity() {
     override fun onBackPressed() {
         // prevent activity from leaking due to android bug
         // https://issuetracker.google.com/issues/139738913
-        appCore.connectableBindingsStore.top()?.run {
+        appScope.connectableBindingsStore.top()?.run {
             if (services.any { it is RosterView })
                 finishAfterTransition() else
                 super.onBackPressed()

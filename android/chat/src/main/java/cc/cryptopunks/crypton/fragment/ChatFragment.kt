@@ -24,9 +24,9 @@ class ChatFragment : ServiceFragment() {
             val chatAddress = route.address
             setTitle(chatAddress)
             binding + ChatService(
-                chatCore = appCore
-                    .sessionCore(accountAddress)
-                    .chatCore(chatAddress)
+                chatScope = appScope
+                    .sessionScope(accountAddress)
+                    .chatScope(chatAddress)
             )
         }
     }

@@ -17,7 +17,7 @@ class AccountListFragment : ServiceFragment() {
     }
 
     override fun onCreatePresenter() = AccountDomainModule(
-        appCore = appCore
+        appScope = appScope
     ).accountListService
 
     override fun onCreateView(

@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.view.AddAccountView
 class AddAccountFragment : ServiceFragment() {
 
     override fun onCreatePresenter() = CommonDomainModule(
-        appCore = appCore
+        appScope = appScope
     ).routerService
 
     override fun onCreateView(
