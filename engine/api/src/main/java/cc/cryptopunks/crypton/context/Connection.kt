@@ -16,14 +16,14 @@ interface Connection : Net {
             val hostAddress: String? = null,
             val securityMode: SecurityMode = SecurityMode.ifpossible
         ) {
-            companion object {
-                val Empty = Config()
-            }
-
             enum class SecurityMode {
                 required,
                 ifpossible,
                 disabled
+            }
+
+            companion object {
+                val Empty = Config()
             }
         }
     }
