@@ -9,16 +9,16 @@ include ':engine:api',
         ':engine:util:paging',
         ':engine:util:service',
 
+        ':engine:mock:sys',
+        ':engine:mock:net',
+        ':engine:mock:repo',
+
         ':engine:domain:app',
         ':engine:domain:common',
         ':engine:domain:session',
         ':engine:domain:account',
         ':engine:domain:roster',
         ':engine:domain:chat',
-
-        ':mock:sys',
-        ':mock:net',
-        ':mock:repo',
 
         ':net:smack:android',
         ':net:smack:jvm',
