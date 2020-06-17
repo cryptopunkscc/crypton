@@ -11,8 +11,9 @@ compileTestKotlin {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api project(':repo:mock')
-    api project(':net:mock')
+    api project(':mock:repo')
+    api project(':mock:net')
+    api project(':mock:sys')
     api project(':net:smack:jvm')
     api project(':engine:backend')
     api project(':engine:util:json')
