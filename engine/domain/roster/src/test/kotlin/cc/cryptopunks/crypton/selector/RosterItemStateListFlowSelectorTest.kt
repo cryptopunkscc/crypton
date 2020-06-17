@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.User
-import cc.cryptopunks.crypton.mock.net.MockConnectionFactory
+import cc.cryptopunks.crypton.mock.MockConnectionFactory
 import cc.cryptopunks.crypton.util.Log
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
@@ -27,7 +27,8 @@ class RosterItemStateListFlowSelectorTest {
 
     private val sessionRepos = (0..1).map { MockSessionRepo() }
 
-    private val createConnection = MockConnectionFactory()
+    private val createConnection =
+        MockConnectionFactory()
 
     private val sessionScopes = (0..1).map { Session.Scope() }
     private val connections = (0..1).map {

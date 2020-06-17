@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
-import cc.cryptopunks.crypton.mock.net.MockConnectionFactory
+import cc.cryptopunks.crypton.mock.MockConnectionFactory
 import cc.cryptopunks.crypton.module.*
 import cc.cryptopunks.crypton.service.SessionService
 import cc.cryptopunks.crypton.service.initExceptionService

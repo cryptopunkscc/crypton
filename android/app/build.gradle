@@ -48,7 +48,7 @@ dependencies {
     implementation project(':engine:api')
     implementation project(':engine:domain:app')
     implementation project(':engine:domain:session')
-    implementation project(':mock:net')
+    implementation project(':engine:mock:net')
 //    implementation project(':net:smack:android')
     implementation project(':android:room')
     implementation project(':android:sys')
