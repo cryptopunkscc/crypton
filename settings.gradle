@@ -16,11 +16,12 @@ include ':engine:api',
         ':engine:domain:roster',
         ':engine:domain:chat',
 
+        ':mock:sys',
+        ':mock:net',
+        ':mock:repo',
+
         ':net:smack:android',
         ':net:smack:jvm',
-        ':net:mock',
-
-        ':repo:mock',
 
         ':jvm:common',
         ':jvm:translator',

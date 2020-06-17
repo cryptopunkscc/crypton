@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.backend.BackendService
+import cc.cryptopunks.crypton.backend.RouteSys
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Connection
@@ -34,7 +35,7 @@ private val createConnectionFactory = SmackConnectionFactory {
 
 private val SCOPE: AppScope by lazy {
     AppModule(
-        sys = JvmSys(),
+        sys = MockSys(routeSys = RouteSys()),
         repo = MockRepo(),
         mainClass = Nothing::class,
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
