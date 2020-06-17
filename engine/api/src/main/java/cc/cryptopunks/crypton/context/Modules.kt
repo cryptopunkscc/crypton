@@ -3,6 +3,10 @@ package cc.cryptopunks.crypton.context
 import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
+import cc.cryptopunks.crypton.util.typedLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
 class AppModule(
@@ -19,6 +23,8 @@ class AppModule(
     Sys by sys,
     Repo by repo {
 
+    override val log = typedLog()
+    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
     override val sessionStore = Session.Store()
     override val presenceStore = Presence.Store()
     override val clipboardStore = Clip.Board.Store()

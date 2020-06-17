@@ -8,5 +8,5 @@ interface Sys {
     val clipboardSys: Clip.Board.Sys
     val networkSys: Network.Sys
 
-    fun createRouteSys(): Route.Sys
+    val createRouteSys: () -> Route.Sys
 }

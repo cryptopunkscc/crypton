@@ -25,7 +25,7 @@ class SessionService(
     SessionScope by sessionScope,
     Session.BackgroundService {
 
-    private val log = typedLog()
+    override val log = typedLog()
 
     override suspend fun invoke() = coroutineScope {
         log.d("Start")

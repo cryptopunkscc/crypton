@@ -44,8 +44,9 @@ data class Account(
     interface Service {
 
         data class Set(val field: Field, val text: CharSequence)
-        object Register
-        object Login
+        interface Connect
+        object Register : Connect
+        object Login : Connect
 
         interface Status {
             val address: Address
