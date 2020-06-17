@@ -8,11 +8,11 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Sys
 
 class MockSys(
-    override val routeSys: Route.Sys = MockRouteSys(),
     override val indicatorSys: Indicator.Sys = MockIndicatorSys(),
     override val notificationSys: Notification.Sys = MockNotificationSys(),
     override val clipboardSys: Clip.Board.Sys = MockClipBoardSys(),
-    override val networkSys: Network.Sys = MockNetworkSys()
+    override val networkSys: Network.Sys = MockNetworkSys(),
+    override val createRouteSys: () -> Route.Sys = { MockRouteSys() }
 ) : Sys {
-    override fun createRouteSys(): Route.Sys = MockRouteSys()
+    override val routeSys: Route.Sys = createRouteSys()
 }

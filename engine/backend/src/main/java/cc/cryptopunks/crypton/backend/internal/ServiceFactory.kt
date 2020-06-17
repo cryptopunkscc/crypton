@@ -15,6 +15,7 @@ import cc.cryptopunks.crypton.context.Route.SetAccount
 import cc.cryptopunks.crypton.module.AccountDomainModule
 import cc.cryptopunks.crypton.service.ChatService
 import cc.cryptopunks.crypton.module.CommonDomainModule
+import cc.cryptopunks.crypton.service.CreateAccountService
 import cc.cryptopunks.crypton.service.CreateChatService
 import cc.cryptopunks.crypton.service.RosterService
 import kotlinx.coroutines.delay
@@ -29,13 +30,13 @@ internal class ServiceFactory(
             appScope = appScope
         ).routerService
 
-        Login -> AccountDomainModule(
+        Login -> CreateAccountService(
             appScope = appScope
-        ).createAccountService
+        )
 
-        Register -> AccountDomainModule(
+        Register -> CreateAccountService(
             appScope = appScope
-        ).createAccountService
+        )
 
         Dashboard -> null
 

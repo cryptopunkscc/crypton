@@ -1,13 +1,17 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.util.Executors
+import cc.cryptopunks.crypton.util.TypedLog
+import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 
 interface AppScope :
+    CoroutineScope,
     Executors,
     Sys,
     Repo {
 
+    val log: TypedLog
     val mainClass: KClass<*>
     val navigate: Route.Navigate
 

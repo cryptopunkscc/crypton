@@ -24,7 +24,7 @@ class ChatService(
 ) : ChatScope by chatScope,
     Connectable {
 
-    private val log = typedLog()
+    override val log = typedLog()
 
     private val handlers by lazy {
         createHandlers {
