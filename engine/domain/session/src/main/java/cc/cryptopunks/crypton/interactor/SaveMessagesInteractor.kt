@@ -4,47 +4,38 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChat
-import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-internal class SaveMessagesInteractor(
-    private val session: SessionScope
-) : (List<Message>) -> Job {
+internal fun SessionScope.saveMessages(messages: List<Message>) = launch {
+    messages.forEach { saveMessage(it) }
+}
 
-    private val log = typedLog()
-
-    override fun invoke(messages: List<Message>) = session.scope.launch {
-        messages.forEach { invoke(it) }
-    }
-
-    suspend operator fun invoke(message: Message) {
-        message.run {
-            get() ?: create()
-        }.let { prepared ->
-            session.messageRepo.run {
-                log.d("inserting message $message")
-                insertOrUpdate(prepared)
-                if (prepared.status == Message.Status.Received)
-                    notifyUnread()
-            }
+internal suspend fun SessionScope.saveMessage(message: Message) {
+    message.run {
+        get(message) ?: create(message)
+    }.let { prepared ->
+        messageRepo.run {
+            log.d("inserting message $message")
+            insertOrUpdate(prepared)
+            if (prepared.status == Message.Status.Received)
+                notifyUnread()
         }
     }
+}
 
-    private suspend fun Message.get() = session.messageRepo.run {
-        get(id)?.also {
-            delete(it)
-        }?.copy(
-            status = status
-        )
-    }
-
-    private suspend fun Message.create() = copy(
-        chatAddress = session.createChat(
-            Chat.Service.CreateChatData(
-                title = chatAddress.id,
-                users = listOf(getParty(session.address).address)
-            )
-        ).address
+private suspend fun SessionScope.get(message: Message) = messageRepo.run {
+    get(message.id)?.also {
+        delete(it)
+    }?.copy(
+        status = message.status
     )
 }
+
+private suspend fun SessionScope.create(message: Message) = message.copy(
+    chatAddress = createChat(
+        Chat.Service.CreateChatData(
+            title = message.chatAddress.id,
+            users = listOf(message.getParty(address).address)
+        )
+    ).address
+)

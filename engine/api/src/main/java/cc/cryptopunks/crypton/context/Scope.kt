@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.util.OpenStore
 import cc.cryptopunks.crypton.util.TypedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlin.reflect.KClass
 
@@ -23,7 +24,7 @@ interface AppScope :
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
 
-    val createSessionServices: (SessionScope) -> List<SessionScope.BackgroundService>
+    val startSessionService: (SessionScope) -> Job
     val createConnection: Connection.Factory
 
     fun sessionScope(): SessionScope
@@ -37,7 +38,6 @@ interface SessionScope :
 
     val address: Address
     val scope: CoroutineScope get() = this
-    val sessionBackgroundServices: List<SessionScope.BackgroundService>
     fun chatScope(chat: Chat): ChatScope
     suspend fun chatScope(chat: Address): ChatScope
 

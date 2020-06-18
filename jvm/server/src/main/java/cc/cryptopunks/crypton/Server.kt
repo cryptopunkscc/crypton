@@ -2,12 +2,13 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.backend.BackendService
 import cc.cryptopunks.crypton.backend.RouteSys
-import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.AppModule
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connection
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.mock.MockRepo
 import cc.cryptopunks.crypton.mock.MockSys
-import cc.cryptopunks.crypton.service.SessionService
+import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -44,9 +45,7 @@ private val appScope: AppScope by lazy {
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
 //        createConnection = MockConnectionFactory(),
         createConnection = createConnectionFactory,
-        createSessionServices = { sessionScope ->
-            listOf(SessionService(sessionScope))
-        }
+        startSessionService = SessionScope::startSessionService
     )
 }
 
