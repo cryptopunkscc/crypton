@@ -2,28 +2,24 @@ package cc.cryptopunks.crypton.handler
 
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.handle
-import cc.cryptopunks.crypton.selector.MessagePagedListFlowSelector
-import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.selector.messagePagedListFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-internal fun SessionScope.handlePageMessagesSubscription(
-    chat: Chat,
-    messageFlow: MessagePagedListFlowSelector,
-    log: TypedLog
-) = handle<Chat.Service.SubscribePagedMessages> { output ->
-    scope.launch {
-        messageFlow(chat)
-            .onEach(log.pagedMessagesReceived)
-            .map { Chat.Service.PagedMessages(address, it) }
-            .collect(output)
+internal fun ChatScope.handlePageMessagesSubscription() =
+    handle<Chat.Service.SubscribePagedMessages> { output ->
+        scope.launch {
+            messagePagedListFlow()
+                .onEach(pagedMessagesReceived)
+                .map { Chat.Service.PagedMessages(address, it) }
+                .collect(output)
+        }
     }
-}
 
-private val TypedLog.pagedMessagesReceived: suspend (PagedList<Message>) -> Unit get() =
-    { list -> d("Received ${list.size} messages") }
+private val ChatScope.pagedMessagesReceived: suspend (PagedList<Message>) -> Unit
+    get() = { list -> log.d("Received ${list.size} messages for chat $chat") }

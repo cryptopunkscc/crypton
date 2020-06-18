@@ -7,23 +7,22 @@ import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.context.handle
 import kotlinx.coroutines.launch
 
-internal fun SessionScope.handleCreateChat(
-    navigate: Route.Navigate
-) = handle<Chat.Service.CreateChat> { output ->
-    scope.launch {
-        try {
-            createChat(
-                Chat.Service.CreateChatData(
-                    title = address.id,
-                    users = listOf(address)
-                )
-            ).run {
-                Route.Chat().also {
-                    it.chatAddress = address.id
-                }.let(navigate)
+internal fun SessionScope.handleCreateChat() =
+    handle<Chat.Service.CreateChat> { output ->
+        launch {
+            try {
+                createChat(
+                    Chat.Service.CreateChatData(
+                        title = address.id,
+                        users = listOf(address)
+                    )
+                ).run {
+                    Route.Chat().also {
+                        it.chatAddress = address.id
+                    }.let(navigate)
+                }
+            } catch (throwable: Throwable) {
+                output(throwable)
             }
-        } catch (throwable: Throwable) {
-            output(throwable)
         }
     }
-}
