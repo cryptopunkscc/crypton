@@ -1,18 +1,13 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.context.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-internal class HasAccountsSelector(
-    private val repo: Account.Repo
-) : () -> Flow<Boolean> {
-    private val log = typedLog()
-    override fun invoke(): Flow<Boolean> = repo.flowList()
-        .map { it.isNotEmpty() }
-        .distinctUntilChanged()
-        .onEach { log.d("Has accounts - $it") }
-}
+internal fun AppScope.hasAccountsFlow(
+): Flow<Boolean> = accountRepo.flowList()
+    .map { it.isNotEmpty() }
+    .distinctUntilChanged()
+    .onEach { log.d("Has accounts - $it") }

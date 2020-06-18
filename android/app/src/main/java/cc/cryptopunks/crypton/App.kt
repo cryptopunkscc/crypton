@@ -9,9 +9,9 @@ import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.mock.MockConnectionFactory
-import cc.cryptopunks.crypton.module.AppDomainModule
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.service.initExceptionService
+import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.sys.AndroidSys
 import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
@@ -55,7 +55,7 @@ class App :
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
 //        initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        AppDomainModule(scope).appService()
+        scope.startAppService()
     }
 
     private companion object {

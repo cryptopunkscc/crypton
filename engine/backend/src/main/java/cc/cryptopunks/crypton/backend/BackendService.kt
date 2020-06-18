@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.actor
+import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -28,7 +29,7 @@ class BackendService(
         SupervisorJob() + newSingleThreadContext(this::class.java.simpleName)
 
     init {
-        Backend(appScope).appService()
+        appScope.startAppService()
     }
 
     override fun Connector.connect(): Job = Proxy(output).run {
