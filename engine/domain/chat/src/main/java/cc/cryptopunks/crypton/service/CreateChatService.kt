@@ -7,9 +7,7 @@ import cc.cryptopunks.crypton.context.createHandlers
 import cc.cryptopunks.crypton.context.dispatch
 import cc.cryptopunks.crypton.context.plus
 import cc.cryptopunks.crypton.handler.handleCreateChat
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -20,15 +18,11 @@ class CreateChatService(
 
     private val handlers by lazy {
         createHandlers {
-            with(session) {
-                plus(handleCreateChat(navigate))
-            }
+            plus(handleCreateChat(navigate))
         }
     }
 
-    override val coroutineContext = SupervisorJob() + Dispatchers.IO
-
-    override fun Connector.connect(): Job = session.scope.launch {
+    override fun Connector.connect(): Job = launch {
         input.collect { handlers.dispatch(it, output) }
     }
 }

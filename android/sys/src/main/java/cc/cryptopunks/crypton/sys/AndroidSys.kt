@@ -38,5 +38,5 @@ class AndroidSys(
         )
     }
 
-    override fun createRouteSys(): Route.Sys = RouteSys()
+    override val createRouteSys: () -> Route.Sys get() = { RouteSys() }
 }

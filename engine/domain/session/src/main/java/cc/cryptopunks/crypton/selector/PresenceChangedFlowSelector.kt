@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.*
 import kotlinx.coroutines.flow.*
 
 internal class PresenceChangedFlowSelector(
-    private val session: Session
+    private val session: SessionScope
 ) : () -> Flow<Roster.Net.PresenceChanged> {
     override fun invoke(): Flow<Roster.Net.PresenceChanged> =
         flowOf(

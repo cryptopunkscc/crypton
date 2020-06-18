@@ -2,12 +2,12 @@ package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.context.handle
 import kotlinx.coroutines.launch
 
-internal fun Session.handleCreateChat(
+internal fun SessionScope.handleCreateChat(
     navigate: Route.Navigate
 ) = handle<Chat.Service.CreateChat> { output ->
     scope.launch {

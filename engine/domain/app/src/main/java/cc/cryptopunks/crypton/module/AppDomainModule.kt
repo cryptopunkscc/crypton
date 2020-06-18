@@ -2,14 +2,7 @@ package cc.cryptopunks.crypton.module
 
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.factory.SessionFactory
 import cc.cryptopunks.crypton.interactor.IndicatorInteractor
-import cc.cryptopunks.crypton.interactor.InterruptSessionsInteractor
-import cc.cryptopunks.crypton.interactor.InvokeSessionServicesInteractor
-import cc.cryptopunks.crypton.interactor.LoadSessionsInteractor
-import cc.cryptopunks.crypton.interactor.ReconnectSessionsInteractor
-import cc.cryptopunks.crypton.interactor.SessionInteractor
 import cc.cryptopunks.crypton.selector.HasAccountsSelector
 import cc.cryptopunks.crypton.selector.NetworkStatusFlowSelector
 import cc.cryptopunks.crypton.selector.NewSessionsFlowSelector
@@ -21,27 +14,12 @@ class AppDomainModule(
 ) : AppScope by appScope {
 
     val appService by lazy {
-        val scope = Service.Scope()
         AppService(
-            scope = scope,
-            sessionInteractor = SessionInteractor(
-                reconnect = ReconnectSessionsInteractor(sessionStore),
-                interrupt = InterruptSessionsInteractor(sessionStore)
-            ),
+            appScope = appScope,
             hasAccounts = HasAccountsSelector(accountRepo),
             networkStatusFlow = NetworkStatusFlowSelector(networkSys),
             toggleIndicator = IndicatorInteractor(indicatorSys),
-            loadSessions = LoadSessionsInteractor(
-                accountRepo = accountRepo,
-                sessionStore = sessionStore,
-                createSession = SessionFactory(
-                    accountRepo = accountRepo,
-                    createConnection = createConnection,
-                    createSessionRepo = createSessionRepo
-                )
-            ),
-            newSessionsFlow = NewSessionsFlowSelector(sessionStore),
-            invokeSessionServices = InvokeSessionServicesInteractor(appScope)
+            newSessionsFlow = NewSessionsFlowSelector(sessionStore)
         )
     }
 
