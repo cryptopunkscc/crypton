@@ -17,13 +17,6 @@ interface Net :
     fun initOmemo(): Boolean
     fun netEvents(): Flow<Api.Event>
 
-    interface Connect : () -> Unit
-    interface Disconnect : () -> Unit
-    interface Interrupt : () -> Unit
-    interface IsConnected : () -> Boolean
-    interface InitOmemo : () -> Boolean
-    interface Output : () -> Flow<Api.Event>
-
     interface Event : Api.Event
 
     object Connected : Event

@@ -10,12 +10,11 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
-import cc.cryptopunks.crypton.smack.net.chat.OutgoingMessageCache
 import cc.cryptopunks.crypton.smack.net.chat.ReadArchivedMessages
 import cc.cryptopunks.crypton.smack.net.chat.createChat
 import cc.cryptopunks.crypton.smack.net.chat.createMessageEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.createSendMessage
-import cc.cryptopunks.crypton.smack.net.client.InitOmemo
+import cc.cryptopunks.crypton.smack.net.omemo.InitOmemo
 import cc.cryptopunks.crypton.smack.net.roster.rosterEventFlow
 import cc.cryptopunks.crypton.smack.util.SmackPresence
 import cc.cryptopunks.crypton.smack.util.bareJid
@@ -52,10 +51,6 @@ internal class ConnectionModule(
 
     private val log = typedLog()
     private val initOmemo by lazy { InitOmemo(omemoManager) }
-
-    private val outgoingMessageCache by lazy {
-        OutgoingMessageCache()
-    }
 
     private val netEvents by lazy {
         NetEventBroadcast(
