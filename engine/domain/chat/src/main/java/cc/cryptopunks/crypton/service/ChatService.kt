@@ -13,7 +13,6 @@ import cc.cryptopunks.crypton.handler.handleMessageRead
 import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handleSendMessage
-import cc.cryptopunks.crypton.selector.MessagePagedListFlowSelector
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -28,22 +27,14 @@ class ChatService(
 
     private val handlers by lazy {
         createHandlers {
-            plus(handleSendMessage(chat))
+            plus(handleSendMessage())
             plus(handleMessageRead())
             plus(handleLastMessageSubscription())
-            plus(handlePopClipboard(clipboardStore))
-            plus(handleCopy(clipboardSys))
-            plus(handlePageMessagesSubscription(chat, messageFlow, log))
+            plus(handlePopClipboard())
+            plus(handleCopy())
+            plus(handlePageMessagesSubscription())
             plus(handleGetMessages())
         }
-    }
-
-    private val messageFlow by lazy {
-        MessagePagedListFlowSelector(
-            repo = messageRepo,
-            mainExecutor = mainExecutor,
-            queryContext = queryContext
-        )
     }
 
     override fun Connector.connect(): Job = launch {

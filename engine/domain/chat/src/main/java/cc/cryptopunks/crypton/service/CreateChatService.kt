@@ -18,7 +18,7 @@ class CreateChatService(
 
     private val handlers by lazy {
         createHandlers {
-            plus(handleCreateChat(navigate))
+            plus(handleCreateChat())
         }
     }
 
