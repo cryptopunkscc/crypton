@@ -9,8 +9,6 @@ import cc.cryptopunks.crypton.backend.internal.requestBindingInteractor
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.module.AppDomainModule
-import cc.cryptopunks.crypton.service.AppService
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,8 +42,4 @@ class Backend(
     val top: () -> Connectable.Binding? = getTopBindingSelector(
         stack = stack
     )
-
-    val appService: AppService by lazy {
-        AppDomainModule(this).appService
-    }
 }

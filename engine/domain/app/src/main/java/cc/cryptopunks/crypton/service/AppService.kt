@@ -3,33 +3,18 @@ package cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.collect
 import cc.cryptopunks.crypton.handler.handleNetworkStatus
-import cc.cryptopunks.crypton.interactor.IndicatorInteractor
 import cc.cryptopunks.crypton.interactor.loadSessions
-import cc.cryptopunks.crypton.selector.HasAccountsSelector
-import cc.cryptopunks.crypton.selector.NetworkStatusFlowSelector
-import cc.cryptopunks.crypton.selector.NewSessionsFlowSelector
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.interactor.setIndicator
+import cc.cryptopunks.crypton.selector.hasAccountsFlow
+import cc.cryptopunks.crypton.selector.networkStatusFlow
+import cc.cryptopunks.crypton.selector.newSessionsFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class AppService internal constructor(
-    private val appScope: AppScope,
-
-    private val hasAccounts: HasAccountsSelector,
-    private val toggleIndicator: IndicatorInteractor,
-
-    private val networkStatusFlow: NetworkStatusFlowSelector,
-
-    private val newSessionsFlow: NewSessionsFlowSelector
-) : AppScope by appScope {
-
-    override val log = typedLog()
-
-    operator fun invoke() = launch {
-        log.d("Start")
-        loadSessions()
-        launch { hasAccounts().collect { toggleIndicator(it) } }
-        launch { networkStatusFlow().collect(handleNetworkStatus()) }
-        launch { newSessionsFlow().collect { startSessionService(it).join() } }
-    }
+fun AppScope.startAppService() = launch {
+    log.d("Start app service")
+    loadSessions()
+    launch { hasAccountsFlow().collect { setIndicator(it) } }
+    launch { networkStatusFlow().collect(handleNetworkStatus()) }
+    launch { newSessionsFlow().collect { startSessionService(it) } }
 }
