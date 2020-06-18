@@ -1,27 +1,18 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.joinAll
+import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.launch
 
-internal class ReconnectSessionsInteractor(
-    private val sessionStore: Session.Store
-) {
-    private val log = typedLog()
-
-    suspend operator fun invoke() = coroutineScope {
-        sessionStore.get().values.map { session ->
-            launch { session.reconnectIfNeeded() }
-        }.joinAll()
+fun AppScope.reconnectAccount() =
+    sessionStore.get().values.map { session ->
+        launch { session.reconnectIfNeeded() }
     }
 
-    private fun Session.reconnectIfNeeded() {
-        log.d("reconnecting: $address")
-        if (isConnected()) interrupt()
-        connect()
-        if (!isAuthenticated()) login()
-        initOmemo()
-    }
+private fun SessionScope.reconnectIfNeeded() {
+    log.d("reconnecting: $address")
+    if (isConnected()) interrupt()
+    connect()
+    if (!isAuthenticated()) login()
+    initOmemo()
 }

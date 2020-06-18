@@ -2,15 +2,14 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Session
-import cc.cryptopunks.crypton.context.calculateId
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class SaveMessagesInteractor(
-    private val session: Session
+    private val session: SessionScope
 ) : (List<Message>) -> Job {
 
     private val log = typedLog()

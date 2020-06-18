@@ -1,11 +1,11 @@
 package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.handle
 import kotlinx.coroutines.launch
 
-internal fun Session.handleGetMessages() = handle<Chat.Service.GetMessages> {
+internal fun SessionScope.handleGetMessages() = handle<Chat.Service.GetMessages> {
     scope.launch {
         messageRepo.list(
             range = System.currentTimeMillis().let { currentTime ->

@@ -28,15 +28,13 @@ class ChatService(
 
     private val handlers by lazy {
         createHandlers {
-            with(session) {
-                plus(handleSendMessage(chat))
-                plus(handleMessageRead())
-                plus(handleLastMessageSubscription())
-                plus(handlePopClipboard(clipboardStore))
-                plus(handleCopy(clipboardSys))
-                plus(handlePageMessagesSubscription(chat, messageFlow, log))
-                plus(handleGetMessages())
-            }
+            plus(handleSendMessage(chat))
+            plus(handleMessageRead())
+            plus(handleLastMessageSubscription())
+            plus(handlePopClipboard(clipboardStore))
+            plus(handleCopy(clipboardSys))
+            plus(handlePageMessagesSubscription(chat, messageFlow, log))
+            plus(handleGetMessages())
         }
     }
 
@@ -47,8 +45,6 @@ class ChatService(
             queryContext = queryContext
         )
     }
-
-    override val coroutineContext get() = session.scope.coroutineContext
 
     override fun Connector.connect(): Job = launch {
         input.collect { handlers.dispatch(it, output) }

@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.handler
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.selector.MessagePagedListFlowSelector
 import cc.cryptopunks.crypton.util.TypedLog
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-internal fun Session.handlePageMessagesSubscription(
+internal fun SessionScope.handlePageMessagesSubscription(
     chat: Chat,
     messageFlow: MessagePagedListFlowSelector,
     log: TypedLog

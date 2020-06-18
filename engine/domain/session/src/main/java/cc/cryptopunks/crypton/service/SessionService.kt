@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.Session
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.collect
 import cc.cryptopunks.crypton.handler.handleApiEvent
@@ -23,7 +22,7 @@ class SessionService(
     sessionScope: SessionScope
 ) :
     SessionScope by sessionScope,
-    Session.BackgroundService {
+    SessionScope.BackgroundService {
 
     override val log = typedLog()
 
@@ -37,16 +36,16 @@ class SessionService(
         Unit
     }
 
-    private val apiEventSelector = ApiEventSelector(session)
+    private val apiEventSelector = ApiEventSelector(sessionScope)
 
-    private val handleApiEvent = session.handleApiEvent(networkSys)
+    private val handleApiEvent = handleApiEvent(networkSys)
 
 
-    private val omemoInitializationsSelector by lazy { OmemoInitializationsSelector(session) }
+    private val omemoInitializationsSelector by lazy { OmemoInitializationsSelector(sessionScope) }
 
     private val handleOmemoInitialized by lazy {
-        session.handleOmemoInitialized(
-            fetchArchivedMessages = FetchArchivedMessagesSelector(messageRepo, session),
+        handleOmemoInitialized(
+            fetchArchivedMessages = FetchArchivedMessagesSelector(messageRepo, sessionScope),
             saveMessages = saveMessages
         )
     }
@@ -62,12 +61,12 @@ class SessionService(
     }
 
 
-    private val saveMessages by lazy { SaveMessagesInteractor(session) }
+    private val saveMessages by lazy { SaveMessagesInteractor(sessionScope) }
 
 
-    private val presenceChangedFlow = PresenceChangedFlowSelector(session)
+    private val presenceChangedFlow = PresenceChangedFlowSelector(sessionScope)
 
     private val handlePresenceChanged by lazy {
-        session.handlePresenceChange(StorePresenceInteractor(presenceStore))
+        handlePresenceChange(StorePresenceInteractor(presenceStore))
     }
 }

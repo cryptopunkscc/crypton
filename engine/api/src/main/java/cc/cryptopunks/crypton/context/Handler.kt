@@ -31,4 +31,4 @@ inline operator fun <reified T> HandlerRegistryBuilder.plus(handle: Handle<T>) =
     plusAssign(T::class to handle)
 
 suspend fun <T> Flow<T>.collect(handle: Handle<T>) =
-    collect { handle(it) }
+    collect { handle(it).join() }

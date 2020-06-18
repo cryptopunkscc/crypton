@@ -1,13 +1,9 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.AppScope
 
-internal class InterruptSessionsInteractor(
-    private val sessionStore: Session.Store
-) {
-    operator fun invoke() {
-        sessionStore.get().values.forEach { session ->
-            session.interrupt()
-        }
+fun AppScope.interruptSessions() {
+    sessionStore.get().values.forEach { session ->
+        session.interrupt()
     }
 }

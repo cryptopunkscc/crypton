@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
@@ -42,7 +42,7 @@ internal class RosterItemStateFlowSelector(
     class Factory(
         private val presenceFlow: PresenceFlowSelector
     ) {
-        operator fun invoke(session: Session) =
+        operator fun invoke(session: SessionScope) =
             RosterItemStateFlowSelector(
                 account = session.address,
                 presenceFlow = presenceFlow,

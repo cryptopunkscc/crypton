@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.selector
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 internal class RosterItemStateListFlowSelector(
-    private val sessionStore: Session.Store,
+    private val sessionStore: SessionScope.Store,
     private val createRosterItemStateFlowSelector: RosterItemStateFlowSelector.Factory
 ) {
     operator fun invoke(): Flow<List<Roster.Item>> =
@@ -33,7 +33,7 @@ internal class RosterItemStateListFlowSelector(
             }
         }
 
-    private fun Session.rosterItemStateFlow(): Flow<Set<Roster.Item>> {
+    private fun SessionScope.rosterItemStateFlow(): Flow<Set<Roster.Item>> {
         val chatJobs = mutableMapOf<Address, Job>()
         val chatItems = mutableMapOf<Address, Roster.Item>()
         val rosterItemStateFlow = createRosterItemStateFlowSelector(this)
@@ -67,8 +67,8 @@ internal class RosterItemStateListFlowSelector(
 }
 
 
-private fun Session.Store.newSessionsFlow(): Flow<Session> {
-    var previous = emptyMap<Address, Session>()
+private fun SessionScope.Store.newSessionsFlow(): Flow<SessionScope> {
+    var previous = emptyMap<Address, SessionScope>()
     return changesFlow().flatMapConcat { current ->
         val new = current - previous.keys
         previous = current

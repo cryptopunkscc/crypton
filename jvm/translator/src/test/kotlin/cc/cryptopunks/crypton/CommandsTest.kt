@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Route
 import org.junit.Assert.assertEquals
+import org.junit.Ignore
 import org.junit.Test
 
 class CommandsTest {
@@ -75,6 +76,7 @@ class CommandsTest {
     }
 
     @Test
+    @Ignore // TODO
     fun `navigate chat`() {
         assertEquals(
             Route.CreateChat(),

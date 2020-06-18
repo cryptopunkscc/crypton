@@ -2,11 +2,11 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.cancel
 
 class DeleteAccountInteractor internal constructor(
-    private val sessionStore: Session.Store,
+    private val sessionStore: SessionScope.Store,
     private val accountRepo: Account.Repo
 ) {
     suspend operator fun invoke(address: Address, unregister: Boolean) {

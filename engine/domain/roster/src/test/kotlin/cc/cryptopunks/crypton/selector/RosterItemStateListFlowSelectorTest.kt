@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.MockSessionRepo
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Connection
@@ -8,11 +7,15 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionModule
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.mock.MockConnectionFactory
+import cc.cryptopunks.crypton.mock.MockSessionRepo
 import cc.cryptopunks.crypton.util.Log
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
@@ -30,7 +33,7 @@ class RosterItemStateListFlowSelectorTest {
     private val createConnection =
         MockConnectionFactory()
 
-    private val sessionScopes = (0..1).map { Session.Scope() }
+    private val sessionScopes = (0..1).map { SessionScope.Scope() }
     private val connections = (0..1).map {
         createConnection(
             Connection.Config(
@@ -41,11 +44,13 @@ class RosterItemStateListFlowSelectorTest {
     }
 
     private val sessions = (0..1).map {
-        Session(
+        SessionModule(
             address = addresses[it],
-            scope = sessionScopes[it],
             sessionRepo = sessionRepos[it],
-            connection = connections[it]
+            connection = connections[it],
+            appScope = mockk {
+                every { coroutineContext } returns GlobalScope.coroutineContext
+            }
         )
     }
 
@@ -77,7 +82,7 @@ class RosterItemStateListFlowSelectorTest {
     @Test
     operator fun invoke() = runBlocking {
         // given
-        val sessionStore = Session.Store()
+        val sessionStore = SessionScope.Store()
         val userPresenceStore = Presence.Store()
 
         val selector = RosterItemStateListFlowSelector(
@@ -115,6 +120,7 @@ class RosterItemStateListFlowSelectorTest {
         Assert.assertEquals(
             setOf(
                 Roster.Item(
+                    account = addresses[0],
                     title = addresses[2].toString(),
                     unreadMessagesCount = 1,
                     message = messages[0],
@@ -122,6 +128,7 @@ class RosterItemStateListFlowSelectorTest {
                     letter = 't'
                 ),
                 Roster.Item(
+                    account = addresses[1],
                     title = addresses[3].toString(),
                     unreadMessagesCount = 1,
                     message = messages[1],

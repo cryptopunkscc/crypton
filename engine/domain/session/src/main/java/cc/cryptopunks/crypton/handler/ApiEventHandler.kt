@@ -3,12 +3,12 @@ package cc.cryptopunks.crypton.handler
 import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Network
-import cc.cryptopunks.crypton.context.Session
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.handle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-internal fun Session.handleApiEvent(
+internal fun SessionScope.handleApiEvent(
     networkSys: Network.Sys
 ) = handle<Api.Event> {
     scope.launch {
@@ -24,7 +24,7 @@ internal fun Session.handleApiEvent(
     }
 }
 
-private fun Session.reconnect() {
+private fun SessionScope.reconnect() {
     connect()
     if (!isAuthenticated()) login()
     initOmemo()

@@ -91,7 +91,7 @@ data class Chat(
     }
 }
 
-suspend fun Session.createChat(data: Chat.Service.CreateChatData) =
+suspend fun SessionScope.createChat(data: Chat.Service.CreateChatData) =
     data.run {
         log.d("Chat $users creating")
         validate()

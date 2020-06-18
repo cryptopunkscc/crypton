@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
@@ -14,7 +15,7 @@ class AppModule(
     val repo: Repo,
     override val mainClass: KClass<*>,
     override val createConnection: Connection.Factory,
-    override val createSessionServices: (SessionScope) -> List<Session.BackgroundService>,
+    override val createSessionServices: (SessionScope) -> List<SessionScope.BackgroundService>,
     override val mainExecutor: MainExecutor,
     override val ioExecutor: IOExecutor
 ) :
@@ -25,32 +26,33 @@ class AppModule(
 
     override val log = typedLog()
     override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
-    override val sessionStore = Session.Store()
+    override val sessionStore = SessionScope.Store()
     override val presenceStore = Presence.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
     override val navigate = Route.Navigate(routeSys)
-    override fun sessionScope(): SessionScope = sessionScope(sessionStore.get().values.first())
-    override fun sessionScope(address: Address): SessionScope = sessionScope(sessionStore.get()[address]!!)
-    override fun sessionScope(session: Session): SessionScope = SessionModule(this, session)
+    override fun sessionScope(): SessionScope = sessionStore.get().values.first()
+    override fun sessionScope(address: Address): SessionScope = sessionStore.get()[address]!!
 }
 
-private data class SessionModule(
+data class SessionModule(
     val appScope: AppScope,
-    override val session: Session
+    val connection: Connection,
+    val sessionRepo: SessionRepo,
+    override val address: Address
 ) :
     SessionScope,
     AppScope by appScope,
-    Net by session,
-    SessionRepo by session {
+    Net by connection,
+    SessionRepo by sessionRepo {
 
-    override val sessionScope = Session.Scope()
+    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
     override val sessionBackgroundServices by lazy { createSessionServices(this) }
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
 }
 
-private class ChatModule(
+class ChatModule(
     sessionScope: SessionScope,
     override val chat: Chat
 ) :
