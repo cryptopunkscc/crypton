@@ -14,10 +14,10 @@ import cc.cryptopunks.crypton.context.Route.Roster
 import cc.cryptopunks.crypton.context.Route.SetAccount
 import cc.cryptopunks.crypton.module.AccountDomainModule
 import cc.cryptopunks.crypton.service.ChatService
-import cc.cryptopunks.crypton.module.CommonDomainModule
 import cc.cryptopunks.crypton.service.CreateAccountService
 import cc.cryptopunks.crypton.service.CreateChatService
 import cc.cryptopunks.crypton.service.RosterService
+import cc.cryptopunks.crypton.service.RouterService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -26,9 +26,9 @@ internal class ServiceFactory(
 ): (Route) -> Connectable? {
     override fun invoke(route: Route): Connectable? = when (route) {
 
-        SetAccount -> CommonDomainModule(
+        SetAccount -> RouterService(
             appScope = appScope
-        ).routerService
+        )
 
         Login -> CreateAccountService(
             appScope = appScope

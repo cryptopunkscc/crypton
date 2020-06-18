@@ -32,7 +32,7 @@ class RosterService(
         createHandlers {
             plus(handleGetRosterItems(rosterItemsStore))
             plus(handleRosterItemsSubscription(rosterItemsStore))
-            plus(handleSubscriptionAccept(sessionStore))
+            plus(handleSubscriptionAccept())
         }
     }
 
