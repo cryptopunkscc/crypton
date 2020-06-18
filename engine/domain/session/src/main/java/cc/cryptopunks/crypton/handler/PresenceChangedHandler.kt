@@ -1,20 +1,18 @@
 package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Handle
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.context.handle
-import cc.cryptopunks.crypton.interactor.StorePresenceInteractor
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
+import cc.cryptopunks.crypton.interactor.storePresence
 import kotlinx.coroutines.launch
 
-internal fun SessionScope.handlePresenceChange(
-    storePresence: StorePresenceInteractor
-) = handle<Roster.Net.PresenceChanged> {
+internal fun SessionScope.handlePresenceChanged(): Handle<Roster.Net.PresenceChanged> = handle {
     scope.launch {
-
         storePresence(presence)
 
         when (presence.status) {

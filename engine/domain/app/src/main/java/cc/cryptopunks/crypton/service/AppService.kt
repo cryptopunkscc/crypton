@@ -1,11 +1,9 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.AppScope
-import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.collect
-import cc.cryptopunks.crypton.interactor.IndicatorInteractor
 import cc.cryptopunks.crypton.handler.handleNetworkStatus
-import cc.cryptopunks.crypton.interactor.invokeSessionServices
+import cc.cryptopunks.crypton.interactor.IndicatorInteractor
 import cc.cryptopunks.crypton.interactor.loadSessions
 import cc.cryptopunks.crypton.selector.HasAccountsSelector
 import cc.cryptopunks.crypton.selector.NetworkStatusFlowSelector
@@ -32,6 +30,6 @@ class AppService internal constructor(
         loadSessions()
         launch { hasAccounts().collect { toggleIndicator(it) } }
         launch { networkStatusFlow().collect(handleNetworkStatus()) }
-        launch { newSessionsFlow().collect(SessionScope::invokeSessionServices) }
+        launch { newSessionsFlow().collect { startSessionService(it).join() } }
     }
 }

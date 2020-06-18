@@ -5,8 +5,8 @@ import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
@@ -15,7 +15,7 @@ class AppModule(
     val repo: Repo,
     override val mainClass: KClass<*>,
     override val createConnection: Connection.Factory,
-    override val createSessionServices: (SessionScope) -> List<SessionScope.BackgroundService>,
+    override val startSessionService: SessionScope.() -> Job,
     override val mainExecutor: MainExecutor,
     override val ioExecutor: IOExecutor
 ) :
@@ -47,7 +47,6 @@ data class SessionModule(
     SessionRepo by sessionRepo {
 
     override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
-    override val sessionBackgroundServices by lazy { createSessionServices(this) }
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
 }

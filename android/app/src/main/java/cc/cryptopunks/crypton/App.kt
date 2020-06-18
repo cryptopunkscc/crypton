@@ -6,13 +6,18 @@ import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.mock.MockConnectionFactory
-import cc.cryptopunks.crypton.module.*
-import cc.cryptopunks.crypton.service.SessionService
+import cc.cryptopunks.crypton.module.AppDomainModule
+import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.service.initExceptionService
+import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.sys.AndroidSys
-import cc.cryptopunks.crypton.util.*
+import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
+import cc.cryptopunks.crypton.util.IOExecutor
+import cc.cryptopunks.crypton.util.MainExecutor
+import cc.cryptopunks.crypton.util.initAndroidLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 
@@ -38,9 +43,7 @@ class App :
                 )
             ),
             createConnection = MockConnectionFactory(),
-            createSessionServices = { sessionScope ->
-                listOf(SessionService(sessionScope))
-            }
+            startSessionService = SessionScope::startSessionService
         )
     }
 
