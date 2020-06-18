@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.dashboard.R
-import cc.cryptopunks.crypton.module.CommonDomainModule
+import cc.cryptopunks.crypton.service.RouterService
 import cc.cryptopunks.crypton.view.DashboardView
 
 class DashboardFragment :
@@ -20,13 +20,9 @@ class DashboardFragment :
         setHasOptionsMenu(true)
     }
 
-    override fun onCreatePresenter() = CommonDomainModule(
-        appScope = appScope
-    ).routerService
+    override fun onCreatePresenter() = RouterService(appScope)
 
-    override fun onCreateActor(view: View) = DashboardView(
-        containerView = view
-    )
+    override fun onCreateActor(view: View) = DashboardView(view)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         binding.send(Route.AccountManagement)
