@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.smack.net.client
+package cc.cryptopunks.crypton.smack.net.omemo
 
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.util.typedLog

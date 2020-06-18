@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.smack.net.roster
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.smack.util.SmackJid
 import cc.cryptopunks.crypton.smack.util.presence
-import cc.cryptopunks.crypton.smack.util.resourceId
 import kotlinx.coroutines.channels.SendChannel
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smack.roster.PresenceEventListener
