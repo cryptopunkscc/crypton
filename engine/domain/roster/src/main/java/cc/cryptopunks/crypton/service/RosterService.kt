@@ -10,9 +10,6 @@ import cc.cryptopunks.crypton.context.plus
 import cc.cryptopunks.crypton.handler.handleGetRosterItems
 import cc.cryptopunks.crypton.handler.handleRosterItemsSubscription
 import cc.cryptopunks.crypton.handler.handleSubscriptionAccept
-import cc.cryptopunks.crypton.selector.PresenceFlowSelector
-import cc.cryptopunks.crypton.selector.RosterItemStateFlowSelector
-import cc.cryptopunks.crypton.selector.RosterItemStateListFlowSelector
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,22 +31,13 @@ class RosterService(
     private val handlers by lazy {
         createHandlers {
             plus(handleGetRosterItems(rosterItemsStore))
-            plus(handleRosterItemsSubscription(rosterListFlowSelector, rosterItemsStore))
+            plus(handleRosterItemsSubscription(rosterItemsStore))
             plus(handleSubscriptionAccept(sessionStore))
         }
     }
 
     private val rosterItemsStore by lazy {
         Store(Roster.Service.Items(emptyList()))
-    }
-
-    private val rosterListFlowSelector by lazy {
-        RosterItemStateListFlowSelector(
-            sessionStore = sessionStore,
-            createRosterItemStateFlowSelector = RosterItemStateFlowSelector.Factory(
-                presenceFlow = PresenceFlowSelector(presenceStore)
-            )
-        )
     }
 }
 
