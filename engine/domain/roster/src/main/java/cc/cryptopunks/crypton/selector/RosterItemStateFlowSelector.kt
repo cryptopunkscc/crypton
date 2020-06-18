@@ -10,46 +10,23 @@ import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.scan
 
-internal class RosterItemStateFlowSelector(
-    private val account: Address,
-    private val presenceFlow: PresenceFlowSelector,
-    private val latestMessageFlow: LatestMessageFlowSelector,
-    private val messageRepo: Message.Repo
-) {
-
-    operator fun invoke(chatAddress: Address): Flow<Roster.Item> = run {
-        flowOf(
-            flowOf(Unit),
-            presenceFlow(chatAddress),
-            latestMessageFlow(chatAddress),
-            messageRepo.unreadCountFlow(chatAddress)
-        ).flattenMerge().scan(
-            Roster.Item(
-                account = account,
-                letter = chatAddress.toString().firstOrNull()?.toLowerCase() ?: 'a',
-                title = chatAddress.toString()
-            )
-        ) { item, changed ->
-            when (changed) {
-                is Presence.Status -> item.copy(presence = changed)
-                is Message -> item.copy(message = changed)
-                is Int -> item.copy(unreadMessagesCount = changed)
-                else -> item
-            }
+internal fun SessionScope.rosterItemStatesFlow(chatAddress: Address): Flow<Roster.Item> =
+    flowOf(
+        flowOf(Unit),
+        presenceFlow(chatAddress),
+        latestMessageFlow(chatAddress),
+        messageRepo.unreadCountFlow(chatAddress)
+    ).flattenMerge().scan(
+        Roster.Item(
+            account = address,
+            letter = chatAddress.toString().firstOrNull()?.toLowerCase() ?: 'a',
+            title = chatAddress.toString()
+        )
+    ) { item, changed ->
+        when (changed) {
+            is Presence.Status -> item.copy(presence = changed)
+            is Message -> item.copy(message = changed)
+            is Int -> item.copy(unreadMessagesCount = changed)
+            else -> item
         }
     }
-
-    class Factory(
-        private val presenceFlow: PresenceFlowSelector
-    ) {
-        operator fun invoke(session: SessionScope) =
-            RosterItemStateFlowSelector(
-                account = session.address,
-                presenceFlow = presenceFlow,
-                latestMessageFlow = LatestMessageFlowSelector(
-                    session.messageRepo
-                ),
-                messageRepo = session.messageRepo
-            )
-    }
-}
