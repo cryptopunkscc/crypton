@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton
 
 interface Input {
-    val value: String?
+    var value: String?
     val isEmpty get() = value == null
     val isNotEmpty get() = isEmpty.not()
 

@@ -3,9 +3,11 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
 
 private val navigate = "navigate" to mapOf(
+    "accounts" to command { Route.SetAccount },
     "roster" to command { Route.Roster },
     "create" to mapOf(
         "chat" to command {
@@ -44,6 +46,13 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
                 Account.Service.Register()
             )
         }
+    ),
+    Route.Roster to mapOf(
+        "get" to mapOf(
+            "items" to command {
+                Roster.Service.GetItems
+            }
+        )
     ),
     Route.Chat() to mapOf(
         "send" to mapOf(

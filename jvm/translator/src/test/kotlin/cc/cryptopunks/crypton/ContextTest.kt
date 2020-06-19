@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 
-private val TEST_COMMANDS = mapOf(
+val TEST_COMMANDS = mapOf(
     "cmd0" to command(
         param(),
         param()

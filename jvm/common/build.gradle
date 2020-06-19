@@ -6,5 +6,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api "io.ktor:ktor-server-netty:$ktor_version"
     api project(':engine:api')
-    implementation project(':engine:util:json')
+    api project(':engine:util:json')
 }
