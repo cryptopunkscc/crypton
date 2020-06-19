@@ -27,7 +27,6 @@ class AppModule(
     override val log = typedLog()
     override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
     override val sessionStore = SessionScope.Store()
-    override val presenceStore = Presence.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
     override val navigate = Route.Navigate(routeSys)
@@ -46,6 +45,7 @@ data class SessionModule(
     Net by connection,
     SessionRepo by sessionRepo {
 
+    override val presenceStore = Presence.Store()
     override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))

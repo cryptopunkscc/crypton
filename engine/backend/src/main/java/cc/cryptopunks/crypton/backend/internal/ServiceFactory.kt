@@ -12,11 +12,11 @@ import cc.cryptopunks.crypton.context.Route.Login
 import cc.cryptopunks.crypton.context.Route.Register
 import cc.cryptopunks.crypton.context.Route.Roster
 import cc.cryptopunks.crypton.context.Route.SetAccount
-import cc.cryptopunks.crypton.service.AccountService
 import cc.cryptopunks.crypton.service.ChatService
 import cc.cryptopunks.crypton.service.CreateChatService
 import cc.cryptopunks.crypton.service.RosterService
 import cc.cryptopunks.crypton.service.RouterService
+import cc.cryptopunks.crypton.service.accountService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -27,7 +27,7 @@ internal class ServiceFactory(
 
         SetAccount -> RouterService(appScope)
 
-        Login, Register, AccountList -> AccountService(appScope)
+        Login, Register, AccountList -> accountService(appScope)
 
         Dashboard -> null
 

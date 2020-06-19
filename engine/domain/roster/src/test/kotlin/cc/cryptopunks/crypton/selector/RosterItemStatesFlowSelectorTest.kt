@@ -56,7 +56,6 @@ class RosterItemStatesFlowSelectorTest {
 
         val appScope = mockk<AppScope> {
             every { this@mockk.sessionStore } returns sessionStore
-            every { this@mockk.presenceStore } returns presenceStore
         }
 
         val sessions = (0..1).map {
