@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 
 internal fun SessionScope.handlePresenceChanged() =
     handle<Roster.Net.PresenceChanged> {
+        log.d("handle $this")
         launch {
             storePresence(presence)
 

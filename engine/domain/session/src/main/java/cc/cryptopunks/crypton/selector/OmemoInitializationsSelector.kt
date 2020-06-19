@@ -9,6 +9,6 @@ import kotlinx.coroutines.flow.onStart
 
 internal fun SessionScope.omemoInitializations(): Flow<Net.OmemoInitialized> =
     netEvents()
-        .onStart { log.d("Start") }
+        .onStart { log.d("Omemo initialization") }
         .filterIsInstance<Net.OmemoInitialized>()
         .onEach { log.d("Omemo initialized") }

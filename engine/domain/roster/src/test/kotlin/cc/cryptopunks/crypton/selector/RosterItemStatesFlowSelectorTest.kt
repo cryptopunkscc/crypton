@@ -92,12 +92,14 @@ class RosterItemStatesFlowSelectorTest {
         sessionStore.reduce {
             sessions.associateBy { it.address }
         }
-        presenceStore.reduce {
-            (2..3).associate {
-                addresses[it] to Presence(
-                    Resource(addresses[it]),
-                    Presence.Status.Available
-                )
+        sessions.forEach {
+            it.presenceStore.reduce {
+                (2..3).associate { i ->
+                    addresses[i] to Presence(
+                        Resource(addresses[i]),
+                        Presence.Status.Available
+                    )
+                }
             }
         }
         (0..1).forEach {
