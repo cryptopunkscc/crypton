@@ -9,9 +9,10 @@ import cc.cryptopunks.crypton.selector.fetchArchivedMessages
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-internal fun SessionScope.handleOmemoInitialized() = handle<Net.OmemoInitialized> {
-    scope.launch {
-        launch { flushQueuedMessages() }
-        launch { fetchArchivedMessages().collect { messages -> saveMessages(messages).join() } }
+internal fun SessionScope.handleOmemoInitialized() =
+    handle<Net.OmemoInitialized> {
+        launch {
+            launch { flushQueuedMessages() }
+            launch { fetchArchivedMessages().collect { messages -> saveMessages(messages).join() } }
+        }
     }
-}

@@ -15,7 +15,7 @@ private class SendMessageHandler
 internal fun ChatScope.handleSendMessage(
     log: TypedLog = SendMessageHandler().typedLog()
 ) = handle<Chat.Service.SendMessage> {
-    scope.launch {
+    launch {
         chat.createQueuedMessage(text).let { message ->
             log.d("Enqueue message $message")
             messageRepo.insertOrUpdate(message)

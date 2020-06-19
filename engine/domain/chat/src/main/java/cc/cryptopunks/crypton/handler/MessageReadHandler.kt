@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 internal fun SessionScope.handleMessageRead() =
     handle<Chat.Service.MessagesRead> {
-        scope.launch {
+        launch {
             log.d("Read ${messages.size} messages")
             messageRepo.run {
                 insertOrUpdate(

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 internal fun AppScope.handleSubscriptionAccept() =
     handle<Roster.Service.AcceptSubscription> {
         sessionStore.get()[account]?.run {
-            scope.launch {
+            launch {
                 sendPresence(
                     Presence(
                         resource = Resource(accepted),

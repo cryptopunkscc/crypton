@@ -6,10 +6,11 @@ import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.interactor.removeSessionScope
 import kotlinx.coroutines.cancel
 
-internal fun AppScope.handleLogout() = handle<Account.Service.Logout> {
-    removeSessionScope(address) {
-        disconnect()
-        cancel()
-        log.d("Successful logout $address")
+internal fun AppScope.handleLogout() =
+    handle<Account.Service.Logout> {
+        removeSessionScope(address) {
+            disconnect()
+            cancel()
+            log.d("Successful logout $address")
+        }
     }
-}

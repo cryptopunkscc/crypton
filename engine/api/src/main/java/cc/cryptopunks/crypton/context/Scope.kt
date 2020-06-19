@@ -40,8 +40,6 @@ interface SessionScope :
     Connection {
 
     val address: Address
-    val scope: CoroutineScope get() = this
-
     val presenceStore: Presence.Store
 
     fun chatScope(chat: Chat): ChatScope

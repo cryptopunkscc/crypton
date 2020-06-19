@@ -14,7 +14,7 @@ internal fun AppScope.newAccountConnectedFlow(): Flow<Address> {
         .filterNot { session -> session in cache }
         .flatMapMerge { session ->
             session.netEvents()
-                .produceIn(session.scope)
+                .produceIn(session)
                 .consumeAsFlow()
                 .onCompletion { cache.remove(session) }
                 .filterIsInstance<Account.Authenticated>()

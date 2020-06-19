@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 internal fun ChatScope.handlePageMessagesSubscription() =
     handle<Chat.Service.SubscribePagedMessages> { output ->
-        scope.launch {
+        launch {
             messagePagedListFlow()
                 .onEach(pagedMessagesReceived)
                 .map { Chat.Service.PagedMessages(address, it) }
