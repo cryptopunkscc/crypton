@@ -19,7 +19,7 @@ object Roster {
         data class Select(val item: Item)
 
         object GetItems
-        data class SubscribeItems(override var enable: Boolean) : Subscription
+        data class SubscribeItems(override val enable: Boolean) : Subscription
         data class Items(val list: List<Item>)
     }
 

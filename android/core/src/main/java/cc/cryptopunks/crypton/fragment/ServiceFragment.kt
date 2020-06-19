@@ -25,10 +25,10 @@ abstract class ServiceFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding + viewProxy
-        binding + onCreatePresenter()
+        binding + onCreateService()
     }
 
-    protected open fun onCreatePresenter(): Connectable? = null
+    protected open fun onCreateService(): Connectable? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

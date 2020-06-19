@@ -22,13 +22,23 @@ fun HandlerRegistry.dispatch(message: Any, output: ConnectorOutput = {}): Job? =
 
 typealias HandlerRegistry = Map<KClass<*>, Handle<*>>
 
-typealias HandlerRegistryBuilder = MutableMap<KClass<*>, Handle<*>>
+class HandlerRegistryBuilder internal constructor() {
+    internal val handlers = mutableMapOf<KClass<*>, Handle<*>>()
+
+    fun unsafePlus(type: KClass<*>, handle: Handle<*>) {
+        handlers += (type to handle)
+    }
+
+    inline operator fun <reified T> Handle<T>.unaryPlus() {
+        unsafePlus(T::class, this)
+    }
+}
 
 fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
-    mutableMapOf<KClass<*>, Handle<*>>().apply(build)
+    HandlerRegistryBuilder().apply(build).handlers
 
 inline operator fun <reified T> HandlerRegistryBuilder.plus(handle: Handle<T>) =
-    plusAssign(T::class to handle)
+    unsafePlus(T::class, handle)
 
 suspend fun <T> Flow<T>.collect(handle: Handle<T>) =
     collect { handle(it).join() }

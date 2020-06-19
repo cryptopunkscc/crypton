@@ -69,13 +69,13 @@ internal class CreateAccountView(context: Context) : ActorLayout(context) {
     }.asFlow().flattenMerge()
 
     fun login() = apply {
-        action = Account.Service.Login
+        action = Account.Service.Login()
         registerButton.text = "Sing in"
         confirmPasswordLayout.visibility = View.GONE
     }
 
     fun register() = apply {
-        action = Account.Service.Register
+        action = Account.Service.Register()
         registerButton.text = "Sing up"
         confirmPasswordLayout.visibility = View.VISIBLE
     }

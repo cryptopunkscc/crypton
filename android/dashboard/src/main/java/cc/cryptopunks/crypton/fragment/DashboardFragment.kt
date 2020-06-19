@@ -20,7 +20,7 @@ class DashboardFragment :
         setHasOptionsMenu(true)
     }
 
-    override fun onCreatePresenter() = RouterService(appScope)
+    override fun onCreateService() = RouterService(appScope)
 
     override fun onCreateActor(view: View) = DashboardView(view)
 
