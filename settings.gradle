@@ -27,6 +27,7 @@ include ':engine:api',
         ':jvm:translator',
         ':jvm:server',
         ':jvm:test',
+        ':jvm:cli',
 
         ':android:app',
         ':android:debug',

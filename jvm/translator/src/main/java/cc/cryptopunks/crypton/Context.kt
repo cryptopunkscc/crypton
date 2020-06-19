@@ -6,14 +6,27 @@ data class Context(
     val route: Route = Route.SetAccount,
     val commands: Map<Route, Map<String, Any>> = COMMANDS,
     val account: String = "",
-    val state: Any = Unit
+    val state: Any = Unit,
+    val result: Any? = null
 )
 
-fun Context.prepare() =
-    copy(state = commands[route] ?: throw IllegalArgumentException("No commands for route $route"))
+fun Context.process(input: String): Context = set(input).run {
+    anySuggestion()
+        ?.let { copy(result = it) }
+        ?: copy(result = execute()).run {
+            if (result is Route) copy(route = result)
+            else this
+        }.prepare()
+}
+
+
+fun Context.prepare() = copy(
+    state = commands[route] ?: throw IllegalArgumentException("No commands for route $route")
+)
 
 fun Context.set(string: String): Context =
-    string.split(" ").let { strings ->
+    if (string.isBlank()) this
+    else string.split(" ").let { strings ->
         if (strings.size != 1) set(strings)
         else copy(
             state = when (state) {
@@ -21,9 +34,9 @@ fun Context.set(string: String): Context =
                 is Command -> state.append(string)
 
                 is Map<*, *> -> (state as Map<String, Any>)[string]
-                    ?: throw IllegalArgumentException("Unknown command $string")
+                    ?: IllegalArgumentException("Unknown command $string")
 
-                else -> throw IllegalStateException("Unknown state $state")
+                else -> IllegalStateException("Unknown state $state")
             }
         )
     }
@@ -34,14 +47,16 @@ fun Context.set(strings: List<String>) =
         context.set(string)
     }
 
-fun Context.validate() =
+fun Context.anySuggestion(): Any? =
     state.let { state ->
         when (state) {
 
             COMMANDS[route] == state -> Check.Prepared
 
             is Command -> when {
+
                 state.canExecute() -> null
+
                 else -> Check.Suggest(
                     state.emptyParams()
                         .filterIsInstance<Input.Named>()
@@ -62,6 +77,10 @@ class Check {
     data class Suggest(val list: List<String>)
 }
 
-fun Context.execute() = validate() ?: (state as? Command)
-    ?.run { run(params.map { it.value!! }) }
-?: throw IllegalStateException("Cannot execute state $state")
+fun Context.execute(): Any = anySuggestion()
+    ?: (state as? Command)?.run {
+        run(params.map { it.value!! }).also {
+            params.forEach { it.value = null }
+        }
+    }
+    ?: IllegalStateException("Cannot execute state $state")

@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.IOExecutor
+import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.typedLog
 import io.ktor.network.selector.ActorSelectorManager
@@ -22,8 +23,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.net.InetSocketAddress
+
+fun main() {
+    Log.init(JvmLog)
+    TrustAllManager.install()
+    runBlocking { startServer() }
+}
+
 
 private object Server
 

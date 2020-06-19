@@ -76,13 +76,14 @@ class CommandsTest {
     }
 
     @Test
-    @Ignore // TODO
     fun `navigate chat`() {
         assertEquals(
-            Route.CreateChat(),
+            Route.Chat().apply {
+                chatAddress = "asd"
+            },
             Context()
                 .prepare()
-                .set("navigate chat")
+                .set("navigate chat asd")
                 .execute()
         )
     }
