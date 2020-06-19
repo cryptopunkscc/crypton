@@ -51,7 +51,7 @@ private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
 
             // Observe new chat changes
             current.minus(jobs.keys).map { address ->
-                jobs += (address to scope.launch {
+                jobs += (address to launch {
                     rosterItemStatesFlow(address).collect { state ->
                         items.apply {
                             put(address, state)
