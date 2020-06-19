@@ -23,6 +23,28 @@ data class Account(
 
     data class Authenticated(val resumed: Boolean) : Event
 
+    interface Service {
+
+        // input
+        data class Set(val field: Field, val text: CharSequence)
+        interface Connect
+        data class Register(val address: Address? = null) : Connect
+        data class Login(val address: Address? = null) : Connect
+        data class Logout(val address: Address)
+        data class Remove(val address: Address, val deviceOnly: Boolean = true)
+        data class SubscribeAccountList(override val enable: Boolean) : Subscription
+
+        // output
+        data class Connecting(override val address: Address) : Status
+        data class Connected(override val address: Address) : Status
+        data class Error(override val address: Address, val message: String? = null) : Status
+        data class Accounts(val list: List<Address>)
+
+        interface Status {
+            val address: Address
+        }
+    }
+
     interface Net {
         fun createAccount()
         fun removeAccount()
@@ -39,22 +61,6 @@ data class Account(
         suspend fun list(): List<Account>
         fun flowList(): Flow<List<Address>>
         suspend fun addressList(): List<Address>
-    }
-
-    interface Service {
-
-        data class Set(val field: Field, val text: CharSequence)
-        interface Connect
-        object Register : Connect
-        object Login : Connect
-
-        interface Status {
-            val address: Address
-        }
-
-        data class Connecting(override val address: Address) : Status
-        data class Connected(override val address: Address) : Status
-        data class Error(override val address: Address, val message: String? = null) : Status
     }
 
     enum class Field {

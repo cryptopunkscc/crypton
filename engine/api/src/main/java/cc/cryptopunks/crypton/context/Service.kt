@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference
 
 interface Service : CoroutineScope {
 
-    val id: Any get() = Unit
+    val id: Any get() = this::class.java.simpleName
 
     class Scope : BroadcastErrorScope() {
         override val coroutineContext = SupervisorJob() + Dispatchers.IO
@@ -21,7 +21,7 @@ interface Service : CoroutineScope {
 }
 
 interface Subscription {
-    var enable: Boolean
+    val enable: Boolean
 }
 
 typealias Out = Connectable.Output

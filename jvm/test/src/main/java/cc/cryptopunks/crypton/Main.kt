@@ -104,7 +104,7 @@ suspend fun ClientDsl.loginOrRegister(
         Account.Service.Set(Account.Field.UserName, local),
         Account.Service.Set(Account.Field.Password, password)
     )
-    var command: Any = Account.Service.Login
+    var command: Any = Account.Service.Login()
     send(command)
     while (true) {
         val status = waitFor<Account.Service.Status> {
@@ -117,7 +117,7 @@ suspend fun ClientDsl.loginOrRegister(
                     send(command)
                 }
                 status.message?.contains("not-authorized") == true -> {
-                    command = Account.Service.Register
+                    command = Account.Service.Register()
                     send(command)
                 }
             }

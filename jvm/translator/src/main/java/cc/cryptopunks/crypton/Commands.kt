@@ -31,7 +31,7 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
             listOf(
                 Account.Service.Set(Account.Field.UserName, account),
                 Account.Service.Set(Account.Field.Password, password),
-                Account.Service.Login
+                Account.Service.Login()
             )
         },
         "create" to command(
@@ -41,7 +41,7 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
             listOf(
                 Account.Service.Set(Account.Field.UserName, account),
                 Account.Service.Set(Account.Field.Password, password),
-                Account.Service.Register
+                Account.Service.Register()
             )
         }
     ),

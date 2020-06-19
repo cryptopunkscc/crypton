@@ -15,7 +15,7 @@ class CommandsTest {
             listOf(
                 Account.Service.Set(Account.Field.UserName, "test@account.io"),
                 Account.Service.Set(Account.Field.Password, "pass"),
-                Account.Service.Login
+                Account.Service.Login()
             ),
             Context(Route.SetAccount)
                 .prepare()
@@ -30,7 +30,7 @@ class CommandsTest {
             listOf(
                 Account.Service.Set(Account.Field.UserName, "test@account.io"),
                 Account.Service.Set(Account.Field.Password, "pass"),
-                Account.Service.Register
+                Account.Service.Register()
             ),
             Context(Route.SetAccount)
                 .prepare()

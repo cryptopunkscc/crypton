@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
-import cc.cryptopunks.crypton.service.AccountListService
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.account_item.*
@@ -36,7 +36,7 @@ internal class AccountListAdapter(
 
     override fun Connector.connect(): Job = launch {
         launch {
-            input.filterIsInstance<AccountListService.Accounts>().collect {
+            input.filterIsInstance<Account.Service.Accounts>().collect {
                 items = it.list
                 notifyDataSetChanged()
             }
@@ -68,18 +68,13 @@ internal class AccountListAdapter(
             connectionSwitch.setOnCheckedChangeListener { _, _ ->
                 launch {
                     delay(400)
-                    channel.send(AccountListService.ToggleConnection(address))
+                    channel.send(Account.Service.Login(address))
                 }
             }
         }
 
         fun bind(account: Address) {
             address = account
-//            if (isChecked != model.isChecked)
-//                isChecked = model.isChecked
-
-//            accountName.text = model.name
-//            status.text = model.status
         }
     }
 }

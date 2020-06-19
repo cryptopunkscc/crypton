@@ -30,9 +30,9 @@ data class Chat(
 
         data class Copy(val message: Message)
 
-        data class SubscribePagedMessages(override var enable: Boolean) : Subscription
+        data class SubscribePagedMessages(override val enable: Boolean) : Subscription
 
-        data class SubscribeLastMessage(override var enable: Boolean) : Subscription
+        data class SubscribeLastMessage(override val enable: Boolean) : Subscription
 
         data class SubscribeListMessages(
             override var enable: Boolean = true,

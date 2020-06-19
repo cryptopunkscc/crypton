@@ -1,9 +1,13 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.module.AccountDomainModule
+import cc.cryptopunks.crypton.service.AccountService
 import cc.cryptopunks.crypton.view.AccountListView
 
 
@@ -16,9 +20,8 @@ class AccountListFragment : ServiceFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreatePresenter() = AccountDomainModule(
-        appScope = appScope
-    ).accountListService
+    override fun onCreateService() =
+        AccountService(appScope)
 
     override fun onCreateView(
         inflater: LayoutInflater,

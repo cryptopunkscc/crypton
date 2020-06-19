@@ -12,9 +12,8 @@ import cc.cryptopunks.crypton.context.Route.Login
 import cc.cryptopunks.crypton.context.Route.Register
 import cc.cryptopunks.crypton.context.Route.Roster
 import cc.cryptopunks.crypton.context.Route.SetAccount
-import cc.cryptopunks.crypton.module.AccountDomainModule
+import cc.cryptopunks.crypton.service.AccountService
 import cc.cryptopunks.crypton.service.ChatService
-import cc.cryptopunks.crypton.service.CreateAccountService
 import cc.cryptopunks.crypton.service.CreateChatService
 import cc.cryptopunks.crypton.service.RosterService
 import cc.cryptopunks.crypton.service.RouterService
@@ -26,25 +25,13 @@ internal class ServiceFactory(
 ): (Route) -> Connectable? {
     override fun invoke(route: Route): Connectable? = when (route) {
 
-        SetAccount -> RouterService(
-            appScope = appScope
-        )
+        SetAccount -> RouterService(appScope)
 
-        Login -> CreateAccountService(
-            appScope = appScope
-        )
-
-        Register -> CreateAccountService(
-            appScope = appScope
-        )
+        Login, Register, AccountList -> AccountService(appScope)
 
         Dashboard -> null
 
         Roster -> RosterService(appScope)
-
-        AccountList -> AccountDomainModule(
-            appScope = appScope
-        ).accountListService
 
         AccountManagement -> null
 
