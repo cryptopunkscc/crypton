@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
@@ -103,10 +104,7 @@ suspend fun ClientDsl.removeAccount(
 ) {
     send(
         Route.Login,
-        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
-        Account.Service.Set(Account.Field.UserName, local),
-        Account.Service.Set(Account.Field.Password, password),
-        Account.Service.Login()
+        Account.Service.Login(Account(Address(local, domain), Password(password)))
     )
     val status = waitFor<Account.Service.Status> {
         (address.id == "$local@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error))
@@ -124,10 +122,7 @@ suspend fun ClientDsl.register(
 ) {
     send(
         Route.Login,
-        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
-        Account.Service.Set(Account.Field.UserName, local),
-        Account.Service.Set(Account.Field.Password, password),
-        Account.Service.Register()
+        Account.Service.Register(Account(Address(local, domain), Password(password)))
     )
     waitFor<Account.Service.Connected> {
         address.id == "$local@janek-latitude"
