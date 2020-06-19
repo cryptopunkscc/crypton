@@ -19,7 +19,7 @@ private fun <C : Account.Service.Connect> AppScope.handleConnection(
     form: Form
 ) = handle<C> { out ->
     launch {
-        form.account().let { account ->
+        (account ?: form.account()).let { account ->
             out(Account.Service.Connecting(account.address))
             try {
                 addAccount(

@@ -13,6 +13,7 @@ internal fun AppScope.handleRemove() =
                 removeAccount()
                 log.d("Successfully removed $address from server")
             }
+            disconnect()
             accountRepo.delete(address)
             cancel()
             log.d("Successfully removed $address from local database")
