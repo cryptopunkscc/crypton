@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
@@ -34,6 +35,7 @@ fun main() {
 
 object Client1
 object Client2
+
 private const val test1 = "test3"
 private const val test2 = "test4"
 private const val pass = "pass"
@@ -44,7 +46,8 @@ private val address2 = Address(test2, domain)
 suspend fun startClient1() = Client1.connectClient {
     openSubscription()
     log.d("Start client 1")
-    loginOrRegister(test1, pass)
+    removeAccount(test1, pass)
+    register(test1, pass)
     send(
         Route.CreateChat().apply {
             accountId = "$test1@janek-latitude"
@@ -69,7 +72,8 @@ suspend fun startClient1() = Client1.connectClient {
 suspend fun startClient2() = Client2.connectClient {
     openSubscription()
     log.d("Start client 2")
-    loginOrRegister(test2, pass)
+    removeAccount(test2, pass)
+    register(test2, pass)
     send(
         Route.Roster,
         Roster.Service.SubscribeItems(true)
@@ -91,6 +95,43 @@ suspend fun startClient2() = Client2.connectClient {
     )
     flush()
     log.d("Stop client 2")
+}
+
+suspend fun ClientDsl.removeAccount(
+    local: String,
+    password: String
+) {
+    send(
+        Route.Login,
+        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
+        Account.Service.Set(Account.Field.UserName, local),
+        Account.Service.Set(Account.Field.Password, password),
+        Account.Service.Login()
+    )
+    val status = waitFor<Account.Service.Status> {
+        (address.id == "$local@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error))
+    }
+    if (status is Account.Service.Connected) {
+        send(Account.Service.Remove(address("$local@$domain"), deviceOnly = false))
+        delay(500)
+    }
+}
+
+
+suspend fun ClientDsl.register(
+    local: String,
+    password: String
+) {
+    send(
+        Route.Login,
+        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
+        Account.Service.Set(Account.Field.UserName, local),
+        Account.Service.Set(Account.Field.Password, password),
+        Account.Service.Register()
+    )
+    waitFor<Account.Service.Connected> {
+        address.id == "$local@janek-latitude"
+    }
 }
 
 

@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton.context
 
+fun address(string: String) = Address.from(string)
+
 data class Address(
     val local: String,
     val domain: String
