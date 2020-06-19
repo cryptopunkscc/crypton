@@ -13,7 +13,9 @@ import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handleSendMessage
 import cc.cryptopunks.crypton.util.service
 
-fun chatService(scope: ChatScope) = service(scope) { chatHandlers() }
+fun chatService(scope: ChatScope) = service(scope) {
+    chatHandlers()
+}
 
 fun ChatScope.chatHandlers() = createHandlers {
     +handleSendMessage()
