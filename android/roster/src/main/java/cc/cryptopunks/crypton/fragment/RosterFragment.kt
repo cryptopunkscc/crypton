@@ -3,13 +3,13 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.service.RosterService
+import cc.cryptopunks.crypton.service.rosterService
 import cc.cryptopunks.crypton.view.RosterView
 
 class RosterFragment : ServiceFragment() {
 
     override fun onCreateService() =
-        RosterService(appScope)
+        rosterService(appScope)
 
     override fun onCreateView(
         inflater: LayoutInflater,
