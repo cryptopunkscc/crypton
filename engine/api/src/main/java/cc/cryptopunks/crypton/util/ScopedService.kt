@@ -20,7 +20,7 @@ fun <T: BaseScope> service(
 
 private data class ScopedService(
     val scope: BaseScope,
-    val handlers: HandlerRegistry = emptyMap()
+    val handlers: HandlerRegistry
 ) :
     Connectable,
     CoroutineScope by scope {

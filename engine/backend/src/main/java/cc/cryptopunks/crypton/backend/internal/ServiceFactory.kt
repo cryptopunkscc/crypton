@@ -12,11 +12,11 @@ import cc.cryptopunks.crypton.context.Route.Login
 import cc.cryptopunks.crypton.context.Route.Register
 import cc.cryptopunks.crypton.context.Route.Roster
 import cc.cryptopunks.crypton.context.Route.SetAccount
-import cc.cryptopunks.crypton.service.ChatService
-import cc.cryptopunks.crypton.service.CreateChatService
 import cc.cryptopunks.crypton.service.RosterService
 import cc.cryptopunks.crypton.service.RouterService
 import cc.cryptopunks.crypton.service.accountService
+import cc.cryptopunks.crypton.service.chatService
+import cc.cryptopunks.crypton.service.createChatService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -35,14 +35,14 @@ internal class ServiceFactory(
 
         AccountManagement -> null
 
-        is CreateChat -> CreateChatService(
-            sessionScope = appScope.sessionScope(
+        is CreateChat -> createChatService(
+            scope = appScope.sessionScope(
                 address = CreateChat(route.data).accountAddress
             )
         )
 
-        is Chat -> ChatService(
-            chatScope = runBlocking {
+        is Chat -> chatService(
+            scope = runBlocking {
                 delay(100)
                 appScope.sessionScope(
                     address = Chat(route.data).accountAddress

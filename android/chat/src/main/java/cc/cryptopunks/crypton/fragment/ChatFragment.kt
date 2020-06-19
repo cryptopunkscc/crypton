@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.service.ChatService
+import cc.cryptopunks.crypton.service.chatService
 import cc.cryptopunks.crypton.util.toMap
 import cc.cryptopunks.crypton.view.ChatView
 import kotlinx.coroutines.launch
@@ -23,8 +23,8 @@ class ChatFragment : ServiceFragment() {
             val accountAddress = route.accountAddress
             val chatAddress = route.address
             setTitle(chatAddress)
-            binding + ChatService(
-                chatScope = appScope
+            binding + chatService(
+                scope = appScope
                     .sessionScope(accountAddress)
                     .chatScope(chatAddress)
             )
