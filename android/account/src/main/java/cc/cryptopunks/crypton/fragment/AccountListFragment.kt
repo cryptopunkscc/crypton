@@ -7,7 +7,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.service.AccountService
+import cc.cryptopunks.crypton.service.accountService
 import cc.cryptopunks.crypton.view.AccountListView
 
 
@@ -21,7 +21,7 @@ class AccountListFragment : ServiceFragment() {
     }
 
     override fun onCreateService() =
-        AccountService(appScope)
+        accountService(appScope)
 
     override fun onCreateView(
         inflater: LayoutInflater,

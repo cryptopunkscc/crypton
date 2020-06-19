@@ -9,18 +9,21 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlin.reflect.KClass
 
+interface BaseScope :
+    CoroutineScope {
+    val log: TypedLog
+}
+
 interface AppScope :
-    CoroutineScope,
+    BaseScope,
     Executors,
     Sys,
     Repo {
 
-    val log: TypedLog
     val mainClass: KClass<*>
     val navigate: Route.Navigate
 
     val sessionStore: SessionScope.Store
-    val presenceStore: Presence.Store
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
 
@@ -38,6 +41,9 @@ interface SessionScope :
 
     val address: Address
     val scope: CoroutineScope get() = this
+
+    val presenceStore: Presence.Store
+
     fun chatScope(chat: Chat): ChatScope
     suspend fun chatScope(chat: Address): ChatScope
 
