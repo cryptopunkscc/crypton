@@ -104,7 +104,7 @@ suspend fun ClientDsl.removeAccount(
 ) {
     send(
         Route.Login,
-        Account.Service.Login(Account(Address(local, domain), Password(password)))
+        Account.Service.Add(Account(Address(local, domain), Password(password)))
     )
     val status = waitFor<Account.Service.Status> {
         (address.id == "$local@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error))
@@ -140,7 +140,7 @@ suspend fun ClientDsl.loginOrRegister(
         Account.Service.Set(Account.Field.UserName, local),
         Account.Service.Set(Account.Field.Password, password)
     )
-    var command: Any = Account.Service.Login()
+    var command: Any = Account.Service.Add()
     send(command)
     while (true) {
         val status = waitFor<Account.Service.Status> {

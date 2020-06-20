@@ -15,7 +15,6 @@ class CliClient : Connectable {
     override fun Connector.connect(): Job = launch {
         launch {
             systemInput().translate().collect { result ->
-                println(result)
                 when (result) {
                     is Throwable -> result.printStackTrace()
                     is Check.Suggest -> println(result)

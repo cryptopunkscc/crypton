@@ -68,7 +68,7 @@ internal class AccountListAdapter(
             connectionSwitch.setOnCheckedChangeListener { _, _ ->
                 launch {
                     delay(400)
-                    channel.send(Account.Service.Login())
+                    channel.send(Account.Service.Add())
                 }
             }
         }

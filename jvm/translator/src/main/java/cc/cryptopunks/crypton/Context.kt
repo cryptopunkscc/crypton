@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Route
 
 data class Context(
-    val route: Route = Route.SetAccount,
+    val route: Route = Route.Login,
     val commands: Map<Route, Map<String, Any>> = COMMANDS,
     val account: String = "",
     val state: Any = Unit,

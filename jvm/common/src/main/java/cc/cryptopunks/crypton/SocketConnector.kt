@@ -42,7 +42,12 @@ private fun ByteReadChannel.flowMessages(): Flow<String> = flow {
 }
 
 private fun String.parseMessage(): Any = split(":", limit = 2).let { (className, json) ->
-    json.parseJson(Class.forName(PREFIX + className).kotlin as KClass<Any>)
+    try {
+        json.parseJson(Class.forName(PREFIX + className).kotlin as KClass<Any>)
+    } catch (e: Throwable) {
+        println(this)
+        e.printStackTrace()
+    }
 }
 
 private suspend fun ByteWriteChannel.send(any: Any) {

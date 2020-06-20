@@ -4,7 +4,6 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Route
 import org.junit.Assert.assertEquals
-import org.junit.Ignore
 import org.junit.Test
 
 class CommandsTest {
@@ -15,7 +14,7 @@ class CommandsTest {
             listOf(
                 Account.Service.Set(Account.Field.UserName, "test@account.io"),
                 Account.Service.Set(Account.Field.Password, "pass"),
-                Account.Service.Login()
+                Account.Service.Add()
             ),
             Context(Route.SetAccount)
                 .prepare()
