@@ -3,11 +3,13 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.address
 
 private val navigate = "navigate" to mapOf(
-    "accounts" to command { Route.SetAccount },
+    "accounts" to command { Route.Login },
     "roster" to command { Route.Roster },
     "create" to mapOf(
         "chat" to command {
@@ -25,26 +27,23 @@ private val navigate = "navigate" to mapOf(
 )
 
 val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
-    Route.SetAccount to mapOf(
+    Route.Login to mapOf(
+        "login" to command(
+            param()
+        ) { (account) ->
+            Account.Service.Login(address(account))
+        },
         "add" to command(
             named("account"),
             named("password")
         ) { (account, password) ->
-            listOf(
-                Account.Service.Set(Account.Field.UserName, account),
-                Account.Service.Set(Account.Field.Password, password),
-                Account.Service.Login()
-            )
+            Account.Service.Add(Account(address(account), Password(password)))
         },
         "create" to command(
             named("account"),
             named("password")
         ) { (account, password) ->
-            listOf(
-                Account.Service.Set(Account.Field.UserName, account),
-                Account.Service.Set(Account.Field.Password, password),
-                Account.Service.Register()
-            )
+            Account.Service.Register(Account(address(account), Password(password)))
         }
     ),
     Route.Roster to mapOf(

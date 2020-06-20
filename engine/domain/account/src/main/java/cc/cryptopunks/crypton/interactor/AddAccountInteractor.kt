@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 
 suspend fun AppScope.addAccount(
     account: Account,
-    register: Boolean
+    register: Boolean,
+    insert: Boolean
 ) {
     log.d("Adding account ${account.address}")
     accountRepo.assertAccountNotExist(account.address)
@@ -34,7 +35,7 @@ suspend fun AppScope.addAccount(
         login()
         log.d("Logged in")
         scope.launch { initOmemo() }
-        accountRepo.insert(account)
+        if (insert) accountRepo.insert(account)
         log.d("Account inserted")
     }
     sessionStore reduce {

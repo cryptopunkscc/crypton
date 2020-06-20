@@ -2,6 +2,12 @@ apply plugin: 'application'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 mainClassName = "cc.cryptopunks.crypton.CliKt"
+apply plugin: 'com.github.johnrengelman.shadow'
+shadowJar {
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':engine:api')

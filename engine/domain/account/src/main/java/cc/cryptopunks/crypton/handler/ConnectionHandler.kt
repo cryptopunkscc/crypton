@@ -9,29 +9,46 @@ import cc.cryptopunks.crypton.interactor.addAccount
 import cc.cryptopunks.crypton.model.Form
 import kotlinx.coroutines.launch
 
-internal fun AppScope.handleLogin(form: Form) =
-    handleConnection<Account.Service.Login>(form)
+internal fun AppScope.handleAdd(form: Form) =
+    handleConnection<Account.Service.Add>(form)
 
 internal fun AppScope.handleRegister(form: Form) =
     handleConnection<Account.Service.Register>(form)
 
-private fun <C : Account.Service.Connect> AppScope.handleConnection(
+internal fun AppScope.handleLogin(form: Form) =
+    handleConnection<Account.Service.Login>(form)
+
+private fun <C : Any> AppScope.handleConnection(
     form: Form
 ) = handle<C> { out ->
+    log.d("Handle $this")
     launch {
-        (account ?: form.account()).let { account ->
-            out(Account.Service.Connecting(account.address))
-            try {
-                addAccount(
-                    account = account,
-                    register = this@handle is Account.Service.Register
-                )
-                out(Account.Service.Connected(account.address))
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                out(Account.Service.Error(account.address, e.message))
-            }
+        when (this@handle) {
+            is Account.Service.Add -> account ?: form.account()
+            is Account.Service.Register -> account ?: form.account()
+            is Account.Service.Login -> accountRepo.get(address)
+            else -> throw Exception("Invalid connect")
+        }.connectAccount(out) { account ->
+            addAccount(
+                account = account,
+                register = this@handle is Account.Service.Register,
+                insert = true
+            )
         }
+    }
+}
+
+private suspend fun Account.connectAccount(
+    out: suspend (Any) -> Unit,
+    connect: suspend (Account) -> Unit
+) {
+    out(Account.Service.Connecting(address))
+    try {
+        connect(this)
+        out(Account.Service.Connected(address))
+    } catch (e: Throwable) {
+        e.printStackTrace()
+        out(Account.Service.Error(address, e.message))
     }
 }
 

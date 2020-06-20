@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.createHandlers
 import cc.cryptopunks.crypton.handler.handleAccountListSubscription
+import cc.cryptopunks.crypton.handler.handleAdd
 import cc.cryptopunks.crypton.handler.handleLogin
 import cc.cryptopunks.crypton.handler.handleLogout
 import cc.cryptopunks.crypton.handler.handleRegister
@@ -23,6 +24,7 @@ fun AppScope.createAccountHandlers() = createHandlers {
 
     +handleSetField(form)
     +handleRegister(form)
+    +handleAdd(form)
     +handleLogin(form)
     +handleLogout()
     +handleRemove()

@@ -28,15 +28,14 @@ data class Account(
         // input
         data class Set(val field: Field, val text: CharSequence)
 
-        data class Register(override val account: Account? = null) : Connect
-        data class Login(override val account: Account? = null) : Connect
+        data class Register(val account: Account? = null) : Connect
+        data class Add(val account: Account? = null) : Connect
+        data class Login(val address: Address) : Connect
         data class Logout(val address: Address)
         data class Remove(val address: Address, val deviceOnly: Boolean = true)
         data class SubscribeAccountList(override val enable: Boolean) : Subscription
 
-        interface Connect {
-            val account: Account?
-        }
+        interface Connect
 
         // output
         data class Connecting(override val address: Address) : Status
