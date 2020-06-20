@@ -13,8 +13,8 @@ internal fun SessionScope.handleCreateChat() =
             try {
                 createChat(
                     Chat.Service.CreateChatData(
-                        title = address.id,
-                        users = listOf(address)
+                        title = chat.id,
+                        users = listOf(chat)
                     )
                 ).run {
                     Route.Chat().also {

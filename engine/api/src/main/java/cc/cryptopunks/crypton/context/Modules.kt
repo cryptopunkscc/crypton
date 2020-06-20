@@ -45,8 +45,9 @@ data class SessionModule(
     Net by connection,
     SessionRepo by sessionRepo {
 
-    override val presenceStore = Presence.Store()
+    override val log = typedLog()
     override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
+    override val presenceStore = Presence.Store()
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
 }
@@ -56,4 +57,7 @@ class ChatModule(
     override val chat: Chat
 ) :
     SessionScope by sessionScope,
-    ChatScope
+    ChatScope {
+
+    override val log = typedLog()
+}

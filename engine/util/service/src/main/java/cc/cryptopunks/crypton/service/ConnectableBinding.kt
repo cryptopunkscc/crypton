@@ -4,10 +4,9 @@ import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.service.internal.Binding
 import cc.cryptopunks.crypton.service.internal.cancel
+import cc.cryptopunks.crypton.service.internal.createBinding
 import cc.cryptopunks.crypton.service.internal.setActor
 import cc.cryptopunks.crypton.service.internal.setService
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 
 class ConnectableBinding(
@@ -16,7 +15,7 @@ class ConnectableBinding(
     Connectable.Binding {
 
     private var binding: Binding =
-        cc.cryptopunks.crypton.service.internal.createBinding(
+        createBinding(
             actorChannel = channels.actor,
             serviceChannel = channels.service
         )
@@ -49,16 +48,6 @@ class ConnectableBinding(
 
     override suspend fun cancel() {
         binding.cancel()
-        binding = cc.cryptopunks.crypton.service.internal.createBinding()
-    }
-}
-
-data class Channels(
-    val actor: BroadcastChannel<Any> = BroadcastChannel(Channel.BUFFERED),
-    val service: BroadcastChannel<Any> = BroadcastChannel(Channel.BUFFERED)
-) {
-    fun cancel() {
-        actor.cancel()
-        service.cancel()
+        binding = createBinding()
     }
 }

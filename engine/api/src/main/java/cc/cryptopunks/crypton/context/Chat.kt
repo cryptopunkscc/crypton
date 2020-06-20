@@ -22,6 +22,8 @@ data class Chat(
 
     interface Service : Connectable {
 
+        // input
+
         object PopClipboard
 
         data class MessagesRead(val messages: List<Message>)
@@ -42,13 +44,10 @@ data class Chat(
 
         data class GetMessages(val address: Address? = null)
 
-        data class CreateChat(val address: Address)
-
-        data class MessageText(val text: CharSequence?) : Out
-
-        data class PagedMessages(val account: Address, val list: PagedList<Message>) : Out
-
-        data class Messages(val account: Address, val list: List<Message>)
+        data class CreateChat(
+            val account: Address,
+            val chat: Address
+        )
 
         data class CreateChatData(
             val title: String,
@@ -65,6 +64,17 @@ data class Chat(
                 }
             }
         }
+
+
+        // output
+
+        data class ChatCreated(val address: Address)
+
+        data class MessageText(val text: CharSequence?)
+
+        data class PagedMessages(val account: Address, val list: PagedList<Message>)
+
+        data class Messages(val account: Address, val list: List<Message>)
     }
 
 

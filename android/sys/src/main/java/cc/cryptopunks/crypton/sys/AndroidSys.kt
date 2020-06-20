@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.sys
 import android.app.Application
 import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.context.*
+import kotlinx.coroutines.GlobalScope
 import kotlin.reflect.KClass
 
 class AndroidSys(
@@ -33,7 +34,7 @@ class AndroidSys(
 
     override val networkSys: Network.Sys by lazy {
         NetworkSys(
-            scope = Service.Scope(),
+            scope = GlobalScope,
             connectivityManager = application.getSystemService()!!
         )
     }

@@ -42,6 +42,7 @@ data class Account(
         data class Connected(override val address: Address) : Status
         data class Error(override val address: Address, val message: String? = null) : Status
         data class Accounts(val list: List<Address>)
+        data class HasAccounts(val condition: Boolean)
 
         interface Status {
             val address: Address

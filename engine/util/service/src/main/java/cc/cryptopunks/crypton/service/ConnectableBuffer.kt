@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.typedLog
@@ -16,7 +17,7 @@ import kotlin.coroutines.CoroutineContext
 
 class ConnectableBuffer(
     override val coroutineContext: CoroutineContext
-) : Connectable {
+) : Actor {
 
     private val log = typedLog()
 

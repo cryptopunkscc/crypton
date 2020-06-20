@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-
 fun <T : BaseScope> service(
     scope: T,
     createRegistry: T.() -> HandlerRegistry
