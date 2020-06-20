@@ -45,7 +45,9 @@ internal class CreateAccountView(context: Context) : ActorLayout(context) {
         }
         launch {
             flowOf(
-                registerButton.clicks().map { action },
+                registerButton.clicks().map {
+                    action
+                },
                 formFields.textFieldChanges().map { (field, text) ->
                     Account.Service.Set(field, text)
                 }

@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.util.BroadcastErrorScope
 import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,23 +11,14 @@ import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
 interface Service : CoroutineScope {
-
     val id: Any get() = this::class.java.simpleName
-
-    class Scope : BroadcastErrorScope() {
-        override val coroutineContext = SupervisorJob() + Dispatchers.IO
-    }
 }
 
 interface Subscription {
     val enable: Boolean
 }
 
-typealias Out = Connectable.Output
-
 interface Connectable : Service {
-    interface Input
-    interface Output
     interface Binding {
         class Store : OpenStore<List<WeakReference<out Binding>>>(emptyList())
 

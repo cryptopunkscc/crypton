@@ -3,16 +3,21 @@ package cc.cryptopunks.crypton.sys
 import android.net.ConnectivityManager
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Network.Status.Unavailable
-import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.sys.network.NetworkCallbacks
 import cc.cryptopunks.crypton.sys.network.bind
 import cc.cryptopunks.crypton.sys.network.processNetworkStatus
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 internal class NetworkSys(
     connectivityManager: ConnectivityManager,
-    scope: Service.Scope
+    scope: CoroutineScope
 ) :
     Network.Sys {
 

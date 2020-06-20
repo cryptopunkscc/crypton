@@ -16,6 +16,7 @@ import cc.cryptopunks.crypton.util.service
 import kotlinx.coroutines.flow.collect
 
 fun accountService(scope: AppScope) = service(scope) {
+    scope.log.d("Init account service")
     createAccountHandlers()
 }
 

@@ -4,11 +4,14 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.context.AppModule
+import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.mock.MockConnectionFactory
+import cc.cryptopunks.crypton.smack.SmackConnectionFactory
+import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.service.startAppService
@@ -42,7 +45,12 @@ class App :
                     )
                 )
             ),
-            createConnection = MockConnectionFactory(),
+            createConnection = SmackConnectionFactory {
+                copy(
+                    hostAddress = "10.0.2.2",
+                    securityMode = Connection.Factory.Config.SecurityMode.disabled
+                )
+            },
             startSessionService = SessionScope::startSessionService
         )
     }
@@ -54,7 +62,7 @@ class App :
         initAndroidLog()
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
-//        initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
+        initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
         scope.startAppService()
     }
 

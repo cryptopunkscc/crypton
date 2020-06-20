@@ -5,9 +5,10 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.widget.ActorLayout
@@ -47,7 +48,8 @@ class CreateChatView(context: Context) :
     }
 
     private fun createUserFromInput() = Chat.Service.CreateChat(
-        Address.from(addressInputView.input.text.toString())
+        account = context.currentAccount!!,
+        chat = address(addressInputView.input.text.toString())
     )
 
     private fun setError(throwable: Throwable?) {

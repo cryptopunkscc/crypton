@@ -2,13 +2,14 @@ package cc.cryptopunks.crypton.sys.network
 
 import android.net.ConnectivityManager
 import cc.cryptopunks.crypton.context.Network
-import cc.cryptopunks.crypton.context.Service
 import cc.cryptopunks.crypton.util.typedLog
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.launch
 
 internal class NetworkCallbacks(
-    private val scope: Service.Scope
+    private val scope: CoroutineScope
 ) :
     ConnectivityManager.NetworkCallback() {
 

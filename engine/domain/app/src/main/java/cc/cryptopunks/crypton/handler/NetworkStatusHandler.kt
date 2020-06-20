@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 fun AppScope.handleNetworkStatus() =
     handle<Network.Status> {
+        log.d("handle $this")
         launch {
             when (this@handle) {
                 is Network.Status.Available,

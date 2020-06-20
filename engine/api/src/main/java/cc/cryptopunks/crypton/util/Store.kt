@@ -6,11 +6,9 @@ import kotlinx.coroutines.flow.asFlow
 
 private val StoreDispatcher = newSingleThreadContext("Store")
 
-val Dispatchers.Store get() = StoreDispatcher
-
 open class Store<T>(
     initial: T,
-    val dispatcher: CoroutineDispatcher = Dispatchers.Store
+    val dispatcher: CoroutineDispatcher = StoreDispatcher
 ) {
     private val channel = ConflatedBroadcastChannel(initial)
     fun get() = channel.value

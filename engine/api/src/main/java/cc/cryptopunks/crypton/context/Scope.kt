@@ -62,10 +62,6 @@ interface SessionScope :
 
 
     class Store : OpenStore<Map<Address, SessionScope>>(emptyMap())
-
-    interface BackgroundService {
-        suspend operator fun invoke()
-    }
 }
 
 interface ChatScope :
