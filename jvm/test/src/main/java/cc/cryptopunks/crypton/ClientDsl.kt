@@ -12,9 +12,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.scan
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withTimeout
+import org.junit.Assert
 import kotlin.coroutines.CoroutineContext
 
 class ClientDsl(
@@ -71,5 +74,17 @@ class ClientDsl(
     ): T = withTimeout(timeout) {
         flush()
         output().filterIsInstance<T>().first { it.filter() }
+    }
+
+    suspend fun expect(expected: List<Any>) {
+        flush()
+        require(expected.isNotEmpty()) { "expected cannot be empty " }
+        output().scan(expected) { rest, value ->
+            if (rest.isEmpty()) rest
+            else {
+                Assert.assertEquals(rest.first(), value)
+                rest.drop(1)
+            }
+        }.takeWhile { it.isNotEmpty() }
     }
 }
