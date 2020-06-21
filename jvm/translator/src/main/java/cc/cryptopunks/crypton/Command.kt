@@ -40,7 +40,7 @@ fun Command.append(arg: String) = copy(
 
             param.value != null -> args
 
-            param is Input.Simple -> {
+            param is Input.Param -> {
                 param.value = args.first()
                 args.drop(1)
             }
