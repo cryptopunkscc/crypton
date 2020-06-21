@@ -63,12 +63,8 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
     Route.CreateChat() to (mapOf(
         "chat" to mapOf(
             "to" to command(param()) { (address) ->
-                Chat.Service.CreateChat(Address.from(address))
+                Chat.Service.CreateChat(address(account), Address.from(address))
             }
         )
     ))
 ).mapValues { (_, commands) -> commands + navigate }
-
-fun param() = Input.Simple()
-fun vararg() = Input.Vararg()
-fun named(name: String) = Input.Named(name)
