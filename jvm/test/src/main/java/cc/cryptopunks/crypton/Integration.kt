@@ -7,7 +7,6 @@ import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
@@ -22,14 +21,8 @@ fun main() {
             startServer()
         }.also {
             listOf(
-                launch {
-                    delay(100)
-                    startClient1()
-                },
-                launch {
-                    delay(1000) // FIXME delay prevents race condition
-                    startClient2()
-                }
+                launch { startClient1() },
+                launch { startClient2() }
             ).joinAll()
         }.cancel()
     }
@@ -48,7 +41,7 @@ private val address2 = Address(test2, domain)
 suspend fun startClient1() = Client1.connectClient {
     openSubscription()
     log.d("Start client 1")
-    removeAccount(test1, pass)
+    tryRemoveAccount(test1, pass)
     register(test1, pass)
     send(
         Route.CreateChat().apply {
@@ -74,7 +67,7 @@ suspend fun startClient1() = Client1.connectClient {
 suspend fun startClient2() = Client2.connectClient {
     openSubscription()
     log.d("Start client 2")
-    removeAccount(test2, pass)
+    tryRemoveAccount(test2, pass)
     register(test2, pass)
     send(
         Route.Roster,
@@ -99,21 +92,27 @@ suspend fun startClient2() = Client2.connectClient {
     log.d("Stop client 2")
 }
 
-suspend fun ClientDsl.removeAccount(
+suspend fun ClientDsl.tryRemoveAccount(
     local: String,
     password: String
 ) {
+    val address = Address(local, domain)
     send(
         Route.Login,
-        Account.Service.Add(Account(Address(local, domain), Password(password)))
+        Account.Service.Add(Account(address, Password(password)))
     )
-    val status = waitFor<Account.Service.Status> {
-        (address.id == "$local@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error))
-    }
-    if (status is Account.Service.Connected) {
-        send(Account.Service.Remove(address("$local@$domain"), deviceOnly = false))
-        delay(500)
-    }
+    expect(
+        Account.Service.Connecting(address),
+        should<Account.Service.Status> {
+            when (this) {
+                is Account.Service.Error -> true
+                is Account.Service.Connected -> true.also {
+                    send(Account.Service.Remove(address, deviceOnly = false))
+                }
+                else -> false
+            }
+        }
+    )
 }
 
 

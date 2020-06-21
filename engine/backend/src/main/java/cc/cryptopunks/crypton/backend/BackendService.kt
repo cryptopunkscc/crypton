@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
 
 class BackendService(
     private val appScope: AppScope
@@ -25,8 +24,7 @@ class BackendService(
 
     private val log = typedLog()
 
-    override val coroutineContext =
-        SupervisorJob() + newSingleThreadContext(this::class.java.simpleName)
+    override val coroutineContext get() = appScope.coroutineContext
 
     init {
         appScope.startAppService()
