@@ -13,14 +13,15 @@ class InitOmemo(
     private val channel = Channel<Net.Event>()
 
     private val init by lazy {
+        val jid = omemoManager.ownJid
         try {
-            log.d("start")
+            log.d("start $jid")
             omemoManager.initialize()
             channel.offer(Net.OmemoInitialized)
-            log.d("stop")
+            log.d("stop $jid")
             true
         } catch (throwable: Throwable) {
-            log.d("failed")
+            log.d("failed $jid")
             throwable.printStackTrace()
             channel.offer(
                 Net.Exception(

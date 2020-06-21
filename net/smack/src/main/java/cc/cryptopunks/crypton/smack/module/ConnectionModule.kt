@@ -179,7 +179,7 @@ internal class ConnectionModule(
 
     override suspend fun sendMessage(message: Message) = sendMessage.invoke(message)
 
-    override fun messageEvents(): Flow<Message.Net.Event> = messageEventBroadcast.asFlow()
+    override fun incomingMessages(): Flow<Message.Net.Event> = messageEventBroadcast.asFlow()
 
     override fun readArchived(
         query: Message.Net.ReadArchived.Query

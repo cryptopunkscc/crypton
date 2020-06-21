@@ -31,10 +31,10 @@ internal fun createSendMessage(
     val fromJid = JidCreate.entityBareFrom(address.toString())
     val toJid = JidCreate.entityBareFrom(message.to.address.toString())
 
-    log.d("$id checking subscription")
+    log.d("$id checking subscription to $toJid")
     if (!roster.iAmSubscribedTo(toJid) && fromJid != toJid) {
         roster.createEntry(toJid, message.to.address.local, emptyArray())
-        log.d("$id subscribe")
+        log.d("$id subscribe to $toJid")
     } else {
         log.d("$id encrypting")
         val smackMessage = omemoManager

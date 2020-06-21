@@ -22,6 +22,6 @@ fun SessionScope.startSessionService() = launch {
             update.also { it(messages) }
         }
     }
-    launch { messageEvents().collect { event -> saveMessage(event.message) } }
+    launch { incomingMessages().collect { event -> saveMessage(event.message) } }
     launch { presenceChangedFlow().collect(handlePresenceChanged()) }
 }

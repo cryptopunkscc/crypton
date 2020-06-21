@@ -37,8 +37,8 @@ fun main() {
 object Client1
 object Client2
 
-private const val test1 = "test3"
-private const val test2 = "test4"
+private const val test1 = "test1"
+private const val test2 = "test2"
 private const val pass = "pass"
 private const val domain = "janek-latitude"
 private val address1 = Address(test1, domain)
@@ -53,14 +53,14 @@ suspend fun startClient1() = Client1.connectClient {
         Route.CreateChat().apply {
             accountId = "$test1@janek-latitude"
         },
-        Chat.Service.CreateChat(address1, Address.from("$test2@janek-latitude")),
+        Chat.Service.CreateChat(address1, address2),
         Route.Chat().apply {
             accountId = "$test1@janek-latitude"
             chatAddress = "$test2@janek-latitude"
         },
         Chat.Service.SubscribeLastMessage(true)
     )
-    send(Chat.Service.SendMessage("yo"))
+    send(Chat.Service.QueueMessage("yo"))
     waitFor<Chat.Service.Messages> {
         list.any { it.text == "yo yo" }
     }
@@ -92,7 +92,7 @@ suspend fun startClient2() = Client2.connectClient {
             chatAddress = "$test1@janek-latitude"
         },
         Chat.Service.SubscribeLastMessage(true),
-        Chat.Service.SendMessage("yo yo")
+        Chat.Service.QueueMessage("yo yo")
     )
     flush()
     log.d("Stop client 2")

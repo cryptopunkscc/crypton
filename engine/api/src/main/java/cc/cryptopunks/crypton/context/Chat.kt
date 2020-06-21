@@ -28,7 +28,7 @@ data class Chat(
 
         data class MessagesRead(val messages: List<Message>)
 
-        data class SendMessage(val text: String)
+        data class QueueMessage(val text: String)
 
         data class Copy(val message: Message)
 

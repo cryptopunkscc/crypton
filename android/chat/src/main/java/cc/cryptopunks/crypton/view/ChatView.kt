@@ -14,7 +14,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat.Service.MessageText
 import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
-import cc.cryptopunks.crypton.context.Chat.Service.SendMessage
+import cc.cryptopunks.crypton.context.Chat.Service.QueueMessage
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.util.bindings.clicks
@@ -82,7 +82,7 @@ class ChatView(
         launch {
             flowOf(
                 messageAdapter.outputFlow(),
-                messageInputView.button.clicks().map { SendMessage(getInputAndClear()) }
+                messageInputView.button.clicks().map { QueueMessage(getInputAndClear()) }
             ).flattenMerge()
                 .collect(output)
         }
