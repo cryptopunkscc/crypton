@@ -4,9 +4,9 @@ import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
@@ -25,7 +25,7 @@ class AppModule(
     Repo by repo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
+    override val coroutineContext: CoroutineContext = SupervisorJob() + newSingleThreadContext("AppScope")
     override val sessionStore = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
@@ -46,7 +46,7 @@ data class SessionModule(
     SessionRepo by sessionRepo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO
+    override val coroutineContext: CoroutineContext = SupervisorJob() + newSingleThreadContext(address.id)
     override val presenceStore = Presence.Store()
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
