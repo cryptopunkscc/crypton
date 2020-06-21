@@ -53,7 +53,7 @@ suspend fun startClient1() = Client1.connectClient {
         Route.CreateChat().apply {
             accountId = "$test1@janek-latitude"
         },
-        Chat.Service.CreateChat(Address.from("$test2@janek-latitude")),
+        Chat.Service.CreateChat(address1, Address.from("$test2@janek-latitude")),
         Route.Chat().apply {
             accountId = "$test1@janek-latitude"
             chatAddress = "$test2@janek-latitude"

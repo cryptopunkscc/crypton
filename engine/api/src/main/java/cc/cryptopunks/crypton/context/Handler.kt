@@ -41,4 +41,4 @@ inline operator fun <reified T> HandlerRegistryBuilder.plus(handle: Handle<T>) =
     unsafePlus(T::class, handle)
 
 suspend fun <T> Flow<T>.collect(handle: Handle<T>) =
-    collect { handle(it).join() }
+    collect { handle(it) }
