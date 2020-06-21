@@ -39,7 +39,7 @@ internal fun SmackJid.remoteId() = Address(
 
 internal fun SmackPresence.presence(address: SmackJid) = Presence(
     resource = address.resourceId(),
-    status = Presence.Status.values()[type.ordinal]
+    status = Presence.Status.values().first { it.name.toLowerCase() == type.name }
 )
 
 internal fun Address.bareJid() = JidCreate.bareFrom(toString())

@@ -41,7 +41,7 @@ class CommandsTest {
     @Test
     fun `send message`() {
         assertEquals(
-            Chat.Service.SendMessage("lorem ipsum"),
+            Chat.Service.QueueMessage("lorem ipsum"),
             Context(Route.Chat().apply {
                 chatAddress = "chat@address.io"
                 accountId = "test@account.io"

@@ -18,6 +18,6 @@ class MockMessageNet(
         query: Message.Net.ReadArchived.Query
     ): Flow<List<Message>> = state.defaults.messages.asFlow()
 
-    override fun messageEvents(): Flow<Message.Net.Event> = state.messageEvents.consumeAsFlow()
+    override fun incomingMessages(): Flow<Message.Net.Event> = state.messageEvents.consumeAsFlow()
 
 }

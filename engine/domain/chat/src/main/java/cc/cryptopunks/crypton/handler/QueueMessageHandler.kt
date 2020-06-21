@@ -12,10 +12,9 @@ import kotlinx.coroutines.launch
 
 private class SendMessageHandler
 
-internal fun ChatScope.handleSendMessage(
+internal fun ChatScope.handleQueueMessage(
     log: TypedLog = SendMessageHandler().typedLog()
-) = handle<Chat.Service.SendMessage> {
-    log.d("handle $this")
+) = handle<Chat.Service.QueueMessage> {
     launch {
         chat.createQueuedMessage(text).let { message ->
             log.d("Enqueue message $message")

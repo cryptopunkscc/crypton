@@ -50,6 +50,7 @@ data class SessionModule(
     override val presenceStore = Presence.Store()
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
+    override fun toString(): String = address.toString()
 }
 
 class ChatModule(
