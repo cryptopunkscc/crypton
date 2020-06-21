@@ -18,19 +18,20 @@ fun main() {
     Log.init(JvmLog)
     TrustAllManager.install()
     runBlocking {
-        listOf(
-            launch {
-                startServer()
-            },
-            launch {
-                delay(100)
-                startClient1()
-            },
-            launch {
-                delay(1000)
-                startClient2()
-            }
-        ).joinAll()
+        launch {
+            startServer()
+        }.also {
+            listOf(
+                launch {
+                    delay(100)
+                    startClient1()
+                },
+                launch {
+                    delay(1000) // FIXME delay prevents race condition
+                    startClient2()
+                }
+            ).joinAll()
+        }.cancel()
     }
 }
 
