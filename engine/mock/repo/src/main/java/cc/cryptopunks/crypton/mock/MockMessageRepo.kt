@@ -73,6 +73,9 @@ class MockMessageRepo : Message.Repo {
             ).also { dataSources + it }
         }
 
+    override fun unreadList(): List<Message> =
+        store.get().values.filter { it.isUnread }.sortedBy { it.timestamp }
+
     override fun unreadListFlow(): Flow<List<Message>> = store.changesFlow().map { map ->
         map.filterValues { it.isUnread }.values.sortedBy { it.timestamp }
     }
