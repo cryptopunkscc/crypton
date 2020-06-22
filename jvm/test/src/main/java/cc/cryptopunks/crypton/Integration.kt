@@ -3,8 +3,10 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Presence
+import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.util.Log
@@ -41,8 +43,8 @@ private val address2 = Address(test2, domain)
 suspend fun startClient1() = Client1.connectClient {
     openSubscription()
     log.d("Start client 1")
-    tryRemoveAccount(test1, pass)
-    register(test1, pass)
+    tryRemoveAccount(address1, pass)
+    register(address1, pass)
     send(
         Route.CreateChat().apply {
             accountId = "$test1@janek-latitude"
@@ -55,10 +57,64 @@ suspend fun startClient1() = Client1.connectClient {
         Chat.Service.SubscribeLastMessage(true)
     )
     send(Chat.Service.QueueMessage("yo"))
-    waitFor<Chat.Service.Messages> {
-        list.any { it.text == "yo yo" }
-    }
-
+    expect(
+        Chat.Service.Messages(
+            account = address1,
+            list = listOf(
+                should {
+                    require(text == "yo") { text }
+                    require(from == Resource(address1)) { from }
+                    require(to == Resource(address2)) { to }
+                    require(chatAddress == address2) { chatAddress }
+                    require(status == Message.Status.Queued) { status }
+                    require(notifiedAt == 0L) { notifiedAt }
+                    require(readAt == 0L) { readAt }
+                    true
+                }
+            )
+        ),
+        Chat.Service.Messages(
+            account = address1,
+            list = listOf(
+                should {
+                    require(text == "yo") { text }
+                    require(from == Resource(address1)) { from }
+                    require(to == Resource(address2)) { to }
+                    require(chatAddress == address2) { chatAddress }
+                    require(status == Message.Status.Sending) { status }
+                    require(notifiedAt == 0L) { notifiedAt }
+                    require(readAt == 0L) { readAt }
+                    true
+                },
+                should {
+                    require(text == "yo") { text }
+                    require(from == Resource(address1)) { from }
+                    require(to == Resource(address2)) { to }
+                    require(chatAddress == address2) { chatAddress }
+                    require(status == Message.Status.Sent) { status }
+                    require(notifiedAt == 0L) { notifiedAt }
+                    require(readAt == 0L) { readAt }
+                    true
+                }
+            )
+        ),
+        Chat.Service.Messages(
+            account = address1,
+            list = listOf(
+                should {
+                    require(text == "yo yo") { text }
+                    require(from.address == address2) { from.address }
+                    require(to.address == address1) { to.address }
+                    require(chatAddress == address2) { chatAddress }
+                    require(status == Message.Status.Received) { status }
+                    require(notifiedAt == 0L) { notifiedAt }
+                    require(readAt == 0L) { readAt }
+                    true
+                },
+                ignore() // Fixme duplicated message
+            )
+        )
+    )
     flush()
     delay(2000)
     log.d("Stop client 1")
@@ -67,19 +123,51 @@ suspend fun startClient1() = Client1.connectClient {
 suspend fun startClient2() = Client2.connectClient {
     openSubscription()
     log.d("Start client 2")
-    tryRemoveAccount(test2, pass)
-    register(test2, pass)
+    tryRemoveAccount(address2, pass)
+    register(address2, pass)
     send(
         Route.Roster,
         Roster.Service.SubscribeItems(true)
     )
-    waitFor<Roster.Service.Items> {
-        list.any { it.presence == Presence.Status.Subscribe }
-    }
+    expect(
+        ignore(),
+        Roster.Service.Items(
+            listOf(
+                ignore(),
+                should {
+                    require(account == address2) { account }
+                    require(title == address1.id) { title }
+                    require(presence == Presence.Status.Subscribe) { presence }
+                    require(message == Message.Empty) { message }
+                    require(unreadMessagesCount == 0) { unreadMessagesCount }
+                    true
+                }
+            )
+        )
+    )
     send(Roster.Service.AcceptSubscription(address2, address1))
-    waitFor<Roster.Service.Items> {
-        list.any { it.presence != Presence.Status.Subscribe }
-    }
+    expect(
+        ignore(),
+        Roster.Service.Items(
+            listOf(
+                ignore(),
+                should {
+                    require(account == address2) { account }
+                    require(title == address1.id) { title }
+                    require(presence == Presence.Status.Available) { presence }
+                    message.run {
+                        require(text == "yo") { text }
+                        require(chatAddress == address1) { chatAddress }
+                        require(from.address == address1) { from.address }
+                        require(to.address == address2 ) { to.address }
+                        require(status == Message.Status.Received)
+                    }
+                    require(unreadMessagesCount == 1) { unreadMessagesCount }
+                    true
+                }
+            )
+        )
+    )
     send(
         Route.Chat().apply {
             accountId = "$test2@janek-latitude"
@@ -93,10 +181,9 @@ suspend fun startClient2() = Client2.connectClient {
 }
 
 suspend fun ClientDsl.tryRemoveAccount(
-    local: String,
+    address: Address,
     password: String
 ) {
-    val address = Address(local, domain)
     send(
         Route.Login,
         Account.Service.Add(Account(address, Password(password)))
@@ -117,49 +204,15 @@ suspend fun ClientDsl.tryRemoveAccount(
 
 
 suspend fun ClientDsl.register(
-    local: String,
+    address: Address,
     password: String
 ) {
     send(
         Route.Login,
-        Account.Service.Register(Account(Address(local, domain), Password(password)))
+        Account.Service.Register(Account(address, Password(password)))
     )
-    waitFor<Account.Service.Connected> {
-        address.id == "$local@janek-latitude"
-    }
-}
-
-
-suspend fun ClientDsl.loginOrRegister(
-    local: String,
-    password: String
-) {
-    send(
-        Route.Login,
-        Account.Service.Set(Account.Field.ServiceName, "janek-latitude"),
-        Account.Service.Set(Account.Field.UserName, local),
-        Account.Service.Set(Account.Field.Password, password)
+    expect(
+        Account.Service.Connecting(address),
+        Account.Service.Connected(address)
     )
-    var command: Any = Account.Service.Add()
-    send(command)
-    while (true) {
-        val status = waitFor<Account.Service.Status> {
-            (address.id == "$local@janek-latitude" && (this is Account.Service.Connected || this is Account.Service.Error))
-        }
-        when (status) {
-            is Account.Service.Error -> when {
-                status.message?.contains("wait") == true -> {
-                    delay(10000)
-                    send(command)
-                }
-                status.message?.contains("not-authorized") == true -> {
-                    command = Account.Service.Register()
-                    send(command)
-                }
-            }
-            is Account.Service.Connected -> return
-            else -> Unit
-        }
-    }
 }
-
