@@ -6,7 +6,6 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.context.handle
-import cc.cryptopunks.crypton.interactor.flushQueuedMessages
 import cc.cryptopunks.crypton.interactor.storePresence
 import kotlinx.coroutines.launch
 
@@ -36,11 +35,6 @@ internal fun SessionScope.handlePresenceChanged() =
                             )
                         )
                     }
-
-                Presence.Status.Subscribed -> {
-                    log.d("${presence.resource} accepted subscription")
-                    flushQueuedMessages(presence.resource.address)
-                }
 
                 else -> Unit
             }

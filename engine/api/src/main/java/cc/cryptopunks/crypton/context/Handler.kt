@@ -40,5 +40,6 @@ fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
 inline operator fun <reified T> HandlerRegistryBuilder.plus(handle: Handle<T>) =
     unsafePlus(T::class, handle)
 
-suspend fun <T> Flow<T>.collect(handle: Handle<T>) =
-    collect { handle(it) }
+suspend fun <T> Flow<T>.collect(handle: Handle<T>, join: Boolean = false) = collect {
+    handle(it).run { if (join) join() }
+}

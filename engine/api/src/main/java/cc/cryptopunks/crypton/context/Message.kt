@@ -57,6 +57,7 @@ data class Message(
         suspend fun list(range: LongRange = 0..System.currentTimeMillis()): List<Message>
         fun flowLatest(chatAddress: Address? = null): Flow<Message>
         fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message>
+        fun unreadList(): List<Message>
         fun unreadListFlow(): Flow<List<Message>>
         fun queuedListFlow(): Flow<List<Message>>
         fun unreadCountFlow(chatAddress: Address) : Flow<Int>

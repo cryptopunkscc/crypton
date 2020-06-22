@@ -3,10 +3,12 @@ package cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.collect
 import cc.cryptopunks.crypton.handler.handleApiEvent
+import cc.cryptopunks.crypton.handler.handleFlushQueuedMessages
 import cc.cryptopunks.crypton.handler.handleOmemoInitialized
 import cc.cryptopunks.crypton.handler.handlePresenceChanged
 import cc.cryptopunks.crypton.interactor.saveMessage
 import cc.cryptopunks.crypton.interactor.updateChatNotification
+import cc.cryptopunks.crypton.selector.flushQueueMessagesFlow
 import cc.cryptopunks.crypton.selector.omemoInitializations
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import kotlinx.coroutines.flow.collect
@@ -24,4 +26,5 @@ fun SessionScope.startSessionService() = launch {
     }
     launch { incomingMessages().collect { event -> saveMessage(event.message) } }
     launch { presenceChangedFlow().collect(handlePresenceChanged()) }
+    launch { flushQueueMessagesFlow().collect(handleFlushQueuedMessages(), join = true) }
 }
