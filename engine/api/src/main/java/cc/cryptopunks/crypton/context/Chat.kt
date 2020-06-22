@@ -32,6 +32,8 @@ data class Chat(
 
         data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
 
+        data class UpdateNotification(val messages: List<Message>)
+
         data class Copy(val message: Message)
 
         data class SubscribePagedMessages(override val enable: Boolean) : Subscription

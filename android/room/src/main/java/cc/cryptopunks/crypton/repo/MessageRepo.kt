@@ -81,6 +81,9 @@ internal class MessageRepo(
     override fun unreadListFlow(): Flow<List<Message>> =
         unreadMessagesChannel.asFlow()
 
+    override suspend fun queuedList(): List<Message> =
+        dao.queueList().map(MessageData::message)
+
     override fun queuedListFlow(): Flow<List<Message>> =
         dao.flowQueueList().map { it.map(MessageData::message) }
 

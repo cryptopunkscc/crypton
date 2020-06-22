@@ -74,6 +74,9 @@ internal data class MessageData(
         fun flowUnreadList(chatId: AddressData): Flow<List<MessageData>>
 
         @Query("select * from message where status == 'Queued'")
+        fun queueList(): List<MessageData>
+
+        @Query("select * from message where status == 'Queued'")
         fun flowQueueList(): Flow<List<MessageData>>
 
         @Query("select id from message where readAt == 0 and chatId == :chatId and status == 'Received'")
