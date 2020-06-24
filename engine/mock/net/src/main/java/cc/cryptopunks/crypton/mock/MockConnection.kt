@@ -27,15 +27,17 @@ class MockConnection(
 
     override fun isConnected(): Boolean = true
 
-    override fun initOmemo(): Boolean = runBlocking {
+    override suspend fun initOmemo() = runBlocking {
         delay(2000)
         state {
             omemoInitialized = true
             apiEvents.send(Net.OmemoInitialized)
             log.d("Omemo initialized")
         }
-        true
     }
+
+    override fun isOmemoInitialized(): Boolean =
+        state.omemoInitialized
 
     override fun netEvents(): Flow<Api.Event> =
         state.apiEvents.asFlow()

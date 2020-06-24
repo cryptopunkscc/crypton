@@ -34,7 +34,7 @@ suspend fun AppScope.addAccount(
         if (register) createAccount()
         login()
         log.d("Logged in")
-        scope.launch { initOmemo() }
+        launch { initOmemo() }
         if (insert) accountRepo.insert(account)
         log.d("Account inserted")
     }

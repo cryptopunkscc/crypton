@@ -7,12 +7,16 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MockMessageRepo : Message.Repo {
 
     val store = Store<Map<String, Message>>(emptyMap())
+
+    private val latest = BroadcastChannel<Message>(Channel.BUFFERED)
 
     private val scope = CoroutineScope(SupervisorJob() + store.dispatcher)
 
@@ -28,11 +32,18 @@ class MockMessageRepo : Message.Repo {
     }
 
     override suspend fun insertOrUpdate(message: Message) {
-        store reduce { plus(message.id to message) }
+        store reduce {
+            println("inserting: $message")
+            plus(message.id to message)
+        }
+        latest.offer(message)
     }
 
     override suspend fun insertOrUpdate(messages: List<Message>) {
         store reduce { plus(messages.map { it.id to it }) }
+        messages.forEach {
+            latest.offer(it)
+        }
     }
 
     override suspend fun latest(): Message? =
@@ -52,16 +63,7 @@ class MockMessageRepo : Message.Repo {
         store.get().values.toList()
 
     override fun flowLatest(chatAddress: Address?): Flow<Message> {
-        var last = emptySet<String>()
-        return store.changesFlow().mapNotNull { current ->
-            (current - last)
-                .also { last = current.keys }
-                .values.maxBy { it.timestamp }
-        }.run {
-            if (chatAddress == null) this else filter {
-                it.chatAddress == chatAddress
-            }
-        }
+        return latest.asFlow()
     }
 
     override fun dataSourceFactory(chatAddress: Address) =
@@ -91,5 +93,4 @@ class MockMessageRepo : Message.Repo {
     override suspend fun notifyUnread() {
 
     }
-
 }

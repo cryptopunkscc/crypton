@@ -10,7 +10,7 @@ internal suspend fun SessionScope.flushQueuedMessages(
     messageRepo.queuedListFlow().first().let { list: List<Message> ->
         log.d("Flush pending messages $list")
         list.filter(filter).forEach { message ->
-            sendMessage(message)
+            sendOrSubscribe(message)
         }
     }
 }

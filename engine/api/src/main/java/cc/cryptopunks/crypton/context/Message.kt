@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import java.security.MessageDigest
 
@@ -34,7 +35,7 @@ data class Message(
     }
 
     interface Net {
-        suspend fun sendMessage(message: Message)
+        suspend fun sendMessage(message: Message): Job
         fun incomingMessages(): Flow<Event>
         fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
 

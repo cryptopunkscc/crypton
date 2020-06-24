@@ -72,9 +72,7 @@ internal class ConnectionModule(
         createSendMessage(
             address = address,
             connection = connection,
-            roster = roster,
-            omemoManager = omemoManager,
-            broadcast = messageEventBroadcast
+            omemoManager = omemoManager
         )
     }
 
@@ -91,7 +89,9 @@ internal class ConnectionModule(
 
     override fun isConnected(): Boolean = connection.isConnected
 
-    override fun initOmemo(): Boolean = initOmemo.invoke()
+    override suspend fun initOmemo() = initOmemo.invoke()
+
+    override fun isOmemoInitialized(): Boolean = initOmemo.isInitialized
 
     override fun connect() {
         connection.run {
@@ -176,6 +176,8 @@ internal class ConnectionModule(
     }
 
     override fun iAmSubscribed(address: Address) = roster.iAmSubscribedTo(address.bareJid())
+
+    override fun subscribe(address: Address) = roster.createEntry(address.bareJid(), address.local, emptyArray())
 
     override suspend fun sendMessage(message: Message) = sendMessage.invoke(message)
 

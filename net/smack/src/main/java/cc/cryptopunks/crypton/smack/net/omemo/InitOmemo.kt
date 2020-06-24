@@ -4,22 +4,31 @@ import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.withContext
 import org.jivesoftware.smackx.omemo.OmemoManager
 
 class InitOmemo(
-    omemoManager: OmemoManager
+    private val omemoManager: OmemoManager
 ) {
-    val log = typedLog()
+    private val log = typedLog()
     private val channel = Channel<Net.Event>()
 
-    private val init by lazy {
-        val jid = omemoManager.ownJid
+    var isInitialized: Boolean = false
+        private set
+
+
+    suspend operator fun invoke() {
+        if (isInitialized) return
+        val jid = "${omemoManager.ownJid}/${omemoManager.deviceId}"
         try {
             log.d("start $jid")
-            omemoManager.initialize()
+            withContext(newSingleThreadContext(this::class.java.name)) {
+                omemoManager.initialize()
+            }
             channel.offer(Net.OmemoInitialized)
             log.d("stop $jid")
-            true
+            isInitialized = true
         } catch (throwable: Throwable) {
             log.d("failed $jid")
             throwable.printStackTrace()
@@ -29,11 +38,8 @@ class InitOmemo(
                     cause = throwable
                 )
             )
-            false
         }
     }
-
-    operator fun invoke() = init
 
     fun flow() = channel.consumeAsFlow()
 }

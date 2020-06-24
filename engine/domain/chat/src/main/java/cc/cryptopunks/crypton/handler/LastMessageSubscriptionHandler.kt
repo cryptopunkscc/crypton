@@ -6,22 +6,31 @@ import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flattenConcat
+import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 internal fun SessionScope.handleLastMessageSubscription() =
-    handle<Chat.Service.SubscribeLastMessage> { output ->
+    handle<Chat.Service.SubscribeLastMessage> { out ->
         launch {
             flowOf(
                 messageRepo.list().asFlow(),
                 messageRepo.flowLatest()
-            ).flattenConcat().bufferedThrottle(100).map { messages ->
+            ).flattenMerge().onEach {
+                log.d("last message $it")
+            }.bufferedThrottle(100).map { messages ->
                 Chat.Service.Messages(
                     account = address,
                     list = messages
                 )
-            }.collect(output)
+            }.onStart {
+                log.d("start LastMessageSubscription")
+            }.onCompletion {
+                log.d("finish LastMessageSubscription $it")
+            }.collect(out)
         }
     }

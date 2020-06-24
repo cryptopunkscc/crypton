@@ -2,58 +2,28 @@ package cc.cryptopunks.crypton.smack.net.chat
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.util.TypedLog
-import cc.cryptopunks.crypton.util.typedLog
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.launch
-import org.jivesoftware.smack.roster.Roster
+import kotlinx.coroutines.Job
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smackx.omemo.OmemoManager
 import org.jxmpp.jid.impl.JidCreate
 
-private class SendMessage
-
-private var lastId = 0
-
 internal fun createSendMessage(
     address: Address,
     connection: XMPPTCPConnection,
-    omemoManager: OmemoManager,
-    roster: Roster,
-    broadcast: SendChannel<Message.Net.Event>,
-    log: TypedLog = SendMessage().typedLog()
-): suspend (Message) -> Unit = { message ->
+    omemoManager: OmemoManager
+): suspend (Message) -> Job = { message ->
     if (!connection.isAuthenticated) throw Exception("Connection not authenticated")
-    val id = lastId++
 
-    log.d("$id start sending")
     val fromJid = JidCreate.entityBareFrom(address.toString())
     val toJid = JidCreate.entityBareFrom(message.to.address.toString())
 
-    log.d("$id checking subscription to $toJid")
-    if (!roster.iAmSubscribedTo(toJid) && fromJid != toJid) {
-        roster.createEntry(toJid, message.to.address.local, emptyArray())
-        log.d("$id subscribe to $toJid")
-    } else {
-        log.d("$id encrypting")
-        val smackMessage = omemoManager
-            .encrypt(toJid, message.text)
-            .asMessage(toJid)
-            .apply {
-                from = fromJid
-                type = org.jivesoftware.smack.packet.Message.Type.chat
-            }
+    val smackMessage = omemoManager.encrypt(toJid, message.text).asMessage(toJid).apply {
+        from = fromJid
+        type = org.jivesoftware.smack.packet.Message.Type.chat
+    }
 
-        connection.addStanzaIdAcknowledgedListener(smackMessage.stanzaId) {
-            GlobalScope.launch { broadcast.send(Message.Net.Event(message.copy(status = Message.Status.Sent))) }
-        }
-
-        log.d("$id sending")
-        broadcast.send(Message.Net.Event(message.copy(status = Message.Status.Sending)))
+    Job().apply {
+        connection.addStanzaIdAcknowledgedListener(smackMessage.stanzaId) { complete() }
         connection.sendStanza(smackMessage)
-        log.d("$id send")
-        log.d("$id stop")
     }
 }
-
