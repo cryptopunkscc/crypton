@@ -2,7 +2,9 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.address
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,12 +13,13 @@ class CommandsTest {
     @Test
     fun `add account`() {
         assertEquals(
-            listOf(
-                Account.Service.Set(Account.Field.UserName, "test@account.io"),
-                Account.Service.Set(Account.Field.Password, "pass"),
-                Account.Service.Add()
+            Account.Service.Add(
+                Account(
+                    address = address("test@account.io"),
+                    password = Password("pass")
+                )
             ),
-            Context(Route.SetAccount)
+            Context()
                 .prepare()
                 .set("add account test@account.io password pass")
                 .execute()
@@ -26,12 +29,13 @@ class CommandsTest {
     @Test
     fun `create account`() {
         assertEquals(
-            listOf(
-                Account.Service.Set(Account.Field.UserName, "test@account.io"),
-                Account.Service.Set(Account.Field.Password, "pass"),
-                Account.Service.Register()
+            Account.Service.Register(
+                Account(
+                    address = address("test@account.io"),
+                    password = Password("pass")
+                )
             ),
-            Context(Route.SetAccount)
+            Context()
                 .prepare()
                 .set("create account test@account.io password pass")
                 .execute()
@@ -48,28 +52,6 @@ class CommandsTest {
             })
                 .prepare()
                 .set("send message lorem ipsum")
-                .execute()
-        )
-    }
-
-    @Test
-    fun `navigate roster`() {
-        assertEquals(
-            Route.Roster,
-            Context()
-                .prepare()
-                .set("navigate roster")
-                .execute()
-        )
-    }
-
-    @Test
-    fun `navigate create chat`() {
-        assertEquals(
-            Route.CreateChat(),
-            Context()
-                .prepare()
-                .set("navigate create chat")
                 .execute()
         )
     }

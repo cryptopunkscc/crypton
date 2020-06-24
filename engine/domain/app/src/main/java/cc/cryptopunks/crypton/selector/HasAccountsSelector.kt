@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-internal fun AppScope.hasAccountsFlow(
+fun AppScope.hasAccountsFlow(
 ): Flow<Account.Service.HasAccounts> = accountRepo.flowList()
     .map { it.isNotEmpty() }
     .distinctUntilChanged()
