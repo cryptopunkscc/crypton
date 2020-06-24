@@ -8,15 +8,13 @@ import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 internal fun AppScope.handleRosterItemsSubscription(
     lastItems: Store<Roster.Service.Items>
-) = handle<Roster.Service.SubscribeItems> { output ->
-    launch {
+) =
+    handle<Roster.Service.SubscribeItems> { output ->
         rosterItemStatesFlow()
             .map { Roster.Service.Items(it) }
             .onEach { lastItems { it } }
             .collect(output)
     }
-}

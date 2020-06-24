@@ -9,16 +9,13 @@ import cc.cryptopunks.crypton.selector.messagePagedListFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 internal fun ChatScope.handlePageMessagesSubscription() =
     handle<Chat.Service.SubscribePagedMessages> { output ->
-        launch {
-            messagePagedListFlow()
-                .onEach(pagedMessagesReceived)
-                .map { Chat.Service.PagedMessages(address, it) }
-                .collect(output)
-        }
+        messagePagedListFlow()
+            .onEach(pagedMessagesReceived)
+            .map { Chat.Service.PagedMessages(address, it) }
+            .collect(output)
     }
 
 private val ChatScope.pagedMessagesReceived: suspend (PagedList<Message>) -> Unit

@@ -4,9 +4,8 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChat
-import kotlinx.coroutines.launch
 
-internal fun SessionScope.saveMessages(messages: List<Message>) = launch {
+internal suspend fun SessionScope.saveMessages(messages: List<Message>) {
     messages.forEach { saveMessage(it) }
 }
 
