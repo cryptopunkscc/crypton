@@ -1,19 +1,24 @@
 package cc.cryptopunks.crypton.context
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 
-fun <T : Any> handle(handle: T.(ConnectorOutput) -> Job): Handle<T> = Handler(handle)
+fun <T : Any> CoroutineScope.handle(handle: suspend T.(ConnectorOutput) -> Unit): Handle<T> = Handler(this, handle)
 
 interface Handle<T> {
     operator fun invoke(arg: T, output: ConnectorOutput = {}): Job
 }
 
-private class Handler<T>(val handle: T.(ConnectorOutput) -> Job) : Handle<T> {
-    override fun invoke(arg: T, output: ConnectorOutput) = arg.handle(output)
+private class Handler<T>(
+    val scope: CoroutineScope,
+    val handle: suspend T.(ConnectorOutput) -> Unit
+) : Handle<T> {
+    override fun invoke(arg: T, output: ConnectorOutput) = scope.launch { arg.handle(output) }
 }
 
 @Suppress("UNCHECKED_CAST")

@@ -7,7 +7,6 @@ import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.interactor.addAccount
 import cc.cryptopunks.crypton.model.Form
-import kotlinx.coroutines.launch
 
 internal fun AppScope.handleAdd(form: Form) =
     handleConnection<Account.Service.Add>(form)
@@ -20,9 +19,9 @@ internal fun AppScope.handleLogin(form: Form) =
 
 private fun <C : Any> AppScope.handleConnection(
     form: Form
-) = handle<C> { out ->
-    log.d("Handle $this")
-    launch {
+) =
+    handle<C> { out ->
+        log.d("Handle $this")
         when (this@handle) {
             is Account.Service.Add -> account ?: form.account()
             is Account.Service.Register -> account ?: form.account()
@@ -36,7 +35,6 @@ private fun <C : Any> AppScope.handleConnection(
             )
         }
     }
-}
 
 private suspend fun Account.connectAccount(
     out: suspend (Any) -> Unit,

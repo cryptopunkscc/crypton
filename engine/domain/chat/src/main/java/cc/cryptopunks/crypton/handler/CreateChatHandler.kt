@@ -4,21 +4,18 @@ import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.context.handle
-import kotlinx.coroutines.launch
 
 internal fun AppScope.handleCreateChat() =
     handle<Chat.Service.CreateChat> { output ->
-        launch {
-            try {
-                sessionStore.get()[account]!!.createChat(
-                    Chat.Service.CreateChatData(
-                        title = chat.id,
-                        users = listOf(chat)
-                    )
+        try {
+            sessionStore.get()[account]!!.createChat(
+                Chat.Service.CreateChatData(
+                    title = chat.id,
+                    users = listOf(chat)
                 )
-                output(Chat.Service.ChatCreated(chat))
-            } catch (throwable: Throwable) {
-                output(throwable)
-            }
+            )
+            output(Chat.Service.ChatCreated(chat))
+        } catch (throwable: Throwable) {
+            output(throwable)
         }
     }
