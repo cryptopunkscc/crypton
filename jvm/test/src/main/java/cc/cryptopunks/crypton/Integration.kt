@@ -56,6 +56,14 @@ suspend fun startClient1() = Client1.connectClient {
         },
         Chat.Service.SubscribeLastMessage(true)
     )
+    flush()
+    // Wait for chat service initialization,
+    // It is not necessary from technical point,
+    // but in testing we want to receive all statuses [queued, sending, sent].
+    // Without delay it will by only [sent].
+    // With current arch design is hard to synchronize subscriptions with normal query/commands,
+    // but it does not matter, from user perspective there is no use case for that.
+    delay(1000)
     send(Chat.Service.QueueMessage("yo"))
     expect(
         Chat.Service.Messages(
@@ -75,8 +83,8 @@ suspend fun startClient1() = Client1.connectClient {
         ),
         Chat.Service.Messages(
             account = address1,
-            list = listOf(
-                should {
+            list = should {
+                get(0).run {
                     require(text == "yo") { text }
                     require(from == Resource(address1)) { from }
                     require(to == Resource(address2)) { to }
@@ -84,9 +92,8 @@ suspend fun startClient1() = Client1.connectClient {
                     require(status == Message.Status.Sending) { status }
                     require(notifiedAt == 0L) { notifiedAt }
                     require(readAt == 0L) { readAt }
-                    true
-                },
-                should {
+                }
+                get(1).run {
                     require(text == "yo") { text }
                     require(from == Resource(address1)) { from }
                     require(to == Resource(address2)) { to }
@@ -94,14 +101,15 @@ suspend fun startClient1() = Client1.connectClient {
                     require(status == Message.Status.Sent) { status }
                     require(notifiedAt == 0L) { notifiedAt }
                     require(readAt == 0L) { readAt }
-                    true
                 }
-            )
+                true
+            }
+
         ),
         Chat.Service.Messages(
             account = address1,
-            list = listOf(
-                should {
+            list = should {
+                get(0).run {
                     require(text == "yo yo") { text }
                     require(from.address == address2) { from.address }
                     require(to.address == address1) { to.address }
@@ -109,10 +117,9 @@ suspend fun startClient1() = Client1.connectClient {
                     require(status == Message.Status.Received) { status }
                     require(notifiedAt == 0L) { notifiedAt }
                     require(readAt == 0L) { readAt }
-                    true
-                },
-                ignore() // Fixme duplicated message
-            )
+                }
+                true
+            }
         )
     )
     flush()
@@ -132,9 +139,8 @@ suspend fun startClient2() = Client2.connectClient {
     expect(
         ignore(),
         Roster.Service.Items(
-            listOf(
-                ignore(),
-                should {
+            should {
+                get(1).run {
                     require(account == address2) { account }
                     require(title == address1.id) { title }
                     require(presence == Presence.Status.Subscribe) { presence }
@@ -142,16 +148,15 @@ suspend fun startClient2() = Client2.connectClient {
                     require(unreadMessagesCount == 0) { unreadMessagesCount }
                     true
                 }
-            )
+            }
         )
     )
     send(Roster.Service.AcceptSubscription(address2, address1))
     expect(
         ignore(),
         Roster.Service.Items(
-            listOf(
-                ignore(),
-                should {
+            should {
+                get(1).run {
                     require(account == address2) { account }
                     require(title == address1.id) { title }
                     require(presence == Presence.Status.Available) { presence }
@@ -159,15 +164,16 @@ suspend fun startClient2() = Client2.connectClient {
                         require(text == "yo") { text }
                         require(chatAddress == address1) { chatAddress }
                         require(from.address == address1) { from.address }
-                        require(to.address == address2 ) { to.address }
+                        require(to.address == address2) { to.address }
                         require(status == Message.Status.Received)
                     }
                     require(unreadMessagesCount == 1) { unreadMessagesCount }
-                    true
                 }
-            )
+                true
+            }
         )
     )
+    delay(5000)
     send(
         Route.Chat().apply {
             accountId = "$test2@janek-latitude"

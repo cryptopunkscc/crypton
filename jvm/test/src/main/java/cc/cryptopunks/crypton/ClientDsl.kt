@@ -76,15 +76,13 @@ class ClientDsl(
         output().filterIsInstance<T>().first { it.filter() }
     }
 
-    suspend fun expect(vararg expected: Any) {
+    suspend inline fun expect(vararg expected: Any) {
         flush()
         require(expected.isNotEmpty()) { "expected cannot be empty " }
         output().scan(expected.toList()) { rest, value ->
-            if (rest.isEmpty()) rest
-            else {
-                Assert.assertEquals(rest.first(), value)
-                rest.drop(1)
-            }
+            require(rest.isNotEmpty()) { "Not expect more elements but was $value" }
+            Assert.assertEquals(rest.first(), value)
+            rest.drop(1)
         }.takeWhile { it.isNotEmpty() }.collect()
     }
 }

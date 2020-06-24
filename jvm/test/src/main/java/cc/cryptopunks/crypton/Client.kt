@@ -3,7 +3,9 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.util.typedLog
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.withContext
 import java.net.InetSocketAddress
 
 suspend fun Any.connectClient(
@@ -13,7 +15,7 @@ suspend fun Any.connectClient(
 ) {
     val log = typedLog()
     withContext(newSingleThreadContext(toString())) {
-        aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
+        aSocket(ActorSelectorManager(newSingleThreadContext(toString()))).tcp()
             .connect(InetSocketAddress(host, port))
             .connector(log)
             .also { connector ->

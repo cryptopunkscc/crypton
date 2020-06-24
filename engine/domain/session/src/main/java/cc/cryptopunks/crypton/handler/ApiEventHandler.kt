@@ -22,7 +22,7 @@ internal fun SessionScope.handleApiEvent() =
         }
     }
 
-private fun SessionScope.reconnect() {
+private suspend fun SessionScope.reconnect() {
     connect()
     if (!isAuthenticated()) login()
     initOmemo()

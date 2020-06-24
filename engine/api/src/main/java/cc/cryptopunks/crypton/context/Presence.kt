@@ -9,6 +9,7 @@ data class Presence(
     interface Net {
         fun sendPresence(presence: Presence)
         fun getCachedPresences(): List<Presence>
+        fun subscribe(address: Address)
         fun iAmSubscribed(address: Address): Boolean
     }
 

@@ -6,22 +6,17 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.calculateId
 import cc.cryptopunks.crypton.context.handle
-import cc.cryptopunks.crypton.util.TypedLog
-import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.launch
 
-private class SendMessageHandler
-
-internal fun ChatScope.handleQueueMessage(
-    log: TypedLog = SendMessageHandler().typedLog()
-) = handle<Chat.Service.QueueMessage> {
-    launch {
-        chat.createQueuedMessage(text).let { message ->
-            log.d("Enqueue message $message")
-            messageRepo.insertOrUpdate(message)
+internal fun ChatScope.handleQueueMessage() =
+    handle<Chat.Service.QueueMessage> {
+        launch {
+            chat.createQueuedMessage(text).let { message ->
+                log.d("Enqueue message $message")
+                messageRepo.insertOrUpdate(message)
+            }
         }
     }
-}
 
 private fun Chat.createQueuedMessage(text: String) =
     System.currentTimeMillis().let { timestamp ->

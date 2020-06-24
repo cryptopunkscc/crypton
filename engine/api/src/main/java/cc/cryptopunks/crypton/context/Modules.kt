@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.context
 import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
+import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -51,6 +52,10 @@ data class SessionModule(
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
     override fun toString(): String = address.toString()
+
+    init {
+        invokeOnClose { log.d("Closed $address $it") }
+    }
 }
 
 class ChatModule(
