@@ -33,7 +33,6 @@ class MockMessageRepo : Message.Repo {
 
     override suspend fun insertOrUpdate(message: Message) {
         store reduce {
-            println("inserting: $message")
             plus(message.id to message)
         }
         latest.offer(message)

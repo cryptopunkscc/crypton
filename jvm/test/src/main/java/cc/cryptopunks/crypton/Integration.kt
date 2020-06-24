@@ -57,7 +57,7 @@ suspend fun startClient1() = Client1.connectClient {
         Chat.Service.SubscribeLastMessage(true)
     )
     flush()
-    // Wait for chat service initialization,
+    // Wait for chat service initialization.
     // It is not necessary from technical point,
     // but in testing we want to receive all statuses [queued, sending, sent].
     // Without delay it will by only [sent].
@@ -66,64 +66,60 @@ suspend fun startClient1() = Client1.connectClient {
     delay(1000)
     send(Chat.Service.QueueMessage("yo"))
     expect(
-        Chat.Service.Messages(
-            account = address1,
-            list = listOf(
-                should {
-                    require(text == "yo") { text }
-                    require(from == Resource(address1)) { from }
-                    require(to == Resource(address2)) { to }
-                    require(chatAddress == address2) { chatAddress }
-                    require(status == Message.Status.Queued) { status }
-                    require(notifiedAt == 0L) { notifiedAt }
-                    require(readAt == 0L) { readAt }
-                    true
-                }
-            )
-        ),
-        Chat.Service.Messages(
-            account = address1,
-            list = should {
-                get(0).run {
-                    require(text == "yo") { text }
-                    require(from == Resource(address1)) { from }
-                    require(to == Resource(address2)) { to }
-                    require(chatAddress == address2) { chatAddress }
-                    require(status == Message.Status.Sending) { status }
-                    require(notifiedAt == 0L) { notifiedAt }
-                    require(readAt == 0L) { readAt }
-                }
-                get(1).run {
-                    require(text == "yo") { text }
-                    require(from == Resource(address1)) { from }
-                    require(to == Resource(address2)) { to }
-                    require(chatAddress == address2) { chatAddress }
-                    require(status == Message.Status.Sent) { status }
-                    require(notifiedAt == 0L) { notifiedAt }
-                    require(readAt == 0L) { readAt }
-                }
-                true
+        should<Chat.Service.Messages> {
+            require(account == address1) { account }
+            require(list.size == 1) { list }
+            list[0].run {
+                require(text == "yo") { text }
+                require(from == Resource(address1)) { from }
+                require(to == Resource(address2)) { to }
+                require(chatAddress == address2) { chatAddress }
+                require(notifiedAt == 0L) { notifiedAt }
+                require(readAt == 0L) { readAt }
+                require(status == Message.Status.Queued) { status }
             }
-
-        ),
-        Chat.Service.Messages(
-            account = address1,
-            list = should {
-                get(0).run {
-                    require(text == "yo yo") { text }
-                    require(from.address == address2) { from.address }
-                    require(to.address == address1) { to.address }
-                    require(chatAddress == address2) { chatAddress }
-                    require(status == Message.Status.Received) { status }
-                    require(notifiedAt == 0L) { notifiedAt }
-                    require(readAt == 0L) { readAt }
-                }
-                true
+            true
+        },
+        should<Chat.Service.Messages> {
+            require(account == address1) { account }
+            require(list.size == 2) { list }
+            list[0].run {
+                require(text == "yo") { text }
+                require(from == Resource(address1)) { from }
+                require(to == Resource(address2)) { to }
+                require(chatAddress == address2) { chatAddress }
+                require(notifiedAt == 0L) { notifiedAt }
+                require(readAt == 0L) { readAt }
+                require(status == Message.Status.Sending) { status }
             }
-        )
+            list[1].run {
+                require(text == "yo") { text }
+                require(from == Resource(address1)) { from }
+                require(to == Resource(address2)) { to }
+                require(chatAddress == address2) { chatAddress }
+                require(notifiedAt == 0L) { notifiedAt }
+                require(readAt == 0L) { readAt }
+                require(status == Message.Status.Sent) { status }
+            }
+            true
+        },
+        should<Chat.Service.Messages> {
+            require(account == address1) { account }
+            require(list.size == 1) { list }
+            list[0].run {
+                require(text == "yo yo") { text }
+                require(from.address == address2) { from.address }
+                require(to.address == address1) { to.address }
+                require(chatAddress == address2) { chatAddress }
+                require(notifiedAt == 0L) { notifiedAt }
+                require(readAt == 0L) { readAt }
+                require(status == Message.Status.Received) { status }
+            }
+            true
+        }
     )
     flush()
-    delay(2000)
+    delay(5000) // wait for lazy errors
     log.d("Stop client 1")
 }
 
@@ -138,51 +134,48 @@ suspend fun startClient2() = Client2.connectClient {
     )
     expect(
         ignore(),
-        Roster.Service.Items(
-            should {
-                get(1).run {
-                    require(account == address2) { account }
-                    require(title == address1.id) { title }
-                    require(presence == Presence.Status.Subscribe) { presence }
-                    require(message == Message.Empty) { message }
-                    require(unreadMessagesCount == 0) { unreadMessagesCount }
-                    true
-                }
+        should<Roster.Service.Items> {
+            require(list.size == 2) { list }
+            list[1].run {
+                require(account == address2) { account }
+                require(title == address1.id) { title }
+                require(presence == Presence.Status.Subscribe) { presence }
+                require(message == Message.Empty) { message }
+                require(unreadMessagesCount == 0) { unreadMessagesCount }
             }
-        )
+            true
+        }
     )
     send(Roster.Service.AcceptSubscription(address2, address1))
     expect(
         ignore(),
-        Roster.Service.Items(
-            should {
-                get(1).run {
-                    require(account == address2) { account }
-                    require(title == address1.id) { title }
-                    require(presence == Presence.Status.Available) { presence }
-                    message.run {
-                        require(text == "yo") { text }
-                        require(chatAddress == address1) { chatAddress }
-                        require(from.address == address1) { from.address }
-                        require(to.address == address2) { to.address }
-                        require(status == Message.Status.Received)
-                    }
-                    require(unreadMessagesCount == 1) { unreadMessagesCount }
+        should<Roster.Service.Items> {
+            require(list.size == 2) { list }
+            list[1].run {
+                require(account == address2) { account }
+                require(title == address1.id) { title }
+                require(presence == Presence.Status.Available) { presence }
+                message.run {
+                    require(text == "yo") { text }
+                    require(chatAddress == address1) { chatAddress }
+                    require(from.address == address1) { from.address }
+                    require(to.address == address2) { to.address }
+                    require(status == Message.Status.Received)
                 }
-                true
+                require(unreadMessagesCount == 1) { unreadMessagesCount }
             }
-        )
+            true
+        }
     )
-    delay(5000)
     send(
         Route.Chat().apply {
             accountId = "$test2@janek-latitude"
             chatAddress = "$test1@janek-latitude"
         },
-        Chat.Service.SubscribeLastMessage(true),
         Chat.Service.QueueMessage("yo yo")
     )
     flush()
+    delay(5000) // wait for lazy errors
     log.d("Stop client 2")
 }
 
