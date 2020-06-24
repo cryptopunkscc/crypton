@@ -9,21 +9,8 @@ sealed class Route(
     override fun hashCode(): Int = this::class.hashCode()
     override fun toString(): String = this::class.qualifiedName!!
 
-    class Raw(val id: Int) : Route()
     object Main : Route()
     object Back : Route()
-    object SetAccount : Route()
-    object Login : Route()
-    object Register : Route()
-    object Dashboard : Route()
-    object Roster : Route()
-    object AccountList : Route()
-    object AccountManagement : Route()
-    class CreateChat(data: MutableMap<String, Any?> = mutableMapOf()) : Route(data) {
-        var accountId: String by data
-        val accountAddress get() = Address.from(accountId)
-        override fun toString() = "Route.CreateChat(data=${data})"
-    }
     class Chat(data: MutableMap<String, Any?> = mutableMapOf()) : Route(data) {
         var accountId: String by data
         var chatAddress: String by data

@@ -5,7 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import cc.cryptopunks.crypton.context.Route
+import androidx.navigation.fragment.findNavController
 import cc.cryptopunks.crypton.dashboard.R
 import cc.cryptopunks.crypton.service.RouterService
 import cc.cryptopunks.crypton.view.DashboardView
@@ -25,7 +25,7 @@ class DashboardFragment :
     override fun onCreateActor(view: View) = DashboardView(view)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        binding.send(Route.AccountManagement)
+        findNavController().navigate(R.id.navigateAccountManagement)
         return true
     }
 

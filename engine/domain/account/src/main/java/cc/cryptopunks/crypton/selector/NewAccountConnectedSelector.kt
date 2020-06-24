@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.flow.*
 
-internal fun AppScope.newAccountConnectedFlow(): Flow<Address> {
+fun AppScope.newAccountConnectedFlow(): Flow<Address> {
     val cache = mutableSetOf<SessionScope>()
 
     return sessionStore.changesFlow()

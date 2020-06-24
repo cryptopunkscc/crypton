@@ -9,15 +9,7 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
 
 private val navigate = "navigate" to mapOf(
-    "accounts" to command { Route.Login },
-    "roster" to command { Route.Roster },
-    "create" to mapOf(
-        "chat" to command {
-            Route.CreateChat().apply {
-                accountId = account
-            }
-        }
-    ),
+    "main" to command { Route.Main },
     "chat" to command(param()) { (address) ->
         Route.Chat().apply {
             accountId = account
@@ -27,7 +19,7 @@ private val navigate = "navigate" to mapOf(
 )
 
 val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
-    Route.Login to mapOf(
+    Route.Main to mapOf(
         "login" to command(
             param()
         ) { (account) ->
@@ -44,12 +36,15 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
             named("password")
         ) { (account, password) ->
             Account.Service.Register(Account(address(account), Password(password)))
-        }
-    ),
-    Route.Roster to mapOf(
+        },
         "get" to mapOf(
             "items" to command {
                 Roster.Service.GetItems
+            }
+        ),
+        "chat" to mapOf(
+            "to" to command(param()) { (address) ->
+                Chat.Service.CreateChat(address(account), Address.from(address))
             }
         )
     ),
@@ -59,12 +54,5 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
                 Chat.Service.EnqueueMessage(message.joinToString(" "))
             }
         )
-    ),
-    Route.CreateChat() to (mapOf(
-        "chat" to mapOf(
-            "to" to command(param()) { (address) ->
-                Chat.Service.CreateChat(address(account), Address.from(address))
-            }
-        )
-    ))
+    )
 ).mapValues { (_, commands) -> commands + navigate }
