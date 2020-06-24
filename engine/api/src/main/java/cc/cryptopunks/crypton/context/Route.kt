@@ -10,6 +10,7 @@ sealed class Route(
     override fun toString(): String = this::class.qualifiedName!!
 
     class Raw(val id: Int) : Route()
+    object Main : Route()
     object Back : Route()
     object SetAccount : Route()
     object Login : Route()
