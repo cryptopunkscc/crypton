@@ -41,14 +41,12 @@ private val address1 = Address(test1, domain)
 private val address2 = Address(test2, domain)
 
 suspend fun startClient1() = Client1.connectClient {
+    main()
     openSubscription()
     log.d("Start client 1")
     tryRemoveAccount(address1, pass)
     register(address1, pass)
     send(
-        Route.CreateChat().apply {
-            accountId = "$test1@janek-latitude"
-        },
         Chat.Service.CreateChat(address1, address2),
         Route.Chat().apply {
             accountId = "$test1@janek-latitude"
@@ -124,14 +122,12 @@ suspend fun startClient1() = Client1.connectClient {
 }
 
 suspend fun startClient2() = Client2.connectClient {
+    main()
     openSubscription()
     log.d("Start client 2")
     tryRemoveAccount(address2, pass)
     register(address2, pass)
-    send(
-        Route.Roster,
-        Roster.Service.SubscribeItems(true)
-    )
+    send(Roster.Service.SubscribeItems(true))
     expect(
         ignore(),
         should<Roster.Service.Items> {
@@ -179,14 +175,15 @@ suspend fun startClient2() = Client2.connectClient {
     log.d("Stop client 2")
 }
 
+fun ClientDsl.main() {
+    send(Route.Main)
+}
+
 suspend fun ClientDsl.tryRemoveAccount(
     address: Address,
     password: String
 ) {
-    send(
-        Route.Login,
-        Account.Service.Add(Account(address, Password(password)))
-    )
+    send(Account.Service.Add(Account(address, Password(password))))
     expect(
         Account.Service.Connecting(address),
         should<Account.Service.Status> {
@@ -206,10 +203,7 @@ suspend fun ClientDsl.register(
     address: Address,
     password: String
 ) {
-    send(
-        Route.Login,
-        Account.Service.Register(Account(address, Password(password)))
-    )
+    send(Account.Service.Register(Account(address, Password(password))))
     expect(
         Account.Service.Connecting(address),
         Account.Service.Connected(address)

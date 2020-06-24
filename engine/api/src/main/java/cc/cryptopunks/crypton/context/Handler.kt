@@ -30,20 +30,21 @@ typealias HandlerRegistry = Map<KClass<*>, Handle<*>>
 class HandlerRegistryBuilder internal constructor() {
     internal val handlers = mutableMapOf<KClass<*>, Handle<*>>()
 
-    fun unsafePlus(type: KClass<*>, handle: Handle<*>) {
-        handlers += (type to handle)
+    operator fun HandlerRegistry.unaryPlus() {
+        handlers += this
     }
 
     inline operator fun <reified T> Handle<T>.unaryPlus() {
         unsafePlus(T::class, this)
     }
+
+    fun unsafePlus(type: KClass<*>, handle: Handle<*>) {
+        handlers += (type to handle)
+    }
 }
 
 fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
     HandlerRegistryBuilder().apply(build).handlers
-
-inline operator fun <reified T> HandlerRegistryBuilder.plus(handle: Handle<T>) =
-    unsafePlus(T::class, handle)
 
 suspend fun <T> Flow<T>.collect(handle: Handle<T>, join: Boolean = false) = collect {
     handle(it).run { if (join) join() }

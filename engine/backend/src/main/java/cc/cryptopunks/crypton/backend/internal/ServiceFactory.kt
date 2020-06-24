@@ -3,43 +3,22 @@ package cc.cryptopunks.crypton.backend.internal
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.Route.AccountList
-import cc.cryptopunks.crypton.context.Route.AccountManagement
 import cc.cryptopunks.crypton.context.Route.Chat
-import cc.cryptopunks.crypton.context.Route.CreateChat
-import cc.cryptopunks.crypton.context.Route.Dashboard
-import cc.cryptopunks.crypton.context.Route.Login
-import cc.cryptopunks.crypton.context.Route.Register
-import cc.cryptopunks.crypton.context.Route.Roster
-import cc.cryptopunks.crypton.context.Route.SetAccount
-import cc.cryptopunks.crypton.service.RouterService
-import cc.cryptopunks.crypton.service.accountService
+import cc.cryptopunks.crypton.context.createHandlers
+import cc.cryptopunks.crypton.service.accountHandlers
 import cc.cryptopunks.crypton.service.chatService
-import cc.cryptopunks.crypton.service.createChatService
-import cc.cryptopunks.crypton.service.rosterService
+import cc.cryptopunks.crypton.service.createChatHandlers
+import cc.cryptopunks.crypton.service.rosterHandlers
+import cc.cryptopunks.crypton.util.service
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 internal class ServiceFactory(
     private val appScope: AppScope
-): (Route) -> Connectable? {
+) : (Route) -> Connectable? {
     override fun invoke(route: Route): Connectable? = when (route) {
 
-        SetAccount -> RouterService(appScope)
-
-        Login, Register, AccountList -> accountService(appScope)
-
-        Dashboard -> null
-
-        Roster -> rosterService(appScope)
-
-        AccountManagement -> null
-
-        is CreateChat -> createChatService(
-            scope = appScope.sessionScope(
-                address = CreateChat(route.data).accountAddress
-            )
-        )
+        Route.Main -> mainService(appScope)
 
         is Chat -> chatService(
             scope = runBlocking {
@@ -53,5 +32,14 @@ internal class ServiceFactory(
         )
 
         else -> null
+    }
+}
+
+
+private fun mainService(scope: AppScope) = service(scope) {
+    createHandlers {
+        +accountHandlers()
+        +rosterHandlers()
+        +createChatHandlers()
     }
 }

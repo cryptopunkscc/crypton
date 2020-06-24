@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.collect
 
 fun accountService(scope: AppScope) = service(scope) {
     scope.log.d("Init account service")
-    createAccountHandlers()
+    accountHandlers()
 }
 
-fun AppScope.createAccountHandlers() = createHandlers {
+fun AppScope.accountHandlers() = createHandlers {
     val form = Form()
 
     +handleSetField(form)

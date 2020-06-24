@@ -9,7 +9,6 @@ import cc.cryptopunks.crypton.context.actor
 import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.asFlow
