@@ -64,7 +64,7 @@ suspend fun startClient1() = Client1.connectClient {
     // With current arch design is hard to synchronize subscriptions with normal query/commands,
     // but it does not matter, from user perspective there is no use case for that.
     delay(1000)
-    send(Chat.Service.QueueMessage("yo"))
+    send(Chat.Service.EnqueueMessage("yo"))
     expect(
         should<Chat.Service.Messages> {
             require(account == address1) { account }
@@ -172,7 +172,7 @@ suspend fun startClient2() = Client2.connectClient {
             accountId = "$test2@janek-latitude"
             chatAddress = "$test1@janek-latitude"
         },
-        Chat.Service.QueueMessage("yo yo")
+        Chat.Service.EnqueueMessage("yo yo")
     )
     flush()
     delay(5000) // wait for lazy errors

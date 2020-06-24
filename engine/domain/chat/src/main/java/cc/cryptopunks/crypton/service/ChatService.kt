@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.handler.handleLastMessageSubscription
 import cc.cryptopunks.crypton.handler.handleMessageRead
 import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
-import cc.cryptopunks.crypton.handler.handleQueueMessage
+import cc.cryptopunks.crypton.handler.handleEnqueueMessage
 import cc.cryptopunks.crypton.util.service
 
 fun chatService(scope: ChatScope) = service(scope) {
@@ -18,7 +18,7 @@ fun chatService(scope: ChatScope) = service(scope) {
 }
 
 fun ChatScope.chatHandlers() = createHandlers {
-    +handleQueueMessage()
+    +handleEnqueueMessage()
     +handleMessageRead()
     +handleLastMessageSubscription()
     +handlePopClipboard()

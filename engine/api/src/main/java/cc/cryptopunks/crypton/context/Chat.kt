@@ -28,7 +28,7 @@ data class Chat(
 
         data class MessagesRead(val messages: List<Message>)
 
-        data class QueueMessage(val text: String)
+        data class EnqueueMessage(val text: String)
 
         data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
 

@@ -1,0 +1,55 @@
+@startuml
+
+actor Client
+control Chat.Service
+database Chat.Repo
+control App.Service
+boundary Net
+
+== Message sending ==
+
+Client -> Chat.Service: QueueMessage
+activate Chat.Service
+Chat.Service --> Chat.Repo: insert queued message
+activate Chat.Repo
+deactivate Chat.Service
+loop flush pending messages
+    alt if any
+        Chat.Repo --> App.Service: new enqueued message
+        deactivate Chat.Repo
+        activate App.Service
+        activate App.Service
+    else
+        Net -->  App.Service: subscription accepted
+    else
+        Net -->  App.Service: omemo initialized
+    end
+    App.Service --> App.Service: FlushQueuedMessages
+
+    alt if user subscribed
+        App.Service --> Net: send message
+        activate Net
+        App.Service --> Chat.Repo: update status (sending)
+        activate Chat.Repo
+        App.Service <-- Net: message sent
+        deactivate Net
+        App.Service --> Chat.Repo: update status (sent)
+    else
+        deactivate App.Service
+        App.Service --> Net: subscribe
+        deactivate App.Service
+    end
+end
+
+== Message subscription ==
+
+Client -> Chat.Service: SubscribeLastMessage
+
+loop message list subscription
+    activate Chat.Service
+    Chat.Service <-- Chat.Repo: message list updates
+    deactivate Chat.Repo
+    Client <- Chat.Service: Chat.Service.Messages
+    deactivate Chat.Service
+end
+@enduml

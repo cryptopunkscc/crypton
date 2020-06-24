@@ -8,8 +8,8 @@ import cc.cryptopunks.crypton.context.calculateId
 import cc.cryptopunks.crypton.context.handle
 import kotlinx.coroutines.launch
 
-internal fun ChatScope.handleQueueMessage() =
-    handle<Chat.Service.QueueMessage> {
+internal fun ChatScope.handleEnqueueMessage() =
+    handle<Chat.Service.EnqueueMessage> {
         launch {
             chat.createQueuedMessage(text).let { message ->
                 log.d("Enqueue message $message")
