@@ -56,7 +56,7 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
     Route.Chat() to mapOf(
         "send" to mapOf(
             "message" to command(vararg()) { message ->
-                Chat.Service.QueueMessage(message.joinToString(" "))
+                Chat.Service.EnqueueMessage(message.joinToString(" "))
             }
         )
     ),
