@@ -19,7 +19,7 @@ var Bundle.account by BundleAddress
 
 var Bundle.chat by BundleAddress
 
-val Context.currentAccount by ContextAddress
+var Context.currentAccount by ContextAddress
 
 
 private object BundleAddress : ReadWriteProperty<Bundle, Address?> {
@@ -32,12 +32,12 @@ private object BundleAddress : ReadWriteProperty<Bundle, Address?> {
     }
 }
 
-private object ContextAddress : ReadWriteProperty<Context, Address?> {
+private object ContextAddress : ReadWriteProperty<Context, Address> {
 
     override fun getValue(thisRef: Context, property: KProperty<*>) =
-        thisRef.sharedPrefs.getString(property.name, null)?.let { address(it) }
+        thisRef.sharedPrefs.getString(property.name, null)?.let { address(it) } ?: Address.Empty
 
-    override fun setValue(thisRef: Context, property: KProperty<*>, value: Address?) {
-        thisRef.sharedPrefs.edit().putString(property.name, value?.id).apply()
+    override fun setValue(thisRef: Context, property: KProperty<*>, value: Address) {
+        thisRef.sharedPrefs.edit().putString(property.name, value.id).apply()
     }
 }

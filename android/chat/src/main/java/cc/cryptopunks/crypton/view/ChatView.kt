@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Chat.Service.MessageText
 import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
@@ -87,7 +88,9 @@ class ChatView(
                 .collect(output)
         }
         launch {
-            Actor.Connected.out()
+            delay(1)
+            Chat.Service.GetPagedMessages.out()
+            Chat.Service.SubscribePagedMessages(true).out()
         }
         invokeOnClose {
             messageAdapter.setMessages(null)

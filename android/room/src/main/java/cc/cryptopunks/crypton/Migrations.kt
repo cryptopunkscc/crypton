@@ -8,5 +8,8 @@ internal val migrations = arrayOf(
     },
     migration(2, 3) {
         execSQL("alter table chat add column isMultiUser integer not null default 0")
+    },
+    migration(3, 4) {
+        /*no-op*/
     }
 )

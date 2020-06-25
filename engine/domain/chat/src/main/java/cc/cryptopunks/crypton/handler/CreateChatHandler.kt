@@ -16,6 +16,7 @@ internal fun AppScope.handleCreateChat() =
             )
             output(Chat.Service.ChatCreated(chat))
         } catch (throwable: Throwable) {
+            throwable.printStackTrace()
             output(throwable)
         }
     }

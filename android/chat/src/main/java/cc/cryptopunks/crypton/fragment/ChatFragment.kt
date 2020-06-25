@@ -4,24 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.adapter.MessageAdapter
-import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.navigate.account
+import cc.cryptopunks.crypton.navigate.chat
 import cc.cryptopunks.crypton.service.chatService
-import cc.cryptopunks.crypton.util.toMap
 import cc.cryptopunks.crypton.view.ChatView
 import kotlinx.coroutines.launch
 
 class ChatFragment : ServiceFragment() {
-
-    private val route get() = Route.Chat(arguments.toMap())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding + viewProxy
         binding + MessageAdapter()
         launch {
-            val route = route
-            val accountAddress = route.accountAddress
-            val chatAddress = route.address
+            val accountAddress = arguments!!.account!!
+            val chatAddress = arguments!!.chat!!
             setTitle(chatAddress)
             binding + chatService(
                 scope = appScope
@@ -35,5 +32,5 @@ class ChatFragment : ServiceFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = ChatView(context!!, route.address)
+    ) = ChatView(context!!, arguments!!.chat!!)
 }

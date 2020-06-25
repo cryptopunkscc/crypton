@@ -19,6 +19,7 @@ internal fun SessionScope.rosterItemStatesFlow(chatAddress: Address): Flow<Roste
     ).flattenMerge().scan(
         Roster.Item(
             account = address,
+            chatAddress = chatAddress,
             letter = chatAddress.toString().firstOrNull()?.toLowerCase() ?: 'a',
             title = chatAddress.toString()
         )

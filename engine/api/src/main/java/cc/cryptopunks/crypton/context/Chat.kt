@@ -36,6 +36,8 @@ data class Chat(
 
         data class Copy(val message: Message)
 
+        object GetPagedMessages
+
         data class SubscribePagedMessages(override val enable: Boolean) : Subscription
 
         data class SubscribeLastMessage(override val enable: Boolean) : Subscription
@@ -107,7 +109,6 @@ data class Chat(
 
 suspend fun SessionScope.createChat(data: Chat.Service.CreateChatData) =
     data.run {
-        log.d("Chat $users creating")
         validate()
         Chat(
             title = title,
@@ -119,6 +120,7 @@ suspend fun SessionScope.createChat(data: Chat.Service.CreateChatData) =
             createChat(this) else
             copy(address = users.first().address)
     }.also { chat ->
+        log.d("Creating $chat ")
         chatRepo.insertIfNeeded(chat)
         log.d("Chat ${chat.address} with users ${chat.users} created")
     }

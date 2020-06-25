@@ -8,14 +8,17 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.collect
+import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
-import cc.cryptopunks.crypton.mock.MockConnectionFactory
-import cc.cryptopunks.crypton.smack.SmackConnectionFactory
-import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.module.RoomRepo
+import cc.cryptopunks.crypton.navigate.currentAccount
+import cc.cryptopunks.crypton.selector.newSessionsFlow
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.service.startSessionService
+import cc.cryptopunks.crypton.smack.SmackConnectionFactory
+import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.sys.AndroidSys
 import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -23,6 +26,7 @@ import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.initAndroidLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
+import kotlinx.coroutines.launch
 
 class App :
     Application(),
@@ -63,10 +67,17 @@ class App :
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        scope.startAppService()
+        scope.apply {
+            startAppService()
+            launch { newSessionsFlow().collect(handleNewSession()) }
+        }
     }
 
     private companion object {
         private const val OMEMO_STORE_NAME = "omemo"
     }
+}
+
+fun App.handleNewSession() = scope.handle<SessionScope> {
+    currentAccount = address
 }
