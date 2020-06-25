@@ -2,20 +2,13 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.paging.DataSource
 import androidx.room.*
-import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.context.address
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
-    tableName = "chat",
-    indices = [Index("accountId")],
-    foreignKeys = [ForeignKey(
-        entity = AccountData::class,
-        parentColumns = ["id"],
-        childColumns = ["accountId"],
-        onDelete = ForeignKey.CASCADE
-    )]
+    tableName = "chat"
 )
 internal data class ChatData(
     @PrimaryKey val id: AddressData,
@@ -59,7 +52,8 @@ internal data class ChatData(
 internal fun ChatData.toDomain(users: List<User> = emptyList()) =
     Chat(
         title = title,
-        address = Address.from(id),
+        address = address(id),
+        account = address(accountId),
         users = users
     )
 

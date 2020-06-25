@@ -2,11 +2,14 @@ package cc.cryptopunks.crypton.view
 
 import android.content.Context
 import android.view.View
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.navigate.currentAccount
+import cc.cryptopunks.crypton.navigate.navigateChat
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.roster.view.*
@@ -50,10 +53,16 @@ class RosterView(
             }
         }
         launch {
+            Roster.Service.GetItems.out()
             Roster.Service.SubscribeItems(true).out()
         }
         launch {
-            rosterAdapter.clicks.asFlow().collect(output)
+            rosterAdapter.clicks.asFlow().collect {
+                findNavController().navigateChat(
+                    account = context.currentAccount,
+                    chat = it.item.chatAddress
+                )
+            }
         }
     }
 

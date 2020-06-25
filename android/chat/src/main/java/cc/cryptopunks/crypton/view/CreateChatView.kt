@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.view
 
 import android.content.Context
 import android.view.View
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
@@ -9,6 +10,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.navigate.currentAccount
+import cc.cryptopunks.crypton.navigate.navigateChat
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.widget.ActorLayout
@@ -17,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 
 class CreateChatView(context: Context) :
@@ -36,6 +39,14 @@ class CreateChatView(context: Context) :
 
     override fun Connector.connect(): Job = launch {
         launch {
+            input.filterIsInstance<Chat.Service.ChatCreated>().collect { created ->
+                findNavController().navigateChat(
+                    account = context.currentAccount,
+                    chat = created.address
+                )
+            }
+        }
+        launch {
             addressInputView.input.textChanges().collect {
                 setError(null)
             }
@@ -48,7 +59,7 @@ class CreateChatView(context: Context) :
     }
 
     private fun createUserFromInput() = Chat.Service.CreateChat(
-        account = context.currentAccount!!,
+        account = context.currentAccount,
         chat = address(addressInputView.input.text.toString())
     )
 

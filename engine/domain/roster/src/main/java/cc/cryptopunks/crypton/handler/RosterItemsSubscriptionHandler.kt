@@ -15,6 +15,7 @@ internal fun AppScope.handleRosterItemsSubscription(
     handle<Roster.Service.SubscribeItems> { output ->
         rosterItemStatesFlow()
             .map { Roster.Service.Items(it) }
+            .onEach { log.d("roster items $it") }
             .onEach { lastItems { it } }
             .collect(output)
     }
