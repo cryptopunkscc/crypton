@@ -1,6 +1,3 @@
-//include 'auto-di:annotations',
-//        'auto-di:processor'
-
 include ':engine:api',
         ':engine:backend',
 
