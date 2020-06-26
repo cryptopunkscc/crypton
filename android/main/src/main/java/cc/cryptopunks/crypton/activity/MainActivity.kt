@@ -11,9 +11,7 @@ import cc.cryptopunks.crypton.fragment.MainFragment
 import cc.cryptopunks.crypton.initDebugDrawer
 import cc.cryptopunks.crypton.intent.IntentProcessor
 import cc.cryptopunks.crypton.main.R
-import cc.cryptopunks.crypton.service.top
 import cc.cryptopunks.crypton.util.ext.fragment
-import cc.cryptopunks.crypton.view.RosterView
 import cc.cryptopunks.crypton.view.setupDrawerAccountView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main.*
@@ -56,16 +54,6 @@ class MainActivity : FeatureActivity() {
     override fun onDestroy() {
         detachDebugDrawer()
         super.onDestroy()
-    }
-
-    override fun onBackPressed() {
-        // prevent activity from leaking due to android bug
-        // https://issuetracker.google.com/issues/139738913
-        appScope.connectableBindingsStore.top()?.run {
-            if (services.any { it is RosterView })
-                finishAfterTransition() else
-                super.onBackPressed()
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

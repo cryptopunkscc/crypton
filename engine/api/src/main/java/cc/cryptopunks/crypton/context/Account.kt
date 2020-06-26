@@ -35,6 +35,7 @@ data class Account(
         data class Logout(val address: Address)
         data class Remove(val address: Address, val deviceOnly: Boolean = true)
         data class SubscribeAccountList(override val enable: Boolean) : Subscription
+        object GetAccountList
         data class Enable(val address: Address, val condition: Boolean)
 
         interface Connect

@@ -63,7 +63,7 @@ class RosterView(
         launch {
             rosterAdapter.clicks.asFlow().collect {
                 findNavController().navigateChat(
-                    account = context.currentAccount,
+                    account = it.item.account,
                     chat = it.item.chatAddress
                 )
             }
