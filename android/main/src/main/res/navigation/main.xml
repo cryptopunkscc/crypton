@@ -24,26 +24,30 @@
     <fragment
         android:id="@+id/manageAccounts"
         android:name="cc.cryptopunks.crypton.fragment.AccountListFragment"
-        android:label="@string/manage_accounts" />
-    <include app:graph="@navigation/set_account" />
+        android:label="@string/manage_accounts"
+        tools:layout="@layout/account_list"/>
+    <fragment
+        android:id="@+id/addAccountFragment"
+        android:name="cc.cryptopunks.crypton.fragment.AddAccountFragment"
+        android:label="@string/add_account"
+        tools:layout="@layout/create_account" />
     <action
-        android:id="@id/navigateSetAccount"
-        app:destination="@id/setAccountNavigation"
+        android:id="@id/navigateAddAccount"
+        app:destination="@id/addAccountFragment"
         app:popUpTo="@id/mainNavigation"
         app:popUpToInclusive="true" />
     <action
-        android:id="@id/navigateDashboard"
+        android:id="@id/navigateRoster"
         app:destination="@id/rosterFragment"
         app:popUpTo="@id/mainNavigation"
         app:popUpToInclusive="true" />
     <action
         android:id="@+id/navigateAccountList"
-        app:destination="@id/manageAccounts"
-        />
+        app:destination="@id/manageAccounts" />
     <fragment
         android:id="@+id/createChatFragment"
         android:name="cc.cryptopunks.crypton.fragment.CreateChatFragment"
-        android:label="CreateChatFragment"
+        android:label="@string/create_chat"
         tools:layout="@layout/create_chat">
         <action
             android:id="@id/navigateChat"

@@ -14,7 +14,7 @@ abstract class BaseFragment : LoggerFragment() {
 
     open val titleId @StringRes get() = 0
 
-    private val baseActivity get() = activity as? BaseActivity
+    val baseActivity get() = activity as? BaseActivity
 
     fun setTitle(title: Any) {
         baseActivity?.supportActionBar?.apply {
@@ -41,7 +41,7 @@ abstract class BaseFragment : LoggerFragment() {
         }
     }
     fun restart() {
-        fragmentManager!!.beginTransaction()
+        parentFragmentManager.beginTransaction()
             .detach(this)
             .attach(this)
             .commit()

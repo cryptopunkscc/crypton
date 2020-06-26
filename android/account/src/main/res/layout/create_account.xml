@@ -2,12 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/default_padding"
-    tools:context="cc.cryptopunks.crypton.activity.AccountManagementActivity">
+    android:padding="@dimen/default_padding">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/serviceNameLayout"
@@ -40,6 +38,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/confirmPasswordLayout"
         style="@style/Widget.TextInputLayout.Password"
+        android:visibility="gone"
         app:passwordToggleEnabled="true">
 
         <EditText
@@ -62,10 +61,23 @@
         android:textColor="@color/error" />
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/addButton"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sign up" />
+        android:text="add existing account" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="@dimen/default_padding"
+        android:background="?android:listDivider" />
+
+    <Button
+        android:id="@+id/registerButton"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="create new" />
 
 </LinearLayout>

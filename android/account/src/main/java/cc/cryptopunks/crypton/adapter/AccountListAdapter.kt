@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.util.ext.inflate
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.account_item.*
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +31,8 @@ internal class AccountListAdapter(
     CoroutineScope,
     Connectable {
 
+    private val log = typedLog()
+
     private var items = listOf<Address>()
 
     private val channel = BroadcastChannel<Any>(1)
@@ -37,6 +40,7 @@ internal class AccountListAdapter(
     override fun Connector.connect(): Job = launch {
         launch {
             input.filterIsInstance<Account.Service.Accounts>().collect {
+                log.d("items $it")
                 items = it.list
                 notifyDataSetChanged()
             }

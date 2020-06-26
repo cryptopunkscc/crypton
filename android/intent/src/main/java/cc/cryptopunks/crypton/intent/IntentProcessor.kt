@@ -25,8 +25,4 @@ class IntentProcessor(
 
     private fun Intent.isCopyToClipboard() =
         action == Intent.ACTION_SEND && type?.startsWith("text") ?: false
-
-    interface Core {
-        val processIntent: IntentProcessor
-    }
 }

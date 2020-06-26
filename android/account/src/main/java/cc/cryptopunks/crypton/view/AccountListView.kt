@@ -39,6 +39,7 @@ internal class AccountListView(
     override fun Connector.connect(): Job = launch {
         connect(accountListAdapter)
         launch {
+            Account.Service.GetAccountList.out()
             Account.Service.SubscribeAccountList(true).out()
         }
     }

@@ -2,17 +2,11 @@
 <resources>
     <string name="manage_accounts">Manage accounts</string>
 
-    <string name="set_account">Set account</string>
-
-    <string name="set_account_label">Add existing xmpp account or create new one.</string>
-    <string name="add_existing_account">Add existing account</string>
-    <string name="register_new_account">Register new account</string>
-
+    <string name="add_account">Add account</string>
     <string name="service_name">Service name</string>
     <string name="user_name">User name</string>
     <string name="password">password</string>
     <string name="confirm_password">Confirm password</string>
-
     <string name="remove_account">Remove account</string>
     <string name="remove_also_from_server">Delete account also from server.</string>
     <string name="remove_account_confirmation_message">Are you sure you want to remove this account from the application?</string>
