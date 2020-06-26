@@ -4,7 +4,6 @@ apply plugin: 'kotlin-kapt'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api project(':engine:domain:app')
-    api project(':engine:domain:common')
     api project(':engine:domain:session')
     api project(':engine:domain:account')
     api project(':engine:domain:chat')

@@ -22,10 +22,10 @@ class JsonTest {
             users = listOf(User(address))
         ),
         Route.Back,
-        Route.Chat().apply {
-            accountId = "id"
-            chatAddress = "test@test.io"
-        }
+        Route.Chat(
+            accountAddress = Address.Empty,
+            address = address("test@test.io")
+        )
     )
 
     private val testJson = { any: Any ->

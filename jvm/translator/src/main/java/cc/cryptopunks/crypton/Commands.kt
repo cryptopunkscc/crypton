@@ -11,10 +11,7 @@ import cc.cryptopunks.crypton.context.address
 private val navigate = "navigate" to mapOf(
     "main" to command { Route.Main },
     "chat" to command(param()) { (address) ->
-        Route.Chat().apply {
-            accountId = account
-            chatAddress = address
-        }
+        Route.Chat(account, address)
     }
 )
 

@@ -46,10 +46,7 @@ class CommandsTest {
     fun `send message`() {
         assertEquals(
             Chat.Service.EnqueueMessage("lorem ipsum"),
-            Context(Route.Chat().apply {
-                chatAddress = "chat@address.io"
-                accountId = "test@account.io"
-            })
+            Context(Route.Chat("chat@address.io", "test@account.io"))
                 .prepare()
                 .set("send message lorem ipsum")
                 .execute()
@@ -59,9 +56,7 @@ class CommandsTest {
     @Test
     fun `navigate chat`() {
         assertEquals(
-            Route.Chat().apply {
-                chatAddress = "asd"
-            },
+            Route.Chat(address = "asd"),
             Context()
                 .prepare()
                 .set("navigate chat asd")

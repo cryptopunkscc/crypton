@@ -48,10 +48,7 @@ suspend fun startClient1() = Client1.connectClient {
     register(address1, pass)
     send(
         Chat.Service.CreateChat(address1, address2),
-        Route.Chat().apply {
-            accountId = "$test1@janek-latitude"
-            chatAddress = "$test2@janek-latitude"
-        },
+        Route.Chat("$test1@janek-latitude", "$test2@janek-latitude"),
         Chat.Service.SubscribeLastMessage(true)
     )
     flush()
@@ -164,10 +161,7 @@ suspend fun startClient2() = Client2.connectClient {
         }
     )
     send(
-        Route.Chat().apply {
-            accountId = "$test2@janek-latitude"
-            chatAddress = "$test1@janek-latitude"
-        },
+        Route.Chat("$test2@janek-latitude", "$test1@janek-latitude"),
         Chat.Service.EnqueueMessage("yo yo")
     )
     flush()
