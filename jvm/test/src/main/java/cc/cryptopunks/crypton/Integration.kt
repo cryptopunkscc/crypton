@@ -32,13 +32,16 @@ fun main() {
 
 object Client1
 object Client2
+object Client3
 
 private const val test1 = "test1"
 private const val test2 = "test2"
+private const val test3 = "test3"
 private const val pass = "pass"
 private const val domain = "janek-latitude"
 private val address1 = Address(test1, domain)
 private val address2 = Address(test2, domain)
+private val address3 = Address(test3, domain)
 
 suspend fun startClient1() = Client1.connectClient {
     main()
@@ -167,6 +170,16 @@ suspend fun startClient2() = Client2.connectClient {
     flush()
     delay(5000) // wait for lazy errors
     log.d("Stop client 2")
+}
+
+suspend fun startClient3() = Client3.connectClient {
+    main()
+    openSubscription()
+    log.d("Start client 2")
+    tryRemoveAccount(address3, pass)
+    register(address3, pass)
+    send(Roster.Service.SubscribeItems(true))
+
 }
 
 fun ClientDsl.main() {
