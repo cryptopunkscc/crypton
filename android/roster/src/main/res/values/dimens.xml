@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="avatar_size">64dp</dimen>
-    <dimen name="avatar_letter_size">32dp</dimen>
     <dimen name="roster_divider_padding_left">88dp</dimen>
     <dimen name="roster_divider_padding_right">8dp</dimen>
     <dimen name="presence_icon_size">16dp</dimen>

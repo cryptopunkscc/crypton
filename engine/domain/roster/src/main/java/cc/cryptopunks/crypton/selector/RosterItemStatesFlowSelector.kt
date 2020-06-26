@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,16 +21,35 @@ import kotlinx.coroutines.launch
 internal fun AppScope.rosterItemStatesFlow(): Flow<List<Roster.Item>> {
     val items = mutableMapOf<Address, Set<Roster.Item>>()
 
-    return sessionStore.newSessionsFlow().flatMapMerge { session ->
-        session.rosterItemStatesFlow().map { states ->
-            session.address to states
-        }
-    }.onEach { changed ->
-        items += changed
+    return sessionStore.changesFlow().flatMapMerge { sessions ->
+        flowOf(
+            flowOf(Change(remove = items.keys - sessions.keys)),
+            (sessions - items.keys).values.rosterItemStatesFlow().map { changed ->
+                Change(update = changed)
+            }
+        ).flattenMerge()
+    }.onEach {
+        if (it.remove.isNotEmpty())
+            items -= it.remove
+        if (it.update != null)
+            items += it.update
     }.bufferedThrottle(100).map {
         items.values.flatten()
     }
 }
+
+private data class Change(
+    val remove: Set<Address> = emptySet(),
+    val update: Pair<Address, Set<Roster.Item>>? = null
+)
+
+private fun Collection<SessionScope>.rosterItemStatesFlow(): Flow<Pair<Address, Set<Roster.Item>>> =
+    map { session ->
+        session.rosterItemStatesFlow().map { states ->
+            session.address to states
+        }
+    }.asFlow().flattenMerge()
+
 
 private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
     val jobs = mutableMapOf<Address, Job>()
@@ -61,15 +81,5 @@ private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
                 })
             }
         }
-    }
-}
-
-
-private fun SessionScope.Store.newSessionsFlow(): Flow<SessionScope> {
-    var previous = emptyMap<Address, SessionScope>()
-    return changesFlow().flatMapConcat { current: Map<Address, SessionScope> ->
-        val new = current - previous.keys
-        previous = current
-        new.values.asFlow()
     }
 }

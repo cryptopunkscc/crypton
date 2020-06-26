@@ -13,7 +13,6 @@ abstract class FeatureActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        setSupportActionBar(toolbar)
         scope.launch { appScope.routeSys.bind(navController) }
     }
 
@@ -21,11 +20,6 @@ abstract class FeatureActivity : BaseActivity() {
         scope.coroutineContext.cancelChildren()
         super.onStop()
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        scope.launch { featureCore.selectOptionItem(item.itemId) }
-//        return super.onOptionsItemSelected(item)
-//    }
 
     override fun onDestroy() {
         scope.cancel()

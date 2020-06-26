@@ -19,19 +19,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:visibility="gone"
             tools:text="connected" />
 
         <Switch
             android:id="@+id/connectionSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/removeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_grey_900_24dp"
+            android:src="@drawable/ic_baseline_delete_outline_24"
             android:layout_marginStart="16dp"
             android:contentDescription="@string/remove_account" />
     </LinearLayout>

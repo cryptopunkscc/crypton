@@ -17,8 +17,9 @@ class ChatFragment : ServiceFragment() {
         binding + viewProxy
         binding + MessageAdapter()
         launch {
-            val accountAddress = arguments!!.account!!
-            val chatAddress = arguments!!.chat!!
+            val args = requireArguments()
+            val accountAddress = args.account!!
+            val chatAddress = args.chat!!
             setTitle(chatAddress)
             binding + chatService(
                 scope = appScope
@@ -32,5 +33,5 @@ class ChatFragment : ServiceFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = ChatView(context!!, arguments!!.chat!!)
+    ) = ChatView(requireContext(), requireArguments().chat!!)
 }

@@ -53,12 +53,7 @@ class RosterItemView(
 
                 conversationLetter.text = letter.toString()
 
-                avatarDrawable.setColor(
-                    ContextCompat.getColor(
-                        context,
-                        letterColors.getValue(letter)
-                    )
-                )
+                avatarDrawable.setColor(ContextCompat.getColor(context, letterColors.getValue(letter)))
 
                 lastMessageTextView.text = message.formatMessage()
 

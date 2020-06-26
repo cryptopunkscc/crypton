@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import cc.cryptopunks.crypton.context.*
-import cc.cryptopunks.crypton.context.Chat.Service.*
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.view.MessageView
@@ -40,7 +39,7 @@ class MessageAdapter(
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
-    fun setMessages(messages: PagedMessages?) {
+    fun setMessages(messages: Chat.Service.PagedMessages?) {
         log.d("submit messages $messages")
         account = messages?.account ?: account
         submitList(messages?.list)
@@ -48,7 +47,7 @@ class MessageAdapter(
 
     fun outputFlow() = flowOf(
         clicks.asFlow(),
-        read.asFlow().bufferedThrottle(200).map { MessagesRead(it) }
+        read.asFlow().bufferedThrottle(200).map { Chat.Service.MessagesRead(it) }
     ).flattenMerge()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(

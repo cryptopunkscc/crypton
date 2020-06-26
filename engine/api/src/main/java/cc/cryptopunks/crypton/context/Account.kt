@@ -4,7 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 data class Account(
     val address: Address = Address.Empty,
-    val password: Password = Password.Empty
+    val password: Password = Password.Empty,
+    val enabled: Boolean = true
 ) {
     val domain get() = address.domain
 
@@ -34,6 +35,7 @@ data class Account(
         data class Logout(val address: Address)
         data class Remove(val address: Address, val deviceOnly: Boolean = true)
         data class SubscribeAccountList(override val enable: Boolean) : Subscription
+        data class Enable(val address: Address, val condition: Boolean)
 
         interface Connect
 

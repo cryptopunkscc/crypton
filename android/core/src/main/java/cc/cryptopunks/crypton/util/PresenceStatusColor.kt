@@ -9,7 +9,7 @@ val presenceStatusColorIds = mapOf(
     Presence.Status.Unavailable to R.color.presence_unavailable,
     Presence.Status.Available to R.color.presence_available,
     Presence.Status.Error to R.color.presence_error
-)
+).withDefault { R.color.presence_error }
 
 fun Context.presenceStatusColors() = let { context ->
     val default = ContextCompat.getColor(context, R.color.presence_error)

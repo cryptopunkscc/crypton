@@ -15,16 +15,9 @@
 
         <TextView
             android:id="@+id/conversationLetter"
-            android:layout_width="@dimen/avatar_size"
-            android:layout_height="@dimen/avatar_size"
-            android:gravity="center"
-            android:textAllCaps="true"
-            android:textColor="?android:textColorPrimaryInverse"
-            android:textSize="@dimen/avatar_letter_size"
-            android:fontFamily="@string/roboto_medium"
-            android:background="@drawable/no_avatar_drawable"
             tools:ignore="SpUsage"
-            tools:text="C" />
+            tools:text="C"
+            style="@style/Widget.Avatar.Letter" />
 
         <ImageView
             android:id="@+id/presenceStatusIcon"

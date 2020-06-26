@@ -26,14 +26,22 @@ android {
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':android:intent')
     implementation project(':android:account')
-    implementation project(':android:dashboard')
+    implementation project(':android:roster')
     implementation project(':android:chat')
+    implementation project(':android:drawer')
     implementation project(':engine:domain:app')
 }
 configurations {

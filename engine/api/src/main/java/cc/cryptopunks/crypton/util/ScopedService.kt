@@ -35,6 +35,8 @@ private data class ScopedService(
                 else -> handleRequest(it)
             }
         }
+        subscriptions.values.forEach { it.cancel() }
+        subscriptions.clear()
     }
 
     fun Connector.handleSubscription(subscription: Subscription) {
