@@ -8,15 +8,12 @@
     <fragment
         android:id="@+id/splashFragment"
         android:name="cc.cryptopunks.crypton.fragment.SplashFragment"
-        android:label="SplashFragment" />
+        android:label="@string/app_name" />
     <fragment
-        android:id="@+id/dashboardFragment"
-        android:name="cc.cryptopunks.crypton.fragment.DashboardFragment"
-        android:label="DashboardFragment"
-        tools:layout="@layout/dashboard" >
-        <action
-            android:id="@id/navigateAccountManagement"
-            app:destination="@id/accountManagementActivity" />
+        android:id="@+id/rosterFragment"
+        android:name="cc.cryptopunks.crypton.fragment.RosterFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/roster" >
         <action
             android:id="@id/navigateCreateChat"
             app:destination="@id/createChatFragment" />
@@ -24,12 +21,11 @@
             android:id="@id/navigateChat"
             app:destination="@id/chatFragment"/>
     </fragment>
+    <fragment
+        android:id="@+id/manageAccounts"
+        android:name="cc.cryptopunks.crypton.fragment.AccountListFragment"
+        android:label="@string/manage_accounts" />
     <include app:graph="@navigation/set_account" />
-    <activity
-        android:id="@+id/accountManagementActivity"
-        android:name="cc.cryptopunks.crypton.activity.AccountManagementActivity"
-        android:label="AccountManagementActivity"
-        tools:layout="@layout/account_list"/>
     <action
         android:id="@id/navigateSetAccount"
         app:destination="@id/setAccountNavigation"
@@ -37,9 +33,13 @@
         app:popUpToInclusive="true" />
     <action
         android:id="@id/navigateDashboard"
-        app:destination="@id/dashboardFragment"
+        app:destination="@id/rosterFragment"
         app:popUpTo="@id/mainNavigation"
         app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/navigateAccountList"
+        app:destination="@id/manageAccounts"
+        />
     <fragment
         android:id="@+id/createChatFragment"
         android:name="cc.cryptopunks.crypton.fragment.CreateChatFragment"
@@ -48,7 +48,7 @@
         <action
             android:id="@id/navigateChat"
             app:destination="@id/chatFragment"
-            app:popUpTo="@+id/dashboardFragment" />
+            app:popUpTo="@+id/rosterFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"

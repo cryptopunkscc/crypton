@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.service.accountService
 import cc.cryptopunks.crypton.view.AccountListView
@@ -28,11 +31,16 @@ class AccountListFragment : ServiceFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = AccountListView(
-        context = activity!!,
-        fragmentManager = fragmentManager!!
+        context = requireActivity(),
+        fragmentManager = parentFragmentManager
     )
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.account_management, menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(findNavController()) || super.onOptionsItemSelected(item)
+    }
+
 }

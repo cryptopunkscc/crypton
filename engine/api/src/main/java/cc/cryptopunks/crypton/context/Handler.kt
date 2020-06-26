@@ -21,6 +21,13 @@ private class Handler<T>(
     override fun invoke(arg: T, output: ConnectorOutput) = scope.launch { arg.handle(output) }
 }
 
+class CompoundHandler(
+    private val registry: HandlerRegistry
+) : Handle<Any> {
+    override fun invoke(arg: Any, output: ConnectorOutput): Job =
+        registry.dispatch(arg) ?: Job().apply { complete() }
+}
+
 @Suppress("UNCHECKED_CAST")
 fun HandlerRegistry.dispatch(message: Any, output: ConnectorOutput = {}): Job? =
     (get(message::class) as? Handle<Any>)?.invoke(message, output)
@@ -43,7 +50,7 @@ class HandlerRegistryBuilder internal constructor() {
     }
 }
 
-fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
+fun createHandlers(build: HandlerRegistryBuilder.() -> Unit) =
     HandlerRegistryBuilder().apply(build).handlers
 
 suspend fun <T> Flow<T>.collect(handle: Handle<T>, join: Boolean = false) = collect {

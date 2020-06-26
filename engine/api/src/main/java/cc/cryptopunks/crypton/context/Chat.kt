@@ -20,7 +20,7 @@ data class Chat(
     }
 
 
-    interface Service : Connectable {
+    object Service {
 
         // input
 

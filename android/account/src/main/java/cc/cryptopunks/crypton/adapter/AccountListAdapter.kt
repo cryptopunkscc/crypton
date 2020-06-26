@@ -46,9 +46,8 @@ internal class AccountListAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        containerView = parent.inflate(R.layout.account_item)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(parent.inflate(R.layout.account_item))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
@@ -75,6 +74,7 @@ internal class AccountListAdapter(
 
         fun bind(account: Address) {
             address = account
+            accountName.text = address.id
         }
     }
 }

@@ -10,6 +10,7 @@ import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.navigate.navigateChat
+import cc.cryptopunks.crypton.navigate.navigateCreateChat
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.roster.view.*
@@ -41,6 +42,9 @@ class RosterView(
             addItemDecoration(rosterItemDecorator)
             layoutManager = LinearLayoutManager(context)
             adapter = rosterAdapter
+        }
+        createConversationButton.setOnClickListener {
+            findNavController().navigateCreateChat()
         }
     }
 
