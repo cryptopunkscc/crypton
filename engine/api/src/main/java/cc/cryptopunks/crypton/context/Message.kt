@@ -36,6 +36,7 @@ data class Message(
 
     interface Net {
         suspend fun sendMessage(message: Message): Job
+        suspend fun sendMucMessage(message: Message): Job
         fun incomingMessages(): Flow<Event>
         fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
 

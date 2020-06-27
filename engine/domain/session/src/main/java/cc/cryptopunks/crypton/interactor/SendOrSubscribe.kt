@@ -17,7 +17,9 @@ internal suspend fun SessionScope.sendOrSubscribe(message: Message) {
         }
 
         else -> {
-            val job = sendMessage(message)
+            val job = if (chatRepo.get(message.to.address).isDirect)
+                sendMessage(message) else
+                sendMucMessage(message)
             log.d("$id sending")
             messageRepo.insertOrUpdate(message.copy(status = Message.Status.Sending))
             job.join()

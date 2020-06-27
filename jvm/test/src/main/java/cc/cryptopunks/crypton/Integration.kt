@@ -49,8 +49,9 @@ suspend fun startClient1() = Client1.connectClient {
     log.d("Start client 1")
     tryRemoveAccount(address1, pass)
     register(address1, pass)
+    send(Chat.Service.CreateChat(address1, address2))
+    expect(Chat.Service.ChatCreated(address = address2))
     send(
-        Chat.Service.CreateChat(address1, address2),
         Route.Chat("$test1@janek-latitude", "$test2@janek-latitude"),
         Chat.Service.SubscribeLastMessage(true)
     )

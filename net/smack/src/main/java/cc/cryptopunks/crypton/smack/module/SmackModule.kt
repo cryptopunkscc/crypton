@@ -45,7 +45,6 @@ internal class SmackModule(
     override val mucManager by lazy {
         MultiUserChatManager.getInstanceFor(connection)!!.apply {
             setAutoJoinOnReconnect(true)
-            addInvitationListener(mucInvitationManager)
         }
     }
 

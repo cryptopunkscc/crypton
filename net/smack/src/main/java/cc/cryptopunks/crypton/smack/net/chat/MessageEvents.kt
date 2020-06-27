@@ -17,9 +17,11 @@ import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener
 import org.jivesoftware.smack.packet.Stanza
 import org.jivesoftware.smackx.carbons.packet.CarbonExtension
+import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.omemo.OmemoManager
 import org.jivesoftware.smackx.omemo.OmemoMessage
 import org.jivesoftware.smackx.omemo.listener.OmemoMessageListener
+import org.jivesoftware.smackx.omemo.listener.OmemoMucMessageListener
 import org.jivesoftware.smack.packet.Message as SmackMessage
 
 internal fun createMessageEventBroadcast(
@@ -33,10 +35,12 @@ internal fun createMessageEventBroadcast(
 
     chatManager.addIncomingListener(incomingListener)
     omemoManager.addOmemoMessageListener(omemoListener)
+    omemoManager.addOmemoMucMessageListener(omemoListener)
 
     awaitClose {
         chatManager.removeIncomingListener(incomingListener)
         omemoManager.removeOmemoMessageListener(omemoListener)
+        omemoManager.removeOmemoMucMessageListener(omemoListener)
     }
 }
     .mapNotNull { it.cryptonMessage() }
@@ -62,7 +66,9 @@ private fun SendChannel<MessageEvent>.incomingListener() =
     }
 
 
-private fun SendChannel<MessageEvent>.omemoListener() = object : OmemoMessageListener {
+private fun SendChannel<MessageEvent>.omemoListener() = object :
+    OmemoMessageListener,
+    OmemoMucMessageListener {
 
     override fun onOmemoMessageReceived(
         stanza: Stanza,
@@ -82,5 +88,13 @@ private fun SendChannel<MessageEvent>.omemoListener() = object : OmemoMessageLis
         carbonCopy
             .replaceBody(decryptedCarbonCopy)
             ?.let { offer(it to MessageType.CarbonCopy) }
+    }
+
+    override fun onOmemoMucMessageReceived(
+        muc: MultiUserChat,
+        stanza: Stanza,
+        decryptedOmemoMessage: OmemoMessage.Received
+    ) {
+        onOmemoMessageReceived(stanza, decryptedOmemoMessage)
     }
 }

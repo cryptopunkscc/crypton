@@ -5,6 +5,7 @@ import androidx.paging.listDataSource
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.util.Store
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -13,6 +14,7 @@ import java.lang.Exception
 
 class MockChatRepo : Chat.Repo {
 
+    private val log = typedLog()
     val store = Store<Map<Address, Chat>>(emptyMap())
 
     private val scope = CoroutineScope(SupervisorJob() + store.dispatcher)
@@ -38,6 +40,7 @@ class MockChatRepo : Chat.Repo {
         (store.get() - addresses).values.toList()
 
     override suspend fun insert(chat: Chat) {
+        log.d("insert $chat")
         store reduce { plus(chat.address to chat) }
         dataSources.apply {
             forEach { it.invalidate() }

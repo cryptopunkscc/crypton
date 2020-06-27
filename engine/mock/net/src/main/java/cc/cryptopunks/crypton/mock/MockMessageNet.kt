@@ -21,6 +21,10 @@ class MockMessageNet(
         }
     }
 
+    override suspend fun sendMucMessage(message: Message): Job {
+        TODO("Not yet implemented")
+    }
+
     override fun readArchived(
         query: Message.Net.ReadArchived.Query
     ): Flow<List<Message>> = state.defaults.messages.asFlow()

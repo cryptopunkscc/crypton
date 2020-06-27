@@ -85,12 +85,21 @@ data class Chat(
 
 
     interface Net {
-        fun createChat(chat: Chat): Chat
+        fun createMuc(chat: Chat): Chat
+        fun mucInvitationsFlow(): Flow<MucInvitation>
+        fun joinMuc(address: Address)
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
 
         interface EventFlow : Flow<Event>
+
+        data class MucInvitation(
+            val address: Address,
+            val inviter: Resource,
+            val reason: String,
+            val password: String
+        )
     }
 
 
@@ -117,7 +126,7 @@ suspend fun SessionScope.createChat(data: Chat.Service.CreateChatData) =
         )
     }.run {
         if (!isDirect)
-            createChat(this) else
+            createMuc(this) else
             copy(address = users.first().address)
     }.also { chat ->
         log.d("Creating $chat ")

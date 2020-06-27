@@ -11,17 +11,22 @@ import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.ReadArchivedMessages
-import cc.cryptopunks.crypton.smack.net.chat.createChat
 import cc.cryptopunks.crypton.smack.net.chat.createMessageEventBroadcast
+import cc.cryptopunks.crypton.smack.net.chat.createMuc
 import cc.cryptopunks.crypton.smack.net.chat.createSendMessage
+import cc.cryptopunks.crypton.smack.net.chat.encryptMulti
+import cc.cryptopunks.crypton.smack.net.chat.encryptSingle
+import cc.cryptopunks.crypton.smack.net.chat.invitationsFlow
+import cc.cryptopunks.crypton.smack.net.chat.join
 import cc.cryptopunks.crypton.smack.net.omemo.InitOmemo
 import cc.cryptopunks.crypton.smack.net.roster.rosterEventFlow
 import cc.cryptopunks.crypton.smack.util.SmackPresence
 import cc.cryptopunks.crypton.smack.util.bareJid
 import cc.cryptopunks.crypton.smack.util.presence
-import cc.cryptopunks.crypton.smack.util.remoteId
+import cc.cryptopunks.crypton.smack.util.address
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
@@ -70,10 +75,13 @@ internal class ConnectionModule(
 
     private val sendMessage by lazy {
         createSendMessage(
-            address = address,
             connection = connection,
-            omemoManager = omemoManager
+            encrypt = encryptSingle()
         )
+    }
+
+    private val sendMucMessage by lazy {
+        createSendMessage(connection, encryptMulti())
     }
 
     private val readArchived by lazy {
@@ -129,7 +137,7 @@ internal class ConnectionModule(
         connection.isAuthenticated
 
     override fun getContacts(): List<User> = roster.entries.map { entry ->
-        User(address = entry.jid.remoteId())
+        User(address = entry.jid.address())
     }
 
     override fun addContact(user: User) {
@@ -180,6 +188,7 @@ internal class ConnectionModule(
     override fun subscribe(address: Address) = roster.createEntry(address.bareJid(), address.local, emptyArray())
 
     override suspend fun sendMessage(message: Message) = sendMessage.invoke(message)
+    override suspend fun sendMucMessage(message: Message): Job = sendMucMessage.invoke(message)
 
     override fun incomingMessages(): Flow<Message.Net.Event> = messageEventBroadcast.asFlow()
 
@@ -189,7 +198,11 @@ internal class ConnectionModule(
 
     override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
 
-    override fun createChat(chat: Chat): Chat = smack.createChat(chat)
+    override fun createMuc(chat: Chat): Chat = mucManager.createMuc(chat)
+
+    override fun mucInvitationsFlow() = mucManager.invitationsFlow()
+
+    override fun joinMuc(muc: Address) = mucManager.join(muc, address.local)
 
     override fun getCachedPresences(): List<Presence> = roster.run {
         entries.map { entry -> getPresence(entry.jid).presence(entry.jid) }
