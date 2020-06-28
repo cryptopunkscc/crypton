@@ -38,8 +38,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: "SNAPSHOT"
-        release_name: "snapshot"
+        tag_name: SNAPSHOT
+        release_name: snapshot
         prerelease: true
     - name: Upload Release Asset
       id: upload-release-asset 
