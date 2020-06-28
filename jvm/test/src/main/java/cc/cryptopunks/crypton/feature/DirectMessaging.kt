@@ -1,7 +1,19 @@
 package cc.cryptopunks.crypton.feature
 
+import cc.cryptopunks.crypton.Client1
+import cc.cryptopunks.crypton.Client2
+import cc.cryptopunks.crypton.acceptSubscription
+import cc.cryptopunks.crypton.address1
+import cc.cryptopunks.crypton.address2
 import cc.cryptopunks.crypton.connectClient
+import cc.cryptopunks.crypton.createChat
+import cc.cryptopunks.crypton.expectReceived
+import cc.cryptopunks.crypton.expectRosterItemMessage
 import cc.cryptopunks.crypton.ignore
+import cc.cryptopunks.crypton.openChat
+import cc.cryptopunks.crypton.pass
+import cc.cryptopunks.crypton.prepare
+import cc.cryptopunks.crypton.sendMessage
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
@@ -9,12 +21,12 @@ import kotlinx.coroutines.launch
 
 suspend fun testDirectMessaging() = coroutineScope {
     listOf(
-        launch { startClient1() },
-        launch { startClient2() }
+        launch { client1() },
+        launch { client2() }
     ).joinAll()
 }
 
-private suspend fun startClient1() = Client1.connectClient {
+private suspend fun client1() = Client1.connectClient {
     log.d("Start client 1")
     prepare(address1, pass)
     createChat(address1, address2)
@@ -33,7 +45,7 @@ private suspend fun startClient1() = Client1.connectClient {
     log.d("Stop client 1")
 }
 
-private suspend fun startClient2() = Client2.connectClient {
+private suspend fun client2() = Client2.connectClient {
     log.d("Start client 2")
     prepare(address2, pass)
     acceptSubscription(address2, address1)

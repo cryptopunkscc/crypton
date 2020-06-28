@@ -1,6 +1,5 @@
-package cc.cryptopunks.crypton.feature
+package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.ClientDsl
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
@@ -10,7 +9,6 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.should
 import kotlinx.coroutines.delay
 
 suspend fun ClientDsl.prepare(

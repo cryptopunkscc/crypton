@@ -1,9 +1,5 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.feature.address1
-import cc.cryptopunks.crypton.feature.address2
-import cc.cryptopunks.crypton.feature.address3
-import cc.cryptopunks.crypton.feature.removeAccounts
 import cc.cryptopunks.crypton.feature.testDirectMessaging
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -17,7 +13,6 @@ class FeatureTest {
     fun `as a user I can use direct messages`() = runBlocking {
         testDirectMessaging()
     }
-
 
     @After
     fun tearDown() = runBlocking {

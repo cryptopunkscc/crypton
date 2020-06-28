@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.feature
+package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Address
 
