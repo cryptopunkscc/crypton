@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.should
+import kotlinx.coroutines.delay
 
 suspend fun ClientDsl.prepare(
     address: Address,
@@ -40,6 +41,15 @@ suspend fun ClientDsl.tryRemoveAccount(
     )
 }
 
+suspend fun ClientDsl.removeAccounts(vararg addresses: Address) {
+    send(
+        *addresses.map { address ->
+            Account.Service.Remove(address, deviceOnly = false)
+        }.toTypedArray()
+    )
+    flush()
+    delay(200)
+}
 
 suspend fun ClientDsl.register(
     address: Address,
