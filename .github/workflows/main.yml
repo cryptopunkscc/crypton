@@ -33,23 +33,24 @@ jobs:
         arguments: "clean assembleDebug"
     - name: Codecov
       uses: codecov/codecov-action@v1.0.7
-    - name: Create a Release
-      id: create_release
-      uses: actions/create-release@v1.1.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: SNAPSHOT
-        release_name: snapshot
-        prerelease: true
-        draft: false
+#     - name: Create a Release
+#       id: create_release
+#       uses: actions/create-release@v1.1.1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         tag_name: SNAPSHOT
+#         release_name: snapshot
+#         prerelease: true
+#         draft: false
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        upload_url: https://uploads.github.com/repos/cryptopunkscc/crypton/releases/snapshot/assets{snapshot}
+#         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./android/app/build/outputs/apk/debug/app-debug.apk
         asset_name: crypton.apk
         asset_content_type: application/apk    
