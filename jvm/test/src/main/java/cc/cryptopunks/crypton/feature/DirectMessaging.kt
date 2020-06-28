@@ -40,8 +40,6 @@ private suspend fun client1() = Client1.connectClient {
     delay(1000)
     sendMessage("yo", address1, address2, subscribe = true)
     expectReceived("yo yo", address1, address2)
-    log.d("Finish client 1")
-    delay(5000) // wait for lazy errors
     log.d("Stop client 1")
 }
 
@@ -54,7 +52,5 @@ private suspend fun client2() = Client2.connectClient {
     openChat(address2, address1)
     delay(1000)
     sendMessage("yo yo", address2, address1)
-    log.d("Finish client 2")
-    delay(5000) // wait for lazy errors
     log.d("Stop client 2")
 }
