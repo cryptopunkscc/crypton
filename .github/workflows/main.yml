@@ -34,6 +34,7 @@ jobs:
     - name: Codecov
       uses: codecov/codecov-action@v1.0.7
     - name: Create a Release
+      id: create_release
       uses: actions/create-release@v1.1.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -41,9 +42,10 @@ jobs:
         tag_name: SNAPSHOT
         release_name: snapshot
         prerelease: true
+        draft: false
     - name: Upload Release Asset
       id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
