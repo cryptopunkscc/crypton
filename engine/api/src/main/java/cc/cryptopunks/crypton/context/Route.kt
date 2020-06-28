@@ -10,11 +10,11 @@ sealed class Route {
     object Main : Route()
     object Back : Route()
     class Chat(
-        val accountAddress: Address,
+        val account: Address,
         val address: Address
     ) : Route() {
         constructor(account: String = "", address: String = "") : this(
-            accountAddress = address(account),
+            account = address(account),
             address = address(address)
         )
     }

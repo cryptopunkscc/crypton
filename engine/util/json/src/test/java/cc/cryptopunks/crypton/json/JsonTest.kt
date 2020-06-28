@@ -23,7 +23,7 @@ class JsonTest {
         ),
         Route.Back,
         Route.Chat(
-            accountAddress = Address.Empty,
+            account = Address.Empty,
             address = address("test@test.io")
         )
     )

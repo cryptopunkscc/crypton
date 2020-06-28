@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.scan
@@ -76,10 +77,10 @@ class ClientDsl(
         output().filterIsInstance<T>().first { it.filter() }
     }
 
-    suspend inline fun expect(vararg expected: Any) {
+    suspend fun expect(vararg expected: Any, filter: suspend (Any) -> Boolean = { true }) {
         flush()
         require(expected.isNotEmpty()) { "expected cannot be empty " }
-        output().scan(expected.toList()) { rest, value ->
+        output().filter(filter).scan(expected.toList()) { rest, value ->
             require(rest.isNotEmpty()) { "Not expect more elements but was $value" }
             Assert.assertEquals(rest.first(), value)
             rest.drop(1)

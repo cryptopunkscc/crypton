@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class BackendService(
@@ -34,8 +36,11 @@ class BackendService(
         val backend = Backend(appScope)
         launch {
             backend.routeSys.bind(backend)
-            input.map {
+            input.onEach {
                 log.d("Received $it")
+            }.onStart {
+                emit(Route.Main)
+            }.map {
                 it as? Route ?: send(it)
             }.filterIsInstance<Route>().fold(Actor.Empty) { old, route ->
                 newActor().also { new -> backend.switchContext(route, old, new) }

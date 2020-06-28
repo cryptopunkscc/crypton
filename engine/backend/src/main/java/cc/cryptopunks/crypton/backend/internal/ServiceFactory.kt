@@ -24,7 +24,7 @@ internal class ServiceFactory(
             scope = runBlocking {
                 delay(100)
                 appScope.sessionScope(
-                    address = route.accountAddress
+                    address = route.account
                 ).run {
                     chatScope(chatRepo.get(route.address))
                 }
