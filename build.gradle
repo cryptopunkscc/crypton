@@ -3,7 +3,7 @@
 buildscript {
     ext {
         version_code = 1
-        version_name = '0.0'
+        version_name = '0.1'
         min_sdk = 22
         target_sdk = 27 // TODO temporary downgraded required by Omemo
         compile_sdk = 29

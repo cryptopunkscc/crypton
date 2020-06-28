@@ -41,5 +41,5 @@ jobs:
         prerelease: true
         title: "Development Build"
         files: |
-          android/app/build/outputs/apk/debug/app-debug.apk
+          android/app/build/outputs/apk/debug/*.apk
 
