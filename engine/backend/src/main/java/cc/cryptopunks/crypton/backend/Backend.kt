@@ -34,7 +34,7 @@ class Backend(
         )
     )
 
-    val drop: () -> Connectable.Binding? = dropBindingInteractor(
+    val drop: suspend () -> Unit = dropBindingInteractor(
         scope = scope,
         stack = stack
     )

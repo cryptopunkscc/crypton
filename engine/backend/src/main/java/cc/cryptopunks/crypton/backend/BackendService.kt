@@ -45,6 +45,8 @@ class BackendService(
             }.filterIsInstance<Route>().fold(Actor.Empty) { old, route ->
                 newActor().also { new -> backend.switchContext(route, old, new) }
             }
+            backend.drop()
+            log.d("Disconnect")
         }
     }
 }
@@ -61,8 +63,11 @@ private class Proxy(
     ).actor()
 }
 
-private fun Backend.switchContext(route: Route, old: Actor, new: Actor) {
+private suspend fun Backend.switchContext(route: Route, old: Actor, new: Actor) {
     top()?.minus(old)
-    navigate(route)
+    when (route) {
+        is Route.Back -> drop()
+        else -> request(route)
+    }
     top()?.plus(new)
 }

@@ -9,7 +9,6 @@ import cc.cryptopunks.crypton.connectClient
 import cc.cryptopunks.crypton.createChat
 import cc.cryptopunks.crypton.expectReceived
 import cc.cryptopunks.crypton.expectRosterItemMessage
-import cc.cryptopunks.crypton.ignore
 import cc.cryptopunks.crypton.openChat
 import cc.cryptopunks.crypton.pass
 import cc.cryptopunks.crypton.prepare
@@ -38,19 +37,20 @@ private suspend fun client1() = Client1.connectClient {
     // With current arch design is hard to synchronize subscriptions with normal query/commands,
     // but it does not matter, from user perspective there is no use case for that.
     delay(1000)
-    sendMessage("yo", address1, address2, subscribe = true)
+    sendMessage("yo", address1, address2)
     expectReceived("yo yo", address1, address2)
     log.d("Stop client 1")
+    delay(1000)
 }
 
 private suspend fun client2() = Client2.connectClient {
     log.d("Start client 2")
     prepare(address2, pass)
     acceptSubscription(address2, address1)
-    expect(ignore())
     expectRosterItemMessage("yo", address2, address1)
     openChat(address2, address1)
     delay(1000)
     sendMessage("yo yo", address2, address1)
     log.d("Stop client 2")
+    delay(1000)
 }

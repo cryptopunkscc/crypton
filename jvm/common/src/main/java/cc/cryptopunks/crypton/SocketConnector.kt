@@ -9,10 +9,13 @@ import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.cancel
+import io.ktor.utils.io.close
 import io.ktor.utils.io.writePacket
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 import kotlin.reflect.KClass
 
 
@@ -24,6 +27,11 @@ fun Socket.connector(log: TypedLog): Connector = let {
         output = {
             log.d("Sending $it")
             writeChannel.send(it)
+        },
+        close = {
+            writeChannel.close()
+            readChannel.cancel()
+            dispose()
         }
     )
 }
@@ -32,12 +40,16 @@ private fun ByteReadChannel.flowParsedMessages(): Flow<Any> =
     flowMessages().map { it.parseMessage() }
 
 private fun ByteReadChannel.flowMessages(): Flow<String> = flow {
-    while (true) {
-        val len = readInt()
-        val arr = ByteArray(len)
-        readFully(arr, 0, len)
-        val message = arr.toString(Charsets.UTF_8)
-        emit(message)
+    try {
+        while (true) {
+            val len = readInt()
+            val arr = ByteArray(len)
+            readFully(arr, 0, len)
+            val message = arr.toString(Charsets.UTF_8)
+            emit(message)
+        }
+    } catch (e: Throwable) {
+        println("Close message flow (${e.message})")
     }
 }
 
@@ -50,7 +62,7 @@ private fun String.parseMessage(): Any = split(":", limit = 2).let { (className,
     }
 }
 
-private suspend fun ByteWriteChannel.send(any: Any) {
+private suspend fun ByteWriteChannel.send(any: Any) = try {
     val message = any.formatMessage()
     write(message.length) { buffer ->
         buffer.putInt(message.length)
@@ -59,6 +71,9 @@ private suspend fun ByteWriteChannel.send(any: Any) {
         append(message)
     }
     flush()
+} catch (e: IOException) {
+    println("failed send $any")
+    println(e.localizedMessage)
 }
 
 private const val PREFIX = "cc.cryptopunks.crypton."

@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.net.InetSocketAddress
@@ -71,7 +72,7 @@ suspend fun startServer() = coroutineScope {
 }
 
 private fun startServerSocket(): ServerSocket =
-    aSocket(ActorSelectorManager(Dispatchers.IO))
+    aSocket(ActorSelectorManager(newSingleThreadContext("Server")))
         .tcp()
         .bind(InetSocketAddress("127.0.0.1", 2323))
         .apply { log.d("Started at $localAddress") }

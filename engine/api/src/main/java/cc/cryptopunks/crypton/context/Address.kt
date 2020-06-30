@@ -38,3 +38,12 @@ data class Address(
         }
     }
 }
+
+fun Address.conference() = copy(
+    domain = if (domain.startsWith(CONFERENCE_PREFIX))
+        domain else CONFERENCE_PREFIX + domain
+)
+
+val Address.isConference get() = domain.startsWith(CONFERENCE_PREFIX)
+
+private const val CONFERENCE_PREFIX = "conference."

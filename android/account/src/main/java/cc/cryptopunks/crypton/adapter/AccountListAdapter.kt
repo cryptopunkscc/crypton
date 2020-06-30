@@ -44,6 +44,8 @@ internal class AccountListAdapter(
                 items = it.list
                 notifyDataSetChanged()
             }
+        }
+        launch {
             channel.asFlow().collect(output)
         }
     }
@@ -71,7 +73,7 @@ internal class AccountListAdapter(
             connectionSwitch.setOnCheckedChangeListener { _, _ ->
                 launch {
                     delay(400)
-                    channel.send(Account.Service.Add())
+//                    channel.send(Account.Service.Add())
                 }
             }
         }
