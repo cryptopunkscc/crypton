@@ -5,7 +5,6 @@ import kotlin.reflect.KClass
 
 private val gson = GsonBuilder()
     .setExclusionStrategies(DelegatePropertyExclusionStrategy)
-    .registerTypeAdapterFactory(RouteAdapterFactory)
     .registerTypeAdapter(CharSequence::class.java, CharSequenceDeserializer)
     .create()
 
