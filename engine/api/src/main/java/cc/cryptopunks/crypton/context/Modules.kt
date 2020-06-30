@@ -31,7 +31,6 @@ class AppModule(
     override val sessionStore = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
-    override val navigate = Route.Navigate(routeSys)
     override fun sessionScope(): SessionScope = sessionStore.get().values.first()
     override fun sessionScope(address: Address): SessionScope = sessionStore.get()[address]!!
 }
