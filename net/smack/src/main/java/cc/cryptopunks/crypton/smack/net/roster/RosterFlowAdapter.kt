@@ -31,7 +31,7 @@ class RosterFlowAdapter(
         return null
     }
 
-    override fun presenceAvailable(address: FullJid, availablePresence: Presence) {
+    override fun presenceAvailable(address: FullJid?, availablePresence: Presence) {
         channel.offer(
             Roster.Net.PresenceChanged(
                 availablePresence.presence(address)

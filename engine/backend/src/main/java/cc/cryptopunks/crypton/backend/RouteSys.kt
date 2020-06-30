@@ -17,10 +17,10 @@ class RouteSys :
     override fun navigate(route: Route) {
         log.d("Navigate $route")
         backend?.run {
-            when (route) {
-                is Route.Back -> drop()
-                else -> request(route)
-            }
+//            when (route) {
+//                is Route.Back -> drop()
+//                else -> request(route)
+//            }
         }
     }
 

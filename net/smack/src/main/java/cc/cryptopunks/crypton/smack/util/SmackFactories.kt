@@ -37,8 +37,8 @@ internal fun SmackJid.address() = Address(
     domain = domain.toString()
 )
 
-internal fun SmackPresence.presence(address: SmackJid) = Presence(
-    resource = address.resource(),
+internal fun SmackPresence.presence(address: SmackJid?) = Presence(
+    resource = address?.resource() ?: Resource.Empty,
     status = Presence.Status.values().first { it.name.toLowerCase() == type.name }
 )
 

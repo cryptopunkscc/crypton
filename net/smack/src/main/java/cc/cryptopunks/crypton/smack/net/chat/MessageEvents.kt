@@ -1,6 +1,8 @@
 package cc.cryptopunks.crypton.smack.net.chat
 
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.smack.util.address
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.toCryptonMessage
@@ -48,15 +50,25 @@ internal fun createMessageEventBroadcast(
     .broadcastIn(scope)
 
 
-private fun MessageEvent.cryptonMessage(): Message? =
-    if (first.type != SmackMessage.Type.chat) null
-    else when (second) {
-        MessageType.Incoming -> Message.Status.Received
-        MessageType.CarbonCopy -> Message.Status.Sent
-        MessageType.Outgoing -> null
-    }?.let { status ->
-        first.toCryptonMessage().copy(status = status)
-    }
+private fun MessageEvent.cryptonMessage(): Message? = if (
+    setOf(
+        SmackMessage.Type.chat,
+        SmackMessage.Type.groupchat
+    ).contains(first.type).not()
+) null else when (second) {
+    MessageType.Incoming -> Message.Status.Received
+    MessageType.CarbonCopy -> Message.Status.Sent
+    MessageType.Outgoing -> null
+}?.let { status ->
+    first.toCryptonMessage().copy(
+        status = status,
+        chatAddress = when(first.type) {
+            SmackMessage.Type.chat -> first.from.address()
+            SmackMessage.Type.groupchat -> first.to.address()
+            else -> Address.Empty
+        }
+    )
+}
 
 
 private fun SendChannel<MessageEvent>.incomingListener() =

@@ -50,7 +50,8 @@ interface Actor : Connectable {
 
 data class Connector(
     val input: Flow<Any>,
-    val output: suspend (Any) -> Unit
+    val output: suspend (Any) -> Unit,
+    val close: () -> Unit = {}
 ) {
     suspend fun Any.out() = output(this)
 }

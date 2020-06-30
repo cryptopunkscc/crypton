@@ -97,7 +97,7 @@ internal class ConnectionModule(
 
     override fun isConnected(): Boolean = connection.isConnected
 
-    override suspend fun initOmemo() = initOmemo.invoke()
+    override fun initOmemo() = initOmemo.invoke()
 
     override fun isOmemoInitialized(): Boolean = initOmemo.isInitialized
 

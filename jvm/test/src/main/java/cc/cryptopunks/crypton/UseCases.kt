@@ -10,13 +10,13 @@ import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
 import kotlinx.coroutines.delay
+import org.junit.Assert.assertEquals
 
 suspend fun ClientDsl.prepare(
     address: Address,
     password: String
 ) {
     openSubscription()
-    tryRemoveAccount(address, password)
     register(address, password)
 }
 
@@ -37,6 +37,7 @@ suspend fun ClientDsl.tryRemoveAccount(
             }
         }
     )
+    flush()
 }
 
 suspend fun ClientDsl.removeAccounts(vararg addresses: Address) {
@@ -46,7 +47,7 @@ suspend fun ClientDsl.removeAccounts(vararg addresses: Address) {
         }.toTypedArray()
     )
     flush()
-    delay(200)
+    delay(1000)
 }
 
 suspend fun ClientDsl.register(
@@ -62,9 +63,10 @@ suspend fun ClientDsl.register(
 
 suspend fun ClientDsl.createChat(
     account: Address,
-    chat: Address
+    chat: Address,
+    users: List<Address> = listOf(chat)
 ) {
-    send(Chat.Service.CreateChat(account, chat))
+    send(Chat.Service.CreateChat(account, chat, users))
     expect(Chat.Service.ChatCreated(address = chat))
 }
 
@@ -82,8 +84,7 @@ suspend fun ClientDsl.openChat(
 suspend fun ClientDsl.sendMessage(
     message: String,
     account: Address,
-    chat: Address,
-    subscribe: Boolean = false
+    chat: Address
 ) {
     fun Message.requireStatus(
         status: Message.Status
@@ -100,32 +101,17 @@ suspend fun ClientDsl.sendMessage(
     send(
         Chat.Service.EnqueueMessage(message)
     )
-    if (subscribe) {
-        expect(
-            should<Chat.Service.Messages> {
-                require(this.account == account) { this.account }
-                require(list.size == 1) { list }
-                list[0].requireStatus(Message.Status.Queued)
-                true
-            },
-            should<Chat.Service.Messages> {
-                require(this.account == account) { this.account }
-                require(list.size == 2) { list }
-                list[0].requireStatus(Message.Status.Sending)
-                list[1].requireStatus(Message.Status.Sent)
-                true
-            }
-        )
-    } else expect(
-        should<Chat.Service.Messages> {
-            require(this.account == account) { this.account }
-            require(list.size == 3) { list }
-            list[0].requireStatus(Message.Status.Queued)
-            list[1].requireStatus(Message.Status.Sending)
-            list[2].requireStatus(Message.Status.Sent)
-            true
+
+    mutableListOf<Message>().apply {
+        waitFor<Chat.Service.Messages> {
+            plusAssign(list)
+            size == 3
         }
-    )
+    }.run {
+        get(0).requireStatus(Message.Status.Queued)
+        get(1).requireStatus(Message.Status.Sending)
+        get(2).requireStatus(Message.Status.Sent)
+    }
 }
 
 suspend fun ClientDsl.expectReceived(
@@ -156,7 +142,7 @@ suspend fun ClientDsl.acceptSubscription(
     account: Address,
     subscriber: Address
 ) {
-    send(Roster.Service.SubscribeItems(true))
+    send(Roster.Service.SubscribeItems(true, account))
     expect(
         should<Roster.Service.Items> {
             list.first { it.account == account }.run {
@@ -171,7 +157,13 @@ suspend fun ClientDsl.acceptSubscription(
         }
     ) { input ->
         (input as? Roster.Service.Items)?.run {
-            list.any { it.account == account }
+            println("Filtering items for acceptSubscription: acc = $account, sub = $subscriber")
+            println(list.joinToString("\n"))
+            list.any {
+                it.account == account &&
+                        it.chatAddress == subscriber &&
+                        it.presence == Presence.Status.Subscribe
+            }
         } ?: false
     }
     send(Roster.Service.AcceptSubscription(account, subscriber))
@@ -180,18 +172,26 @@ suspend fun ClientDsl.acceptSubscription(
 suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, chat: Address) {
     expect(
         should<Roster.Service.Items> {
-            list.first { it.account == account }.run {
-                require(this.account == account) { this.account }
+            log.d("Expect RosterItemMessage: $text, $account, $chat")
+            list.firstOrNull { it.account == account && it.chatAddress == chat }?.run {
                 require(title == chat.id) { title }
                 require(presence == Presence.Status.Available) { presence }
                 message.run {
-                    require(this.text == text) { this.text }
+                    assertEquals("\n" + list.joinToString("\n"), text, this.text)
                     require(chatAddress == chat) { chatAddress }
                     require(from.address == chat) { from.address }
                     require(to.address == account) { to.address }
                     require(status == Message.Status.Received)
                 }
                 require(unreadMessagesCount == 1) { unreadMessagesCount }
+            } ?: require(false) {
+                """
+Expect RosterItemMessage: 
+text = $text,
+acc = $account 
+chat = $chat 
+But was:
+""" + list.joinToString(separator = "\n")
             }
             true
         }

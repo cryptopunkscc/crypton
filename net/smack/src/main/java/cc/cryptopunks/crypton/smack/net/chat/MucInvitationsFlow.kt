@@ -22,8 +22,8 @@ fun MultiUserChatManager.invitationsFlow() =
         InvitationListener { conn: XMPPConnection,
                              room: MultiUserChat,
                              inviter: EntityJid,
-                             reason: String,
-                             password: String,
+                             reason: String?,
+                             password: String?,
                              message: Message,
                              invitation: MUCUser.Invite ->
             offer(
@@ -32,7 +32,9 @@ fun MultiUserChatManager.invitationsFlow() =
                     inviter = inviter.resource(),
                     password = password,
                     reason = reason
-                )
+                ).also {
+                    println("new invitation $it")
+                }
             )
         }.let { listener ->
             addInvitationListener(listener)

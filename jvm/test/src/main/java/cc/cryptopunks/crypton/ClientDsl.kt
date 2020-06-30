@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
@@ -33,7 +34,9 @@ class ClientDsl(
 
     init {
         launch {
-            connector.input.collect {
+            connector.input.onCompletion {
+                log.d("Close client $it")
+            }.collect {
                 log.d("Received $it")
                 input.send(it)
             }
@@ -70,7 +73,7 @@ class ClientDsl(
     }
 
     suspend inline fun <reified T> waitFor(
-        timeout: Long = 20_000,
+        timeout: Long = 120_000,
         crossinline filter: T.() -> Boolean = { true }
     ): T = withTimeout(timeout) {
         flush()
