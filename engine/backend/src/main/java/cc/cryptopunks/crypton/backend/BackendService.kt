@@ -35,7 +35,6 @@ class BackendService(
         log.d("Connect")
         val backend = Backend(appScope)
         launch {
-            backend.routeSys.bind(backend)
             input.onEach {
                 log.d("Received $it")
             }.onStart {

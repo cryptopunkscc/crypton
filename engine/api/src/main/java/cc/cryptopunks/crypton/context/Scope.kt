@@ -21,7 +21,6 @@ interface AppScope :
     Repo {
 
     val mainClass: KClass<*>
-    val navigate: Route.Navigate
 
     val sessionStore: SessionScope.Store
     val clipboardStore: Clip.Board.Store
