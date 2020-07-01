@@ -45,6 +45,13 @@ end
 
 Client -> Chat.Service: SubscribeLastMessage
 
+loop incoming messages
+    App.Service <-- Net: new message received
+    activate App.Service
+    App.Service --> Chat.Repo: update status (received)
+    deactivate App.Service
+end
+
 loop message list subscription
     activate Chat.Service
     Chat.Service <-- Chat.Repo: message list updates
