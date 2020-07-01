@@ -10,15 +10,12 @@ Is to provide free and open way to safe encrypted communication basing on decent
 * keeping implementation and architecture design clean and simple as possible.
 * provide stable set of important features.
 
-## Current version
-At this moment crypton doesn't respect versioning. 
-
-## Installation 
-Unstable snapshot of android artifact is published in
-[latest pre-release](https://github.com/cryptopunkscc/crypton/releases/tag/latest) each commit.
-
 ## Current project status
 Early work in progress alpha. Some of features already works but are not well tested.
+
+## Installation 
+Unstable snapshot of android developer artifact is published in
+[latest pre-release](https://github.com/cryptopunkscc/crypton/releases/tag/latest) each commit.
 
 ## Features
 The first-in-last-out (FILO) queue of all features in project scope. 
