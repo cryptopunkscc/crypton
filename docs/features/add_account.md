@@ -1,10 +1,10 @@
 # Add Account
-Using this feature user can insert existing account credentials to local data base,
+User can insert existing account credentials to local data base,
 so it can be used to session authorization, which is also performed as next step.
 May return error if any occurs.     
 
 ## User story
-As a user I can add existing account to application and initialize session.
+As a user I want add existing account to application and initialize session.
 
 ## Business value
 This is key access feature to other features in application. 
