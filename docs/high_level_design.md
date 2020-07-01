@@ -19,7 +19,7 @@ In Android more sense makes application with embedded UI and backend.
 ## Modular architecture
 Crypton is pretending to be multi-platform client.
 To make it possible is important to keep reusable code separated from platform specific modules.
-The reusable part is called `:engine` and contains core `java-library` modules for crypton.
+The reusable part is called `:engine` and contains core `java-library` modules for Crypton.
 More details about Crypton modules can be found in `modules.md` document.
 
 ## Internal state
