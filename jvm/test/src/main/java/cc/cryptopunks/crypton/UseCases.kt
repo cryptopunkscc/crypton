@@ -92,7 +92,7 @@ suspend fun ClientDsl.sendMessage(
         require(text == message) { text }
         require(from == Resource(account)) { from }
         require(to == Resource(chat)) { to }
-        require(chatAddress == chat) { chatAddress }
+        require(this.chat == chat) { this.chat }
         require(notifiedAt == 0L) { notifiedAt }
         require(readAt == 0L) { readAt }
         require(this.status == status) { this.status }
@@ -127,7 +127,7 @@ suspend fun ClientDsl.expectReceived(
                 require(text == message) { text }
                 require(from.address == chat) { from.address }
                 require(to.address == account) { to.address }
-                require(chatAddress == chat) { chatAddress }
+                require(this.chat == chat) { this.chat }
                 require(notifiedAt == 0L) { notifiedAt }
                 require(readAt == 0L) { readAt }
                 require(status == Message.Status.Received) { status }
@@ -178,7 +178,7 @@ suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, ch
                 require(presence == Presence.Status.Available) { presence }
                 message.run {
                     assertEquals("\n" + list.joinToString("\n"), text, this.text)
-                    require(chatAddress == chat) { chatAddress }
+                    require(this.chat == chat) { this.chat }
                     require(from.address == chat) { from.address }
                     require(to.address == account) { to.address }
                     require(status == Message.Status.Received)

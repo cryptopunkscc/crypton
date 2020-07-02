@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton.context
 
+fun resource(string: String) = Resource.from(string)
+
 data class Resource(
     val address: Address = Address.Empty,
     val resource: String = ""

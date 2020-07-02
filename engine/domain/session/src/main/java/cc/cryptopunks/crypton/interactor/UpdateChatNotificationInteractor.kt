@@ -25,7 +25,7 @@ fun AppScope.updateChatNotification(): (List<Message>) -> Unit {
 }
 
 private fun List<Message>.asNotifications() = groupBy { message: Message ->
-    message.chatAddress
+    message.chat
 }.map { (address: Address, messages: List<Message>) ->
     Notification.Messages(
         chatAddress = address,

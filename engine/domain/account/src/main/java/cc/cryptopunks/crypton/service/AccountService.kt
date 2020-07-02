@@ -4,12 +4,12 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.createHandlers
 import cc.cryptopunks.crypton.handler.handleAccountListSubscription
-import cc.cryptopunks.crypton.handler.handleAdd
+import cc.cryptopunks.crypton.handler.handleAddAccount
 import cc.cryptopunks.crypton.handler.handleEnableAccount
 import cc.cryptopunks.crypton.handler.handleGetAccountList
 import cc.cryptopunks.crypton.handler.handleLogin
 import cc.cryptopunks.crypton.handler.handleLogout
-import cc.cryptopunks.crypton.handler.handleRegister
+import cc.cryptopunks.crypton.handler.handleRegisterAccount
 import cc.cryptopunks.crypton.handler.handleRemove
 import cc.cryptopunks.crypton.handler.handleSetField
 import cc.cryptopunks.crypton.model.Form
@@ -26,8 +26,8 @@ fun AppScope.accountHandlers() = createHandlers {
     val lastAccounts = Store(Account.Service.Accounts(emptyList()))
 
     +handleSetField(form)
-    +handleRegister(form)
-    +handleAdd(form)
+    +handleRegisterAccount(form)
+    +handleAddAccount(form)
     +handleLogin(form)
     +handleLogout()
     +handleEnableAccount()

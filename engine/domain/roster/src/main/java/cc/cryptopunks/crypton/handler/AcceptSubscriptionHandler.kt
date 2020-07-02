@@ -23,7 +23,7 @@ internal fun AppScope.handleSubscriptionAccept() =
                     )
                 )
             } else {
-                joinMuc(accepted)
+                joinMuc(accepted, account.local)
             }
         } ?: throw IllegalArgumentException("Invalid account $account")
     }

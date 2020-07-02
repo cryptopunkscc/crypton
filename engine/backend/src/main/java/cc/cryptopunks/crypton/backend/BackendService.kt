@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.actor
 import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.asFlow
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 
 class BackendService(
     private val appScope: AppScope
@@ -25,7 +27,7 @@ class BackendService(
 
     private val log = typedLog()
 
-    override val coroutineContext get() = appScope.coroutineContext
+    override val coroutineContext = SupervisorJob() + newSingleThreadContext("BackendService")
 
     init {
         appScope.startAppService()
