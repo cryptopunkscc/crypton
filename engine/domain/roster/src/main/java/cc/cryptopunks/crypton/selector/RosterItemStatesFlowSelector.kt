@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.channelFlow
@@ -57,7 +58,7 @@ private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
 
     return channelFlow {
         chatRepo.flowList().map { chats ->
-
+            delay(50)
             chats.map(Chat::address).toSet()
 
         }.collect { current: Set<Address> ->

@@ -15,7 +15,7 @@ internal fun SmackCore.sendMessage(
     check(connection.isAuthenticated) { "Connection not authenticated" }
 
     val stanza = when (message.chat.isConference) {
-        true -> prepareConferenceMessage(message, encrypt)
+        true -> prepareConferenceMessage(message, false) // TODO
         false -> prepareChatMessage(message, encrypt)
     }
 

@@ -69,7 +69,7 @@ data class Chat(
 
     interface Net {
         fun supportEncryption(address: Address): Boolean
-        fun createMuc(chat: Chat): Chat
+        fun createConversation(chat: Chat): Chat
         fun mucInvitationsFlow(): Flow<MucInvitation>
         fun joinMuc(address: Address, nickname: String)
 
@@ -102,7 +102,7 @@ data class Chat(
 
 suspend fun SessionScope.createChat(chat: Chat) {
     log.d("Creating $chat")
-    if (chat.isMuc) createMuc(chat)
+    if (chat.isMuc) createConversation(chat)
     log.d("Chat ${chat.address} with users ${chat.users} created")
     insertChat(chat)
 }

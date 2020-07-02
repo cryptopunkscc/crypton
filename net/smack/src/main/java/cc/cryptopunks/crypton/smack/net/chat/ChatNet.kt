@@ -29,7 +29,7 @@ internal class ChatNet(
         omemoManager.multiUserChatSupportsOmemo(mucManager.getMultiUserChat(address.entityBareJid()))
 
 
-    override fun createMuc(chat: Chat): Chat = smackCore.createMuc(chat)
+    override fun createConversation(chat: Chat): Chat = smackCore.createMuc(chat)
 
     override fun mucInvitationsFlow(): Flow<Chat.Net.MucInvitation> = mucManager.invitationsFlow()
 

@@ -159,7 +159,7 @@ internal class ConnectionModule(
 
     override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
 
-    override fun createMuc(chat: Chat): Chat = smack.createMuc(chat)
+    override fun createConversation(chat: Chat): Chat = smack.createMuc(chat)
 
     override fun mucInvitationsFlow() = mucManager.invitationsFlow()
 
