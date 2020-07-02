@@ -89,28 +89,26 @@ suspend fun ClientDsl.sendMessage(
     fun Message.requireStatus(
         status: Message.Status
     ) {
-        require(text == message) { text }
-        require(from == Resource(account)) { from }
-        require(to == Resource(chat)) { to }
-        require(this.chat == chat) { this.chat }
-        require(notifiedAt == 0L) { notifiedAt }
-        require(readAt == 0L) { readAt }
-        require(this.status == status) { this.status }
+        assertEquals(toString(), chat, this.chat)
+        assertEquals(toString(), message, text)
+        assertEquals(toString(), Resource(account), from)
+        assertEquals(toString(), Resource(chat), to)
+        assertEquals(toString(), 0L, notifiedAt)
+        assertEquals(toString(), 0L, readAt)
+        assertEquals(toString(), status, this.status)
     }
-
+    openSubscription()
     send(
         Chat.Service.EnqueueMessage(message)
     )
 
-    mutableListOf<Message>().apply {
-        waitFor<Chat.Service.Messages> {
-            plusAssign(list)
-            size == 3
-        }
-    }.run {
-        get(0).requireStatus(Message.Status.Queued)
-        get(1).requireStatus(Message.Status.Sending)
-        get(2).requireStatus(Message.Status.Sent)
+    waitFor<Chat.Service.Messages> {
+        list.any { it.status == Message.Status.Sent }
+    }.list.run {
+        forEach { println(it) }
+        first {
+            it.status == Message.Status.Sent
+        }.requireStatus(Message.Status.Sent)
     }
 }
 

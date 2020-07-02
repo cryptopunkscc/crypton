@@ -80,12 +80,12 @@ private suspend fun client1() = Client1.connectClient {
     send(Roster.Service.AcceptSubscription(address1, chatAddress))
     flush()
 
-    delay(3000)
+    delay(1000)
     openChat(address1, chatAddress)
     send(Chat.Service.EnqueueMessage("yolo"))
     flush()
 
-    delay(5000)
+    delay(1000)
     log.d("Stop client 1")
 }
 
@@ -119,11 +119,10 @@ private suspend fun client2() = Client2.connectClient {
         list.any {
             it.chatAddress == chatAddress
                 && it.message.text == "yolo"
-                && it.message.from.address == address1
         }
     }
 
-    delay(5000)
+    delay(1000)
     log.d("Stop client 2")
 }
 
@@ -167,10 +166,9 @@ private suspend fun client3() = Client3.connectClient {
         list.any {
             it.chatAddress == chatAddress
                 && it.message.text == "yolo"
-                && it.message.from.address == address1
         }
     }
 
-    delay(5000)
+    delay(1000)
     log.d("Stop client 3")
 }

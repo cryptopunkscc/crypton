@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.smack.net.message
 
 import cc.cryptopunks.crypton.context.CryptonMessage
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.calculateId
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
@@ -12,6 +13,7 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.broadcastIn
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import org.jivesoftware.smack.StanzaListener
 import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.filter.StanzaFilter
@@ -39,6 +41,7 @@ internal fun SmackCore.createMessageEventBroadcast(): BroadcastChannel<CryptonMe
             connection.removeAsyncStanzaListener(incomingMucListener)
         }
     }
+        .map { it.calculateId() }
         .broadcastIn(this)
 
 
@@ -48,7 +51,7 @@ private fun SendChannel<CryptonMessage>.incomingMucListener(connection: XMPPConn
             when {
                 it.hasOmemoExtension -> false
 
-                it.type == SmackMessage.Type.chat -> true
+                SmackMessage.Type.chat == it.type -> true
 
                 all( // filter own messages
                     SmackMessage.Type.groupchat == it.type,
@@ -62,10 +65,12 @@ private fun SendChannel<CryptonMessage>.incomingMucListener(connection: XMPPConn
                 copy(
                     chat = when (type) {
                         SmackMessage.Type.chat -> from.address
-                        SmackMessage.Type.groupchat -> to.address
+                        SmackMessage.Type.groupchat -> from.address
                         else -> throw IllegalArgumentException("invalid message type $type")
                     }
-                )
+                ).also {
+                    println("incoming $it")
+                }
             })
         }
     }
@@ -83,7 +88,9 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
             it as? SmackMessage
         }?.replaceBody(decryptedMessage)?.run {
             offer(toCryptonMessage(Message.Status.Received).run {
-                copy(chat = from.address)
+                copy(chat = from.address).also {
+                    println("incoming omemo message $it")
+                }
             })
         }
     }
@@ -96,7 +103,9 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
     ) {
         carbonCopy.replaceBody(decryptedCarbonCopy)?.run {
             offer(toCryptonMessage(Message.Status.Sent).run {
-                copy(chat = to.address)
+                copy(chat = to.address).also {
+                    println("incoming carbon copy $it")
+                }
             })
         }
     }
@@ -110,7 +119,9 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
             it as? SmackMessage
         }?.replaceBody(decryptedOmemoMessage)?.run {
             offer(toCryptonMessage(Message.Status.Received).run {
-                copy(chat = from.address)
+                copy(chat = from.address).also {
+                    println("incoming omemo muc message $it")
+                }
             })
         }
     }
