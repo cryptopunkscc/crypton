@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.smack
 
-import cc.cryptopunks.crypton.smack.net.chat.MucInvitationManager
+import kotlinx.coroutines.CoroutineScope
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
@@ -11,7 +11,7 @@ import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
 
-internal interface SmackCore {
+internal interface SmackCore : CoroutineScope {
     val configuration: XMPPTCPConnectionConfiguration
     val connection: XMPPTCPConnection
     val accountManager: AccountManager
@@ -21,5 +21,4 @@ internal interface SmackCore {
     val mamManager: MamManager
     val omemoManager: OmemoManager
     val carbonManager: CarbonManager
-    val mucInvitationManager: MucInvitationManager
 }

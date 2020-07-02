@@ -23,7 +23,7 @@ class MockState(
 
     val rosterEvents = Channel<Roster.Net.Event>(Channel.BUFFERED)
 
-    val messageEvents = Channel<Message.Net.Event>(Channel.BUFFERED)
+    val messageEvents = Channel<Message.Net.Incoming>(Channel.BUFFERED)
 
     val apiEvents = BroadcastChannel<Api.Event>(Channel.BUFFERED)
 
@@ -67,7 +67,7 @@ class MockState(
                 Message(
                     id = messageText + chat.address,
                     stanzaId = messageText + chat.address,
-                    chatAddress = chat.address,
+                    chat = chat.address,
                     from = chat.resource,
                     to = Resource(account, "mock"),
                     status = Message.Status.Read,

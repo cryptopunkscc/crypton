@@ -68,9 +68,10 @@ data class Chat(
 
 
     interface Net {
+        fun supportEncryption(address: Address): Boolean
         fun createMuc(chat: Chat): Chat
         fun mucInvitationsFlow(): Flow<MucInvitation>
-        fun joinMuc(address: Address)
+        fun joinMuc(address: Address, nickname: String)
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
@@ -120,5 +121,5 @@ fun Chat.Service.CreateChat.asChat() =
         isMuc = chat.isConference,
         users = if (!chat.isConference)
             users.map(::User) + User(account) else
-            emptyList()
+            users.map(::User)
     )

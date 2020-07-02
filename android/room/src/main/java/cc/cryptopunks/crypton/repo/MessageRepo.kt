@@ -91,7 +91,7 @@ internal class MessageRepo(
     override fun unreadCountFlow(chatAddress: Address): Flow<Int> =
         unreadListFlow().map { list ->
             list.filter { message ->
-                message.chatAddress == chatAddress
+                message.chat == chatAddress
             }.size
         }
 }

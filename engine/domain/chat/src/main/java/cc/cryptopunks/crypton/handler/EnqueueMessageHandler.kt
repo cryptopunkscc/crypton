@@ -22,7 +22,7 @@ private fun Chat.createQueuedMessage(text: String) =
             from = Resource(account),
             to = Resource(address),
             status = Message.Status.Queued,
-            chatAddress = address,
+            chat = address,
             timestamp = timestamp
         ).calculateId()
     }

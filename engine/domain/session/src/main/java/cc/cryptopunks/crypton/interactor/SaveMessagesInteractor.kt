@@ -32,9 +32,9 @@ private suspend fun SessionScope.get(message: Message) = messageRepo.run {
 }
 
 private suspend fun SessionScope.create(message: Message) = message.copy(
-    chatAddress = Chat.Service.CreateChat(
+    chat = Chat.Service.CreateChat(
         account = address,
-        chat = message.chatAddress,
+        chat = message.chat,
         users = listOf(message.getParty(address).address)
     ).asChat().also {
         insertChat(it)
