@@ -18,7 +18,7 @@ Unstable snapshot of android developer artifact is published in
 [latest pre-release](https://github.com/cryptopunkscc/crypton/releases/tag/latest) each commit.
 
 ## Features
-The first-in-last-out (FILO) queue of all features in project scope. 
+The FIFO queue of all features in project scope. 
 Usually the highest priority has `work in progress` section the next it last item from `Road map`.  
 
 ### Road map
