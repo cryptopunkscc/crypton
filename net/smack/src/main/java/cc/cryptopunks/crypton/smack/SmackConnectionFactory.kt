@@ -40,7 +40,7 @@ class SmackConnectionFactory(
 
     private val connectionConfig
         get() = XMPPTCPConnectionConfiguration.builder()
-            .enableDefaultDebugger()
+//            .enableDefaultDebugger()
 //            .setResource(factoryConfig.resource)
             .setHostAddress(factoryConfig.hostAddress?.let(InetAddress::getByName))
             .setSecurityMode(ConnectionConfiguration.SecurityMode.valueOf(factoryConfig.securityMode.name))

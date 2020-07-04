@@ -38,6 +38,8 @@ private suspend fun client1() = Client1.connectClient {
     // but it does not matter, from user perspective there is no use case for that.
     delay(1000)
     sendMessage("yo", address1, address2)
+    flush()
+    delay(100000000)
     expectReceived("yo yo", address1, address2)
     log.d("Stop client 1")
     delay(1000)
@@ -47,6 +49,11 @@ private suspend fun client2() = Client2.connectClient {
     log.d("Start client 2")
     prepare(address2, pass)
     acceptSubscription(address2, address1)
+
+//    send(Roster.Service.SubscribeItems(true, address1))
+    flush()
+    delay(100000000)
+
     expectRosterItemMessage("yo", address2, address1)
     openChat(address2, address1)
     delay(1000)

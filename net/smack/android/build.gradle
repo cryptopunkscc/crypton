@@ -23,6 +23,13 @@ android {
     sourceSets {
         main.java.srcDirs += ["../src/main/java"]
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -38,4 +45,7 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+configurations {
+    all*.exclude group: 'xpp3', module: 'xpp3_min'
 }

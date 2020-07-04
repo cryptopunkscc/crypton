@@ -48,11 +48,8 @@ internal fun SmackCore.createMuc(
         createOrJoin(Resourcepart.from(chat.account.local))
 
         // configure
-        configurationForm.fields.forEachIndexed { index, formField ->
-            println(formField.toXML("$index"))
-        }
         sendConfigurationForm(
-            configurationForm.createAnswerForm().apply {
+            configurationForm.fillableForm.apply {
                 setAnswer(Muc.RoomConfig.MEMBERS_ONLY, true)
                 setAnswer(Muc.RoomConfig.PUBLIC_ROOM, false)
                 setAnswer(Muc.RoomConfig.ALLOW_INVITES, true)
