@@ -27,7 +27,7 @@ class MockConnection(
 
     override fun isConnected(): Boolean = true
 
-    override fun initOmemo() = runBlocking {
+    override suspend fun initOmemo() = runBlocking {
         delay(2000)
         state {
             omemoInitialized = true

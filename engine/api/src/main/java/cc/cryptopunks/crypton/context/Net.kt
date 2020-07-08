@@ -14,7 +14,7 @@ interface Net :
     fun disconnect()
     fun interrupt()
     fun isConnected(): Boolean
-    fun initOmemo()
+    suspend fun initOmemo()
     fun isOmemoInitialized(): Boolean
     fun netEvents(): Flow<Api.Event>
 

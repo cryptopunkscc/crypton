@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.newSingleThreadContext
 
 suspend fun AppScope.addAccount(
     account: Account,
@@ -35,11 +35,7 @@ suspend fun AppScope.addAccount(
         if (register) createAccount()
         login()
         log.d("Logged in")
-        launch {
-            initOmemo()
-        }.invokeOnCompletion {
-            log.d("Cancel omemo initialization")
-        }
+        launch { initOmemo() }
         if (insert) accountRepo.insert(account)
         log.d("Account inserted")
     }

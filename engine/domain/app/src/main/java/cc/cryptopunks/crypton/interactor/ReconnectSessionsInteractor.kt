@@ -10,7 +10,7 @@ internal fun AppScope.reconnectSessions(): List<Job> =
         launch { session.reconnectIfNeeded() }
     }
 
-private fun SessionScope.reconnectIfNeeded() = try {
+private suspend fun SessionScope.reconnectIfNeeded() = try {
     log.d("reconnecting: $address")
     if (isConnected()) interrupt()
     connect()

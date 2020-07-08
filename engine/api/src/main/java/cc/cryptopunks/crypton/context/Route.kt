@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.context
 sealed class Route {
     object Main : Route()
     object Back : Route()
-    class Chat(
+    data class Chat(
         val account: Address,
         val address: Address
     ) : Route() {

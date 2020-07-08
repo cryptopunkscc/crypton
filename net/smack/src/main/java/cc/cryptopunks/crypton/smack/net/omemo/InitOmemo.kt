@@ -5,7 +5,8 @@ import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.withContext
 import org.jivesoftware.smack.SmackException
 import org.jivesoftware.smackx.omemo.OmemoManager
 
@@ -14,23 +15,25 @@ class InitOmemo(
 ) {
     private val log = typedLog()
     private val channel = Channel<Net.Event>()
-
+    private val context = newSingleThreadContext("Omemo ${omemoManager.ownJid}")
     var isInitialized: Boolean = false
         private set
 
 
-    operator fun invoke() = runBlocking {
-        if (isInitialized) return@runBlocking
+    suspend operator fun invoke() {
+        if (isInitialized) return
         val jid = "${omemoManager.ownJid}/${omemoManager.deviceId}"
         try {
             log.d("start $jid")
-            omemoManager.initialize()
-            delay(5000)
+            withContext(context) {
+                omemoManager.initialize()
+            }
+            delay(3000)
             channel.offer(Net.OmemoInitialized)
             log.d("success $jid")
             isInitialized = true
         } catch (throwable: Throwable) {
-            if (throwable is SmackException.NotConnectedException) return@runBlocking
+            if (throwable is SmackException.NotConnectedException) return
             log.d("failed $jid")
             throwable.printStackTrace()
             channel.offer(
