@@ -1,7 +1,7 @@
 # Auto reconnection
 
 ## User story
-As a user I want to have accounts automatically reconnected sessions after connection lost or application restart
+As a user I want to have account sessions automatically reconnected after connection lost or application restart
 
 ## Business value
 User is not forced for interactions to keep connection with external server persistent.
