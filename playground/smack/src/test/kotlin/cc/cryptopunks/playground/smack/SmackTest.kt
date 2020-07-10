@@ -3,49 +3,24 @@ package cc.cryptopunks.playground.smack
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
-import org.jivesoftware.smack.ConnectionConfiguration
-import org.jivesoftware.smack.ConnectionListener
 import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.roster.SubscribeListener
-import org.jivesoftware.smack.tcp.XMPPTCPConnection
-import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jivesoftware.smackx.omemo.OmemoConfiguration
 import org.jivesoftware.smackx.omemo.OmemoManager
-import org.jivesoftware.smackx.omemo.internal.OmemoDevice
-import org.jivesoftware.smackx.omemo.signal.SignalCachingOmemoStore
-import org.jivesoftware.smackx.omemo.signal.SignalFileBasedOmemoStore
-import org.jivesoftware.smackx.omemo.signal.SignalOmemoService
-import org.jivesoftware.smackx.omemo.trust.OmemoFingerprint
-import org.jivesoftware.smackx.omemo.trust.OmemoTrustCallback
-import org.jivesoftware.smackx.omemo.trust.TrustState
 import org.junit.Test
-import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Localpart
 import org.jxmpp.jid.parts.Resourcepart
-import java.io.File
-import java.lang.Exception
-import java.net.InetAddress
 
-private const val test1 = "test11"
-private const val test2 = "test12"
-private const val domain = "localhost"
-private val address1 = JidCreate.bareFrom("$test1@$domain")
-private val address2 = JidCreate.bareFrom("$test1@$domain")
-private val chat = JidCreate.entityBareFrom("chat@conference.$domain")
-
-private const val omemoStore = "omemo_store"
 
 class SmackTest {
 
     @Test
     fun test() {
         runBlocking {
-            init()
+            initOmemo()
             listOf(
                 launch { client1() },
                 launch { client2() }
@@ -54,43 +29,14 @@ class SmackTest {
     }
 }
 
-private fun init() {
-    OmemoConfiguration.setRepairBrokenSessionsWithPrekeyMessages(true)
-    SignalOmemoService.acknowledgeLicense()
-    SignalOmemoService.setup()
-    SignalOmemoService.getInstance().apply {
-        omemoStoreBackend = SignalCachingOmemoStore(SignalFileBasedOmemoStore(File(omemoStore)))
-    }
-}
-
 private suspend fun client1() {
-    XMPPTCPConnectionConfiguration.builder()
-        .enableDefaultDebugger()
-        .setHostAddress(InetAddress.getByName("127.0.0.1"))
-        .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-        .setUsernameAndPassword(test1, "pass")
-        .setXmppDomain("localhost")
-        .build()
-        .let(::XMPPTCPConnection)
-        .run {
+    createXmppConnection {
+        setUsernameAndPassword(test1, password)
+    }.run {
             replyTimeout = 10000 // Omemo initialization can take longer then 5s
             fromMode = XMPPConnection.FromMode.USER
 
-            addConnectionListener(object : ConnectionListener {
-                override fun connected(connection: XMPPConnection?) {
-
-                }
-
-                override fun connectionClosed() {
-                }
-
-                override fun connectionClosedOnError(e: Exception?) {
-                }
-
-                override fun authenticated(connection: XMPPConnection?, resumed: Boolean) {
-
-                }
-            })
+            addConnectionListener(TestConnectionListener(address1))
 
             // delete account
             connect()
@@ -111,8 +57,9 @@ private suspend fun client1() {
             val accountManager = AccountManager.getInstance(this).apply {
                 sensitiveOperationOverInsecureConnection(true)
             }
-            accountManager.createAccount(Localpart.from(test1), "pass")
+            accountManager.createAccount(Localpart.from(test1), password)
             login()
+            println("successful login $address1")
 
             // add listeners
             Roster.getInstanceFor(this).addSubscribeListener { from, subscribeRequest ->
@@ -162,17 +109,13 @@ private suspend fun client1() {
 }
 
 private suspend fun client2() {
-    XMPPTCPConnectionConfiguration.builder()
-        .enableDefaultDebugger()
-        .setHostAddress(InetAddress.getByName("127.0.0.1"))
-        .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-        .setUsernameAndPassword(test2, "pass")
-        .setXmppDomain("localhost")
-        .build()
-        .let(::XMPPTCPConnection)
-        .run {
+    createXmppConnection {
+        setUsernameAndPassword(test2, "pass")
+    }.run {
             replyTimeout = 10000 // Omemo initialization can take longer then 5s
             fromMode = XMPPConnection.FromMode.USER
+
+            addConnectionListener(TestConnectionListener(address2))
 
             // delete account
             connect()
@@ -201,6 +144,7 @@ private suspend fun client2() {
             }
             accountManager.createAccount(Localpart.from(test2), "pass")
             login()
+            println("successful login $address2")
 
             // init omemo
             OmemoManager.getInstanceFor(this).apply {
@@ -212,20 +156,4 @@ private suspend fun client2() {
             accountManager.deleteAccount()
             disconnect()
         }
-}
-
-
-private object OmemoTrustAllCallback :
-    OmemoTrustCallback {
-
-    override fun setTrust(
-        device: OmemoDevice,
-        fingerprint: OmemoFingerprint,
-        state: TrustState
-    ) = Unit
-
-    override fun getTrust(
-        device: OmemoDevice,
-        fingerprint: OmemoFingerprint
-    ) = TrustState.trusted
 }

@@ -1,0 +1,91 @@
+<stream>
+    <!--12:28:41 SENT (1):-->
+    <iq from='test11@localhost/testresource' id='5Nheq-52' to='upload.localhost' type='get'>
+        <query xmlns='http://jabber.org/protocol/disco#info'></query>
+    </iq>
+    <r xmlns='urn:xmpp:sm:3' />
+    <presence from='test11@localhost/testresource' id='5Nheq-54'>
+        <c hash='sha-1' node='http://www.igniterealtime.org/projects/smack'
+            ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='
+            xmlns='http://jabber.org/protocol/caps' />
+    </presence>
+    <iq from='test11@localhost/testresource' id='5Nheq-55' to='localhost' type='set'>
+        <query xmlns='jabber:iq:register'>
+            <remove />
+        </query>
+    </iq>
+    <presence from='test11@localhost/testresource' id='5Nheq-58' type='unavailable'></presence>
+    <iq from='test11@localhost/testresource' id='5Nheq-59' to='localhost' type='get'>
+        <query xmlns='jabber:iq:register'></query>
+    </iq>
+    <iq from='test11@localhost/testresource' id='5Nheq-61' to='localhost' type='set'>
+        <query xmlns='jabber:iq:register'>
+            <password>pass</password>
+            <username>test11</username>
+        </query>
+    </iq>
+    <r xmlns='urn:xmpp:sm:3' />
+    <iq from='test11@localhost/testresource' id='5Nheq-65' type='get'>
+        <query xmlns='jabber:iq:roster'></query>
+    </iq>
+    <presence from='test11@localhost/testresource' id='5Nheq-66'>
+        <c hash='sha-1' node='http://www.igniterealtime.org/projects/smack'
+            ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='
+            xmlns='http://jabber.org/protocol/caps' />
+    </presence>
+    <!--12:28:41 RECV (1):-->
+    <a h='1' xmlns='urn:xmpp:sm:3' />
+    <!--12:28:41 RECV (1):-->
+    <a h='6' xmlns='urn:xmpp:sm:3' />
+    <!--12:28:41 RECV (1):-->
+    <iq from='upload.localhost' id='5Nheq-52' to='test11@localhost/testresource' type='result'
+        xml:lang='en'>
+        <query xmlns='http://jabber.org/protocol/disco#info'>
+            <identity name='HTTP File Upload' category='store' type='file' />
+            <feature var='urn:xmpp:http:upload' />
+            <feature var='urn:xmpp:http:upload:0' />
+            <feature var='eu:siacs:conversations:http:upload' />
+            <feature var='vcard-temp' />
+            <feature var='http://jabber.org/protocol/disco#info' />
+            <feature var='http://jabber.org/protocol/disco#items' />
+            <x type='result' xmlns='jabber:x:data'>
+                <field type='hidden' var='FORM_TYPE'>
+                    <value>urn:xmpp:http:upload</value>
+                </field>
+                <field label='Maximum file size' type='text-single' var='max-file-size'>
+                    <value>104857600</value>
+                </field>
+            </x>
+            <x type='result' xmlns='jabber:x:data'>
+                <field type='hidden' var='FORM_TYPE'>
+                    <value>urn:xmpp:http:upload:0</value>
+                </field>
+                <field label='Maximum file size' type='text-single' var='max-file-size'>
+                    <value>104857600</value>
+                </field>
+            </x>
+            <x type='result' xmlns='jabber:x:data'>
+                <field type='hidden' var='FORM_TYPE'>
+                    <value>http://jabber.org/network/serverinfo</value>
+                </field>
+            </x>
+        </query>
+    </iq>
+    <r xmlns='urn:xmpp:sm:3' />
+    <!--12:28:41 RECV (1):-->
+    <presence from='test11@localhost/testresource' id='5Nheq-54' to='test11@localhost/testresource'
+        xml:lang='en'>
+        <c hash='sha-1' node='http://www.igniterealtime.org/projects/smack'
+            ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='
+            xmlns='http://jabber.org/protocol/caps' />
+        <x xmlns='vcard-temp:x:update' />
+    </presence>
+    <iq from='test11@localhost/testresource' id='5Nheq-55' to='test11@localhost/testresource'
+        type='result' xml:lang='en' />
+    <stream:error>
+        <conflict xmlns='urn:ietf:params:xml:ns:xmpp-streams' />
+        <text xmlns='urn:ietf:params:xml:ns:xmpp-streams' xml:lang='en'>User removed</text>
+    </stream:error>
+    <!--12:28:41 SENT (1):-->
+    <a h='1' xmlns='urn:xmpp:sm:3' />
+</stream>

@@ -1,0 +1,128 @@
+12:28:41 SENT (1): <stream:stream xmlns='jabber:client' to='localhost' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' from='test11@localhost' xml:lang='en'>
+12:28:41 RECV (1): <?xml version='1.0'?><stream:stream id='4009379186021761693' version='1.0' xml:lang='en' xmlns:stream='http://etherx.jabber.org/streams' to='test11@localhost' from='localhost' xmlns='jabber:client'>
+12:28:41 RECV (1): <stream:features><mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'><mechanism>DIGEST-MD5</mechanism><mechanism>PLAIN</mechanism><mechanism>SCRAM-SHA-1</mechanism><mechanism>X-OAUTH2</mechanism></mechanisms><register xmlns='http://jabber.org/features/iq-register'/></stream:features>
+connected test11@localhost
+12:28:41 SENT (1): <auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='SCRAM-SHA-1'>biwsbj10ZXN0MTEscj0/XUh2dS9FXkdyKyhhaTxgVTNLUidDfT8pdWw1SGEoUQ==</auth>
+12:28:41 RECV (1): <challenge xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>cj0/XUh2dS9FXkdyKyhhaTxgVTNLUidDfT8pdWw1SGEoUVpEU1lwYUFZWTNWU2FWSnpmbXp0Unc9PSxzPWx1QXErS3I2bGtPak5JdmNFcWEwK1E9PSxpPTQwOTY=</challenge>
+12:28:41 SENT (1): <response xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>Yz1iaXdzLHI9P11IdnUvRV5HcisoYWk8YFUzS1InQ30/KXVsNUhhKFFaRFNZcGFBWVkzVlNhVkp6Zm16dFJ3PT0scD1TdFBJSVE5UzBlV3hKODJ3b01UNjZxOFg1d1E9</response>
+12:28:41 RECV (1): <success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>dj1EcFhTOHh4YitSZkR1V3ZBZmEvMFZJeDd5Rnc9</success>
+12:28:41 SENT (1): <stream:stream xmlns='jabber:client' to='localhost' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' from='test11@localhost' id='4009379186021761693' xml:lang='en'>
+12:28:41 RECV (1): <?xml version='1.0'?><stream:stream id='17236243656628074198' version='1.0' xml:lang='en' xmlns:stream='http://etherx.jabber.org/streams' to='test11@localhost' from='localhost' xmlns='jabber:client'>
+12:28:41 RECV (1): <stream:features><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/><session xmlns='urn:ietf:params:xml:ns:xmpp-session'><optional/></session><c ver='NqMDrgCx03HLh3URMusgDnNsR30=' node='http://www.process-one.net/en/ejabberd/' hash='sha-1' xmlns='http://jabber.org/protocol/caps'/><sm xmlns='urn:xmpp:sm:2'/><sm xmlns='urn:xmpp:sm:3'/><ver xmlns='urn:xmpp:features:rosterver'/><csi xmlns='urn:xmpp:csi:0'/></stream:features>
+12:28:41 SENT (1): <iq id='5Nheq-40' type='set'><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'><resource>testresource</resource></bind></iq>
+12:28:41 RECV (1): <iq type='result' id='5Nheq-40'><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'><jid>test11@localhost/testresource</jid></bind></iq>
+12:28:41 SENT (1): <enable xmlns='urn:xmpp:sm:3' resume='true'/>
+12:28:41 RECV (1): <enabled resume='true' max='300' id='g2gCbQAAAAx0ZXN0cmVzb3VyY2VoA2IAAAY6YgACK69hKw==' xmlns='urn:xmpp:sm:3'/>
+12:28:41 User logged (1): test11@localhost:5222/testresource
+12:28:41 SENT (1): <iq from='test11@localhost/testresource' id='5Nheq-42' type='get'><query xmlns='jabber:iq:roster'></query></iq>
+12:28:41 SENT (1): <iq to='localhost' from='test11@localhost/testresource' id='5Nheq-43' type='get'><query xmlns='http://jabber.org/protocol/disco#items'></query></iq>
+12:28:41 RECV (1): <iq xml:lang='en' to='test11@localhost/testresource' from='test11@localhost' type='result' id='5Nheq-42'><query xmlns='jabber:iq:roster'/></iq>
+12:28:41 RECV (1): <r xmlns='urn:xmpp:sm:3'/>
+12:28:41 SENT (1): <a xmlns='urn:xmpp:sm:3' h='1'/>
+12:28:41 RECV (1): <iq xml:lang='en' to='test11@localhost/testresource' from='localhost' type='result' id='5Nheq-43'><query xmlns='http://jabber.org/protocol/disco#items'><item jid='conference.localhost'/><item jid='proxy.localhost'/><item jid='pubsub.localhost'/><item jid='upload.localhost'/></query></iq>
+12:28:41 RECV (1): <r xmlns='urn:xmpp:sm:3'/>
+12:28:41 SENT (1): <a xmlns='urn:xmpp:sm:3' h='2'/><iq to='conference.localhost' from='test11@localhost/testresource' id='5Nheq-46' type='get'><query xmlns='http://jabber.org/protocol/disco#info'></query></iq>
+12:28:41 RECV (1): <iq xml:lang='en' to='test11@localhost/testresource' from='conference.localhost' type='result' id='5Nheq-46'><query xmlns='http://jabber.org/protocol/disco#info'><identity name='Chatrooms' type='text' category='conference'/><feature var='http://jabber.org/protocol/disco#info'/><feature var='http://jabber.org/protocol/disco#items'/><feature var='http://jabber.org/protocol/muc'/><feature var='vcard-temp'/><feature var='urn:xmpp:mucsub:0'/><feature var='http://jabber.org/protocol/muc#unique'/><feature var='jabber:iq:register'/><feature var='http://jabber.org/protocol/rsm'/><feature var='urn:xmpp:mam:tmp'/><feature var='urn:xmpp:mam:0'/><feature var='urn:xmpp:mam:1'/><feature var='urn:xmpp:mam:2'/><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>http://jabber.org/network/serverinfo</value></field></x></query></iq><r xmlns='urn:xmpp:sm:3'/>
+12:28:41 SENT (1): <a xmlns='urn:xmpp:sm:3' h='3'/>
+12:28:41 SENT (1): <iq to='proxy.localhost' from='test11@localhost/testresource' id='5Nheq-48' type='get'><query xmlns='http://jabber.org/protocol/disco#info'></query></iq>
+12:28:41 RECV (1): <iq xml:lang='en' to='test11@localhost/testresource' from='proxy.localhost' type='result' id='5Nheq-48'><query xmlns='http://jabber.org/protocol/disco#info'><identity name='SOCKS5 Bytestreams' type='bytestreams' category='proxy'/><feature var='http://jabber.org/protocol/disco#info'/><feature var='http://jabber.org/protocol/disco#items'/><feature var='vcard-temp'/><feature var='http://jabber.org/protocol/bytestreams'/><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>http://jabber.org/network/serverinfo</value></field></x></query></iq><r xmlns='urn:xmpp:sm:3'/>
+12:28:41 SENT (1): <a xmlns='urn:xmpp:sm:3' h='4'/>
+12:28:41 SENT (1): <iq to='pubsub.localhost' from='test11@localhost/testresource' id='5Nheq-50' type='get'><query xmlns='http://jabber.org/protocol/disco#info'></query></iq><r xmlns='urn:xmpp:sm:3'/>
+12:28:41 RECV (1): <a h='5' xmlns='urn:xmpp:sm:3'/>
+12:28:41 RECV (1): <iq xml:lang='en' to='test11@localhost/testresource' from='pubsub.localhost' type='result' id='5Nheq-50'><query xmlns='http://jabber.org/protocol/disco#info'><identity name='Publish-Subscribe' type='service' category='pubsub'/><feature var='http://jabber.org/protocol/disco#info'/><feature var='http://jabber.org/protocol/disco#items'/><feature var='http://jabber.org/protocol/pubsub'/><feature var='http://jabber.org/protocol/commands'/><feature var='vcard-temp'/><feature var='http://jabber.org/protocol/pubsub#access-authorize'/><feature var='http://jabber.org/protocol/pubsub#access-open'/><feature var='http://jabber.org/protocol/pubsub#access-presence'/><feature var='http://jabber.org/protocol/pubsub#access-whitelist'/><feature var='http://jabber.org/protocol/pubsub#auto-create'/><feature var='http://jabber.org/protocol/pubsub#auto-subscribe'/><feature var='http://jabber.org/protocol/pubsub#collections'/><feature var='http://jabber.org/protocol/pubsub#config-node'/><feature var='http://jabber.org/protocol/pubsub#create-and-configure'/><feature var='http://jabber.org/protocol/pubsub#create-nodes'/><feature var='http://jabber.org/protocol/pubsub#delete-items'/><feature var='http://jabber.org/protocol/pubsub#delete-nodes'/><feature var='http://jabber.org/protocol/pubsub#filtered-notifications'/><feature var='http://jabber.org/protocol/pubsub#get-pending'/><feature var='http://jabber.org/protocol/pubsub#instant-nodes'/><feature var='http://jabber.org/protocol/pubsub#item-ids'/><feature var='http://jabber.org/protocol/pubsub#last-published'/><feature var='http://jabber.org/protocol/pubsub#manage-subscriptions'/><feature var='http://jabber.org/protocol/pubsub#member-affiliation'/><feature var='http://jabber.org/protocol/pubsub#modify-affiliations'/><feature var='http://jabber.org/protocol/pubsub#multi-items'/><feature var='http://jabber.org/protocol/pubsub#outcast-affiliation'/><feature var='http://jabber.org/protocol/pubsub#persistent-items'/><feature var='http://jabber.org/protocol/pubsub#presence-notifications'/><feature var='http://jabber.org/protocol/pubsub#presence-subscribe'/><feature var='http://jabber.org/protocol/pubsub#publish'/><feature var='http://jabber.org/protocol/pubsub#publish-only-affiliation'/><feature var='http://jabber.org/protocol/pubsub#publish-options'/><feature var='http://jabber.org/protocol/pubsub#publisher-affiliation'/><feature var='http://jabber.org/protocol/pubsub#purge-nodes'/><feature var='http://jabber.org/protocol/pubsub#retract-items'/><feature var='http://jabber.org/protocol/pubsub#retrieve-affiliations'/><feature var='http://jabber.org/protocol/pubsub#retrieve-default'/><feature var='http://jabber.org/protocol/pubsub#retrieve-items'/><feature var='http://jabber.org/protocol/pubsub#retrieve-subscriptions'/><feature var='http://jabber.org/protocol/pubsub#shim'/><feature var='http://jabber.org/protocol/pubsub#subscribe'/><feature var='http://jabber.org/protocol/pubsub#subscription-notifications'/><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>http://jabber.org/network/serverinfo</value></field></x></query></iq>
+12:28:41 RECV (1): <r xmlns='urn:xmpp:sm:3'/>
+12:28:41 SENT (1): <iq to='upload.localhost' from='test11@localhost/testresource' id='5Nheq-52' type='get'><query xmlns='http://jabber.org/protocol/disco#info'></query></iq><a xmlns='urn:xmpp:sm:3' h='5'/>
+12:28:41 RECV (1): <iq xml:lang='en' to='test11@localhost/testresource' from='upload.localhost' type='result' id='5Nheq-52'><query xmlns='http://jabber.org/protocol/disco#info'><identity name='HTTP File Upload' type='file' category='store'/><feature var='urn:xmpp:http:upload'/><feature var='urn:xmpp:http:upload:0'/><feature var='eu:siacs:conversations:http:upload'/><feature var='vcard-temp'/><feature var='http://jabber.org/protocol/disco#info'/><feature var='http://jabber.org/protocol/disco#items'/><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>urn:xmpp:http:upload</value></field><field var='max-file-size' type='text-single' label='Maximum file size'><value>104857600</value></field></x><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>urn:xmpp:http:upload:0</value></field><field var='max-file-size' type='text-single' label='Maximum file size'><value>104857600</value></field></x><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>http://jabber.org/network/serverinfo</value></field></x></query></iq><r xmlns='urn:xmpp:sm:3'/>
+authenticated test11@localhost resumed: false
+12:28:41 XMPPConnection authenticated (XMPPTCPConnection[test11@localhost/testresource] (1))
+12:28:41 SENT (1): <a xmlns='urn:xmpp:sm:3' h='6'/>
+delete account test11@localhost
+12:28:41 SENT (1): <presence from='test11@localhost/testresource' id='5Nheq-54'><c xmlns='http://jabber.org/protocol/caps' hash='sha-1' node='http://www.igniterealtime.org/projects/smack' ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='/></presence><iq to='localhost' from='test11@localhost/testresource' id='5Nheq-55' type='set'><query xmlns='jabber:iq:register'><remove/></query></iq>
+12:28:41 RECV (1): <presence xml:lang='en' to='test11@localhost/testresource' from='test11@localhost/testresource' id='5Nheq-54'><c xmlns='http://jabber.org/protocol/caps' hash='sha-1' node='http://www.igniterealtime.org/projects/smack' ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='/><x xmlns='vcard-temp:x:update'/></presence>
+12:28:41 RECV (1): <r xmlns='urn:xmpp:sm:3'/><iq xml:lang='en' to='test11@localhost/testresource' from='test11@localhost/testresource' type='result' id='5Nheq-55'/><stream:error><conflict xmlns='urn:ietf:params:xml:ns:xmpp-streams'/><text xml:lang='en' xmlns='urn:ietf:params:xml:ns:xmpp-streams'>User removed</text></stream:error>
+try disconnect
+12:28:41 SENT (1): <a xmlns='urn:xmpp:sm:3' h='7'/>
+12:28:41 SENT (1): <presence xmlns='jabber:client' from='test11@localhost/testresource' id='5Nheq-58' type='unavailable'></presence><a xmlns='urn:xmpp:sm:3' h='8'/>
+12:28:41 SENT (1): </stream:stream>
+connectionClosed test11@localhost
+12:28:41 XMPPConnection closed (XMPPTCPConnection[test11@localhost/testresource] (1))
+12:28:41 SENT (1): <stream:stream xmlns='jabber:client' to='localhost' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' from='test11@localhost' xml:lang='en'>
+12:28:41 RECV (1): <?xml version='1.0'?><stream:stream id='9093875205138974800' version='1.0' xml:lang='en' xmlns:stream='http://etherx.jabber.org/streams' to='test11@localhost' from='localhost' xmlns='jabber:client'>
+12:28:41 RECV (1): <stream:features><mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'><mechanism>DIGEST-MD5</mechanism><mechanism>PLAIN</mechanism><mechanism>SCRAM-SHA-1</mechanism><mechanism>X-OAUTH2</mechanism></mechanisms><register xmlns='http://jabber.org/features/iq-register'/></stream:features>
+connected test11@localhost
+12:28:41 XMPPConnection connected (XMPPTCPConnection[test11@localhost/testresource] (1))
+12:28:41 SENT (1): <iq to='localhost' from='test11@localhost/testresource' id='5Nheq-59' type='get'><query xmlns='jabber:iq:register'></query></iq>
+12:28:41 RECV (1): <iq xml:lang='en' from='localhost' type='result' id='5Nheq-59'><query xmlns='jabber:iq:register'><username/><password/><instructions>Choose a username and password to register with this server</instructions></query></iq>
+12:28:41 SENT (1): <iq to='localhost' from='test11@localhost/testresource' id='5Nheq-61' type='set'><query xmlns='jabber:iq:register'><password>pass</password><username>test11</username></query></iq>
+12:28:41 RECV (1): <iq xml:lang='en' from='localhost' type='result' id='5Nheq-61'/>
+12:28:41 SENT (1): <auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='SCRAM-SHA-1'>biwsbj10ZXN0MTEscj1lbWVsVE8iPGs4diYxbkZgNDExdCVMYS0oLXE+YlRwSg==</auth>
+12:28:41 RECV (1): <challenge xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>cj1lbWVsVE8iPGs4diYxbkZgNDExdCVMYS0oLXE+YlRwSndiYlUyMit5aDd3ME1zZDhjbVRsS1E9PSxzPWVoVTcrZ2VSNU1IaGwrbkQyc2xLTmc9PSxpPTQwOTY=</challenge>
+12:28:41 SENT (1): <response xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>Yz1iaXdzLHI9ZW1lbFRPIjxrOHYmMW5GYDQxMXQlTGEtKC1xPmJUcEp3YmJVMjIreWg3dzBNc2Q4Y21UbEtRPT0scD1jaC9jUmVvMHRxRkUvNlA2d1g4Kyt4cGhyK289</response>
+12:28:41 RECV (1): <success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>dj1Jc3llMVlKRUt5ZGRUeTdlOXdtV256WmRYbG89</success>
+12:28:41 SENT (1): <stream:stream xmlns='jabber:client' to='localhost' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' from='test11@localhost' id='9093875205138974800' xml:lang='en'>
+12:28:41 RECV (1): <?xml version='1.0'?><stream:stream id='4685915991703513726' version='1.0' xml:lang='en' xmlns:stream='http://etherx.jabber.org/streams' to='test11@localhost' from='localhost' xmlns='jabber:client'>
+12:28:41 RECV (1): <stream:features><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/><session xmlns='urn:ietf:params:xml:ns:xmpp-session'><optional/></session><c ver='NqMDrgCx03HLh3URMusgDnNsR30=' node='http://www.process-one.net/en/ejabberd/' hash='sha-1' xmlns='http://jabber.org/protocol/caps'/><sm xmlns='urn:xmpp:sm:2'/><sm xmlns='urn:xmpp:sm:3'/><ver xmlns='urn:xmpp:features:rosterver'/><csi xmlns='urn:xmpp:csi:0'/></stream:features>
+12:28:41 SENT (1): <iq from='test11@localhost/testresource' id='5Nheq-63' type='set'><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'><resource>testresource</resource></bind></iq>
+12:28:41 RECV (1): <iq to='test11@localhost/testresource' type='result' id='5Nheq-63'><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'><jid>test11@localhost/testresource</jid></bind></iq>
+12:28:41 SENT (1): <enable xmlns='urn:xmpp:sm:3' resume='true'/>
+12:28:41 RECV (1): <enabled resume='true' max='300' id='g2gCbQAAAAx0ZXN0cmVzb3VyY2VoA2IAAAY6YgACK69hLA==' xmlns='urn:xmpp:sm:3'/>
+12:28:41 User logged (1): test11@localhost:5222/testresource
+authenticated test11@localhost resumed: false
+12:28:41 XMPPConnection authenticated (XMPPTCPConnection[test11@localhost/testresource] (1))
+successful login test11@localhost
+12:28:41 SENT (1): <iq to='upload.localhost' from='test11@localhost/testresource' id='5Nheq-52' type='get'><query xmlns='http://jabber.org/protocol/disco#info'></query></iq><r xmlns='urn:xmpp:sm:3'/><presence from='test11@localhost/testresource' id='5Nheq-54'><c xmlns='http://jabber.org/protocol/caps' hash='sha-1' node='http://www.igniterealtime.org/projects/smack' ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='/></presence><iq to='localhost' from='test11@localhost/testresource' id='5Nheq-55' type='set'><query xmlns='jabber:iq:register'><remove/></query></iq><presence from='test11@localhost/testresource' id='5Nheq-58' type='unavailable'></presence><iq to='localhost' from='test11@localhost/testresource' id='5Nheq-59' type='get'><query xmlns='jabber:iq:register'></query></iq><iq to='localhost' from='test11@localhost/testresource' id='5Nheq-61' type='set'><query xmlns='jabber:iq:register'><password>pass</password><username>test11</username></query></iq><r xmlns='urn:xmpp:sm:3'/><iq from='test11@localhost/testresource' id='5Nheq-65' type='get'><query xmlns='jabber:iq:roster'></query></iq><presence from='test11@localhost/testresource' id='5Nheq-66'><c xmlns='http://jabber.org/protocol/caps' hash='sha-1' node='http://www.igniterealtime.org/projects/smack' ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='/></presence>
+12:28:41 RECV (1): <a h='1' xmlns='urn:xmpp:sm:3'/>
+12:28:41 RECV (1): <a h='6' xmlns='urn:xmpp:sm:3'/>
+12:28:41 RECV (1): <iq xml:lang='en' to='test11@localhost/testresource' from='upload.localhost' type='result' id='5Nheq-52'><query xmlns='http://jabber.org/protocol/disco#info'><identity name='HTTP File Upload' type='file' category='store'/><feature var='urn:xmpp:http:upload'/><feature var='urn:xmpp:http:upload:0'/><feature var='eu:siacs:conversations:http:upload'/><feature var='vcard-temp'/><feature var='http://jabber.org/protocol/disco#info'/><feature var='http://jabber.org/protocol/disco#items'/><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>urn:xmpp:http:upload</value></field><field var='max-file-size' type='text-single' label='Maximum file size'><value>104857600</value></field></x><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>urn:xmpp:http:upload:0</value></field><field var='max-file-size' type='text-single' label='Maximum file size'><value>104857600</value></field></x><x type='result' xmlns='jabber:x:data'><field var='FORM_TYPE' type='hidden'><value>http://jabber.org/network/serverinfo</value></field></x></query></iq><r xmlns='urn:xmpp:sm:3'/>
+12:28:41 RECV (1): <presence xml:lang='en' to='test11@localhost/testresource' from='test11@localhost/testresource' id='5Nheq-54'><c xmlns='http://jabber.org/protocol/caps' hash='sha-1' node='http://www.igniterealtime.org/projects/smack' ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8='/><x xmlns='vcard-temp:x:update'/></presence><iq xml:lang='en' to='test11@localhost/testresource' from='test11@localhost/testresource' type='result' id='5Nheq-55'/><stream:error><conflict xmlns='urn:ietf:params:xml:ns:xmpp-streams'/><text xml:lang='en' xmlns='urn:ietf:params:xml:ns:xmpp-streams'>User removed</text></stream:error>
+12:28:41 SENT (1): <a xmlns='urn:xmpp:sm:3' h='1'/>
+lip 09, 2020 12:28:41 PM org.jivesoftware.smack.AbstractXMPPConnection callConnectionClosedOnErrorListener
+WARNING: Connection XMPPTCPConnection[test11@localhost/testresource] (1) closed with error
+org.jivesoftware.smack.XMPPException$StreamErrorException: conflict You can read more about the meaning of this stream error at http://xmpp.org/rfcs/rfc6120.html#streams-error-conditions
+<stream:error><conflict xmlns='urn:ietf:params:xml:ns:xmpp-streams'/><text xml:lang='en'>User removed</text></stream:error>
+	at org.jivesoftware.smack.tcp.XMPPTCPConnection$PacketReader.parsePackets(XMPPTCPConnection.java:1057)
+connectionClosedOnError test11@localhost conflict You can read more about the meaning of this stream error at http://xmpp.org/rfcs/rfc6120.html#streams-error-conditions
+	at org.jivesoftware.smack.tcp.XMPPTCPConnection$PacketReader.access$300(XMPPTCPConnection.java:993)
+<stream:error><conflict xmlns='urn:ietf:params:xml:ns:xmpp-streams'/><text xml:lang='en'>User removed</text></stream:error>
+	at org.jivesoftware.smack.tcp.XMPPTCPConnection$PacketReader$1.run(XMPPTCPConnection.java:1009)
+	at java.lang.Thread.run(Thread.java:748)
+
+12:28:41 XMPPConnection closed due to an exception (XMPPTCPConnection[test11@localhost/testresource] (1))org.jivesoftware.smack.XMPPException$StreamErrorException: conflict You can read more about the meaning of this stream error at http://xmpp.org/rfcs/rfc6120.html#streams-error-conditions
+<stream:error><conflict xmlns='urn:ietf:params:xml:ns:xmpp-streams'/><text xml:lang='en'>User removed</text></stream:error>
+	at org.jivesoftware.smack.tcp.XMPPTCPConnection$PacketReader.parsePackets(XMPPTCPConnection.java:1057)
+	at org.jivesoftware.smack.tcp.XMPPTCPConnection$PacketReader.access$300(XMPPTCPConnection.java:993)
+	at org.jivesoftware.smack.tcp.XMPPTCPConnection$PacketReader$1.run(XMPPTCPConnection.java:1009)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:86)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at org.junit.Assert.assertTrue(Assert.java:52)
+	at cc.cryptopunks.playground.smack.ReuseConnectionTestKt.clientWithResource(ReuseConnectionTest.kt:98)
+	at cc.cryptopunks.playground.smack.ReuseConnectionTestKt.access$clientWithResource(ReuseConnectionTest.kt:1)
+	at cc.cryptopunks.playground.smack.ReuseConnectionTest.test2(ReuseConnectionTest.kt:18)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:33)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:230)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:58)
+
