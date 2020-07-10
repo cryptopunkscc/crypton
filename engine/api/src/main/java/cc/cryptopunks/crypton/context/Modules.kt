@@ -26,7 +26,8 @@ class AppModule(
     Repo by repo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext = SupervisorJob() + newSingleThreadContext("AppScope")
+    override val coroutineContext: CoroutineContext =
+        log + SupervisorJob() + newSingleThreadContext("AppScope")
     override val sessionStore = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
@@ -47,10 +48,13 @@ data class SessionModule(
     SessionRepo by sessionRepo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext = SupervisorJob() + newSingleThreadContext(address.id)
+    override val coroutineContext: CoroutineContext =
+        log + SupervisorJob() + newSingleThreadContext(address.id)
     override val presenceStore = Presence.Store()
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
-    override suspend fun chatScope(chatAddress: Address): ChatScope = chatScope(chatRepo.get(chatAddress))
+    override suspend fun chatScope(chatAddress: Address): ChatScope =
+        chatScope(chatRepo.get(chatAddress))
+
     override fun toString(): String = address.toString()
 
     init {

@@ -7,14 +7,14 @@ interface Connection : Net {
     data class Config(
         val scope: CoroutineScope,
         val address: Address = Address.Empty,
-        val password: CharSequence = ""
+        val password: Password = Password.Empty
     )
 
     interface Factory : (Config) -> Connection {
         data class Config(
-            val resource: String = "",
-            val hostAddress: String? = null,
-            val securityMode: SecurityMode = SecurityMode.ifpossible
+            var resource: String = "",
+            var hostAddress: String? = null,
+            var securityMode: SecurityMode = SecurityMode.ifpossible
         ) {
             enum class SecurityMode {
                 required,

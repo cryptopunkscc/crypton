@@ -21,10 +21,10 @@ fun initSmack(omemoStoreFile: File) {
 }
 
 class SmackConnectionFactory(
-    setup: Connection.Factory.Config.() -> Connection.Factory.Config = { this }
+    setup: Connection.Factory.Config.() -> Unit = { }
 ) : Connection.Factory {
 
-    private val factoryConfig = Connection.Factory.Config().setup()
+    private val factoryConfig = Connection.Factory.Config().apply(setup)
 
     override fun invoke(config: Connection.Config): Connection = createConnection(
         scope = config.scope,
@@ -32,7 +32,7 @@ class SmackConnectionFactory(
         configuration = connectionConfig
             .setUsernameAndPassword(
                 config.address.local,
-                config.password.toString()
+                String(config.password.byteArray)
             )
             .setXmppDomain(config.address.domain)
             .build()

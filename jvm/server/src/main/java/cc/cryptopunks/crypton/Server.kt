@@ -39,10 +39,8 @@ private object Server
 private val log = Server.typedLog()
 
 private val createConnectionFactory = SmackConnectionFactory {
-    copy(
-        hostAddress = "127.0.0.1",
-        securityMode = Connection.Factory.Config.SecurityMode.disabled
-    )
+    hostAddress = "127.0.0.1"
+    securityMode = Connection.Factory.Config.SecurityMode.disabled
 }
 
 private val appScope: AppScope by lazy {

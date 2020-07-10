@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.util.TypedLog
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -15,10 +17,21 @@ interface Handle<T> {
 }
 
 private class Handler<T>(
-    val scope: CoroutineScope,
+    scope: CoroutineScope,
     val handle: suspend T.(ConnectorOutput) -> Unit
-) : Handle<T> {
-    override fun invoke(arg: T, output: ConnectorOutput) = scope.launch { arg.handle(output) }
+) : Handle<T>,
+    CoroutineScope by scope {
+
+    override fun invoke(arg: T, output: ConnectorOutput) = launch {
+        try {
+            arg.handle(output)
+        } catch (e: Throwable) {
+            when(e) {
+                is CancellationException -> coroutineContext[TypedLog]?.d("${e.message} $arg")
+                else -> output(Api.Error(e.message, arg.toString()))
+            }
+        }
+    }
 }
 
 class CompoundHandler(

@@ -38,5 +38,12 @@ internal fun createConnector(
     outputChannel: SendChannel<Any>
 ) = Connector(
     input = inputChannel.consumeAsFlow(),
-    output = { outputChannel.send(it) }
+    output = {
+        try {
+            outputChannel.send(it)
+        } catch (e: Throwable) {
+            println("Cannot send $it")
+            e.printStackTrace()
+        }
+    }
 )

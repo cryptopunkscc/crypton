@@ -14,11 +14,10 @@ class ConnectableBinding(
 ) :
     Connectable.Binding {
 
-    private var binding: Binding =
-        createBinding(
-            actorChannel = channels.actor,
-            serviceChannel = channels.service
-        )
+    private var binding: Binding = createBinding(
+        actorChannel = channels.actor,
+        serviceChannel = channels.service
+    )
 
     val sendToService: suspend (Any) -> Unit = channels.service::send
 

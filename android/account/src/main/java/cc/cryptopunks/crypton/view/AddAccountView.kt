@@ -33,14 +33,14 @@ internal class AddAccountView(context: Context) : ActorLayout(context) {
             input.collect { arg ->
                 when (arg) {
                     is Map<*, *> -> setForm(arg as Map<Account.Field, CharSequence>)
-                    is Error -> errorOutput.text = arg.message
+                    is Account.Service.Error -> errorOutput.text = arg.message
                 }
             }
         }
         launch {
             flowOf(
-                addButton.clicks().map { Account.Service.Add() },
-                registerButton.clicks().map { Account.Service.Register() },
+                addButton.clicks().clearError().map { Account.Service.Add() },
+                registerButton.clicks().clearError().map { Account.Service.Register() },
                 formFields.textFieldChanges().map { (field, text) ->
                     Account.Service.Set(field, text)
                 }
@@ -62,4 +62,6 @@ internal class AddAccountView(context: Context) : ActorLayout(context) {
             field to text
         }
     }.asFlow().flattenMerge()
+
+    private fun Flow<Unit>.clearError() = onEach { errorOutput.text = null  }
 }
