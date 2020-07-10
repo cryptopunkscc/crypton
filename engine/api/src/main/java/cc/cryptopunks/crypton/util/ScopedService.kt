@@ -39,7 +39,7 @@ private data class ScopedService(
         subscriptions.clear()
     }
 
-    fun Connector.handleSubscription(subscription: Subscription) {
+    private fun Connector.handleSubscription(subscription: Subscription) {
         if (!subscription.enable)
             subscriptions.remove(subscription::class)?.cancel()
         else
@@ -49,7 +49,7 @@ private data class ScopedService(
             }
     }
 
-    suspend fun Connector.handleRequest(request: Any) {
+    private suspend fun Connector.handleRequest(request: Any) {
         handlers.dispatch(request, output)?.join()
     }
 }
