@@ -51,7 +51,7 @@ class App :
             ),
             createConnection = SmackConnectionFactory {
                 copy(
-                    hostAddress = "10.0.2.2",
+//                     hostAddress = "10.0.2.2",
                     securityMode = Connection.Factory.Config.SecurityMode.disabled
                 )
             },
