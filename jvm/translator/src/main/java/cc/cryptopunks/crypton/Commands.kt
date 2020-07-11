@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Roster
@@ -15,7 +14,7 @@ private val navigate = "navigate" to mapOf(
     }
 )
 
-val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
+val COMMANDS: Map<Route<*>, Map<String, Any>> = mapOf(
     Route.Main to mapOf(
         "login" to command(
             param()
@@ -45,11 +44,23 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
             }
         )
     ),
-    Route.Chat() to mapOf(
+    Route.Chat(isConference = false) to mapOf(
         "send" to mapOf(
             "message" to command(vararg()) { message ->
                 Chat.Service.EnqueueMessage(message.joinToString(" "))
             }
         )
+    ),
+    Route.Chat(isConference = true) to mapOf(
+        "send" to mapOf(
+            "message" to command(vararg()) { message ->
+                Chat.Service.EnqueueMessage(message.joinToString(" "))
+            }
+        ),
+        "invite" to command(
+            vararg()
+        ) { users ->
+            Chat.Service.Invite(users.map(::address))
+        }
     )
 ).mapValues { (_, commands) -> commands + navigate }

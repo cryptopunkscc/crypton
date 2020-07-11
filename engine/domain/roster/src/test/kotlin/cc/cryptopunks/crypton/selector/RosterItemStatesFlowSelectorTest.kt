@@ -10,7 +10,6 @@ import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.mock.MockConnectionFactory
 import cc.cryptopunks.crypton.mock.MockSessionRepo
 import cc.cryptopunks.crypton.util.Log

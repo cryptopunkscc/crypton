@@ -160,7 +160,7 @@ internal class ConnectionModule(
 
     override fun createConference(chat: Chat): Chat = smack.createMuc(chat)
 
-    override fun mucInvitationsFlow() = mucManager.invitationsFlow()
+    override fun conferenceInvitationsFlow() = mucManager.invitationsFlow()
 
 
     override fun getCachedPresences(): List<Presence> = roster.run {

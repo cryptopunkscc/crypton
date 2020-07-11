@@ -28,7 +28,8 @@ data class Message(
         Sent,
         Error,
         Received,
-        Read
+        Read,
+        Info
     }
 
     object Service {
@@ -59,8 +60,10 @@ data class Message(
         suspend fun latest(): Message?
         suspend fun get(id: String): Message?
         suspend fun delete(message: Message)
+        suspend fun delete(message: List<Message>)
         suspend fun listUnread(): List<Message>
         suspend fun list(range: LongRange = 0..System.currentTimeMillis()): List<Message>
+        suspend fun list(chat: Address, status: Status): List<Message>
         fun flowLatest(chatAddress: Address? = null): Flow<Message>
         fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message>
         suspend fun queuedList(): List<Message>

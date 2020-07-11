@@ -11,7 +11,11 @@ class MockChatNet(
         state { chatStore reduce { plus(chat.address to chat) } }
     }
 
-    override fun mucInvitationsFlow(): Flow<Chat.Net.MucInvitation> {
+    override fun inviteToConference(chat: Address, users: List<Address>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> {
         TODO("Not yet implemented")
     }
 

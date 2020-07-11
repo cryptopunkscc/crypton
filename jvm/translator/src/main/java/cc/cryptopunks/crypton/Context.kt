@@ -2,43 +2,47 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Route
 
+typealias TranslationContext = Context
+
 data class Context(
-    val route: Route = Route.Main,
-    val commands: Map<Route, Map<String, Any>> = COMMANDS,
+    val route: Route<*> = Route.Main,
+    val commands: Map<Route<*>, Map<String, Any>> = COMMANDS,
     val account: String = "",
     val state: Any = Unit,
     val result: Any? = null
 )
 
 fun Context.process(input: String): Context = set(input).run {
-    anySuggestion()
-        ?.let { copy(result = it) }
-        ?: copy(result = execute()).run {
-            if (result is Route) copy(route = result)
-            else this
-        }.prepare()
+    copy(result = execute()).run {
+        if (result is Route<*>) copy(route = result)
+        else this
+    }.prepare()
 }
 
 
 fun Context.prepare() = copy(
-    state = commands[route] ?: throw IllegalArgumentException("No commands for route $route")
+    state = commands[route.empty()]
+        ?: throw IllegalArgumentException("No commands for route $route")
 )
 
 fun Context.set(string: String): Context =
     if (string.isBlank()) this
     else string.split(" ").let { strings ->
         if (strings.size != 1) set(strings)
-        else copy(
-            state = when (state) {
+        else when (state) {
 
-                is Command -> state.append(string)
+            is Command -> state.append(string)
 
-                is Map<*, *> -> (state as Map<String, Any>)[string]
-                    ?: IllegalArgumentException("Unknown command $string")
+            is Map<*, *> -> (state as Map<String, Any>)[string]
+                ?: IllegalArgumentException("Unknown command $string")
 
-                else -> IllegalStateException("Unknown state $state")
+            else -> IllegalStateException("Unknown state $state")
+        }.let { result ->
+            when (result) {
+                is Throwable -> copy(result = result)
+                else -> copy(state = result)
             }
-        )
+        }
     }
 
 
@@ -51,7 +55,7 @@ fun Context.anySuggestion(): Any? =
     state.let { state ->
         when (state) {
 
-            COMMANDS[route] == state -> Check.Prepared
+            COMMANDS[route.empty()] == state -> Check.Prepared
 
             is Command -> when {
 

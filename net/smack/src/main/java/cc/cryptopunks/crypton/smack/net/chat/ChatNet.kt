@@ -31,10 +31,22 @@ internal class ChatNet(
 
     override fun createConference(chat: Chat): Chat = smackCore.createMuc(chat)
 
-    override fun mucInvitationsFlow(): Flow<Chat.Net.MucInvitation> = mucManager.invitationsFlow()
+    override fun inviteToConference(chat: Address, users: List<Address>) = smackCore.inviteToConference(chat, users)
+
+    override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> = mucManager.invitationsFlow()
 
     override fun joinConference(address: Address, nickname: String) = mucManager.join(address, nickname)
+}
 
+internal fun SmackCore.inviteToConference(
+    chat: Address,
+    users: List<Address>
+) {
+    mucManager.getMultiUserChat(chat.entityBareJid()).apply {
+        users.forEach { user ->
+            invite(user.entityBareJid(), "no reason")
+        }
+    }
 }
 
 internal fun SmackCore.createMuc(
@@ -68,7 +80,7 @@ internal fun SmackCore.createMuc(
 }
 
 fun MultiUserChatManager.invitationsFlow() =
-    callbackFlow<Chat.Net.MucInvitation> {
+    callbackFlow<Chat.Net.ConferenceInvitation> {
         InvitationListener { conn: XMPPConnection,
                              room: MultiUserChat,
                              inviter: EntityJid,
@@ -77,7 +89,7 @@ fun MultiUserChatManager.invitationsFlow() =
                              message: Message,
                              invitation: MUCUser.Invite ->
             offer(
-                Chat.Net.MucInvitation(
+                Chat.Net.ConferenceInvitation(
                     address = room.room.address(),
                     inviter = inviter.resource(),
                     password = password,

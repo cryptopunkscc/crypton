@@ -56,6 +56,10 @@ internal class MessageRepo(
     override suspend fun delete(message: Message) =
         dao.delete(message.id)
 
+    override suspend fun delete(messages: List<Message>) {
+        messages.forEach { dao.delete(it.id) }
+    }
+
     override suspend fun latest(): Message? =
         if (latest != Message.Empty)
             latest else
@@ -68,6 +72,9 @@ internal class MessageRepo(
 
     override suspend fun list(range: LongRange): List<Message> =
         dao.list(oldest = range.first, latest = range.last).map { it.message() }
+
+    override suspend fun list(chat: Address, status: Message.Status): List<Message> =
+        dao.list(chat.id, status.name).map { it.message() }
 
     override fun flowLatest(chatAddress: Address?): Flow<Message> =
         dao.run {

@@ -26,6 +26,10 @@ data class Chat(
 
         data class EnqueueMessage(val text: String)
 
+        data class InfoMessage(val text: String)
+
+        object ClearInfoMessages
+
         data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
 
         data class UpdateNotification(val messages: List<Message>)
@@ -48,6 +52,8 @@ data class Chat(
 
         data class Create(val chat: Chat)
 
+        data class Invite(val users: List<Address>, val chat: Address = Address.Empty)
+
         // output
 
         data class ChatCreated(val chat: Address)
@@ -63,7 +69,8 @@ data class Chat(
     interface Net {
         fun supportEncryption(address: Address): Boolean
         fun createConference(chat: Chat): Chat
-        fun mucInvitationsFlow(): Flow<MucInvitation>
+        fun inviteToConference(chat: Address, users: List<Address>)
+        fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
         fun joinConference(address: Address, nickname: String)
 
         interface Event : Api.Event
@@ -71,7 +78,7 @@ data class Chat(
 
         interface EventFlow : Flow<Event>
 
-        data class MucInvitation(
+        data class ConferenceInvitation(
             val address: Address,
             val inviter: Resource,
             val reason: String?,

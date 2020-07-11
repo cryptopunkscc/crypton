@@ -28,7 +28,7 @@ private class Handler<T>(
         } catch (e: Throwable) {
             when(e) {
                 is CancellationException -> coroutineContext[TypedLog]?.d("${e.message} $arg")
-                else -> output(Api.Error(e.message, arg.toString()))
+                else -> output(Api.Error(e.message ?: e.javaClass.name, arg.toString()))
             }
         }
     }
@@ -66,6 +66,6 @@ class HandlerRegistryBuilder internal constructor() {
 fun createHandlers(build: HandlerRegistryBuilder.() -> Unit) =
     HandlerRegistryBuilder().apply(build).handlers
 
-suspend fun <T> Flow<T>.collect(handle: Handle<T>, join: Boolean = false) = collect {
-    handle(it).run { if (join) join() }
+suspend fun <T> Flow<T>.collect(handle: Handle<T>, output: ConnectorOutput = {}, join: Boolean = false) = collect {
+    handle(it, output).run { if (join) join() }
 }
