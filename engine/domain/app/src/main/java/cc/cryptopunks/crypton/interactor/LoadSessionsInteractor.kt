@@ -8,6 +8,7 @@ internal suspend fun AppScope.loadSessions() {
         plus(
             accountRepo.addressList()
                 .minus(keys)
+                .also { log.d("Loading sessions: $it") }
                 .map { createSession(it) }
                 .map { it.address to it }
         )

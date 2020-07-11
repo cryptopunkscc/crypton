@@ -11,7 +11,6 @@ internal fun SessionScope.handleMucInvitations() =
         if (!chatRepo.contains(address)) {
             insertChat(
                 Chat(
-                    title = address.local,
                     address = address,
                     account = this@handleMucInvitations.address
                 )

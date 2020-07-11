@@ -40,7 +40,6 @@ internal class ChatNet(
 internal fun SmackCore.createMuc(
     chat: Chat
 ) = chat.also {
-    require(chat.title.isNotBlank())
     println("Creating muc $chat")
     mucManager.getMultiUserChat(chat.address.entityBareJid()).apply {
 

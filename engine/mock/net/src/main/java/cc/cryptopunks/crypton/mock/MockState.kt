@@ -51,7 +51,6 @@ class MockState(
 
         val chats = contacts.map {
             Chat(
-                title = it.toString(),
                 address = it,
                 account = account,
                 users = listOf(it, account)

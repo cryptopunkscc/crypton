@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 
 class BackendService(
-    private val appScope: AppScope
+    val appScope: AppScope
 ) : Connectable {
 
     private val log = typedLog()

@@ -16,7 +16,7 @@ internal fun AppScope.handleRemove() =
             }
             interrupt()
             accountRepo.delete(address)
-            coroutineContext.cancelChildren()
+//            coroutineContext.cancelChildren()
             cancel()
             log.d("Successfully removed $address from local database")
         }

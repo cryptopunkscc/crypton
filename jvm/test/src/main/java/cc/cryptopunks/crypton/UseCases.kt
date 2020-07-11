@@ -66,8 +66,8 @@ suspend fun ClientDsl.createChat(
     chat: Address,
     users: List<Address> = listOf(chat)
 ) {
-    send(Chat.Service.CreateChat(account, chat, users))
-    expect(Chat.Service.ChatCreated(address = chat))
+    send(Chat.Service.Create(Chat(chat, account, users)))
+    expect(Chat.Service.ChatCreated(chat = chat))
 }
 
 suspend fun ClientDsl.openChat(

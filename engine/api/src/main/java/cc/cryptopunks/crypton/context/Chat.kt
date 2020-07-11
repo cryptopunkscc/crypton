@@ -5,10 +5,10 @@ import androidx.paging.PagedList
 import kotlinx.coroutines.flow.Flow
 
 data class Chat(
-    val title: String = "",
     val address: Address = Address.Empty,
     val account: Address = Address.Empty,
-    val users: List<Address> = emptyList()
+    val users: List<Address> = emptyList(),
+    val title: String = ""
 ) {
     val isConference = address.isConference
 
@@ -46,18 +46,11 @@ data class Chat(
 
         data class GetMessages(val address: Address? = null)
 
-        data class CreateChat(
-            val account: Address,
-            val chat: Address,
-            val users: List<Address> = listOf(chat),
-            val isMuc: Boolean = false
-        )
-
         data class Create(val chat: Chat)
 
         // output
 
-        data class ChatCreated(val address: Address)
+        data class ChatCreated(val chat: Address)
 
         data class MessageText(val text: CharSequence?)
 
@@ -112,13 +105,3 @@ suspend fun SessionScope.insertChat(chat: Chat) {
     chatRepo.insertIfNeeded(chat)
     log.d("Chat ${chat.address} with users ${chat.users} Inserted")
 }
-
-fun Chat.Service.CreateChat.asChat() =
-    Chat(
-        title = chat.local,
-        address = chat,
-        account = account,
-        users = if (!chat.isConference)
-            users + account else
-            users
-    )

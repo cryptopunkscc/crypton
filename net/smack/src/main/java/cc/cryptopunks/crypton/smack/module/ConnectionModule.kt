@@ -7,7 +7,6 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.ChatNet

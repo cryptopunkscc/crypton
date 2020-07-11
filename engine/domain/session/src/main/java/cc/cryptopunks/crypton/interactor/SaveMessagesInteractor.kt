@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.interactor
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.asChat
 import cc.cryptopunks.crypton.context.insertChat
 
 internal suspend fun SessionScope.saveMessages(messages: List<Message>) {
@@ -32,11 +31,10 @@ private suspend fun SessionScope.get(message: Message) = messageRepo.run {
 }
 
 private suspend fun SessionScope.create(message: Message) = message.copy(
-    chat = Chat.Service.CreateChat(
+    chat = Chat(
         account = address,
-        chat = message.chat,
-        users = listOf(message.getParty(address).address)
-    ).asChat().also {
+        address = message.chat
+    ).also {
         insertChat(it)
     }.address
 )

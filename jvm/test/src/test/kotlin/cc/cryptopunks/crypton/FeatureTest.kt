@@ -55,6 +55,7 @@ class FeatureTest {
                     ).joinAll()
                     section("END CLEANING BEFORE TESTS")
                     stop()
+                    delay(1000)
                     server.start()
                 }
             }

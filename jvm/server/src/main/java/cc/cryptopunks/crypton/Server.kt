@@ -20,7 +20,12 @@ import io.ktor.network.sockets.Socket
 import io.ktor.network.sockets.aSocket
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
@@ -43,8 +48,8 @@ private val createConnectionFactory = SmackConnectionFactory {
     securityMode = Connection.Factory.Config.SecurityMode.disabled
 }
 
-private val appScope: AppScope by lazy {
-    AppModule(
+private val appScope: AppScope
+    get() = AppModule(
         sys = MockSys(),
         repo = MockRepo(),
         mainClass = Nothing::class,
@@ -54,24 +59,22 @@ private val appScope: AppScope by lazy {
         createConnection = createConnectionFactory,
         startSessionService = SessionScope::startSessionService
     )
-}
 
 suspend fun startServer() = coroutineScope {
     initSmack(File("./omemo_store"))
-    startServerSocket().let { server ->
-        val service = BackendService(appScope)
-        launch {
-            while (true) {
-                val socket = server.accept()
-                log.d("Socket accepted: ${socket.remoteAddress}")
-                service.tryConnectTo(socket)
-            }
-        }.apply {
-            invokeOnCompletion {
-                log.d("close server $server")
-                server.close()
-            }
-        }
+    val service = BackendService(appScope)
+    val server = startServerSocket()
+    flow {
+        while (true) emit(server.accept())
+    }.onCompletion { throwable ->
+        log.d("close server $server $throwable")
+        service.cancel()
+        service.appScope.cancel()
+        server.close()
+    }.onEach { socket ->
+        log.d("Socket accepted: ${socket.remoteAddress}")
+    }.collect { socket ->
+        service.tryConnectTo(socket)
     }
 }
 
