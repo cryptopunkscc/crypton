@@ -61,15 +61,17 @@ class MockMessageRepo : Message.Repo {
     override suspend fun list(range: LongRange): List<Message> =
         store.get().values.toList()
 
-    override fun flowLatest(chatAddress: Address?): Flow<Message> {
-        return latest.asFlow()
-    }
+    override fun flowLatest(chatAddress: Address?): Flow<Message> =
+        latest.asFlow().run {
+            if (chatAddress == null) this
+            else filter { it.chat == chatAddress }
+        }
 
     override fun dataSourceFactory(chatAddress: Address) =
         object : DataSource.Factory<Int, Message>() {
             override fun create(): DataSource<Int, Message> = listDataSource(
                 store.get()
-                    .filterValues { it.chatAddress == chatAddress }
+                    .filterValues { it.chat == chatAddress }
                     .values.sortedBy { it.timestamp }
             ).also { dataSources + it }
         }
@@ -86,7 +88,7 @@ class MockMessageRepo : Message.Repo {
     }.filter { it.isNotEmpty() }
 
     override fun unreadCountFlow(chatAddress: Address): Flow<Int> = store.changesFlow()
-        .map { it.filterValues { it.chatAddress == chatAddress } }
+        .map { it.filterValues { it.chat == chatAddress } }
         .map { it.count { it.value.isUnread } }
 
     override suspend fun notifyUnread() {

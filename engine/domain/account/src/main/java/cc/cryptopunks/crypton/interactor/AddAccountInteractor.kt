@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 
 suspend fun AppScope.addAccount(
     account: Account,

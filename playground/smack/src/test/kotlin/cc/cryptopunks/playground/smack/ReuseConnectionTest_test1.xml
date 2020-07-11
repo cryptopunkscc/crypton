@@ -1,0 +1,46 @@
+<stream>
+    <!--12:28:39 SENT (0):-->
+    <iq from='test11@localhost/116792095052329455112946' id='5Nheq-18' to='pubsub.localhost'
+        type='get'>
+        <query xmlns='http://jabber.org/protocol/disco#info'></query>
+    </iq>
+    <iq from='test11@localhost/116792095052329455112946' id='5Nheq-20' to='upload.localhost'
+        type='get'>
+        <query xmlns='http://jabber.org/protocol/disco#info'></query>
+    </iq>
+    <presence from='test11@localhost/116792095052329455112946' id='5Nheq-22'>
+        <c hash='sha-1' node='http://www.igniterealtime.org/projects/smack'
+            ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8=' xmlns='http://jabber.org/protocol/caps' />
+    </presence>
+    <iq from='test11@localhost/116792095052329455112946' id='5Nheq-23' to='localhost' type='set'>
+        <query xmlns='jabber:iq:register'>
+            <remove />
+        </query>
+    </iq>
+    <presence from='test11@localhost/116792095052329455112946' id='5Nheq-26'
+        type='unavailable'></presence>
+    <r xmlns='urn:xmpp:sm:3' />
+    <iq from='test11@localhost/116792095052329455112946' id='5Nheq-27' to='localhost' type='get'>
+        <query xmlns='jabber:iq:register'></query>
+    </iq>
+    <iq from='test11@localhost/116792095052329455112946' id='5Nheq-29' to='localhost' type='set'>
+        <query xmlns='jabber:iq:register'>
+            <password>pass</password>
+            <username>test11</username>
+        </query>
+    </iq>
+    <iq from='test11@localhost/110177241588685248593010' id='5Nheq-33' type='get'>
+        <query xmlns='jabber:iq:roster'></query>
+    </iq>
+    <presence from='test11@localhost/110177241588685248593010' id='5Nheq-34'>
+        <c hash='sha-1' node='http://www.igniterealtime.org/projects/smack'
+            ver='tUtPo6aj3mjjQWfXQO8eNy8Pwm8=' xmlns='http://jabber.org/protocol/caps' />
+    </presence>
+    <!--RECV (0):-->
+    <stream:error>
+        <invalid-from xmlns='urn:ietf:params:xml:ns:xmpp-streams' />
+        <text xmlns='urn:ietf:params:xml:ns:xmpp-streams' xml:lang='en'>Improper &apos;from&apos;
+            attribute
+        </text>
+    </stream:error>
+</stream>

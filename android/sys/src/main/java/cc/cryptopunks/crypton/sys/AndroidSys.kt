@@ -11,10 +11,6 @@ class AndroidSys(
     notificationFactories: Map<KClass<out Notification>, (Notification) -> android.app.Notification>
 ) : Sys {
 
-    override val routeSys: Route.Sys by lazy {
-        RouteSys()
-    }
-
     override val indicatorSys: Indicator.Sys by lazy {
         IndicatorSys(application)
     }
@@ -38,6 +34,4 @@ class AndroidSys(
             connectivityManager = application.getSystemService()!!
         )
     }
-
-    override val createRouteSys: () -> Route.Sys get() = { RouteSys() }
 }

@@ -1,10 +1,17 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.paging.DataSource
-import androidx.room.*
-import cc.cryptopunks.crypton.context.Address
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
+import androidx.room.Query
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Resource
+import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.context.messageStatus
+import cc.cryptopunks.crypton.context.resource
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
@@ -86,7 +93,7 @@ internal data class MessageData(
 
 internal fun Message.messageData() = MessageData(
     id = id,
-    chatId = chatAddress.id,
+    chatId = chat.id,
     stanzaId = stanzaId,
     timestamp = timestamp,
     text = text,
@@ -99,11 +106,11 @@ internal fun Message.messageData() = MessageData(
 internal fun MessageData.message() = Message(
     id = id,
     stanzaId = stanzaId,
-    to = Resource.from(to),
-    from = Resource.from(from),
-    chatAddress = Address.from(chatId),
+    to = resource(to),
+    from = resource(from),
+    chat = address(chatId),
     text = text,
     timestamp = timestamp,
-    status = Message.Status.valueOf(status),
+    status = messageStatus(status),
     readAt = readAt
 )

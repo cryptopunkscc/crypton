@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
@@ -21,6 +22,60 @@ import kotlinx.coroutines.withTimeout
 import org.junit.Assert
 import kotlin.coroutines.CoroutineContext
 
+class TrafficError(
+    message: String?,
+    cause: Throwable
+) : Exception(message, cause)
+
+class ExpectedTraffic(
+    private val log: TypedLog
+) {
+    private val expected = mutableListOf<(Any) -> Any?>()
+    val traffic = mutableListOf<Any>()
+
+    fun <T> next(check: T.() -> Unit) {
+        val exception = Exception()
+        expected.add {
+            try {
+                val t = it as T
+                check(t)
+            } catch (e: Throwable) {
+                TrafficError(
+                    message = e.message,
+                    cause = exception
+                )
+            }
+        }
+    }
+
+    fun <T> lazy(check: T.() -> Unit) {
+        expected.add {
+            try {
+                check(it as T)
+                true
+            } catch (e: Throwable) {
+                log.d("WARNING: lazy check skipping $it")
+                false
+            }
+        }
+    }
+
+    fun check(value: Any) = expected.run {
+        traffic.add(value)
+        firstOrNull()?.let { check ->
+            when (val result = check(value)) {
+                null -> Unit
+                is Unit -> removeAt(0)
+                is Throwable -> throw result.also {
+                    it.printStackTrace()
+                }
+                is Boolean -> if (result) removeAt(0) else Unit
+                else -> throw Error("unknown result $result")
+            }
+        }
+    }
+}
+
 class ClientDsl(
     private val connector: Connector,
     val log: TypedLog
@@ -28,15 +83,25 @@ class ClientDsl(
     private val input = BroadcastChannel<Any>(Channel.BUFFERED)
     private var subscription: ReceiveChannel<Any> = Channel()
     private val actions = Channel<() -> Job>(Channel.BUFFERED)
-    override val coroutineContext: CoroutineContext =
-        SupervisorJob() + newSingleThreadContext(log.label)
+    val expected = ExpectedTraffic(log)
+    override val coroutineContext = Job() + newSingleThreadContext(log.label)
 
     init {
         launch {
-            connector.input.collect {
+            connector.input.onCompletion {
+                log.d("Close client $it")
+            }.collect {
                 log.d("Received $it")
+                expected.check(it)
                 input.send(it)
             }
+        }
+    }
+
+    fun printTraffic() {
+        log.d("TRAFFIC")
+        expected.traffic.forEach {
+            log.d(it.toString())
         }
     }
 
@@ -57,7 +122,14 @@ class ClientDsl(
     }
 
     fun send(vararg any: Any) = apply {
-        actions.offer { launch { any.forEach { connector.output(it) } } }
+        actions.offer {
+            launch {
+                any.forEach {
+                    expected.check(it)
+                    connector.output(it)
+                }
+            }
+        }
     }
 
     suspend fun flush() {
@@ -70,7 +142,7 @@ class ClientDsl(
     }
 
     suspend inline fun <reified T> waitFor(
-        timeout: Long = 20_000,
+        timeout: Long = 120_000,
         crossinline filter: T.() -> Boolean = { true }
     ): T = withTimeout(timeout) {
         flush()

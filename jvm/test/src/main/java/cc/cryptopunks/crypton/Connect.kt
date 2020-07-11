@@ -3,7 +3,9 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.util.typedLog
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import java.net.InetSocketAddress
@@ -19,7 +21,14 @@ suspend fun Any.connectClient(
             .connect(InetSocketAddress(host, port))
             .connector(log)
             .also { connector ->
-                launch { ClientDsl(connector, log).block() }
+                ClientDsl(connector, log).apply {
+                    block()
+                    if (isActive) {
+                        cancel()
+                        delay(200)
+                    }
+                }
+                connector.close()
             }
     }
 }

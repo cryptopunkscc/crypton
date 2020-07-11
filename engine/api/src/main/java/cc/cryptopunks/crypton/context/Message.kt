@@ -7,12 +7,14 @@ import java.security.MessageDigest
 
 typealias CryptonMessage = Message
 
+fun messageStatus(status: String) = Message.Status.valueOf(status)
+
 data class Message(
     val id: String = "",
     val stanzaId: String = "",
     val text: String = "",
     val timestamp: Long = 0,
-    val chatAddress: Address = Address.Empty,
+    val chat: Address = Address.Empty,
     val from: Resource = Resource.Empty,
     val to: Resource = Resource.Empty,
     val status: Status = Status.None,
@@ -21,12 +23,12 @@ data class Message(
 ) {
     enum class Status {
         None,
+        Queued,
         Sending,
-        Error,
         Sent,
+        Error,
         Received,
-        Read,
-        Queued
+        Read
     }
 
     object Service {
@@ -35,9 +37,8 @@ data class Message(
     }
 
     interface Net {
-        suspend fun sendMessage(message: Message): Job
-        suspend fun sendMucMessage(message: Message): Job
-        fun incomingMessages(): Flow<Event>
+        suspend fun sendMessage(message: Message, encrypt: Boolean = true): Job
+        fun incomingMessages(): Flow<Incoming>
         fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
 
         object ReadArchived {
@@ -49,9 +50,7 @@ data class Message(
             )
         }
 
-        data class Event(
-            val message: Message
-        ) : Api.Event
+        data class Incoming(val message: Message) : Api.Event
     }
 
     interface Repo {
@@ -67,7 +66,7 @@ data class Message(
         suspend fun queuedList(): List<Message>
         fun unreadListFlow(): Flow<List<Message>>
         fun queuedListFlow(): Flow<List<Message>>
-        fun unreadCountFlow(chatAddress: Address) : Flow<Int>
+        fun unreadCountFlow(chatAddress: Address): Flow<Int>
         suspend fun notifyUnread()
     }
 

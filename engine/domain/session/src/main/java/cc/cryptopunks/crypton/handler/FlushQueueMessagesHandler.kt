@@ -10,5 +10,5 @@ internal fun SessionScope.handleFlushQueuedMessages() =
     handle<Chat.Service.FlushQueuedMessages> {
         if (addresses.isEmpty())
             flushQueuedMessages { true } else
-            flushQueuedMessages { message: Message -> addresses.contains(message.chatAddress) }
+            flushQueuedMessages { message: Message -> addresses.contains(message.chat) }
     }

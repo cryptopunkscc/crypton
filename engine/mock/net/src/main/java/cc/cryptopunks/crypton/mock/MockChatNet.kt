@@ -7,8 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class MockChatNet(
     private val state: MockState
 ) : Chat.Net {
-
-    override fun createMuc(chat: Chat): Chat = chat.also {
+    override fun createConversation(chat: Chat): Chat = chat.also {
         state { chatStore reduce { plus(chat.address to chat) } }
     }
 
@@ -16,7 +15,11 @@ class MockChatNet(
         TODO("Not yet implemented")
     }
 
-    override fun joinMuc(address: Address) {
+    override fun supportEncryption(address: Address): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun joinMuc(address: Address, nickname: String) {
         TODO("Not yet implemented")
     }
 }

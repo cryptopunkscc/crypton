@@ -122,5 +122,5 @@ class ChatView(
         const val SCROLL_THRESHOLD_DP = 100
     }
 
-    override fun canConsume(message: Message): Boolean = message.chatAddress == address
+    override fun canConsume(message: Message): Boolean = message.chat == address
 }

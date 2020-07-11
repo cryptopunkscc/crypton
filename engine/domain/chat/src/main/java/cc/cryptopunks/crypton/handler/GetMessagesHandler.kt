@@ -12,7 +12,7 @@ internal fun SessionScope.handleGetMessages() =
             }
         ).let { messages ->
             when {
-                address != null -> messages.filter { it.chatAddress == address }
+                address != null -> messages.filter { it.chat == address }
                 else -> messages
             }
         }

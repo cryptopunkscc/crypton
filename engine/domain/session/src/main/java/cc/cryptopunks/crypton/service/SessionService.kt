@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.collect
 import cc.cryptopunks.crypton.handler.handleApiEvent
 import cc.cryptopunks.crypton.handler.handleFlushQueuedMessages
+import cc.cryptopunks.crypton.handler.handleMucInvitations
 import cc.cryptopunks.crypton.handler.handlePresenceChanged
 import cc.cryptopunks.crypton.handler.handleSaveMessages
 import cc.cryptopunks.crypton.handler.handleUpdateChatNotification
@@ -20,4 +21,5 @@ fun SessionScope.startSessionService() = launch {
     launch { saveMessagesFlow().collect(handleSaveMessages(), join = true) }
     launch { presenceChangedFlow().collect(handlePresenceChanged(), join = true) }
     launch { flushQueueMessagesFlow().collect(handleFlushQueuedMessages(), join = true) }
+    launch { mucInvitationsFlow().collect(handleMucInvitations()) }
 }

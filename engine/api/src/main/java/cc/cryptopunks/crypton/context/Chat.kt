@@ -9,16 +9,14 @@ data class Chat(
     val address: Address = Address.Empty,
     val account: Address = Address.Empty,
     val resource: Resource = Resource.Empty,
-    val users: List<User> = emptyList()
+    val users: List<User> = emptyList(),
+    val isMuc: Boolean = false
 ) {
-    val isDirect get() = users.size == 2
-    val accountUser get() = users.last()
-
+    val isDirect get() = !isMuc
 
     companion object {
         val Empty = Chat()
     }
-
 
     object Service {
 
@@ -52,25 +50,10 @@ data class Chat(
 
         data class CreateChat(
             val account: Address,
-            val chat: Address
+            val chat: Address,
+            val users: List<Address> = listOf(chat),
+            val isMuc: Boolean = false
         )
-
-        data class CreateChatData(
-            val title: String,
-            val users: List<Address>
-        ) {
-            fun validate() = users.isNotEmpty() || throw Exception.EmptyUsers
-
-            data class Exception(
-                override val message: String
-            ) : kotlin.Exception() {
-
-                companion object {
-                    val EmptyUsers = Exception("Users cannot be empty")
-                }
-            }
-        }
-
 
         // output
 
@@ -85,9 +68,10 @@ data class Chat(
 
 
     interface Net {
-        fun createMuc(chat: Chat): Chat
+        fun supportEncryption(address: Address): Boolean
+        fun createConversation(chat: Chat): Chat
         fun mucInvitationsFlow(): Flow<MucInvitation>
-        fun joinMuc(address: Address)
+        fun joinMuc(address: Address, nickname: String)
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
@@ -97,8 +81,8 @@ data class Chat(
         data class MucInvitation(
             val address: Address,
             val inviter: Resource,
-            val reason: String,
-            val password: String
+            val reason: String?,
+            val password: String?
         )
     }
 
@@ -116,20 +100,26 @@ data class Chat(
     }
 }
 
-suspend fun SessionScope.createChat(data: Chat.Service.CreateChatData) =
-    data.run {
-        validate()
-        Chat(
-            title = title,
-            users = users.map(::User) + User(address),
-            account = address
-        )
-    }.run {
-        if (!isDirect)
-            createMuc(this) else
-            copy(address = users.first().address)
-    }.also { chat ->
-        log.d("Creating $chat ")
-        chatRepo.insertIfNeeded(chat)
-        log.d("Chat ${chat.address} with users ${chat.users} created")
-    }
+suspend fun SessionScope.createChat(chat: Chat) {
+    log.d("Creating $chat")
+    if (chat.isMuc) createConversation(chat)
+    log.d("Chat ${chat.address} with users ${chat.users} created")
+    insertChat(chat)
+}
+
+suspend fun SessionScope.insertChat(chat: Chat) {
+    log.d("Inserting $chat")
+    chatRepo.insertIfNeeded(chat)
+    log.d("Chat ${chat.address} with users ${chat.users} Inserted")
+}
+
+fun Chat.Service.CreateChat.asChat() =
+    Chat(
+        title = chat.local,
+        address = chat,
+        account = account,
+        isMuc = chat.isConference,
+        users = if (!chat.isConference)
+            users.map(::User) + User(account) else
+            users.map(::User)
+    )

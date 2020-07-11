@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.typedLog
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.newSingleThreadContext
@@ -27,11 +28,10 @@ class AppModule(
 
     override val log = typedLog()
     override val coroutineContext: CoroutineContext =
-        log + SupervisorJob() + newSingleThreadContext("AppScope")
+        log + SupervisorJob() + Dispatchers.IO
     override val sessionStore = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
-    override val navigate = Route.Navigate(routeSys)
     override fun sessionScope(): SessionScope = sessionStore.get().values.first()
     override fun sessionScope(address: Address): SessionScope = sessionStore.get()[address]!!
 }

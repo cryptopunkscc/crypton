@@ -8,10 +8,10 @@ import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.interactor.addAccount
 import cc.cryptopunks.crypton.model.Form
 
-internal fun AppScope.handleAdd(form: Form) =
+internal fun AppScope.handleAddAccount(form: Form) =
     handleConnection<Account.Service.Add>(form)
 
-internal fun AppScope.handleRegister(form: Form) =
+internal fun AppScope.handleRegisterAccount(form: Form) =
     handleConnection<Account.Service.Register>(form)
 
 internal fun AppScope.handleLogin(form: Form) =

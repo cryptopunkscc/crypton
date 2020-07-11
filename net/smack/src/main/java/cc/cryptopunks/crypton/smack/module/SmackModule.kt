@@ -2,8 +2,9 @@ package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.smack.SmackCore
-import cc.cryptopunks.crypton.smack.net.chat.MucInvitationManager
 import cc.cryptopunks.crypton.smack.net.omemo.OmemoTrustAllCallback
+import kotlinx.coroutines.CoroutineScope
+import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
@@ -16,13 +17,16 @@ import org.jivesoftware.smackx.omemo.OmemoManager
 
 internal class SmackModule(
     override val configuration: XMPPTCPConnectionConfiguration,
-    val address: Address
-) : SmackCore {
+    val address: Address,
+    scope: CoroutineScope
+) : SmackCore,
+    CoroutineScope by scope {
 
     // Smack
     override val connection by lazy {
         XMPPTCPConnection(configuration).apply {
             replyTimeout = 10000 // Omemo initialization can take longer then 5s
+            fromMode = XMPPConnection.FromMode.USER
         }
     }
 
@@ -46,10 +50,6 @@ internal class SmackModule(
         MultiUserChatManager.getInstanceFor(connection)!!.apply {
             setAutoJoinOnReconnect(true)
         }
-    }
-
-    override val mucInvitationManager: MucInvitationManager by lazy {
-        MucInvitationManager(address)
     }
 
     override val mamManager: MamManager by lazy {

@@ -4,9 +4,9 @@ import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.OpenStore
 import cc.cryptopunks.crypton.util.TypedLog
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.newSingleThreadContext
 import kotlin.reflect.KClass
 
 interface BaseScope :
@@ -21,7 +21,6 @@ interface AppScope :
     Repo {
 
     val mainClass: KClass<*>
-    val navigate: Route.Navigate
 
     val sessionStore: SessionScope.Store
     val clipboardStore: Clip.Board.Store
@@ -57,7 +56,7 @@ interface SessionScope :
     )
 
     class Scope : CoroutineScope {
-        override val coroutineContext = SupervisorJob() + Dispatchers.IO
+        override val coroutineContext = SupervisorJob() + newSingleThreadContext("Smack")
     }
 
 

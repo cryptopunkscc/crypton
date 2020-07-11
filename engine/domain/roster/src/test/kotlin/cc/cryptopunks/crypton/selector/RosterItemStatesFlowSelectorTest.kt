@@ -80,7 +80,7 @@ class RosterItemStatesFlowSelectorTest {
             Message(
                 id = it.toString(),
                 text = "text$it",
-                chatAddress = chats[it].address,
+                chat = chats[it].address,
                 to = Resource(addresses[it]),
                 from = Resource(addresses[it + 2]),
                 status = Message.Status.Received

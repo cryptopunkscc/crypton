@@ -40,4 +40,8 @@ include ':engine:api',
         ':android:indicator',
         ':android:account',
         ':android:roster',
-        ':android:chat'
+        ':android:chat',
+
+        ':playground:smack'
+
+

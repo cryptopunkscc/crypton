@@ -22,7 +22,7 @@ Creating multi user chat allows to share messages with many users in one chat sc
 
 ## Command
 ```kotlin
-Chat.Service.CrateChat
+Chat.Service.CreateChat
 ```
 
 ## Requires

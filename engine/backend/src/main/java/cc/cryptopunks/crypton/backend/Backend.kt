@@ -22,10 +22,6 @@ class Backend(
 
     private val stack: Store<List<Context>> = Store(emptyList())
 
-    override val routeSys: Route.Sys = createRouteSys()
-
-    override val navigate: Route.Navigate = Route.Navigate(routeSys)
-
     val request: (Route) -> Connectable.Binding = requestBindingInteractor(
         createService = ServiceFactory(this),
         createBinding = ConnectableBindingFactory(
@@ -34,7 +30,7 @@ class Backend(
         )
     )
 
-    val drop: () -> Connectable.Binding? = dropBindingInteractor(
+    val drop: suspend () -> Unit = dropBindingInteractor(
         scope = scope,
         stack = stack
     )

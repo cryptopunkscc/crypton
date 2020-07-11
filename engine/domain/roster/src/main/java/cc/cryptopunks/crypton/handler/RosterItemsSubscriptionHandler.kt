@@ -1,10 +1,12 @@
 package cc.cryptopunks.crypton.handler
 
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.selector.rosterItemStatesFlow
 import cc.cryptopunks.crypton.util.Store
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -14,8 +16,13 @@ internal fun AppScope.handleRosterItemsSubscription(
 ) =
     handle<Roster.Service.SubscribeItems> { output ->
         rosterItemStatesFlow()
+            .filterBy(account)
             .map { Roster.Service.Items(it) }
-            .onEach { log.d("roster items $it") }
             .onEach { lastItems { it } }
             .collect(output)
+    }
+
+private fun Flow<List<Roster.Item>>.filterBy(account: Address?) =
+    if (account == null) this else map { items ->
+        items.filter { it.account == account }
     }

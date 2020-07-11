@@ -1,6 +1,10 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.feature.testDirectMessaging
+import cc.cryptopunks.crypton.feature.testMultiUserChat
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.AfterClass
@@ -14,8 +18,14 @@ class FeatureTest {
         testDirectMessaging()
     }
 
+    @Test
+    fun `as a user I can use multi user chat`() = runBlocking {
+        testMultiUserChat()
+    }
+
     @After
     fun tearDown() = runBlocking {
+        section("BEGIN CLEANING AFTER TEST")
         connectClient {
             removeAccounts(
                 address1,
@@ -23,6 +33,8 @@ class FeatureTest {
                 address3
             )
         }
+        delay(2000)
+        section("END CLEANING AFTER TEST")
     }
 
     companion object {
@@ -30,10 +42,33 @@ class FeatureTest {
 
         @BeforeClass
         @JvmStatic
-        fun beforeAll() = server.start()
+        fun beforeAll() {
+            section("STARTING SERVER")
+            runBlocking {
+                TestServer().apply {
+                    start()
+                    section("BEGIN CLEANING BEFORE TESTS")
+                    listOf(
+                        launch { connectClient { tryRemoveAccount(address1, pass) } },
+                        launch { connectClient { tryRemoveAccount(address2, pass) } },
+                        launch { connectClient { tryRemoveAccount(address3, pass) } }
+                    ).joinAll()
+                    section("END CLEANING BEFORE TESTS")
+                    stop()
+                    server.start()
+                }
+            }
+        }
 
         @AfterClass
         @JvmStatic
         fun afterAll() = server.stop()
     }
 }
+
+private fun section(message: String) {
+    val decor = (0..(SECTION_WIDTH - message.length) / 2).joinToString("") { "=" }
+    println("$decor $message $decor")
+}
+
+private const val SECTION_WIDTH = 120

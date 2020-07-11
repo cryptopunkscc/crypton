@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 internal fun SessionScope.flushQueueMessagesFlow(): Flow<Chat.Service.FlushQueuedMessages> =
     flowOf(
         netEvents().filterIsInstance<Net.OmemoInitialized>().map {
-            messageRepo.queuedList().map { it.chatAddress }
+            messageRepo.queuedList().map { it.chat }
         },
         presenceChangedFlow().filter {
             it.presence.status == Presence.Status.Subscribed
@@ -23,7 +23,7 @@ internal fun SessionScope.flushQueueMessagesFlow(): Flow<Chat.Service.FlushQueue
             listOf(it.presence.resource.address)
         },
         messageRepo.queuedListFlow().map { list ->
-            list.map { it.chatAddress }
+            list.map { it.chat }
         }
     ).flattenMerge().filter {
         isOmemoInitialized()

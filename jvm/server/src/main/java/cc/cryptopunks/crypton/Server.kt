@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.backend.BackendService
-import cc.cryptopunks.crypton.backend.RouteSys
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connection
@@ -23,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.net.InetSocketAddress
@@ -45,7 +45,7 @@ private val createConnectionFactory = SmackConnectionFactory {
 
 private val appScope: AppScope by lazy {
     AppModule(
-        sys = MockSys(createRouteSys = ::RouteSys),
+        sys = MockSys(),
         repo = MockRepo(),
         mainClass = Nothing::class,
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
@@ -58,25 +58,34 @@ private val appScope: AppScope by lazy {
 
 suspend fun startServer() = coroutineScope {
     initSmack(File("./omemo_store"))
-    startServerSocket().run {
+    startServerSocket().let { server ->
         val service = BackendService(appScope)
-        while (true) {
-            val socket = accept()
-            log.d("Socket accepted: ${socket.remoteAddress}")
-            service.tryConnectTo(socket)
+        launch {
+            while (true) {
+                val socket = server.accept()
+                log.d("Socket accepted: ${socket.remoteAddress}")
+                service.tryConnectTo(socket)
+            }
+        }.apply {
+            invokeOnCompletion {
+                log.d("close server $server")
+                server.close()
+            }
         }
     }
 }
 
 private fun startServerSocket(): ServerSocket =
-    aSocket(ActorSelectorManager(Dispatchers.IO))
+    aSocket(ActorSelectorManager(newSingleThreadContext("Server")))
         .tcp()
         .bind(InetSocketAddress("127.0.0.1", 2323))
         .apply { log.d("Started at $localAddress") }
 
-private fun BackendService.tryConnectTo(socket: Socket) = launch {
+private fun BackendService.tryConnectTo(socket: Socket) = let {
     try {
-        socket.connector(log).connect()
+        socket.connector(log).connect().apply {
+            invokeOnCompletion { socket.close() }
+        }
     } catch (e: Throwable) {
         e.printStackTrace()
         socket.close()
