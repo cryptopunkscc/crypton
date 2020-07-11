@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.*
 import android.widget.FrameLayout
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.iterator
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
@@ -55,16 +56,18 @@ class MessageView(
     override fun onCreateContextMenu(menu: ContextMenu) {
         MenuInflater(context).inflate(R.menu.message, menu)
         menu.setHeaderTitle(R.string.choose_option_label)
-            .findItem(R.id.copyToClipboard)
-            .setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.copyToClipboard -> Chat.Service.Copy(message!!)
-                    else -> null
-                }?.let {
-                    optionClicks.offer(it)
-                }
-                true
-            }
+        menu.iterator().forEach { it.setOnMenuItemClickListener(onMenuItemCharSequence) }
+    }
+
+    private val onMenuItemCharSequence = MenuItem.OnMenuItemClickListener { item ->
+        when (item.itemId) {
+            R.id.copyToClipboard -> Chat.Service.Copy(message!!)
+            R.id.delete -> Chat.Service.Delete(message!!)
+            else -> null
+        }?.let {
+            optionClicks.offer(it)
+            true
+        } ?: false
     }
 
     private fun setGravity(gravity: Int) = apply {

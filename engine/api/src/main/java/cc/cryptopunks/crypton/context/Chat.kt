@@ -36,6 +36,8 @@ data class Chat(
 
         data class Copy(val message: Message)
 
+        data class Delete(val message: Message)
+
         object GetPagedMessages
 
         data class SubscribePagedMessages(override val enable: Boolean) : Subscription

@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.context.createHandlers
 import cc.cryptopunks.crypton.handler.handleClearInfoMessages
 import cc.cryptopunks.crypton.handler.handleCopy
 import cc.cryptopunks.crypton.handler.handleCreateChat
+import cc.cryptopunks.crypton.handler.handleDeleteMessage
 import cc.cryptopunks.crypton.handler.handleEnqueueMessage
 import cc.cryptopunks.crypton.handler.handleGetMessages
 import cc.cryptopunks.crypton.handler.handleGetPagedMessages
@@ -37,6 +38,7 @@ fun ChatScope.chatHandlers() = createHandlers {
     +handleInvite()
     +handleSaveInfoMessage()
     +handleClearInfoMessages()
+    +handleDeleteMessage()
 }
 
 fun createChatService(scope: AppScope) = service(scope) {
