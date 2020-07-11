@@ -58,12 +58,19 @@ private val appScope: AppScope by lazy {
 
 suspend fun startServer() = coroutineScope {
     initSmack(File("./omemo_store"))
-    startServerSocket().run {
+    startServerSocket().let { server ->
         val service = BackendService(appScope)
-        while (true) {
-            val socket = accept()
-            log.d("Socket accepted: ${socket.remoteAddress}")
-            service.tryConnectTo(socket)
+        launch {
+            while (true) {
+                val socket = server.accept()
+                log.d("Socket accepted: ${socket.remoteAddress}")
+                service.tryConnectTo(socket)
+            }
+        }.apply {
+            invokeOnCompletion {
+                log.d("close server $server")
+                server.close()
+            }
         }
     }
 }
@@ -74,9 +81,11 @@ private fun startServerSocket(): ServerSocket =
         .bind(InetSocketAddress("127.0.0.1", 2323))
         .apply { log.d("Started at $localAddress") }
 
-private fun BackendService.tryConnectTo(socket: Socket) = launch {
+private fun BackendService.tryConnectTo(socket: Socket) = let {
     try {
-        socket.connector(log).connect()
+        socket.connector(log).connect().apply {
+            invokeOnCompletion { socket.close() }
+        }
     } catch (e: Throwable) {
         e.printStackTrace()
         socket.close()

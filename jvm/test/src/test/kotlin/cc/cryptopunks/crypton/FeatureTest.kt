@@ -44,16 +44,19 @@ class FeatureTest {
         @JvmStatic
         fun beforeAll() {
             section("STARTING SERVER")
-            server.start()
             runBlocking {
-                section("BEGIN CLEANING BEFORE TESTS")
-                listOf(
-                    launch { connectClient { tryRemoveAccount(address1, pass) } },
-                    launch { connectClient { tryRemoveAccount(address2, pass) } },
-                    launch { connectClient { tryRemoveAccount(address3, pass) } }
-                ).joinAll()
-                delay(1000)
-                section("END CLEANING BEFORE TESTS")
+                TestServer().apply {
+                    start()
+                    section("BEGIN CLEANING BEFORE TESTS")
+                    listOf(
+                        launch { connectClient { tryRemoveAccount(address1, pass) } },
+                        launch { connectClient { tryRemoveAccount(address2, pass) } },
+                        launch { connectClient { tryRemoveAccount(address3, pass) } }
+                    ).joinAll()
+                    section("END CLEANING BEFORE TESTS")
+                    stop()
+                    server.start()
+                }
             }
         }
 

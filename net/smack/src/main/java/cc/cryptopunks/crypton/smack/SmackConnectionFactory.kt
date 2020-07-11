@@ -11,13 +11,17 @@ import org.jivesoftware.smackx.omemo.signal.SignalOmemoService
 import java.io.File
 import java.net.InetAddress
 
+private var initialized = false
+
 fun initSmack(omemoStoreFile: File) {
+    if (initialized) return
     OmemoConfiguration.setRepairBrokenSessionsWithPrekeyMessages(true)
     SignalOmemoService.acknowledgeLicense()
     SignalOmemoService.setup()
     SignalOmemoService.getInstance().apply {
         omemoStoreBackend = SignalCachingOmemoStore(SignalFileBasedOmemoStore(omemoStoreFile))
     }
+    initialized = true
 }
 
 class SmackConnectionFactory(

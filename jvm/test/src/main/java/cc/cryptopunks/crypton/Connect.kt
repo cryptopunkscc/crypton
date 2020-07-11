@@ -4,8 +4,8 @@ import cc.cryptopunks.crypton.util.typedLog
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import java.net.InetSocketAddress
@@ -23,9 +23,10 @@ suspend fun Any.connectClient(
             .also { connector ->
                 ClientDsl(connector, log).apply {
                     block()
-                    coroutineContext.cancelChildren()
-                    cancel()
-                    delay(200)
+                    if (isActive) {
+                        cancel()
+                        delay(200)
+                    }
                 }
                 connector.close()
             }

@@ -69,6 +69,7 @@ class ExpectedTraffic(
                 is Throwable -> throw result.also {
                     it.printStackTrace()
                 }
+                is Boolean -> if (result) removeAt(0) else Unit
                 else -> throw Error("unknown result $result")
             }
         }

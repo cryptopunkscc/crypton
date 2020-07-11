@@ -36,7 +36,6 @@ private suspend fun client1() = Client1.connectClient {
         next<Account.Service.Connecting> {  }
         next<Account.Service.Connected> {  }
         next<Chat.Service.CreateChat> {  }
-        next<Chat.Service.CreateChat> {  }
         next<Chat.Service.ChatCreated> {  }
         next<Route.Chat> {  }
         next<Chat.Service.SubscribeLastMessage> {  }
@@ -69,7 +68,9 @@ private suspend fun client1() = Client1.connectClient {
     // but it does not matter, from user perspective there is no use case for that.
     delay(1000)
     sendMessage("yo", address1, address2)
-    expectReceived("yo yo", address1, address2)
+    waitFor<Chat.Service.Messages> {
+        list.any { it.text == "yo yo" }
+    }
     log.d("Stop client 1")
     delay(1000)
     printTraffic()
