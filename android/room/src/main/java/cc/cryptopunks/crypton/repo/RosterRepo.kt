@@ -2,15 +2,15 @@ package cc.cryptopunks.crypton.repo
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.entity.UserData
 import cc.cryptopunks.crypton.entity.user
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class UserRepo(
+internal class RosterRepo(
     private val dao: UserData.Dao
-) : User.Repo {
+) : Roster.Repo {
 
     override suspend fun insert(user: Address) =
         dao.insert(UserData(user.id))

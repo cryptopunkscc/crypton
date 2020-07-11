@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.data.Database
 import cc.cryptopunks.crypton.migrations
 import cc.cryptopunks.crypton.repo.ChatRepo
 import cc.cryptopunks.crypton.repo.MessageRepo
-import cc.cryptopunks.crypton.repo.UserRepo
+import cc.cryptopunks.crypton.repo.RosterRepo
 
 class RoomSessionRepo(
     context: Context,
@@ -44,8 +44,8 @@ class RoomSessionRepo(
             coroutineContext = queryContext
         )
 
-    override val userRepo: User.Repo =
-        UserRepo(
+    override val rosterRepo: Roster.Repo =
+        RosterRepo(
             dao = database.userDao
         )
 

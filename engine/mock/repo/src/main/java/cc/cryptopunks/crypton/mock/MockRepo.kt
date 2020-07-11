@@ -14,7 +14,7 @@ class MockSessionRepo : SessionRepo {
 
     override val chatRepo by lazy { MockChatRepo() }
     override val messageRepo by lazy { MockMessageRepo() }
-    override val userRepo by lazy { MockUserRepo() }
+    override val rosterRepo by lazy { MockRosterRepo() }
 
     class Factory : SessionRepo.Factory {
         override fun invoke(address: Address) = MockSessionRepo()

@@ -2,10 +2,10 @@ package cc.cryptopunks.crypton.mock
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.context.Roster
 import kotlinx.coroutines.flow.Flow
 
-class MockUserRepo : User.Repo {
+class MockRosterRepo : Roster.Repo {
 
     override suspend fun insert(user: Address) {
         TODO("Not yet implemented")
