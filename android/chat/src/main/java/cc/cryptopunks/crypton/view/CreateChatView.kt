@@ -58,9 +58,11 @@ class CreateChatView(context: Context) :
         }
     }
 
-    private fun createUserFromInput() = Chat.Service.CreateChat(
-        account = context.currentAccount,
-        chat = address(addressInputView.input.text.toString())
+    private fun createUserFromInput() = Chat.Service.Create(
+        Chat(
+            account = context.currentAccount,
+            address = address(addressInputView.input.text.toString())
+        )
     )
 
     private fun setError(throwable: Throwable?) {

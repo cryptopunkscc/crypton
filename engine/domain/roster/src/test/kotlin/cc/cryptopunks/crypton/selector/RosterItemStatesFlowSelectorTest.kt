@@ -72,7 +72,7 @@ class RosterItemStatesFlowSelectorTest {
                 title = addresses[it + 2].toString(),
                 address = addresses[it + 2],
                 account = addresses[it],
-                users = listOf(it, it + 2).map { User(addresses[it]) }
+                users = listOf(it, it + 2).map { addresses[it] }
             )
         }
 

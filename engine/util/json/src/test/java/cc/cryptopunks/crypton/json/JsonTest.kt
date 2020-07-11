@@ -18,8 +18,7 @@ class JsonTest {
         Chat(
             title = "title",
             address = address,
-            resource = Resource(address, "dupa"),
-            users = listOf(User(address))
+            users = listOf(address)
         ),
         Route.Back,
         Route.Chat(

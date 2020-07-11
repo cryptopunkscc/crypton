@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.paging.DataSource
 import androidx.room.*
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.context.address
@@ -49,7 +50,7 @@ internal data class ChatData(
     }
 }
 
-internal fun ChatData.toDomain(users: List<User> = emptyList()) =
+internal fun ChatData.toDomain(users: List<Address> = emptyList()) =
     Chat(
         title = title,
         address = address(id),
@@ -61,5 +62,5 @@ internal fun Chat.chatData() = ChatData(
     title = title,
     id = address.id,
     accountId = account.id,
-    isMultiUser = !isDirect
+    isMultiUser = isConference
 )

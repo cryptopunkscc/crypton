@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.chat_user_item.*
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class ChatUserListAdapter @Inject constructor() :
     RecyclerView.Adapter<ChatUserListAdapter.ViewHolder>() {
 
-    var users = emptyList<User>()
+    var users = emptyList<Address>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -34,14 +34,14 @@ class ChatUserListAdapter @Inject constructor() :
         RecyclerView.ViewHolder(containerView),
         LayoutContainer {
 
-        fun bind(user: User) {
-            userNameTextView.text = user.address.toString()
+        fun bind(user: Address) {
+            userNameTextView.text = user.toString()
         }
     }
 }
 
 suspend fun ChatUserListAdapter.bind(
-    flow: Flow<List<User>>
+    flow: Flow<List<Address>>
 ) = flow.collect {
     users = it
 }

@@ -29,11 +29,11 @@ internal class ChatNet(
         omemoManager.multiUserChatSupportsOmemo(mucManager.getMultiUserChat(address.entityBareJid()))
 
 
-    override fun createConversation(chat: Chat): Chat = smackCore.createMuc(chat)
+    override fun createConference(chat: Chat): Chat = smackCore.createMuc(chat)
 
     override fun mucInvitationsFlow(): Flow<Chat.Net.MucInvitation> = mucManager.invitationsFlow()
 
-    override fun joinMuc(address: Address, nickname: String) = mucManager.join(address, nickname)
+    override fun joinConference(address: Address, nickname: String) = mucManager.join(address, nickname)
 
 }
 
@@ -61,9 +61,9 @@ internal fun SmackCore.createMuc(
         )
 
         // invite users
-        chat.users.filterNot { it.address == chat.account }.forEach { user ->
+        chat.users.filterNot { it == chat.account }.forEach { user ->
             println("Muc inviting $user")
-            invite(JidCreate.entityBareFrom(user.address.id), "")
+            invite(JidCreate.entityBareFrom(user.id), "")
         }
     }
 }

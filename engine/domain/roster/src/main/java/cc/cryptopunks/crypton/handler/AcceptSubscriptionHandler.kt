@@ -9,21 +9,22 @@ import cc.cryptopunks.crypton.context.handle
 internal fun AppScope.handleSubscriptionAccept() =
     handle<Roster.Service.AcceptSubscription> {
         sessionStore.get()[account]?.run {
-            if (chatRepo.get(accepted).isDirect) {
-                sendPresence(
-                    Presence(
-                        resource = Resource(accepted),
-                        status = Presence.Status.Subscribed
+            when (chatRepo.get(accepted).isConference) {
+                true -> joinConference(accepted, account.local)
+                false -> {
+                    sendPresence(
+                        Presence(
+                            resource = Resource(accepted),
+                            status = Presence.Status.Subscribed
+                        )
                     )
-                )
-                sendPresence(
-                    Presence(
-                        resource = Resource(accepted),
-                        status = Presence.Status.Subscribe
+                    sendPresence(
+                        Presence(
+                            resource = Resource(accepted),
+                            status = Presence.Status.Subscribe
+                        )
                     )
-                )
-            } else {
-                joinMuc(accepted, account.local)
+                }
             }
         } ?: throw IllegalArgumentException("Invalid account $account")
     }

@@ -8,11 +8,9 @@ data class Chat(
     val title: String = "",
     val address: Address = Address.Empty,
     val account: Address = Address.Empty,
-    val resource: Resource = Resource.Empty,
-    val users: List<User> = emptyList(),
-    val isMuc: Boolean = false
+    val users: List<Address> = emptyList()
 ) {
-    val isDirect get() = !isMuc
+    val isConference = address.isConference
 
     companion object {
         val Empty = Chat()
@@ -55,6 +53,8 @@ data class Chat(
             val isMuc: Boolean = false
         )
 
+        data class Create(val chat: Chat)
+
         // output
 
         data class ChatCreated(val address: Address)
@@ -69,9 +69,9 @@ data class Chat(
 
     interface Net {
         fun supportEncryption(address: Address): Boolean
-        fun createConversation(chat: Chat): Chat
+        fun createConference(chat: Chat): Chat
         fun mucInvitationsFlow(): Flow<MucInvitation>
-        fun joinMuc(address: Address, nickname: String)
+        fun joinConference(address: Address, nickname: String)
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
@@ -102,7 +102,7 @@ data class Chat(
 
 suspend fun SessionScope.createChat(chat: Chat) {
     log.d("Creating $chat")
-    if (chat.isMuc) createConversation(chat)
+    if (chat.isConference) createConference(chat)
     log.d("Chat ${chat.address} with users ${chat.users} created")
     insertChat(chat)
 }
@@ -118,8 +118,7 @@ fun Chat.Service.CreateChat.asChat() =
         title = chat.local,
         address = chat,
         account = account,
-        isMuc = chat.isConference,
         users = if (!chat.isConference)
-            users.map(::User) + User(account) else
-            users.map(::User)
+            users + account else
+            users
     )

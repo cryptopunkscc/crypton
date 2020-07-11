@@ -41,7 +41,8 @@ val COMMANDS: Map<Route, Map<String, Any>> = mapOf(
         ),
         "chat" to mapOf(
             "to" to command(param()) { (address) ->
-                Chat.Service.CreateChat(address(account), Address.from(address))
+//                Chat.Service.CreateChat(address(account), Address.from(address))
+                Chat.Service.Create(Chat(address, address(address), address(account)))
             }
         )
     ),

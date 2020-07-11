@@ -7,10 +7,10 @@ class MockUserNet(
     private val state: MockState
 ) : User.Net {
 
-    override fun getContacts(): List<User> = state
+    override fun getContacts(): List<Address> = state
         .contacts.value.toList()
 
-    override fun addContact(user: User) = state {
+    override fun addContact(user: Address) = state {
         contacts { plus(user) }
     }
 

@@ -105,14 +105,14 @@ internal class ConnectionModule(
     override fun isAuthenticated() =
         connection.isAuthenticated
 
-    override fun getContacts(): List<User> = roster.entries.map { entry ->
-        User(address = entry.jid.address())
+    override fun getContacts(): List<Address> = roster.entries.map { entry ->
+        entry.jid.address()
     }
 
-    override fun addContact(user: User) {
+    override fun addContact(user: Address) {
         roster.createEntry(
-            user.address.entityBareJid(),
-            user.address.local,
+            user.entityBareJid(),
+            user.local,
             null
         )
     }
@@ -159,7 +159,7 @@ internal class ConnectionModule(
 
     override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
 
-    override fun createConversation(chat: Chat): Chat = smack.createMuc(chat)
+    override fun createConference(chat: Chat): Chat = smack.createMuc(chat)
 
     override fun mucInvitationsFlow() = mucManager.invitationsFlow()
 
