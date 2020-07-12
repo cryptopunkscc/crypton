@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -37,28 +36,6 @@ fun main() {
     TrustAllManager.install()
     runBlocking { startServer() }
 }
-
-
-private object Server
-
-private val log = Server.typedLog()
-
-private val createConnectionFactory = SmackConnectionFactory {
-    hostAddress = "127.0.0.1"
-    securityMode = Connection.Factory.Config.SecurityMode.disabled
-}
-
-private val appScope: AppScope
-    get() = AppModule(
-        sys = MockSys(),
-        repo = MockRepo(),
-        mainClass = Nothing::class,
-        ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
-        mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
-//        createConnection = MockConnectionFactory(),
-        createConnection = createConnectionFactory,
-        startSessionService = SessionScope::startSessionService
-    )
 
 suspend fun startServer() = coroutineScope {
     initSmack(File("./omemo_store"))
@@ -76,6 +53,27 @@ suspend fun startServer() = coroutineScope {
     }.collect { socket ->
         service.tryConnectTo(socket)
     }
+}
+
+private object Server
+
+private val log = Server.typedLog()
+
+private val appScope: AppScope
+    get() = AppModule(
+        sys = MockSys(),
+        repo = MockRepo(),
+        mainClass = Nothing::class,
+        ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
+        mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
+//        createConnection = MockConnectionFactory(),
+        createConnection = createConnectionFactory,
+        startSessionService = SessionScope::startSessionService
+    )
+
+private val createConnectionFactory = SmackConnectionFactory {
+    hostAddress = "127.0.0.1"
+    securityMode = Connection.Factory.Config.SecurityMode.disabled
 }
 
 private fun startServerSocket(): ServerSocket =

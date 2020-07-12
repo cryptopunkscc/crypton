@@ -49,10 +49,7 @@ class App :
                     )
                 )
             ),
-            createConnection = SmackConnectionFactory {
-//                hostAddress = "10.0.2.2"
-//                securityMode = Connection.Factory.Config.SecurityMode.disabled
-            },
+            createConnection = SmackConnectionFactory(setupSmackConnection),
             startSessionService = SessionScope::startSessionService
         )
     }

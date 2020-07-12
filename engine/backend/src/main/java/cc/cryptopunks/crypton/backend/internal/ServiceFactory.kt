@@ -15,8 +15,8 @@ import kotlinx.coroutines.runBlocking
 
 internal class ServiceFactory(
     private val appScope: AppScope
-) : (Route) -> Connectable? {
-    override fun invoke(route: Route): Connectable? = when (route) {
+) : (Route<*>) -> Connectable? {
+    override fun invoke(route: Route<*>): Connectable? = when (route) {
 
         Route.Main -> mainService(appScope)
 

@@ -42,8 +42,8 @@ class BackendService(
             }.onStart {
                 emit(Route.Main)
             }.map {
-                it as? Route ?: send(it)
-            }.filterIsInstance<Route>().fold(Actor.Empty) { old, route ->
+                it as? Route<*> ?: send(it)
+            }.filterIsInstance<Route<*>>().fold(Actor.Empty) { old, route ->
                 newActor().also { new -> backend.switchContext(route, old, new) }
             }
             backend.drop()
@@ -64,7 +64,7 @@ private class Proxy(
     ).actor()
 }
 
-private suspend fun Backend.switchContext(route: Route, old: Actor, new: Actor) {
+private suspend fun Backend.switchContext(route: Route<*>, old: Actor, new: Actor) {
     top()?.minus(old)
     when (route) {
         is Route.Back -> drop()

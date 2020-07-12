@@ -6,7 +6,7 @@ typealias TranslationContext = Context
 
 data class Context(
     val route: Route<*> = Route.Main,
-    val commands: Map<Route<*>, Map<String, Any>> = COMMANDS,
+    val commands: Map<Route<*>, Map<String, Any>> = cc.cryptopunks.crypton.commands,
     val account: String = "",
     val state: Any = Unit,
     val result: Any? = null
@@ -55,7 +55,7 @@ fun Context.anySuggestion(): Any? =
     state.let { state ->
         when (state) {
 
-            COMMANDS[route.empty()] == state -> Check.Prepared
+            cc.cryptopunks.crypton.commands[route.empty()] == state -> Check.Prepared
 
             is Command -> when {
 

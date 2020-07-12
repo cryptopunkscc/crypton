@@ -7,7 +7,9 @@ import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
-import cc.cryptopunks.crypton.service.chatService
+import cc.cryptopunks.crypton.service.chatHandlers
+import cc.cryptopunks.crypton.service.rosterHandlers
+import cc.cryptopunks.crypton.util.service
 import cc.cryptopunks.crypton.view.ChatView
 import kotlinx.coroutines.launch
 
@@ -22,11 +24,13 @@ class ChatFragment : ServiceFragment() {
             val accountAddress = args.account!!
             val chatAddress = args.chat!!
             setTitle(chatAddress)
-            binding + chatService(
+            binding + service(
                 scope = appScope
                     .sessionScope(accountAddress)
                     .chatScope(chatAddress)
-            )
+            ) {
+                chatHandlers() + rosterHandlers()
+            }
         }
     }
 

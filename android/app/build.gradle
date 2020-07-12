@@ -22,6 +22,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "host"
+    productFlavors {
+        remote {
+            dimension "host"
+        }
+        local {
+            dimension "host"
+            applicationIdSuffix ".local"
+            versionNameSuffix "-local"
+        }
+    }
     packagingOptions {
         exclude 'META-INF/core_debug.kotlin_module'
         exclude 'META-INF/core_release.kotlin_module'
