@@ -8,6 +8,8 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.mock.MockRepo
 import cc.cryptopunks.crypton.mock.MockSys
+import cc.cryptopunks.crypton.net.connect
+import cc.cryptopunks.crypton.net.startServerSocket
 import cc.cryptopunks.crypton.service.chatHandlers
 import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
@@ -27,7 +29,6 @@ fun main() {
     TrustAllManager.install()
     runBlocking { startCryptonServer() }
 }
-
 
 suspend fun startCryptonServer() {
     initSmack(File("./omemo_store"))

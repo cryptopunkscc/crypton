@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.net.connect
 import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.runBlocking
 import java.net.InetSocketAddress

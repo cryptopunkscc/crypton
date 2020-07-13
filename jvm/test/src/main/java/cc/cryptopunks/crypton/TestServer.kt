@@ -22,9 +22,9 @@ open class TestServer {
         TrustAllManager.install()
     }
 
-    fun start() = runBlocking{
+    fun start() = runBlocking {
         serverJob = scope.launch {
-            startServer()
+            startCryptonServer()
         }
         delay(1000)
     }

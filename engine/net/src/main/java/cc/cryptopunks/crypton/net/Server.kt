@@ -1,5 +1,6 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.net
 
+import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.util.TypedLog
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.ServerSocket
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.newSingleThreadContext
 import java.net.InetSocketAddress
 import kotlin.coroutines.CoroutineContext
-
 
 fun startServerSocket(
     address: InetSocketAddress,

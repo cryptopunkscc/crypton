@@ -11,7 +11,7 @@ fun main() {
     TrustAllManager.install()
     runBlocking {
         launch {
-            startServer()
+            startCryptonServer()
         }.also {
             testDirectMessaging()
         }.cancel()
