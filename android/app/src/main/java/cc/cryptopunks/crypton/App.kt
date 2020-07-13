@@ -8,8 +8,6 @@ import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.collect
-import cc.cryptopunks.crypton.context.handle
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.navigate.currentAccount

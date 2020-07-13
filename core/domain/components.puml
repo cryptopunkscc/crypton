@@ -1,0 +1,19 @@
+@startuml
+
+[:core:api]
+[:core:util:common]
+[:core:domain:session]
+[:core:domain:account]
+[:core:domain:chat]
+[:core:domain:navigation]
+[:core:domain:roster]
+
+[:core:util:common] --> [:core:api]
+[:core:domain:session] --> [:core:util:common]
+[:core:domain:navigation] --> [:core:util:common]
+[:core:domain:account] --> [:core:domain:navigation]
+[:core:domain:account] --> [:core:domain:session]
+[:core:domain:chat] --> [:core:domain:navigation]
+[:core:domain:roster] --> [:core:util:common]
+
+@enduml

@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.Actor
+import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.view.MessageView
@@ -34,8 +36,6 @@ class MessageAdapter(
     private val read = BroadcastChannel<Message>(Channel.BUFFERED)
 
     private var account = Address.Empty
-
-    private var actorStatus: Any = Actor.Stop
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 

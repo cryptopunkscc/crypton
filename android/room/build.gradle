@@ -32,7 +32,7 @@ dependencies {
     // TODO: Integrate database encryption
     // https://github.com/commonsguy/cwac-saferoom
     // implementation "com.commonsware.cwac:saferoom.x:1.2.1"
-    implementation project(':engine:api')
+    implementation project(':core:api')
     implementation deps.room.ktx
     kapt deps.room.compiler
     androidTestImplementation deps.test.core

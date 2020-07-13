@@ -1,8 +1,8 @@
 @startuml
 
-[:net:smack] --> [:engine:api]
+[:net:smack] --> [:core:api]
 
-[:android:app] --> [:engine:domain:app]
+[:android:app] --> [:core:domain:app]
 [:android:app] --> [:net:smack]
 [:android:app] --> [:android:room]
 [:android:app] --> [:android:dashboard]
@@ -11,23 +11,23 @@
 [:android:app] --> [:android:indicator]
 
 [:android:account] --> [:android:core]
-[:android:account] ---> [:engine:domain:account]
+[:android:account] ---> [:core:domain:account]
 
 [:android:chat] ---> [:android:core]
-[:android:chat] --> [:engine:domain:chat]
+[:android:chat] --> [:core:domain:chat]
 
 [:android:dashboard] --> [:android:roster]
-[:android:dashboard] --> [:engine:domain:dashboard]
+[:android:dashboard] --> [:core:domain:dashboard]
 
 [:android:roster] --> [:android:core]
-[:android:roster] --> [:engine:domain:chat]
+[:android:roster] --> [:core:domain:chat]
 
 [:android:indicator] ---> [:android:core]
 
-[:android:core] --> [:engine:domain:session]
-[:android:core] --> [:engine:domain:navigation]
+[:android:core] --> [:core:domain:session]
+[:android:core] --> [:core:domain:navigation]
 
-[:android:room] --> [:engine:api]
+[:android:room] --> [:core:api]
 
 
 

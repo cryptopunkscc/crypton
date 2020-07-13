@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.net.connector
 import cc.cryptopunks.crypton.util.typedLog
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket

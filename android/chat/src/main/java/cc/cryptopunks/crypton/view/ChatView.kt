@@ -8,22 +8,22 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.Check
-import cc.cryptopunks.crypton.TranslationContext
+import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Chat.Service.MessageText
 import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Connector
+import cc.cryptopunks.crypton.Handle
+import cc.cryptopunks.crypton.cli.context
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.prepare
-import cc.cryptopunks.crypton.translateMessageInput
+import cc.cryptopunks.crypton.translator.prepare
+import cc.cryptopunks.crypton.cli.translateMessageInput
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.util.typedLog
@@ -79,7 +79,7 @@ class ChatView(
                             getHitRect(rect)
                             child.getLocalVisibleRect(rect)
                         }.filterIsInstance<MessageView>().mapNotNull { it.message }.let {
-                            MessagesRead(it.toList())
+                            MessagesRead(it.toList()).out()
                         }
                     }
 
@@ -94,8 +94,8 @@ class ChatView(
                             displayNewMessageInfo()
                     }
 
-                    is Api.Error -> Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name)
-                        .out()
+                    is Handle.Error ->
+                        Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name).out()
 
                     else -> log.d(arg)
                 }
@@ -133,7 +133,7 @@ class ChatView(
         }
         launch {
             messageInputView.input.textChanges().debounce(100).translateMessageInput(
-                TranslationContext(
+                context(
                     route = Route.Chat(
                         account = account,
                         address = address

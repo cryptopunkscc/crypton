@@ -9,8 +9,8 @@ User can remove account from local application database.
 
 ## Modules
 ```
-:engine:api
-:engine:domain:account
+:core:api
+:core:domain:account
 :smack:net
 :android:room
 :android:account

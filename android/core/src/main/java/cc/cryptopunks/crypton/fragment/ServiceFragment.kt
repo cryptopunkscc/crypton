@@ -2,11 +2,11 @@ package cc.cryptopunks.crypton.fragment
 
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.context.Actor
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.service.ConnectableBuffer
-import cc.cryptopunks.crypton.service.createBinding
-import cc.cryptopunks.crypton.service.remove
+import cc.cryptopunks.crypton.Actor
+import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.ConnectableBuffer
+import cc.cryptopunks.crypton.createBinding
+import cc.cryptopunks.crypton.remove
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -20,7 +20,8 @@ abstract class ServiceFragment :
         runBlocking { appScope.connectableBindingsStore.createBinding() }
     }
 
-    protected val viewProxy = ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
+    protected val viewProxy =
+        ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

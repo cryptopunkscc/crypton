@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.widget
 import android.content.Context
 import android.view.View
 import android.widget.FrameLayout
-import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.Actor
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

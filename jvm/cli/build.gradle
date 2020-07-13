@@ -10,7 +10,7 @@ shadowJar {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation project(':engine:api')
-    implementation project(':jvm:common')
-    implementation project(':jvm:translator')
+    implementation project(':engine:net')
+    implementation project(':jvm:log')
+    implementation project(':core:cli')
 }

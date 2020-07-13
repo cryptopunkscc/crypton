@@ -1,4 +1,5 @@
 apply plugin: 'application'
+apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 mainClassName = "cc.cryptopunks.crypton.ServerKt"
@@ -17,11 +18,11 @@ compileTestKotlin {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api project(':engine:mock:repo')
-    api project(':engine:mock:net')
-    api project(':engine:mock:sys')
+    api project(':core:mock:repo')
+    api project(':core:mock:net')
+    api project(':core:mock:sys')
     api project(':net:smack:jvm')
-    api project(':engine:backend')
-    api project(':engine:util:json')
-    api project(':jvm:common')
+    api project(':core:backend')
+    implementation project(':engine:net')
+    api project(':jvm:log')
 }
