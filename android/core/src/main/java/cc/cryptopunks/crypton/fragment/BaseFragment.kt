@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.activity.BaseActivity
 
 abstract class BaseFragment : LoggerFragment() {
@@ -47,3 +48,8 @@ abstract class BaseFragment : LoggerFragment() {
             .commit()
     }
 }
+
+
+val Fragment.baseActivity get() = context as BaseActivity
+
+val Fragment.appScope get() = baseActivity.appScope

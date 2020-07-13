@@ -11,7 +11,6 @@ class MockConnection(
     private val state: MockState
 ) : Connection,
     Account.Net by MockAccountNet(),
-    User.Net by MockUserNet(state),
     Presence.Net by MockPresenceNet(state),
     Message.Net by MockMessageNet(state),
     Chat.Net by MockChatNet(state),

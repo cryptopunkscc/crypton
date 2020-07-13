@@ -2,46 +2,59 @@ package cc.cryptopunks.crypton.view
 
 import android.content.Context
 import android.graphics.Rect
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cc.cryptopunks.crypton.Check
+import cc.cryptopunks.crypton.TranslationContext
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Chat.Service.MessageText
 import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
-import cc.cryptopunks.crypton.context.Chat.Service.EnqueueMessage
 import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.prepare
+import cc.cryptopunks.crypton.translateMessageInput
 import cc.cryptopunks.crypton.util.bindings.clicks
-import cc.cryptopunks.crypton.util.ext.invokeOnClose
+import cc.cryptopunks.crypton.util.bindings.textChanges
+import cc.cryptopunks.crypton.util.typedLog
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
 class ChatView(
     context: Context,
+    private val account: Address,
     private val address: Address
 ) :
     ActorLayout(context),
     Message.Consumer {
+
+    private val log = typedLog()
 
     private val messageAdapter = MessageAdapter(coroutineContext)
 
     private val scrollThreshold: Int = context.resources.displayMetrics.run {
         scaledDensity * SCROLL_THRESHOLD_DP
     }.toInt()
+
+    private var command: Any? = null
 
     init {
         View.inflate(context, R.layout.chat, this)
@@ -59,6 +72,7 @@ class ChatView(
         launch {
             input.collect { arg ->
                 when (arg) {
+
                     is Actor.Start -> chatRecyclerView.run {
                         val rect = Rect()
                         children.filter { child ->
@@ -68,7 +82,9 @@ class ChatView(
                             MessagesRead(it.toList())
                         }
                     }
+
                     is MessageText -> messageInputView.input.setText(arg.text)
+
                     is PagedMessages -> {
                         messageAdapter.setMessages(arg)
                         val wasBottomReached = isBottomReached()
@@ -77,22 +93,63 @@ class ChatView(
                             scrollToNewMessage() else
                             displayNewMessageInfo()
                     }
+
+                    is Api.Error -> Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name)
+                        .out()
+
+                    else -> log.d(arg)
                 }
             }
         }
         launch {
             flowOf(
                 messageAdapter.outputFlow(),
-                messageInputView.button.clicks().map { EnqueueMessage(getInputAndClear()) }
+                messageInputView.button.clicks().mapNotNull {
+                    when (command) {
+                        is Check.Suggest ->
+                            Toast.makeText(
+                                context,
+                                command.toString(),
+                                Toast.LENGTH_SHORT
+                            ).run {
+                                setGravity(
+                                    Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+                                    0, IntArray(2).also {
+                                        messageInputView.getLocationInWindow(it)
+                                    }[1] - messageInputView.measuredHeight
+                                )
+                                show()
+                                null
+                            }
+
+                        else -> {
+                            if (command != null) getInputAndClear()
+                            command
+                        }
+                    }
+                }
             ).flattenMerge()
                 .collect(output)
+        }
+        launch {
+            messageInputView.input.textChanges().debounce(100).translateMessageInput(
+                TranslationContext(
+                    route = Route.Chat(
+                        account = account,
+                        address = address
+                    )
+                ).prepare()
+            ).collect {
+                command = it
+            }
         }
         launch {
             delay(5)
             Chat.Service.GetPagedMessages.out()
             Chat.Service.SubscribePagedMessages(true).out()
         }
-        invokeOnClose {
+    }.apply {
+        invokeOnCompletion {
             messageAdapter.setMessages(null)
         }
     }

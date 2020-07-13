@@ -5,14 +5,12 @@ import androidx.paging.PagedList
 import kotlinx.coroutines.flow.Flow
 
 data class Chat(
-    val title: String = "",
     val address: Address = Address.Empty,
     val account: Address = Address.Empty,
-    val resource: Resource = Resource.Empty,
-    val users: List<User> = emptyList(),
-    val isMuc: Boolean = false
+    val users: List<Address> = emptyList(),
+    val title: String = ""
 ) {
-    val isDirect get() = !isMuc
+    val isConference = address.isConference
 
     companion object {
         val Empty = Chat()
@@ -28,11 +26,17 @@ data class Chat(
 
         data class EnqueueMessage(val text: String)
 
+        data class InfoMessage(val text: String)
+
+        object ClearInfoMessages
+
         data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
 
         data class UpdateNotification(val messages: List<Message>)
 
         data class Copy(val message: Message)
+
+        data class Delete(val message: Message)
 
         object GetPagedMessages
 
@@ -48,16 +52,13 @@ data class Chat(
 
         data class GetMessages(val address: Address? = null)
 
-        data class CreateChat(
-            val account: Address,
-            val chat: Address,
-            val users: List<Address> = listOf(chat),
-            val isMuc: Boolean = false
-        )
+        data class Create(val chat: Chat)
+
+        data class Invite(val users: List<Address>, val chat: Address = Address.Empty)
 
         // output
 
-        data class ChatCreated(val address: Address)
+        data class ChatCreated(val chat: Address)
 
         data class MessageText(val text: CharSequence?)
 
@@ -69,16 +70,17 @@ data class Chat(
 
     interface Net {
         fun supportEncryption(address: Address): Boolean
-        fun createConversation(chat: Chat): Chat
-        fun mucInvitationsFlow(): Flow<MucInvitation>
-        fun joinMuc(address: Address, nickname: String)
+        fun createConference(chat: Chat): Chat
+        fun inviteToConference(chat: Address, users: List<Address>)
+        fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
+        fun joinConference(address: Address, nickname: String)
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
 
         interface EventFlow : Flow<Event>
 
-        data class MucInvitation(
+        data class ConferenceInvitation(
             val address: Address,
             val inviter: Resource,
             val reason: String?,
@@ -102,7 +104,7 @@ data class Chat(
 
 suspend fun SessionScope.createChat(chat: Chat) {
     log.d("Creating $chat")
-    if (chat.isMuc) createConversation(chat)
+    if (chat.isConference) createConference(chat)
     log.d("Chat ${chat.address} with users ${chat.users} created")
     insertChat(chat)
 }
@@ -112,14 +114,3 @@ suspend fun SessionScope.insertChat(chat: Chat) {
     chatRepo.insertIfNeeded(chat)
     log.d("Chat ${chat.address} with users ${chat.users} Inserted")
 }
-
-fun Chat.Service.CreateChat.asChat() =
-    Chat(
-        title = chat.local,
-        address = chat,
-        account = account,
-        isMuc = chat.isConference,
-        users = if (!chat.isConference)
-            users.map(::User) + User(account) else
-            users.map(::User)
-    )

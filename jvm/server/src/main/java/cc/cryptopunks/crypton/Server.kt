@@ -1,12 +1,14 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.backend.BackendService
+import cc.cryptopunks.crypton.backend.internal.mainHandlers
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.mock.MockRepo
 import cc.cryptopunks.crypton.mock.MockSys
+import cc.cryptopunks.crypton.service.chatHandlers
 import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
@@ -20,8 +22,12 @@ import io.ktor.network.sockets.Socket
 import io.ktor.network.sockets.aSocket
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -33,46 +39,44 @@ fun main() {
     runBlocking { startServer() }
 }
 
+suspend fun startServer() = coroutineScope {
+    initSmack(File("./omemo_store"))
+    val service = BackendService(appScope)
+    val server = startServerSocket()
+    flow {
+        while (true) emit(server.accept())
+    }.onCompletion { throwable ->
+        log.d("close server $server $throwable")
+        service.cancel("Server close", throwable)
+        service.appScope.cancel("Server close", throwable)
+        server.close()
+    }.onEach { socket ->
+        log.d("Socket accepted: ${socket.remoteAddress}")
+    }.collect { socket ->
+        service.tryConnectTo(socket)
+    }
+}
 
 private object Server
 
 private val log = Server.typedLog()
 
-private val createConnectionFactory = SmackConnectionFactory {
-    hostAddress = "127.0.0.1"
-    securityMode = Connection.Factory.Config.SecurityMode.disabled
-}
-
-private val appScope: AppScope by lazy {
-    AppModule(
+private val appScope: AppScope
+    get() = AppModule(
         sys = MockSys(),
         repo = MockRepo(),
         mainClass = Nothing::class,
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
-//        createConnection = MockConnectionFactory(),
         createConnection = createConnectionFactory,
-        startSessionService = SessionScope::startSessionService
+        startSessionService = SessionScope::startSessionService,
+        mainHandlers = mainHandlers,
+        chatHandlers = chatHandlers
     )
-}
 
-suspend fun startServer() = coroutineScope {
-    initSmack(File("./omemo_store"))
-    startServerSocket().let { server ->
-        val service = BackendService(appScope)
-        launch {
-            while (true) {
-                val socket = server.accept()
-                log.d("Socket accepted: ${socket.remoteAddress}")
-                service.tryConnectTo(socket)
-            }
-        }.apply {
-            invokeOnCompletion {
-                log.d("close server $server")
-                server.close()
-            }
-        }
-    }
+private val createConnectionFactory = SmackConnectionFactory {
+    hostAddress = "127.0.0.1"
+    securityMode = Connection.Factory.Config.SecurityMode.disabled
 }
 
 private fun startServerSocket(): ServerSocket =

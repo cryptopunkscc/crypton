@@ -7,7 +7,6 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.User
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.ChatNet
@@ -105,14 +104,14 @@ internal class ConnectionModule(
     override fun isAuthenticated() =
         connection.isAuthenticated
 
-    override fun getContacts(): List<User> = roster.entries.map { entry ->
-        User(address = entry.jid.address())
+    override fun getContacts(): List<Address> = roster.entries.map { entry ->
+        entry.jid.address()
     }
 
-    override fun addContact(user: User) {
+    override fun addContact(user: Address) {
         roster.createEntry(
-            user.address.entityBareJid(),
-            user.address.local,
+            user.entityBareJid(),
+            user.local,
             null
         )
     }
@@ -159,9 +158,9 @@ internal class ConnectionModule(
 
     override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
 
-    override fun createConversation(chat: Chat): Chat = smack.createMuc(chat)
+    override fun createConference(chat: Chat): Chat = smack.createMuc(chat)
 
-    override fun mucInvitationsFlow() = mucManager.invitationsFlow()
+    override fun conferenceInvitationsFlow() = mucManager.invitationsFlow()
 
 
     override fun getCachedPresences(): List<Presence> = roster.run {

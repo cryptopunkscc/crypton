@@ -6,7 +6,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
@@ -48,10 +50,30 @@ interface Actor : Connectable {
     }
 }
 
+fun Connectable.dispatch(
+    vararg args: Any,
+    output: suspend (Any) -> Unit = {}
+) = connector(args, output).connect()
+
+fun Any.connector(
+    output: suspend (Any) -> Unit = {}
+) = Connector(
+    input = flowOf(this),
+    output = output
+)
+
+fun connector(
+    vararg args: Any,
+    output: suspend (Any) -> Unit = {}
+) = Connector(
+    input = args.asFlow(),
+    output = output
+)
+
 data class Connector(
     val input: Flow<Any>,
-    val output: suspend (Any) -> Unit,
-    val close: () -> Unit = {}
+    val close: () -> Unit = {},
+    val output: suspend (Any) -> Unit = {}
 ) {
     suspend fun Any.out() = output(this)
 }

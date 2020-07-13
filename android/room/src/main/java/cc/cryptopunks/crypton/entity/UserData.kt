@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.User
+import cc.cryptopunks.crypton.context.address
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
@@ -35,10 +34,4 @@ internal data class UserData(
     }
 }
 
-internal fun UserData.user() = User(
-    address = Address.from(id)
-)
-
-internal fun User.userData() = UserData(
-    id = address.id
-)
+internal fun UserData.user() = address(id)

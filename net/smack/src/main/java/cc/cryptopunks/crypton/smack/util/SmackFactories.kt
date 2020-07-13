@@ -52,9 +52,7 @@ internal fun Resource.entityFullJid() = JidCreate.entityFullFrom(toString())
 
 
 internal fun MultiUserChat.toChat(account: Address) = Chat(
-    title = room.toString(),
     account = account,
     address = room.resource().address,
-    resource = room.resource(),
-    users = this.members.map { User(it.jid.resource().address) }
+    users = this.members.map { it.jid.resource().address }
 )

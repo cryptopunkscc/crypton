@@ -22,7 +22,7 @@ class Backend(
 
     private val stack: Store<List<Context>> = Store(emptyList())
 
-    val request: (Route) -> Connectable.Binding = requestBindingInteractor(
+    val request: (Route<*>) -> Connectable.Binding = requestBindingInteractor(
         createService = ServiceFactory(this),
         createBinding = ConnectableBindingFactory(
             bindingStore = connectableBindingsStore,

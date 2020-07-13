@@ -6,37 +6,30 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Route.Chat
 import cc.cryptopunks.crypton.context.createHandlers
 import cc.cryptopunks.crypton.service.accountHandlers
-import cc.cryptopunks.crypton.service.chatService
 import cc.cryptopunks.crypton.service.createChatHandlers
 import cc.cryptopunks.crypton.service.rosterHandlers
-import cc.cryptopunks.crypton.util.service
+import cc.cryptopunks.crypton.util.HandlerRegistryFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 internal class ServiceFactory(
     private val appScope: AppScope
-) : (Route) -> Connectable? {
-    override fun invoke(route: Route): Connectable? = when (route) {
+) : (Route<*>) -> Connectable? {
+    override fun invoke(route: Route<*>): Connectable? = when (route) {
 
-        Route.Main -> mainService(appScope)
+        Route.Main -> appScope
 
-        is Chat -> chatService(
-            scope = runBlocking {
-                delay(100)
-                appScope.sessionScope(
-                    address = route.account
-                ).run {
-                    chatScope(chatRepo.get(route.address))
-                }
-            }
-        )
+        is Chat -> runBlocking {
+            delay(100)
+            appScope.sessionScope(route.account).chatScope(route.address)
+        }
 
         else -> null
     }
 }
 
 
-private fun mainService(scope: AppScope) = service(scope) {
+val mainHandlers: HandlerRegistryFactory<AppScope> = {
     createHandlers {
         +accountHandlers()
         +rosterHandlers()

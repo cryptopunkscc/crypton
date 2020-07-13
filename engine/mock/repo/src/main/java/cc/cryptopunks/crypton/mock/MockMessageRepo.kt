@@ -55,11 +55,19 @@ class MockMessageRepo : Message.Repo {
         store.reduce { minus(message.id) }
     }
 
+    override suspend fun delete(messages: List<Message>) {
+        messages.forEach { message -> delete(message) }
+    }
+
     override suspend fun listUnread(): List<Message> =
         store.get().values.filter { it.isUnread }.sortedBy { it.timestamp }
 
     override suspend fun list(range: LongRange): List<Message> =
         store.get().values.toList()
+
+    override suspend fun list(chat: Address, status: Message.Status): List<Message> {
+        TODO("Not yet implemented")
+    }
 
     override fun flowLatest(chatAddress: Address?): Flow<Message> =
         latest.asFlow().run {

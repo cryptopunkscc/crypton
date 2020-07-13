@@ -74,6 +74,9 @@ internal data class MessageData(
         @Query("select * from message where timestamp <= :latest and timestamp >= :oldest")
         suspend fun list(latest: Long, oldest: Long): List<MessageData>
 
+        @Query("select * from message where chatId == :chat and status == :status")
+        suspend fun list(chat: AddressData, status: String): List<MessageData>
+
         @Query("select * from message where readAt == 0")
         fun flowUnreadList(): Flow<List<MessageData>>
 

@@ -28,9 +28,11 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':android:widget')
+    implementation project(':jvm:translator')
     api project(':android:core')
     api project(':android:notification')
-    api project(':engine:domain:chat')
+//    api project(':engine:domain:chat')
+//    api project(':engine:domain:roster')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

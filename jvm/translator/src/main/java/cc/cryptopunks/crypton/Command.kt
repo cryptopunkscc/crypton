@@ -15,11 +15,11 @@ fun Command.emptyParams() =
 
 fun command(
     vararg params: Input,
-    f: Context.(List<String>) -> Any
+    run: Context.(List<String>) -> Any
 ) = Command(
     params = params.toList(),
     args = emptyList(),
-    run = f,
+    run = run,
     input = emptyList()
 )
 

@@ -46,16 +46,14 @@ class MockState(
             "user1@cryptopunks.mock",
             "user2@cryptopunks.mock"
         ).map {
-            User(Address.from(it))
+            address(it)
         }
 
         val chats = contacts.map {
             Chat(
-                title = it.address.toString(),
-                address = it.address,
+                address = it,
                 account = account,
-                resource = Resource(it.address, "mock"),
-                users = listOf(it, User(account))
+                users = listOf(it, account)
             )
         }
 
@@ -68,7 +66,7 @@ class MockState(
                     id = messageText + chat.address,
                     stanzaId = messageText + chat.address,
                     chat = chat.address,
-                    from = chat.resource,
+                    from = Resource(chat.address),
                     to = Resource(account, "mock"),
                     status = Message.Status.Read,
                     notifiedAt = 0,

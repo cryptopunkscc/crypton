@@ -35,7 +35,7 @@ private suspend fun client1() = Client1.connectClient {
         next<Account.Service.Register> {  }
         next<Account.Service.Connecting> {  }
         next<Account.Service.Connected> {  }
-        next<Chat.Service.CreateChat> {  }
+        next<Chat.Service.Create> {  }
         next<Chat.Service.ChatCreated> {  }
         next<Route.Chat> {  }
         next<Chat.Service.SubscribeLastMessage> {  }

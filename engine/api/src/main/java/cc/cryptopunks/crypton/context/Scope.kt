@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.util.Executors
+import cc.cryptopunks.crypton.util.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.OpenStore
 import cc.cryptopunks.crypton.util.TypedLog
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +19,8 @@ interface AppScope :
     BaseScope,
     Executors,
     Sys,
-    Repo {
+    Repo,
+    Connectable {
 
     val mainClass: KClass<*>
 
@@ -26,8 +28,11 @@ interface AppScope :
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
 
-    val startSessionService: (SessionScope) -> Job
+    val startSessionService: SessionScope.() -> Job
     val createConnection: Connection.Factory
+
+    val mainHandlers: HandlerRegistryFactory<AppScope>
+    val chatHandlers: HandlerRegistryFactory<ChatScope>
 
     fun sessionScope(): SessionScope
     fun sessionScope(address: Address): SessionScope

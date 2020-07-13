@@ -42,7 +42,7 @@ class CreateChatView(context: Context) :
             input.filterIsInstance<Chat.Service.ChatCreated>().collect { created ->
                 findNavController().navigateChat(
                     account = context.currentAccount,
-                    chat = created.address
+                    chat = created.chat
                 )
             }
         }
@@ -58,9 +58,11 @@ class CreateChatView(context: Context) :
         }
     }
 
-    private fun createUserFromInput() = Chat.Service.CreateChat(
-        account = context.currentAccount,
-        chat = address(addressInputView.input.text.toString())
+    private fun createUserFromInput() = Chat.Service.Create(
+        Chat(
+            account = context.currentAccount,
+            address = address(addressInputView.input.text.toString())
+        )
     )
 
     private fun setError(throwable: Throwable?) {

@@ -7,9 +7,7 @@ import cc.cryptopunks.crypton.entity.ChatData
 import cc.cryptopunks.crypton.entity.ChatUserData
 import cc.cryptopunks.crypton.entity.UserData
 import cc.cryptopunks.crypton.entity.chatData
-import cc.cryptopunks.crypton.entity.chatUserData
 import cc.cryptopunks.crypton.entity.toDomain
-import cc.cryptopunks.crypton.entity.userData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -44,12 +42,15 @@ internal class ChatRepo(
     private suspend fun Chat.insertUsersIfNeeded() {
         userDao.insertIfNeeded(
             list = users.map { user ->
-                user.userData()
+                UserData(user.id)
             }
         )
         chatUserDao.insertIfNeeded(
             list = users.map { user ->
-                user.chatUserData(chatId = address.id)
+                ChatUserData(
+                    id = user.id,
+                    chatId = address.id
+                )
             }
         )
     }

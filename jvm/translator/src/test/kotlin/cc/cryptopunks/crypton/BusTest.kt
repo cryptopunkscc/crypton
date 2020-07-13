@@ -16,7 +16,7 @@ class BusTest {
                 listOf(listOf("0", "1")),
                 listOf("cmd0 0 1")
                     .asFlow()
-                    .translate(Context(state = TEST_COMMANDS))
+                    .translateCli(Context(state = TEST_COMMANDS))
                     .toList()
             )
         }
@@ -35,7 +35,7 @@ class BusTest {
                 ),
                 listOf("cmd1", "subCmd0", "arg1 1", "arg0", "0")
                     .asFlow()
-                    .translate(Context(state = TEST_COMMANDS))
+                    .translateCli(Context(state = TEST_COMMANDS))
                     .toList()
             )
         }
@@ -47,7 +47,7 @@ class BusTest {
             assertTrue(
                 listOf("uknown", "comand", "foo", "bar")
                     .asFlow()
-                    .translate(Context(state = TEST_COMMANDS))
+                    .translateCli(Context(state = TEST_COMMANDS))
                     .onEach { println(it) }
                     .toList()
                     .all { it is IllegalStateException }

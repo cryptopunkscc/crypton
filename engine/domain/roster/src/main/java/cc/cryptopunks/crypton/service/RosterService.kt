@@ -6,17 +6,15 @@ import cc.cryptopunks.crypton.context.createHandlers
 import cc.cryptopunks.crypton.handler.handleGetRosterItems
 import cc.cryptopunks.crypton.handler.handleRosterItemsSubscription
 import cc.cryptopunks.crypton.handler.handleSubscriptionAccept
+import cc.cryptopunks.crypton.util.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.Store
-import cc.cryptopunks.crypton.util.service
 
-fun rosterService(scope: AppScope) = service(scope) {
-    rosterHandlers()
-}
+val rosterHandlers: HandlerRegistryFactory<AppScope> = {
+    createHandlers {
+        val store = Store(Roster.Service.Items(emptyList()))
 
-fun AppScope.rosterHandlers() = createHandlers {
-    val store = Store(Roster.Service.Items(emptyList()))
-
-    +handleGetRosterItems(store)
-    +handleRosterItemsSubscription(store)
-    +handleSubscriptionAccept()
+        +handleGetRosterItems(store)
+        +handleRosterItemsSubscription(store)
+        +handleSubscriptionAccept()
+    }
 }

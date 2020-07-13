@@ -13,25 +13,23 @@ import cc.cryptopunks.crypton.handler.handleRegisterAccount
 import cc.cryptopunks.crypton.handler.handleRemove
 import cc.cryptopunks.crypton.handler.handleSetField
 import cc.cryptopunks.crypton.model.Form
+import cc.cryptopunks.crypton.util.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.Store
-import cc.cryptopunks.crypton.util.service
 
-fun accountService(scope: AppScope) = service(scope) {
-    scope.log.d("Init account service")
-    accountHandlers()
-}
+val accountHandlers: HandlerRegistryFactory<AppScope> = {
+    log.d("Init account service")
+    createHandlers {
+        val form = Form()
+        val lastAccounts = Store(Account.Service.Accounts(emptyList()))
 
-fun AppScope.accountHandlers() = createHandlers {
-    val form = Form()
-    val lastAccounts = Store(Account.Service.Accounts(emptyList()))
-
-    +handleSetField(form)
-    +handleRegisterAccount(form)
-    +handleAddAccount(form)
-    +handleLogin(form)
-    +handleLogout()
-    +handleEnableAccount()
-    +handleRemove()
-    +handleGetAccountList(lastAccounts)
-    +handleAccountListSubscription(lastAccounts)
+        +handleSetField(form)
+        +handleRegisterAccount(form)
+        +handleAddAccount(form)
+        +handleLogin(form)
+        +handleLogout()
+        +handleEnableAccount()
+        +handleRemove()
+        +handleGetAccountList(lastAccounts)
+        +handleAccountListSubscription(lastAccounts)
+    }
 }

@@ -3,8 +3,8 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import cc.cryptopunks.crypton.activity.MainActivity
+import cc.cryptopunks.crypton.backend.internal.mainHandlers
 import cc.cryptopunks.crypton.context.AppModule
-import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.SessionScope
@@ -14,6 +14,7 @@ import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.selector.newSessionsFlow
+import cc.cryptopunks.crypton.service.chatHandlers
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.service.startSessionService
@@ -49,11 +50,10 @@ class App :
                     )
                 )
             ),
-            createConnection = SmackConnectionFactory {
-//                hostAddress = "10.0.2.2"
-//                securityMode = Connection.Factory.Config.SecurityMode.disabled
-            },
-            startSessionService = SessionScope::startSessionService
+            createConnection = SmackConnectionFactory(setupSmackConnection),
+            startSessionService = SessionScope::startSessionService,
+            mainHandlers = mainHandlers,
+            chatHandlers = chatHandlers
         )
     }
 

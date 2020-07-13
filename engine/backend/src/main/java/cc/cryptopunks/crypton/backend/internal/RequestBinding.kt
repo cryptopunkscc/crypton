@@ -4,9 +4,9 @@ import cc.cryptopunks.crypton.context.Connectable
 import cc.cryptopunks.crypton.context.Route
 
 internal fun requestBindingInteractor(
-    createService: (Route) -> Connectable?,
+    createService: (Route<*>) -> Connectable?,
     createBinding: ConnectableBindingFactory
-): (Route) -> Connectable.Binding = { route ->
+): (Route<*>) -> Connectable.Binding = { route ->
     createBinding(route).apply {
         if (services.isEmpty()) plus(createService(route))
     }

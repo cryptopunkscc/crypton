@@ -161,7 +161,7 @@ private suspend fun client3() = Client3.connectClient {
         }
     }
 
-    send(Chat.Service.CreateChat(address3, chatAddress, listOf(address1, address2)))
+    send(Chat.Service.Create(Chat(chatAddress, address3, listOf(address1, address2))))
     waitFor<Roster.Service.Items> {
         list.any {
             it.chatAddress == chatAddress

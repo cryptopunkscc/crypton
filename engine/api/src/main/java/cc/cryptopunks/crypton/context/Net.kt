@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface Net :
     Account.Net,
-    User.Net,
     Presence.Net,
     Message.Net,
     Chat.Net,

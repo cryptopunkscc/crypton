@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.service.accountService
 import cc.cryptopunks.crypton.view.AccountListView
 
 
@@ -22,9 +21,6 @@ class AccountListFragment : ServiceFragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-
-    override fun onCreateService() =
-        accountService(appScope)
 
     override fun onCreateView(
         inflater: LayoutInflater,

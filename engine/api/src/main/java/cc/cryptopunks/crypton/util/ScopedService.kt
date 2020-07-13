@@ -11,11 +11,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-fun <T : BaseScope> service(
-    scope: T,
-    createRegistry: T.() -> HandlerRegistry
+fun <T : BaseScope> T.service(
+    createRegistry: HandlerRegistryFactory<T>
 ): Connectable =
-    ScopedService(scope, scope.createRegistry())
+    ScopedService(this, createRegistry())
+
+typealias HandlerRegistryFactory<T> = T.() -> HandlerRegistry
 
 private data class ScopedService(
     val scope: BaseScope,

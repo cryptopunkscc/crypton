@@ -1,8 +1,12 @@
 package cc.cryptopunks.crypton.entity
 
-import androidx.room.*
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.User
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import cc.cryptopunks.crypton.context.address
 
 @Entity(
     tableName = "chatUser",
@@ -51,11 +55,4 @@ internal data class ChatUserData(
     }
 }
 
-internal fun ChatUserData.user() = User(
-    address = Address.from(id)
-)
-
-internal fun User.chatUserData(chatId: AddressData) = ChatUserData(
-    chatId = chatId,
-    id = address.id
-)
+internal fun ChatUserData.user() = address(id)

@@ -16,13 +16,11 @@ internal fun ChatScope.handleEnqueueMessage() =
     }
 
 private fun Chat.createQueuedMessage(text: String) =
-    System.currentTimeMillis().let { timestamp ->
-        Message(
-            text = text,
-            from = Resource(account),
-            to = Resource(address),
-            status = Message.Status.Queued,
-            chat = address,
-            timestamp = timestamp
-        ).calculateId()
-    }
+    Message(
+        text = text,
+        from = Resource(account),
+        to = Resource(address),
+        status = Message.Status.Queued,
+        chat = address,
+        timestamp = System.currentTimeMillis()
+    ).calculateId()
