@@ -14,8 +14,8 @@ Creating chat is required for sending direct messages
 
 ## Modules
 ```
-:engine:api
-:engine:domain:chat
+:core:api
+:core:domain:chat
 :android:chat
 :android:room
 :net:smack

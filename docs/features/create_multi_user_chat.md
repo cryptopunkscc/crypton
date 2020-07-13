@@ -13,8 +13,8 @@ Creating multi user chat allows to share messages with many users in one chat sc
 
 ## Modules
 ```
-:engine:api
-:engine:domain:chat
+:core:api
+:core:domain:chat
 :android:chat
 :android:room
 :net:smack

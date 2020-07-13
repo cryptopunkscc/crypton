@@ -11,8 +11,8 @@ This is key access feature to other features in application.
 
 ## Modules
 ```
-:engine:api
-:engine:domain:account
+:core:api
+:core:domain:account
 :net:smack
 :android:room
 :android:account

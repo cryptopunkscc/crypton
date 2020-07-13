@@ -8,8 +8,8 @@ todo
 
 ## Modules
 ```
-:engine:api
-:engine:domain:
+:core:api
+:core:domain:
 :android:
 ```
 

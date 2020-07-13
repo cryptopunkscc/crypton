@@ -1,4 +1,4 @@
-## `:engine:api`
+## `:core:api`
 A central part of application. 
 Mostly pure structures, constants and interfaces.
 It contains definition of: 
@@ -15,21 +15,21 @@ It contains definition of:
 Some of them are technically not important from client perspective, but it was early design decision to keep data 
 with abstraction together. May be improved in the future.
  
-## `:engine:domain`
+## `:core:domain`
 Bundle of feature specific modules. 
 The role for them is to cover crypton API with business logic implementation.
 Should be implemented using functions as it defines interactions, not data.
 
-## `:engine:backend`
+## `:core:backend`
 Manage access to domain services through two related parts:
 * Backend - Aggregates set of interactions for domain services management.
 * BackendService - Is connectable wrapper-adapter for backend. Can be connected to clients.
 
-## `:engine:util`
+## `:core:util`
 Bundle of non domain, non platform specific adapters and libs.
 
-## `:engine:mock`
-Should contain reusable mock implementations of repositories, network api and system interfaces specified in `:engine:api`
+## `:core:mock`
+Should contain reusable mock implementations of repositories, network api and system interfaces specified in `:core:api`
 
 ## `:jvm`
 JVM specific implementations except smack adapter. which is specified in `:net:smack` and provided by `:net:smack:jvm` module

@@ -31,8 +31,8 @@ dependencies {
     implementation project(':jvm:translator')
     api project(':android:core')
     api project(':android:notification')
-//    api project(':engine:domain:chat')
-//    api project(':engine:domain:roster')
+//    api project(':core:domain:chat')
+//    api project(':core:domain:roster')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

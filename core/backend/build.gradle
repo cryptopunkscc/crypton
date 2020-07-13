@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api project(':core:domain:app')
+    api project(':core:domain:session')
+    api project(':core:domain:account')
+    api project(':core:domain:chat')
+    api project(':core:domain:roster')
+}

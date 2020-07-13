@@ -61,9 +61,9 @@ android {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':engine:api')
-    implementation project(':engine:backend')
-    implementation project(':engine:mock:net')
+    implementation project(':core:api')
+    implementation project(':core:backend')
+    implementation project(':core:mock:net')
     implementation project(':net:smack:android')
     implementation project(':android:room')
     implementation project(':android:sys')

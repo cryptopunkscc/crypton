@@ -23,8 +23,8 @@ Message
 
 ## Modules
 ```
-:engine:api
-:engine:domain:roster
+:core:api
+:core:domain:roster
 :android:room
 :android:roster
 ```

@@ -8,8 +8,8 @@ User is not forced for interactions to keep connection with external server pers
 
 ## Modules
 ```
-:engine:api
-:engine:domain:app
+:core:api
+:core:domain:app
 :net:smack
 :android:room
 ```
