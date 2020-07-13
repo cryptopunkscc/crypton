@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.cli
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
@@ -6,6 +6,11 @@ import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.translator.command
+import cc.cryptopunks.crypton.translator.commands
+import cc.cryptopunks.crypton.translator.named
+import cc.cryptopunks.crypton.translator.param
+import cc.cryptopunks.crypton.translator.vararg
 
 private const val NAVIGATE = "navigate"
 private const val MAIN = "main"
@@ -24,54 +29,60 @@ private const val JOIN = "join"
 
 private val navigateMain = MAIN to command { Route.Main }
 
-private val navigateChat = CHAT to command(param()) { (address) ->
-        Route.Chat(account, address)
-    }
+private val navigateChat = CHAT to command(
+    param()
+) { (address) ->
+    Route.Chat(account, address)
+}
 
 
 private val login = LOGIN to command(
-        param()
-    ) { (account) ->
-        Account.Service.Login(address(account))
-    }
+    param()
+) { (account) ->
+    Account.Service.Login(address(account))
+}
 
 private val addAccount = ADD to command(
-        named(ACCOUNT),
-        named(PASSWORD)
-    ) { (account, password) ->
-        Account.Service.Add(Account(address(account), Password(password)))
-    }
+    named(ACCOUNT),
+    named(PASSWORD)
+) { (account, password) ->
+    Account.Service.Add(Account(address(account), Password(password)))
+}
 
 private val createAccount = CREATE to command(
-        named(ACCOUNT),
-        named(PASSWORD)
-    ) { (account, password) ->
-        Account.Service.Register(Account(address(account), Password(password)))
-    }
+    named(ACCOUNT),
+    named(PASSWORD)
+) { (account, password) ->
+    Account.Service.Register(Account(address(account), Password(password)))
+}
 
-private val rosterItems = GET to mapOf(ITEMS to command {
-        Roster.Service.GetItems
-    })
+private val rosterItems = GET to mapOf(
+    ITEMS to command {
+    Roster.Service.GetItems
+})
 
 private val chat = CHAT to command(param()) { (address) ->
-        Chat.Service.Create(Chat(address(address), address(account)))
-    }
+    Chat.Service.Create(Chat(address(address), address(account)))
+}
 
-private val sendMessage = SEND to mapOf(MESSAGE to command(vararg()) { message ->
-        Chat.Service.EnqueueMessage(message.joinToString(" "))
-    })
+private val sendMessage = SEND to mapOf(
+    MESSAGE to command(
+    vararg()
+) { message ->
+    Chat.Service.EnqueueMessage(message.joinToString(" "))
+})
 
 private val join = JOIN to command {
-        (route as Route.Chat).run {
-            Roster.Service.AcceptSubscription(account, address)
-        }
+    (route as Route.Chat).run {
+        Roster.Service.AcceptSubscription(account, address)
     }
+}
 
 private val invite = INVITE to command(
-        vararg()
-    ) { users ->
-        Chat.Service.Invite(users.map(::address))
-    }
+    vararg()
+) { users ->
+    Chat.Service.Invite(users.map(::address))
+}
 
 
 private val navigate = NAVIGATE to mapOf(
@@ -79,9 +90,7 @@ private val navigate = NAVIGATE to mapOf(
     navigateChat
 )
 
-private typealias Commands = Map<Route<*>, Map<String, Any>>
-
-val commands: Commands = mapOf(
+val cryptonCommands = commands(
     Route.Main to mapOf(
         login,
         addAccount,

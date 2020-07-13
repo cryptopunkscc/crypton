@@ -1,12 +1,6 @@
 include ':core:api',
         ':core:backend',
-
-        ':engine:json',
-        ':engine:log',
-        ':engine:paging',
-        ':engine:connectable',
-        ':engine:net',
-        ':engine:util',
+        ':core:cli',
 
         ':core:mock:sys',
         ':core:mock:net',
@@ -18,11 +12,18 @@ include ':core:api',
         ':core:domain:roster',
         ':core:domain:chat',
 
+        ':engine:json',
+        ':engine:log',
+        ':engine:paging',
+        ':engine:connectable',
+        ':engine:net',
+        ':engine:util',
+        ':engine:translator',
+
         ':net:smack:android',
         ':net:smack:jvm',
 
         ':jvm:log',
-        ':jvm:translator',
         ':jvm:server',
         ':jvm:test',
         ':jvm:cli',

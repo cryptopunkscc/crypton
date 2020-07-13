@@ -1,12 +1,16 @@
-package cc.cryptopunks.crypton
-
-import cc.cryptopunks.crypton.context.Route
+package cc.cryptopunks.crypton.translator
 
 typealias TranslationContext = Context
 
+typealias Commands = Map<Any, Map<String, Any>>
+
+fun commands(vararg commands: Pair<Any, Map<String, Any>>): Commands = mapOf(*commands)
+
 data class Context(
-    val route: Route<*> = Route.Main,
-    val commands: Map<Route<*>, Map<String, Any>> = cc.cryptopunks.crypton.commands,
+    val commands: Commands = emptyMap(),
+    val route: Any = Unit,
+    val isRoute: Any.() -> Boolean = { this is Unit },
+    val empty: Any.() -> Any = { this },
     val account: String = "",
     val state: Any = Unit,
     val result: Any? = null
@@ -14,10 +18,18 @@ data class Context(
 
 fun Context.process(input: String): Context = set(input).run {
     copy(result = execute()).run {
-        if (result is Route<*>) copy(route = result)
+        if (result?.isRoute() == true) copy(route = result)
         else this
-    }.prepare()
+    }
 }
+
+fun Context.execute(): Any = anySuggestion()
+    ?: (state as? Command)?.run {
+        run(params.map { it.value!! }).also {
+            params.forEach { it.value = null }
+        }
+    }
+    ?: IllegalStateException("Cannot execute state $state")
 
 
 fun Context.prepare() = copy(
@@ -55,7 +67,7 @@ fun Context.anySuggestion(): Any? =
     state.let { state ->
         when (state) {
 
-            cc.cryptopunks.crypton.commands[route.empty()] == state -> Check.Prepared
+            commands[route.empty()] == state -> Check.Prepared
 
             is Command -> when {
 
@@ -80,11 +92,3 @@ class Check {
     object Prepared
     data class Suggest(val list: List<String>)
 }
-
-fun Context.execute(): Any = anySuggestion()
-    ?: (state as? Command)?.run {
-        run(params.map { it.value!! }).also {
-            params.forEach { it.value = null }
-        }
-    }
-    ?: IllegalStateException("Cannot execute state $state")

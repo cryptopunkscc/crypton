@@ -5,7 +5,7 @@ import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.RosterAdapter
-import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.roster.R
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.navigate.navigateChat

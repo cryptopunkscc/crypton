@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.translator
 
 data class Command(
     val params: List<Input>,

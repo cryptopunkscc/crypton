@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.translator.Check
+import cc.cryptopunks.crypton.translator.translateCli
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob

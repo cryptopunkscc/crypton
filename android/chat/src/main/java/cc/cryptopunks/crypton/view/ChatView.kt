@@ -8,8 +8,7 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.Check
-import cc.cryptopunks.crypton.TranslationContext
+import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.Actor
@@ -20,10 +19,11 @@ import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.Handle
+import cc.cryptopunks.crypton.cli.context
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.prepare
-import cc.cryptopunks.crypton.translateMessageInput
+import cc.cryptopunks.crypton.translator.prepare
+import cc.cryptopunks.crypton.cli.translateMessageInput
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.util.typedLog
@@ -133,7 +133,7 @@ class ChatView(
         }
         launch {
             messageInputView.input.textChanges().debounce(100).translateMessageInput(
-                TranslationContext(
+                context(
                     route = Route.Chat(
                         account = account,
                         address = address

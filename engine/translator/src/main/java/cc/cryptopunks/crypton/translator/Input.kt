@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.translator
 
 interface Input {
     var value: String?

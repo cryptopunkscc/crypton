@@ -6,7 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
-import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.roster.R
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster

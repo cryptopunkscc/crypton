@@ -1,5 +1,8 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.translator.Check
+import cc.cryptopunks.crypton.translator.Context
+import cc.cryptopunks.crypton.translator.translateCli
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
@@ -16,7 +19,7 @@ class BusTest {
                 listOf(listOf("0", "1")),
                 listOf("cmd0 0 1")
                     .asFlow()
-                    .translateCli(Context(state = TEST_COMMANDS))
+                    .translateCli(Context(TEST_COMMANDS))
                     .toList()
             )
         }
@@ -35,7 +38,11 @@ class BusTest {
                 ),
                 listOf("cmd1", "subCmd0", "arg1 1", "arg0", "0")
                     .asFlow()
-                    .translateCli(Context(state = TEST_COMMANDS))
+                    .translateCli(
+                        Context(
+                            TEST_COMMANDS
+                        )
+                    )
                     .toList()
             )
         }
@@ -47,7 +54,11 @@ class BusTest {
             assertTrue(
                 listOf("uknown", "comand", "foo", "bar")
                     .asFlow()
-                    .translateCli(Context(state = TEST_COMMANDS))
+                    .translateCli(
+                        Context(
+                            TEST_COMMANDS
+                        )
+                    )
                     .onEach { println(it) }
                     .toList()
                     .all { it is IllegalStateException }
