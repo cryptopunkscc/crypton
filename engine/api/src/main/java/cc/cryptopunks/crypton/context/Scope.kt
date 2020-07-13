@@ -19,7 +19,8 @@ interface AppScope :
     BaseScope,
     Executors,
     Sys,
-    Repo {
+    Repo,
+    Connectable {
 
     val mainClass: KClass<*>
 
@@ -32,7 +33,6 @@ interface AppScope :
 
     val mainHandlers: HandlerRegistryFactory<AppScope>
     val chatHandlers: HandlerRegistryFactory<ChatScope>
-    val connectable: Connectable
 
     fun sessionScope(): SessionScope
     fun sessionScope(address: Address): SessionScope

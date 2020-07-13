@@ -22,9 +22,6 @@ class AccountListFragment : ServiceFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateService() =
-        appScope.connectable
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

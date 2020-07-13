@@ -17,9 +17,9 @@ import kotlin.reflect.KClass
 class AppModule(
     val sys: Sys,
     val repo: Repo,
+    override val mainClass: KClass<*>,
     override val mainHandlers: HandlerRegistryFactory<AppScope>,
     override val chatHandlers: HandlerRegistryFactory<ChatScope>,
-    override val mainClass: KClass<*>,
     override val createConnection: Connection.Factory,
     override val startSessionService: SessionScope.() -> Job,
     override val mainExecutor: MainExecutor,
@@ -31,14 +31,17 @@ class AppModule(
     Repo by repo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext =
-        log + SupervisorJob() + Dispatchers.IO
+    override val coroutineContext: CoroutineContext = log +
+        SupervisorJob() +
+        Dispatchers.IO
     override val sessionStore = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
-    override val connectable = service(mainHandlers)
     override fun sessionScope(): SessionScope = sessionStore.get().values.first()
     override fun sessionScope(address: Address): SessionScope = sessionStore.get()[address]!!
+
+    private val connectable by lazy { service(mainHandlers) }
+    override fun Connector.connect(): Job = connectable.run { connect() }
 }
 
 data class SessionModule(
@@ -53,8 +56,9 @@ data class SessionModule(
     SessionRepo by sessionRepo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext =
-        log + SupervisorJob() + newSingleThreadContext(address.id)
+    override val coroutineContext: CoroutineContext = log +
+        SupervisorJob() +
+        newSingleThreadContext(address.id)
     override val presenceStore = Presence.Store()
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chatAddress: Address): ChatScope =
@@ -76,5 +80,6 @@ class ChatModule(
 
     override val log = typedLog()
 
-    override val connectable = service { mainHandlers() + chatHandlers() }
+    private val connectable by lazy { service { mainHandlers() + chatHandlers() } }
+    override fun Connector.connect(): Job = connectable.run { connect() }
 }

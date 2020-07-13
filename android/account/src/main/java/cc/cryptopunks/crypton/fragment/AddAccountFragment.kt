@@ -8,9 +8,6 @@ import cc.cryptopunks.crypton.view.AddAccountView
 
 class AddAccountFragment : ServiceFragment() {
 
-    override fun onCreateService() =
-        appScope.connectable
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

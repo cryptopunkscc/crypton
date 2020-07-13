@@ -7,9 +7,6 @@ import cc.cryptopunks.crypton.view.RosterView
 
 class RosterFragment : ServiceFragment() {
 
-    override fun onCreateService() =
-        appScope.connectable
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

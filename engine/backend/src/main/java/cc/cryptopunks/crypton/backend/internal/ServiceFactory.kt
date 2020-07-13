@@ -17,11 +17,11 @@ internal class ServiceFactory(
 ) : (Route<*>) -> Connectable? {
     override fun invoke(route: Route<*>): Connectable? = when (route) {
 
-        Route.Main -> appScope.connectable
+        Route.Main -> appScope
 
         is Chat -> runBlocking {
             delay(100)
-            appScope.sessionScope(route.account).chatScope(route.address).connectable
+            appScope.sessionScope(route.account).chatScope(route.address)
         }
 
         else -> null

@@ -47,8 +47,8 @@ suspend fun startServer() = coroutineScope {
         while (true) emit(server.accept())
     }.onCompletion { throwable ->
         log.d("close server $server $throwable")
-        service.cancel()
-        service.appScope.cancel()
+        service.cancel("Server close", throwable)
+        service.appScope.cancel("Server close", throwable)
         server.close()
     }.onEach { socket ->
         log.d("Socket accepted: ${socket.remoteAddress}")
