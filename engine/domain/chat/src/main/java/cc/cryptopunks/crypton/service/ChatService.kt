@@ -17,35 +17,30 @@ import cc.cryptopunks.crypton.handler.handleMessageRead
 import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handleSaveInfoMessage
+import cc.cryptopunks.crypton.util.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.Store
-import cc.cryptopunks.crypton.util.service
 
-fun chatService(scope: ChatScope) = service(scope) {
-    chatHandlers()
+val chatHandlers: HandlerRegistryFactory<ChatScope> = {
+    createHandlers {
+        val pagedMessage = Store<Chat.Service.PagedMessages?>(null)
+
+        +handleEnqueueMessage()
+        +handleMessageRead()
+        +handleLastMessageSubscription()
+        +handlePopClipboard()
+        +handleCopy()
+        +handlePageMessagesSubscription(pagedMessage)
+        +handleGetPagedMessages(pagedMessage)
+        +handleGetMessages()
+        +handleInvite()
+        +handleSaveInfoMessage()
+        +handleClearInfoMessages()
+        +handleDeleteMessage()
+    }
 }
 
-fun ChatScope.chatHandlers() = createHandlers {
-    val pagedMessage = Store<Chat.Service.PagedMessages?>(null)
-
-    +handleEnqueueMessage()
-    +handleMessageRead()
-    +handleLastMessageSubscription()
-    +handlePopClipboard()
-    +handleCopy()
-    +handlePageMessagesSubscription(pagedMessage)
-    +handleGetPagedMessages(pagedMessage)
-    +handleGetMessages()
-    +handleInvite()
-    +handleSaveInfoMessage()
-    +handleClearInfoMessages()
-    +handleDeleteMessage()
+val createChatHandlers: HandlerRegistryFactory<AppScope> = {
+    createHandlers {
+        +handleCreateChat()
+    }
 }
-
-fun createChatService(scope: AppScope) = service(scope) {
-    createChatHandlers()
-}
-
-fun AppScope.createChatHandlers() = createHandlers {
-    +handleCreateChat()
-}
-

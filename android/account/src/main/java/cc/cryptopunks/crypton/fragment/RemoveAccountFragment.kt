@@ -10,19 +10,14 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.activity.BaseActivity
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Actor
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.CompoundHandler
-import cc.cryptopunks.crypton.context.collect
-import cc.cryptopunks.crypton.service.accountHandlers
+import cc.cryptopunks.crypton.context.dispatch
 import kotlinx.android.synthetic.main.delete_account_checkbox.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 
 class RemoveAccountFragment :
     DialogFragment(),
@@ -43,9 +38,7 @@ class RemoveAccountFragment :
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when (which) {
-            BUTTON_POSITIVE -> (context as BaseActivity).appScope.run {
-                launch { flowOf(Account.Service.Remove(model)).collect(CompoundHandler(accountHandlers())) }
-            }
+            BUTTON_POSITIVE -> appScope.connectable.dispatch(Account.Service.Remove(model))
             BUTTON_NEGATIVE -> dismiss()
         }
     }

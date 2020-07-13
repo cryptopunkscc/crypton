@@ -1,9 +1,11 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.util.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
+import cc.cryptopunks.crypton.util.service
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,6 +17,8 @@ import kotlin.reflect.KClass
 class AppModule(
     val sys: Sys,
     val repo: Repo,
+    override val mainHandlers: HandlerRegistryFactory<AppScope>,
+    override val chatHandlers: HandlerRegistryFactory<ChatScope>,
     override val mainClass: KClass<*>,
     override val createConnection: Connection.Factory,
     override val startSessionService: SessionScope.() -> Job,
@@ -32,6 +36,7 @@ class AppModule(
     override val sessionStore = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
+    override val connectable = service(mainHandlers)
     override fun sessionScope(): SessionScope = sessionStore.get().values.first()
     override fun sessionScope(address: Address): SessionScope = sessionStore.get()[address]!!
 }
@@ -70,4 +75,6 @@ class ChatModule(
     ChatScope {
 
     override val log = typedLog()
+
+    override val connectable = service { mainHandlers() + chatHandlers() }
 }

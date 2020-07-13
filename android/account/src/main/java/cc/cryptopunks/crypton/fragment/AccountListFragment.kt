@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import cc.cryptopunks.crypton.account.R
-import cc.cryptopunks.crypton.service.accountService
 import cc.cryptopunks.crypton.view.AccountListView
 
 
@@ -24,7 +23,7 @@ class AccountListFragment : ServiceFragment() {
     }
 
     override fun onCreateService() =
-        accountService(appScope)
+        appScope.connectable
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -28,7 +28,7 @@ abstract class ServiceFragment :
         binding + onCreateService()
     }
 
-    protected open fun onCreateService(): Connectable? = null
+    protected open fun onCreateService(): Connectable? = appScope.connectable
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
