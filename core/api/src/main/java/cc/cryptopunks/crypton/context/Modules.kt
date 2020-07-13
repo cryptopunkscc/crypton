@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
-import cc.cryptopunks.crypton.service
+import cc.cryptopunks.crypton.connectable
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,7 +42,7 @@ class AppModule(
     override fun sessionScope(): SessionScope = sessionStore.get().values.first()
     override fun sessionScope(address: Address): SessionScope = sessionStore.get()[address]!!
 
-    private val connectable by lazy { service(mainHandlers) }
+    private val connectable by lazy { connectable(mainHandlers) }
     override fun Connector.connect(): Job = connectable.run { connect() }
 }
 
@@ -82,6 +82,6 @@ class ChatModule(
 
     override val log = typedLog()
 
-    private val connectable by lazy { service { mainHandlers() + chatHandlers() } }
+    private val connectable by lazy { connectable { mainHandlers() + chatHandlers() } }
     override fun Connector.connect(): Job = connectable.run { connect() }
 }

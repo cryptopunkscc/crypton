@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-fun <T : CoroutineScope> T.service(
+fun <T : CoroutineScope> T.connectable(
     createRegistry: HandlerRegistryFactory<T>
 ): Connectable =
-    ScopedService(this, createRegistry())
+    ScopedConnectable(this, createRegistry())
 
 typealias HandlerRegistryFactory<T> = T.() -> HandlerRegistry
 
-private data class ScopedService(
+private data class ScopedConnectable(
     val scope: CoroutineScope,
     val handlers: HandlerRegistry
 ) :
