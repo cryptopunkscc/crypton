@@ -37,8 +37,6 @@ class MessageAdapter(
 
     private var account = Address.Empty
 
-    private var actorStatus: Any = Actor.Stop
-
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
     fun setMessages(messages: Chat.Service.PagedMessages?) {

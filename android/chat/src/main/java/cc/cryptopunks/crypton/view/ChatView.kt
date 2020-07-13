@@ -79,7 +79,7 @@ class ChatView(
                             getHitRect(rect)
                             child.getLocalVisibleRect(rect)
                         }.filterIsInstance<MessageView>().mapNotNull { it.message }.let {
-                            MessagesRead(it.toList())
+                            MessagesRead(it.toList()).out()
                         }
                     }
 
@@ -94,8 +94,8 @@ class ChatView(
                             displayNewMessageInfo()
                     }
 
-                    is Handle.Error -> Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name)
-                        .out()
+                    is Handle.Error ->
+                        Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name).out()
 
                     else -> log.d(arg)
                 }
