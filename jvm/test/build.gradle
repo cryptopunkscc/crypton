@@ -5,7 +5,6 @@ mainClassName = "cc.cryptopunks.crypton.IntegrationKt"
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':core:api')
-    implementation project(':jvm:common')
     implementation project(':jvm:server')
     implementation "junit:junit:$junit_version"
     implementation "io.mockk:mockk:$mockk_version"

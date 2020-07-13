@@ -6,13 +6,12 @@ import io.ktor.network.sockets.aSocket
 import kotlinx.coroutines.Dispatchers
 import java.net.InetSocketAddress
 
-suspend fun CliClient.connect(
-    host: String = "127.0.0.1",
-    port: Int = 2323
+suspend fun Connectable.connect(
+    address: InetSocketAddress
 ) {
     val log = typedLog()
     aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
-        .connect(InetSocketAddress(host, port))
+        .connect(address)
         .connector(log)
         .connect()
         .join()

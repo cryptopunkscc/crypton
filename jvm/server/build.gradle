@@ -22,6 +22,6 @@ dependencies {
     api project(':core:mock:sys')
     api project(':net:smack:jvm')
     api project(':core:backend')
-    api project(':engine:json')
+    api project(':engine:net')
     api project(':jvm:common')
 }

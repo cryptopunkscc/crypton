@@ -5,6 +5,7 @@ include ':core:api',
         ':engine:log',
         ':engine:paging',
         ':engine:connectable',
+        ':engine:net',
         ':engine:util',
 
         ':core:mock:sys',
