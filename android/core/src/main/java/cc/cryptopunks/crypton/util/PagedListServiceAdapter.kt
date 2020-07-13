@@ -41,7 +41,7 @@ S : Connectable {
         holder.item = getItem(position)
     }
 
-    open class DiffItemCallback<S : Service> : DiffUtil.ItemCallback<S>() {
+    open class DiffItemCallback<S : Connectable> : DiffUtil.ItemCallback<S>() {
         override fun areItemsTheSame(
             oldItem: S,
             newItem: S

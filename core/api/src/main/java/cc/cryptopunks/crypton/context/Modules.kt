@@ -57,7 +57,7 @@ data class SessionModule(
 
     override val log = typedLog()
     override val coroutineContext: CoroutineContext = log +
-        SupervisorJob() +
+        SupervisorJob().apply { invokeOnCompletion { log.d("Closed $address $it") } } +
         newSingleThreadContext(address.id)
     override val presenceStore = Presence.Store()
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)

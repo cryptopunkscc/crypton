@@ -12,15 +12,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
-interface Service : CoroutineScope {
-    val id: Any get() = this::class.java.simpleName
-}
-
 interface Subscription {
     val enable: Boolean
 }
 
-interface Connectable : Service {
+interface Connectable : CoroutineScope {
     interface Binding {
         class Store : OpenStore<List<WeakReference<out Binding>>>(emptyList())
 
@@ -30,6 +26,8 @@ interface Connectable : Service {
         operator fun minus(service: Connectable): Boolean
         fun send(any: Any) = Unit
     }
+
+    val id: Any get() = this::class.java.simpleName
 
     fun Connector.connect(): Job = launch { }
     fun Connector.connect(service: Connectable): Job = launch {
