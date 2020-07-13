@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.json.formatJson
 import cc.cryptopunks.crypton.json.parseJson
 import cc.cryptopunks.crypton.util.TypedLog

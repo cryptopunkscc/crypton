@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
 

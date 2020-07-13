@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.AppScope
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 
 fun AppScope.handleHasAccounts() =
     handle<Account.Service.HasAccounts> {

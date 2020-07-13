@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.service
+package cc.cryptopunks.crypton
 
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel

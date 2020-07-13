@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.AppScope
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 
 internal fun AppScope.handleEnableAccount() =
     handle<Account.Service.Enable> {
@@ -10,7 +10,6 @@ internal fun AppScope.handleEnableAccount() =
             get(address).apply {
                 if (condition != enabled)
                     update(copy(enabled = condition))
-
             }
         }
     }

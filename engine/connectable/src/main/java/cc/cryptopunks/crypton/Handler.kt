@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.context
+package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.util.TypedLog
 import kotlinx.coroutines.CancellationException
@@ -14,6 +14,11 @@ fun <T : Any> CoroutineScope.handle(handle: suspend T.(ConnectorOutput) -> Unit)
 
 interface Handle<T> {
     operator fun invoke(arg: T, output: ConnectorOutput = {}): Job
+
+    data class Error(
+        val message: String?,
+        val command: String
+    )
 }
 
 private class Handler<T>(
@@ -28,7 +33,7 @@ private class Handler<T>(
         } catch (e: Throwable) {
             when(e) {
                 is CancellationException -> coroutineContext[TypedLog]?.d("${e.message} $arg")
-                else -> output(Api.Error(e.message ?: e.javaClass.name, arg.toString()))
+                else -> output(Handle.Error(e.message ?: e.javaClass.name, arg.toString()))
             }
         }
     }

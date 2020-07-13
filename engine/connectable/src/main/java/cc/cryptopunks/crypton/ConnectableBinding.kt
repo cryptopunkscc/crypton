@@ -1,12 +1,10 @@
-package cc.cryptopunks.crypton.service
+package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.Actor
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.service.internal.Binding
-import cc.cryptopunks.crypton.service.internal.cancel
-import cc.cryptopunks.crypton.service.internal.createBinding
-import cc.cryptopunks.crypton.service.internal.setActor
-import cc.cryptopunks.crypton.service.internal.setService
+import cc.cryptopunks.crypton.internal.Binding
+import cc.cryptopunks.crypton.internal.cancel
+import cc.cryptopunks.crypton.internal.createBinding
+import cc.cryptopunks.crypton.internal.setActor
+import cc.cryptopunks.crypton.internal.setService
 import kotlinx.coroutines.runBlocking
 
 class ConnectableBinding(

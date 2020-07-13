@@ -1,10 +1,8 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.Connector
 import cc.cryptopunks.crypton.util.TypedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -20,7 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert
-import kotlin.coroutines.CoroutineContext
 
 class TrafficError(
     message: String?,

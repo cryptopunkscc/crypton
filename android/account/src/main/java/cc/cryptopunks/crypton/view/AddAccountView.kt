@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.EditText
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.widget.ActorLayout

@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.AppScope
-import cc.cryptopunks.crypton.context.createHandlers
+import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.handler.handleAccountListSubscription
 import cc.cryptopunks.crypton.handler.handleAddAccount
 import cc.cryptopunks.crypton.handler.handleEnableAccount
@@ -13,7 +13,7 @@ import cc.cryptopunks.crypton.handler.handleRegisterAccount
 import cc.cryptopunks.crypton.handler.handleRemove
 import cc.cryptopunks.crypton.handler.handleSetField
 import cc.cryptopunks.crypton.model.Form
-import cc.cryptopunks.crypton.util.HandlerRegistryFactory
+import cc.cryptopunks.crypton.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.Store
 
 val accountHandlers: HandlerRegistryFactory<AppScope> = {

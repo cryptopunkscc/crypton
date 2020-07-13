@@ -1,8 +1,8 @@
-package cc.cryptopunks.crypton.service.internal
+package cc.cryptopunks.crypton.internal
 
-import cc.cryptopunks.crypton.context.Actor
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Actor
+import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.Connector
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 

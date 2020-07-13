@@ -5,11 +5,10 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.context.Actor
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Service
-import cc.cryptopunks.crypton.service.cancelAll
-import cc.cryptopunks.crypton.service.createBinding
+import cc.cryptopunks.crypton.Actor
+import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.cancelAll
+import cc.cryptopunks.crypton.createBinding
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking

@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.typedLog

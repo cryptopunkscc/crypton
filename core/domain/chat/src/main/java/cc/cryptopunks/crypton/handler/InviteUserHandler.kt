@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.context.isConference
 
 internal fun SessionScope.handleInvite() =

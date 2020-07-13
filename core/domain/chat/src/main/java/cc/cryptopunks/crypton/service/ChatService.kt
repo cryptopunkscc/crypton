@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.ChatScope
-import cc.cryptopunks.crypton.context.createHandlers
+import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.handler.handleClearInfoMessages
 import cc.cryptopunks.crypton.handler.handleCopy
 import cc.cryptopunks.crypton.handler.handleCreateChat
@@ -17,7 +17,7 @@ import cc.cryptopunks.crypton.handler.handleMessageRead
 import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handleSaveInfoMessage
-import cc.cryptopunks.crypton.util.HandlerRegistryFactory
+import cc.cryptopunks.crypton.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.Store
 
 val chatHandlers: HandlerRegistryFactory<ChatScope> = {

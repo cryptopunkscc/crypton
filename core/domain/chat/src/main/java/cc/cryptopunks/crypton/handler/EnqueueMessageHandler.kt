@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.calculateId
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 
 internal fun ChatScope.handleEnqueueMessage() =
     handle<Chat.Service.EnqueueMessage> {

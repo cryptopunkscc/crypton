@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 
 internal fun SessionScope.handleGetMessages() =
     handle<Chat.Service.GetMessages> {

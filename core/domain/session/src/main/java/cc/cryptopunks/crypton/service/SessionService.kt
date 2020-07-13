@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.collect
+import cc.cryptopunks.crypton.collect
 import cc.cryptopunks.crypton.handler.handleApiEvent
 import cc.cryptopunks.crypton.handler.handleFlushQueuedMessages
 import cc.cryptopunks.crypton.handler.handleConferenceInvitations

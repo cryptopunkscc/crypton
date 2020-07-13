@@ -1,7 +1,5 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob

@@ -1,17 +1,13 @@
-package cc.cryptopunks.crypton.util
+package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.BaseScope
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
-import cc.cryptopunks.crypton.context.HandlerRegistry
-import cc.cryptopunks.crypton.context.Subscription
-import cc.cryptopunks.crypton.context.dispatch
+import cc.cryptopunks.crypton.util.TypedLog
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-fun <T : BaseScope> T.service(
+fun <T : CoroutineScope> T.service(
     createRegistry: HandlerRegistryFactory<T>
 ): Connectable =
     ScopedService(this, createRegistry())
@@ -19,15 +15,16 @@ fun <T : BaseScope> T.service(
 typealias HandlerRegistryFactory<T> = T.() -> HandlerRegistry
 
 private data class ScopedService(
-    val scope: BaseScope,
+    val scope: CoroutineScope,
     val handlers: HandlerRegistry
 ) :
     Connectable,
-    BaseScope by scope {
+    CoroutineScope by scope {
 
     private val subscriptions = mutableMapOf<KClass<*>, Job>()
 
     override fun Connector.connect(): Job = launch {
+        val log = coroutineContext[TypedLog]!!
         log.d("Start $id")
         input.collect {
             log.d("$id Received $it")

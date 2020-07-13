@@ -2,10 +2,10 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.AppScope
-import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Notification
-import cc.cryptopunks.crypton.service.top
+import cc.cryptopunks.crypton.top
 
 
 fun AppScope.updateChatNotification(): (List<Message>) -> Unit {

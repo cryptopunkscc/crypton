@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 
 internal fun AppScope.handleSubscriptionAccept() =
     handle<Roster.Service.AcceptSubscription> {

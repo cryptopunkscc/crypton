@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.AppScope
-import cc.cryptopunks.crypton.context.collect
+import cc.cryptopunks.crypton.collect
 import cc.cryptopunks.crypton.handler.handleHasAccounts
 import cc.cryptopunks.crypton.handler.handleNetworkStatus
 import cc.cryptopunks.crypton.handler.handleNewSession

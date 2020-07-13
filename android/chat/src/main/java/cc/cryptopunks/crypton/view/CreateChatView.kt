@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.navigate.navigateChat

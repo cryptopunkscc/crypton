@@ -1,11 +1,11 @@
 package cc.cryptopunks.crypton.backend
 
-import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.context.AppScope
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.context.actor
+import cc.cryptopunks.crypton.actor
 import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job

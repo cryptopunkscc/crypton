@@ -4,7 +4,7 @@ import androidx.paging.PagedList
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.selector.messagePagedListFlow
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.flow.collect

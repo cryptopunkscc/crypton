@@ -11,9 +11,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.dispatch
+import cc.cryptopunks.crypton.dispatch
 import kotlinx.android.synthetic.main.delete_account_checkbox.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

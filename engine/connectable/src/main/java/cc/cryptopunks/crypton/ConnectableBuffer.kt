@@ -1,9 +1,5 @@
-package cc.cryptopunks.crypton.service
+package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.Actor
-import cc.cryptopunks.crypton.context.Connectable
-import cc.cryptopunks.crypton.context.Connector
-import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -18,8 +14,6 @@ import kotlin.coroutines.CoroutineContext
 class ConnectableBuffer(
     override val coroutineContext: CoroutineContext
 ) : Actor {
-
-    private val log = typedLog()
 
     private val inputProxy = BroadcastChannel<Any>(Channel.BUFFERED)
 
@@ -43,7 +37,6 @@ class ConnectableBuffer(
 
     override fun Connector.connect(): Job = launch {
         launch {
-            log.d("bind")
             input.collect {
                 inputProxy.send(it)
             }

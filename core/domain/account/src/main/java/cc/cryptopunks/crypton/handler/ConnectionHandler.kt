@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Password
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.addAccount
 import cc.cryptopunks.crypton.model.Form
 

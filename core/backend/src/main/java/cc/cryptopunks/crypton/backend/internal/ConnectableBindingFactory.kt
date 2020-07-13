@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.backend.internal
 
-import cc.cryptopunks.crypton.context.Connectable
+import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.service.createBinding
+import cc.cryptopunks.crypton.createBinding
 import cc.cryptopunks.crypton.util.Store
 
 internal class ConnectableBindingFactory(

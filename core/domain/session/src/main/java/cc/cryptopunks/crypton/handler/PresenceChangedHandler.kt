@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChat
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.storePresence
 
 internal fun SessionScope.handlePresenceChanged() =

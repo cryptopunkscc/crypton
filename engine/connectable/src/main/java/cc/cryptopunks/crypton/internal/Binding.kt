@@ -1,6 +1,6 @@
-package cc.cryptopunks.crypton.service.internal
+package cc.cryptopunks.crypton.internal
 
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Connector
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 

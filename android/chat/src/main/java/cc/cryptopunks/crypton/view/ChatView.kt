@@ -12,14 +12,14 @@ import cc.cryptopunks.crypton.Check
 import cc.cryptopunks.crypton.TranslationContext
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Actor
+import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Chat.Service.MessageText
 import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
-import cc.cryptopunks.crypton.context.Connector
+import cc.cryptopunks.crypton.Connector
+import cc.cryptopunks.crypton.Handle
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.prepare
@@ -94,7 +94,7 @@ class ChatView(
                             displayNewMessageInfo()
                     }
 
-                    is Api.Error -> Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name)
+                    is Handle.Error -> Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name)
                         .out()
 
                     else -> log.d(arg)

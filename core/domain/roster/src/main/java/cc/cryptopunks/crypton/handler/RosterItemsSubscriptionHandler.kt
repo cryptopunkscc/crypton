@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.handler
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.handle
+import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.selector.rosterItemStatesFlow
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.flow.Flow
