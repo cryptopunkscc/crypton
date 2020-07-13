@@ -23,5 +23,5 @@ dependencies {
     api project(':net:smack:jvm')
     api project(':core:backend')
     api project(':engine:net')
-    api project(':jvm:common')
+    api project(':jvm:log')
 }

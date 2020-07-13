@@ -21,7 +21,7 @@ include ':core:api',
         ':net:smack:android',
         ':net:smack:jvm',
 
-        ':jvm:common',
+        ':jvm:log',
         ':jvm:translator',
         ':jvm:server',
         ':jvm:test',
