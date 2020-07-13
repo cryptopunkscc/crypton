@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api project(':core:api')
-    api project(':core:util:paging')
+    api project(':engine:paging')
     testImplementation project(':core:mock:repo')
     testImplementation project(':core:mock:net')
     testImplementation "junit:junit:$junit_version"

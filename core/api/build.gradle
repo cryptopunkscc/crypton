@@ -6,5 +6,5 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     api 'javax.inject:javax.inject:1'
     api "androidx.paging:paging-common:$paging_version"
-    api project(':core:util:log')
+    api project(':engine:log')
 }
