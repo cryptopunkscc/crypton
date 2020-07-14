@@ -26,4 +26,8 @@ class MockChatNet(
     override fun joinConference(address: Address, nickname: String) {
         TODO("Not yet implemented")
     }
+
+    override fun listJoinedRooms(): Set<Address> {
+        TODO("Not yet implemented")
+    }
 }

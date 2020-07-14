@@ -36,6 +36,8 @@ internal class ChatNet(
     override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> = mucManager.invitationsFlow()
 
     override fun joinConference(address: Address, nickname: String) = mucManager.join(address, nickname)
+
+    override fun listJoinedRooms(): Set<Address> = mucManager.joinedRooms.map { it.address() }.toSet()
 }
 
 internal fun SmackCore.inviteToConference(

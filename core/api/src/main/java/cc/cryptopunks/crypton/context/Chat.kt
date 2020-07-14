@@ -57,6 +57,8 @@ data class Chat(
 
         data class Invite(val users: List<Address>, val chat: Address = Address.Empty)
 
+        data class ListJoinedRooms(val account: Address)
+
         // output
 
         data class ChatCreated(val chat: Address)
@@ -66,6 +68,8 @@ data class Chat(
         data class PagedMessages(val account: Address, val list: PagedList<Message>)
 
         data class Messages(val account: Address, val list: List<Message>)
+
+        data class JoinedRooms(val set: Set<Address>)
     }
 
 
@@ -75,6 +79,7 @@ data class Chat(
         fun inviteToConference(chat: Address, users: List<Address>)
         fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
         fun joinConference(address: Address, nickname: String)
+        fun listJoinedRooms(): Set<Address>
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event

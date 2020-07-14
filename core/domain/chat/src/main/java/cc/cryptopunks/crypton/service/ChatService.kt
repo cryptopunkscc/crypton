@@ -18,6 +18,7 @@ import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handleSaveInfoMessage
 import cc.cryptopunks.crypton.HandlerRegistryFactory
+import cc.cryptopunks.crypton.handler.handleListJoinedRooms
 import cc.cryptopunks.crypton.util.Store
 
 val chatHandlers: HandlerRegistryFactory<ChatScope> = {
@@ -42,5 +43,6 @@ val chatHandlers: HandlerRegistryFactory<ChatScope> = {
 val createChatHandlers: HandlerRegistryFactory<AppScope> = {
     createHandlers {
         +handleCreateChat()
+        +handleListJoinedRooms()
     }
 }

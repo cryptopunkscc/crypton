@@ -115,6 +115,7 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         stanza: Stanza,
         decryptedOmemoMessage: OmemoMessage.Received
     ) {
+        println("Omemo muc message received")
         stanza.let {
             it as? SmackMessage
         }?.replaceBody(decryptedOmemoMessage)?.run {

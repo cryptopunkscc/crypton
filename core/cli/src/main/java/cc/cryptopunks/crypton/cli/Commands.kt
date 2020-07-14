@@ -26,6 +26,7 @@ private const val SEND = "send"
 private const val MESSAGE = "message"
 private const val INVITE = "invite"
 private const val JOIN = "join"
+private const val ROOMS = "rooms"
 
 private val navigateMain = MAIN to command { Route.Main }
 
@@ -78,6 +79,10 @@ private val join = JOIN to command {
     }
 }
 
+private val listJoinedRooms = ROOMS to command(param()) { (account) ->
+    Chat.Service.ListJoinedRooms(address(account))
+}
+
 private val invite = INVITE to command(
     vararg()
 ) { users ->
@@ -90,22 +95,23 @@ private val navigate = NAVIGATE to mapOf(
     navigateChat
 )
 
+val mainCommands = mapOf(
+    login,
+    addAccount,
+    createAccount,
+    rosterItems,
+    chat,
+    listJoinedRooms
+)
+
+val chatCommands = mapOf(
+    sendMessage,
+    join,
+    invite
+) + mainCommands
+
 val cryptonCommands = commands(
-    Route.Main to mapOf(
-        login,
-        addAccount,
-        createAccount,
-        rosterItems,
-        chat
-    ),
-    Route.Chat(isConference = false) to mapOf(
-        sendMessage,
-        join,
-        invite
-    ),
-    Route.Chat(isConference = true) to mapOf(
-        sendMessage,
-        join,
-        invite
-    )
+    Route.Main to mainCommands,
+    Route.Chat(isConference = false) to chatCommands,
+    Route.Chat(isConference = true) to chatCommands
 ).mapValues { (_, commands) -> commands + navigate }
