@@ -1,0 +1,29 @@
+@startuml
+package ":engine" {
+[:engine:net]
+[:engine:connectable]
+[:engine:json]
+[:engine:util]
+[:engine:log]
+[:engine:translator]
+}
+package ":jvm" {
+[:jvm:log]
+[:jvm:cli]
+}
+package ":core" {
+[:core:cli]
+[:core:api]
+}
+[:engine:net] --> [:engine:connectable]
+[:engine:net] --> [:engine:json]
+[:jvm:log] --> [:engine:log]
+[:core:cli] --> [:engine:translator]
+[:core:cli] --> [:core:api]
+[:engine:connectable] --> [:engine:util]
+[:engine:connectable] --> [:engine:log]
+[:core:api] --> [:engine:connectable]
+[:jvm:cli] --> [:engine:net]
+[:jvm:cli] --> [:jvm:log]
+[:jvm:cli] --> [:core:cli]
+@enduml

@@ -3,5 +3,6 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api project(':core:api')
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    api "androidx.paging:paging-common:$paging_version"
 }
