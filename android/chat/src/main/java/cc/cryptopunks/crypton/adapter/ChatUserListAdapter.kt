@@ -10,9 +10,8 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.chat_user_item.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import javax.inject.Inject
 
-class ChatUserListAdapter @Inject constructor() :
+class ChatUserListAdapter :
     RecyclerView.Adapter<ChatUserListAdapter.ViewHolder>() {
 
     var users = emptyList<Address>()

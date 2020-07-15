@@ -1,4 +1,31 @@
 @startuml
+package ":core" {
+[:core:mock:repo]
+[:core:mock:net]
+[:core:mock:sys]
+[:core:backend]
+[:core:api]
+[:core:domain:app]
+[:core:domain:session]
+[:core:domain:account]
+[:core:domain:chat]
+[:core:domain:roster]
+}
+package ":net" {
+[:net:smack:jvm]
+}
+package ":engine" {
+[:engine:net]
+[:engine:connectable]
+[:engine:util]
+[:engine:log]
+[:engine:paging]
+[:engine:json]
+}
+package ":jvm" {
+[:jvm:log]
+[:jvm:server]
+}
 [:core:mock:repo] --> [:core:api]
 [:core:mock:net] --> [:core:api]
 [:core:mock:sys] --> [:core:api]

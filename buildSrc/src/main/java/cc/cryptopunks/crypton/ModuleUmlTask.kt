@@ -30,6 +30,13 @@ private fun Map<String, Set<String>>.writeToFile(output: String) = File(output).
     createNewFile()
     outputStream().writer().apply {
         startUml()
+        keys.groupBy(String::modulePrefix).forEach { (group, modules) ->
+            packageOf(group) {
+                modules.forEach { module ->
+                    appendln(component(module))
+                }
+            }
+        }
         forEach { (module, dependencies) ->
             dependencies.forEach { dependency ->
                 addRelation(component(module) to component(dependency))
@@ -38,3 +45,5 @@ private fun Map<String, Set<String>>.writeToFile(output: String) = File(output).
         endUml()
     }.flush()
 }
+
+private val String.modulePrefix get() = split(":").getOrNull(1).let { ":$it" }

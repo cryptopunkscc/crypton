@@ -14,3 +14,6 @@ fun Appendable.addRelation(pair: Pair<String, String>) = this
     .appendln()
 
 fun component(any: Any) = "[$any]"
+
+fun Appendable.packageOf(name: String, block: Appendable.() -> Unit) =
+    append("package \"").append(name).append("\" {").appendln().apply(block).appendln("}")

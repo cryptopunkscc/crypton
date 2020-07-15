@@ -1,4 +1,42 @@
 @startuml
+package ":core" {
+[:core:backend]
+[:core:domain:app]
+[:core:domain:session]
+[:core:domain:account]
+[:core:domain:chat]
+[:core:domain:roster]
+[:core:api]
+[:core:cli]
+}
+package ":net" {
+[:net:smack:android]
+}
+package ":android" {
+[:android:room]
+[:android:sys]
+[:android:log]
+[:android:error]
+[:android:main]
+[:android:indicator]
+[:android:core]
+[:android:notification]
+[:android:debug]
+[:android:intent]
+[:android:account]
+[:android:roster]
+[:android:chat]
+[:android:drawer]
+[:android:widget]
+[:android:app]
+}
+package ":engine" {
+[:engine:connectable]
+[:engine:util]
+[:engine:log]
+[:engine:paging]
+[:engine:translator]
+}
 [:core:backend] --> [:core:domain:app]
 [:core:backend] --> [:core:domain:session]
 [:core:backend] --> [:core:domain:account]
