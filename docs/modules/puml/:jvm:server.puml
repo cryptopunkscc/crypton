@@ -19,7 +19,6 @@
 [:core:domain:account] --> [:core:api]
 [:core:domain:chat] --> [:engine:paging]
 [:core:domain:roster] --> [:engine:paging]
-[:engine:paging] --> [:core:api]
 [:jvm:server] --> [:core:mock:repo]
 [:jvm:server] --> [:core:mock:net]
 [:jvm:server] --> [:core:mock:sys]

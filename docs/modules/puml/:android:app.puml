@@ -23,7 +23,6 @@
 [:core:api] --> [:engine:connectable]
 [:engine:connectable] --> [:engine:util]
 [:engine:connectable] --> [:engine:log]
-[:engine:paging] --> [:core:api]
 [:android:indicator] --> [:android:core]
 [:android:indicator] --> [:android:notification]
 [:android:core] --> [:core:api]
