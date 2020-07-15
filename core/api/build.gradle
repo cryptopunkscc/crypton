@@ -7,5 +7,4 @@ dependencies {
     api 'javax.inject:javax.inject:1'
     api "androidx.paging:paging-common:$paging_version"
     api project(':engine:connectable')
-    api project(':engine:log')
 }

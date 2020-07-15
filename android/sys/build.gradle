@@ -28,10 +28,6 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation project(':core:api')
-    implementation project(':engine:log')
 
-    api project(':android:core')
-    api project(':android:notification')
     api project(':android:indicator')
 }

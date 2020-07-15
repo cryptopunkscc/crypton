@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.TaskAction
 
@@ -14,9 +15,9 @@ abstract class AbstractDependenciesTask : DefaultTask() {
 
     private fun getModulesDependencies(): Map<String, Set<String>> =
         mutableMapOf<String, MutableSet<String>>().apply {
-            project.subprojects.filter(hasGradleFile).forEach { project ->
+            project.subprojects.filter(hasGradleFile).forEach {project ->
                 if (!contains(project.path)) set(project.path, mutableSetOf())
-                project.configurations.forEach { configuration ->
+                project.configurations.filterNot(isTestImplementation).forEach { configuration ->
                     configuration.dependencies.filter(isProjectDependency)
                         .forEach { dependency: Dependency ->
                             getValue(project.path).add(dependency.moduleName)
@@ -27,6 +28,12 @@ abstract class AbstractDependenciesTask : DefaultTask() {
 
     private val isProjectDependency = { dependency: Dependency ->
         dependency.group?.startsWith(project.name) == true
+    }
+
+    private val isTestImplementation = { configuration: Configuration ->
+        configuration.name.let {
+            "testImplementation" in it  || "androidTestImplementation" in it
+        }
     }
 
     private val hasGradleFile = { project: Project ->
