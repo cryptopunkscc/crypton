@@ -24,6 +24,7 @@ class ActionInputView @JvmOverloads constructor(
         }
     }
 
+    val slash get() = slashButton
     val input get() = inputEditText
     val button get() = actionButton
 

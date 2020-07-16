@@ -66,6 +66,22 @@ class ChatView(
             )
             adapter = messageAdapter
         }
+        messageInputView.apply {
+            slash.setOnClickListener {
+                input.apply {
+                    selectionEnd.let { selection ->
+                        if (text.firstOrNull() == '/') {
+                            setText(text.drop(1))
+                            setSelection(selection-1)
+                        }
+                        else {
+                            setText("/$text")
+                            setSelection(selection+1)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun Connector.connect(): Job = launch {
