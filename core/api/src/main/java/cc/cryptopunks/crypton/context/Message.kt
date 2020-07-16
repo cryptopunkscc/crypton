@@ -29,7 +29,8 @@ data class Message(
         Error,
         Received,
         Read,
-        Info
+        Info,
+        State
     }
 
     object Service {

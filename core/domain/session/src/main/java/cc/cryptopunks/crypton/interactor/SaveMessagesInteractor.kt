@@ -10,6 +10,8 @@ internal suspend fun SessionScope.saveMessages(messages: List<Message>) {
 }
 
 internal suspend fun SessionScope.saveMessage(message: Message) {
+    // TODO handle messages messages with status State
+    if (message.status == Message.Status.State) return
     message.run {
         get(message) ?: create(message)
     }.let { prepared ->
