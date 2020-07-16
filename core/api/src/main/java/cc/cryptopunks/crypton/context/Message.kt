@@ -33,6 +33,33 @@ data class Message(
         State
     }
 
+    enum class State {
+        /**
+         * User is actively participating in the chat session.
+         */
+        active,
+
+        /**
+         * User is composing a message.
+         */
+        composing,
+
+        /**
+         * User had been composing but now has stopped.
+         */
+        paused,
+
+        /**
+         * User has not been actively participating in the chat session.
+         */
+        inactive,
+
+        /**
+         * User has effectively ended their participation in the chat session.
+         */
+        gone
+    }
+
     object Service {
         object FetchArchived
         data class Save(val messages: List<Message>)
@@ -60,6 +87,7 @@ data class Message(
         suspend fun insertOrUpdate(messages: List<Message>)
         suspend fun latest(): Message?
         suspend fun get(id: String): Message?
+        suspend fun delete(id: String)
         suspend fun delete(message: Message)
         suspend fun delete(message: List<Message>)
         suspend fun listUnread(): List<Message>
@@ -86,13 +114,6 @@ data class Message(
 
     companion object {
         val Empty = Message()
-    }
-
-
-    fun getParty(address: Address) = when (address) {
-        from.address -> to
-        to.address -> from
-        else -> throw Exception("$address is not in party")
     }
 
     val isUnread get() = readAt == 0L && status == Status.Received

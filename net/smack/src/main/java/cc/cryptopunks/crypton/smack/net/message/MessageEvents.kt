@@ -72,11 +72,12 @@ private fun SendChannel<CryptonMessage>.stanzaListener(connection: XMPPConnectio
                         status = Message.Status.State,
                         body = stanza.chatStateExtension.name
                     )
+                    stanza.body.isNullOrEmpty() -> null
                     else -> cryptonMessage(Message.Status.Received)
-                }.also {
-                    println("offering omemo message $it")
+                }?.also {
+                    println("offering message $it")
                     offer(it)
-                }
+                } ?: println("Unknown stanza with empty body received")
             }
 
             else -> {
@@ -94,8 +95,10 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         stanza: Stanza,
         decryptedMessage: OmemoMessage.Received
     ) {
-        when (stanza) {
-            is SmackMessage -> stanza.cryptonMessage(
+        println("Omemo omemo stanza received")
+        when {
+            decryptedMessage.body.isNullOrBlank() -> println("Null or blank body")
+            stanza is SmackMessage -> stanza.cryptonMessage(
                 status = Message.Status.Received,
                 decrypted = decryptedMessage
             ).also {
@@ -112,6 +115,7 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         wrappingMessage: SmackMessage,
         decryptedCarbonCopy: OmemoMessage.Received
     ) {
+        println("Omemo omemo carbon copy received")
         carbonCopy.cryptonMessage(
             status = Message.Status.Sent,
             decrypted = decryptedCarbonCopy

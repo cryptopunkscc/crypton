@@ -89,9 +89,9 @@ class ChatView(
                         messageAdapter.setMessages(arg)
                         val wasBottomReached = isBottomReached()
                         delay(50)
-                        if (wasBottomReached)
-                            scrollToNewMessage() else
-                            displayNewMessageInfo()
+                        if (!wasBottomReached && arg.list.last().status == Message.Status.State)
+                            displayNewMessageInfo() else
+                            scrollToNewMessage()
                     }
 
                     is Handle.Error ->

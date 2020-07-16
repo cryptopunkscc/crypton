@@ -20,6 +20,9 @@ internal fun SmackMessage.cryptonMessage(
     decrypted: OmemoMessage.Received? = null,
     body: String = decrypted?.body ?: this.body ?: "",
     chat: Address = when (status) {
+        Message.Status.State ->
+            if (to.address.isConference) to.address
+            else from.address
         Message.Status.Received -> from.address
         Message.Status.Sent -> to.address
         else -> Address.Empty

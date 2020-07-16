@@ -12,8 +12,8 @@ crypton {
 
 buildscript {
     ext {
-        version_code = 2
-        version_name = '0.2'
+        version_code = 3
+        version_name = '0.3'
         min_sdk = 22
         target_sdk = 27 // TODO temporary downgraded required by Omemo
         compile_sdk = 29
