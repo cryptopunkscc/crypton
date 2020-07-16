@@ -3,6 +3,8 @@ package cc.cryptopunks.crypton.view
 import android.content.Context
 import android.view.View
 import android.widget.EditText
+import androidx.navigation.NavGraph
+import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.Connector
@@ -29,11 +31,13 @@ internal class AddAccountView(context: Context) : ActorLayout(context) {
         )
 
     override fun Connector.connect(): Job = launch {
+        val navigateUpOnConnected = findNavController().previousBackStackEntry?.destination !is NavGraph
         launch {
             input.collect { arg ->
                 when (arg) {
                     is Map<*, *> -> setForm(arg as Map<Account.Field, CharSequence>)
                     is Account.Service.Error -> errorOutput.text = arg.message
+                    is Account.Service.Connected -> if (navigateUpOnConnected) findNavController().navigateUp()
                 }
             }
         }

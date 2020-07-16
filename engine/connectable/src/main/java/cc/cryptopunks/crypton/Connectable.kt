@@ -51,7 +51,7 @@ interface Actor : Connectable {
 fun Connectable.dispatch(
     vararg args: Any,
     output: suspend (Any) -> Unit = {}
-) = connector(args, output).connect()
+) = connector(*args, output).connect()
 
 fun Any.connector(
     output: suspend (Any) -> Unit = {}

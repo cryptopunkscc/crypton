@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.util.TypedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -26,15 +27,16 @@ private data class ScopedConnectable(
     override fun Connector.connect(): Job = launch {
         val log = coroutineContext[TypedLog]!!
         log.d("Start $id")
-        input.collect {
+        input.onCompletion {
+            subscriptions.values.forEach { it.cancel() }
+            subscriptions.clear()
+        }.collect {
             log.d("$id Received $it")
             when (it) {
                 is Subscription -> handleSubscription(it)
                 else -> handleRequest(it)
             }
         }
-        subscriptions.values.forEach { it.cancel() }
-        subscriptions.clear()
     }
 
     private fun Connector.handleSubscription(subscription: Subscription) {
