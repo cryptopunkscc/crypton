@@ -82,6 +82,11 @@ class ChatView(
                 }
             }
         }
+        messageInputView.addOnLayoutChangeListener { view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            chatRecyclerView.apply {
+                setPadding(paddingLeft, paddingTop, paddingRight, this.bottom - top)
+            }
+        }
     }
 
     override fun Connector.connect(): Job = launch {
