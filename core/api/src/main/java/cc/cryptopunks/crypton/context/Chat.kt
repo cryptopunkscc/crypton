@@ -33,7 +33,7 @@ data class Chat(
 
         data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
 
-        data class UpdateNotification(val messages: List<Message>)
+        data class UpdateNotification(val account: Address, val messages: List<Message>)
 
         data class Copy(val message: Message)
 

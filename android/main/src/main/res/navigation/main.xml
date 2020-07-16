@@ -60,4 +60,7 @@
         android:label="{chat}"
         tools:layout="@layout/chat">
     </fragment>
+    <action
+        android:id="@id/navigateChat"
+        app:destination="@id/chatFragment"/>
 </navigation>

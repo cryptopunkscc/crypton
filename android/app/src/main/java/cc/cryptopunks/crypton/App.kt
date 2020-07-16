@@ -44,14 +44,16 @@ class App :
                 notificationFactories = mapOf(
                     Notification.Messages::class to AndroidChatNotificationFactory(
                         context = this,
-                        mainActivityClass = mainActivityClass.java
+                        mainActivityClass = mainActivityClass.java,
+                        navGraphId = R.navigation.main
                     )
                 )
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
             startSessionService = SessionScope::startSessionService,
             mainHandlers = mainHandlers,
-            chatHandlers = chatHandlers
+            chatHandlers = chatHandlers,
+            navigateChatId = R.id.chatFragment
         )
     }
 
