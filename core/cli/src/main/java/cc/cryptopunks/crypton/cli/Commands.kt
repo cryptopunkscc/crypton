@@ -27,6 +27,7 @@ private const val MESSAGE = "message"
 private const val INVITE = "invite"
 private const val JOIN = "join"
 private const val ROOMS = "rooms"
+private const val DELETE = "delete"
 
 private val navigateMain = MAIN to command { Route.Main }
 
@@ -59,17 +60,14 @@ private val createAccount = CREATE to command(
 
 private val rosterItems = GET to mapOf(
     ITEMS to command {
-    Roster.Service.GetItems
-})
+        Roster.Service.GetItems
+    })
 
 private val chat = CHAT to command(param()) { (address) ->
     Chat.Service.Create(Chat(address(address), address(account)))
 }
 
-private val sendMessage = SEND to mapOf(
-    MESSAGE to command(
-    vararg()
-) { message ->
+private val sendMessage = SEND to mapOf(MESSAGE to command(vararg()) { message ->
     Chat.Service.EnqueueMessage(message.joinToString(" "))
 })
 
@@ -83,12 +81,20 @@ private val listJoinedRooms = ROOMS to command(param()) { (account) ->
     Chat.Service.ListJoinedRooms(address(account))
 }
 
-private val invite = INVITE to command(
-    vararg()
-) { users ->
+private val invite = INVITE to command(vararg()) { users ->
     Chat.Service.Invite(users.map(::address))
 }
 
+private val deleteChat = DELETE to command(vararg()) { chats ->
+    run {
+        Chat.Service.DeleteChat(
+            when (chats.isEmpty()) {
+                true -> (route as Route.Chat).run { listOf(address) }
+                false -> chats.map { address(it) }
+            }
+        )
+    }
+}
 
 private val navigate = NAVIGATE to mapOf(
     navigateMain,
@@ -101,7 +107,8 @@ val mainCommands = mapOf(
     createAccount,
     rosterItems,
     chat,
-    listJoinedRooms
+    listJoinedRooms,
+    deleteChat
 )
 
 val chatCommands = mapOf(

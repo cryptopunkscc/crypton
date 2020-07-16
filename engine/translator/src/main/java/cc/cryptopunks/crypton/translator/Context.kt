@@ -25,7 +25,7 @@ fun Context.process(input: String): Context = set(input).run {
 
 fun Context.execute(): Any = anySuggestion()
     ?: (state as? Command)?.run {
-        run(params.map { it.value!! }).also {
+        run(params.mapNotNull { it.value }).also {
             params.forEach { it.value = null }
         }
     }

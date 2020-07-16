@@ -8,7 +8,7 @@ data class Command(
 )
 
 fun Command.canExecute() =
-    params.all(Input::isNotEmpty)
+    params.filterNot { it is Input.Vararg }.all(Input::isNotEmpty)
 
 fun Command.emptyParams() =
     params.filter(Input::isEmpty)

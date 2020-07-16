@@ -59,6 +59,8 @@ data class Chat(
 
         data class ListJoinedRooms(val account: Address)
 
+        data class DeleteChat(val chats: List<Address>)
+
         // output
 
         data class ChatCreated(val chat: Address)
@@ -101,7 +103,7 @@ data class Chat(
         suspend fun list(addresses: List<Address>): List<Chat>
         suspend fun insert(chat: Chat)
         suspend fun insertIfNeeded(chat: Chat)
-        suspend fun delete(chat: Chat)
+        suspend fun delete(chats: List<Address>)
         suspend fun deleteAll()
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>
         fun flowList(): Flow<List<Chat>>

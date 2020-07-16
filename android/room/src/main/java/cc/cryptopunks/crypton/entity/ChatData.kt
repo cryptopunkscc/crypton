@@ -34,8 +34,8 @@ internal data class ChatData(
         @Insert(onConflict = OnConflictStrategy.IGNORE)
         suspend fun insertIfNeeded(data: ChatData)
 
-        @Delete
-        suspend fun delete(data: ChatData)
+        @Query("delete from chat where id in (:ids)")
+        suspend fun delete(ids: List<AddressData>)
 
         @Query("delete from chat")
         suspend fun deleteAll()

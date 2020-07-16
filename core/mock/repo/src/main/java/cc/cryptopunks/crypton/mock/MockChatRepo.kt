@@ -51,8 +51,8 @@ class MockChatRepo : Chat.Repo {
         if (chat.address !in store.get()) insert(chat)
     }
 
-    override suspend fun delete(chat: Chat) {
-        store reduce { minus(chat.address) }
+    override suspend fun delete(chats: List<Address>) {
+        store reduce { minus(chats) }
     }
 
     override suspend fun deleteAll() {

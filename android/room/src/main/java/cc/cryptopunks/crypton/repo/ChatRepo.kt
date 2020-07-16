@@ -61,8 +61,8 @@ internal class ChatRepo(
     override fun flowList(): Flow<List<Chat>> =
         chatDao.flowList().map { list -> list.map { data -> data.toDomain() } }
 
-    override suspend fun delete(chat: Chat): Unit =
-        chatDao.delete(chat.chatData())
+    override suspend fun delete(chats: List<Address>): Unit =
+        chatDao.delete(chats.map { it.id })
 
     override suspend fun deleteAll(): Unit =
         chatDao.deleteAll()
