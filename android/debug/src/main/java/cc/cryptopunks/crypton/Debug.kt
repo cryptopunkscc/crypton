@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.view.ViewGroup
 import io.palaima.debugdrawer.DebugDrawer
-import io.palaima.debugdrawer.R
 import io.palaima.debugdrawer.commons.BuildModule
 import io.palaima.debugdrawer.commons.DeviceModule
 import io.palaima.debugdrawer.commons.SettingsModule
@@ -24,11 +23,14 @@ fun Application.initAppDebug() {
 fun Activity.initDebugDrawer(): DebugDrawer = DebugDrawer
     .Builder(this)
     .modules(
-        ScalpelModule(this),
-        TimberModule(),
-        DeviceModule(),
         BuildModule(),
-        SettingsModule()
+        SettingsModule(),
+        CryptonDebugModule(
+            restart()
+        ),
+        DeviceModule(),
+        TimberModule(),
+        ScalpelModule(this)
     )
     .build()
 
