@@ -53,6 +53,9 @@ internal class MessageRepo(
     override suspend fun get(id: String): Message? =
         dao.get(id)?.message()
 
+    override suspend fun delete(id: String) =
+        dao.delete(id)
+
     override suspend fun delete(message: Message) =
         dao.delete(message.id)
 

@@ -4,9 +4,10 @@ import cc.cryptopunks.crypton.context.CryptonMessage
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.calculateId
 import cc.cryptopunks.crypton.smack.SmackCore
+import cc.cryptopunks.crypton.smack.util.cryptonMessage
+import cc.cryptopunks.crypton.smack.util.ext.chatStateExtension
+import cc.cryptopunks.crypton.smack.util.ext.hasChatStateExtension
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
-import cc.cryptopunks.crypton.smack.util.ext.replaceBody
-import cc.cryptopunks.crypton.smack.util.toCryptonMessage
 import cc.cryptopunks.crypton.util.all
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -28,50 +29,60 @@ import org.jivesoftware.smack.packet.Message as SmackMessage
 internal fun SmackCore.createMessageEventBroadcast(): BroadcastChannel<CryptonMessage> =
     callbackFlow<CryptonMessage> {
 
-        val incomingMucListener = incomingMucListener(connection)
+        val stanzaListener = stanzaListener(connection)
         val omemoListener = omemoListener()
 
         omemoManager.addOmemoMessageListener(omemoListener)
         omemoManager.addOmemoMucMessageListener(omemoListener)
-        connection.addAsyncStanzaListener(incomingMucListener, StanzaFilter { true })
+        connection.addAsyncStanzaListener(stanzaListener, StanzaFilter { true })
 
         awaitClose {
             omemoManager.removeOmemoMessageListener(omemoListener)
             omemoManager.removeOmemoMucMessageListener(omemoListener)
-            connection.removeAsyncStanzaListener(incomingMucListener)
+            connection.removeAsyncStanzaListener(stanzaListener)
         }
     }
         .map { it.calculateId() }
         .broadcastIn(this)
 
 
-private fun SendChannel<CryptonMessage>.incomingMucListener(connection: XMPPConnection) =
+private fun SendChannel<CryptonMessage>.stanzaListener(connection: XMPPConnection) =
     StanzaListener { stanza ->
-        (stanza as? SmackMessage)?.takeIf {
-            when {
-                it.hasOmemoExtension -> false
+        println("incoming stanza")
+        when {
+            stanza.hasOmemoExtension -> Unit
+            stanza is SmackMessage -> when {
 
-                SmackMessage.Type.chat == it.type -> true
+                SmackMessage.Type.chat == stanza.type -> {
+                    stanza
+                }
 
                 all( // filter own messages
-                    SmackMessage.Type.groupchat == it.type,
-                    connection.user.localpart != it.from.resourceOrEmpty
-                ) -> true
+                    SmackMessage.Type.groupchat == stanza.type,
+                    connection.user.localpart != stanza.from.resourceOrEmpty
+                ) -> stanza
 
-                else -> false
-            }
-        }?.run {
-            offer(toCryptonMessage(status = Message.Status.Received).run {
-                copy(
-                    chat = when (type) {
-                        SmackMessage.Type.chat -> from.address
-                        SmackMessage.Type.groupchat -> from.address
-                        else -> throw IllegalArgumentException("invalid message type $type")
-                    }
-                ).also {
-                    println("incoming $it")
+                else -> {
+                    println("Unknown stanza received")
+                    null
                 }
-            })
+            }?.run {
+                when {
+                    stanza.hasChatStateExtension -> cryptonMessage(
+                        status = Message.Status.State,
+                        body = stanza.chatStateExtension.name
+                    )
+                    stanza.body.isNullOrEmpty() -> null
+                    else -> cryptonMessage(Message.Status.Received)
+                }?.also {
+                    println("offering message $it")
+                    offer(it)
+                } ?: println("Unknown stanza with empty body received")
+            }
+
+            else -> {
+                println("Unknown stanza received")
+            }
         }
     }
 
@@ -84,14 +95,17 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         stanza: Stanza,
         decryptedMessage: OmemoMessage.Received
     ) {
-        stanza.let {
-            it as? SmackMessage
-        }?.replaceBody(decryptedMessage)?.run {
-            offer(toCryptonMessage(Message.Status.Received).run {
-                copy(chat = from.address).also {
-                    println("incoming omemo message $it")
-                }
-            })
+        println("Omemo omemo stanza received")
+        when {
+            decryptedMessage.body.isNullOrBlank() -> println("Null or blank body")
+            stanza is SmackMessage -> stanza.cryptonMessage(
+                status = Message.Status.Received,
+                decrypted = decryptedMessage
+            ).also {
+                println("offering omemo message $it")
+                offer(it)
+            }
+            else -> println("Unknown omemo stanza received")
         }
     }
 
@@ -101,12 +115,13 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         wrappingMessage: SmackMessage,
         decryptedCarbonCopy: OmemoMessage.Received
     ) {
-        carbonCopy.replaceBody(decryptedCarbonCopy)?.run {
-            offer(toCryptonMessage(Message.Status.Sent).run {
-                copy(chat = to.address).also {
-                    println("incoming carbon copy $it")
-                }
-            })
+        println("Omemo omemo carbon copy received")
+        carbonCopy.cryptonMessage(
+            status = Message.Status.Sent,
+            decrypted = decryptedCarbonCopy
+        ).also {
+            println("offering carbon copy $it")
+            offer(it)
         }
     }
 
@@ -115,15 +130,16 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         stanza: Stanza,
         decryptedOmemoMessage: OmemoMessage.Received
     ) {
-        println("Omemo muc message received")
-        stanza.let {
-            it as? SmackMessage
-        }?.replaceBody(decryptedOmemoMessage)?.run {
-            offer(toCryptonMessage(Message.Status.Received).run {
-                copy(chat = from.address).also {
-                    println("incoming omemo muc message $it")
-                }
-            })
+        println("Omemo muc stanza received")
+        when (stanza) {
+            is SmackMessage -> stanza.cryptonMessage(
+                status = Message.Status.Received,
+                decrypted = decryptedOmemoMessage
+            ).also {
+                println("offering omemo muc message $it")
+                offer(it)
+            }
+            else -> println("Unknown muc omemo stanza received")
         }
     }
 }

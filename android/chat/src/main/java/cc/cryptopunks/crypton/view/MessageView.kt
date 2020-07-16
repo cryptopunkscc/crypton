@@ -34,10 +34,20 @@ class MessageView(
     var message: Message? = null
         set(value) {
             field = value?.apply {
-                bodyTextView.text = text
-                authorTextView.text = " $BULLET $author"
-                statusTextView.text = " $BULLET $status"
-                timestampTextView.text = dateFormat.format(timestamp)
+                when {
+                    value.status == Message.Status.State && value.text == Message.State.composing.name -> {
+                        bodyTextView.text = "..."
+                        authorTextView.text = author
+                        statusTextView.text = null
+                        timestampTextView.text = null
+                    }
+                    else -> {
+                        bodyTextView.text = text
+                        authorTextView.text = " $BULLET $author"
+                        statusTextView.text = " $BULLET $status"
+                        timestampTextView.text = dateFormat.format(timestamp)
+                    }
+                }
             }
         }
 

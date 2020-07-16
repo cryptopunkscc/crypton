@@ -5,10 +5,6 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.insertChat
 
-internal suspend fun SessionScope.saveMessages(messages: List<Message>) {
-    messages.forEach { saveMessage(it) }
-}
-
 internal suspend fun SessionScope.saveMessage(message: Message) {
     message.run {
         get(message) ?: create(message)

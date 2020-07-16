@@ -1,18 +1,15 @@
 package cc.cryptopunks.crypton.smack.net.message
 
-import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.CryptonMessage
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.SmackCore
-import cc.cryptopunks.crypton.smack.util.entityBareJid
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
-import cc.cryptopunks.crypton.smack.util.toCryptonMessage
+import cc.cryptopunks.crypton.smack.util.cryptonMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
-import org.jivesoftware.smackx.muc.MultiUserChat
 import java.util.*
 
 internal fun SmackCore.readArchivedMessages(
@@ -39,7 +36,7 @@ private fun SmackCore.flowMessages(query: MamManager.MamQuery): Flow<List<Crypto
                     forwarded.takeIf { it.forwardedStanza.replaceBody(omemoMessage) != null }
                 }
             }
-            .map(Forwarded::toCryptonMessage)
+            .map(Forwarded::cryptonMessage)
             .map { it.copy(readAt = System.currentTimeMillis()) }
             .filter { it.text.isNotBlank() }
             .let { emit(it) }

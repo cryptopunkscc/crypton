@@ -51,8 +51,11 @@ class MockMessageRepo : Message.Repo {
     override suspend fun get(id: String): Message? =
         store.get()[id]
 
+    override suspend fun delete(id: String) {
+        store.reduce { minus(id) }
+    }
     override suspend fun delete(message: Message) {
-        store.reduce { minus(message.id) }
+        delete(message.id)
     }
 
     override suspend fun delete(messages: List<Message>) {
