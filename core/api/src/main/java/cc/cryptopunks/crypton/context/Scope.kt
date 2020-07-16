@@ -24,6 +24,7 @@ interface AppScope :
     Connectable {
 
     val mainClass: KClass<*>
+    val navigateChatId: Int
 
     val sessionStore: SessionScope.Store
     val clipboardStore: Clip.Board.Store

@@ -1,20 +1,24 @@
 package cc.cryptopunks.crypton.fragment
 
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Intent
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import androidx.navigation.NavDeepLinkBuilder
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Notification
+import cc.cryptopunks.crypton.navigate.account
+import cc.cryptopunks.crypton.navigate.chat
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AndroidChatNotificationFactory(
     private val context: Application,
-    private val mainActivityClass: Class<*>
+    private val mainActivityClass: Class<*>,
+    private val navGraphId: Int
 ) : (Notification) -> android.app.Notification {
 
     private val person = Person.Builder().setName("Me").build()
@@ -51,7 +55,16 @@ class AndroidChatNotificationFactory(
     private fun Notification.Messages.formatMessageCount() = context.resources
         .getQuantityText(R.plurals.messages_count, messages.size)
 
-    private fun pendingIntent() = PendingIntent.getActivity(context, 0, mainActivityIntent(), 0)
+    private fun Notification.Messages.pendingIntent() =
+        NavDeepLinkBuilder(context)
+            .setGraph(navGraphId)
+            .setDestination(destination)
+            .setArguments(Bundle().also {
+                it.chat = chatAddress
+                it.account = account
+            })
+            .createPendingIntent()
+
 
     private fun mainActivityIntent() = Intent(context, mainActivityClass)
 

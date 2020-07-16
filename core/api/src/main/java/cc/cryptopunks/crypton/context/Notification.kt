@@ -4,6 +4,8 @@ sealed class Notification(
     val id: Int
 ) {
     data class Messages(
+        val destination: Int,
+        val account: Address,
         val chatAddress: Address,
         val messages: List<Message>
     ) : Notification(chatAddress.hashCode())

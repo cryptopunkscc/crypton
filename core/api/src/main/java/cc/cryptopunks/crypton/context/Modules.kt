@@ -25,7 +25,8 @@ class AppModule(
     override val createConnection: Connection.Factory,
     override val startSessionService: SessionScope.() -> Job,
     override val mainExecutor: MainExecutor,
-    override val ioExecutor: IOExecutor
+    override val ioExecutor: IOExecutor,
+    override val navigateChatId: Int = 0
 ) :
     AppScope,
     Executors,

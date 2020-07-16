@@ -17,9 +17,9 @@ import kotlinx.coroutines.launch
 fun SessionScope.startSessionService() = launch {
     log.d("Invoke session services for $address")
     launch { netEvents().collect(handleApiEvent()) }
-    launch { updateChatNotificationFlow().collect(handleUpdateChatNotification() ) }
     launch { saveMessagesFlow().collect(handleSaveMessages(), join = true) }
     launch { presenceChangedFlow().collect(handlePresenceChanged(), join = true) }
     launch { flushQueueMessagesFlow().collect(handleFlushQueuedMessages(), join = true) }
     launch { conferenceInvitationsFlow().collect(handleConferenceInvitations()) }
+    launch { updateChatNotificationFlow().collect(handleUpdateChatNotification()) }
 }

@@ -7,11 +7,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import cc.cryptopunks.crypton.detachDebugDrawer
-import cc.cryptopunks.crypton.fragment.MainFragment
 import cc.cryptopunks.crypton.initDebugDrawer
 import cc.cryptopunks.crypton.intent.IntentProcessor
 import cc.cryptopunks.crypton.main.R
-import cc.cryptopunks.crypton.util.ext.fragment
 import cc.cryptopunks.crypton.view.setupDrawerAccountView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main.*
@@ -33,7 +31,6 @@ class MainActivity : FeatureActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        fragment<MainFragment>()
         setSupportActionBar(toolbar)
         initDebugDrawer()
         intent?.let(processIntent)
