@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
     <style name="Theme.Crypton" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">@color/md_blue_200</item>
+        <item name="colorPrimary">@color/md_indigo_200</item>
 <!--        <item name="colorPrimaryDark">@color/md_blue_500</item>-->
         <item name="colorPrimaryVariant">@color/md_teal_200</item>
         <item name="colorSecondary">@color/md_indigo_200</item>

@@ -35,6 +35,7 @@ class CreateChatView(context: Context) :
             layoutManager = LinearLayoutManager(context)
             adapter = userListAdapter
         }
+        addressInputView.slash.visibility = View.GONE
     }
 
     override fun Connector.connect(): Job = launch {
