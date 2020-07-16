@@ -17,6 +17,7 @@ internal fun AppScope.handleRosterItemsSubscription(
     handle<Roster.Service.SubscribeItems> { output ->
         rosterItemStatesFlow()
             .filterBy(account)
+            .map { list -> list.sortedByDescending { item -> item.message.timestamp } }
             .map { Roster.Service.Items(it) }
             .onEach { lastItems { it } }
             .collect(output)
