@@ -11,7 +11,7 @@ class MockMessageNet(
     private val state: MockState
 ) : Message.Net {
 
-    override suspend fun sendMessage(message: Message, encrypt: Boolean): Job {
+    override suspend fun sendMessage(message: Message): Job {
         delay(500)
         state { messageEvents.send(Message.Net.Incoming(message.copy(status = Message.Status.Sending))) }
         return Job().apply {
