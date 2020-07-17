@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.ConnectableBuffer
 import cc.cryptopunks.crypton.createBinding
+import cc.cryptopunks.crypton.minus
 import cc.cryptopunks.crypton.remove
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
 
 abstract class ServiceFragment :
@@ -20,12 +17,8 @@ abstract class ServiceFragment :
         runBlocking { appScope.connectableBindingsStore.createBinding() }
     }
 
-    protected val viewProxy =
-        ConnectableBuffer(SupervisorJob() + Dispatchers.IO)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding + viewProxy
         binding + onCreateService()
     }
 
@@ -33,11 +26,11 @@ abstract class ServiceFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewProxy.service = onCreateActor(view)
+        binding + onCreateActor(view)
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected open fun onCreateActor(view: View): Connectable? = view as? Connectable
+    protected open fun onCreateActor(view: View): Actor? = view as? Actor
 
     override fun onStart() {
         super.onStart()
@@ -51,13 +44,12 @@ abstract class ServiceFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewProxy.service = null
+        binding.minus<Actor>()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         runBlocking {
-            viewProxy.cancel()
             binding.cancel()
             log.d("binding canceled")
             appScope.connectableBindingsStore.remove(binding)

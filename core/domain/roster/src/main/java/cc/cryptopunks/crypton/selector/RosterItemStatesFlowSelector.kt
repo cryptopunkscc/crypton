@@ -7,11 +7,13 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
@@ -55,7 +57,9 @@ private fun Collection<SessionScope>.rosterItemStatesFlow(): Flow<Pair<Address, 
 private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
     val jobs = mutableMapOf<Address, Job>()
     val items = mutableMapOf<Address, Roster.Item>()
-
+    val sync = actor<suspend () -> Unit> {
+        channel.consumeAsFlow().collect { it() }
+    }
     return channelFlow {
         chatRepo.flowList().map { chats ->
             delay(50)
@@ -66,17 +70,21 @@ private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
             // Cancel jobs of removed chats
             jobs.minus(current).map { (address, job) ->
                 job.cancel()
-                items -= address
-                jobs -= address
+                address
+            }.also { addresses ->
+                sync.send {
+                    items -= addresses
+                    jobs -= addresses
+                }
             }
 
             // Observe new chat changes
             current.minus(jobs.keys).map { address ->
                 jobs += (address to launch {
                     rosterItemStatesFlow(address).collect { state ->
-                        items.apply {
-                            put(address, state)
-                            send(values.toSet())
+                        sync.send {
+                            items[address] = state
+                            send(items.values.toSet())
                         }
                     }
                 })

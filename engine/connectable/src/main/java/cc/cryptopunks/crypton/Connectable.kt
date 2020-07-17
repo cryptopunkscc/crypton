@@ -23,7 +23,7 @@ interface Connectable : CoroutineScope {
         val services: Set<Connectable>
         suspend fun cancel()
         operator fun plus(service: Connectable?): Boolean
-        operator fun minus(service: Connectable): Boolean
+        operator fun minus(service: Connectable?): Boolean
         fun send(any: Any) = Unit
     }
 
@@ -34,6 +34,9 @@ interface Connectable : CoroutineScope {
         service.run { connect() }.join()
     }
 }
+
+inline fun <reified T : Connectable> Connectable.Binding.minus() =
+    services.filterIsInstance<T>().forEach { minus(it) }
 
 interface Actor : Connectable {
     interface Status
