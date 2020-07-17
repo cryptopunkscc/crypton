@@ -36,6 +36,7 @@ class CreateChatView(context: Context) :
             adapter = userListAdapter
         }
         addressInputView.slash.visibility = View.GONE
+        addressInputView.encrypt.visibility = View.GONE
     }
 
     override fun Connector.connect(): Job = launch {

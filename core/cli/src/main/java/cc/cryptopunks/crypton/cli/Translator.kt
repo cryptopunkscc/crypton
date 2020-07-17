@@ -7,8 +7,9 @@ import cc.cryptopunks.crypton.translator.process
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-fun Flow<CharSequence>.translateMessageInput(context: Context = context()
-    .prepare()): Flow<Any?> =
+fun Flow<CharSequence>.translateMessageInput(
+    context: Context = context().prepare()
+): Flow<Any?> =
     map { message ->
         when {
             message.isBlank() -> null

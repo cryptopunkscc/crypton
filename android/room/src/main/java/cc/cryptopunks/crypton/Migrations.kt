@@ -11,5 +11,8 @@ internal val migrations = arrayOf(
     },
     migration(3, 4) {
         /*no-op*/
+    },
+    migration(4, 5) {
+        execSQL("alter table message add column encrypted integer not null default 1")
     }
 )

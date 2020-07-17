@@ -25,7 +25,7 @@ data class Chat(
 
         data class MessagesRead(val messages: List<Message>)
 
-        data class EnqueueMessage(val text: String)
+        data class EnqueueMessage(val text: String, val encrypted: Boolean = true)
 
         data class InfoMessage(val text: String)
 

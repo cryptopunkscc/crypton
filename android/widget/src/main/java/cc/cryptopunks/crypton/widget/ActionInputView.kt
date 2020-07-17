@@ -25,8 +25,10 @@ class ActionInputView @JvmOverloads constructor(
     }
 
     val slash get() = slashButton
+    val encrypt get() = encryptToggle
     val input get() = inputEditText
     val button get() = actionButton
+    val actionWrapper get() = actionButtonWrapper
 
     private companion object {
         val layout get() = R.layout.action_input

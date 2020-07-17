@@ -4,19 +4,15 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.isConference
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.util.entityBareJid
-import cc.cryptopunks.crypton.smack.util.entityFullJid
 import kotlinx.coroutines.Job
 import org.jivesoftware.smack.packet.Message as SmackMessage
 
-internal fun SmackCore.sendMessage(
-    message: Message,
-    encrypt: Boolean
-): Job {
+internal fun SmackCore.sendMessage(message: Message): Job {
     check(connection.isAuthenticated) { "Connection not authenticated" }
 
     val stanza = when (message.chat.isConference) {
-        true -> prepareConferenceMessage(message, encrypt)
-        false -> prepareChatMessage(message, encrypt)
+        true -> prepareConferenceMessage(message)
+        false -> prepareChatMessage(message)
     }
 
     return Job().apply {
@@ -25,8 +21,8 @@ internal fun SmackCore.sendMessage(
     }
 }
 
-private fun SmackCore.prepareConferenceMessage(message: Message, encrypt: Boolean): SmackMessage =
-    when (encrypt) {
+private fun SmackCore.prepareConferenceMessage(message: Message): SmackMessage =
+    when (message.encrypted) {
         true -> encryptConferenceMessage(message)
         false -> createConferenceMessage(message)
     }
@@ -43,8 +39,8 @@ private fun SmackCore.createConferenceMessage(message: Message): SmackMessage =
         body = message.text
     }
 
-private fun SmackCore.prepareChatMessage(message: Message, encrypt: Boolean): SmackMessage =
-    when (encrypt) {
+private fun SmackCore.prepareChatMessage(message: Message): SmackMessage =
+    when (message.encrypted) {
         true -> encryptChatMessage(message)
         false -> createChatMessage(message)
     }
@@ -58,7 +54,7 @@ private fun SmackCore.encryptChatMessage(message: Message): SmackMessage =
 
 private fun createChatMessage(message: Message) =
     SmackMessage().apply {
-        to = message.to.entityFullJid()
+        to = message.to.address.entityBareJid()
         body = message.text
         type = SmackMessage.Type.chat
     }
