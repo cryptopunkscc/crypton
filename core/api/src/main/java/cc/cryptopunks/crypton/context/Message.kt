@@ -19,7 +19,8 @@ data class Message(
     val to: Resource = Resource.Empty,
     val status: Status = Status.None,
     val notifiedAt: Long = 0,
-    val readAt: Long = 0
+    val readAt: Long = 0,
+    val encrypted: Boolean = true
 ) {
     enum class Status {
         None,
@@ -66,7 +67,7 @@ data class Message(
     }
 
     interface Net {
-        suspend fun sendMessage(message: Message, encrypt: Boolean = true): Job
+        suspend fun sendMessage(message: Message): Job
         fun incomingMessages(): Flow<Incoming>
         fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
 
@@ -118,7 +119,11 @@ data class Message(
 
     val isUnread get() = readAt == 0L && status == Status.Received
 
-    val author: String get() = from.address.local
+    val author: String get() = when {
+        !chat.isConference -> from.address.local
+        from.address != chat -> from.address.local
+        else -> from.resource
+    }
 }
 
 fun Message.calculateId() = copy(

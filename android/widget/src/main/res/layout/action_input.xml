@@ -38,19 +38,32 @@
             android:textSize="32dp" />
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/actionButtonWrapper"
-        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/inputEditText">
+        android:layout_alignBottom="@+id/inputEditText"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <ToggleButton
+            android:id="@+id/encryptToggle"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/lock_button"
+            android:checked="true"
+            android:textOff="@null"
+            android:textOn="@null" />
 
         <ImageView
             android:id="@+id/actionButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_margin="4dp"
+            android:layout_marginStart="4dp"
             tools:src="@android:drawable/ic_menu_send" />
-    </FrameLayout>
+    </LinearLayout>
 
 </RelativeLayout>

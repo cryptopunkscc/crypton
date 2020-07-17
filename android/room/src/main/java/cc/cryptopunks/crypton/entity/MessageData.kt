@@ -35,7 +35,8 @@ internal data class MessageData(
     val from: AddressData = EmptyAddressData,
     val to: AddressData = EmptyAddressData,
     val status: String = "",
-    val readAt: Long = 0
+    val readAt: Long = 0,
+    val encrypted: Boolean = true
 ) {
 
     @androidx.room.Dao
@@ -103,7 +104,8 @@ internal fun Message.messageData() = MessageData(
     from = from.id,
     to = to.id,
     status = status.name,
-    readAt = readAt
+    readAt = readAt,
+    encrypted = encrypted
 )
 
 internal fun MessageData.message() = Message(
@@ -115,5 +117,6 @@ internal fun MessageData.message() = Message(
     text = text,
     timestamp = timestamp,
     status = messageStatus(status),
-    readAt = readAt
+    readAt = readAt,
+    encrypted = encrypted
 )

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.view.Gravity
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 class ChatView(
     context: Context,
@@ -56,6 +58,8 @@ class ChatView(
 
     private var command: Any? = null
 
+    private val orientationThreshold = context.resources.displayMetrics.density * 48 * 2
+
     init {
         View.inflate(context, R.layout.chat, this)
         chatRecyclerView.apply {
@@ -72,11 +76,10 @@ class ChatView(
                     selectionEnd.let { selection ->
                         if (text.firstOrNull() == '/') {
                             setText(text.drop(1))
-                            setSelection(selection-1)
-                        }
-                        else {
+                            setSelection(selection - 1)
+                        } else {
                             setText("/$text")
-                            setSelection(selection+1)
+                            setSelection(selection + 1)
                         }
                     }
                 }
@@ -86,6 +89,12 @@ class ChatView(
             chatRecyclerView.apply {
                 setPadding(paddingLeft, paddingTop, paddingRight, this.bottom - top)
             }
+
+            if (top != oldTop) messageInputView.actionWrapper.orientation =
+                when (abs(top - bottom) > orientationThreshold) {
+                    true -> LinearLayout.VERTICAL
+                    false -> LinearLayout.HORIZONTAL
+                }
         }
     }
 
@@ -145,7 +154,9 @@ class ChatView(
 
                         else -> {
                             if (command != null) getInputAndClear()
-                            command
+                            (command as? Chat.Service.EnqueueMessage)
+                                ?.copy(encrypted = messageInputView.encrypt.isChecked)
+                                ?: command
                         }
                     }
                 }

@@ -9,15 +9,16 @@ import cc.cryptopunks.crypton.handle
 
 internal fun ChatScope.handleEnqueueMessage() =
     handle<Chat.Service.EnqueueMessage> {
-        chat.createQueuedMessage(text).let { message ->
+        chat.queuedMessage(this).let { message ->
             log.d("Enqueue message $message")
             messageRepo.insertOrUpdate(message)
         }
     }
 
-private fun Chat.createQueuedMessage(text: String) =
+private fun Chat.queuedMessage(enqueueMessage: Chat.Service.EnqueueMessage) =
     Message(
-        text = text,
+        text = enqueueMessage.text,
+        encrypted = enqueueMessage.encrypted,
         from = Resource(account),
         to = Resource(address),
         status = Message.Status.Queued,

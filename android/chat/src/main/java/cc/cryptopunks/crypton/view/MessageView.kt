@@ -40,12 +40,16 @@ class MessageView(
                         authorTextView.text = author
                         statusTextView.text = null
                         timestampTextView.text = null
+                        encryptedIcon.visibility = View.GONE
                     }
                     else -> {
                         bodyTextView.text = text
-                        authorTextView.text = " $BULLET $author"
-                        statusTextView.text = " $BULLET $status"
                         timestampTextView.text = dateFormat.format(timestamp)
+                        authorTextView.text = " $BULLET $author"
+                        statusTextView.text = StringBuffer(" $BULLET $status").apply {
+                            if (encrypted) append(" $BULLET ")
+                        }
+                        encryptedIcon.visibility = if (encrypted) View.VISIBLE else View.GONE
                     }
                 }
             }

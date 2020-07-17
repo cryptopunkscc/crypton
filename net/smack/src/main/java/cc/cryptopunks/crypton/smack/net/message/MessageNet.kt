@@ -14,8 +14,8 @@ internal class MessageNet(
 
     private val messageBroadcast = smack.createMessageEventBroadcast()
 
-    override suspend fun sendMessage(message: Message, encrypt: Boolean): Job =
-        smack.sendMessage(message, encrypt)
+    override suspend fun sendMessage(message: Message): Job =
+        smack.sendMessage(message)
 
     override fun incomingMessages(): Flow<Message.Net.Incoming> =
         messageBroadcast.asFlow().map { Message.Net.Incoming(it) }
