@@ -31,13 +31,21 @@ internal class ChatNet(
 
     override fun createConference(chat: Chat): Chat = smackCore.createMuc(chat)
 
-    override fun inviteToConference(chat: Address, users: List<Address>) = smackCore.inviteToConference(chat, users)
+    override fun inviteToConference(chat: Address, users: List<Address>) =
+        smackCore.inviteToConference(chat, users)
 
-    override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> = mucManager.invitationsFlow()
+    override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> =
+        mucManager.invitationsFlow()
 
-    override fun joinConference(address: Address, nickname: String) = mucManager.join(address, nickname)
+    override fun joinConference(address: Address, nickname: String) =
+        mucManager.join(address, nickname)
 
-    override fun listJoinedRooms(): Set<Address> = mucManager.joinedRooms.map { it.address() }.toSet()
+    override fun listJoinedRooms(): Set<Address> =
+        mucManager.joinedRooms.map { it.address() }.toSet()
+
+    override fun listRooms(): Set<Address> =
+        mucManager.mucServiceDomains.map(mucManager::getHostedRooms).flatten()
+            .map { it.jid.address() }.toSet()
 }
 
 internal fun SmackCore.inviteToConference(

@@ -59,6 +59,8 @@ data class Chat(
 
         data class ListJoinedRooms(val account: Address)
 
+        data class ListRooms(val accounts: Set<Address> = emptySet())
+
         data class DeleteChat(val chats: List<Address>)
 
         // output
@@ -71,7 +73,11 @@ data class Chat(
 
         data class Messages(val account: Address, val list: List<Message>)
 
-        data class JoinedRooms(val set: Set<Address>)
+        interface Rooms { val set: Set<Address> }
+
+        data class JoinedRooms(override val set: Set<Address>) : Rooms
+
+        data class AllRooms(override val set: Set<Address>) : Rooms
     }
 
 
@@ -82,6 +88,7 @@ data class Chat(
         fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
         fun joinConference(address: Address, nickname: String)
         fun listJoinedRooms(): Set<Address>
+        fun listRooms(): Set<Address>
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event
