@@ -8,6 +8,8 @@ import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.Connector
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.widget.ActorLayout
@@ -43,16 +45,22 @@ internal class AddAccountView(context: Context) : ActorLayout(context) {
         }
         launch {
             flowOf(
-                addButton.clicks().clearError().map { Account.Service.Add() },
-                registerButton.clicks().clearError().map { Account.Service.Register() },
-                formFields.textFieldChanges().map { (field, text) ->
-                    Account.Service.Set(field, text)
-                }
+                addButton.clicks().clearError().map { Account.Service.Add(account()) },
+                registerButton.clicks().clearError().map { Account.Service.Register(account()) }
             )
                 .flattenMerge()
                 .collect(output)
         }
     }
+
+    private fun account() = formFields.run {
+        Account(
+            address = Address(Account.Field.UserName.text, Account.Field.ServiceName.text),
+            password = Password(Account.Field.Password.text)
+        )
+    }
+
+    private val Account.Field.text get() = formFields.getValue(this).text.toString()
 
     private fun setForm(form: Map<Account.Field, CharSequence>) {
         form

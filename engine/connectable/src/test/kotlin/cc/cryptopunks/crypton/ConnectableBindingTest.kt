@@ -2,6 +2,8 @@ package cc.cryptopunks.crypton
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -23,10 +25,10 @@ class ConnectableBindingTest {
         runBlocking {
             // given
             val connectable = EchoConnectable()
-            val channels = Channels()
-            val binding = ConnectableBinding(channels)
+            val actor: BroadcastChannel<Any> = BroadcastChannel(Channel.BUFFERED)
+            val binding = ConnectableBinding(actor)
             val output = mutableListOf<Any>()
-            launch { channels.actor.openSubscription().consumeAsFlow().toCollection(output) }
+            launch { actor.openSubscription().consumeAsFlow().toCollection(output) }
 
             // when
             (1..2).asFlow().collect(binding.sendToService)

@@ -23,8 +23,11 @@ internal class ChatRepo(
     override suspend fun contains(address: Address): Boolean =
         chatDao.contains(address.id) != null
 
-    override suspend fun list(addresses: List<Address>): List<Chat> =
-        chatDao.list(addresses.map(Address::id)).map { it.toDomain() }
+    override suspend fun list(): List<Chat> =
+        chatDao.list().map { it.toDomain() }
+
+    override suspend fun list(accounts: List<Address>): List<Chat> =
+        chatDao.list(accounts.map(Address::id)).map { it.toDomain() }
 
     override suspend fun insert(chat: Chat)  =
         chat.run {

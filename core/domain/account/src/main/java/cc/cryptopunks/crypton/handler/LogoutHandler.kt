@@ -10,7 +10,7 @@ internal fun AppScope.handleLogout() =
     handle<Account.Service.Logout> {
         removeSessionScope(address) {
             disconnect()
-            cancel()
+            cancel(this@handle)
             log.d("Successful logout $address")
         }
     }

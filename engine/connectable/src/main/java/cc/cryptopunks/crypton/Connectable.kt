@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.util.OpenStore
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +22,7 @@ interface Connectable : CoroutineScope {
         class Store : OpenStore<List<WeakReference<out Binding>>>(emptyList())
 
         val services: Set<Connectable>
-        suspend fun cancel()
+        suspend fun cancel(cause: CancellationException? = null)
         operator fun plus(service: Connectable?): Boolean
         operator fun minus(service: Connectable?): Boolean
         fun send(any: Any) = Unit

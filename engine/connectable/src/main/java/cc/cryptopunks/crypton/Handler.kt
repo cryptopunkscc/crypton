@@ -10,7 +10,9 @@ import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 
-fun <T : Any> CoroutineScope.handle(handle: suspend T.(ConnectorOutput) -> Unit): Handle<T> = Handler(this, handle)
+fun <T : Any> CoroutineScope.handle(
+    handle: suspend T.(ConnectorOutput) -> Unit
+): Handle<T> = Handler(this, handle)
 
 interface Handle<T> {
     operator fun invoke(arg: T, output: ConnectorOutput = {}): Job
@@ -31,8 +33,8 @@ private class Handler<T>(
         try {
             arg.handle(output)
         } catch (e: Throwable) {
-            when(e) {
-                is CancellationException -> coroutineContext[TypedLog]?.d("${e.message} $arg")
+            when (e) {
+                is CancellationException -> coroutineContext[TypedLog]?.d("Handle cancelled by: ${e.message} $arg")
                 else -> Handle.Error(e.message ?: e.javaClass.name, arg.toString()).also {
                     e.printStackTrace()
                     output(it)
@@ -74,6 +76,10 @@ class HandlerRegistryBuilder internal constructor() {
 fun createHandlers(build: HandlerRegistryBuilder.() -> Unit) =
     HandlerRegistryBuilder().apply(build).handlers
 
-suspend fun <T> Flow<T>.collect(handle: Handle<T>, output: ConnectorOutput = {}, join: Boolean = false) = collect {
+suspend fun <T> Flow<T>.collect(
+    handle: Handle<T>,
+    output: ConnectorOutput = {},
+    join: Boolean = false
+) = collect {
     handle(it, output).run { if (join) join() }
 }

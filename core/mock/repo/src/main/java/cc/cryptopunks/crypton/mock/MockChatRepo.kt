@@ -36,6 +36,9 @@ class MockChatRepo : Chat.Repo {
     override suspend fun contains(address: Address): Boolean =
         store.get().contains(address)
 
+    override suspend fun list(): List<Chat> =
+        store.get().values.toList()
+
     override suspend fun list(addresses: List<Address>): List<Chat> =
         (store.get() - addresses).values.toList()
 

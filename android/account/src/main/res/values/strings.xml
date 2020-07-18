@@ -11,4 +11,7 @@
     <string name="remove_also_from_server">Delete account also from server.</string>
     <string name="remove_account_confirmation_message">Are you sure you want to remove this account from the application?</string>
 
+    <string name="service_value">@null</string>
+    <string name="account_value">@null</string>
+    <string name="password_value">@null</string>
 </resources>

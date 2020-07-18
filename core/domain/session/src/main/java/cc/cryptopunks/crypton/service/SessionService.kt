@@ -1,17 +1,19 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.collect
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.handler.handleApiEvent
-import cc.cryptopunks.crypton.handler.handleFlushQueuedMessages
 import cc.cryptopunks.crypton.handler.handleConferenceInvitations
+import cc.cryptopunks.crypton.handler.handleFlushQueuedMessages
 import cc.cryptopunks.crypton.handler.handlePresenceChanged
 import cc.cryptopunks.crypton.handler.handleSaveMessages
 import cc.cryptopunks.crypton.handler.handleUpdateChatNotification
+import cc.cryptopunks.crypton.selector.accountAuthenticatedFlow
 import cc.cryptopunks.crypton.selector.flushQueueMessagesFlow
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.selector.saveMessagesFlow
 import cc.cryptopunks.crypton.selector.updateChatNotificationFlow
+import handleAccountAuthenticated
 import kotlinx.coroutines.launch
 
 fun SessionScope.startSessionService() = launch {
@@ -22,4 +24,5 @@ fun SessionScope.startSessionService() = launch {
     launch { flushQueueMessagesFlow().collect(handleFlushQueuedMessages(), join = true) }
     launch { conferenceInvitationsFlow().collect(handleConferenceInvitations()) }
     launch { updateChatNotificationFlow().collect(handleUpdateChatNotification()) }
+    launch { accountAuthenticatedFlow().collect(handleAccountAuthenticated()) }
 }

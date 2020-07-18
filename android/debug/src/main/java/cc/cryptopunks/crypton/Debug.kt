@@ -26,7 +26,8 @@ fun Activity.initDebugDrawer(): DebugDrawer = DebugDrawer
         BuildModule(),
         SettingsModule(),
         CryptonDebugModule(
-            restart()
+            restart(),
+            clearData()
         ),
         DeviceModule(),
         TimberModule(),

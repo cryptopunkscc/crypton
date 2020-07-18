@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.backend.internal
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.concurrent.CancellationException
 
 internal fun dropBindingInteractor(
     scope: CoroutineScope,
@@ -10,5 +11,5 @@ internal fun dropBindingInteractor(
 ): suspend () -> Unit = {
     stack.get().lastOrNull()?.also {
         scope.launch { stack reduce { dropLast(1) } }
-    }?.binding?.cancel() ?: Unit
+    }?.binding?.cancel(CancellationException("Drop binding")) ?: Unit
 }
