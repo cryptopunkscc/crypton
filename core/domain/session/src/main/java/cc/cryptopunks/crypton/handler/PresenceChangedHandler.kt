@@ -33,6 +33,17 @@ internal fun SessionScope.handlePresenceChanged() =
                         )
                     )
                 }
+            Presence.Status.Unavailable,
+            Presence.Status.Available -> if (presence.resource.address != address)
+                if (chatRepo.contains(presence.resource.address).not()) {
+                    log.d("Creating chat from presence ${presence.resource}")
+                    createChat(
+                        Chat(
+                            address = presence.resource.address,
+                            account = address
+                        )
+                    )
+                }
 
             else -> Unit
         }

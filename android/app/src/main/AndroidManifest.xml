@@ -23,7 +23,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,7 +34,6 @@
                 <data android:mimeType="text/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.AccountManagementActivity" />
         <service
             android:name=".service.IndicatorService"
             android:exported="false"
