@@ -33,7 +33,10 @@ private class Handler<T>(
         } catch (e: Throwable) {
             when(e) {
                 is CancellationException -> coroutineContext[TypedLog]?.d("${e.message} $arg")
-                else -> output(Handle.Error(e.message ?: e.javaClass.name, arg.toString()))
+                else -> Handle.Error(e.message ?: e.javaClass.name, arg.toString()).also {
+                    e.printStackTrace()
+                    output(it)
+                }
             }
         }
     }

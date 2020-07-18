@@ -76,7 +76,7 @@ private fun SendChannel<CryptonMessage>.stanzaListener(connection: XMPPConnectio
                     else -> cryptonMessage(Message.Status.Received)
                 }?.also {
                     println("offering message $it")
-                    offer(it)
+                    offer(it.copy(encrypted = false))
                 } ?: println("Unknown stanza with empty body received")
             }
 

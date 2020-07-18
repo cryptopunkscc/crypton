@@ -29,6 +29,7 @@ include ':core:api',
         ':jvm:cli',
 
         ':android:app',
+        ':android:resources',
         ':android:debug',
         ':android:room',
         ':android:log',

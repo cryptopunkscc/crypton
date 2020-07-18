@@ -26,7 +26,8 @@ internal fun SmackMessage.cryptonMessage(
         Message.Status.Received -> from.address
         Message.Status.Sent -> to.address
         else -> Address.Empty
-    }
+    },
+    encrypted: Boolean = true
 ) = CryptonMessage(
     id = id,
     text = body,
@@ -35,7 +36,8 @@ internal fun SmackMessage.cryptonMessage(
     chat = chat,
     timestamp = timestamp,
     stanzaId = id,
-    status = status
+    status = status,
+    encrypted = encrypted
 )
 
 internal fun SmackMessage.stanzaElementId() =

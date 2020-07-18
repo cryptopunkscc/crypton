@@ -56,9 +56,11 @@ class ChatView(
         scaledDensity * SCROLL_THRESHOLD_DP
     }.toInt()
 
+    private val orientationThreshold = context.resources.displayMetrics.density * 48 * 2
+
     private var command: Any? = null
 
-    private val orientationThreshold = context.resources.displayMetrics.density * 48 * 2
+    private var lastMessageTimestamp = 0L
 
     init {
         View.inflate(context, R.layout.chat, this)
@@ -117,11 +119,16 @@ class ChatView(
 
                     is PagedMessages -> {
                         messageAdapter.setMessages(arg)
-                        val wasBottomReached = isBottomReached()
-                        delay(50)
-                        if (!wasBottomReached && arg.list.last().status == Message.Status.State)
-                            displayNewMessageInfo() else
-                            scrollToNewMessage()
+                        arg.list.firstOrNull()?.takeIf {
+                            it.timestamp > lastMessageTimestamp && it.status != Message.Status.State
+                        }?.run {
+                            lastMessageTimestamp = timestamp
+                            val wasBottomReached = isBottomReached()
+                            delay(50)
+                            if (!wasBottomReached)
+                                displayNewMessageInfo() else
+                                scrollToNewMessage()
+                        }
                     }
 
                     is Handle.Error ->

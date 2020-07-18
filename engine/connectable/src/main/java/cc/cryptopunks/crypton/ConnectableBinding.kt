@@ -5,7 +5,9 @@ import cc.cryptopunks.crypton.internal.cancel
 import cc.cryptopunks.crypton.internal.createBinding
 import cc.cryptopunks.crypton.internal.setActor
 import cc.cryptopunks.crypton.internal.setService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class ConnectableBinding(
     channels: Channels = Channels()
@@ -33,17 +35,19 @@ class ConnectableBinding(
         service != null
     }
 
-    override fun minus(service: Connectable): Boolean = runBlocking {
-        services -= service
-        binding = binding.run {
-            if (service is Actor)
-                setActor(null) else
-                setService(null)
+    override fun minus(service: Connectable?): Boolean =
+        if (service == null) false else runBlocking {
+            services -= service
+            binding = binding.run {
+                if (service is Actor)
+                    setActor(null) else
+                    setService(null)
+            }
+            true
         }
-        true
-    }
 
     override suspend fun cancel() {
+        services.clear()
         binding.cancel()
         binding = createBinding()
     }

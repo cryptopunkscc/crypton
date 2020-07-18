@@ -3,11 +3,9 @@ package cc.cryptopunks.crypton.view
 import android.content.Context
 import android.view.View
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import cc.cryptopunks.crypton.adapter.ChatUserListAdapter
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.navigate.navigateChat
@@ -27,14 +25,8 @@ class CreateChatView(context: Context) :
 
     override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
-    private val userListAdapter = ChatUserListAdapter()
-
     init {
         View.inflate(context, R.layout.create_chat, this)
-        userListRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = userListAdapter
-        }
         addressInputView.slash.visibility = View.GONE
         addressInputView.encrypt.visibility = View.GONE
     }

@@ -14,7 +14,6 @@ fun AppScope.newSessionsFlow(
 ): Flow<SessionScope> {
     var sessions = emptyMap<Address, SessionScope>()
     return sessionStore.changesFlow().flatMapConcat { current ->
-        println("Current ${current.keys}")
         val new = (current - sessions.keys)
         sessions = current
         new.map { it.value }.asFlow()
