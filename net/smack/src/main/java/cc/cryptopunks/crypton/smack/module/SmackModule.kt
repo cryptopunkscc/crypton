@@ -3,6 +3,8 @@ package cc.cryptopunks.crypton.smack.module
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.omemo.OmemoTrustAllCallback
+import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.CoroutineScope
 import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.chat2.ChatManager
@@ -21,6 +23,8 @@ internal class SmackModule(
     scope: CoroutineScope
 ) : SmackCore,
     CoroutineScope by scope {
+
+    override val log = typedLog()
 
     // Smack
     override val connection by lazy {

@@ -10,8 +10,6 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.ChatNet
-import cc.cryptopunks.crypton.smack.net.chat.createMuc
-import cc.cryptopunks.crypton.smack.net.chat.invitationsFlow
 import cc.cryptopunks.crypton.smack.net.message.MessageNet
 import cc.cryptopunks.crypton.smack.net.omemo.InitOmemo
 import cc.cryptopunks.crypton.smack.net.roster.rosterEventFlow
@@ -50,7 +48,7 @@ internal class ConnectionModule(
     Message.Net by MessageNet(smack),
     Chat.Net by ChatNet(smack) {
 
-    private val log = typedLog()
+    override val log = typedLog()
     private val initOmemo by lazy { InitOmemo(omemoManager) }
 
     private val netEvents by lazy {
@@ -157,11 +155,6 @@ internal class ConnectionModule(
 
 
     override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
-
-    override fun createConference(chat: Chat): Chat = smack.createMuc(chat)
-
-    override fun conferenceInvitationsFlow() = mucManager.invitationsFlow()
-
 
     override fun getCachedPresences(): List<Presence> = roster.run {
         entries.map { entry -> getPresence(entry.jid).presence(entry.jid) }

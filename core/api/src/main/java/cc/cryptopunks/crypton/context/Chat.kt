@@ -83,7 +83,8 @@ data class Chat(
 
     interface Net {
         fun supportEncryption(address: Address): Boolean
-        fun createConference(chat: Chat): Chat
+        fun createOrJoinConference(chat: Chat): Chat
+        fun configureConference(chat: Address)
         fun inviteToConference(chat: Address, users: List<Address>)
         fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
         fun joinConference(address: Address, nickname: String)
@@ -107,6 +108,7 @@ data class Chat(
     interface Repo {
         suspend fun get(address: Address): Chat
         suspend fun contains(address: Address): Boolean
+        suspend fun list(): List<Chat>
         suspend fun list(addresses: List<Address>): List<Chat>
         suspend fun insert(chat: Chat)
         suspend fun insertIfNeeded(chat: Chat)
@@ -119,7 +121,7 @@ data class Chat(
 
 suspend fun SessionScope.createChat(chat: Chat) {
     log.d("Creating $chat")
-    if (chat.isConference) createConference(chat)
+    if (chat.isConference && chat.address !in listJoinedRooms()) createOrJoinConference(chat)
     log.d("Chat ${chat.address} with users ${chat.users} created")
     insertChat(chat)
 }

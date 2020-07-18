@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton
 
+import kotlinx.coroutines.CancellationException
 import java.lang.ref.WeakReference
 
 fun Connectable.Binding.Store.createBinding(): Connectable.Binding = ConnectableBinding().also { binding ->
@@ -12,7 +13,7 @@ fun Connectable.Binding.Store.remove(binding: Connectable.Binding) {
 
 fun Connectable.Binding.Store.top(): Connectable.Binding? = get().lastOrNull()?.get()
 
-suspend fun Connectable.Binding.Store.cancelAll() {
-    reduce { forEach { it.get()?.cancel() }; emptyList() }
+suspend fun Connectable.Binding.Store.cancelAll(cause: CancellationException? = null) {
+    reduce { forEach { it.get()?.cancel(cause) }; emptyList() }
 }
 

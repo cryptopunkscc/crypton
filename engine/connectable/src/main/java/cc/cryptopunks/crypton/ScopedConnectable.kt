@@ -6,6 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
+import java.util.concurrent.CancellationException
 import kotlin.reflect.KClass
 
 fun <T : CoroutineScope> T.connectable(
@@ -22,24 +23,26 @@ private data class ScopedConnectable(
     Connectable,
     CoroutineScope by scope {
 
-    private val subscriptions = mutableMapOf<KClass<*>, Job>()
-
     override fun Connector.connect(): Job = launch {
+        val subscriptions: MutableMap<KClass<*>, Job> = mutableMapOf()
         val log = coroutineContext[TypedLog]!!
         log.d("Start $id")
-        input.onCompletion {
-            subscriptions.values.forEach { it.cancel() }
+        input.onCompletion { throwable ->
+            subscriptions.values.forEach { it.cancel(CancellationException("Complete input $it $throwable")) }
             subscriptions.clear()
         }.collect {
             log.d("$id Received $it")
             when (it) {
-                is Subscription -> handleSubscription(it)
+                is Subscription -> handleSubscription(subscriptions, it)
                 else -> handleRequest(it)
             }
         }
     }
 
-    private fun Connector.handleSubscription(subscription: Subscription) {
+    private fun Connector.handleSubscription(
+        subscriptions: MutableMap<KClass<*>, Job>,
+        subscription: Subscription
+    ) {
         if (!subscription.enable)
             subscriptions.remove(subscription::class)?.cancel()
         else

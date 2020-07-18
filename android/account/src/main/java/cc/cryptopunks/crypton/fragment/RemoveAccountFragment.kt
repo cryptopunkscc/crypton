@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.delete_account_checkbox.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import java.util.concurrent.CancellationException
 
 class RemoveAccountFragment :
     DialogFragment(),
@@ -44,7 +45,7 @@ class RemoveAccountFragment :
     }
 
     override fun onDestroy() {
-        cancel()
+        cancel(CancellationException(toString()))
         super.onDestroy()
     }
 

@@ -13,6 +13,7 @@
 
         <EditText
             android:id="@+id/serviceName"
+            android:text="@string/service_value"
             style="@style/Widget.EditText.Sing.Domain" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -23,6 +24,7 @@
 
         <EditText
             android:id="@+id/userName"
+            android:text="@string/account_value"
             style="@style/Widget.EditText.Sing.Login" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -32,6 +34,7 @@
 
         <EditText
             android:id="@+id/password"
+            android:text="@string/password_value"
             style="@style/Widget.EditText.Sing.Password" />
     </com.google.android.material.textfield.TextInputLayout>
 

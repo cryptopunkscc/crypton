@@ -15,7 +15,7 @@ internal fun AppScope.handleRemove() =
             }
             interrupt()
             accountRepo.delete(address)
-            cancel()
+            cancel(this@handle)
             log.d("Successfully removed $address from local database")
         }
     }

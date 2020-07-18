@@ -3,12 +3,12 @@ package cc.cryptopunks.crypton.internal
 import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.Connector
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 
-internal fun Binding.cancel() {
-    actorContext.input.cancel()
-    serviceContext.input.cancel()
+internal fun Binding.cancel(cause: CancellationException? = null) {
+    actorContext.input.cancel(cause)
+    serviceContext.input.cancel(cause)
 }
 
 internal suspend fun Binding.setActor(connectable: Actor?) = copy(
@@ -20,7 +20,7 @@ internal suspend fun Binding.setService(connectable: Connectable?) = copy(
 )
 
 private suspend fun Binding.Context.set(connectable: Connectable?): Binding.Context = this
-    .apply { job?.cancel() }
+    .apply { job?.cancel(CancellationException("Binding change to $connectable")) }
     .copy(getConnector().connect(connectable))
 
 private fun Binding.Context.copy(connectorJob: Pair<Connector, Job?>) = copy(

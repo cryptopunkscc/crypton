@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 internal fun SessionScope.handleApiEvent() =
     handle<Api.Event> {
-        when (this@handle) {
+        when (this) {
             is Net.Disconnected -> if (hasError) launch {
                 delay(2000) // wait for network connection
                 if (!isConnected())
