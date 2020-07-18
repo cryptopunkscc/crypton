@@ -20,7 +20,7 @@ internal suspend fun Binding.setService(connectable: Connectable?) = copy(
 )
 
 private suspend fun Binding.Context.set(connectable: Connectable?): Binding.Context = this
-    .apply { job?.cancelAndJoin() }
+    .apply { job?.cancel() }
     .copy(getConnector().connect(connectable))
 
 private fun Binding.Context.copy(connectorJob: Pair<Connector, Job?>) = copy(
