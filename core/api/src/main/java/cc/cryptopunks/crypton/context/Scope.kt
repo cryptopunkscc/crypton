@@ -67,7 +67,9 @@ interface SessionScope :
     }
 
 
-    class Store : OpenStore<Map<Address, SessionScope>>(emptyMap())
+    class Store : OpenStore<Map<Address, SessionScope>>(emptyMap()) {
+        operator fun get(address: Address) = get()[address]
+    }
 }
 
 interface ChatScope :

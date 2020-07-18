@@ -14,6 +14,7 @@ open class Store<T>(
 ) {
     private val channel = ConflatedBroadcastChannel(initial)
     fun get() = channel.value
+    operator fun invoke() = get()
     operator fun invoke(reduce: T.() -> T?): T? =
         channel.value.reduce()?.also {
             channel.offer(it)

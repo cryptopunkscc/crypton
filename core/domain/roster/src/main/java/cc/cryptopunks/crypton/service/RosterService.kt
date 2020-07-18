@@ -7,6 +7,8 @@ import cc.cryptopunks.crypton.handler.handleGetRosterItems
 import cc.cryptopunks.crypton.handler.handleRosterItemsSubscription
 import cc.cryptopunks.crypton.handler.handleSubscriptionAccept
 import cc.cryptopunks.crypton.HandlerRegistryFactory
+import cc.cryptopunks.crypton.handler.handleListJoinedRooms
+import cc.cryptopunks.crypton.handler.handleListRooms
 import cc.cryptopunks.crypton.util.Store
 
 val rosterHandlers: HandlerRegistryFactory<AppScope> = {
@@ -16,5 +18,7 @@ val rosterHandlers: HandlerRegistryFactory<AppScope> = {
         +handleGetRosterItems(store)
         +handleRosterItemsSubscription(store)
         +handleSubscriptionAccept()
+        +handleListRooms()
+        +handleListJoinedRooms()
     }
 }
