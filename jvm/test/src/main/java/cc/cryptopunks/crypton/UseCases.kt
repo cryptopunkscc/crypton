@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.util.all
 import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
 
@@ -141,28 +142,14 @@ suspend fun ClientDsl.acceptSubscription(
     subscriber: Address
 ) {
     send(Roster.Service.SubscribeItems(true, account))
-    expect(
-        should<Roster.Service.Items> {
-            list.first { it.account == account }.run {
-                require(this.account == account) { this.account }
-                require(title == subscriber.id) { title }
-                require(chatAddress == subscriber) { chatAddress }
-                require(presence == Presence.Status.Subscribe) { presence }
-                require(message == Message.Empty) { message }
-                require(unreadMessagesCount == 0) { unreadMessagesCount }
-            }
-            true
+    waitFor<Roster.Service.Items> {
+        list.any {
+            all(
+                it.account == account,
+                it.chatAddress == subscriber,
+                it.presence == Presence.Status.Subscribe
+            )
         }
-    ) { input ->
-        (input as? Roster.Service.Items)?.run {
-            println("Filtering items for acceptSubscription: acc = $account, sub = $subscriber")
-            println(list.joinToString("\n"))
-            list.any {
-                it.account == account &&
-                        it.chatAddress == subscriber &&
-                        it.presence == Presence.Status.Subscribe
-            }
-        } ?: false
     }
     send(Roster.Service.AcceptSubscription(account, subscriber))
 }
