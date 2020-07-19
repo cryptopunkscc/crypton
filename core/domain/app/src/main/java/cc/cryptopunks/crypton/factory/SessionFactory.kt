@@ -11,7 +11,7 @@ fun AppScope.createSession(address: Address): SessionModule =
             connection = createConnection(
                 Connection.Config(
                     scope = this,
-                    address = account.address,
+                    account = account.address,
                     password = account.password
                 )
             )

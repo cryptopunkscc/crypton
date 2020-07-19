@@ -151,7 +151,7 @@ suspend fun ClientDsl.acceptSubscription(
             )
         }
     }
-    send(Roster.Service.AcceptSubscription(account, subscriber))
+    send(Roster.Service.Join(account, subscriber))
 }
 
 suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, chat: Address) {

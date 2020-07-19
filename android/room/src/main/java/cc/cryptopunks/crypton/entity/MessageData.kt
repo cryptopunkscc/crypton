@@ -57,6 +57,9 @@ internal data class MessageData(
         @Query("select * from message order by timestamp desc")
         fun latest(): MessageData?
 
+        @Query("select * from message where chatId == :chatId order by timestamp desc")
+        fun latest(chatId: AddressData): MessageData?
+
         @Query("select * from message order by timestamp desc")
         fun flowLatest(): Flow<MessageData?>
 

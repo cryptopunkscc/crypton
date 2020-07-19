@@ -7,20 +7,20 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.handle
 
 internal fun AppScope.handleSubscriptionAccept() =
-    handle<Roster.Service.AcceptSubscription> {
-        sessionStore.get()[account]?.run {
-            when (chatRepo.get(accepted).isConference) {
-                true -> joinConference(accepted, account.local)
+    handle<Roster.Service.Join> {
+        sessions[account]?.run {
+            when (chatRepo.get(chat).isConference) {
+                true -> joinConference(chat, account.local)
                 false -> {
                     sendPresence(
                         Presence(
-                            resource = Resource(accepted),
+                            resource = Resource(chat),
                             status = Presence.Status.Subscribed
                         )
                     )
                     sendPresence(
                         Presence(
-                            resource = Resource(accepted),
+                            resource = Resource(chat),
                             status = Presence.Status.Subscribe
                         )
                     )

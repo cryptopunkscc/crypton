@@ -26,7 +26,7 @@ interface AppScope :
     val mainClass: KClass<*>
     val navigateChatId: Int
 
-    val sessionStore: SessionScope.Store
+    val sessions: SessionScope.Store
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
 
@@ -68,7 +68,7 @@ interface SessionScope :
 
 
     class Store : OpenStore<Map<Address, SessionScope>>(emptyMap()) {
-        operator fun get(address: Address) = get()[address]
+        operator fun get(address: Address): SessionScope? = get()[address]
     }
 }
 

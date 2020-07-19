@@ -87,6 +87,7 @@ data class Message(
         suspend fun insertOrUpdate(message: Message)
         suspend fun insertOrUpdate(messages: List<Message>)
         suspend fun latest(): Message?
+        suspend fun latest(chat: Address): Message?
         suspend fun get(id: String): Message?
         suspend fun delete(id: String)
         suspend fun delete(message: Message)

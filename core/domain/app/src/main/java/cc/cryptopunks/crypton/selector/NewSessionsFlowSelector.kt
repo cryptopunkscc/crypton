@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onEach
 fun AppScope.newSessionsFlow(
 ): Flow<SessionScope> {
     var sessions = emptyMap<Address, SessionScope>()
-    return sessionStore.changesFlow().flatMapConcat { current ->
+    return this.sessions.changesFlow().flatMapConcat { current ->
         val new = (current - sessions.keys)
         sessions = current
         new.map { it.value }.asFlow()

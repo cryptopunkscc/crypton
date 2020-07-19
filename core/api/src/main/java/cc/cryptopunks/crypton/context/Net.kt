@@ -26,13 +26,11 @@ interface Net :
     ) : Event {
         val hasError get() = throwable != null
     }
+
     open class Exception(
         message: String? = null,
         cause: Throwable? = null
     ) :
         kotlin.Exception(message, cause),
-        Event {
-
-        interface Output : Flow<Exception>
-    }
+        Event
 }

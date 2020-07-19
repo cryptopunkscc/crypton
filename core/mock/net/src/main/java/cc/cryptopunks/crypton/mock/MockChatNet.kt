@@ -16,6 +16,10 @@ class MockChatNet(
         TODO("Not yet implemented")
     }
 
+    override fun joinConference(address: Address, nickname: String, historySince: Int) {
+        TODO("Not yet implemented")
+    }
+
     override fun supportEncryption(address: Address): Boolean {
         TODO("Not yet implemented")
     }
@@ -28,15 +32,15 @@ class MockChatNet(
         TODO("Not yet implemented")
     }
 
-    override fun joinConference(address: Address, nickname: String) {
-        TODO("Not yet implemented")
-    }
-
     override fun listJoinedRooms(): Set<Address> {
         TODO("Not yet implemented")
     }
 
     override fun listRooms(): Set<Address> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getChatInfo(chat: Address): Chat.Service.Info {
         TODO("Not yet implemented")
     }
 }

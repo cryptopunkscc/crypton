@@ -44,7 +44,7 @@ class RosterItemStatesFlowSelectorTest {
         val connections = (0..1).map {
             createConnection(
                 Connection.Config(
-                    address = addresses[it],
+                    account = addresses[it],
                     scope = sessionScopes[it]
                 )
             )
@@ -54,7 +54,7 @@ class RosterItemStatesFlowSelectorTest {
         val presenceStore = Presence.Store()
 
         val appScope = mockk<AppScope> {
-            every { this@mockk.sessionStore } returns sessionStore
+            every { this@mockk.sessions } returns sessionStore
         }
 
         val sessions = (0..1).map {

@@ -27,26 +27,26 @@ import org.jxmpp.jid.parts.Localpart
 
 internal fun createConnection(
     scope: CoroutineScope,
-    address: Address,
+    account: Address,
     configuration: XMPPTCPConnectionConfiguration
 ) = ConnectionModule(
     scope = scope,
-    address = address,
+    account = account,
     smack = SmackModule(
         configuration = configuration,
-        address = address,
+        account = account,
         scope = scope
     )
 )
 
 internal class ConnectionModule(
     scope: CoroutineScope,
-    private val address: Address,
+    private val account: Address,
     private val smack: SmackCore
 ) : SmackCore by smack,
     Connection,
     Message.Net by MessageNet(smack),
-    Chat.Net by ChatNet(smack) {
+    Chat.Net by ChatNet(smack, account) {
 
     override val log = typedLog()
     private val initOmemo by lazy { InitOmemo(omemoManager) }

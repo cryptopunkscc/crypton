@@ -1,13 +1,16 @@
 package cc.cryptopunks.crypton.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.activity.BaseActivity
+
 
 abstract class BaseFragment : LoggerFragment() {
 
@@ -35,12 +38,18 @@ abstract class BaseFragment : LoggerFragment() {
         inflater.inflate(it, container, false)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.hideKeyboard()
+    }
+
     override fun onResume() {
         super.onResume()
         titleId.takeIf { it > 0 }?.let { id ->
             baseActivity?.supportActionBar?.setTitle(id)
         }
     }
+
     fun restart() {
         parentFragmentManager.beginTransaction()
             .detach(this)
@@ -53,3 +62,9 @@ abstract class BaseFragment : LoggerFragment() {
 val Fragment.baseActivity get() = context as BaseActivity
 
 val Fragment.appScope get() = baseActivity.appScope
+
+private fun Activity.hideKeyboard() = window?.decorView?.windowToken.let { token ->
+    getSystemService(Activity.INPUT_METHOD_SERVICE).let {
+        it as InputMethodManager
+    }.hideSoftInputFromWindow(token, 0)
+}

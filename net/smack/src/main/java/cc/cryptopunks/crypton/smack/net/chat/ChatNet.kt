@@ -13,13 +13,13 @@ import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.muc.InvitationListener
 import org.jivesoftware.smackx.muc.MultiUserChat
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.packet.MUCUser
 import org.jxmpp.jid.EntityJid
 import org.jxmpp.jid.parts.Resourcepart
 
 internal class ChatNet(
-    private val smackCore: SmackCore
+    private val smackCore: SmackCore,
+    private val account: Address
 ) :
     SmackCore by smackCore,
     Chat.Net {
@@ -38,8 +38,19 @@ internal class ChatNet(
     override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> =
         smackCore.invitationsFlow()
 
-    override fun joinConference(address: Address, nickname: String) =
-        mucManager.join(address, nickname)
+    override fun joinConference(
+        address: Address,
+        nickname: String,
+        historySince: Int
+    ): Unit = mucManager.run {
+        getMultiUserChat(address.entityBareJid()).run {
+            join(
+                getEnterConfigurationBuilder(Resourcepart.from(nickname))
+                    .requestHistorySince(historySince)
+                    .build()
+            )
+        }
+    }
 
     override fun listJoinedRooms(): Set<Address> =
         mucManager.joinedRooms.map { it.address() }.toSet()
@@ -47,6 +58,25 @@ internal class ChatNet(
     override fun listRooms(): Set<Address> =
         mucManager.mucServiceDomains.map(mucManager::getHostedRooms).flatten()
             .map { it.jid.address() }.toSet()
+
+    override fun getChatInfo(address: Address): Chat.Service.Info {
+        val conference = mucManager.getMultiUserChat(address.entityBareJid())
+        val info = mucManager.getRoomInfo(address.entityBareJid())
+        return Chat.Service.Info(
+            account = account,
+            address = address,
+            name = info.name,
+            members = conference.run { owners + admins + members }.map {
+                Chat.Member(
+                    nick = it.nick?.run { toString() },
+                    address = it.jid.address(),
+                    role = it.role?.run { Chat.Role.valueOf(name) } ?: Chat.Role.unknown,
+                    affiliation = it.affiliation?.run { Chat.Affiliation.valueOf(name) }
+                        ?: Chat.Affiliation.unknown
+                )
+            }.toSet()
+        )
+    }
 }
 
 internal fun SmackCore.inviteToConference(
@@ -111,8 +141,3 @@ internal fun SmackCore.invitationsFlow() =
             }
         }
     }
-
-
-fun MultiUserChatManager.join(chat: Address, nickname: String) {
-    getMultiUserChat(chat.entityBareJid()).join(Resourcepart.from(nickname))
-}

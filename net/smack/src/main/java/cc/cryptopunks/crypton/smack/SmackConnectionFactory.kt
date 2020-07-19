@@ -32,13 +32,13 @@ class SmackConnectionFactory(
 
     override fun invoke(config: Connection.Config): Connection = createConnection(
         scope = config.scope,
-        address = config.address,
+        account = config.account,
         configuration = connectionConfig
             .setUsernameAndPassword(
-                config.address.local,
+                config.account.local,
                 String(config.password.byteArray)
             )
-            .setXmppDomain(config.address.domain)
+            .setXmppDomain(config.account.domain)
             .build()
     )
 

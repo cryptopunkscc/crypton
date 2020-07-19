@@ -17,9 +17,20 @@ data class Chat(
         val Empty = Chat()
     }
 
+    data class Member(
+        val nick: String?,
+        val address: Address,
+        val role: Role,
+        val affiliation: Affiliation
+    )
+
+    enum class Role { moderator, none, participant, visitor, unknown }
+
+    enum class Affiliation { owner, admin, member, outcast, none, unknown }
+
     object Service {
 
-        // input
+        // command
 
         object PopClipboard
 
@@ -27,11 +38,9 @@ data class Chat(
 
         data class EnqueueMessage(val text: String, val encrypted: Boolean = true)
 
-        data class InfoMessage(val text: String)
+        data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
 
         object ClearInfoMessages
-
-        data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
 
         data class UpdateNotification(val account: Address, val messages: List<Message>)
 
@@ -39,7 +48,29 @@ data class Chat(
 
         data class Delete(val message: Message)
 
+        data class Create(val chat: Chat)
+
+        data class Invite(val users: List<Address>, val chat: Address = Address.Empty)
+
+        data class DeleteChat(val chats: List<Address>)
+
+        data class Configure(val account: Address? = null, val chat: Address? = null)
+
+        // Query
+
+        data class InfoMessage(val text: String)
+
         object GetPagedMessages
+
+        data class GetMessages(val address: Address? = null)
+
+        data class ListJoinedRooms(val account: Address)
+
+        data class ListRooms(val accounts: Set<Address> = emptySet())
+
+        data class GetInfo(val chat: Address? = null, val account: Address? = null)
+
+        // Subscribe
 
         data class SubscribePagedMessages(override val enable: Boolean) : Subscription
 
@@ -51,19 +82,7 @@ data class Chat(
             val to: Long = System.currentTimeMillis()
         ) : Subscription
 
-        data class GetMessages(val address: Address? = null)
-
-        data class Create(val chat: Chat)
-
-        data class Invite(val users: List<Address>, val chat: Address = Address.Empty)
-
-        data class ListJoinedRooms(val account: Address)
-
-        data class ListRooms(val accounts: Set<Address> = emptySet())
-
-        data class DeleteChat(val chats: List<Address>)
-
-        // output
+        // Event
 
         data class ChatCreated(val chat: Address)
 
@@ -73,11 +92,20 @@ data class Chat(
 
         data class Messages(val account: Address, val list: List<Message>)
 
-        interface Rooms { val set: Set<Address> }
+        interface Rooms {
+            val set: Set<Address>
+        }
 
         data class JoinedRooms(override val set: Set<Address>) : Rooms
 
         data class AllRooms(override val set: Set<Address>) : Rooms
+
+        data class Info(
+            val name: String,
+            val account: Address,
+            val address: Address,
+            val members: Set<Member> = emptySet()
+        )
     }
 
 
@@ -87,9 +115,10 @@ data class Chat(
         fun configureConference(chat: Address)
         fun inviteToConference(chat: Address, users: List<Address>)
         fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
-        fun joinConference(address: Address, nickname: String)
+        fun joinConference(address: Address, nickname: String, historySince: Int = 0)
         fun listJoinedRooms(): Set<Address>
         fun listRooms(): Set<Address>
+        fun getChatInfo(chat: Address): Service.Info
 
         interface Event : Api.Event
         data class Joined(val chat: Chat) : Event

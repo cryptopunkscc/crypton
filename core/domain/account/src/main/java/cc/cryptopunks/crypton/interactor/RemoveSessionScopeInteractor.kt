@@ -8,9 +8,9 @@ internal suspend fun AppScope.removeSessionScope(
     address: Address,
     onRemove: suspend SessionScope.() -> Unit
 ) {
-    val sessionScope = sessionStore.get()[address]
+    val sessionScope = sessions[address]
     if (sessionScope != null) {
         sessionScope.onRemove()
-        sessionStore { minus(address) }
+        sessions { minus(address) }
     }
 }

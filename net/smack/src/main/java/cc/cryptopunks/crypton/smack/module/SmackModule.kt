@@ -19,7 +19,7 @@ import org.jivesoftware.smackx.omemo.OmemoManager
 
 internal class SmackModule(
     override val configuration: XMPPTCPConnectionConfiguration,
-    val address: Address,
+    val account: Address,
     scope: CoroutineScope
 ) : SmackCore,
     CoroutineScope by scope {

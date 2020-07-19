@@ -6,7 +6,7 @@ interface Connection : Net {
 
     data class Config(
         val scope: CoroutineScope,
-        val address: Address = Address.Empty,
+        val account: Address = Address.Empty,
         val password: Password = Password.Empty
     )
 

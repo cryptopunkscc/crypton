@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.factory.createSession
 
 internal suspend fun AppScope.loadSessions() {
-    sessionStore.reduce {
+    sessions.reduce {
         plus(
             accountRepo.addressList()
                 .minus(keys)
