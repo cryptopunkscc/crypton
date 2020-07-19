@@ -42,7 +42,7 @@ dependencies {
     api project(':android:roster')
     api project(':android:chat')
     api project(':android:drawer')
-    api project(':core:domain:app')
+    api project(':core:domain')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'
