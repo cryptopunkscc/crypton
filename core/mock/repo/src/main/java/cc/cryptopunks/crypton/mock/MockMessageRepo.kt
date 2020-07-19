@@ -48,6 +48,9 @@ class MockMessageRepo : Message.Repo {
     override suspend fun latest(): Message? =
         store.get().values.maxBy { it.timestamp }
 
+    override suspend fun latest(chat: Address): Message? =
+        store.get().values.filter { it.chat == chat }.maxBy { it.timestamp }
+
     override suspend fun get(id: String): Message? =
         store.get()[id]
 

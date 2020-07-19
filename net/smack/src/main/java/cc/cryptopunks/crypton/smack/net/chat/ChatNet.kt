@@ -13,7 +13,6 @@ import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.muc.InvitationListener
 import org.jivesoftware.smackx.muc.MultiUserChat
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.packet.MUCUser
 import org.jxmpp.jid.EntityJid
 import org.jxmpp.jid.parts.Resourcepart
@@ -39,8 +38,19 @@ internal class ChatNet(
     override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> =
         smackCore.invitationsFlow()
 
-    override fun joinConference(address: Address, nickname: String) =
-        mucManager.join(address, nickname)
+    override fun joinConference(
+        address: Address,
+        nickname: String,
+        historySince: Int
+    ): Unit = mucManager.run {
+        getMultiUserChat(address.entityBareJid()).run {
+            join(
+                getEnterConfigurationBuilder(Resourcepart.from(nickname))
+                    .requestHistorySince(historySince)
+                    .build()
+            )
+        }
+    }
 
     override fun listJoinedRooms(): Set<Address> =
         mucManager.joinedRooms.map { it.address() }.toSet()
@@ -60,8 +70,9 @@ internal class ChatNet(
                 Chat.Member(
                     nick = it.nick?.run { toString() },
                     address = it.jid.address(),
-                    role = it.role?.run { Chat.Role.valueOf(name) } ?: Chat.Role.unknown ,
-                    affiliation = it.affiliation?.run { Chat.Affiliation.valueOf(name) } ?: Chat.Affiliation.unknown
+                    role = it.role?.run { Chat.Role.valueOf(name) } ?: Chat.Role.unknown,
+                    affiliation = it.affiliation?.run { Chat.Affiliation.valueOf(name) }
+                        ?: Chat.Affiliation.unknown
                 )
             }.toSet()
         )
@@ -130,8 +141,3 @@ internal fun SmackCore.invitationsFlow() =
             }
         }
     }
-
-
-fun MultiUserChatManager.join(chat: Address, nickname: String) {
-    getMultiUserChat(chat.entityBareJid()).join(Resourcepart.from(nickname))
-}

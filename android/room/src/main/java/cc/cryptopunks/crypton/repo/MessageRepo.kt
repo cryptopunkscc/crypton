@@ -70,6 +70,11 @@ internal class MessageRepo(
                 ?.message()
                 ?.also { latest = it }
 
+    override suspend fun latest(chat: Address): Message? =
+        dao.latest(chat.id)
+            ?.message()
+            ?.also { latest = it }
+
     override suspend fun listUnread(): List<Message> =
         dao.listUnread().map { it.message() }
 
