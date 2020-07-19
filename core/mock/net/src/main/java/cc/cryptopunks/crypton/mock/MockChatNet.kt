@@ -39,4 +39,8 @@ class MockChatNet(
     override fun listRooms(): Set<Address> {
         TODO("Not yet implemented")
     }
+
+    override fun getChatInfo(chat: Address): Chat.Service.Info {
+        TODO("Not yet implemented")
+    }
 }
