@@ -29,6 +29,8 @@ private const val JOIN = "join"
 private const val ROOMS = "rooms"
 private const val JOINED = "joined"
 private const val DELETE = "delete"
+private const val INFO = "info"
+private const val CONFIGURE = "configure"
 
 private val navigateMain = MAIN to command { Route.Main }
 
@@ -101,6 +103,14 @@ private val deleteChat = DELETE to command(vararg()) { chats ->
     }
 }
 
+private val getInfo = INFO to command {
+    Chat.Service.GetInfo()
+}
+
+private val configure = CONFIGURE to command {
+    Chat.Service.Configure()
+}
+
 private val navigate = NAVIGATE to mapOf(
     navigateMain,
     navigateChat
@@ -117,11 +127,13 @@ val mainCommands = mapOf(
     deleteChat
 )
 
-val chatCommands = mapOf(
+val chatCommands = mainCommands + mapOf(
     sendMessage,
     join,
-    invite
-) + mainCommands
+    invite,
+    getInfo,
+    configure
+)
 
 val cryptonCommands = commands(
     Route.Main to mainCommands,

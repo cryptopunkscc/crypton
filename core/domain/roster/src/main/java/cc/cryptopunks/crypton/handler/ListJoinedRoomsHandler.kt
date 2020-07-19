@@ -8,7 +8,7 @@ internal fun AppScope.handleListJoinedRooms() =
     handle<Chat.Service.ListJoinedRooms> { out ->
         out(
             Chat.Service.JoinedRooms(
-                sessionStore.get()[account]!!.listJoinedRooms()
+                sessions[account]!!.listJoinedRooms()
             )
         )
     }

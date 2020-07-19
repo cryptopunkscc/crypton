@@ -37,11 +37,11 @@ class AppModule(
     override val coroutineContext: CoroutineContext = log +
         SupervisorJob() +
         Dispatchers.IO
-    override val sessionStore = SessionScope.Store()
+    override val sessions = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
-    override fun sessionScope(): SessionScope = sessionStore.get().values.first()
-    override fun sessionScope(address: Address): SessionScope = sessionStore.get()[address]!!
+    override fun sessionScope(): SessionScope = sessions.get().values.first()
+    override fun sessionScope(address: Address): SessionScope = sessions.get()[address]!!
 
     private val connectable by lazy { connectable(mainHandlers) }
     override fun Connector.connect(): Job = connectable.run { connect() }

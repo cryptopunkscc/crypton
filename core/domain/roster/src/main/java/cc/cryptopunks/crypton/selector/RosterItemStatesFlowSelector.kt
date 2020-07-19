@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 internal fun AppScope.rosterItemStatesFlow(): Flow<List<Roster.Item>> {
     val items = mutableMapOf<Address, Set<Roster.Item>>()
 
-    return sessionStore.changesFlow().flatMapMerge { sessions ->
+    return sessions.changesFlow().flatMapMerge { sessions ->
         flowOf(
             flowOf(Change(remove = items.keys - sessions.keys)),
             (sessions - items.keys).values.rosterItemStatesFlow().map { changed ->

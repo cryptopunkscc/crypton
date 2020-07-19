@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.handle
 
 internal fun AppScope.handleListRooms() =
     handle<Chat.Service.ListRooms> { out ->
-        sessionStore.get().values.run {
+        sessions.get().values.run {
             if (accounts.isEmpty()) this
             else filter { scope -> accounts.contains(scope.address) }
         }.flatMap { scope ->

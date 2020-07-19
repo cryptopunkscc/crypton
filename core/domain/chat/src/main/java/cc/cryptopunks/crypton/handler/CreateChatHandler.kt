@@ -7,6 +7,6 @@ import cc.cryptopunks.crypton.handle
 
 internal fun AppScope.handleCreateChat() =
     handle<Chat.Service.Create> { output ->
-        sessionStore.get().getValue(chat.account).createChat(chat)
+        sessions.get().getValue(chat.account).createChat(chat)
         output(Chat.Service.ChatCreated(chat.address))
     }

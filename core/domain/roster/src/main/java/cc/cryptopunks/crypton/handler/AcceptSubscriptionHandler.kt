@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.handle
 
 internal fun AppScope.handleSubscriptionAccept() =
     handle<Roster.Service.AcceptSubscription> {
-        sessionStore.get()[account]?.run {
+        sessions.get()[account]?.run {
             when (chatRepo.get(accepted).isConference) {
                 true -> joinConference(accepted, account.local)
                 false -> {

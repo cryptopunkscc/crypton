@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.HandlerRegistryFactory
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.ChatScope
@@ -7,6 +8,7 @@ import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.handler.handleClearInfoMessages
 import cc.cryptopunks.crypton.handler.handleCopy
 import cc.cryptopunks.crypton.handler.handleCreateChat
+import cc.cryptopunks.crypton.handler.handleDeleteChat
 import cc.cryptopunks.crypton.handler.handleDeleteMessage
 import cc.cryptopunks.crypton.handler.handleEnqueueMessage
 import cc.cryptopunks.crypton.handler.handleGetMessages
@@ -17,9 +19,9 @@ import cc.cryptopunks.crypton.handler.handleMessageRead
 import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handleSaveInfoMessage
-import cc.cryptopunks.crypton.HandlerRegistryFactory
-import cc.cryptopunks.crypton.handler.handleDeleteChat
 import cc.cryptopunks.crypton.util.Store
+import handleConfigureChat
+import handleGetChatInfo
 
 val chatHandlers: HandlerRegistryFactory<ChatScope> = {
     createHandlers {
@@ -38,11 +40,14 @@ val chatHandlers: HandlerRegistryFactory<ChatScope> = {
         +handleClearInfoMessages()
         +handleDeleteMessage()
         +handleDeleteChat()
+        +handleGetChatInfo()
+        +handleConfigureChat()
     }
 }
 
-val createChatHandlers: HandlerRegistryFactory<AppScope> = {
+val appChatHandlers: HandlerRegistryFactory<AppScope> = {
     createHandlers {
         +handleCreateChat()
+        +handleGetChatInfo()
     }
 }

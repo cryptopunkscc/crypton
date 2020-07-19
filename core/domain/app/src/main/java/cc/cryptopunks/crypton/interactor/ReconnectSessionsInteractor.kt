@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal fun AppScope.reconnectSessions(): List<Job> =
-    sessionStore.get().values.map { session ->
+    sessions.get().values.map { session ->
         launch { session.reconnectIfNeeded() }
     }
 

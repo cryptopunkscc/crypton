@@ -7,7 +7,6 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
 
 suspend fun AppScope.addAccount(
     account: Account,
@@ -24,7 +23,7 @@ suspend fun AppScope.addAccount(
         connection = createConnection(
             Connection.Config(
                 scope = scope,
-                address = account.address,
+                account = account.address,
                 password = account.password
             )
         )
@@ -39,7 +38,7 @@ suspend fun AppScope.addAccount(
         if (insert) accountRepo.insert(account)
         log.d("Account inserted")
     }
-    sessionStore reduce {
+    sessions reduce {
         plus(account.address to session)
     }
 }

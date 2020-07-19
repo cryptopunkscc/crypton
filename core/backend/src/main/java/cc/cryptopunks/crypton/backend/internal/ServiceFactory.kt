@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Route.Chat
 import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.service.accountHandlers
-import cc.cryptopunks.crypton.service.createChatHandlers
+import cc.cryptopunks.crypton.service.appChatHandlers
 import cc.cryptopunks.crypton.service.rosterHandlers
 import cc.cryptopunks.crypton.HandlerRegistryFactory
 import kotlinx.coroutines.delay
@@ -33,6 +33,6 @@ val mainHandlers: HandlerRegistryFactory<AppScope> = {
     createHandlers {
         +accountHandlers()
         +rosterHandlers()
-        +createChatHandlers()
+        +appChatHandlers()
     }
 }

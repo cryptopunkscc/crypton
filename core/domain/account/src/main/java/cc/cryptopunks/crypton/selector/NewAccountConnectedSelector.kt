@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.*
 fun AppScope.newAccountConnectedFlow(): Flow<Address> {
     val cache = mutableSetOf<SessionScope>()
 
-    return sessionStore.changesFlow()
+    return sessions.changesFlow()
         .flatMapConcat { map -> map.values.asFlow() }
         .filterNot { session -> session in cache }
         .flatMapMerge { session ->
