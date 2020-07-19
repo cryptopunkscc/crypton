@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.roster.R
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
@@ -55,10 +56,6 @@ class RosterItemView(
 
                 avatarDrawable.setColor(ContextCompat.getColor(context, letterColors.getValue(letter)))
 
-                lastMessageTextView.text = message.formatMessage()
-
-                dateTextView.text = dateFormat.format(message.timestamp)
-
                 statusDrawable.setColor(statusColors.getValue(presence))
 
                 unreadMessagesTextView.text =
@@ -66,9 +63,30 @@ class RosterItemView(
                         "+ $unreadMessagesCount" else
                         null
 
+                message.run {
+                    textViewModel().let { (visibility, message) ->
+                        lastMessageTextView.text = message
+                        lastMessageTextView.visibility = visibility
+                    }
+
+                    dateViewModel().let { (visibility, date) ->
+                        dateTextView.text = date
+                        dateTextView.visibility = visibility
+                    }
+                }
+
                 visibility = View.VISIBLE
             }
         }
 
-    private fun Message.formatMessage() = "${from.address.local}: $text"
+    private fun Message.textViewModel() = when {
+        text.isEmpty() -> View.GONE to null
+        from.address == Address.Empty -> View.GONE to null
+        else -> View.VISIBLE to "${from.address.local}: $text"
+    }
+
+    private fun Message.dateViewModel() = when {
+        timestamp == 0L -> View.GONE to null
+        else -> View.VISIBLE to dateFormat.format(timestamp)
+    }
 }
