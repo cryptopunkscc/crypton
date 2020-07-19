@@ -77,7 +77,7 @@ private suspend fun client1() = Client1.connectClient {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
     }
-    send(Roster.Service.AcceptSubscription(address1, chatAddress))
+    send(Roster.Service.Join(address1, chatAddress))
     flush()
 
     delay(1000)
@@ -100,21 +100,21 @@ private suspend fun client2() = Client2.connectClient {
         }
     }
 
-    send(Roster.Service.AcceptSubscription(address2, address1))
+    send(Roster.Service.Join(address2, address1))
     waitFor<Roster.Service.Items> {
         list.any {
             it.chatAddress == address3 && it.presence == Presence.Status.Subscribe
         }
     }
 
-    send(Roster.Service.AcceptSubscription(address2, address3))
+    send(Roster.Service.Join(address2, address3))
     waitFor<Roster.Service.Items> {
         list.any {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
     }
 
-    send(Roster.Service.AcceptSubscription(address2, chatAddress))
+    send(Roster.Service.Join(address2, chatAddress))
     waitFor<Roster.Service.Items> {
         list.any {
             it.chatAddress == chatAddress
@@ -140,7 +140,7 @@ private suspend fun client3() = Client3.connectClient {
         }
     }
 
-    send(Roster.Service.AcceptSubscription(address3, address1))
+    send(Roster.Service.Join(address3, address1))
     flush()
 
     createChat(address3, address2)

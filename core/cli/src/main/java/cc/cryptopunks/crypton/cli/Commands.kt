@@ -76,7 +76,7 @@ private val sendMessage = SEND to mapOf(MESSAGE to command(vararg()) { message -
 
 private val join = JOIN to command {
     (route as Route.Chat).run {
-        Roster.Service.AcceptSubscription(account, address)
+        Roster.Service.Join(account, address)
     }
 }
 
