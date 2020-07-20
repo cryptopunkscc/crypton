@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 
-internal fun SessionScope.flushQueueMessagesFlow(): Flow<Chat.Service.FlushQueuedMessages> =
+internal fun SessionScope.flushMessageQueueFlow(): Flow<Chat.Service.FlushQueuedMessages> =
     flowOf(
         netEvents().filterIsInstance<Net.OmemoInitialized>().map {
             messageRepo.queuedList().map { it.chat }

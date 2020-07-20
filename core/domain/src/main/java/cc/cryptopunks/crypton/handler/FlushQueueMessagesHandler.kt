@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
 
-internal fun SessionScope.handleFlushQueuedMessages() =
+internal fun SessionScope.handleFlushMessageQueue() =
     handle<Chat.Service.FlushQueuedMessages> {
         if (addresses.isEmpty())
             flushQueuedMessages { true } else

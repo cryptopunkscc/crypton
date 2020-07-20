@@ -30,7 +30,6 @@ interface AppScope :
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
 
-    val startSessionService: SessionScope.() -> Job
     val createConnection: Connection.Factory
 
     val mainHandlers: HandlerRegistryFactory<AppScope>

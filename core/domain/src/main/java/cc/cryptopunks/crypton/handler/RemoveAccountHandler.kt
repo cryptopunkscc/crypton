@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.removeSessionScope
 import kotlinx.coroutines.cancel
 
-internal fun AppScope.handleRemove() =
+internal fun AppScope.handleRemoveAccount() =
     handle<Account.Service.Remove> {
         removeSessionScope(address) {
             if (!deviceOnly) {

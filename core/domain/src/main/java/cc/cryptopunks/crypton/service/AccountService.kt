@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.handler.handleGetAccountList
 import cc.cryptopunks.crypton.handler.handleLogin
 import cc.cryptopunks.crypton.handler.handleLogout
 import cc.cryptopunks.crypton.handler.handleRegisterAccount
-import cc.cryptopunks.crypton.handler.handleRemove
+import cc.cryptopunks.crypton.handler.handleRemoveAccount
 import cc.cryptopunks.crypton.handler.handleSetField
 import cc.cryptopunks.crypton.model.Form
 import cc.cryptopunks.crypton.HandlerRegistryFactory
@@ -28,7 +28,7 @@ val accountHandlers: HandlerRegistryFactory<AppScope> = {
         +handleLogin(form)
         +handleLogout()
         +handleEnableAccount()
-        +handleRemove()
+        +handleRemoveAccount()
         +handleGetAccountList(lastAccounts)
         +handleAccountListSubscription(lastAccounts)
     }
