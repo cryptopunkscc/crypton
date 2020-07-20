@@ -39,5 +39,5 @@ dependencies {
 
     implementation 'io.palaima.debugdrawer:debugdrawer-fps:0.8.0'
 
-    implementation project(':core:api')
+    api project(':core:api')
 }

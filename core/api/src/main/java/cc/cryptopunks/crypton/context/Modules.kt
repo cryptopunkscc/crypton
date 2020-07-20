@@ -23,7 +23,6 @@ class AppModule(
     override val mainHandlers: HandlerRegistryFactory<AppScope>,
     override val chatHandlers: HandlerRegistryFactory<ChatScope>,
     override val createConnection: Connection.Factory,
-    override val startSessionService: SessionScope.() -> Job,
     override val mainExecutor: MainExecutor,
     override val ioExecutor: IOExecutor,
     override val navigateChatId: Int = 0

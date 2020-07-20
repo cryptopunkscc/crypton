@@ -5,13 +5,11 @@ import cc.cryptopunks.crypton.backend.internal.mainHandlers
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Connection
-import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.mock.MockRepo
 import cc.cryptopunks.crypton.mock.MockSys
 import cc.cryptopunks.crypton.net.connect
 import cc.cryptopunks.crypton.net.startServerSocket
 import cc.cryptopunks.crypton.service.chatHandlers
-import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -52,7 +50,6 @@ private val appScope: AppScope
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
         createConnection = createConnectionFactory,
-        startSessionService = SessionScope::startSessionService,
         mainHandlers = mainHandlers,
         chatHandlers = chatHandlers
     )
