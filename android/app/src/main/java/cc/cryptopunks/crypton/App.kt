@@ -15,7 +15,6 @@ import cc.cryptopunks.crypton.selector.newSessionsFlow
 import cc.cryptopunks.crypton.service.chatHandlers
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.service.startAppService
-import cc.cryptopunks.crypton.service.startSessionService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.sys.AndroidSys
@@ -50,7 +49,6 @@ class App :
                 )
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
-            startSessionService = SessionScope::startSessionService,
             mainHandlers = mainHandlers,
             chatHandlers = chatHandlers,
             navigateChatId = R.id.chatFragment
