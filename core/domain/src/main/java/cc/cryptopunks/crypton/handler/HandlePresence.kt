@@ -1,14 +1,14 @@
 package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
-import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.storePresence
 
-internal fun handlePresenceChanged() = handle { _, (presence): Roster.Net.PresenceChanged ->
+internal fun handlePresence() = handle { _, (presence): Exec.HandlePresence ->
     log.d("handle $this")
     storePresence(presence)
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-internal suspend fun SessionScope.fetchArchivedMessages(): Flow<List<Message>> {
+internal suspend fun SessionScope.archivedMessagesFlow(): Flow<List<Message>> {
     val since = messageRepo.latest()?.timestamp
     var count = 0
     return readArchived(Message.Net.ReadArchived.Query(since = since))

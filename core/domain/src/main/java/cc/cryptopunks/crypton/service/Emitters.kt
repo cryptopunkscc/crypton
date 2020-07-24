@@ -2,14 +2,16 @@ package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.selector.accountAuthenticatedFlow
 import cc.cryptopunks.crypton.selector.flushMessageQueueFlow
+import cc.cryptopunks.crypton.selector.handlePresenceFlow
 import cc.cryptopunks.crypton.selector.hasAccountsFlow
 import cc.cryptopunks.crypton.selector.joinConferencesFlow
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.selector.saveMessagesFlow
 import cc.cryptopunks.crypton.selector.sessionActionsFlow
 import cc.cryptopunks.crypton.selector.startSessionServicesFlow
+import cc.cryptopunks.crypton.selector.syncConferencesFlow
+import cc.cryptopunks.crypton.selector.toggleIndicatorFlow
 import cc.cryptopunks.crypton.selector.updateChatNotificationFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flattenMerge
@@ -21,7 +23,7 @@ import kotlinx.coroutines.flow.onStart
 
 
 internal fun RootScope.appActionsFlow() = flowOf(
-    hasAccountsFlow(),
+    toggleIndicatorFlow(),
     sessionActionsFlow(),
     startSessionServicesFlow()
 ).flattenMerge().onEach {
@@ -30,11 +32,11 @@ internal fun RootScope.appActionsFlow() = flowOf(
 
 internal fun SessionScope.accountActionsFlow() = flowOf(
     saveMessagesFlow(),
-    presenceChangedFlow(),
+    handlePresenceFlow(),
     flushMessageQueueFlow(),
     conferenceInvitationsFlow(),
     updateChatNotificationFlow(),
-    accountAuthenticatedFlow(),
+    syncConferencesFlow(),
     joinConferencesFlow()
 ).flattenMerge().flowOn(Dispatchers.IO).onStart {
     log.d("start accountActionsFlow")

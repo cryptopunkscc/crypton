@@ -36,7 +36,7 @@ object Roster {
             data class Failed(val exception: Exception) : Loading()
         }
 
-        data class PresenceChanged(val presence: Presence) : Event, Account.Action
+        data class PresenceChanged(val presence: Presence) : Event
     }
 
     interface Repo {

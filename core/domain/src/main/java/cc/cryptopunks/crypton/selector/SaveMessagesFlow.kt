@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun SessionScope.saveMessagesFlow() = flowOf(
     netEvents().filterIsInstance<Net.OmemoInitialized>().flatMapConcat {
-        fetchArchivedMessages().onEach { log.d("Archived messages $it") }
+        archivedMessagesFlow().onEach { log.d("Archived messages $it") }
     },
     incomingMessages().onEach { log.d("Incoming message $it ") }.map {
         listOf(it.message)

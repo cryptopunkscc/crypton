@@ -13,20 +13,21 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-internal fun handleLastMessageSubscription() = handle { out, _: Subscribe.LastMessage ->
-    flowOf(
-        messageRepo.list().asFlow(),
-        messageRepo.flowLatest()
-    ).flattenMerge().onEach {
-        log.d("last message $it")
-    }.bufferedThrottle(100).map { messages ->
-        Chat.Service.Messages(
-            account = address,
-            list = messages
-        )
-    }.onStart {
-        log.d("start LastMessageSubscription")
-    }.onCompletion {
-        log.d("finish LastMessageSubscription $it")
-    }.collect(out)
-}
+internal fun handleLastMessageSubscription() =
+    handle { out, _: Subscribe.LastMessage ->
+        flowOf(
+            messageRepo.list().asFlow(),
+            messageRepo.flowLatest()
+        ).flattenMerge().onEach {
+            log.d("last message $it")
+        }.bufferedThrottle(100).map { messages ->
+            Chat.Service.Messages(
+                account = address,
+                list = messages
+            )
+        }.onStart {
+            log.d("start LastMessageSubscription")
+        }.onCompletion {
+            log.d("finish LastMessageSubscription $it")
+        }.collect(out)
+    }

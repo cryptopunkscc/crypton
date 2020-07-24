@@ -4,7 +4,6 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.isConference
 
-
 private var lastId = 0
 
 internal suspend fun SessionScope.sendOrSubscribe(message: Message) {

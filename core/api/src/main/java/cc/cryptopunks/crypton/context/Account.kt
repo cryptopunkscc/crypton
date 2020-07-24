@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Async
 import cc.cryptopunks.crypton.Scoped
 import kotlinx.coroutines.flow.Flow
 
@@ -26,14 +25,14 @@ data class Account(
 
     interface Event : Api.Event
 
-    data class Authenticated(val resumed: Boolean) : Action, Event, Async
+    data class Authenticated(val resumed: Boolean) : Event
 
     interface Service {
         data class Connecting(val account: Address) : Status
         data class Connected(val account: Address) : Status
         data class Error(val account: Address, val message: String? = null) : Status
         data class Accounts(val list: List<Address>)
-        data class HasAccounts(val condition: Boolean) : Main.Action, Async
+        data class HasAccounts(val condition: Boolean)
 
         interface Status
     }

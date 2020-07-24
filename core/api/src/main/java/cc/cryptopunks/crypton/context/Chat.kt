@@ -71,9 +71,6 @@ data class Chat(
         fun getChatInfo(chat: Address): Service.Info
 
         interface Event : Api.Event
-        data class Joined(val chat: Chat) : Event
-
-        interface EventFlow : Flow<Event>
 
         data class ConferenceInvitation(
             val address: Address,

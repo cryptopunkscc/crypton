@@ -15,12 +15,14 @@ object Exec {
     }
     object PopClipboard : Main.Action
     data class Copy(val message: Message) : Main.Action
+    data class ToggleIndicator(val show: Boolean) : Main.Action
 
     // Account
 
-    object SessionService : Account.Action, Async
     object Connect : Account.Action
     object Disconnect : Account.Action
+    object SessionService : Account.Action, Async
+    object SyncConferences : Account.Action, Async
     data class EnableAccount(val condition: Boolean) : Account.Action
     data class RemoveAccount(val deviceOnly: Boolean = true) : Account.Action
     data class MessagesRead(val messages: List<Message>) : Account.Action
@@ -29,6 +31,7 @@ object Exec {
     data class DeleteMessage(val message: Message) : Account.Action
     data class CreateChat(val chat: Chat) : Account.Action
     data class SaveMessages(val messages: List<Message>) : Account.Action
+    data class HandlePresence(val presence: Presence) : Account.Action
 
     // Chat
 
@@ -40,6 +43,7 @@ object Exec {
     data class SaveInfoMessage(val text: String) : Chat.Action // TODO
     object JoinChat : Chat.Action
     data class Select(val item: Roster.Item) : Chat.Action
+    data class InsertInvitation(val address: Address, val inviter: Resource) : Chat.Action
 }
 
 object Get {
