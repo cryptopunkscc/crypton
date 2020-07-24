@@ -23,6 +23,8 @@ interface AppScope :
     val sessions: SessionScope.Store
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
+    val lastAccounts: Store<Account.Service.Accounts>
+    val rosterItems: Store<Roster.Service.Items>
 
     val createConnection: Connection.Factory
 

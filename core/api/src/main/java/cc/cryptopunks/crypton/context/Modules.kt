@@ -7,7 +7,6 @@ import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
-import cc.cryptopunks.crypton.util.OpenStore
 import cc.cryptopunks.crypton.util.Store
 import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.Dispatchers
@@ -32,13 +31,17 @@ class AppModule(
     Repo by repo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext = log +
-        SupervisorJob().apply {
-            invokeOnCompletion { log.d("Finish AppModule ${this@AppModule}") }
-        } + Dispatchers.IO
+
+    override val coroutineContext: CoroutineContext = log + SupervisorJob().apply {
+        invokeOnCompletion { log.d("Finish AppModule ${this@AppModule}") }
+    } + Dispatchers.IO
+
     override val sessions = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
+    override val lastAccounts = Store(Account.Service.Accounts(emptyList()))
+    override val rosterItems = Store(Roster.Service.Items(emptyList()))
+
     override fun sessionScope(): SessionScope = sessions.get().values.first()
     override fun sessionScope(address: Address): SessionScope =
         sessions[address] ?: throw Exception(
@@ -67,11 +70,14 @@ class SessionModule(
     SessionRepo by sessionRepo {
 
     override val log = typedLog()
-    override val coroutineContext: CoroutineContext = log +
-        SupervisorJob().apply { invokeOnCompletion { log.d("Closed $address ${it.hashCode()} $it") } } +
-        newSingleThreadContext(address.id)
+
+    override val coroutineContext: CoroutineContext = log + SupervisorJob().apply {
+        invokeOnCompletion { log.d("Finish SessionModule $address ${it.hashCode()} $it") }
+    } + newSingleThreadContext(address.id)
+
     override val presenceStore = Presence.Store()
-    override val subscriptions = OpenStore(emptySet<Address>())
+    override val subscriptions = Store(emptySet<Address>())
+
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chat: Address): ChatScope = chatScope(chatRepo.get(chat))
 

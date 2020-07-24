@@ -5,10 +5,6 @@ import cc.cryptopunks.crypton.connectable
 import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Route.Chat
-import cc.cryptopunks.crypton.createHandlers
-import cc.cryptopunks.crypton.service.accountHandlers
-import cc.cryptopunks.crypton.service.appChatHandlers
-import cc.cryptopunks.crypton.service.rosterHandlers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -29,8 +25,3 @@ internal class ServiceFactory(
 }
 
 
-val mainHandlers get() = createHandlers {
-    +accountHandlers()
-    +rosterHandlers()
-    +appChatHandlers
-}

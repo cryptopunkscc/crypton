@@ -10,6 +10,8 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 
+operator fun Connectable.plus(other: Connectable): Connectable.Binding = ConnectableBinding() + this + other
+
 class ConnectableBinding(
     actor: BroadcastChannel<Any> = BroadcastChannel(Channel.BUFFERED),
     service: BroadcastChannel<Any> = BroadcastChannel(Channel.BUFFERED)

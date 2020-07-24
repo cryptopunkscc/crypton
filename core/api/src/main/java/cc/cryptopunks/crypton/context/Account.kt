@@ -37,8 +37,8 @@ data class Account(
         // input
 
         interface Connect : Scoped<AppScope>
-        data class Register(val account: Account? = null) : Connect
-        data class Add(val account: Account? = null) : Connect
+        data class Register(val account: Account) : Connect
+        data class Add(val account: Account) : Connect
 
         object StartServices : Action, Async
 

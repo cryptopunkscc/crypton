@@ -32,7 +32,7 @@ fun connector(
     output = output
 )
 
-typealias ConnectorOutput = suspend (Any) -> Unit
+typealias ConnectorOutput = suspend Any.() -> Unit
 
 fun Connector.actor(): Actor = object : Actor, Connectable by ConnectableConnector(this) {}
 

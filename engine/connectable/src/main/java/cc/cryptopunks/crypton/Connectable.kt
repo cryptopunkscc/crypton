@@ -55,8 +55,8 @@ interface Actor : Connectable {
 
 fun actor(
     context: CoroutineContext = Dispatchers.Unconfined,
-    onConnect: CoroutineScope.(Connector) -> Job
+    onConnect: suspend CoroutineScope.(Connector) -> Unit
 ) = object : Actor {
     override val coroutineContext = SupervisorJob() + context
-    override fun Connector.connect(): Job = onConnect(this)
+    override fun Connector.connect(): Job = launch { onConnect(this@connect) }
 }

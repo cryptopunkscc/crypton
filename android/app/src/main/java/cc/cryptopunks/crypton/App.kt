@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.backend.internal.mainHandlers
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
@@ -11,8 +10,7 @@ import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.selector.newSessionsFlow
-import cc.cryptopunks.crypton.service.appHandlers
-import cc.cryptopunks.crypton.service.chatHandlers
+import cc.cryptopunks.crypton.service.cryptonHandlers
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
@@ -50,7 +48,7 @@ class App :
                 )
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
-            handlers = appHandlers + mainHandlers + chatHandlers,
+            handlers = cryptonHandlers(),
             navigateChatId = R.id.chatFragment
         )
     }
