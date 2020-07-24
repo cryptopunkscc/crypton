@@ -28,21 +28,21 @@ suspend fun testDirectMessaging() = coroutineScope {
 private suspend fun client1() = Client1.connectClient {
     expected.apply {
 //        next<Exec.Register> {  }
-//        next<Account.Service.Connecting> {  }
-//        next<Account.Service.Connected> {  }
-//        next<Chat.Service.Create>(address1) {  }
-//        next<Chat.Service.ChatCreated> {  }
+//        next<Account.Connecting> {  }
+//        next<Account.Connected> {  }
+//        next<Chat.Create>(address1) {  }
+//        next<Account.ChatCreated> {  }
 //        next<Route.Chat> {  }
-//        next<Chat.Service.SubscribeLastMessage> {  }
-//        next<Chat.Service.EnqueueMessage> {  }
-//        lazy<Chat.Service.Messages> {
+//        next<Chat.SubscribeLastMessage> {  }
+//        next<Chat.EnqueueMessage> {  }
+//        lazy<Chat.Messages> {
 //            list.forEach { message ->
 //                assertEquals(address2, message.chat)
 //                assertEquals("yo", message.text)
 //                assertEquals(Message.Status.Sent, message.status)
 //            }
 //        }
-//        next<Chat.Service.Messages> {
+//        next<Chat.Messages> {
 //            list.forEach { message ->
 //                assertEquals(address2, message.chat)
 //                assertEquals("yo yo", message.text)
@@ -63,7 +63,7 @@ private suspend fun client1() = Client1.connectClient {
     // but it does not matter, from user perspective there is no use case for that.
     delay(1000)
     sendMessage("yo", address1, address2)
-    waitFor<Chat.Service.Messages> {
+    waitFor<Chat.Messages> {
         list.any { it.text == "yo yo" }
     }
     log.d("Stop client 1")
@@ -76,7 +76,7 @@ private suspend fun client2() = Client2.connectClient {
     prepare(address2, pass)
     acceptSubscription(address2, address1)
     delay(1000)
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any { it.chatAddress == address1 && it.message.text == "yo" }
     }
     openChat(address2, address1)

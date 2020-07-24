@@ -27,15 +27,14 @@ data class Account(
 
     data class Authenticated(val resumed: Boolean) : Event
 
-    interface Service {
-        data class Connecting(val account: Address) : Status
-        data class Connected(val account: Address) : Status
-        data class Error(val account: Address, val message: String? = null) : Status
-        data class Accounts(val list: List<Address>)
-        data class HasAccounts(val condition: Boolean)
+    data class Connecting(val account: Address) : Status
+    data class Connected(val account: Address) : Status
+    data class Error(val account: Address, val message: String? = null) : Status
+    data class Many(val accounts: Set<Address>)
+    data class HasAccounts(val condition: Boolean)
+    data class ChatCreated(val chat: Address)
 
-        interface Status
-    }
+    interface Status
 
     interface Net {
         fun createAccount()

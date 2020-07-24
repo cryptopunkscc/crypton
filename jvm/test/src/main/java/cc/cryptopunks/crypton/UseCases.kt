@@ -29,11 +29,11 @@ suspend fun ClientDsl.tryRemoveAccount(
 ) {
     send(Exec.Login(Account(address, Password(password))))
     expect(
-        Account.Service.Connecting(address),
-        should<Account.Service.Status> {
+        Account.Connecting(address),
+        should<Account.Status> {
             when (this) {
-                is Account.Service.Error -> true
-                is Account.Service.Connected -> true.also {
+                is Account.Error -> true
+                is Account.Connected -> true.also {
                     send(Exec.RemoveAccount(deviceOnly = false).context(address))
                 }
                 else -> false
@@ -59,8 +59,8 @@ suspend fun ClientDsl.register(
 ) {
     send(Exec.Register(Account(address, Password(password))))
     expect(
-        Account.Service.Connecting(address),
-        Account.Service.Connected(address)
+        Account.Connecting(address),
+        Account.Connected(address)
     )
 }
 
@@ -70,7 +70,7 @@ suspend fun ClientDsl.createChat(
     users: List<Address> = listOf(chat)
 ) {
     send(Exec.CreateChat(Chat(chat, account, users)).context(account))
-    expect(Chat.Service.ChatCreated(chat = chat))
+    expect(Account.ChatCreated(chat = chat))
 }
 
 suspend fun ClientDsl.openChat(
@@ -104,7 +104,7 @@ suspend fun ClientDsl.sendMessage(
         Exec.EnqueueMessage(message).context(account, chat)
     )
 
-    waitFor<Chat.Service.Messages> {
+    waitFor<Chat.Messages> {
         list.any { it.status == Message.Status.Sent }
     }.list.run {
         forEach { println(it) }
@@ -120,7 +120,7 @@ suspend fun ClientDsl.expectReceived(
     chat: Address
 ) {
     expect(
-        should<Chat.Service.Messages> {
+        should<Chat.Messages> {
             require(this.account == account) { this.account }
             require(list.size == 1) { list }
             list[0].run {
@@ -143,7 +143,7 @@ suspend fun ClientDsl.acceptSubscription(
     subscriber: Address
 ) {
     send(Subscribe.RosterItems(true, account))
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             all(
                 it.account == account,
@@ -157,7 +157,7 @@ suspend fun ClientDsl.acceptSubscription(
 
 suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, chat: Address) {
     expect(
-        should<Roster.Service.Items> {
+        should<Roster.Items> {
             log.d("Expect RosterItemMessage: $text, $account, $chat")
             list.firstOrNull { it.account == account && it.chatAddress == chat }?.run {
                 require(title == chat.id) { title }
@@ -182,7 +182,7 @@ But was:
             true
         }
     ) { input ->
-        (input as? Roster.Service.Items)?.run {
+        (input as? Roster.Items)?.run {
             list.any { it.account == account }
         } ?: false
     }

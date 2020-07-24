@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.Output
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.SessionScope
@@ -29,7 +30,7 @@ internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
     }.filter { it.isNotEmpty() }.firstOrNull()?.let { rooms ->
         log.d("Fetched conferences $rooms")
         syncConferences(rooms).map { it.address }.onEach { room ->
-            out(Chat.Service.ChatCreated(room))
+            out(Account.ChatCreated(room))
         }.toList().also { syncRooms ->
             log.d("Conferences sync $syncRooms")
         }

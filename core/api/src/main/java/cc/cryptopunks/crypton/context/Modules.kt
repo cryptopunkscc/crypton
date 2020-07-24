@@ -39,8 +39,8 @@ class RootModule(
     override val sessions = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
     override val connectableBindingsStore = Connectable.Binding.Store()
-    override val lastAccounts = Store(Account.Service.Accounts(emptyList()))
-    override val rosterItems = Store(Roster.Service.Items(emptyList()))
+    override val accounts = Store(Account.Many(emptySet()))
+    override val rosterItems = Store(Roster.Items(emptyList()))
 
     override fun sessionScope(): SessionScope = sessions.get().values.first()
     override fun sessionScope(address: Address): SessionScope =
@@ -103,7 +103,7 @@ class ChatModule(
 
     override val log = typedLog()
 
-    override val pagedMessage: Store<Chat.Service.PagedMessages?> = Store(null)
+    override val pagedMessage: Store<Chat.PagedMessages?> = Store(null)
 
     @Suppress("IntroduceWhenSubject")
     override suspend fun resolve(

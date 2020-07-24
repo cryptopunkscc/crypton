@@ -5,6 +5,7 @@ import android.view.View
 import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.chat.R
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.address
@@ -35,7 +36,7 @@ class CreateChatView(context: Context) :
 
     override fun Connector.connect(): Job = launch {
         launch {
-            input.filterIsInstance<Chat.Service.ChatCreated>().collect { created ->
+            input.filterIsInstance<Account.ChatCreated>().collect { created ->
                 findNavController().navigateChat(
                     account = context.currentAccount,
                     chat = created.chat

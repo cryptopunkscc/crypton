@@ -61,7 +61,7 @@ private suspend fun client1() = Client1.connectClient {
         Subscribe.RosterItems(true, address1)
     )
 
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.filter { it.account == address1 }.run {
             isNotEmpty() && any {
                 it.message.from.address == address1
@@ -75,7 +75,7 @@ private suspend fun client1() = Client1.connectClient {
         }
     }
 
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
@@ -97,28 +97,28 @@ private suspend fun client2() = Client2.connectClient {
     prepare(address2, pass)
 
     send(Subscribe.RosterItems(true, address2))
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == address1 && it.presence == Presence.Status.Subscribe
         }
     }
 
     send(Exec.JoinChat.context(address2, address1))
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == address3 && it.presence == Presence.Status.Subscribe
         }
     }
 
     send(Exec.JoinChat.context(address2, address3))
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
     }
 
     send(Exec.JoinChat.context(address2, chatAddress))
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress
                 && it.message.text == "yolo"
@@ -134,7 +134,7 @@ private suspend fun client3() = Client3.connectClient {
     prepare(address3, pass)
 
     send(Subscribe.RosterItems(true, address3))
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.filter { it.account == address3 }.run {
             isNotEmpty() && any {
                 it.chatAddress == address1
@@ -156,7 +156,7 @@ private suspend fun client3() = Client3.connectClient {
         Route.Main,
         Subscribe.RosterItems(true, address3)
     )
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.isNotEmpty() && list.any {
             it.chatAddress == address2
                 && it.message.from.address == address3
@@ -165,7 +165,7 @@ private suspend fun client3() = Client3.connectClient {
     }
 
     send(Exec.CreateChat(Chat(chatAddress, address3, listOf(address1, address2))))
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress
                 && it.message.text == "yolo"

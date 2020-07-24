@@ -21,7 +21,7 @@ internal fun handleLastMessageSubscription() =
         ).flattenMerge().onEach {
             log.d("last message $it")
         }.bufferedThrottle(100).map { messages ->
-            Chat.Service.Messages(
+            Chat.Messages(
                 account = address,
                 list = messages
             )

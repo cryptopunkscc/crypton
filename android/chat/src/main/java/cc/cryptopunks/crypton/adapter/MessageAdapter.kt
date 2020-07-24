@@ -47,7 +47,7 @@ class MessageAdapter(
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
-    fun setMessages(messages: Chat.Service.PagedMessages?) {
+    fun setMessages(messages: Chat.PagedMessages?) {
         log.d("submit messages $messages")
         account = messages?.account ?: account
         submitList(messages?.list)

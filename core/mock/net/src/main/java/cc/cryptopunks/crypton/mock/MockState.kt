@@ -21,9 +21,9 @@ class MockState(
 
     val contacts = ConflatedBroadcastChannel(defaults.contacts.toSet())
 
-    val rosterEvents = Channel<Roster.Net.Event>(Channel.BUFFERED)
+    val rosterEvents = Channel<Roster.Event>(Channel.BUFFERED)
 
-    val messageEvents = Channel<Message.Net.Incoming>(Channel.BUFFERED)
+    val messageEvents = Channel<Message.Incoming>(Channel.BUFFERED)
 
     val apiEvents = BroadcastChannel<Api.Event>(Channel.BUFFERED)
 

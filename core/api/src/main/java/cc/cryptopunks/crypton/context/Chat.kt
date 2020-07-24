@@ -30,54 +30,46 @@ data class Chat(
 
     enum class Affiliation { owner, admin, member, outcast, none, unknown }
 
-    object Service {
+    // Events
 
-        // Event
+    data class MessageText(val text: CharSequence?)
 
-        data class ChatCreated(val chat: Address)
+    data class PagedMessages(val account: Address, val list: PagedList<Message>)
 
-        data class MessageText(val text: CharSequence?)
+    data class Messages(val account: Address, val list: List<Message>)
 
-        data class PagedMessages(val account: Address, val list: PagedList<Message>)
-
-        data class Messages(val account: Address, val list: List<Message>)
-
-        interface Rooms {
-            val set: Set<Address>
-        }
-
-        data class JoinedRooms(override val set: Set<Address>) : Rooms
-
-        data class AllRooms(override val set: Set<Address>) : Rooms
-
-        data class Info(
-            val name: String,
-            val account: Address,
-            val address: Address,
-            val members: Set<Member> = emptySet()
-        )
+    interface Rooms {
+        val set: Set<Address>
     }
 
+    data class JoinedRooms(override val set: Set<Address>) : Rooms
+
+    data class AllRooms(override val set: Set<Address>) : Rooms
+
+    data class Info(
+        val name: String,
+        val account: Address,
+        val address: Address,
+        val members: Set<Member> = emptySet()
+    )
+
+    data class Invitation(
+        val address: Address,
+        val inviter: Resource,
+        val reason: String?,
+        val password: String?
+    )
 
     interface Net {
         fun supportEncryption(address: Address): Boolean
         fun createOrJoinConference(chat: Chat): Chat
         fun configureConference(chat: Address)
         fun inviteToConference(chat: Address, users: Set<Address>)
-        fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
+        fun conferenceInvitationsFlow(): Flow<Invitation>
         fun joinConference(address: Address, nickname: String, historySince: Int = 0)
         fun listJoinedRooms(): Set<Address>
         fun listRooms(): Set<Address>
-        fun getChatInfo(chat: Address): Service.Info
-
-        interface Event : Api.Event
-
-        data class ConferenceInvitation(
-            val address: Address,
-            val inviter: Resource,
-            val reason: String?,
-            val password: String?
-        ) : Action
+        fun getChatInfo(chat: Address): Info
     }
 
 

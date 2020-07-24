@@ -10,7 +10,7 @@ internal fun handleGetMessages() = handle { out, _: Get.Messages ->
             currentTime - SEVEN_DAYS_MILLIS..currentTime
         }
     ).filter { it.chat == address }.let {
-        out(Chat.Service.Messages(address, it))
+        out(Chat.Messages(address, it))
     }
 }
 

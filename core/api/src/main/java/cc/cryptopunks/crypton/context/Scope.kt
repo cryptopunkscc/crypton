@@ -23,8 +23,8 @@ interface RootScope :
     val sessions: SessionScope.Store
     val clipboardStore: Clip.Board.Store
     val connectableBindingsStore: Connectable.Binding.Store
-    val lastAccounts: Store<Account.Service.Accounts>
-    val rosterItems: Store<Roster.Service.Items>
+    val accounts: Store<Account.Many>
+    val rosterItems: Store<Roster.Items>
 
     val createConnection: Connection.Factory
 
@@ -71,5 +71,5 @@ interface ChatScope :
     SessionScope {
 
     val chat: Chat
-    val pagedMessage: Store<Chat.Service.PagedMessages?>
+    val pagedMessage: Store<Chat.PagedMessages?>
 }

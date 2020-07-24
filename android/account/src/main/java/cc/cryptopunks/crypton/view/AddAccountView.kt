@@ -45,8 +45,8 @@ internal class AddAccountView(context: Context) : ActorLayout(context) {
             input.collect { arg ->
                 when (arg) {
                     is Map<*, *> -> setForm(arg as Map<Account.Field, CharSequence>)
-                    is Account.Service.Error -> errorOutput.text = arg.message
-                    is Account.Service.Connected -> if (navigateUpOnConnected) findNavController().navigateUp()
+                    is Account.Error -> errorOutput.text = arg.message
+                    is Account.Connected -> if (navigateUpOnConnected) findNavController().navigateUp()
                 }
             }
         }

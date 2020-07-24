@@ -12,7 +12,7 @@ class MockChatNet(
         TODO("Not yet implemented")
     }
 
-    override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> {
+    override fun conferenceInvitationsFlow(): Flow<Chat.Invitation> {
         TODO("Not yet implemented")
     }
 
@@ -40,7 +40,7 @@ class MockChatNet(
         TODO("Not yet implemented")
     }
 
-    override fun getChatInfo(chat: Address): Chat.Service.Info {
+    override fun getChatInfo(chat: Address): Chat.Info {
         TODO("Not yet implemented")
     }
 }

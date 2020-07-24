@@ -115,9 +115,9 @@ class ChatView(
             }.collect { arg ->
                 when (arg) {
 
-                    is Chat.Service.MessageText -> messageInputView.input.setText(arg.text)
+                    is Chat.MessageText -> messageInputView.input.setText(arg.text)
 
-                    is Chat.Service.PagedMessages -> {
+                    is Chat.PagedMessages -> {
                         messageAdapter.setMessages(arg)
                         arg.list.firstOrNull()?.takeIf {
                             it.timestamp > lastMessageTimestamp && it.status != Message.Status.State

@@ -15,7 +15,7 @@ internal fun handleRosterItemsSubscription() =
         rosterItemStatesFlow()
             .filterBy(account)
             .map { list -> list.sortedByDescending { item -> item.message.timestamp } }
-            .map { Roster.Service.Items(it) }
+            .map { Roster.Items(it) }
             .onEach { rosterItems { it } }
             .collect(out)
     }

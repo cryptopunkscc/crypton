@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun handleAccountsSubscription() =
     handle { out, _: Subscribe.Accounts ->
-        accountRepo.flowList().map {
-            Account.Service.Accounts(it)
+        accountRepo.flowList().map { accounts ->
+            Account.Many(accounts.toSet())
         }.onEach {
-            lastAccounts { it }
+            accounts { it }
         }.collect(out)
     }
 
 internal fun handleGetAccountList() =
     handle { out, _: Get.Accounts ->
-        lastAccounts.get().takeIf {
-            it.list.isNotEmpty()
+        accounts.get().takeIf {
+            it.accounts.isNotEmpty()
         }?.out()
     }

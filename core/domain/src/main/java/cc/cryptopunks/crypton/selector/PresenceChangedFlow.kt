@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 
-internal fun SessionScope.presenceChangedFlow(): Flow<Roster.Net.PresenceChanged> =
+internal fun SessionScope.presenceChangedFlow(): Flow<Roster.PresenceChanged> =
     flowOf(
         getCachedPresences().map { presence ->
-            Roster.Net.PresenceChanged(
+            Roster.PresenceChanged(
                 presence = presence
             )
         }.asFlow(),
-        rosterEvents.filterIsInstance<Roster.Net.PresenceChanged>()
+        rosterEvents.filterIsInstance<Roster.PresenceChanged>()
     ).flattenConcat().distinctUntilChanged().onEach {
         println("Presence changed $address $it")
     }

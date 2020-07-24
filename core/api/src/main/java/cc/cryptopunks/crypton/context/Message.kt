@@ -66,21 +66,19 @@ data class Message(
         gone
     }
 
+    data class Incoming(val message: Message) : Api.Event
+
     interface Net {
         suspend fun sendMessage(message: Message): Job
         fun incomingMessages(): Flow<Incoming>
-        fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
+        fun readArchived(query: ReadQuery): Flow<List<Message>>
 
-        object ReadArchived {
-            data class Query(
-                val since: Long? = null,
-                val afterUid: String? = null,
-                val until: Long = System.currentTimeMillis(),
-                val chat: Chat? = null
-            )
-        }
-
-        data class Incoming(val message: Message) : Api.Event
+        data class ReadQuery(
+            val since: Long? = null,
+            val afterUid: String? = null,
+            val until: Long = System.currentTimeMillis(),
+            val chat: Chat? = null
+        )
     }
 
     interface Repo {
@@ -116,11 +114,12 @@ data class Message(
 
     val isUnread get() = readAt == 0L && status == Status.Received
 
-    val author: String get() = when {
-        !chat.isConference -> from.address.local
-        from.address != chat -> from.address.local
-        else -> from.resource
-    }
+    val author: String
+        get() = when {
+            !chat.isConference -> from.address.local
+            from.address != chat -> from.address.local
+            else -> from.resource
+        }
 }
 
 fun Message.calculateId() = copy(

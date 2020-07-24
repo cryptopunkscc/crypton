@@ -13,7 +13,7 @@ import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.Jid
 
 class RosterFlowAdapter(
-    private val channel: SendChannel<Roster.Net.Event>
+    private val channel: SendChannel<Roster.Event>
 ) :
     RosterLoadedListener,
     PresenceEventListener,
@@ -24,7 +24,7 @@ class RosterFlowAdapter(
         subscribeRequest: Presence
     ): SubscribeListener.SubscribeAnswer? {
         channel.offer(
-            Roster.Net.PresenceChanged(
+            Roster.PresenceChanged(
                 subscribeRequest.presence(from)
             )
         )
@@ -33,7 +33,7 @@ class RosterFlowAdapter(
 
     override fun presenceAvailable(address: FullJid?, availablePresence: Presence) {
         channel.offer(
-            Roster.Net.PresenceChanged(
+            Roster.PresenceChanged(
                 availablePresence.presence(address)
             )
         )
@@ -41,7 +41,7 @@ class RosterFlowAdapter(
 
     override fun presenceUnavailable(address: FullJid, presence: Presence) {
         channel.offer(
-            Roster.Net.PresenceChanged(
+            Roster.PresenceChanged(
                 presence.presence(address)
             )
         )
@@ -49,7 +49,7 @@ class RosterFlowAdapter(
 
     override fun presenceSubscribed(address: BareJid, subscribedPresence: Presence) {
         channel.offer(
-            Roster.Net.PresenceChanged(
+            Roster.PresenceChanged(
                 subscribedPresence.presence(address)
             )
         )
@@ -57,7 +57,7 @@ class RosterFlowAdapter(
 
     override fun presenceUnsubscribed(address: BareJid, unsubscribedPresence: Presence) {
         channel.offer(
-            Roster.Net.PresenceChanged(
+            Roster.PresenceChanged(
                 unsubscribedPresence.presence(address)
             )
         )
@@ -65,20 +65,20 @@ class RosterFlowAdapter(
 
     override fun presenceError(address: Jid, errorPresence: Presence) {
         channel.offer(
-            Roster.Net.PresenceChanged(errorPresence.presence(address))
+            Roster.PresenceChanged(errorPresence.presence(address))
         )
     }
 
     override fun onRosterLoaded(roster: org.jivesoftware.smack.roster.Roster) {
         channel.offer(
-            Roster.Net.Loading.Success(roster)
+            Roster.Loading.Success(roster)
         )
 
     }
 
     override fun onRosterLoadingFailed(exception: Exception) {
         channel.offer(
-            Roster.Net.Loading.Failed(exception)
+            Roster.Loading.Failed(exception)
         )
     }
 }

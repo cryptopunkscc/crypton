@@ -17,10 +17,10 @@ internal class MessageNet(
     override suspend fun sendMessage(message: Message): Job =
         smack.sendMessage(message)
 
-    override fun incomingMessages(): Flow<Message.Net.Incoming> =
-        messageBroadcast.asFlow().map { Message.Net.Incoming(it) }
+    override fun incomingMessages(): Flow<Message.Incoming> =
+        messageBroadcast.asFlow().map { Message.Incoming(it) }
 
-    override fun readArchived(query: Message.Net.ReadArchived.Query): Flow<List<Message>> =
+    override fun readArchived(query: Message.Net.ReadQuery): Flow<List<Message>> =
         smack.readArchivedMessages(query)
 
 

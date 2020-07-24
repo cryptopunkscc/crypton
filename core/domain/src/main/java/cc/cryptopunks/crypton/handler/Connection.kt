@@ -34,12 +34,12 @@ private suspend fun Account.connectAccount(
     out: Output,
     connect: suspend (Account) -> Unit
 ) {
-    Account.Service.Connecting(address).out()
+    Account.Connecting(address).out()
     try {
         connect(this)
-        Account.Service.Connected(address)
+        Account.Connected(address)
     } catch (e: Throwable) {
         e.printStackTrace()
-        Account.Service.Error(address, e.message)
+        Account.Error(address, e.message)
     }.out()
 }

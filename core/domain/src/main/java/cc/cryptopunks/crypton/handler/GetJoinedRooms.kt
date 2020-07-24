@@ -5,5 +5,5 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.handle
 
 internal fun handleGetJoinedRooms() = handle { out, _: Get.JoinedRooms ->
-    out(Chat.Service.JoinedRooms(listJoinedRooms()))
+    out(Chat.JoinedRooms(listJoinedRooms()))
 }

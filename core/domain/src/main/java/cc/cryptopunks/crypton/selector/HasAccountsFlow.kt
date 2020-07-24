@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 fun RootScope.hasAccountsFlow(
-): Flow<Account.Service.HasAccounts> = accountRepo.flowList()
+): Flow<Account.HasAccounts> = accountRepo.flowList()
     .map { it.isNotEmpty() }
     .distinctUntilChanged()
     .onEach { log.d("Has accounts - $it") }
-    .map { Account.Service.HasAccounts(it) }
+    .map { Account.HasAccounts(it) }
