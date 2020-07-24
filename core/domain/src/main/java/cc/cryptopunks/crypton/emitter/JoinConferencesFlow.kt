@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.context
+import cc.cryptopunks.crypton.context.inContext
 import cc.cryptopunks.crypton.selector.accountAuthenticatedFlow
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.flow.asFlow
@@ -24,5 +24,5 @@ fun SessionScope.joinConferencesFlow() =
             .minus(listJoinedRooms())
             .asFlow()
     }.map { chat ->
-        Exec.JoinChat.context(address, chat)
+        Exec.JoinChat.inContext(address, chat)
     }

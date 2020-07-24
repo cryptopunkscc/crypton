@@ -23,10 +23,10 @@ infix fun Context.wrap(
     }
 )
 
-fun Any.context(vararg ids: String): Any = context(ids.asIterable())
+fun Any.inContext(vararg ids: String): Any = inContext(ids.toList())
 
-fun Any.context(ids: Iterable<String>): Any =
-    ids.reversed().fold(this) { acc, id ->
+fun Any.inContext(ids: List<String>): Any =
+    ids.foldRight(this) { id, acc ->
         Context(
             id = id,
             next = acc
@@ -44,7 +44,7 @@ fun contextDecoder(): suspend (Any) -> Any? {
         if (arg is String) {
             ids.add(arg)
             null
-        } else arg.context(ids).also {
+        } else arg.inContext(ids).also {
             ids.clear()
         }
     }

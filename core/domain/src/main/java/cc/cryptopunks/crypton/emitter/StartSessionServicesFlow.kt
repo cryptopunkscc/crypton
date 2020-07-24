@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.RootScope
-import cc.cryptopunks.crypton.context.context
+import cc.cryptopunks.crypton.context.inContext
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapConcat
@@ -21,7 +21,7 @@ fun RootScope.startSessionServicesFlow() =
         }.distinctUntilChanged().onEach { scope ->
             log.d("Start services request ${scope.address}")
         }.map { scope ->
-            Exec.SessionService.context(scope.address)
+            Exec.SessionService.inContext(scope.address)
         }.onCompletion {
             log.d("Close newSessionsFlow")
         }

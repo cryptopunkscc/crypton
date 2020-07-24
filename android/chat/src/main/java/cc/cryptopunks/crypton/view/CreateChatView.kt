@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.address
-import cc.cryptopunks.crypton.context.context
+import cc.cryptopunks.crypton.context.inContext
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.navigate.navigateChat
 import cc.cryptopunks.crypton.util.bindings.clicks
@@ -60,7 +60,7 @@ class CreateChatView(context: Context) :
             account = context.currentAccount,
             address = address(addressInputView.input.text.toString())
         )
-    ).context(context.currentAccount)
+    ).inContext(context.currentAccount)
 
     private fun setError(throwable: Throwable?) {
         errorOutput.text = throwable?.message
