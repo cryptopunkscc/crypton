@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Message
@@ -53,7 +53,7 @@ class RosterItemStatesFlowSelectorTest {
         val sessionStore = SessionScope.Store()
         val presenceStore = Presence.Store()
 
-        val appScope = mockk<AppScope> {
+        val rootScope = mockk<RootScope> {
             every { this@mockk.sessions } returns sessionStore
         }
 
@@ -62,7 +62,7 @@ class RosterItemStatesFlowSelectorTest {
                 address = addresses[it],
                 sessionRepo = sessionRepos[it],
                 connection = connections[it],
-                appScope = appScope
+                rootScope = rootScope
             )
         }
 
@@ -114,7 +114,7 @@ class RosterItemStatesFlowSelectorTest {
 
         // then
         val result = withTimeout(5000) {
-            appScope.rosterItemStatesFlow().first().toSet()
+            rootScope.rosterItemStatesFlow().first().toSet()
         }
         result.forEach(::println)
         Assert.assertEquals(

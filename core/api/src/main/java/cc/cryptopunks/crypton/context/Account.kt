@@ -36,7 +36,7 @@ data class Account(
 
         // input
 
-        interface Connect : Scoped<AppScope>
+        interface Connect : Scoped<RootScope>
         data class Register(val account: Account) : Connect
         data class Add(val account: Account) : Connect
 

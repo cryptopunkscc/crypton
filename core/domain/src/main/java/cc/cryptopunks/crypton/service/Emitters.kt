@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.selector.accountAuthenticatedFlow
 import cc.cryptopunks.crypton.selector.flushMessageQueueFlow
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 
-internal fun AppScope.appActionsFlow() = flowOf(
+internal fun RootScope.appActionsFlow() = flowOf(
     hasAccountsFlow(),
     sessionCommandFlow(),
     startSessionServicesFlow()

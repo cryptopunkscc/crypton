@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.factory.createSession
 
-internal suspend fun AppScope.loadSessions() {
+internal suspend fun RootScope.loadSessions() {
     sessions.reduce {
         plus(
             accountRepo.addressList()

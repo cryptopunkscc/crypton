@@ -2,13 +2,13 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.launch
 
-suspend fun AppScope.addAccount(
+suspend fun RootScope.addAccount(
     account: Account,
     register: Boolean,
     insert: Boolean
@@ -17,7 +17,7 @@ suspend fun AppScope.addAccount(
     accountRepo.assertAccountNotExist(account.address)
     val scope = SessionScope.Scope()
     val session = SessionModule(
-        appScope = this,
+        rootScope = this,
         address = account.address,
         sessionRepo = createSessionRepo(account.address),
         connection = createConnection(

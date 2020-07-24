@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-internal fun AppScope.rosterItemStatesFlow(): Flow<List<Roster.Item>> {
+internal fun RootScope.rosterItemStatesFlow(): Flow<List<Roster.Item>> {
     val items = mutableMapOf<Address, Set<Roster.Item>>()
 
     return sessions.changesFlow().flatMapMerge { sessions ->

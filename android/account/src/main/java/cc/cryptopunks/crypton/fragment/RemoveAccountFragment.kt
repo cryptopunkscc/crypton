@@ -41,7 +41,7 @@ class RemoveAccountFragment :
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when (which) {
-            BUTTON_POSITIVE -> appScope.connectable().dispatch(Account.Service.Remove().context(model))
+            BUTTON_POSITIVE -> rootScope.connectable().dispatch(Account.Service.Remove().context(model))
             BUTTON_NEGATIVE -> dismiss()
         }
     }

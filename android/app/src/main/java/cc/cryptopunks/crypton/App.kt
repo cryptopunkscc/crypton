@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.context.AppModule
+import cc.cryptopunks.crypton.context.RootModule
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
@@ -32,7 +32,7 @@ class App :
     private val mainActivityClass = MainActivity::class
 
     override val scope by lazy {
-        AppModule(
+        RootModule(
             mainClass = mainActivityClass,
             mainExecutor = MainExecutor(Dispatchers.Main.asExecutor()),
             ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),

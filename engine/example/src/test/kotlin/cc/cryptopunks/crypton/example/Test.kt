@@ -21,7 +21,7 @@ class Test {
                 val job = Job()
                 val received = mutableListOf<Any>()
 
-                AppModule().connectable() + actor { (input, _, out) ->
+                RootModule().connectable() + actor { (input, _, out) ->
                     launch {
                         measureTimeMillis {
                             listOf(

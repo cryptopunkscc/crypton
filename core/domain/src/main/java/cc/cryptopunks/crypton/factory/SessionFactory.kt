@@ -2,10 +2,10 @@ package cc.cryptopunks.crypton.factory
 
 import cc.cryptopunks.crypton.context.*
 
-fun AppScope.createSession(address: Address): SessionModule =
+fun RootScope.createSession(address: Address): SessionModule =
     accountRepo.get(address).let { account ->
         SessionModule(
-            appScope = this,
+            rootScope = this,
             address = address,
             sessionRepo = createSessionRepo(address),
             connection = createConnection(

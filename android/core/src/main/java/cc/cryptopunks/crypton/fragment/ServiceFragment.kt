@@ -15,7 +15,7 @@ abstract class ServiceFragment :
     Connectable {
 
     protected val binding: Connectable.Binding by lazy {
-        runBlocking { appScope.connectableBindingsStore.createBinding() }
+        runBlocking { rootScope.connectableBindingsStore.createBinding() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +23,7 @@ abstract class ServiceFragment :
         binding + onCreateService()
     }
 
-    protected open fun onCreateService(): Connectable? = appScope.connectable()
+    protected open fun onCreateService(): Connectable? = rootScope.connectable()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +43,7 @@ abstract class ServiceFragment :
         runBlocking {
             binding.cancel(Destroy(log))
             log.d("binding canceled")
-            appScope.connectableBindingsStore.remove(binding)
+            rootScope.connectableBindingsStore.remove(binding)
             log.d("binding removed")
         }
         log.d("destroyed")

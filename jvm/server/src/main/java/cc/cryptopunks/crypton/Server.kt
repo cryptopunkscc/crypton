@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.backend.BackendService
-import cc.cryptopunks.crypton.context.AppModule
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootModule
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.mock.MockRepo
 import cc.cryptopunks.crypton.mock.MockSys
@@ -31,7 +31,7 @@ suspend fun startCryptonServer() {
     initSmack(File("./omemo_store"))
     startServerSocket(address, log).connect(
         log = log,
-        connectable = BackendService(appScope)
+        connectable = BackendService(rootScope)
     )
 }
 
@@ -41,8 +41,8 @@ private val log = Server.typedLog()
 
 private object Server
 
-private val appScope: AppScope
-    get() = AppModule(
+private val rootScope: RootScope
+    get() = RootModule(
         sys = MockSys(),
         repo = MockRepo(),
         mainClass = Nothing::class,

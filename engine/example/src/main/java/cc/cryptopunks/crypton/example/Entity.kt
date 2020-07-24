@@ -9,11 +9,11 @@ data class Entity(
     data class Many(val entities: Collection<Entity>)
 
     object Command {
-        data class Set(val entity: Entity) : Scoped<AppScope>
+        data class Set(val entity: Entity) : Scoped<RootScope>
     }
 
     object Query {
-        object All : Scoped<AppScope>
+        object All : Scoped<RootScope>
     }
 
     interface Repo {

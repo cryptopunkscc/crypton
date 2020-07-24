@@ -15,7 +15,7 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
-class AppModule(
+class RootModule(
     val sys: Sys,
     val repo: Repo,
     override val mainClass: KClass<*>,
@@ -25,7 +25,7 @@ class AppModule(
     override val ioExecutor: IOExecutor,
     override val navigateChatId: Int = 0
 ) :
-    AppScope,
+    RootScope,
     Executors,
     Sys by sys,
     Repo by repo {
@@ -33,7 +33,7 @@ class AppModule(
     override val log = typedLog()
 
     override val coroutineContext: CoroutineContext = log + SupervisorJob().apply {
-        invokeOnCompletion { log.d("Finish AppModule ${this@AppModule}") }
+        invokeOnCompletion { log.d("Finish AppModule ${this@RootModule}") }
     } + Dispatchers.IO
 
     override val sessions = SessionScope.Store()
@@ -59,13 +59,13 @@ class AppModule(
 }
 
 class SessionModule(
-    override val appScope: AppScope,
+    override val rootScope: RootScope,
     val connection: Connection,
     val sessionRepo: SessionRepo,
     override val address: Address
 ) :
     SessionScope,
-    AppScope by appScope,
+    RootScope by rootScope,
     Net by connection,
     SessionRepo by sessionRepo {
 
@@ -90,7 +90,7 @@ class SessionModule(
             else -> this to context.any
         }
         chatRepo.contains(address(context.id)) -> chatScope(address(context.id)).resolve(context)
-        else -> appScope.resolve(context)
+        else -> rootScope.resolve(context)
     }
 }
 

@@ -20,7 +20,7 @@ class ChatFragment : ServiceFragment() {
             val accountAddress = args.account!!
             val chatAddress = args.chat!!
             setTitle(chatAddress)
-            binding + appScope
+            binding + rootScope
                 .sessionScope(accountAddress)
                 .chatScope(chatAddress)
                 .connectable()

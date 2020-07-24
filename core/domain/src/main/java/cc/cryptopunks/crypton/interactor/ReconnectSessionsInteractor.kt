@@ -1,11 +1,11 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-internal fun AppScope.reconnectSessions(): List<Job> =
+internal fun RootScope.reconnectSessions(): List<Job> =
     sessions.get().values.map { session ->
         launch { session.reconnectIfNeeded() }
     }

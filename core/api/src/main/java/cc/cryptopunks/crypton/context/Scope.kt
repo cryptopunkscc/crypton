@@ -11,7 +11,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.newSingleThreadContext
 import kotlin.reflect.KClass
 
-interface AppScope :
+interface RootScope :
     Scope,
     Executors,
     Sys,
@@ -33,12 +33,12 @@ interface AppScope :
 }
 
 interface SessionScope :
-    AppScope,
+    RootScope,
     SessionRepo,
     Connection,
-    Scoped<AppScope> {
+    Scoped<RootScope> {
 
-    val appScope: AppScope
+    val rootScope: RootScope
     val address: Address
     val presenceStore: Presence.Store
     val subscriptions: OpenStore<Set<Address>>

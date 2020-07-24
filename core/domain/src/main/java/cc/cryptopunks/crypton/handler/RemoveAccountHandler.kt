@@ -16,7 +16,7 @@ internal fun handleRemoveAccount() = handle { _, arg: Account.Service.Remove ->
         interrupt()
         accountRepo.delete(address)
         val session = this
-        appScope.launch {
+        rootScope.launch {
             session.cancel(CancellationException(arg.toString()))
             log.d("Successfully removed $address from local database")
         }

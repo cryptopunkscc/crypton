@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.Async
 import cc.cryptopunks.crypton.Scoped
 
 object Main {
-    interface Action : Scoped<AppScope>
+    interface Action : Scoped<RootScope>
 
     object Command {
         data class Session(

@@ -1,10 +1,10 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
 
-internal suspend fun AppScope.removeSessionScope(
+internal suspend fun RootScope.removeSessionScope(
     address: Address,
     onRemove: suspend SessionScope.() -> Unit
 ) {
