@@ -62,7 +62,8 @@ class SessionModule(
     override val rootScope: RootScope,
     val connection: Connection,
     val sessionRepo: SessionRepo,
-    override val address: Address
+    override val address: Address,
+    val onClose: (Throwable?) -> Unit = {}
 ) :
     SessionScope,
     RootScope by rootScope,
@@ -72,7 +73,10 @@ class SessionModule(
     override val log = typedLog()
 
     override val coroutineContext: CoroutineContext = log + SupervisorJob().apply {
-        invokeOnCompletion { log.d("Finish SessionModule $address ${it.hashCode()} $it") }
+        invokeOnCompletion {
+            onClose(it)
+            log.d("Finish SessionModule $address ${it.hashCode()} $it")
+        }
     } + newSingleThreadContext(address.id)
 
     override val presenceStore = Presence.Store()

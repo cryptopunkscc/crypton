@@ -2,17 +2,16 @@ package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.selector.flushMessageQueueFlow
-import cc.cryptopunks.crypton.selector.handlePresenceFlow
-import cc.cryptopunks.crypton.selector.hasAccountsFlow
-import cc.cryptopunks.crypton.selector.joinConferencesFlow
-import cc.cryptopunks.crypton.selector.presenceChangedFlow
-import cc.cryptopunks.crypton.selector.saveMessagesFlow
-import cc.cryptopunks.crypton.selector.sessionActionsFlow
-import cc.cryptopunks.crypton.selector.startSessionServicesFlow
-import cc.cryptopunks.crypton.selector.syncConferencesFlow
-import cc.cryptopunks.crypton.selector.toggleIndicatorFlow
-import cc.cryptopunks.crypton.selector.updateChatNotificationFlow
+import cc.cryptopunks.crypton.emitter.flushMessageQueueFlow
+import cc.cryptopunks.crypton.emitter.handlePresenceFlow
+import cc.cryptopunks.crypton.emitter.insertInvitationFlow
+import cc.cryptopunks.crypton.emitter.joinConferencesFlow
+import cc.cryptopunks.crypton.emitter.saveMessagesFlow
+import cc.cryptopunks.crypton.emitter.sessionActionsFlow
+import cc.cryptopunks.crypton.emitter.startSessionServicesFlow
+import cc.cryptopunks.crypton.emitter.syncConferencesFlow
+import cc.cryptopunks.crypton.emitter.toggleIndicatorFlow
+import cc.cryptopunks.crypton.emitter.updateChatNotificationFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
@@ -34,7 +33,7 @@ internal fun SessionScope.accountActionsFlow() = flowOf(
     saveMessagesFlow(),
     handlePresenceFlow(),
     flushMessageQueueFlow(),
-    conferenceInvitationsFlow(),
+    insertInvitationFlow(),
     updateChatNotificationFlow(),
     syncConferencesFlow(),
     joinConferencesFlow()

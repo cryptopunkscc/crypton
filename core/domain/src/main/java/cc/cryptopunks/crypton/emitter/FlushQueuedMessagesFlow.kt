@@ -1,9 +1,10 @@
-package cc.cryptopunks.crypton.selector
+package cc.cryptopunks.crypton.emitter
 
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-
 
 internal fun SessionScope.flushMessageQueueFlow(): Flow<Exec.FlushQueuedMessages> =
     flowOf(
