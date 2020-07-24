@@ -1,6 +1,5 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.cli
 
-import cc.cryptopunks.crypton.cli.context
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Password
