@@ -3,14 +3,13 @@ package cc.cryptopunks.crypton
 import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 
-typealias Handle<S, T> = suspend S.(ConnectorOutput, T) -> Unit
-
 fun <CS : CoroutineScope, S : Scoped<CS>> handle(block: Handle<CS, S>) = block
 
-data class ActionError(
-    val message: String?,
-    val command: String
-)
+fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
+    HandlerRegistryBuilder().apply(build).handlers
+
+
+typealias Handle<S, T> = suspend S.(Output, T) -> Unit
 
 typealias HandlerRegistry = Map<KClass<*>, Handle<Any, Any>>
 
@@ -29,6 +28,3 @@ class HandlerRegistryBuilder internal constructor() {
         handlers += (type to handle as Handle<Any, Any>)
     }
 }
-
-fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
-    HandlerRegistryBuilder().apply(build).handlers

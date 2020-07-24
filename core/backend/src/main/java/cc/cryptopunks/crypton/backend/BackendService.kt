@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.backend
 
 import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.Connector
-import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.contextDecoder
 import cc.cryptopunks.crypton.service.startAppService
@@ -36,7 +36,7 @@ class BackendService(
         lazyInit
         log.d("Connect")
         val decode = contextDecoder()
-        scope.connectable().run {
+        scope.service().run {
             copy(
                 input = input.onEach {
                     log.d("Received $it")

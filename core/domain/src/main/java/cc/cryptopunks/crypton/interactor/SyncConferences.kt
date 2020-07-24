@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.ConnectorOutput
+import cc.cryptopunks.crypton.Output
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.SessionScope
@@ -21,7 +21,7 @@ private val fib = (0..MAX_ATTEMPTS - initial.size).fold(initial) { acc, _ ->
     acc.run { plus(takeLast(2).run { first() + last() }) }
 }
 
-internal suspend fun SessionScope.syncConferencesWithRetry(out: ConnectorOutput) {
+internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
     fib.withIndex().asFlow().map { (attempt, wait) ->
         delay(1500L * wait)
         log.d("Syncing conferences attempt $attempt $wait")

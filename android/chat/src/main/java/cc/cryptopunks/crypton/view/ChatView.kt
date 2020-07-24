@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.ActionError
+import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
@@ -131,7 +131,7 @@ class ChatView(
                         }
                     }
 
-                    is ActionError ->
+                    is Action.Error ->
                         Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name).out()
 
                     else -> log.d(arg)

@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.Actor
-import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.context
 import cc.cryptopunks.crypton.dispatch
@@ -41,7 +41,7 @@ class RemoveAccountFragment :
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when (which) {
-            BUTTON_POSITIVE -> rootScope.connectable().dispatch(Account.Service.Remove().context(model))
+            BUTTON_POSITIVE -> rootScope.service().dispatch(Account.Service.Remove().context(model))
             BUTTON_NEGATIVE -> dismiss()
         }
     }

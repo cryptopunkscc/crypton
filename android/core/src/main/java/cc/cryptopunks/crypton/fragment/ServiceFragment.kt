@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.createBinding
 import cc.cryptopunks.crypton.minus
 import cc.cryptopunks.crypton.remove
@@ -23,7 +23,7 @@ abstract class ServiceFragment :
         binding + onCreateService()
     }
 
-    protected open fun onCreateService(): Connectable? = rootScope.connectable()
+    protected open fun onCreateService(): Connectable? = rootScope.service()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.example
 
 import cc.cryptopunks.crypton.Context
 import cc.cryptopunks.crypton.actor
-import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.plus
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.take
@@ -21,7 +21,7 @@ class Test {
                 val job = Job()
                 val received = mutableListOf<Any>()
 
-                RootModule().connectable() + actor { (input, _, out) ->
+                RootModule().service() + actor { (input, _, out) ->
                     launch {
                         measureTimeMillis {
                             listOf(

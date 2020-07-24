@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.ConnectorOutput
+import cc.cryptopunks.crypton.Output
 import cc.cryptopunks.crypton.actor
-import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.interactor.loadSessions
@@ -10,13 +10,13 @@ import cc.cryptopunks.crypton.plus
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-fun RootScope.startAppService(out: ConnectorOutput = {}) = launch {
+fun RootScope.startAppService(out: Output = {}) = launch {
     log.d("Start app service")
     loadSessions()
-    connectable() + actor { (_, _, out) -> appActionsFlow().collect(out) }
+    service() + actor { (_, _, out) -> appActionsFlow().collect(out) }
 }
 
-internal fun SessionScope.startSessionService(out: ConnectorOutput = {}) {
+internal fun SessionScope.startSessionService(out: Output = {}) {
     log.d("Invoke session services for $address")
-    connectable() + actor { (_, _, out) -> accountActionsFlow().collect(out) }
+    service() + actor { (_, _, out) -> accountActionsFlow().collect(out) }
 }

@@ -12,9 +12,9 @@ import java.util.*
 import java.util.concurrent.CancellationException
 import kotlin.reflect.KClass
 
-fun <T : Scope> T.connectable(): Connectable = ScopedConnectable(this)
+fun <T : Scope> T.service(): Connectable = Service(this)
 
-private data class ScopedConnectable(
+private data class Service(
     val scope: Scope
 ) :
     Connectable,
@@ -44,7 +44,7 @@ private data class ScopedConnectable(
                     else -> scope.handleRequest(arg, output).join()
                 }
             } catch (e: Throwable) {
-                ActionError(e.message ?: e.javaClass.name, arg.toString()).also {
+                Action.Error(e.message ?: e.javaClass.name, arg.toString()).also {
                     e.printStackTrace()
                     output(it)
                 }
@@ -61,7 +61,7 @@ private data class ScopedConnectable(
 private fun Scope.handleSubscription(
     subscriptions: MutableMap<KClass<*>, Job>,
     subscription: Subscription,
-    output: ConnectorOutput
+    output: Output
 ) {
     log.d("handle subscription $subscription")
     if (!subscription.enable) subscriptions.remove(subscription::class)?.cancel()
@@ -70,7 +70,7 @@ private fun Scope.handleSubscription(
     }
 }
 
-private fun Scope.handleRequest(any: Any, output: ConnectorOutput = {}): Job =
+private fun Scope.handleRequest(any: Any, output: Output = {}): Job =
     handlerFor(any)?.let { handle ->
         launch {
             try {

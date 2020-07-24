@@ -1,13 +1,10 @@
 package cc.cryptopunks.crypton
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
+
+typealias Output = suspend Any.() -> Unit
 
 data class Connector(
     val input: Flow<Any>,
@@ -31,17 +28,3 @@ fun connector(
     input = args.asFlow(),
     output = output
 )
-
-typealias ConnectorOutput = suspend Any.() -> Unit
-
-fun Connector.actor(): Actor = object : Actor, Connectable by ConnectableConnector(this) {}
-
-private class ConnectableConnector(
-    private val connector: Connector
-) : Connectable {
-    override val coroutineContext = SupervisorJob() + Dispatchers.Unconfined
-    override fun Connector.connect(): Job = launch {
-        launch { input.collect(connector.output) }
-        launch { connector.input.collect(output) }
-    }
-}

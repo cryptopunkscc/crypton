@@ -1,24 +1,24 @@
 package cc.cryptopunks.crypton
 
-data class Context(val id: String = "", val any: Any = Unit)
+data class Context(val id: String = "", val next: Any = Unit)
 
 
-fun Context.action(): Any = when (any) {
-    is Context -> any.action()
-    else -> any
+fun Context.action(): Any = when (next) {
+    is Context -> next.action()
+    else -> next
 }
 
-fun Context.list(): List<Any> = listOf<Any>(id) + when (any) {
-    is Context -> any.list()
-    else -> listOf(any)
+fun Context.list(): List<Any> = listOf<Any>(id) + when (next) {
+    is Context -> next.list()
+    else -> listOf(next)
 }
 
 infix fun Context.wrap(
     value: Any
 ): Context = copy(
     id = id,
-    any = when (any) {
-        is Context -> any.wrap(value)
+    next = when (next) {
+        is Context -> next.wrap(value)
         else -> value
     }
 )
@@ -29,7 +29,7 @@ fun Any.context(ids: Iterable<String>): Any =
     ids.reversed().fold(this) { acc, id ->
         Context(
             id = id,
-            any = acc
+            next = acc
         )
     }
 

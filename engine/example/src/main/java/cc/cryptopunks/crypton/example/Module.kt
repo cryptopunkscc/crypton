@@ -22,7 +22,7 @@ internal data class RootModule(
     override val log = javaClass.simpleName.typedLog()
 
     override suspend fun resolve(context: Context): Pair<Scope, Any> =
-        nestedScopes.getValue(context.id) to context.any
+        nestedScopes.getValue(context.id) to context.next
 }
 
 private data class NestedModule(
@@ -32,7 +32,7 @@ private data class NestedModule(
     RootScope by rootScope {
 
     override suspend fun resolve(context: Context): Pair<Scope, Any> = when (id) {
-        context.id -> this to context.any
+        context.id -> this to context.next
         else -> rootScope resolve context
     }
 }

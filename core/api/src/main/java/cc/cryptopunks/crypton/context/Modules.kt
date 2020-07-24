@@ -51,7 +51,7 @@ class RootModule(
 
     override suspend fun resolve(context: Context): Pair<Scope, Any> =
         sessionScope(address(context.id)).let { scope ->
-            when (val any = context.any) {
+            when (val any = context.next) {
                 is Context -> scope.resolve(any)
                 else -> scope to any
             }
@@ -85,9 +85,9 @@ class SessionModule(
     override suspend fun resolve(
         context: Context
     ): Pair<Scope, Any> = when {
-        context.id == address.id -> when (val any = context.any) {
+        context.id == address.id -> when (val any = context.next) {
             is Context -> resolve(any)
-            else -> this to context.any
+            else -> this to context.next
         }
         chatRepo.contains(address(context.id)) -> chatScope(address(context.id)).resolve(context)
         else -> rootScope.resolve(context)
@@ -109,7 +109,7 @@ class ChatModule(
     override suspend fun resolve(
         context: Context
     ): Pair<Scope, Any> = when {
-        context.id == chat.address.id -> this to context.any
+        context.id == chat.address.id -> this to context.next
         else -> sessionScope.resolve(context)
     }
 }

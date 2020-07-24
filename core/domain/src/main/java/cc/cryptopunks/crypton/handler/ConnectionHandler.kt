@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.handler
 
-import cc.cryptopunks.crypton.ConnectorOutput
+import cc.cryptopunks.crypton.Output
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.addAccount
@@ -30,7 +30,7 @@ private fun <C : Account.Service.Connect> handleConnection() = handle { out, arg
 }
 
 private suspend fun Account.connectAccount(
-    out: ConnectorOutput,
+    out: Output,
     connect: suspend (Account) -> Unit
 ) {
     Account.Service.Connecting(address).out()

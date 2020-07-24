@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.backend.internal
 
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Route.Chat
@@ -21,7 +21,7 @@ internal class ServiceFactory(
         }
 
         else -> null
-    }?.connectable()
+    }?.service()
 }
 
 

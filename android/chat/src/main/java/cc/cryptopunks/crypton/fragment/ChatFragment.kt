@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
 import cc.cryptopunks.crypton.view.ChatView
@@ -23,7 +23,7 @@ class ChatFragment : ServiceFragment() {
             binding + rootScope
                 .sessionScope(accountAddress)
                 .chatScope(chatAddress)
-                .connectable()
+                .service()
         }
         return MessageAdapter()
     }
