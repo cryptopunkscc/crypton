@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
 import androidx.paging.PagedList
+import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.Subscription
 import kotlinx.coroutines.flow.Flow
 
@@ -12,6 +13,8 @@ data class Chat(
     val title: String = ""
 ) {
     val isConference = address.isConference
+
+    interface Action : Scoped<ChatScope>
 
     companion object {
         val Empty = Chat()
@@ -32,55 +35,55 @@ data class Chat(
 
         // command
 
-        object PopClipboard
+        object PopClipboard : Main.Action
 
-        data class MessagesRead(val messages: List<Message>)
+        data class MessagesRead(val messages: List<Message>) : Account.Action
 
-        data class EnqueueMessage(val text: String, val encrypted: Boolean = true)
+        data class EnqueueMessage(val text: String, val encrypted: Boolean = true) : Action
 
-        data class FlushQueuedMessages(val addresses: Set<Address> = emptySet())
+        data class FlushQueuedMessages(val addresses: Set<Address> = emptySet()) : Account.Action
 
-        object ClearInfoMessages
+        object ClearInfoMessages : Action
 
-        data class UpdateNotification(val account: Address, val messages: List<Message>)
+        data class UpdateNotification(val messages: List<Message>) : Account.Action
 
-        data class Copy(val message: Message)
+        data class Copy(val message: Message) : Account.Action
 
-        data class Delete(val message: Message)
+        data class Delete(val message: Message) : Account.Action
 
-        data class Create(val chat: Chat)
+        data class Create(val chat: Chat) : Account.Action
 
-        data class Invite(val users: List<Address>, val chat: Address = Address.Empty)
+        data class Invite(val users: Set<Address>) : Action
 
-        data class DeleteChat(val chats: List<Address>)
+        object DeleteChat : Action
 
-        data class Configure(val account: Address? = null, val chat: Address? = null)
+        class Configure : Action
+
+        data class InfoMessage(val text: String) : Action
 
         // Query
 
-        data class InfoMessage(val text: String)
+        object GetPagedMessages : Action
 
-        object GetPagedMessages
+        object GetMessages : Action
 
-        data class GetMessages(val address: Address? = null)
+        object ListJoinedRooms : Account.Action
 
-        data class ListJoinedRooms(val account: Address)
+        object ListRooms : Account.Action
 
-        data class ListRooms(val accounts: Set<Address> = emptySet())
-
-        data class GetInfo(val chat: Address? = null, val account: Address? = null)
+        object GetInfo : Action
 
         // Subscribe
 
-        data class SubscribePagedMessages(override val enable: Boolean) : Subscription
+        data class SubscribePagedMessages(override val enable: Boolean) : Action, Subscription
 
-        data class SubscribeLastMessage(override val enable: Boolean) : Subscription
+        data class SubscribeLastMessage(override val enable: Boolean) : Action, Subscription
 
         data class SubscribeListMessages(
             override var enable: Boolean = true,
             val from: Long = 0,
             val to: Long = System.currentTimeMillis()
-        ) : Subscription
+        ) : Action, Subscription
 
         // Event
 
@@ -113,7 +116,7 @@ data class Chat(
         fun supportEncryption(address: Address): Boolean
         fun createOrJoinConference(chat: Chat): Chat
         fun configureConference(chat: Address)
-        fun inviteToConference(chat: Address, users: List<Address>)
+        fun inviteToConference(chat: Address, users: Set<Address>)
         fun conferenceInvitationsFlow(): Flow<ConferenceInvitation>
         fun joinConference(address: Address, nickname: String, historySince: Int = 0)
         fun listJoinedRooms(): Set<Address>
@@ -130,7 +133,7 @@ data class Chat(
             val inviter: Resource,
             val reason: String?,
             val password: String?
-        )
+        ) : Action
     }
 
 

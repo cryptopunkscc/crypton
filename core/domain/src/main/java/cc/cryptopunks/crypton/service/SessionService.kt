@@ -1,8 +1,11 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.collect
+import cc.cryptopunks.crypton.ConnectableBinding
+import cc.cryptopunks.crypton.ConnectorOutput
+import cc.cryptopunks.crypton.actor
+import cc.cryptopunks.crypton.connectable
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.handler.handleApiEvent
+import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.handler.handleConferenceInvitations
 import cc.cryptopunks.crypton.handler.handleFlushMessageQueue
 import cc.cryptopunks.crypton.handler.handleJoin
@@ -16,16 +19,45 @@ import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.selector.saveMessagesFlow
 import cc.cryptopunks.crypton.selector.updateChatNotificationFlow
 import handleAccountAuthenticated
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-internal fun SessionScope.startSessionService() = launch {
+internal fun SessionScope.startSessionService(out: ConnectorOutput = {}) {
     log.d("Invoke session services for $address")
-    launch { netEvents().collect(handleApiEvent()) }
-    launch { saveMessagesFlow().collect(handleSaveMessages(), join = true) }
-    launch { presenceChangedFlow().collect(handlePresenceChanged(), join = true) }
-    launch { flushMessageQueueFlow().collect(handleFlushMessageQueue(), join = true) }
-    launch { conferenceInvitationsFlow().collect(handleConferenceInvitations()) }
-    launch { updateChatNotificationFlow().collect(handleUpdateChatNotification()) }
-    launch { accountAuthenticatedFlow().collect(handleAccountAuthenticated()) }
-    launch { joinConferencesFlow().collect(handleJoin()) }
+    ConnectableBinding() + connectable() + actor { (_, _, out) ->
+        launch { accountActionsFlow().collect(out) }
+    }
+}
+
+val sessionHandlers = createHandlers {
+    +handleSaveMessages()
+    +handlePresenceChanged()
+    +handleFlushMessageQueue()
+    +handleConferenceInvitations()
+    +handleUpdateChatNotification()
+    +handleAccountAuthenticated()
+    +handleJoin()
+}
+
+internal fun SessionScope.accountActionsFlow() = flowOf(
+    saveMessagesFlow(),
+    presenceChangedFlow(),
+    flushMessageQueueFlow(),
+    conferenceInvitationsFlow(),
+    updateChatNotificationFlow(),
+    accountAuthenticatedFlow(),
+    joinConferencesFlow()
+).flattenMerge().flowOn(Dispatchers.IO).onStart {
+    log.d("start accountActionsFlow")
+}.onCompletion {
+    log.d("stop accountActionsFlow")
+}.onEach {
+    log.d("each accountActionsFlow $it")
 }

@@ -8,24 +8,24 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.handle
 import java.lang.System.currentTimeMillis
 
-internal fun SessionScope.handleJoin() =
-    handle<Roster.Service.Join> {
-        when (chatRepo.get(chat).isConference) {
+internal fun handleJoin() =
+    handle { _, _: Roster.Service.Join ->
+        when (chat.isConference) {
             true -> joinConference(
-                address = chat,
-                nickname = account.local,
-                historySince = historySince(chat)
+                address = chat.address,
+                nickname = address.local,
+                historySince = historySince(chat.address)
             )
             false -> {
                 sendPresence(
                     Presence(
-                        resource = Resource(chat),
+                        resource = Resource(chat.address),
                         status = Presence.Status.Subscribed
                     )
                 )
                 sendPresence(
                     Presence(
-                        resource = Resource(chat),
+                        resource = Resource(chat.address),
                         status = Presence.Status.Subscribe
                     )
                 )

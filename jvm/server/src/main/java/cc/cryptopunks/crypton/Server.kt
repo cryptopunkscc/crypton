@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.mock.MockRepo
 import cc.cryptopunks.crypton.mock.MockSys
 import cc.cryptopunks.crypton.net.connect
 import cc.cryptopunks.crypton.net.startServerSocket
+import cc.cryptopunks.crypton.service.appHandlers
 import cc.cryptopunks.crypton.service.chatHandlers
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
@@ -50,8 +51,7 @@ private val appScope: AppScope
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
         createConnection = createConnectionFactory,
-        mainHandlers = mainHandlers,
-        chatHandlers = chatHandlers
+        handlers = appHandlers + mainHandlers + chatHandlers
     )
 
 private val createConnectionFactory = SmackConnectionFactory {

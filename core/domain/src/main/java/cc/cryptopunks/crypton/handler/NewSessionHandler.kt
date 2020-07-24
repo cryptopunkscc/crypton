@@ -1,10 +1,11 @@
 package cc.cryptopunks.crypton.handler
 
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.service.startSessionService
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-fun CoroutineScope.handleNewSession() = handle<SessionScope> {
-    startSessionService()
+internal fun handleStartServices() = handle { _, _: Account.Service.StartServices ->
+    log.d("Handle StartServices $address")
+    launch { startSessionService() }
 }

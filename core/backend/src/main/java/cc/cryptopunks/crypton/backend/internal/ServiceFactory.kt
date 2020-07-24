@@ -1,14 +1,14 @@
 package cc.cryptopunks.crypton.backend.internal
 
-import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.connectable
+import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Route.Chat
 import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.service.accountHandlers
 import cc.cryptopunks.crypton.service.appChatHandlers
 import cc.cryptopunks.crypton.service.rosterHandlers
-import cc.cryptopunks.crypton.HandlerRegistryFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -25,14 +25,12 @@ internal class ServiceFactory(
         }
 
         else -> null
-    }
+    }?.connectable()
 }
 
 
-val mainHandlers: HandlerRegistryFactory<AppScope> = {
-    createHandlers {
-        +accountHandlers()
-        +rosterHandlers()
-        +appChatHandlers()
-    }
+val mainHandlers get() = createHandlers {
+    +accountHandlers()
+    +rosterHandlers()
+    +appChatHandlers
 }

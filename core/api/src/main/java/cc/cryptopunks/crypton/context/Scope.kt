@@ -1,27 +1,21 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.Scope
+import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.util.Executors
-import cc.cryptopunks.crypton.HandlerRegistryFactory
 import cc.cryptopunks.crypton.util.OpenStore
-import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.newSingleThreadContext
 import kotlin.reflect.KClass
 
-interface BaseScope :
-    CoroutineScope {
-    val log: TypedLog
-}
-
 interface AppScope :
-    BaseScope,
+    Scope,
     Executors,
     Sys,
-    Repo,
-    Connectable {
+    Repo {
 
     val mainClass: KClass<*>
     val navigateChatId: Int
@@ -32,9 +26,6 @@ interface AppScope :
 
     val createConnection: Connection.Factory
 
-    val mainHandlers: HandlerRegistryFactory<AppScope>
-    val chatHandlers: HandlerRegistryFactory<ChatScope>
-
     fun sessionScope(): SessionScope
     fun sessionScope(address: Address): SessionScope
 }
@@ -42,10 +33,13 @@ interface AppScope :
 interface SessionScope :
     AppScope,
     SessionRepo,
-    Connection {
+    Connection,
+    Scoped<AppScope> {
 
+    val appScope: AppScope
     val address: Address
     val presenceStore: Presence.Store
+    val subscriptions: OpenStore<Set<Address>>
 
     fun chatScope(chat: Chat): ChatScope
     suspend fun chatScope(chat: Address): ChatScope
@@ -75,4 +69,5 @@ interface ChatScope :
     SessionScope {
 
     val chat: Chat
+    val pagedMessage: Store<Chat.Service.PagedMessages?>
 }

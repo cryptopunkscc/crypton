@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.selector
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.context
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -22,5 +23,5 @@ fun SessionScope.joinConferencesFlow() =
             .minus(listJoinedRooms())
             .asFlow()
     }.map { chat ->
-        Roster.Service.Join(address, chat)
+        Roster.Service.Join.context(address, chat)
     }

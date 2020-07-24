@@ -2,35 +2,34 @@ package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.AppScope
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.addAccount
 import cc.cryptopunks.crypton.model.Form
 
-internal fun AppScope.handleAddAccount(form: Form) =
-    handleConnection<Account.Service.Add>(form)
 
-internal fun AppScope.handleRegisterAccount(form: Form) =
-    handleConnection<Account.Service.Register>(form)
+internal fun handleLogin() = handle { _, _: Account.Service.Login ->
+    if (!isConnected()) connect()
+    if (!isAuthenticated()) login()
+}
 
-internal fun AppScope.handleLogin(form: Form) =
-    handleConnection<Account.Service.Login>(form)
+internal fun handleAddAccount(form: Form) = handleConnection<Account.Service.Add>(form)
 
-private fun <C : Any> AppScope.handleConnection(
+internal fun handleRegisterAccount(form: Form) = handleConnection<Account.Service.Register>(form)
+
+private fun <C : Account.Service.Connect> handleConnection(
     form: Form
 ) =
-    handle<C> { out ->
-        log.d("Handle $this")
-        when (this@handle) {
-            is Account.Service.Add -> account ?: form.account()
-            is Account.Service.Register -> account ?: form.account()
-            is Account.Service.Login -> accountRepo.get(address)
+    handle { out, arg: C ->
+        log.d("Handle $arg")
+        when (arg) {
+            is Account.Service.Add -> arg.account ?: form.account()
+            is Account.Service.Register -> arg.account ?: form.account()
             else -> throw Exception("Invalid connect")
         }.connectAccount(out) { account ->
             addAccount(
                 account = account,
-                register = this@handle is Account.Service.Register,
+                register = arg is Account.Service.Register,
                 insert = true
             )
         }

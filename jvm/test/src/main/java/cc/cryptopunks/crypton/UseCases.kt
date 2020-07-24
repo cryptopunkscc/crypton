@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.context
 import cc.cryptopunks.crypton.util.all
 import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
@@ -32,7 +32,7 @@ suspend fun ClientDsl.tryRemoveAccount(
             when (this) {
                 is Account.Service.Error -> true
                 is Account.Service.Connected -> true.also {
-                    send(Account.Service.Remove(address, deviceOnly = false))
+                    send(Account.Service.Remove(deviceOnly = false).context(address))
                 }
                 else -> false
             }
@@ -44,7 +44,7 @@ suspend fun ClientDsl.tryRemoveAccount(
 suspend fun ClientDsl.removeAccounts(vararg addresses: Address) {
     send(
         *addresses.map { address ->
-            Account.Service.Remove(address, deviceOnly = false)
+            Account.Service.Remove(deviceOnly = false).context(address)
         }.toTypedArray()
     )
     flush()
@@ -67,7 +67,7 @@ suspend fun ClientDsl.createChat(
     chat: Address,
     users: List<Address> = listOf(chat)
 ) {
-    send(Chat.Service.Create(Chat(chat, account, users)))
+    send(Chat.Service.Create(Chat(chat, account, users)).context(account))
     expect(Chat.Service.ChatCreated(chat = chat))
 }
 
@@ -76,8 +76,7 @@ suspend fun ClientDsl.openChat(
     chat: Address
 ) {
     send(
-        Route.Chat(account.id, chat.id),
-        Chat.Service.SubscribeLastMessage(true)
+        Chat.Service.SubscribeLastMessage(true).context(account.id, chat.id)
     )
     flush()
 }
@@ -100,7 +99,7 @@ suspend fun ClientDsl.sendMessage(
     }
     openSubscription()
     send(
-        Chat.Service.EnqueueMessage(message)
+        Chat.Service.EnqueueMessage(message).context(account, chat)
     )
 
     waitFor<Chat.Service.Messages> {
@@ -151,7 +150,7 @@ suspend fun ClientDsl.acceptSubscription(
             )
         }
     }
-    send(Roster.Service.Join(account, subscriber))
+    send(Roster.Service.Join.context(account, subscriber))
 }
 
 suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, chat: Address) {

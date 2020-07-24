@@ -8,7 +8,7 @@ class MockChatNet(
     private val state: MockState
 ) : Chat.Net {
 
-    override fun inviteToConference(chat: Address, users: List<Address>) {
+    override fun inviteToConference(chat: Address, users: Set<Address>) {
         TODO("Not yet implemented")
     }
 

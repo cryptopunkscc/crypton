@@ -27,17 +27,19 @@ class ConnectableBinding(
 
     override fun send(any: Any) = runBlocking { sendToService(any) }
 
-    override fun plus(service: Connectable?): Boolean = runBlocking {
-        if (service != null) services += service
-        binding = binding.run {
-            if (service is Actor)
-                setActor(service) else
-                setService(service)
+    override fun plus(service: Connectable?) = apply {
+        runBlocking {
+            if (service != null) services += service
+            binding = binding.run {
+                if (service is Actor)
+                    setActor(service) else
+                    setService(service)
+            }
+            service != null
         }
-        service != null
     }
 
-    override fun minus(service: Connectable?): Boolean =
+    override fun minus(service: Connectable?) = apply {
         if (service == null) false else runBlocking {
             services -= service
             binding = binding.run {
@@ -45,8 +47,8 @@ class ConnectableBinding(
                     setActor(null) else
                     setService(null)
             }
-            true
         }
+    }
 
     override suspend fun cancel(cause: CancellationException?) {
         services.clear()

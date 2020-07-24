@@ -32,7 +32,7 @@ internal class ChatNet(
 
     override fun configureConference(chat: Address) = smackCore.configureConference(chat)
 
-    override fun inviteToConference(chat: Address, users: List<Address>) =
+    override fun inviteToConference(chat: Address, users: Set<Address>) =
         smackCore.inviteToConference(chat, users)
 
     override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> =
@@ -81,7 +81,7 @@ internal class ChatNet(
 
 internal fun SmackCore.inviteToConference(
     chat: Address,
-    users: List<Address>
+    users: Set<Address>
 ) {
     log.d("Muc inviting $users")
     mucManager.getMultiUserChat(chat.entityBareJid()).apply {

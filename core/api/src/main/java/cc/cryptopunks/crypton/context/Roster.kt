@@ -17,11 +17,19 @@ object Roster {
 
     object Service {
 
-        data class Join(val account: Address, val chat: Address)
-        data class Select(val item: Item)
+        object Join : Chat.Action
 
-        object GetItems
-        data class SubscribeItems(override val enable: Boolean, val account: Address? = null) : Subscription
+        data class Select(val item: Item) : Chat.Action
+
+        object GetItems : Main.Action
+
+        data class SubscribeItems(
+            override val enable: Boolean,
+            val account: Address? = null
+        ) : Main.Action, Subscription
+
+
+        // Result
         data class Items(val list: List<Item>)
     }
 
@@ -37,11 +45,11 @@ object Roster {
         interface Event
 
         sealed class Loading : Event {
-            data class Success(val roster: Any): Loading()
-            data class Failed(val exception: Exception): Loading()
+            data class Success(val roster: Any) : Loading()
+            data class Failed(val exception: Exception) : Loading()
         }
 
-        data class PresenceChanged(val presence: Presence) : Event
+        data class PresenceChanged(val presence: Presence) : Event, Account.Action
     }
 
     interface Repo {

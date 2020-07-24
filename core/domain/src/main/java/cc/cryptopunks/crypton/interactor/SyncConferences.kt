@@ -21,7 +21,7 @@ private val fib = (0..MAX_ATTEMPTS - initial.size).fold(initial) { acc, _ ->
     acc.run { plus(takeLast(2).run { first() + last() }) }
 }
 
-internal suspend fun SessionScope.syncConferencesWithRetry(out: ConnectorOutput) =
+internal suspend fun SessionScope.syncConferencesWithRetry(out: ConnectorOutput) {
     fib.withIndex().asFlow().map { (attempt, wait) ->
         delay(1500L * wait)
         log.d("Syncing conferences attempt $attempt $wait")
@@ -34,6 +34,8 @@ internal suspend fun SessionScope.syncConferencesWithRetry(out: ConnectorOutput)
             log.d("Conferences sync $syncRooms")
         }
     }
+    log.d("Finish syncing conferences")
+}
 
 private suspend fun SessionScope.syncConferences(list: Set<Address>) =
     chatRepo.list(listOf(address)).map(Chat::address).let { savedChats ->

@@ -1,11 +1,13 @@
 package cc.cryptopunks.crypton.cli
 
+import cc.cryptopunks.crypton.context
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.context.context
 import cc.cryptopunks.crypton.translator.command
 import cc.cryptopunks.crypton.translator.commands
 import cc.cryptopunks.crypton.translator.named
@@ -44,7 +46,7 @@ private val navigateChat = CHAT to command(
 private val login = LOGIN to command(
     param()
 ) { (account) ->
-    Account.Service.Login(address(account))
+    Account.Service.Login.context(address(account))
 }
 
 private val addAccount = ADD to command(
@@ -76,35 +78,40 @@ private val sendMessage = SEND to mapOf(MESSAGE to command(vararg()) { message -
 
 private val join = JOIN to command {
     (route as Route.Chat).run {
-        Roster.Service.Join(account, address)
+        Roster.Service.Join.context(account, address)
     }
 }
 
-private val listRooms = ROOMS to command(vararg()) { accounts ->
-    Chat.Service.ListRooms(accounts.map(::address).toSet())
+private val listRooms = ROOMS to command(param()) { (account) ->
+    Chat.Service.ListRooms.context(address(account))
 }
 
 private val listJoinedRooms = JOINED to mapOf(ROOMS to command(param()) { (account) ->
-    Chat.Service.ListJoinedRooms(address(account))
+    Chat.Service.ListJoinedRooms.context(address(account))
 })
 
 private val invite = INVITE to command(vararg()) { users ->
-    Chat.Service.Invite(users.map(::address))
+    (route as Route.Chat).run {
+        Chat.Service.Invite(users.map { address(it) }.toSet()).context(account, address)
+    }
 }
 
 private val deleteChat = DELETE to command(vararg()) { chats ->
     run {
-        Chat.Service.DeleteChat(
+        Chat.Service.DeleteChat.context(
             when (chats.isEmpty()) {
-                true -> (route as Route.Chat).run { listOf(address) }
-                false -> chats.map { address(it) }
+                true -> (route as Route.Chat).run { listOf(address.id) }
+                false -> chats
             }
         )
     }
 }
 
-private val getInfo = INFO to command {
-    Chat.Service.GetInfo()
+private val getInfo = INFO to command(
+    param(),
+    param()
+) { (account, chat) ->
+    Chat.Service.GetInfo.context(address(account), address(chat))
 }
 
 private val configure = CONFIGURE to command {

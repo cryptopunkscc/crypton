@@ -9,7 +9,7 @@ object Network {
         val status: Status
     )
 
-    sealed class Status {
+    sealed class Status : Main.Action {
         object Available : Status()
         object Changed : Status()
         object Lost : Status()

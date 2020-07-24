@@ -1,19 +1,17 @@
 package cc.cryptopunks.crypton.handler
 
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.context.insertChat
+import cc.cryptopunks.crypton.handle
 
-internal fun SessionScope.handleConferenceInvitations() =
-    handle<Chat.Net.ConferenceInvitation> {
-        log.d(it)
-        if (!chatRepo.contains(address)) {
-            insertChat(
-                Chat(
-                    address = address,
-                    account = this@handleConferenceInvitations.address
-                )
+internal fun handleConferenceInvitations() = handle { _, arg: Chat.Net.ConferenceInvitation ->
+    log.d("handle $arg")
+    if (!chatRepo.contains(arg.address)) {
+        insertChat(
+            Chat(
+                address = arg.address,
+                account = address
             )
-        }
+        )
     }
+}

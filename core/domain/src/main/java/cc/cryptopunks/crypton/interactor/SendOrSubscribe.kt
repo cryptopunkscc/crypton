@@ -14,11 +14,12 @@ internal suspend fun SessionScope.sendOrSubscribe(message: Message) {
     when {
         message.to.address == address -> return
 
-        !message.chat.isConference && !iAmSubscribed(message.chat) -> {
-
-            log.d("$id subscribe to ${message.to.address}")
-            subscribe(message.to.address)
-        }
+        !message.chat.isConference && !iAmSubscribed(message.chat) ->
+            if (message.chat !in subscriptions.get()) {
+                log.d("$id subscribe to ${message.to.address}")
+                subscriptions reduce { plus(message.chat) }
+                subscribe(message.to.address)
+            }
 
         else -> {
             val job = sendMessage(message)

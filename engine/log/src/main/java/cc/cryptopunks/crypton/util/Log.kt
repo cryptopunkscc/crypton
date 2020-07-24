@@ -6,15 +6,25 @@ interface Log : (String, Log.Level, Any) -> Unit {
 
     companion object {
 
-        private var instance: Log? = null
+        private var instance: Log = Simple
 
         fun init(log: Log) {
             instance = log
         }
 
         fun print(label: String, level: Level, message: Any) {
-            instance!!.invoke(label, level, message)
+            instance(label, level, message)
         }
+    }
+
+    object Simple : Log {
+        override fun invoke(label: String, level: Level, message: Any) {
+            println("$label $message")
+        }
+    }
+
+    object Void : Log {
+        override fun invoke(p1: String, p2: Level, p3: Any) = Unit
     }
 }
 

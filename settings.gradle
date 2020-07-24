@@ -15,6 +15,7 @@ include ':core:api',
         ':engine:net',
         ':engine:util',
         ':engine:translator',
+        ':engine:example',
 
         ':net:smack:android',
         ':net:smack:jvm',

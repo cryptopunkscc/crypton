@@ -29,14 +29,14 @@ class InitOmemo(
                 omemoManager.initialize()
             }
             delay(3000)
-            channel.offer(Net.OmemoInitialized)
-            log.d("success $jid")
             isInitialized = true
+            log.d("success $jid")
+            channel.offer(Net.OmemoInitialized)
         } catch (throwable: Throwable) {
             if (throwable is SmackException.NotConnectedException) return
             log.d("failed $jid")
             throwable.printStackTrace()
-            channel.offer(
+            channel.send(
                 Net.Exception(
                     message = "Omemo initialization failed",
                     cause = throwable

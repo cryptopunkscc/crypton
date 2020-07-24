@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.top
 
 
-fun SessionScope.updateChatNotification(): (List<Message>) -> Unit {
+fun updateChatNotification(): SessionScope.(List<Message>) -> Unit {
     var current = emptyList<Message>()
     return { messages ->
 

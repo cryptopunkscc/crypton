@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.util.TypedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -30,12 +31,16 @@ class ExpectedTraffic(
     private val expected = mutableListOf<(Any) -> Any?>()
     val traffic = mutableListOf<Any>()
 
-    fun <T> next(check: T.() -> Unit) {
+    fun <T> next(vararg context: Address, check: T.() -> Unit) {
         val exception = Exception()
         expected.add {
             try {
-                val t = it as T
-                check(t)
+                val t = if (it !is Context) it else it.list().minus(context.map(Address::id)).apply {
+                    require(size == 1) {
+                        "Invalid $this context: ${context.toList()} arg: $it"
+                    }
+                }.first()
+                check(t as T)
             } catch (e: Throwable) {
                 TrafficError(
                     message = e.message,

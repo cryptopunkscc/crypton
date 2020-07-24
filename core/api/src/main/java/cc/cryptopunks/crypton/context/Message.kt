@@ -63,7 +63,7 @@ data class Message(
 
     object Service {
         object FetchArchived
-        data class Save(val messages: List<Message>)
+        data class Save(val messages: List<Message>) : Account.Action
     }
 
     interface Net {

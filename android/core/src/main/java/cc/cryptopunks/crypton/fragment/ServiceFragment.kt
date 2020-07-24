@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.connectable
 import cc.cryptopunks.crypton.createBinding
 import cc.cryptopunks.crypton.minus
 import cc.cryptopunks.crypton.remove
@@ -22,7 +23,7 @@ abstract class ServiceFragment :
         binding + onCreateService()
     }
 
-    protected open fun onCreateService(): Connectable? = appScope
+    protected open fun onCreateService(): Connectable? = appScope.connectable()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,16 +32,6 @@ abstract class ServiceFragment :
 
     @Suppress("UNCHECKED_CAST")
     protected open fun onCreateActor(view: View): Actor? = view as? Actor
-
-    override fun onStart() {
-        super.onStart()
-        binding.send(Actor.Start)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.send(Actor.Stop)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

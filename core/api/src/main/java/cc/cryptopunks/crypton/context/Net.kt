@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.Async
+import cc.cryptopunks.crypton.Scoped
 import kotlinx.coroutines.flow.Flow
 
 interface Net :
@@ -17,7 +19,7 @@ interface Net :
     fun isOmemoInitialized(): Boolean
     fun netEvents(): Flow<Api.Event>
 
-    interface Event : Api.Event
+    interface Event : Api.Event, Scoped<SessionScope>, Async
 
     object Connected : Event
     object OmemoInitialized : Event

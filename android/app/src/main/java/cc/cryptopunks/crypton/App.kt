@@ -7,11 +7,11 @@ import cc.cryptopunks.crypton.backend.internal.mainHandlers
 import cc.cryptopunks.crypton.context.AppModule
 import cc.cryptopunks.crypton.context.Engine
 import cc.cryptopunks.crypton.context.Notification
-import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.selector.newSessionsFlow
+import cc.cryptopunks.crypton.service.appHandlers
 import cc.cryptopunks.crypton.service.chatHandlers
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.service.startAppService
@@ -24,6 +24,7 @@ import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.initAndroidLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class App :
@@ -49,8 +50,7 @@ class App :
                 )
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
-            mainHandlers = mainHandlers,
-            chatHandlers = chatHandlers,
+            handlers = appHandlers + mainHandlers + chatHandlers,
             navigateChatId = R.id.chatFragment
         )
     }
@@ -65,15 +65,11 @@ class App :
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
         scope.apply {
             startAppService()
-            launch { newSessionsFlow().collect(handleNewSession()) }
+            launch { newSessionsFlow().collect { currentAccount = it.address } }
         }
     }
 
     private companion object {
         private const val OMEMO_STORE_NAME = "omemo"
     }
-}
-
-fun App.handleNewSession() = scope.handle<SessionScope> {
-    currentAccount = address
 }

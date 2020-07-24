@@ -9,22 +9,21 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.translator.Check
+import cc.cryptopunks.crypton.ActionError
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.Actor
+import cc.cryptopunks.crypton.cli.context
+import cc.cryptopunks.crypton.cli.translateMessageInput
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Chat.Service.MessageText
 import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
 import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
-import cc.cryptopunks.crypton.Connector
-import cc.cryptopunks.crypton.Handle
-import cc.cryptopunks.crypton.cli.context
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.translator.prepare
-import cc.cryptopunks.crypton.cli.translateMessageInput
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.util.typedLog
@@ -37,6 +36,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -102,18 +102,18 @@ class ChatView(
 
     override fun Connector.connect(): Job = launch {
         launch {
-            input.collect { arg ->
-                when (arg) {
-
-                    is Actor.Start -> chatRecyclerView.run {
-                        val rect = Rect()
-                        children.filter { child ->
-                            getHitRect(rect)
-                            child.getLocalVisibleRect(rect)
-                        }.filterIsInstance<MessageView>().mapNotNull { it.message }.let {
-                            MessagesRead(it.toList()).out()
-                        }
+            input.onStart {
+                chatRecyclerView.run {
+                    val rect = Rect()
+                    children.filter { child ->
+                        getHitRect(rect)
+                        child.getLocalVisibleRect(rect)
+                    }.filterIsInstance<MessageView>().mapNotNull { it.message }.let {
+                        MessagesRead(it.toList()).out()
                     }
+                }
+            }.collect { arg ->
+                when (arg) {
 
                     is MessageText -> messageInputView.input.setText(arg.text)
 
@@ -131,7 +131,7 @@ class ChatView(
                         }
                     }
 
-                    is Handle.Error ->
+                    is ActionError ->
                         Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name).out()
 
                     else -> log.d(arg)

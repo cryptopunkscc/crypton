@@ -10,12 +10,14 @@ internal fun AppScope.reconnectSessions(): List<Job> =
         launch { session.reconnectIfNeeded() }
     }
 
-private suspend fun SessionScope.reconnectIfNeeded() = try {
+private suspend fun SessionScope.reconnectIfNeeded(): Unit = try {
     log.d("reconnecting: $address")
-    if (isConnected()) interrupt()
-    connect()
-    if (!isAuthenticated()) login()
-    initOmemo()
+    if (!isConnected()) {
+        connect()
+        if (!isAuthenticated()) login()
+        initOmemo()
+    }
+    Unit
 } catch (e: Throwable) {
     log.d("reconnection failed: $e")
     interrupt()
