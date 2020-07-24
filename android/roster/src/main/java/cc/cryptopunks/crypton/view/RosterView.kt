@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.roster.R
 import cc.cryptopunks.crypton.Connector
+import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.navigate.navigateChat
 import cc.cryptopunks.crypton.navigate.navigateCreateChat
 import cc.cryptopunks.crypton.util.typedLog
@@ -50,14 +52,14 @@ class RosterView(
     override fun Connector.connect(): Job = launch {
         log.d("Connect")
         launch {
-            input.filterIsInstance<Roster.Service.Items>().collect {
+            input.filterIsInstance<Roster.Items>().collect {
                 log.d("Received ${it.list.size} items")
                 rosterAdapter.submitList(it.list)
             }
         }
         launch {
-            Roster.Service.GetItems.out()
-            Roster.Service.SubscribeItems(true).out()
+            Get.RosterItems.out()
+            Subscribe.RosterItems(true).out()
         }
         launch {
             rosterAdapter.clicks.asFlow().collect {

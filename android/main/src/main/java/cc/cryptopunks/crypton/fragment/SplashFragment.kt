@@ -14,7 +14,7 @@ class SplashFragment : FeatureFragment() {
     override fun onStart() {
         super.onStart()
         launch {
-            appScope.hasAccountsFlow().map { (has) ->
+            rootScope.hasAccountsFlow().map { (has) ->
                 when (has) {
                     true -> baseActivity?.toolbar?.visibility = View.VISIBLE
                     false -> baseActivity?.toolbar?.visibility = View.GONE

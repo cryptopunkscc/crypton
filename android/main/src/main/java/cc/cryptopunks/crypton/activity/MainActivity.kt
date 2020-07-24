@@ -22,7 +22,7 @@ private val topLevelDestinations = setOf(
 class MainActivity : FeatureActivity() {
 
     private val processIntent by lazy {
-        IntentProcessor(appScope.clipboardRepo)
+        IntentProcessor(rootScope.clipboardRepo)
     }
 
     private lateinit var appBarConfiguration: AppBarConfiguration

@@ -4,10 +4,11 @@ import android.content.Context
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.adapter.AccountListAdapter
-import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.Connector
+import cc.cryptopunks.crypton.context.Get
+import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.account_list.view.*
 import kotlinx.coroutines.Dispatchers
@@ -39,8 +40,8 @@ internal class AccountListView(
     override fun Connector.connect(): Job = launch {
         connect(accountListAdapter)
         launch {
-            Account.Service.GetAccountList.out()
-            Account.Service.SubscribeAccountList(true).out()
+            Get.Accounts.out()
+            Subscribe.Accounts(true).out()
         }
     }
 }

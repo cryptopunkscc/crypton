@@ -9,10 +9,13 @@ import cc.cryptopunks.crypton.address3
 import cc.cryptopunks.crypton.chatAddress
 import cc.cryptopunks.crypton.connectClient
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.Subscribe
+import cc.cryptopunks.crypton.context.inContext
 import cc.cryptopunks.crypton.createChat
 import cc.cryptopunks.crypton.openChat
 import cc.cryptopunks.crypton.pass
@@ -41,7 +44,7 @@ private suspend fun client1() = Client1.connectClient {
     createChat(address1, address2)
     openChat(address1, address2)
 
-    send(Chat.Service.EnqueueMessage("yo 1-2"))
+    send(Exec.EnqueueMessage("yo 1-2"))
     flush()
 
     send(Route.Main)
@@ -50,15 +53,15 @@ private suspend fun client1() = Client1.connectClient {
     createChat(address1, address3)
     openChat(address1, address3)
 
-    send(Chat.Service.EnqueueMessage("yo 1-3"))
+    send(Exec.EnqueueMessage("yo 1-3"))
     flush()
 
     send(
         Route.Main,
-        Roster.Service.SubscribeItems(true, address1)
+        Subscribe.RosterItems(true, address1)
     )
 
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.filter { it.account == address1 }.run {
             isNotEmpty() && any {
                 it.message.from.address == address1
@@ -72,17 +75,17 @@ private suspend fun client1() = Client1.connectClient {
         }
     }
 
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
     }
-    send(Roster.Service.Join(address1, chatAddress))
+    send(Exec.JoinChat.inContext(address1, chatAddress))
     flush()
 
     delay(1000)
     openChat(address1, chatAddress)
-    send(Chat.Service.EnqueueMessage("yolo"))
+    send(Exec.EnqueueMessage("yolo"))
     flush()
 
     delay(1000)
@@ -93,29 +96,29 @@ private suspend fun client2() = Client2.connectClient {
     log.d("Start client 2")
     prepare(address2, pass)
 
-    send(Roster.Service.SubscribeItems(true, address2))
-    waitFor<Roster.Service.Items> {
+    send(Subscribe.RosterItems(true, address2))
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == address1 && it.presence == Presence.Status.Subscribe
         }
     }
 
-    send(Roster.Service.Join(address2, address1))
-    waitFor<Roster.Service.Items> {
+    send(Exec.JoinChat.inContext(address2, address1))
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == address3 && it.presence == Presence.Status.Subscribe
         }
     }
 
-    send(Roster.Service.Join(address2, address3))
-    waitFor<Roster.Service.Items> {
+    send(Exec.JoinChat.inContext(address2, address3))
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
     }
 
-    send(Roster.Service.Join(address2, chatAddress))
-    waitFor<Roster.Service.Items> {
+    send(Exec.JoinChat.inContext(address2, chatAddress))
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress
                 && it.message.text == "yolo"
@@ -130,8 +133,8 @@ private suspend fun client3() = Client3.connectClient {
     log.d("Start client 3")
     prepare(address3, pass)
 
-    send(Roster.Service.SubscribeItems(true, address3))
-    waitFor<Roster.Service.Items> {
+    send(Subscribe.RosterItems(true, address3))
+    waitFor<Roster.Items> {
         list.filter { it.account == address3 }.run {
             isNotEmpty() && any {
                 it.chatAddress == address1
@@ -140,20 +143,20 @@ private suspend fun client3() = Client3.connectClient {
         }
     }
 
-    send(Roster.Service.Join(address3, address1))
+    send(Exec.JoinChat.inContext(address3, address1))
     flush()
 
     createChat(address3, address2)
     openChat(address3, address2)
 
-    send(Chat.Service.EnqueueMessage("yo 3-2"))
+    send(Exec.EnqueueMessage("yo 3-2"))
     flush()
 
     send(
         Route.Main,
-        Roster.Service.SubscribeItems(true, address3)
+        Subscribe.RosterItems(true, address3)
     )
-    waitFor<Roster.Service.Items> {
+    waitFor<Roster.Items> {
         list.isNotEmpty() && list.any {
             it.chatAddress == address2
                 && it.message.from.address == address3
@@ -161,8 +164,8 @@ private suspend fun client3() = Client3.connectClient {
         }
     }
 
-    send(Chat.Service.Create(Chat(chatAddress, address3, listOf(address1, address2))))
-    waitFor<Roster.Service.Items> {
+    send(Exec.CreateChat(Chat(chatAddress, address3, listOf(address1, address2))))
+    waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress
                 && it.message.text == "yolo"

@@ -13,10 +13,10 @@ import org.jivesoftware.smackx.mam.MamManager
 import java.util.*
 
 internal fun SmackCore.readArchivedMessages(
-    query: Message.Net.ReadArchived.Query
+    query: Message.Net.ReadQuery
 ) = flowMessages(mamManager.queryArchive(query.mamQueryArgs()))
 
-private fun Message.Net.ReadArchived.Query.mamQueryArgs() = MamManager.MamQueryArgs
+private fun Message.Net.ReadQuery.mamQueryArgs() = MamManager.MamQueryArgs
     .builder()
     .run {
         since?.let { limitResultsSince(Date(it)) }

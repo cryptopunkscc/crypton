@@ -154,7 +154,7 @@ internal class ConnectionModule(
     override fun subscribe(address: Address) = roster.createEntry(address.entityBareJid(), address.local, emptyArray())
 
 
-    override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
+    override val rosterEvents: Flow<Roster.Event> get() = roster.rosterEventFlow()
 
     override fun getCachedPresences(): List<Presence> = roster.run {
         entries.map { entry -> getPresence(entry.jid).presence(entry.jid) }

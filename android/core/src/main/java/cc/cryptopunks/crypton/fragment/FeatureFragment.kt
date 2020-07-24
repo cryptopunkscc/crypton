@@ -10,7 +10,7 @@ abstract class FeatureFragment :
     private val featureActivity get() = activity as FeatureActivity
     private val key by lazy { featureActivity.key }
 
-    val appScope get() = featureActivity.appScope
+    val rootScope get() = featureActivity.rootScope
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

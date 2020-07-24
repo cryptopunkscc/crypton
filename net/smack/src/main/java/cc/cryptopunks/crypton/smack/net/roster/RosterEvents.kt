@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import org.jivesoftware.smack.roster.Roster as SmackRoster
 
-internal fun SmackRoster.rosterEventFlow(): Flow<Roster.Net.Event> = callbackFlow {
+internal fun SmackRoster.rosterEventFlow(): Flow<Roster.Event> = callbackFlow {
     val adapter = RosterFlowAdapter(channel)
 
     addRosterLoadedListener(adapter)

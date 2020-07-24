@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Subscription
 import kotlinx.coroutines.flow.Flow
 
 object Roster {
@@ -15,15 +14,17 @@ object Roster {
         val unreadMessagesCount: Int = 0
     )
 
-    object Service {
+    data class Items(val list: List<Item>)
 
-        data class Join(val account: Address, val chat: Address)
-        data class Select(val item: Item)
 
-        object GetItems
-        data class SubscribeItems(override val enable: Boolean, val account: Address? = null) : Subscription
-        data class Items(val list: List<Item>)
+    interface Event
+
+    sealed class Loading : Event {
+        data class Success(val roster: Any) : Loading()
+        data class Failed(val exception: Exception) : Loading()
     }
+
+    data class PresenceChanged(val presence: Presence) : Event
 
     interface Net {
         fun getContacts(): List<Address>
@@ -31,17 +32,7 @@ object Roster {
         fun invite(address: Address)
         fun invited(address: Address)
 
-
         val rosterEvents: Flow<Event>
-
-        interface Event
-
-        sealed class Loading : Event {
-            data class Success(val roster: Any): Loading()
-            data class Failed(val exception: Exception): Loading()
-        }
-
-        data class PresenceChanged(val presence: Presence) : Event
     }
 
     interface Repo {

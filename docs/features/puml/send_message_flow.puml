@@ -56,7 +56,7 @@ loop message list subscription
     activate Chat.Service
     Chat.Service <-- Chat.Repo: message list updates
     deactivate Chat.Repo
-    Client <- Chat.Service: Chat.Service.Messages
+    Client <- Chat.Service: Chat.Messages
     deactivate Chat.Service
 end
 @enduml

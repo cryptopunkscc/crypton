@@ -11,9 +11,7 @@ import kotlinx.coroutines.runBlocking
 
 open class TestServer {
     private val scope = CoroutineScope(
-        SupervisorJob() + newSingleThreadContext(
-            "server"
-        )
+        SupervisorJob() + newSingleThreadContext("server")
     )
     private lateinit var serverJob: Job
 

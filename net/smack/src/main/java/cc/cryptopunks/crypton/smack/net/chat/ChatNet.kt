@@ -32,10 +32,10 @@ internal class ChatNet(
 
     override fun configureConference(chat: Address) = smackCore.configureConference(chat)
 
-    override fun inviteToConference(chat: Address, users: List<Address>) =
+    override fun inviteToConference(chat: Address, users: Set<Address>) =
         smackCore.inviteToConference(chat, users)
 
-    override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> =
+    override fun conferenceInvitationsFlow(): Flow<Chat.Invitation> =
         smackCore.invitationsFlow()
 
     override fun joinConference(
@@ -59,10 +59,10 @@ internal class ChatNet(
         mucManager.mucServiceDomains.map(mucManager::getHostedRooms).flatten()
             .map { it.jid.address() }.toSet()
 
-    override fun getChatInfo(address: Address): Chat.Service.Info {
+    override fun getChatInfo(address: Address): Chat.Info {
         val conference = mucManager.getMultiUserChat(address.entityBareJid())
         val info = mucManager.getRoomInfo(address.entityBareJid())
-        return Chat.Service.Info(
+        return Chat.Info(
             account = account,
             address = address,
             name = info.name,
@@ -81,7 +81,7 @@ internal class ChatNet(
 
 internal fun SmackCore.inviteToConference(
     chat: Address,
-    users: List<Address>
+    users: Set<Address>
 ) {
     log.d("Muc inviting $users")
     mucManager.getMultiUserChat(chat.entityBareJid()).apply {
@@ -116,7 +116,7 @@ internal fun SmackCore.configureConference(
 }
 
 internal fun SmackCore.invitationsFlow() =
-    callbackFlow<Chat.Net.ConferenceInvitation> {
+    callbackFlow<Chat.Invitation> {
         InvitationListener { conn: XMPPConnection,
                              room: MultiUserChat,
                              inviter: EntityJid,
@@ -125,7 +125,7 @@ internal fun SmackCore.invitationsFlow() =
                              message: Message,
                              invitation: MUCUser.Invite ->
             offer(
-                Chat.Net.ConferenceInvitation(
+                Chat.Invitation(
                     address = room.room.address(),
                     inviter = inviter.resource(),
                     password = password,

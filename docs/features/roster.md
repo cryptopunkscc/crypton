@@ -31,13 +31,13 @@ Message
 
 ## Commands
 ```kotlin
-Roster.Service.GetItems
-Roster.Service.SubscribeItems
+Roster.GetItems
+Roster.SubscribeItems
 ```
 
 ## Returns
 ```kotlin
-Roster.Service.Items
+Roster.Items
 ```
 
 ## Errors

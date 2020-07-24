@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.account_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
@@ -39,9 +38,9 @@ internal class AccountListAdapter(
 
     override fun Connector.connect(): Job = launch {
         launch {
-            input.filterIsInstance<Account.Service.Accounts>().collect {
-                log.d("items $it")
-                items = it.list
+            input.filterIsInstance<Account.Many>().collect { (accounts) ->
+                log.d("items $accounts")
+                items = accounts.toList()
                 notifyDataSetChanged()
             }
         }
@@ -71,10 +70,7 @@ internal class AccountListAdapter(
                 fragmentManager.showRemoveAccountFragment(address)
             }
             connectionSwitch.setOnCheckedChangeListener { _, _ ->
-                launch {
-                    delay(400)
-//                    channel.send(Account.Service.Add())
-                }
+                // TODO
             }
         }
 

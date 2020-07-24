@@ -1,15 +1,14 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.backend.BackendService
-import cc.cryptopunks.crypton.backend.internal.mainHandlers
-import cc.cryptopunks.crypton.context.AppModule
-import cc.cryptopunks.crypton.context.AppScope
+import cc.cryptopunks.crypton.context.RootModule
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.mock.MockRepo
 import cc.cryptopunks.crypton.mock.MockSys
 import cc.cryptopunks.crypton.net.connect
 import cc.cryptopunks.crypton.net.startServerSocket
-import cc.cryptopunks.crypton.service.chatHandlers
+import cc.cryptopunks.crypton.service.cryptonHandlers
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.IOExecutor
@@ -32,7 +31,7 @@ suspend fun startCryptonServer() {
     initSmack(File("./omemo_store"))
     startServerSocket(address, log).connect(
         log = log,
-        connectable = BackendService(appScope)
+        connectable = BackendService(rootScope)
     )
 }
 
@@ -42,16 +41,15 @@ private val log = Server.typedLog()
 
 private object Server
 
-private val appScope: AppScope
-    get() = AppModule(
+private val rootScope: RootScope
+    get() = RootModule(
         sys = MockSys(),
         repo = MockRepo(),
         mainClass = Nothing::class,
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
         createConnection = createConnectionFactory,
-        mainHandlers = mainHandlers,
-        chatHandlers = chatHandlers
+        handlers = cryptonHandlers()
     )
 
 private val createConnectionFactory = SmackConnectionFactory {
