@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 
 class FeatureTest {
@@ -19,6 +20,7 @@ class FeatureTest {
     }
 
     @Test
+    @Ignore("Feature is not finished")
     fun `as a user I can use multi user chat`() = runBlocking {
         testMultiUserChat()
     }

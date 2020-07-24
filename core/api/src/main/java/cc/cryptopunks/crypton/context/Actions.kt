@@ -5,33 +5,38 @@ import cc.cryptopunks.crypton.Subscription
 
 object Exec {
 
+    // Internal
+
+    data class ToggleIndicator(val show: Boolean) : Main.Action
+    data class Session(val action: Action) : Main.Action, Async {
+        enum class Action { Reconnect, Interrupt }
+    }
+
+    object SyncConferences : Account.Action, Async
+    object SessionService : Account.Action, Async
+    data class UpdateNotification(val messages: List<Message>) : Account.Action
+    data class HandlePresence(val presence: Presence) : Account.Action
+    data class SaveMessages(val messages: List<Message>) : Account.Action
+    data class FlushQueuedMessages(val addresses: Set<Address> = emptySet()) : Account.Action
+    data class InsertInvitation(val address: Address, val inviter: Resource) : Account.Action
+
     // Main
 
     interface Authenticate : Main.Action
     data class Register(val account: Account) : Authenticate
     data class Login(val account: Account) : Authenticate
-    data class Session(val action: Action) : Main.Action, Async {
-        enum class Action { Reconnect, Interrupt }
-    }
     object PopClipboard : Main.Action
     data class Copy(val message: Message) : Main.Action
-    data class ToggleIndicator(val show: Boolean) : Main.Action
 
     // Account
 
     object Connect : Account.Action
     object Disconnect : Account.Action
-    object SessionService : Account.Action, Async
-    object SyncConferences : Account.Action, Async
     data class EnableAccount(val condition: Boolean) : Account.Action
     data class RemoveAccount(val deviceOnly: Boolean = true) : Account.Action
     data class MessagesRead(val messages: List<Message>) : Account.Action
-    data class FlushQueuedMessages(val addresses: Set<Address> = emptySet()) : Account.Action
-    data class UpdateNotification(val messages: List<Message>) : Account.Action
     data class DeleteMessage(val message: Message) : Account.Action
     data class CreateChat(val chat: Chat) : Account.Action
-    data class SaveMessages(val messages: List<Message>) : Account.Action
-    data class HandlePresence(val presence: Presence) : Account.Action
 
     // Chat
 
@@ -43,7 +48,6 @@ object Exec {
     data class SaveInfoMessage(val text: String) : Chat.Action // TODO
     object JoinChat : Chat.Action
     data class Select(val item: Roster.Item) : Chat.Action
-    data class InsertInvitation(val address: Address, val inviter: Resource) : Chat.Action
 }
 
 object Get {
@@ -53,12 +57,15 @@ object Get {
     object Accounts : Main.Action
     object RosterItems : Main.Action
 
+    // Account
+
+    object Rooms : Account.Action
+    object JoinedRooms : Account.Action
+
     // Chat
 
     object PagedMessages : Chat.Action
     object Messages : Chat.Action
-    object JoinedRooms : Account.Action
-    object Rooms : Account.Action
     object ChatInfo : Chat.Action
 }
 

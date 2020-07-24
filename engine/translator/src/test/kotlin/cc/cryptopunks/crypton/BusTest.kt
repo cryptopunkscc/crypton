@@ -61,7 +61,7 @@ class BusTest {
                     )
                     .onEach { println(it) }
                     .toList()
-                    .all { it is IllegalStateException }
+                    .all { it is Check.Suggest }
             )
         }
     }

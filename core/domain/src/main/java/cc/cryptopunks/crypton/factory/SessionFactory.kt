@@ -8,18 +8,21 @@ import kotlinx.coroutines.cancel
 import java.util.concurrent.CancellationException
 
 fun RootScope.createSession(address: Address): SessionModule =
-    accountRepo.get(address).let { account ->
-        val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-        SessionModule(
-            rootScope = this,
-            address = address,
-            sessionRepo = createSessionRepo(address),
-            connection = createConnection(
-                Connection.Config(
-                    scope = connectionScope,
-                    account = account.address,
-                    password = account.password
-                )
+    createSession(accountRepo.get(address))
+
+
+fun RootScope.createSession(account: Account): SessionModule = let {
+    val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    SessionModule(
+        rootScope = this,
+        address = account.address,
+        sessionRepo = createSessionRepo(account.address),
+        connection = createConnection(
+            Connection.Config(
+                scope = connectionScope,
+                account = account.address,
+                password = account.password
             )
-        ) { connectionScope.cancel(CancellationException(it?.message)) }
-    }
+        )
+    ) { connectionScope.cancel(CancellationException(it?.message)) }
+}

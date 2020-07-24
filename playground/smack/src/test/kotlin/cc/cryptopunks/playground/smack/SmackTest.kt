@@ -10,6 +10,7 @@ import org.jivesoftware.smack.roster.SubscribeListener
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
+import org.junit.Ignore
 import org.junit.Test
 import org.jxmpp.jid.parts.Localpart
 import org.jxmpp.jid.parts.Resourcepart
@@ -18,6 +19,7 @@ import org.jxmpp.jid.parts.Resourcepart
 class SmackTest {
 
     @Test
+    @Ignore
     fun test() {
         runBlocking {
             initOmemo()

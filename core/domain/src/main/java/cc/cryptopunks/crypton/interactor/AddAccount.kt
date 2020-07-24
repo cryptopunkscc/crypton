@@ -13,7 +13,7 @@ suspend fun RootScope.addAccount(
 ) {
     log.d("Adding account ${account.address}")
     accountRepo.assertAccountNotExist(account.address)
-    val session = createSession(account.address).apply {
+    val session = createSession(account).apply {
         log.d("Connecting")
         connect()
         log.d("Connected")
