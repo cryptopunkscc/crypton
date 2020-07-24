@@ -71,10 +71,7 @@ internal class AccountListAdapter(
                 fragmentManager.showRemoveAccountFragment(address)
             }
             connectionSwitch.setOnCheckedChangeListener { _, _ ->
-                launch {
-                    delay(400)
-//                    channel.send(Account.Service.Add())
-                }
+                // TODO
             }
         }
 

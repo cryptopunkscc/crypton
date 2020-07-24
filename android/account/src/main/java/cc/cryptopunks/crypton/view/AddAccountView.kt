@@ -1,21 +1,28 @@
 package cc.cryptopunks.crypton.view
 
 import android.content.Context
+import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.widget.EditText
 import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.util.bindings.clicks
-import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.create_account.view.*
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 internal class AddAccountView(context: Context) : ActorLayout(context) {
@@ -45,10 +52,11 @@ internal class AddAccountView(context: Context) : ActorLayout(context) {
         }
         launch {
             flowOf(
-                addButton.clicks().clearError().map { Account.Service.Add(account()) },
-                registerButton.clicks().clearError().map { Account.Service.Register(account()) }
+                addButton.clicks().map { Exec.Login(account()) },
+                registerButton.clicks().map { Exec.Register(account()) }
             )
                 .flattenMerge()
+                .clearError()
                 .collect(output)
         }
     }
@@ -68,12 +76,5 @@ internal class AddAccountView(context: Context) : ActorLayout(context) {
             .map { (view, text) -> view?.setText(text) }
     }
 
-
-    private fun Map<Account.Field, EditText>.textFieldChanges() = map { (field, editText) ->
-        editText.textChanges().map { text ->
-            field to text
-        }
-    }.asFlow().flattenMerge()
-
-    private fun Flow<Unit>.clearError() = onEach { errorOutput.text = null  }
+    private fun <T> Flow<T>.clearError() = onEach { errorOutput.text = null  }
 }

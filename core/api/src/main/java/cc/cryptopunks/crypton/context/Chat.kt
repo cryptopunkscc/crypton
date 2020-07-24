@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.context
 import androidx.paging.DataSource
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.Subscription
 import kotlinx.coroutines.flow.Flow
 
 data class Chat(
@@ -32,58 +31,6 @@ data class Chat(
     enum class Affiliation { owner, admin, member, outcast, none, unknown }
 
     object Service {
-
-        // command
-
-        object PopClipboard : Main.Action
-
-        data class MessagesRead(val messages: List<Message>) : Account.Action
-
-        data class EnqueueMessage(val text: String, val encrypted: Boolean = true) : Action
-
-        data class FlushQueuedMessages(val addresses: Set<Address> = emptySet()) : Account.Action
-
-        object ClearInfoMessages : Action
-
-        data class UpdateNotification(val messages: List<Message>) : Account.Action
-
-        data class Copy(val message: Message) : Account.Action
-
-        data class Delete(val message: Message) : Account.Action
-
-        data class Create(val chat: Chat) : Account.Action
-
-        data class Invite(val users: Set<Address>) : Action
-
-        object DeleteChat : Action
-
-        class Configure : Action
-
-        data class InfoMessage(val text: String) : Action
-
-        // Query
-
-        object GetPagedMessages : Action
-
-        object GetMessages : Action
-
-        object ListJoinedRooms : Account.Action
-
-        object ListRooms : Account.Action
-
-        object GetInfo : Action
-
-        // Subscribe
-
-        data class SubscribePagedMessages(override val enable: Boolean) : Action, Subscription
-
-        data class SubscribeLastMessage(override val enable: Boolean) : Action, Subscription
-
-        data class SubscribeListMessages(
-            override var enable: Boolean = true,
-            val from: Long = 0,
-            val to: Long = System.currentTimeMillis()
-        ) : Action, Subscription
 
         // Event
 

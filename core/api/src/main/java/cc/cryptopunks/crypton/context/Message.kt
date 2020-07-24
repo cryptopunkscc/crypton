@@ -22,6 +22,11 @@ data class Message(
     val readAt: Long = 0,
     val encrypted: Boolean = true
 ) {
+
+    companion object {
+        val Empty = Message()
+    }
+
     enum class Status {
         None,
         Queued,
@@ -59,11 +64,6 @@ data class Message(
          * User has effectively ended their participation in the chat session.
          */
         gone
-    }
-
-    object Service {
-        object FetchArchived
-        data class Save(val messages: List<Message>) : Account.Action
     }
 
     interface Net {
@@ -113,10 +113,6 @@ data class Message(
     }
 
     class Exception(message: String? = null) : kotlin.Exception(message)
-
-    companion object {
-        val Empty = Message()
-    }
 
     val isUnread get() = readAt == 0L && status == Status.Received
 

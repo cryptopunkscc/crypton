@@ -4,7 +4,7 @@ import android.app.IntentService
 import android.app.Service
 import android.content.Intent
 import androidx.core.content.getSystemService
-import cc.cryptopunks.crypton.context.Engine
+import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel
@@ -19,7 +19,7 @@ class IndicatorService : IntentService(Indicator.serviceName) {
     }
     private val showIndicatorNotification by lazy {
         ShowIndicatorNotification(
-            mainActivityClass = (application as Engine).scope.mainClass.java,
+            mainActivityClass = (application as Core).scope.mainClass.java,
             context = this,
             showNotification = ShowForegroundNotification(
                 service = this,

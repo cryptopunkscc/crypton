@@ -2,11 +2,7 @@ package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Async
 import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.Subscription
 import kotlinx.coroutines.flow.Flow
-import java.util.concurrent.CancellationException
-
-private var removeCounter = 1
 
 data class Account(
     val address: Address = Address.Empty,
@@ -33,26 +29,6 @@ data class Account(
     data class Authenticated(val resumed: Boolean) : Action, Event, Async
 
     interface Service {
-
-        // input
-
-        interface Connect : Scoped<RootScope>
-        data class Register(val account: Account) : Connect
-        data class Add(val account: Account) : Connect
-
-        object StartServices : Action, Async
-
-        object GetAccountList : Main.Action
-        data class SubscribeAccountList(override val enable: Boolean) :
-            Main.Action,
-            Subscription
-
-        object Login : Action
-        object Logout : Action, CancellationException()
-        data class Enable(val condition: Boolean) : Action
-        data class Remove(val deviceOnly: Boolean = true, val id: Int = removeCounter++) : Action
-        // output
-
         data class Connecting(val account: Address) : Status
         data class Connected(val account: Address) : Status
         data class Error(val account: Address, val message: String? = null) : Status

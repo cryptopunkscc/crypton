@@ -4,12 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.context.RootScope
-import cc.cryptopunks.crypton.context.Engine
+import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.core.R
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    val rootScope: RootScope get() = (application as Engine).scope
+    val rootScope: RootScope get() = (application as Core).scope
 
     val toolbar get() = findViewById<Toolbar>(R.id.action_bar)!!
 

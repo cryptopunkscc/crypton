@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Subscription
 import kotlinx.coroutines.flow.Flow
 
 object Roster {
@@ -16,18 +15,6 @@ object Roster {
     )
 
     object Service {
-
-        object Join : Chat.Action
-
-        data class Select(val item: Item) : Chat.Action
-
-        object GetItems : Main.Action
-
-        data class SubscribeItems(
-            override val enable: Boolean,
-            val account: Address? = null
-        ) : Main.Action, Subscription
-
 
         // Result
         data class Items(val list: List<Item>)

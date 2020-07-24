@@ -27,7 +27,7 @@ suspend fun testDirectMessaging() = coroutineScope {
 
 private suspend fun client1() = Client1.connectClient {
     expected.apply {
-//        next<Account.Service.Register> {  }
+//        next<Exec.Register> {  }
 //        next<Account.Service.Connecting> {  }
 //        next<Account.Service.Connected> {  }
 //        next<Chat.Service.Create>(address1) {  }

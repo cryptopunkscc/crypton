@@ -1,10 +1,11 @@
 package cc.cryptopunks.crypton.handler
 
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.interactor.saveMessage
 
-internal fun handleSaveMessages() = handle { _, (messages): Message.Service.Save ->
+internal fun handleSaveMessages() = handle { _, (messages): Exec.SaveMessages ->
     messages.forEach { message ->
         when (message.status) {
             Message.Status.State -> when (message.text) {

@@ -17,11 +17,11 @@ import cc.cryptopunks.crypton.cli.context
 import cc.cryptopunks.crypton.cli.translateMessageInput
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
-import cc.cryptopunks.crypton.context.Chat.Service.MessageText
-import cc.cryptopunks.crypton.context.Chat.Service.MessagesRead
-import cc.cryptopunks.crypton.context.Chat.Service.PagedMessages
+import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.translator.prepare
 import cc.cryptopunks.crypton.util.bindings.clicks
@@ -109,15 +109,15 @@ class ChatView(
                         getHitRect(rect)
                         child.getLocalVisibleRect(rect)
                     }.filterIsInstance<MessageView>().mapNotNull { it.message }.let {
-                        MessagesRead(it.toList()).out()
+                        Exec.MessagesRead(it.toList()).out()
                     }
                 }
             }.collect { arg ->
                 when (arg) {
 
-                    is MessageText -> messageInputView.input.setText(arg.text)
+                    is Chat.Service.MessageText -> messageInputView.input.setText(arg.text)
 
-                    is PagedMessages -> {
+                    is Chat.Service.PagedMessages -> {
                         messageAdapter.setMessages(arg)
                         arg.list.firstOrNull()?.takeIf {
                             it.timestamp > lastMessageTimestamp && it.status != Message.Status.State
@@ -132,7 +132,7 @@ class ChatView(
                     }
 
                     is Action.Error ->
-                        Chat.Service.InfoMessage(arg.message ?: arg.javaClass.name).out()
+                        Exec.SaveInfoMessage(arg.message ?: arg.javaClass.name).out()
 
                     else -> log.d(arg)
                 }
@@ -161,7 +161,7 @@ class ChatView(
 
                         else -> {
                             if (command != null) getInputAndClear()
-                            (command as? Chat.Service.EnqueueMessage)
+                            (command as? Exec.EnqueueMessage)
                                 ?.copy(encrypted = messageInputView.encrypt.isChecked)
                                 ?: command
                         }
@@ -184,8 +184,8 @@ class ChatView(
         }
         launch {
             delay(5)
-            Chat.Service.GetPagedMessages.out()
-            Chat.Service.SubscribePagedMessages(true).out()
+            Get.PagedMessages.out()
+            Subscribe.PagedMessages(true).out()
         }
     }.apply {
         invokeOnCompletion {

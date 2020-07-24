@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.context.RootModule
-import cc.cryptopunks.crypton.context.Engine
+import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.module.RoomRepo
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class App :
     Application(),
-    Engine {
+    Core {
 
     private val mainActivityClass = MainActivity::class
 

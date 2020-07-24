@@ -20,7 +20,7 @@ This is key access feature to other features in application.
 
 ## Command
 ```kotlin
-Account.Service.Add(account)
+Exec.Add(account)
 ```
 
 ## Requires

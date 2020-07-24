@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.cli
 
 import cc.cryptopunks.crypton.context.Account
-import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
@@ -16,7 +16,7 @@ class CommandsTest {
     @Test
     fun `add account`() {
         assertEquals(
-            Account.Service.Add(
+            Exec.Login(
                 Account(
                     address = address("test@account.io"),
                     password = Password("pass")
@@ -32,7 +32,7 @@ class CommandsTest {
     @Test
     fun `create account`() {
         assertEquals(
-            Account.Service.Register(
+            Exec.Register(
                 Account(
                     address = address("test@account.io"),
                     password = Password("pass")
@@ -48,7 +48,7 @@ class CommandsTest {
     @Test
     fun `send message`() {
         assertEquals(
-            Chat.Service.EnqueueMessage("lorem ipsum"),
+            Exec.EnqueueMessage("lorem ipsum"),
             context(
                 Route.Chat(
                     "chat@address.io",

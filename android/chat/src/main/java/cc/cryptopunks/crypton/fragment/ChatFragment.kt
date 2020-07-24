@@ -3,12 +3,12 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.adapter.MessageAdapter
-import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.service
+import cc.cryptopunks.crypton.adapter.MessageAdapter
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
+import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.view.ChatView
 import kotlinx.coroutines.launch
 
@@ -37,7 +37,7 @@ class ChatFragment : ServiceFragment() {
     }
 
     override fun onDestroy() {
-        binding.send(Chat.Service.ClearInfoMessages)
+        binding.send(Exec.ClearInfoMessages)
         super.onDestroy()
     }
 }

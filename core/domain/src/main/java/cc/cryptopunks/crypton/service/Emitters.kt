@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.selector.hasAccountsFlow
 import cc.cryptopunks.crypton.selector.joinConferencesFlow
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.selector.saveMessagesFlow
-import cc.cryptopunks.crypton.selector.sessionCommandFlow
+import cc.cryptopunks.crypton.selector.sessionActionsFlow
 import cc.cryptopunks.crypton.selector.startSessionServicesFlow
 import cc.cryptopunks.crypton.selector.updateChatNotificationFlow
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.onStart
 
 internal fun RootScope.appActionsFlow() = flowOf(
     hasAccountsFlow(),
-    sessionCommandFlow(),
+    sessionActionsFlow(),
     startSessionServicesFlow()
 ).flattenMerge().onEach {
     log.d("App action flow $it")

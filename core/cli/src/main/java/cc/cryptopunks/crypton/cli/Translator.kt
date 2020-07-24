@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.cli
 
-import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.translator.Context
 import cc.cryptopunks.crypton.translator.prepare
 import cc.cryptopunks.crypton.translator.process
@@ -14,6 +14,6 @@ fun Flow<CharSequence>.translateMessageInput(
         when {
             message.isBlank() -> null
             message[0] == '/' -> context.process(message.drop(1).toString()).prepare().result
-            else -> Chat.Service.EnqueueMessage(message.toString())
+            else -> Exec.EnqueueMessage(message.toString())
         }
     }

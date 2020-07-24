@@ -6,6 +6,7 @@ import androidx.navigation.findNavController
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.context
 import cc.cryptopunks.crypton.navigate.currentAccount
@@ -53,7 +54,7 @@ class CreateChatView(context: Context) :
         }
     }
 
-    private fun createUserFromInput() = Chat.Service.Create(
+    private fun createUserFromInput() = Exec.CreateChat(
         Chat(
             account = context.currentAccount,
             address = address(addressInputView.input.text.toString())

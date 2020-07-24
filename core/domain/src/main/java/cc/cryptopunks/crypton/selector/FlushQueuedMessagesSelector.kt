@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.SessionScope
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 
 
-internal fun SessionScope.flushMessageQueueFlow(): Flow<Chat.Service.FlushQueuedMessages> =
+internal fun SessionScope.flushMessageQueueFlow(): Flow<Exec.FlushQueuedMessages> =
     flowOf(
         netEvents().filterIsInstance<Net.OmemoInitialized>().map {
             log.d("flush by Net.OmemoInitialized")
@@ -40,5 +40,5 @@ internal fun SessionScope.flushMessageQueueFlow(): Flow<Chat.Service.FlushQueued
     }.onCompletion {
         log.d("complete flushMessageQueueFlow")
     }.map {
-        Chat.Service.FlushQueuedMessages(it.toSet())
+        Exec.FlushQueuedMessages(it.toSet())
     }

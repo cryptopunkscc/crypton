@@ -3,8 +3,9 @@ package cc.cryptopunks.crypton.cli
 import cc.cryptopunks.crypton.context
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Password
-import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.context
@@ -46,59 +47,59 @@ private val navigateChat = CHAT to command(
 private val login = LOGIN to command(
     param()
 ) { (account) ->
-    Account.Service.Login.context(address(account))
+    Exec.Connect.context(address(account))
 }
 
 private val addAccount = ADD to command(
     named(ACCOUNT),
     named(PASSWORD)
 ) { (account, password) ->
-    Account.Service.Add(Account(address(account), Password(password)))
+    Exec.Login(Account(address(account), Password(password)))
 }
 
 private val createAccount = CREATE to command(
     named(ACCOUNT),
     named(PASSWORD)
 ) { (account, password) ->
-    Account.Service.Register(Account(address(account), Password(password)))
+    Exec.Register(Account(address(account), Password(password)))
 }
 
 private val rosterItems = GET to mapOf(
     ITEMS to command {
-        Roster.Service.GetItems
+        Get.RosterItems
     })
 
 private val chat = CHAT to command(param()) { (address) ->
-    Chat.Service.Create(Chat(address(address), address(account)))
+    Exec.CreateChat(Chat(address(address), address(account)))
 }
 
 private val sendMessage = SEND to mapOf(MESSAGE to command(vararg()) { message ->
-    Chat.Service.EnqueueMessage(message.joinToString(" "))
+    Exec.EnqueueMessage(message.joinToString(" "))
 })
 
 private val join = JOIN to command {
     (route as Route.Chat).run {
-        Roster.Service.Join.context(account, address)
+        Exec.JoinChat.context(account, address)
     }
 }
 
 private val listRooms = ROOMS to command(param()) { (account) ->
-    Chat.Service.ListRooms.context(address(account))
+    Get.Rooms.context(address(account))
 }
 
 private val listJoinedRooms = JOINED to mapOf(ROOMS to command(param()) { (account) ->
-    Chat.Service.ListJoinedRooms.context(address(account))
+    Get.JoinedRooms.context(address(account))
 })
 
 private val invite = INVITE to command(vararg()) { users ->
     (route as Route.Chat).run {
-        Chat.Service.Invite(users.map { address(it) }.toSet()).context(account, address)
+        Exec.Invite(users.map { address(it) }.toSet()).context(account, address)
     }
 }
 
 private val deleteChat = DELETE to command(vararg()) { chats ->
     run {
-        Chat.Service.DeleteChat.context(
+        Exec.DeleteChat.context(
             when (chats.isEmpty()) {
                 true -> (route as Route.Chat).run { listOf(address.id) }
                 false -> chats
@@ -111,11 +112,11 @@ private val getInfo = INFO to command(
     param(),
     param()
 ) { (account, chat) ->
-    Chat.Service.GetInfo.context(address(account), address(chat))
+    Get.ChatInfo.context(address(account), address(chat))
 }
 
 private val configure = CONFIGURE to command {
-    Chat.Service.Configure()
+    Exec.ConfigureConference()
 }
 
 private val navigate = NAVIGATE to mapOf(

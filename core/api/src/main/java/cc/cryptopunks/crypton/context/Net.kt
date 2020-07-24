@@ -23,9 +23,7 @@ interface Net :
 
     object Connected : Event
     object OmemoInitialized : Event
-    data class Disconnected(
-        val throwable: Throwable? = null
-    ) : Event {
+    data class Disconnected(val throwable: Throwable? = null) : Event {
         val hasError get() = throwable != null
     }
 

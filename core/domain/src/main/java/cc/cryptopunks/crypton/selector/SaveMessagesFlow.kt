@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.SessionScope
 import kotlinx.coroutines.flow.filterIsInstance
@@ -18,5 +18,5 @@ internal fun SessionScope.saveMessagesFlow() = flowOf(
         listOf(it.message)
     }
 ).flattenMerge().map {
-    Message.Service.Save(it)
+    Exec.SaveMessages(it)
 }
