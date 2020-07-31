@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flattenMerge
@@ -19,15 +20,15 @@ internal fun handleLastMessageSubscription() =
             messageRepo.list().asFlow(),
             messageRepo.flowLatest()
         ).flattenMerge().onEach {
-            log.d("last message $it")
+            log.d { "last message $it" }
         }.bufferedThrottle(100).map { messages ->
             Chat.Messages(
                 account = address,
                 list = messages
             )
         }.onStart {
-            log.d("start LastMessageSubscription")
+            log.d { "start LastMessageSubscription" }
         }.onCompletion {
-            log.d("finish LastMessageSubscription $it")
+            log.d { "finish LastMessageSubscription $it" }
         }.collect(out)
     }

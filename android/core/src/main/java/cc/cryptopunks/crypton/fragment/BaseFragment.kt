@@ -34,7 +34,7 @@ abstract class BaseFragment : LoggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = layoutRes.takeIf { it > 0 }?.let {
-        log.d("onCreateView")
+        log.d { "onCreateView" }
         inflater.inflate(it, container, false)
     }
 

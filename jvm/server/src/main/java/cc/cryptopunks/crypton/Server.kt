@@ -14,25 +14,28 @@ import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.MainExecutor
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.InetSocketAddress
 
 fun main() {
-    Log.init(JvmLog)
-    TrustAllManager.install()
-    runBlocking { startCryptonServer() }
+    runBlocking {
+        initJvmLog()
+        TrustAllManager.install()
+        startCryptonServer()
+    }
 }
 
-suspend fun startCryptonServer() {
+suspend fun startCryptonServer() = withContext(
+    CoroutineLog.Label("CryptonServer")
+) {
     initSmack(File("./omemo_store"))
-    startServerSocket(address, log).connect(
-        log = log,
-        connectable = BackendService(rootScope)
-    )
+    startServerSocket(address).connect(BackendService(rootScope))
 }
 
 private val address = InetSocketAddress("127.0.0.1", 2323)

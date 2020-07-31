@@ -158,7 +158,7 @@ suspend fun ClientDsl.acceptSubscription(
 suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, chat: Address) {
     expect(
         should<Roster.Items> {
-            log.d("Expect RosterItemMessage: $text, $account, $chat")
+//            log.d { "Expect RosterItemMessage: $text, $account, $chat" }
             list.firstOrNull { it.account == account && it.chatAddress == chat }?.run {
                 require(title == chat.id) { title }
                 require(presence == Presence.Status.Available) { presence }

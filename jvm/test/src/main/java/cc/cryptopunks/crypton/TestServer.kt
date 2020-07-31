@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
@@ -15,11 +15,6 @@ open class TestServer {
     )
     private lateinit var serverJob: Job
 
-    init {
-        Log.init(JvmLog)
-        TrustAllManager.install()
-    }
-
     fun start() = runBlocking {
         serverJob = scope.launch {
             startCryptonServer()
@@ -29,5 +24,12 @@ open class TestServer {
 
     fun stop() {
         serverJob.cancel()
+    }
+
+    companion object {
+        init {
+            GlobalScope.launch { initJvmLog() }
+            TrustAllManager.install()
+        }
     }
 }

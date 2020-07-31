@@ -16,6 +16,7 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.inContext
 import cc.cryptopunks.crypton.dispatch
 import cc.cryptopunks.crypton.service
+import cc.cryptopunks.crypton.serviceName
 import kotlinx.android.synthetic.main.delete_account_checkbox.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -41,7 +42,7 @@ class RemoveAccountFragment :
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when (which) {
-            BUTTON_POSITIVE -> rootScope.service().dispatch(Exec.RemoveAccount().inContext(account))
+            BUTTON_POSITIVE -> rootScope.service(serviceName).dispatch(Exec.RemoveAccount().inContext(account))
             BUTTON_NEGATIVE -> dismiss()
         }
     }

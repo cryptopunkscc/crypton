@@ -4,7 +4,6 @@ import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.encodeContext
 import cc.cryptopunks.crypton.json.formatJson
 import cc.cryptopunks.crypton.json.parseJson
-import cc.cryptopunks.crypton.util.TypedLog
 import io.ktor.network.sockets.Socket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
@@ -22,13 +21,12 @@ import java.io.IOException
 import kotlin.reflect.KClass
 
 
-fun Socket.connector(log: TypedLog): Connector = let {
+fun Socket.connector(): Connector {
     val readChannel = openReadChannel()
     val writeChannel = openWriteChannel()
-    Connector(
+    return Connector(
         input = readChannel.flowParsedMessages(),
         output = {
-            log.d("Sending $it")
             writeChannel.send(it)
         },
         close = {
@@ -51,7 +49,7 @@ private fun ByteReadChannel.flowMessages(): Flow<Any> = flow {
             emit(message)
         }
     } catch (e: Throwable) {
-        e.printStackTrace()
+//        e.printStackTrace()
         println("Close message flow (${e.message})")
     }
 }.scan(emptyList<String>()) { accumulator, value ->
@@ -75,9 +73,7 @@ private fun String.parseMessage(type: String): Any = try {
 }
 
 private suspend fun ByteWriteChannel.send(any: Any) = try {
-    any.encodeContext().also {
-        println("Sending encoded $it")
-    }.forEach { chunk ->
+    any.encodeContext().forEach { chunk ->
         when (chunk) {
             is String -> send("s", chunk)
             else -> send(chunk.type(), chunk.formatJson())

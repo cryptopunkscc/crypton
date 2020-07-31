@@ -86,16 +86,3 @@ data class Chat(
         fun flowList(): Flow<List<Chat>>
     }
 }
-
-suspend fun SessionScope.createChat(chat: Chat) {
-    log.d("Creating $chat")
-    if (chat.isConference && chat.address !in listJoinedRooms()) createOrJoinConference(chat)
-    log.d("Chat ${chat.address} with users ${chat.users} created")
-    insertChat(chat)
-}
-
-suspend fun SessionScope.insertChat(chat: Chat) {
-    log.d("Inserting $chat")
-    chatRepo.insertIfNeeded(chat)
-    log.d("Chat ${chat.address} with users ${chat.users} Inserted")
-}

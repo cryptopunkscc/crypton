@@ -1,35 +1,33 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.net.connectClientSocket
 import cc.cryptopunks.crypton.net.connector
-import cc.cryptopunks.crypton.util.typedLog
-import io.ktor.network.selector.ActorSelectorManager
-import io.ktor.network.sockets.aSocket
+import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.withContext
 import java.net.InetSocketAddress
 
-suspend fun Any.connectClient(
+suspend fun Any.connectDslClient(
     host: String = "127.0.0.1",
     port: Int = 2323,
     block: suspend ClientDsl.() -> Unit
 ) {
-    val log = typedLog()
-    withContext(newSingleThreadContext(toString())) {
-        aSocket(ActorSelectorManager(newSingleThreadContext(toString()))).tcp()
-            .connect(InetSocketAddress(host, port))
-            .connector(log)
-            .also { connector ->
-                ClientDsl(connector, log).apply {
-                    block()
-                    if (isActive) {
-                        cancel()
-                        delay(200)
-                    }
-                }
-                connector.close()
+    val name = javaClass.simpleName
+    connectClientSocket(
+        InetSocketAddress(host, port),
+        newSingleThreadContext(name)
+    ).connector().logging().also { connector ->
+        ClientDsl(name, connector).apply {
+            log.builder.d { status = Log.Event.Status.Start.name }
+            block()
+            log.builder.d { status = Log.Event.Status.Finished.name }
+            if (isActive) {
+                cancel()
+                delay(200)
             }
+        }
+        connector.close()
     }
 }

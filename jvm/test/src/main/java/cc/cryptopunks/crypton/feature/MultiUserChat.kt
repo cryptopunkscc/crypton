@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.address1
 import cc.cryptopunks.crypton.address2
 import cc.cryptopunks.crypton.address3
 import cc.cryptopunks.crypton.chatAddress
-import cc.cryptopunks.crypton.connectClient
+import cc.cryptopunks.crypton.connectDslClient
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
@@ -20,6 +20,7 @@ import cc.cryptopunks.crypton.createChat
 import cc.cryptopunks.crypton.openChat
 import cc.cryptopunks.crypton.pass
 import cc.cryptopunks.crypton.prepare
+import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -37,8 +38,7 @@ fun testMultiUserChat() {
     }
 }
 
-private suspend fun client1() = Client1.connectClient {
-    log.d("Start client 1")
+private suspend fun client1() = Client1.connectDslClient {
     prepare(address1, pass)
 
     createChat(address1, address2)
@@ -89,11 +89,9 @@ private suspend fun client1() = Client1.connectClient {
     flush()
 
     delay(1000)
-    log.d("Stop client 1")
 }
 
-private suspend fun client2() = Client2.connectClient {
-    log.d("Start client 2")
+private suspend fun client2() = Client2.connectDslClient {
     prepare(address2, pass)
 
     send(Subscribe.RosterItems(true, address2))
@@ -126,11 +124,9 @@ private suspend fun client2() = Client2.connectClient {
     }
 
     delay(1000)
-    log.d("Stop client 2")
 }
 
-private suspend fun client3() = Client3.connectClient {
-    log.d("Start client 3")
+private suspend fun client3() = Client3.connectDslClient {
     prepare(address3, pass)
 
     send(Subscribe.RosterItems(true, address3))
@@ -173,5 +169,4 @@ private suspend fun client3() = Client3.connectClient {
     }
 
     delay(1000)
-    log.d("Stop client 3")
 }

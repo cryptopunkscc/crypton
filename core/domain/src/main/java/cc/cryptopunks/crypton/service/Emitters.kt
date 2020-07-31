@@ -12,12 +12,13 @@ import cc.cryptopunks.crypton.emitter.startSessionServicesFlow
 import cc.cryptopunks.crypton.emitter.syncConferencesFlow
 import cc.cryptopunks.crypton.emitter.toggleIndicatorFlow
 import cc.cryptopunks.crypton.emitter.updateChatNotificationFlow
+import cc.cryptopunks.crypton.util.Log
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 
@@ -25,8 +26,10 @@ internal fun RootScope.appActionsFlow() = flowOf(
     toggleIndicatorFlow(),
     sessionActionsFlow(),
     startSessionServicesFlow()
-).flattenMerge().onEach {
-    log.d("App action flow $it")
+).flattenMerge().onStart {
+    log.builder.d { status = Log.Event.Status.Start.name }
+}.onCompletion {
+    log.builder.d { status = Log.Event.Status.Finished.name }
 }
 
 internal fun SessionScope.accountActionsFlow() = flowOf(
@@ -37,8 +40,8 @@ internal fun SessionScope.accountActionsFlow() = flowOf(
     updateChatNotificationFlow(),
     syncConferencesFlow(),
     joinConferencesFlow()
-).flattenMerge().flowOn(Dispatchers.IO).onStart {
-    log.d("start accountActionsFlow")
+).flattenMerge().onStart {
+    log.builder.d { status = Log.Event.Status.Start.name }
 }.onCompletion {
-    log.d("stop accountActionsFlow")
-}
+    log.builder.d { status = Log.Event.Status.Finished.name }
+}.flowOn(Dispatchers.IO)

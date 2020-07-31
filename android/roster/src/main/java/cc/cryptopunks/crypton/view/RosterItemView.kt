@@ -14,7 +14,7 @@ import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
 import cc.cryptopunks.crypton.util.presenceStatusColors
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.android.synthetic.main.roster_item.view.*
 import java.text.DateFormat
 
@@ -44,7 +44,7 @@ class RosterItemView(
             LayoutParams.WRAP_CONTENT
         )
         inflate(R.layout.roster_item, true)
-        log.d("init")
+        log.builder.d { status = "Init" }
     }
 
     var item: Roster.Item? = null
@@ -54,7 +54,12 @@ class RosterItemView(
 
                 conversationLetter.text = letter.toString()
 
-                avatarDrawable.setColor(ContextCompat.getColor(context, letterColors.getValue(letter)))
+                avatarDrawable.setColor(
+                    ContextCompat.getColor(
+                        context,
+                        letterColors.getValue(letter)
+                    )
+                )
 
                 statusDrawable.setColor(statusColors.getValue(presence))
 

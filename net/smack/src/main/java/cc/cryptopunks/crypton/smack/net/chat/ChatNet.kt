@@ -83,7 +83,7 @@ internal fun SmackCore.inviteToConference(
     chat: Address,
     users: Set<Address>
 ) {
-    log.d("Muc inviting $users")
+    log.d { "Muc inviting $users" }
     mucManager.getMultiUserChat(chat.entityBareJid()).apply {
         users.forEach { user ->
             invite(user.entityBareJid(), "no reason")
@@ -94,7 +94,7 @@ internal fun SmackCore.inviteToConference(
 internal fun SmackCore.createOrJoinConference(
     chat: Chat
 ) = chat.also {
-    log.d("Creating conference $chat")
+    log.d { "Creating conference $chat" }
     mucManager.getMultiUserChat(chat.address.entityBareJid())
         .createOrJoin(Resourcepart.from(chat.account.local))
 }
@@ -102,7 +102,7 @@ internal fun SmackCore.createOrJoinConference(
 internal fun SmackCore.configureConference(
     chat: Address
 ) {
-    log.d("Configuring conference $chat")
+    log.d { "Configuring conference $chat" }
     mucManager.getMultiUserChat(chat.entityBareJid()).apply {
         sendConfigurationForm(
             configurationForm.createAnswerForm().apply {
@@ -131,7 +131,7 @@ internal fun SmackCore.invitationsFlow() =
                     password = password,
                     reason = reason
                 ).also {
-                    log.d("new invitation $it")
+                    log.d { "new invitation $it" }
                 }
             )
         }.let { listener ->

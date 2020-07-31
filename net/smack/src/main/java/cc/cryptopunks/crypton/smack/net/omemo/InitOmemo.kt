@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.smack.net.omemo
 
 import cc.cryptopunks.crypton.context.Net
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -24,17 +24,17 @@ class InitOmemo(
         if (isInitialized) return
         val jid = "${omemoManager.ownJid}/${omemoManager.deviceId}"
         try {
-            log.d("start $jid")
+            log.d { "start $jid" }
             withContext(context) {
                 omemoManager.initialize()
             }
             delay(3000)
             isInitialized = true
-            log.d("success $jid")
+            log.d { "success $jid" }
             channel.offer(Net.OmemoInitialized)
         } catch (throwable: Throwable) {
             if (throwable is SmackException.NotConnectedException) return
-            log.d("failed $jid")
+            log.d { "failed $jid" }
             throwable.printStackTrace()
             channel.send(
                 Net.Exception(

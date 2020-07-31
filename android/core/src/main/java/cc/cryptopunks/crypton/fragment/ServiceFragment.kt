@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.createBinding
 import cc.cryptopunks.crypton.minus
 import cc.cryptopunks.crypton.remove
+import cc.cryptopunks.crypton.service
+import cc.cryptopunks.crypton.serviceName
 import kotlinx.coroutines.runBlocking
 
 abstract class ServiceFragment :
@@ -23,7 +24,7 @@ abstract class ServiceFragment :
         binding + onCreateService()
     }
 
-    protected open fun onCreateService(): Connectable? = rootScope.service()
+    protected open fun onCreateService(): Connectable? = rootScope.service(serviceName)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,11 +42,11 @@ abstract class ServiceFragment :
     override fun onDestroy() {
         super.onDestroy()
         runBlocking {
-            binding.cancel(Destroy(log))
-            log.d("binding canceled")
+            binding.cancel(Destroy(this@ServiceFragment))
+            log.d { "binding canceled" }
             rootScope.connectableBindingsStore.remove(binding)
-            log.d("binding removed")
+            log.d { "binding removed" }
         }
-        log.d("destroyed")
+        log.d { "destroyed" }
     }
 }

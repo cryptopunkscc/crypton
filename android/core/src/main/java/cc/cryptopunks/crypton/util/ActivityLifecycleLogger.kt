@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 
 object ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
+
     override fun onActivityPaused(activity: Activity) {
         activity log "onPaused"
     }
@@ -33,7 +34,12 @@ object ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
         activity log "onCreated"
     }
 
-    private infix fun Activity.log(message: String) {
-        Log.print(toString(), Log.Level.Debug, message)
+    private infix fun Activity.log(status: String) {
+        Log(Log.Level.Verbose) {
+            Log.Event(
+                status = status,
+                label = javaClass.simpleName
+            )
+        }
     }
 }

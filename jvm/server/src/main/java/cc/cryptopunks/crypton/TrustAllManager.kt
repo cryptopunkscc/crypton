@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import java.security.GeneralSecurityException
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -28,7 +28,7 @@ object TrustAllManager : X509TrustManager {
             init(null, arrayOf(TrustAllManager), SecureRandom())
             HttpsURLConnection.setDefaultSSLSocketFactory(socketFactory)
         }
-        log.d("Installed")
+        log.d { "Installed" }
     } catch (e: GeneralSecurityException) {
         e.printStackTrace()
     }

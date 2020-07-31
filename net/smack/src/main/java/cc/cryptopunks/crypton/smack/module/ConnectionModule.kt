@@ -17,7 +17,6 @@ import cc.cryptopunks.crypton.smack.util.SmackPresence
 import cc.cryptopunks.crypton.smack.util.address
 import cc.cryptopunks.crypton.smack.util.entityBareJid
 import cc.cryptopunks.crypton.smack.util.presence
-import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
@@ -48,7 +47,6 @@ internal class ConnectionModule(
     Message.Net by MessageNet(smack),
     Chat.Net by ChatNet(smack, account) {
 
-    override val log = typedLog()
     private val initOmemo by lazy { InitOmemo(omemoManager) }
 
     private val netEvents by lazy {
@@ -143,15 +141,14 @@ internal class ConnectionModule(
                     Presence.Status.Subscribed,
                     Presence.Status.Subscribe -> to = presence.resource.address.entityBareJid()
                 }
-            }.also {
-                log.d("Sending $presence")
             }
         )
     }
 
     override fun iAmSubscribed(address: Address) = roster.iAmSubscribedTo(address.entityBareJid())
 
-    override fun subscribe(address: Address) = roster.createEntry(address.entityBareJid(), address.local, emptyArray())
+    override fun subscribe(address: Address) =
+        roster.createEntry(address.entityBareJid(), address.local, emptyArray())
 
 
     override val rosterEvents: Flow<Roster.Event> get() = roster.rosterEventFlow()

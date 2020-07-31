@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.example
 import cc.cryptopunks.crypton.Context
 import cc.cryptopunks.crypton.HandlerRegistry
 import cc.cryptopunks.crypton.Scope
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
@@ -18,8 +18,6 @@ internal data class RootModule(
         (0..10).map { "$it" }.associateWith {
             NestedModule(this, it)
         }
-
-    override val log = javaClass.simpleName.typedLog()
 
     override suspend fun resolve(context: Context): Pair<Scope, Any> =
         nestedScopes.getValue(context.id) to context.next
