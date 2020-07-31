@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -19,5 +20,5 @@ internal fun SessionScope.presenceChangedFlow(): Flow<Roster.PresenceChanged> =
         }.asFlow(),
         rosterEvents.filterIsInstance<Roster.PresenceChanged>()
     ).flattenConcat().distinctUntilChanged().onEach {
-        println("Presence changed $address $it")
+        log.v { "Presence changed $address $it" }
     }

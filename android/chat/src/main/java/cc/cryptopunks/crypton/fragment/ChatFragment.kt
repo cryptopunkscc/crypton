@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
 import cc.cryptopunks.crypton.service
+import cc.cryptopunks.crypton.serviceName
 import cc.cryptopunks.crypton.view.ChatView
 import kotlinx.coroutines.launch
 
@@ -23,7 +24,7 @@ class ChatFragment : ServiceFragment() {
             binding + rootScope
                 .sessionScope(accountAddress)
                 .chatScope(chatAddress)
-                .service()
+                .service(serviceName)
         }
         return MessageAdapter()
     }

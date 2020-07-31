@@ -57,7 +57,7 @@ class App :
         super.onCreate()
         initExceptionService()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        initAndroidLog()
+        scope.initAndroidLog()
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))

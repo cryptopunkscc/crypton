@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.util.logger.coroutineLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -20,80 +19,22 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert
 
-class TrafficError(
-    message: String?,
-    cause: Throwable
-) : Exception(message, cause)
-
-class ExpectedTraffic(
-    private val log: TypedLog
-) {
-    private val expected = mutableListOf<(Any) -> Any?>()
-    val traffic = mutableListOf<Any>()
-
-    fun <T> next(vararg context: Address, check: T.() -> Unit) {
-        val exception = Exception()
-        expected.add {
-            try {
-                val t = if (it !is Context) it else it.list().minus(context.map(Address::id)).apply {
-                    require(size == 1) {
-                        "Invalid $this context: ${context.toList()} arg: $it"
-                    }
-                }.first()
-                check(t as T)
-            } catch (e: Throwable) {
-                TrafficError(
-                    message = e.message,
-                    cause = exception
-                )
-            }
-        }
-    }
-
-    fun <T> lazy(check: T.() -> Unit) {
-        expected.add {
-            try {
-                check(it as T)
-                true
-            } catch (e: Throwable) {
-                log.d("WARNING: lazy check skipping $it")
-                false
-            }
-        }
-    }
-
-    fun check(value: Any) = expected.run {
-        traffic.add(value)
-        firstOrNull()?.let { check ->
-            when (val result = check(value)) {
-                null -> Unit
-                is Unit -> removeAt(0)
-                is Throwable -> throw result.also {
-                    it.printStackTrace()
-                }
-                is Boolean -> if (result) removeAt(0) else Unit
-                else -> throw Error("unknown result $result")
-            }
-        }
-    }
-}
-
-class ClientDsl(
-    private val connector: Connector,
-    val log: TypedLog
+class ClientDsl internal constructor(
+    private val connector: Connector
 ) : CoroutineScope {
+    override val coroutineContext = Job() + newSingleThreadContext(javaClass.simpleName)
     private val input = BroadcastChannel<Any>(Channel.BUFFERED)
     private var subscription: ReceiveChannel<Any> = Channel()
     private val actions = Channel<() -> Job>(Channel.BUFFERED)
+    val log = coroutineLog()
     val expected = ExpectedTraffic(log)
-    override val coroutineContext = Job() + newSingleThreadContext(log.label)
 
     init {
         launch {
             connector.input.onCompletion {
-                log.d("Close client $it")
+                log.d { "Close client $it" }
             }.collect {
-                log.d("Received $it")
+                log.d { "Received $it" }
                 expected.check(it)
                 input.send(it)
             }
@@ -101,9 +42,9 @@ class ClientDsl(
     }
 
     fun printTraffic() {
-        log.d("TRAFFIC")
+        log.d { "TRAFFIC" }
         expected.traffic.forEach {
-            log.d(it.toString())
+            log.d { (it.toString()) }
         }
     }
 

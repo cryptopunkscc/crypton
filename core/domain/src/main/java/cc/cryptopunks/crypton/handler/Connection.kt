@@ -16,7 +16,6 @@ internal fun handleAddAccount() = handleConnection<Exec.Login>()
 internal fun handleRegisterAccount() = handleConnection<Exec.Register>()
 
 private fun <C : Exec.Authenticate> handleConnection() = handle { out, arg: C ->
-    log.d("Handle $arg")
     when (arg) {
         is Exec.Login -> arg.account
         is Exec.Register -> arg.account

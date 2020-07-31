@@ -26,7 +26,7 @@ import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.translator.prepare
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.log
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
@@ -47,8 +47,6 @@ class ChatView(
 ) :
     ActorLayout(context),
     Message.Consumer {
-
-    private val log = typedLog()
 
     private val messageAdapter = MessageAdapter(coroutineContext)
 
@@ -134,7 +132,7 @@ class ChatView(
                     is Action.Error ->
                         Exec.SaveInfoMessage(arg.message ?: arg.javaClass.name).out()
 
-                    else -> log.d(arg)
+                    else -> log.d { arg }
                 }
             }
         }

@@ -38,7 +38,7 @@ fun testMultiUserChat() {
 }
 
 private suspend fun client1() = Client1.connectClient {
-    log.d("Start client 1")
+    log.d { "Start client 1" }
     prepare(address1, pass)
 
     createChat(address1, address2)
@@ -89,11 +89,11 @@ private suspend fun client1() = Client1.connectClient {
     flush()
 
     delay(1000)
-    log.d("Stop client 1")
+    log.d { "Stop client 1" }
 }
 
 private suspend fun client2() = Client2.connectClient {
-    log.d("Start client 2")
+    log.d { "Start client 2" }
     prepare(address2, pass)
 
     send(Subscribe.RosterItems(true, address2))
@@ -126,11 +126,11 @@ private suspend fun client2() = Client2.connectClient {
     }
 
     delay(1000)
-    log.d("Stop client 2")
+    log.d { "Stop client 2" }
 }
 
 private suspend fun client3() = Client3.connectClient {
-    log.d("Start client 3")
+    log.d { "Start client 3" }
     prepare(address3, pass)
 
     send(Subscribe.RosterItems(true, address3))
@@ -173,5 +173,5 @@ private suspend fun client3() = Client3.connectClient {
     }
 
     delay(1000)
-    log.d("Stop client 3")
+    log.d { "Stop client 3" }
 }

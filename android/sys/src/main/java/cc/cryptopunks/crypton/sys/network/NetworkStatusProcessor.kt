@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.sys.network
 
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Network.Status
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.coroutines.delay
 
 object NetworkStatusProcessor
@@ -47,6 +47,6 @@ private suspend fun onUnavailable() = withLog {
 }
 
 private suspend fun withLog(block: suspend () -> Status?): Status? = block().also {
-    log.d("networks: $networks")
-    log.d("out: $it")
+    log.v { "networks: $networks" }
+    log.v { "out: $it" }
 }

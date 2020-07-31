@@ -51,7 +51,7 @@ private suspend fun client1() = Client1.connectClient {
 //        }
     }
 
-    log.d("Start client 1")
+    log.d { "Start client 1" }
     prepare(address1, pass)
     createChat(address1, address2)
     openChat(address1, address2)
@@ -66,13 +66,13 @@ private suspend fun client1() = Client1.connectClient {
     waitFor<Chat.Messages> {
         list.any { it.text == "yo yo" }
     }
-    log.d("Stop client 1")
+    log.d { "Stop client 1" }
     delay(1000)
     printTraffic()
 }
 
 private suspend fun client2() = Client2.connectClient {
-    log.d("Start client 2")
+    log.d { "Start client 2" }
     prepare(address2, pass)
     acceptSubscription(address2, address1)
     delay(1000)
@@ -82,7 +82,7 @@ private suspend fun client2() = Client2.connectClient {
     openChat(address2, address1)
     delay(1000)
     sendMessage("yo yo", address2, address1)
-    log.d("Stop client 2")
+    log.d { "Stop client 2" }
     delay(1000)
     printTraffic()
 }

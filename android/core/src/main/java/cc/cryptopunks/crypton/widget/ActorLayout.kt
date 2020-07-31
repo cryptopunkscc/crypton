@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.FrameLayout
 import cc.cryptopunks.crypton.Actor
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -24,7 +25,9 @@ abstract class ActorLayout(
     FrameLayout(context),
     Actor {
 
-    override val coroutineContext = SupervisorJob() + Dispatchers.Main
+    override val coroutineContext = SupervisorJob() +
+        Dispatchers.Main +
+        CoroutineLog.Label(javaClass.simpleName)
 
     override fun toString() = javaClass.name + "@" + Integer.toHexString(hashCode())
 }

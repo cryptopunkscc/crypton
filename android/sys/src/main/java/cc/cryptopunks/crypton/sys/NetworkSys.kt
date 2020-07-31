@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.Network.Status.Unavailable
 import cc.cryptopunks.crypton.sys.network.NetworkCallbacks
 import cc.cryptopunks.crypton.sys.network.bind
 import cc.cryptopunks.crypton.sys.network.processNetworkStatus
+import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,8 @@ internal class NetworkSys(
 
     private val channel = ConflatedBroadcastChannel<Network.Status>(Unavailable)
 
+    private val log = typedLog()
+
     init {
         val networkCallbacks = NetworkCallbacks(scope)
         scope.launch {
@@ -32,7 +35,7 @@ internal class NetworkSys(
                 .collect(channel::send)
         }
 
-        connectivityManager.bind(networkCallbacks)
+        connectivityManager.bind(log, networkCallbacks)
     }
 
     override val status: Network.Status get() = channel.value

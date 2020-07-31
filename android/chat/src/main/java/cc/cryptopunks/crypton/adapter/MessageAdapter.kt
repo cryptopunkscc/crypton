@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import cc.cryptopunks.crypton.view.MessageView
 import cc.cryptopunks.crypton.widget.GenericViewHolder
 import kotlinx.coroutines.CoroutineScope
@@ -48,7 +48,7 @@ class MessageAdapter(
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
     fun setMessages(messages: Chat.PagedMessages?) {
-        log.d("submit messages $messages")
+        log.d { "submit messages $messages" }
         account = messages?.account ?: account
         submitList(messages?.list)
     }

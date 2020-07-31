@@ -2,8 +2,6 @@ package cc.cryptopunks.crypton.service
 
 import android.content.Context
 import cc.cryptopunks.crypton.util.Log
-import cc.cryptopunks.crypton.util.d
-import cc.cryptopunks.crypton.util.e
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
@@ -53,9 +51,6 @@ private fun File.writeStackTrace(
 
     crashReportsDir()
         .resolve(fileName())
-        .also {
-            Log.d<UncaughtExceptionService>(it)
-        }
         .let(::FileWriter)
         .append(stackTrace)
         .run {
@@ -63,7 +58,7 @@ private fun File.writeStackTrace(
             close()
         }
 } catch (throwable: Throwable) {
-    Log.e<UncaughtExceptionService>(throwable)
+    Log(Log.Level.Error) { Log.Event(throwable = throwable) }
 }
 
 private fun Throwable.printAsString() = StringWriter().also {

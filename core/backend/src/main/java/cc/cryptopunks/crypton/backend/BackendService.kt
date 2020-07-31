@@ -6,7 +6,8 @@ import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.contextDecoder
 import cc.cryptopunks.crypton.service.startAppService
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.serviceName
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -18,8 +19,6 @@ import kotlinx.coroutines.newSingleThreadContext
 class BackendService(
     private val scope: RootScope
 ) : Connectable {
-
-    private val log = typedLog()
 
     private val job = SupervisorJob()
 
@@ -34,17 +33,17 @@ class BackendService(
 
     override fun Connector.connect(): Job = launch {
         lazyInit
-        log.d("Connect")
+        log.d { "Connect" }
         val decode = contextDecoder()
-        scope.service().run {
+        scope.service(this@BackendService.serviceName).run {
             copy(
                 input = input.onEach {
-                    log.d("Received $it")
+                    log.d { "Received $it" }
                 }.mapNotNull(decode).onEach {
-                    log.d("Decoded $it")
+                    log.d { "Decoded $it" }
                 }
             ).connect()
         }.join()
-        log.d("Disconnect")
+        log.d { "Disconnect" }
     }
 }

@@ -1,0 +1,43 @@
+package cc.cryptopunks.crypton
+
+import cc.cryptopunks.crypton.util.Log
+import cc.cryptopunks.crypton.util.columnFormatter
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.util.logger.TypedLog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+fun CoroutineScope.initJvmLog() = launch {
+    listOf(
+        Log,
+        TypedLog,
+        CoroutineLog
+    ).forEach { log ->
+        log.output(JvmLogOutput)
+    }
+}
+
+object JvmLogOutput : Log.Output {
+
+    private val formatColumn = columnFormatter()
+
+    override fun invoke(event: Log.Event) = event
+        .formatMessage()
+        .formatColumn()
+        .joinToString(" ")
+        .let(::println)
+}
+
+private fun Log.Event.formatMessage() = listOf(
+    label,
+    "|",
+    status,
+    ":|",
+    action?.run { "${javaClass.name.removePackage().replace("$", ".")}" },
+    scopes.takeIf { it.isNotEmpty() }?.run { ":(${scopes.joinToString("; ")})" },
+    "|:",
+    message
+)
+
+private const val packageName = "cc.cryptopunks.crypton.context."
+private fun String.removePackage() = replace(packageName, "")

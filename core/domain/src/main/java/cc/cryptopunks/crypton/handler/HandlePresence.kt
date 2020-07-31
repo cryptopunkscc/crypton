@@ -4,12 +4,12 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
-import cc.cryptopunks.crypton.context.createChat
 import cc.cryptopunks.crypton.handle
+import cc.cryptopunks.crypton.interactor.createChat
 import cc.cryptopunks.crypton.interactor.storePresence
+import cc.cryptopunks.crypton.util.logger.log
 
 internal fun handlePresence() = handle { _, (presence): Exec.HandlePresence ->
-    log.d("handle $this")
     storePresence(presence)
 
     if (presence.status == Presence.Status.Unsubscribed)
@@ -19,7 +19,7 @@ internal fun handlePresence() = handle { _, (presence): Exec.HandlePresence ->
 
         Presence.Status.Subscribe ->
             if (iAmSubscribed(presence.resource.address)) {
-                log.d("Auto accepting feedback subscription from ${presence.resource}")
+                log.d { "Auto accepting feedback subscription from ${presence.resource}" }
                 sendPresence(
                     Presence(
                         resource = presence.resource,
@@ -27,7 +27,7 @@ internal fun handlePresence() = handle { _, (presence): Exec.HandlePresence ->
                     )
                 )
             } else {
-                log.d("Received subscription request from ${presence.resource}")
+                log.d { "Received subscription request from ${presence.resource}" }
                 createChat(
                     Chat(
                         address = presence.resource.address,
@@ -39,7 +39,7 @@ internal fun handlePresence() = handle { _, (presence): Exec.HandlePresence ->
         Presence.Status.Available -> if (presence.resource != Resource.Empty) {
             if (presence.resource.address != address)
                 if (chatRepo.contains(presence.resource.address).not()) {
-                    log.d("Creating chat from presence ${presence.resource}")
+                    log.d { "Creating chat from presence ${presence.resource}" }
                     createChat(
                         Chat(
                             address = presence.resource.address,

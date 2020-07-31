@@ -8,7 +8,8 @@ import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.Store
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.util.logger.coroutineLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.newSingleThreadContext
@@ -30,11 +31,10 @@ class RootModule(
     Sys by sys,
     Repo by repo {
 
-    override val log = typedLog()
-
-    override val coroutineContext: CoroutineContext = log + SupervisorJob().apply {
-        invokeOnCompletion { log.d("Finish AppModule ${this@RootModule}") }
-    } + Dispatchers.IO
+    override val coroutineContext: CoroutineContext = SupervisorJob().apply {
+        invokeOnCompletion { coroutineLog().d { "Finish AppModule ${this@RootModule}" } }
+    } + Dispatchers.IO +
+        CoroutineLog.Label(javaClass.simpleName)
 
     override val sessions = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()
@@ -70,14 +70,15 @@ class SessionModule(
     Net by connection,
     SessionRepo by sessionRepo {
 
-    override val log = typedLog()
-
-    override val coroutineContext: CoroutineContext = log + SupervisorJob().apply {
-        invokeOnCompletion {
-            onClose(it)
-            log.d("Finish SessionModule $address ${it.hashCode()} $it")
-        }
-    } + newSingleThreadContext(address.id)
+    override val coroutineContext: CoroutineContext = SupervisorJob().apply {
+            invokeOnCompletion {
+                onClose(it)
+                coroutineLog().d { ("Finish SessionModule $address ${it.hashCode()} $it") }
+            }
+        } +
+        newSingleThreadContext(address.id) +
+        CoroutineLog.Label(javaClass.simpleName) +
+        CoroutineLog.Scope(address.id)
 
     override val presenceStore = Presence.Store()
     override val subscriptions = Store(emptySet<Address>())
@@ -105,9 +106,11 @@ class ChatModule(
     SessionScope by sessionScope,
     ChatScope {
 
-    override val log = typedLog()
-
     override val pagedMessage: Store<Chat.PagedMessages?> = Store(null)
+
+    override val coroutineContext = sessionScope.coroutineContext +
+        CoroutineLog.Label(javaClass.simpleName) +
+        CoroutineLog.Scope(chat.address.id)
 
     @Suppress("IntroduceWhenSubject")
     override suspend fun resolve(

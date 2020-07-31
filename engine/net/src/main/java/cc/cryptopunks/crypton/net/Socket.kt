@@ -2,9 +2,10 @@ package cc.cryptopunks.crypton.net
 
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.encodeContext
+import cc.cryptopunks.crypton.internal.logging
 import cc.cryptopunks.crypton.json.formatJson
 import cc.cryptopunks.crypton.json.parseJson
-import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.util.logger.log
 import io.ktor.network.sockets.Socket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
@@ -13,6 +14,7 @@ import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.cancel
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writePacket
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
@@ -22,13 +24,13 @@ import java.io.IOException
 import kotlin.reflect.KClass
 
 
-fun Socket.connector(log: TypedLog): Connector = let {
+fun Socket.connector(): Connector = let {
     val readChannel = openReadChannel()
     val writeChannel = openWriteChannel()
     Connector(
         input = readChannel.flowParsedMessages(),
         output = {
-            log.d("Sending $it")
+//            coroutineScope { log.d { "Sending $it" } }
             writeChannel.send(it)
         },
         close = {
@@ -75,9 +77,7 @@ private fun String.parseMessage(type: String): Any = try {
 }
 
 private suspend fun ByteWriteChannel.send(any: Any) = try {
-    any.encodeContext().also {
-        println("Sending encoded $it")
-    }.forEach { chunk ->
+    any.encodeContext().forEach { chunk ->
         when (chunk) {
             is String -> send("s", chunk)
             else -> send(chunk.type(), chunk.formatJson())

@@ -10,10 +10,10 @@ private val log = GnomeNotification.typedLog()
 
 suspend fun showGnomeNotification(message: Any) = coroutineScope {
     launch(Dispatchers.IO) {
-        log.d("Notify $message")
+        log.d { "Notify $message" }
         ProcessBuilder("notify-send", "'Crypton message'", "$message")
             .start()
-            .apply { log.d(String(errorStream.readBytes())) }
+            .apply { log.d { String(errorStream.readBytes()) } }
             .waitFor()
     }
 }

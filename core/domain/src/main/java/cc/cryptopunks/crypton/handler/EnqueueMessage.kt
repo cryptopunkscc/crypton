@@ -6,10 +6,11 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.calculateId
 import cc.cryptopunks.crypton.handle
+import cc.cryptopunks.crypton.util.logger.log
 
 internal fun handleEnqueueMessage() = handle { _, arg: Exec.EnqueueMessage ->
     chat.queuedMessage(arg).let { message ->
-        log.d("Enqueue message $message")
+        log.d { "Enqueue message $message" }
         messageRepo.insertOrUpdate(message)
     }
 }

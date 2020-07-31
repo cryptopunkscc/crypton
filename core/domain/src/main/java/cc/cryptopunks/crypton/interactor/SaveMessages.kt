@@ -3,14 +3,14 @@ package cc.cryptopunks.crypton.interactor
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
-import cc.cryptopunks.crypton.context.insertChat
+import cc.cryptopunks.crypton.util.logger.log
 
 internal suspend fun SessionScope.saveMessage(message: Message) {
     message.run {
         get(message) ?: create(message)
     }.let { prepared ->
         messageRepo.run {
-            log.d("inserting message $message")
+            log.d { "inserting message $message" }
             insertOrUpdate(prepared)
             if (prepared.status == Message.Status.Received)
                 notifyUnread()

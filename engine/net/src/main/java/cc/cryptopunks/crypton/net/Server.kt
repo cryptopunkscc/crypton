@@ -1,7 +1,11 @@
 package cc.cryptopunks.crypton.net
 
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.util.ext.invokeOnClose
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.util.logger.TypedLog
+import cc.cryptopunks.crypton.util.logger.coroutineLog
+import cc.cryptopunks.crypton.util.logger.log
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.ServerSocket
 import io.ktor.network.sockets.Socket
@@ -24,29 +28,35 @@ fun startServerSocket(
     aSocket(ActorSelectorManager(context))
         .tcp()
         .bind(address)
-        .apply { log.d("Started at $localAddress") }
+        .apply { log.d { "Started at $localAddress" } }
 
 
 suspend fun ServerSocket.connect(
-    log: TypedLog,
     connectable: Connectable
 ) = coroutineScope {
+    val _log = coroutineLog()
+    invokeOnClose { throwable ->
+        _log.d { "close server $throwable" }
+        connectable.cancel("Server close", throwable)
+        close()
+    }
     flow {
         while (true) emit(accept())
     }.onCompletion { throwable ->
-        log.d("close server $throwable")
+        log.d { "close server $throwable" }
         connectable.cancel("Server close", throwable)
         close()
     }.onEach { socket ->
-        log.d("Socket accepted: ${socket.remoteAddress}")
+        log.d { "Socket accepted: ${socket.remoteAddress}" }
     }.collect { socket ->
         connectable.tryConnectTo(socket, log)
     }
+
 }
 
-private fun Connectable.tryConnectTo(socket: Socket, log: TypedLog) = let {
+private fun Connectable.tryConnectTo(socket: Socket, log: CoroutineLog) = let {
     try {
-        socket.connector(log).connect().apply {
+        socket.connector().connect().apply {
             invokeOnCompletion { socket.close() }
         }
     } catch (e: Throwable) {

@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.feature.testDirectMessaging
 import cc.cryptopunks.crypton.feature.testMultiUserChat
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class FeatureTest {
         @JvmStatic
         fun beforeAll() {
             section("STARTING SERVER")
-            runBlocking {
+            runBlocking(CoroutineLog.Label("BeforeClass")) {
                 TestServer().apply {
                     start()
                     section("BEGIN CLEANING BEFORE TESTS")
