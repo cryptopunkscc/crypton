@@ -1,16 +1,20 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.net.connect
-import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import cc.cryptopunks.crypton.net.connectClientSocket
+import cc.cryptopunks.crypton.net.connector
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.net.InetSocketAddress
 
 fun main() {
-//    Log.init(JvmLog) TODO
     runBlocking {
-        launch { CoroutineLog.flow().collect { JvmLogOutput(it) } }
-        CliClient(systemInput()).connect(InetSocketAddress("127.0.0.1", 2323))
+        initJvmLog()
+
+        CliClient(systemInput()).run {
+            connectClientSocket(InetSocketAddress("127.0.0.1", 2323), Dispatchers.IO)
+                .connector()
+                .logging()
+                .connect()
+        }
     }
 }

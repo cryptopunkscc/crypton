@@ -16,13 +16,16 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
-val CoroutineScope.log get() = CoroutineLog
+val log get() = CoroutineLog
 
-fun CoroutineScope.coroutineLog() = CoroutineLog.Direct(coroutineContext)
+fun CoroutineScope.coroutineLog() = CoroutineLog.Locked(coroutineContext)
+
+val CoroutineContext.log get() = CoroutineLog.Locked(this)
+
 suspend fun coroutineLog(vararg elements: CoroutineContext.Element) =
-    CoroutineLog.Direct(elements.fold(coroutineContext) { acc, element -> acc + element })
+    CoroutineLog.Locked(elements.fold(coroutineContext) { acc, element -> acc + element })
 
-object CoroutineLog : Log, LogCompanion, CoroutineScope {
+object CoroutineLog : Log, Log.Output, LogCompanion, CoroutineScope {
 
     override val coroutineContext = SupervisorJob() + newSingleThreadContext(
         CoroutineLog::class.java.simpleName
@@ -100,6 +103,10 @@ object CoroutineLog : Log, LogCompanion, CoroutineScope {
         }
     }
 
+    override fun invoke(event: Log.Event) {
+        logger.offer { event }
+    }
+
     override fun invoke(level: Log.Level, build: () -> Log.Event) {
         if (level < Log.Config.level) return
 
@@ -110,7 +117,7 @@ object CoroutineLog : Log, LogCompanion, CoroutineScope {
 
     override suspend fun output(output: Log.Output) = events.asFlow().collect { output(it) }
 
-    class Direct(val context: CoroutineContext) {
+    class Locked(val context: CoroutineContext) {
         fun v(build: suspend () -> Any) = log(Log.Level.Verbose) { build() }
         fun d(build: suspend () -> Any) = log(Log.Level.Debug) { build() }
         fun i(build: suspend () -> Any) = log(Log.Level.Info) { build() }

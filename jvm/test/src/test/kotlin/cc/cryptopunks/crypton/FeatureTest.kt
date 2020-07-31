@@ -29,7 +29,7 @@ class FeatureTest {
     @After
     fun tearDown() = runBlocking {
         section("BEGIN CLEANING AFTER TEST")
-        connectClient {
+        connectDslClient {
             removeAccounts(
                 address1,
                 address2,
@@ -52,9 +52,9 @@ class FeatureTest {
                     start()
                     section("BEGIN CLEANING BEFORE TESTS")
                     listOf(
-                        launch { connectClient { tryRemoveAccount(address1, pass) } },
-                        launch { connectClient { tryRemoveAccount(address2, pass) } },
-                        launch { connectClient { tryRemoveAccount(address3, pass) } }
+                        launch { connectDslClient { tryRemoveAccount(address1, pass) } },
+                        launch { connectDslClient { tryRemoveAccount(address2, pass) } },
+                        launch { connectDslClient { tryRemoveAccount(address3, pass) } }
                     ).joinAll()
                     section("END CLEANING BEFORE TESTS")
                     stop()

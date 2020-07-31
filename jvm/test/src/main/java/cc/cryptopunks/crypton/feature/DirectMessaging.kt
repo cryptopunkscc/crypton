@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.Client2
 import cc.cryptopunks.crypton.acceptSubscription
 import cc.cryptopunks.crypton.address1
 import cc.cryptopunks.crypton.address2
-import cc.cryptopunks.crypton.connectClient
+import cc.cryptopunks.crypton.connectDslClient
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.createChat
@@ -25,7 +25,7 @@ suspend fun testDirectMessaging() = coroutineScope {
     ).joinAll()
 }
 
-private suspend fun client1() = Client1.connectClient {
+private suspend fun client1() = Client1.connectDslClient {
     expected.apply {
 //        next<Exec.Register> {  }
 //        next<Account.Connecting> {  }
@@ -51,7 +51,6 @@ private suspend fun client1() = Client1.connectClient {
 //        }
     }
 
-    log.d { "Start client 1" }
     prepare(address1, pass)
     createChat(address1, address2)
     openChat(address1, address2)
@@ -66,13 +65,11 @@ private suspend fun client1() = Client1.connectClient {
     waitFor<Chat.Messages> {
         list.any { it.text == "yo yo" }
     }
-    log.d { "Stop client 1" }
     delay(1000)
     printTraffic()
 }
 
-private suspend fun client2() = Client2.connectClient {
-    log.d { "Start client 2" }
+private suspend fun client2() = Client2.connectDslClient {
     prepare(address2, pass)
     acceptSubscription(address2, address1)
     delay(1000)
@@ -82,7 +79,6 @@ private suspend fun client2() = Client2.connectClient {
     openChat(address2, address1)
     delay(1000)
     sendMessage("yo yo", address2, address1)
-    log.d { "Stop client 2" }
     delay(1000)
     printTraffic()
 }

@@ -8,13 +8,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 fun CoroutineScope.initJvmLog() = launch {
-    listOf(
-        Log,
-        TypedLog,
-        CoroutineLog
-    ).forEach { log ->
-        log.output(JvmLogOutput)
-    }
+    Log.output(CoroutineLog)
+    TypedLog.output(CoroutineLog)
+    CoroutineLog.output(JvmLogOutput)
 }
 
 object JvmLogOutput : Log.Output {

@@ -35,7 +35,6 @@ internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
             log.d { "Conferences sync $syncRooms" }
         }
     }
-    log.d { "Finish syncing conferences" }
 }
 
 private suspend fun SessionScope.syncConferences(list: Set<Address>) =

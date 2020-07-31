@@ -6,13 +6,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 fun CoroutineScope.initAndroidLog() = launch {
-    listOf(
-        Log,
-        TypedLog,
-        CoroutineLog
-    ).forEach { log ->
-        log.output(AndroidLogOutput)
-    }
+    Log.output(CoroutineLog)
+    TypedLog.output(CoroutineLog)
+    CoroutineLog.output(AndroidLogOutput)
 }
 
 private object AndroidLogOutput : Log.Output {

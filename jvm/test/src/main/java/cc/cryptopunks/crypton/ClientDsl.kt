@@ -1,6 +1,8 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.coroutineLog
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -20,13 +22,14 @@ import kotlinx.coroutines.withTimeout
 import org.junit.Assert
 
 class ClientDsl internal constructor(
+    name: String,
     private val connector: Connector
 ) : CoroutineScope {
-    override val coroutineContext = Job() + newSingleThreadContext(javaClass.simpleName)
+    override val coroutineContext = Job() + newSingleThreadContext(javaClass.simpleName) + CoroutineLog.Label(name)
     private val input = BroadcastChannel<Any>(Channel.BUFFERED)
     private var subscription: ReceiveChannel<Any> = Channel()
     private val actions = Channel<() -> Job>(Channel.BUFFERED)
-    val log = coroutineLog()
+    val log = coroutineContext.log
     val expected = ExpectedTraffic(log)
 
     init {
@@ -34,7 +37,6 @@ class ClientDsl internal constructor(
             connector.input.onCompletion {
                 log.d { "Close client $it" }
             }.collect {
-                log.d { "Received $it" }
                 expected.check(it)
                 input.send(it)
             }

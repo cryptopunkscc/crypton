@@ -13,7 +13,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
 
 internal interface SmackCore : CoroutineScope {
-    val log: CoroutineLog.Direct
+    val log: CoroutineLog.Locked
     val configuration: XMPPTCPConnectionConfiguration
     val connection: XMPPTCPConnection
     val accountManager: AccountManager

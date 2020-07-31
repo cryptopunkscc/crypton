@@ -9,8 +9,9 @@ import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.Store
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.coroutineLog
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
@@ -31,9 +32,8 @@ class RootModule(
     Sys by sys,
     Repo by repo {
 
-    override val coroutineContext: CoroutineContext = SupervisorJob().apply {
-        invokeOnCompletion { coroutineLog().d { "Finish AppModule ${this@RootModule}" } }
-    } + Dispatchers.IO +
+    override val coroutineContext: CoroutineContext = SupervisorJob() +
+        Dispatchers.IO +
         CoroutineLog.Label(javaClass.simpleName)
 
     override val sessions = SessionScope.Store()
@@ -41,6 +41,12 @@ class RootModule(
     override val connectableBindingsStore = Connectable.Binding.Store()
     override val accounts = Store(Account.Many(emptySet()))
     override val rosterItems = Store(Roster.Items(emptyList()))
+
+    init {
+        coroutineContext[Job]!!.invokeOnCompletion {
+            coroutineContext.log.d { "Finish AppModule $this" }
+        }
+    }
 
     override fun sessionScope(): SessionScope = sessions.get().values.first()
     override fun sessionScope(address: Address): SessionScope =
@@ -70,18 +76,20 @@ class SessionModule(
     Net by connection,
     SessionRepo by sessionRepo {
 
-    override val coroutineContext: CoroutineContext = SupervisorJob().apply {
-            invokeOnCompletion {
-                onClose(it)
-                coroutineLog().d { ("Finish SessionModule $address ${it.hashCode()} $it") }
-            }
-        } +
+    override val coroutineContext: CoroutineContext = SupervisorJob(rootScope.coroutineContext[Job]) +
         newSingleThreadContext(address.id) +
         CoroutineLog.Label(javaClass.simpleName) +
         CoroutineLog.Scope(address.id)
 
     override val presenceStore = Presence.Store()
     override val subscriptions = Store(emptySet<Address>())
+
+    init {
+        coroutineContext[Job]!!.invokeOnCompletion {
+            onClose(it)
+            coroutineContext.log.d { "Finish SessionModule $address ${it.hashCode()} $it" }
+        }
+    }
 
     override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
     override suspend fun chatScope(chat: Address): ChatScope = chatScope(chatRepo.get(chat))

@@ -6,7 +6,6 @@ import cc.cryptopunks.crypton.interactor.removeSessionScope
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import java.util.concurrent.CancellationException
 
 internal fun handleRemoveAccount() = handle { _, arg: Exec.RemoveAccount ->
     removeSessionScope(address) {
@@ -18,7 +17,7 @@ internal fun handleRemoveAccount() = handle { _, arg: Exec.RemoveAccount ->
         accountRepo.delete(address)
         val session = this
         rootScope.launch {
-            session.cancel(CancellationException(arg.toString()))
+            session.cancel(arg.toString())
             log.d { "Successfully removed $address from local database" }
         }
     }
