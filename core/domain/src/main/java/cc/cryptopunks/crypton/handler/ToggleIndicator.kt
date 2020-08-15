@@ -5,10 +5,12 @@ import cc.cryptopunks.crypton.handle
 import cc.cryptopunks.crypton.util.logger.log
 
 fun handleToggleIndicator() = handle { _, (condition): Exec.ToggleIndicator ->
-    when (condition) {
-        true -> indicatorSys.showIndicator().let { "Show" }
-        false -> indicatorSys.hideIndicator().let { "Hide" }
-    }.let {
-        log.d { "$it indicator" }
+    indicatorSys.run {
+        if (isIndicatorVisible != condition) when (condition) {
+            true -> showIndicator().let { "Show" }
+            false -> hideIndicator().let { "Hide" }
+        }.let {
+            log.d { "$it indicator" }
+        }
     }
 }

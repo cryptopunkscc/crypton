@@ -11,10 +11,10 @@ fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
 
 typealias Handle<S, T> = suspend S.(Output, T) -> Unit
 
-typealias HandlerRegistry = Map<KClass<*>, Handle<Any, Any>>
+typealias HandlerRegistry = Map<KClass<*>, Handle<Scope, Any>>
 
 class HandlerRegistryBuilder internal constructor() {
-    internal val handlers = mutableMapOf<KClass<*>, Handle<Any, Any>>()
+    internal val handlers = mutableMapOf<KClass<*>, Handle<Scope, Any>>()
 
     operator fun HandlerRegistry.unaryPlus() {
         handlers += this
@@ -25,6 +25,6 @@ class HandlerRegistryBuilder internal constructor() {
     }
 
     fun unsafePlus(type: KClass<*>, handle: Handle<*, *>) {
-        handlers += (type to handle as Handle<Any, Any>)
+        handlers += (type to handle as Handle<Scope, Any>)
     }
 }

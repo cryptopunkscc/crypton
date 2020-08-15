@@ -29,6 +29,7 @@ class IndicatorService : IntentService(Indicator.serviceName) {
     }
 
     override fun onCreate() {
+        isRunning = true
         super.onCreate()
         createNotificationChannel(
             id = Indicator.Notification.channelId,
@@ -41,8 +42,18 @@ class IndicatorService : IntentService(Indicator.serviceName) {
         showIndicatorNotification()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        isRunning = false
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int =
         Service.START_STICKY
 
     override fun onHandleIntent(intent: Intent?) = Unit /*no-op*/
+
+    companion object {
+        var isRunning = false
+            private set
+    }
 }

@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.debug.drawer
 
 import android.view.LayoutInflater
 import android.view.View

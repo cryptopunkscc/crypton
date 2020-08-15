@@ -29,11 +29,10 @@ private fun Log.Event.formatMessage() = listOf(
     "|",
     status,
     ":|",
-    action?.run { "${javaClass.name.removePackage().replace("$", ".")}" },
+    action?.run { javaClass.name.removePackage().replace("$", ".") },
     scopes.takeIf { it.isNotEmpty() }?.run { ":(${scopes.joinToString("; ")})" },
     "|:",
     message
 )
 
-private const val packageName = "cc.cryptopunks.crypton.context."
-private fun String.removePackage() = replace(packageName, "")
+private fun String.removePackage() = replace("cc.cryptopunks.crypton.context.", "")
