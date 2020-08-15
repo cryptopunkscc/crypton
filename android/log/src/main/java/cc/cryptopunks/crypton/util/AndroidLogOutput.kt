@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.util
 
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.util.logger.LogOutputCache
 import cc.cryptopunks.crypton.util.logger.TypedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -8,7 +9,8 @@ import kotlinx.coroutines.launch
 fun CoroutineScope.initAndroidLog() = launch {
     Log.output(CoroutineLog)
     TypedLog.output(CoroutineLog)
-    CoroutineLog.output(AndroidLogOutput)
+    launch { CoroutineLog.output(AndroidLogOutput) }
+    launch { CoroutineLog.output(LogOutputCache.Default) }
 }
 
 private object AndroidLogOutput : Log.Output {

@@ -60,7 +60,15 @@
         android:label="{chat}"
         tools:layout="@layout/chat">
     </fragment>
+    <fragment
+        android:id="@+id/debugFragment"
+        android:name="cc.cryptopunks.crypton.fragment.DebugFragment"
+        android:label="@string/debug_label"
+        tools:layout="@layout/debug_view"/>
     <action
         android:id="@id/navigateChat"
         app:destination="@id/chatFragment"/>
+    <action
+        android:id="@id/navigateDebug"
+        app:destination="@id/debugFragment"/>
 </navigation>

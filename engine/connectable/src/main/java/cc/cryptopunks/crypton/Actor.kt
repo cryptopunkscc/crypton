@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -12,7 +11,7 @@ interface Actor : Connectable
 
 fun actor(
     context: CoroutineContext = Dispatchers.Unconfined,
-    onConnect: suspend CoroutineScope.(Connector) -> Unit
+    onConnect: suspend (Connector) -> Unit
 ) = object : Actor {
     override val coroutineContext = SupervisorJob() + context
     override fun Connector.connect(): Job = launch { onConnect(this@connect) }

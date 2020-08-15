@@ -1,7 +1,8 @@
 package cc.cryptopunks.crypton.service
 
 import android.content.Context
-import cc.cryptopunks.crypton.util.Log
+import cc.cryptopunks.crypton.util.logger.TypedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
@@ -10,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun Context.initExceptionService() = Thread.setDefaultUncaughtExceptionHandler(
-    UncaughtExceptionService(getCryptonDir())
+    getCryptonDir().uncaughtExceptionHandler()
 )
 
 private fun Context.getCryptonDir() = externalCacheDir!!.absolutePath
@@ -22,35 +23,24 @@ private fun Context.getCryptonDir() = externalCacheDir!!.absolutePath
     ?: getExternalFilesDir(null)!!
 
 
-private class UncaughtExceptionService(
-    private val externalFilesDir: File
-) :
-    Thread.UncaughtExceptionHandler {
-
-    private val previousHandler = Thread.getDefaultUncaughtExceptionHandler()!!
-
-    override fun uncaughtException(
-        thread: Thread,
-        throwable: Throwable
-    ) {
-        externalFilesDir.writeStackTrace(
-            throwable
-        )
-        previousHandler.uncaughtException(
-            thread,
-            throwable
-        )
-    }
+fun File.uncaughtExceptionHandler(
+    previousHandler: Thread.UncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()!!
+) = Thread.UncaughtExceptionHandler { thread, e ->
+    writeStackTrace(e)
+    previousHandler.uncaughtException(thread, e)
 }
 
 private fun File.writeStackTrace(
-    throwable: Throwable
+    throwable: Throwable,
+    log: TypedLog = typedLog()
 ) = try {
-    val stackTrace = throwable
-        .printAsString()
+    val stackTrace = throwable.printAsString()
 
     crashReportsDir()
         .resolve(fileName())
+        .also {
+            log.d { it }
+        }
         .let(::FileWriter)
         .append(stackTrace)
         .run {
@@ -58,7 +48,7 @@ private fun File.writeStackTrace(
             close()
         }
 } catch (throwable: Throwable) {
-    Log(Log.Level.Error) { Log.Event(throwable = throwable) }
+    log.e { throwable }
 }
 
 private fun Throwable.printAsString() = StringWriter().also {

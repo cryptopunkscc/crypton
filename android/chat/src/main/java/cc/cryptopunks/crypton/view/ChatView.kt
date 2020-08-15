@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Rect
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,10 +23,14 @@ import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.translator.prepare
+import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.util.logger.log
 import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.autoAdjustActionButtons
+import cc.cryptopunks.crypton.widget.autoAdjustPaddingOf
+import cc.cryptopunks.crypton.widget.setSlashClickListener
 import kotlinx.android.synthetic.main.chat.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -38,7 +41,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 class ChatView(
     context: Context,
@@ -50,11 +52,7 @@ class ChatView(
 
     private val messageAdapter = MessageAdapter(coroutineContext)
 
-    private val scrollThreshold: Int = context.resources.displayMetrics.run {
-        scaledDensity * SCROLL_THRESHOLD_DP
-    }.toInt()
-
-    private val orientationThreshold = context.resources.displayMetrics.density * 48 * 2
+    private val helper = ScrollHelper(context)
 
     private var command: Any? = null
 
@@ -62,7 +60,7 @@ class ChatView(
 
     init {
         View.inflate(context, R.layout.chat, this)
-        chatRecyclerView.apply {
+        val recyclerView = chatRecyclerView.apply {
             layoutManager = LinearLayoutManager(
                 context,
                 RecyclerView.VERTICAL,
@@ -71,44 +69,20 @@ class ChatView(
             adapter = messageAdapter
         }
         messageInputView.apply {
-            slash.setOnClickListener {
-                input.apply {
-                    selectionEnd.let { selection ->
-                        if (text.firstOrNull() == '/') {
-                            setText(text.drop(1))
-                            setSelection(selection - 1)
-                        } else {
-                            setText("/$text")
-                            setSelection(selection + 1)
-                        }
-                    }
-                }
-            }
-        }
-        messageInputView.addOnLayoutChangeListener { view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            chatRecyclerView.apply {
-                setPadding(paddingLeft, paddingTop, paddingRight, this.bottom - top)
-            }
-
-            if (top != oldTop) messageInputView.actionWrapper.orientation =
-                when (abs(top - bottom) > orientationThreshold) {
-                    true -> LinearLayout.VERTICAL
-                    false -> LinearLayout.HORIZONTAL
-                }
+            autoAdjustActionButtons()
+            autoAdjustPaddingOf(recyclerView)
+            setSlashClickListener()
         }
     }
 
     override fun Connector.connect(): Job = launch {
         launch {
             input.onStart {
-                chatRecyclerView.run {
-                    val rect = Rect()
-                    children.filter { child ->
-                        getHitRect(rect)
-                        child.getLocalVisibleRect(rect)
-                    }.filterIsInstance<MessageView>().mapNotNull { it.message }.let {
-                        Exec.MessagesRead(it.toList()).out()
-                    }
+                val rect = Rect()
+                chatRecyclerView.children.filter { child ->
+                    child.getGlobalVisibleRect(rect)
+                }.filterIsInstance<MessageView>().mapNotNull { it.message }.let {
+                    Exec.MessagesRead(it.toList()).out()
                 }
             }.collect { arg ->
                 when (arg) {
@@ -121,11 +95,11 @@ class ChatView(
                             it.timestamp > lastMessageTimestamp && it.status != Message.Status.State
                         }?.run {
                             lastMessageTimestamp = timestamp
-                            val wasBottomReached = isBottomReached()
+                            val wasBottomReached = helper.isBottomReached(chatRecyclerView)
                             delay(50)
                             if (!wasBottomReached)
                                 displayNewMessageInfo() else
-                                scrollToNewMessage()
+                                helper.scrollToTop(chatRecyclerView)
                         }
                     }
 
@@ -191,15 +165,6 @@ class ChatView(
         }
     }
 
-    private fun isBottomReached() = chatRecyclerView.run {
-        val maxScroll = computeVerticalScrollRange()
-        val currentScroll = computeVerticalScrollOffset() + computeVerticalScrollExtent()
-        maxScroll - currentScroll < scrollThreshold
-    }
-
-    private fun scrollToNewMessage() =
-        chatRecyclerView.smoothScrollToPosition(0)
-
     private fun displayNewMessageInfo() =
         Toast.makeText(context, "new message", Toast.LENGTH_SHORT).show()
 
@@ -210,10 +175,6 @@ class ChatView(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         chatRecyclerView.adapter = null
-    }
-
-    private companion object {
-        const val SCROLL_THRESHOLD_DP = 100
     }
 
     override fun canConsume(message: Message): Boolean = message.chat == address

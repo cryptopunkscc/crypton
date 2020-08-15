@@ -9,6 +9,7 @@ object Indicator {
     }
 
     interface Sys {
+        val isIndicatorVisible: Boolean
         fun showIndicator()
         fun hideIndicator()
     }

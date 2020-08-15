@@ -55,7 +55,8 @@ interface Log : (Log.Level, () -> Log.Event) -> Unit {
             Received,
             Start,
             Handling,
-            Finished
+            Finished,
+            Failed
         }
 
         class Builder(

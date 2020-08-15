@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.context.RootModule
 import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Notification
+import cc.cryptopunks.crypton.debug.drawer.initAppDebug
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.navigate.currentAccount

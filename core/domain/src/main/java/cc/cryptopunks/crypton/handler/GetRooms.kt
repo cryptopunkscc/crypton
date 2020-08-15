@@ -5,5 +5,6 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.handle
 
 internal fun handleGetRooms() = handle { out, _: Get.Rooms ->
-    out(Chat.AllRooms(listRooms().toSet()))
+    require(false)
+    Chat.AllRooms(listRooms().toSet()).out()
 }
