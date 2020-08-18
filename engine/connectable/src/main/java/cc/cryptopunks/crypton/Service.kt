@@ -28,44 +28,57 @@ private data class Service(
     override val coroutineContext = CoroutineLog.Label(name) + scope.coroutineContext
 
     override fun Connector.connect(): Job = launch {
-        val subs: MutableMap<KClass<*>, Job> = mutableMapOf()
+        Connection(scope, this@connect).handle()
+    }
+
+    data class Connection(
+        val scope: Scope,
+        val connector: Connector,
+        val subs: MutableMap<KClass<*>, Job> = mutableMapOf(),
         val async: WeakHashMap<Job, Any> = WeakHashMap()
-
-        input
-            .onStart {
-                logConnectionStarted()
-            }
-            .onCompletion { throwable ->
-
-                logConnectionFinished(throwable)
-                (async.keys + subs.values).forEach { job ->
-                    job.cancel(CancellationException("Complete input $job $throwable"))
-                }
-                async.clear()
-                subs.clear()
-            }
-            .collect { arg ->
-                when (arg) {
-                    is Context -> runCatching {
-                        scope.resolve(arg)
-                    }.getOrElse {
-
-                        scope to CannotResolve(arg)
-                    }
-                    else -> {
-                        scope to arg
-                    }
-                }.let { (scope, action) ->
-                    when (action) {
-                        is Subscription -> scope.handleSubscription(subs, action, output)
-                        is Async -> scope.handleAsync(async, action, output)
-                        is Failure -> action.out()
-                        else -> scope.handleRequest(action, output).join()
-                    }
-                }
-            }
+    ) {
+        val out: Output get() = connector.output
     }
 }
+
+private suspend fun Service.Connection.handle() = connector.input
+    .onStart {
+        logConnectionStarted()
+    }
+    .onCompletion { throwable ->
+
+        logConnectionFinished(throwable)
+        (async.keys + subs.values).forEach { job ->
+            job.cancel(CancellationException("Complete input $job $throwable"))
+        }
+        async.clear()
+        subs.clear()
+    }
+    .collect { arg ->
+        val (scope, action) = resolve(arg)
+        handleAction(scope, action)
+    }
+
+private suspend fun Service.Connection.resolve(arg: Any): Pair<Scope, Any> =
+    when (arg) {
+        is Context -> runCatching {
+            scope.resolve(arg)
+        }.getOrElse {
+
+            scope to CannotResolve(arg)
+        }
+        else -> {
+            scope to arg
+        }
+    }
+
+private suspend fun Service.Connection.handleAction(scope: Scope, action: Any) =
+    when (action) {
+        is Subscription -> scope.handleSubscription(subs, action, out)
+        is Async -> scope.handleAsync(async, action, out)
+        is Failure -> action.out()
+        else -> scope.handleRequest(action, out).join()
+    }
 
 private fun Scope.handleSubscription(
     subscriptions: MutableMap<KClass<*>, Job>,
