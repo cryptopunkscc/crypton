@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.roster.R
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.sender
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.letterColors
 import cc.cryptopunks.crypton.util.presenceStatusColors
@@ -87,7 +88,7 @@ class RosterItemView(
     private fun Message.textViewModel() = when {
         text.isEmpty() -> View.GONE to null
         from.address == Address.Empty -> View.GONE to null
-        else -> View.VISIBLE to "${from.address.local}: $text"
+        else -> View.VISIBLE to "$sender: $text"
     }
 
     private fun Message.dateViewModel() = when {

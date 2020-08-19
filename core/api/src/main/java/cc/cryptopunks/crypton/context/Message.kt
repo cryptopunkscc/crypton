@@ -122,6 +122,17 @@ data class Message(
         }
 }
 
+val Message.sender
+    get() = when {
+        from.address.isConference -> from.resource
+        else -> from.address.local
+    }
+
+fun Message.isFrom(address: Address) = when {
+    from.address.isConference -> from.resource == address.local
+    else -> from.address == address
+}
+
 fun Message.calculateId() = copy(
     id = (text + from + to + timestamp).md5()
 )

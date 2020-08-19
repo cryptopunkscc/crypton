@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.isFrom
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.logger.typedLog
 import cc.cryptopunks.crypton.view.MessageView
@@ -86,9 +87,11 @@ class MessageAdapter(
     }
 
     override fun getItemViewType(position: Int): Int =
-        if (getItem(position)?.from?.address == account)
-            Gravity.RIGHT else
-            Gravity.LEFT
+        when (getItem(position)?.isFrom(account)) {
+            null -> Gravity.CENTER_HORIZONTAL
+            true -> Gravity.RIGHT
+            false -> Gravity.LEFT
+        }
 
     private object Diff : DiffUtil.ItemCallback<Message>() {
         override fun areItemsTheSame(
