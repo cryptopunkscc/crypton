@@ -66,7 +66,7 @@ data class Chat(
         fun configureConference(chat: Address)
         fun inviteToConference(chat: Address, users: Set<Address>)
         fun conferenceInvitationsFlow(): Flow<Invitation>
-        fun joinConference(address: Address, nickname: String, historySince: Int = 0)
+        fun joinConference(address: Address, nickname: String, historySince: Long = 0)
         fun listJoinedRooms(): Set<Address>
         fun listRooms(): Set<Address>
         fun getChatInfo(chat: Address): Info
