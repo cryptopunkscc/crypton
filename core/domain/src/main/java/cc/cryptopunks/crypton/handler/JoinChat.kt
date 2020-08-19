@@ -6,7 +6,6 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.handle
-import java.lang.System.currentTimeMillis
 
 internal fun handleJoinChat() =
     handle { _, _: Exec.JoinChat ->
@@ -33,6 +32,5 @@ internal fun handleJoinChat() =
         }
     }
 
-private suspend fun SessionScope.historySince(chat: Address): Int = messageRepo.latest(chat)?.run {
-    (currentTimeMillis() - timestamp).toInt()
-} ?: 0
+private suspend fun SessionScope.historySince(chat: Address): Long =
+    messageRepo.latest(chat)?.run { timestamp + 1 } ?: 0

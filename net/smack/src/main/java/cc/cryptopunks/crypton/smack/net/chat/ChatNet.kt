@@ -16,6 +16,7 @@ import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.packet.MUCUser
 import org.jxmpp.jid.EntityJid
 import org.jxmpp.jid.parts.Resourcepart
+import java.util.Date
 
 internal class ChatNet(
     private val smackCore: SmackCore,
@@ -41,12 +42,12 @@ internal class ChatNet(
     override fun joinConference(
         address: Address,
         nickname: String,
-        historySince: Int
+        historySince: Long
     ): Unit = mucManager.run {
         getMultiUserChat(address.entityBareJid()).run {
             join(
                 getEnterConfigurationBuilder(Resourcepart.from(nickname))
-                    .requestHistorySince(historySince)
+                    .requestHistorySince(Date(historySince) )
                     .build()
             )
         }
