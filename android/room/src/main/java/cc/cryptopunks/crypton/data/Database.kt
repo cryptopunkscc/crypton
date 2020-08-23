@@ -10,9 +10,10 @@ import cc.cryptopunks.crypton.entity.*
         ChatData::class,
         MessageData::class,
         UserData::class,
-        ChatUserData::class
+        ChatUserData::class,
+        FingerprintData::class
     ],
-    version = 5
+    version = 1
 )
 internal abstract class Database : RoomDatabase() {
     abstract val accountDao: AccountData.Dao
@@ -20,4 +21,5 @@ internal abstract class Database : RoomDatabase() {
     abstract val userDao: UserData.Dao
     abstract val chatUserDao: ChatUserData.Dao
     abstract val messageDao: MessageData.Dao
+    abstract val fingerprintDao: FingerprintData.Dao
 }

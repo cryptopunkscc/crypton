@@ -7,6 +7,8 @@ import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.omemo.OmemoMessage
 import org.jivesoftware.smackx.sid.element.StanzaIdElement
+import org.jxmpp.jid.EntityBareJid
+import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 
 internal fun Forwarded.cryptonMessage(): CryptonMessage =
@@ -68,8 +70,8 @@ internal fun SmackPresence.presence(address: SmackJid?) = Presence(
     status = Presence.Status.values().first { it.name.toLowerCase() == type.name }
 )
 
-internal fun Address.entityBareJid() = JidCreate.entityBareFrom(toString())
-internal fun Resource.entityFullJid() = JidCreate.entityFullFrom(toString())
+internal fun Address.entityBareJid(): EntityBareJid = JidCreate.entityBareFrom(toString())
+internal fun Resource.entityFullJid(): EntityFullJid = JidCreate.entityFullFrom(toString())
 
 
 internal fun MultiUserChat.toChat(account: Address) = Chat(

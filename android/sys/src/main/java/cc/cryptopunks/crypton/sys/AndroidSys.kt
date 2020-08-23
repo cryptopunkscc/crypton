@@ -12,7 +12,9 @@ class AndroidSys(
 ) : Sys {
 
     override val indicatorSys: Indicator.Sys by lazy {
-        IndicatorSys(application)
+        IndicatorSys(
+            context = application
+        )
     }
 
     override val notificationSys: Notification.Sys by lazy {
@@ -32,6 +34,12 @@ class AndroidSys(
         NetworkSys(
             scope = GlobalScope,
             connectivityManager = application.getSystemService()!!
+        )
+    }
+
+    override val deviceSys: Device.Sys by lazy {
+        DeviceSys(
+            context = application
         )
     }
 }

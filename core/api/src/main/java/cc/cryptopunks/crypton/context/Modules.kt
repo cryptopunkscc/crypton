@@ -85,6 +85,7 @@ class SessionModule(
     override val subscriptions = Store(emptySet<Address>())
 
     init {
+        setDeviceFingerprintRepo(deviceRepo)
         coroutineContext[Job]!!.invokeOnCompletion {
             onClose(it)
             coroutineContext.log.d { "Finish SessionModule $address ${it.hashCode()} $it" }

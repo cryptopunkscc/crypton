@@ -16,7 +16,7 @@ class MockChatNet(
         TODO("Not yet implemented")
     }
 
-    override fun joinConference(address: Address, nickname: String, historySince: Int) {
+    override fun joinConference(address: Address, nickname: String, historySince: Long) {
         TODO("Not yet implemented")
     }
 

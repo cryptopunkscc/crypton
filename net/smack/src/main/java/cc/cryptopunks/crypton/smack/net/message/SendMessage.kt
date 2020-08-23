@@ -10,16 +10,19 @@ import org.jivesoftware.smack.packet.Message as SmackMessage
 internal fun SmackCore.sendMessage(message: Message): Job {
     check(connection.isAuthenticated) { "Connection not authenticated" }
 
-    val stanza = when (message.chat.isConference) {
-        true -> prepareConferenceMessage(message)
-        false -> prepareChatMessage(message)
-    }
+    val stanza = prepareStanza(message)
 
     return Job().apply {
         connection.addStanzaIdAcknowledgedListener(stanza.setStanzaId()) { complete() }
         connection.sendStanza(stanza)
     }
 }
+
+private fun SmackCore.prepareStanza(message: Message) =
+    when (message.chat.isConference) {
+        true -> prepareConferenceMessage(message)
+        false -> prepareChatMessage(message)
+    }
 
 private fun SmackCore.prepareConferenceMessage(message: Message): SmackMessage =
     when (message.encrypted) {
@@ -31,7 +34,9 @@ private fun SmackCore.encryptConferenceMessage(message: Message): SmackMessage {
     val toJid = message.to.address.entityBareJid()
     val conference = mucManager.getMultiUserChat(toJid)
 
-    return omemoManager.encrypt(conference, message.text).asMessage(toJid)
+    return omemoManager.encrypt(conference, message.text).asMessage(toJid).apply {
+        type = org.jivesoftware.smack.packet.Message.Type.groupchat
+    }
 }
 
 private fun SmackCore.createConferenceMessage(message: Message): SmackMessage =

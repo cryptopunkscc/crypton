@@ -29,6 +29,7 @@ import cc.cryptopunks.crypton.handler.handleMessageRead
 import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handlePresence
+import cc.cryptopunks.crypton.handler.handlePurgeDeviceList
 import cc.cryptopunks.crypton.handler.handleRegisterAccount
 import cc.cryptopunks.crypton.handler.handleRemoveAccount
 import cc.cryptopunks.crypton.handler.handleRosterItemsSubscription
@@ -85,6 +86,7 @@ fun accountHandlers() = createHandlers {
     +handleGetAccountList()
     +handleGetJoinedRooms()
     +handleAccountsSubscription()
+    +handlePurgeDeviceList()
 }
 
 fun chatHandlers() = createHandlers {

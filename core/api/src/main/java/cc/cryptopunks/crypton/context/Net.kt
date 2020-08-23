@@ -9,7 +9,8 @@ interface Net :
     Presence.Net,
     Message.Net,
     Chat.Net,
-    Roster.Net {
+    Roster.Net,
+    Device.Net {
 
     fun connect()
     fun disconnect()

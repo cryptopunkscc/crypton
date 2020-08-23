@@ -34,6 +34,8 @@ private const val JOINED = "joined"
 private const val DELETE = "delete"
 private const val INFO = "info"
 private const val CONFIGURE = "configure"
+private const val PURGE = "purge"
+private const val DEVICES = "devices"
 
 private val navigateMain = MAIN to command { Route.Main }
 
@@ -119,6 +121,10 @@ private val configure = CONFIGURE to command {
     Exec.ConfigureConference()
 }
 
+private val purgeDevices = PURGE to mapOf(DEVICES to command(param()) { (account) ->
+    Exec.PurgeDeviceList.inContext(account)
+})
+
 private val navigate = NAVIGATE to mapOf(
     navigateMain,
     navigateChat
@@ -132,7 +138,8 @@ val mainCommands = mapOf(
     chat,
     listRooms,
     listJoinedRooms,
-    deleteChat
+    deleteChat,
+    purgeDevices
 )
 
 val chatCommands = mainCommands + mapOf(

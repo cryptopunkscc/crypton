@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Connection
+import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
@@ -11,6 +12,7 @@ import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.ChatNet
 import cc.cryptopunks.crypton.smack.net.message.MessageNet
+import cc.cryptopunks.crypton.smack.net.omemo.DeviceNet
 import cc.cryptopunks.crypton.smack.net.omemo.InitOmemo
 import cc.cryptopunks.crypton.smack.net.roster.rosterEventFlow
 import cc.cryptopunks.crypton.smack.util.SmackPresence
@@ -41,11 +43,17 @@ internal fun createConnection(
 internal class ConnectionModule(
     scope: CoroutineScope,
     private val account: Address,
-    private val smack: SmackCore
+    private val smack: SmackCore,
+    private val deviceNet: DeviceNet = DeviceNet(smack)
 ) : SmackCore by smack,
     Connection,
     Message.Net by MessageNet(smack),
-    Chat.Net by ChatNet(smack, account) {
+    Chat.Net by ChatNet(smack, account),
+    Device.Net by deviceNet {
+
+    init {
+        omemoManager.setTrustCallback(deviceNet)
+    }
 
     private val initOmemo by lazy { InitOmemo(omemoManager) }
 
