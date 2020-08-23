@@ -34,6 +34,10 @@ class SmackConnectionFactory(
         scope = config.scope,
         account = config.account,
         configuration = connectionConfig
+            .apply {
+                if (config.resource.isNotEmpty())
+                    setResource(config.resource)
+            }
             .setUsernameAndPassword(
                 config.account.local,
                 String(config.password.byteArray)

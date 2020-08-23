@@ -27,6 +27,7 @@ interface SessionRepo {
     val chatRepo: Chat.Repo
     val messageRepo: Message.Repo
     val rosterRepo: Roster.Repo
+    val deviceRepo: Device.Repo
 
     interface Factory : (Address) -> SessionRepo
 }

@@ -14,7 +14,8 @@ class MockConnection(
     Presence.Net by MockPresenceNet(state),
     Message.Net by MockMessageNet(state),
     Chat.Net by MockChatNet(state),
-    Roster.Net by MockRosterNet(state) {
+    Roster.Net by MockRosterNet(state),
+    Device.Net by MockDeviceNet() {
 
     private val log = typedLog()
 

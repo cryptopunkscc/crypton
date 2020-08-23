@@ -32,6 +32,7 @@ object Exec {
 
     object Connect : Account.Action
     object Disconnect : Account.Action
+    object PurgeDeviceList : Account.Action
     data class EnableAccount(val condition: Boolean) : Account.Action
     data class RemoveAccount(val deviceOnly: Boolean = true) : Account.Action
     data class MessagesRead(val messages: List<Message>) : Account.Action

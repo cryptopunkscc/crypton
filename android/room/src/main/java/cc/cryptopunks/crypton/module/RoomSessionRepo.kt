@@ -2,10 +2,17 @@ package cc.cryptopunks.crypton.module
 
 import android.content.Context
 import androidx.room.Room
-import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Device
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Repo
+import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.SessionRepo
 import cc.cryptopunks.crypton.data.Database
 import cc.cryptopunks.crypton.migrations
 import cc.cryptopunks.crypton.repo.ChatRepo
+import cc.cryptopunks.crypton.repo.DeviceRepo
 import cc.cryptopunks.crypton.repo.MessageRepo
 import cc.cryptopunks.crypton.repo.RosterRepo
 
@@ -47,6 +54,11 @@ class RoomSessionRepo(
     override val rosterRepo: Roster.Repo =
         RosterRepo(
             dao = database.userDao
+        )
+
+    override val deviceRepo: Device.Repo =
+        DeviceRepo(
+            dao = database.fingerprintDao
         )
 
     class Factory(
