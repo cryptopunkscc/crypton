@@ -1,12 +1,13 @@
-name: Release lastest
+name: Release tagged
 
 on:
   push:
-    branches: [ master ]
+    tags:
+      - 'v*'
 
 jobs:
-  snapshot-release:
-    name: Snapshot Release
+  tagged-release:
+    name: Tagged Release
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -21,7 +22,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    - name: Build crypton apk
+    - name: Build android client apk
       uses: eskatos/gradle-command-action@v1.3.2
       with:
         arguments: "clean android:app:assembleRemoteRelease"
@@ -30,8 +31,6 @@ jobs:
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
+        prerelease: false
         files: |
           android/app/build/outputs/apk/**/*.apk

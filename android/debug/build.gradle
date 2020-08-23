@@ -27,7 +27,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber_version"
 
     debugApi "io.palaima.debugdrawer:debugdrawer:0.8.0"
-    releaseApi "io.palaima.debugdrawer:debugdrawer-no-op:0.8.0"
+    releaseApi "io.palaima.debugdrawer:debugdrawer:0.8.0"
+//    releaseApi "io.palaima.debugdrawer:debugdrawer-no-op:0.8.0"
     implementation 'io.palaima.debugdrawer:debugdrawer-base:0.8.0'
     implementation 'io.palaima.debugdrawer:debugdrawer-commons:0.8.0'
     implementation 'io.palaima.debugdrawer:debugdrawer-actions:0.8.0'

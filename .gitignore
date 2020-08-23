@@ -1,6 +1,8 @@
 *.iml
 .gradle
 /local.properties
+signing.properties*
+!signing.properties.gpg
 /.idea/
 .DS_Store
 build

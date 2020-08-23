@@ -13,11 +13,25 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         archivesBaseName = "crypton-v$versionName-$versionCode"
     }
+    signingConfigs {
+        release {
+            def signingProperties = new Properties()
+            signingProperties.load(new FileInputStream(rootProject.file("signing.properties")))
+            storeFile file(signingProperties['storeFile'])
+            storePassword signingProperties['storePassword']
+            keyAlias signingProperties['keyAlias']
+            keyPassword signingProperties['keyPassword']
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
         }
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
