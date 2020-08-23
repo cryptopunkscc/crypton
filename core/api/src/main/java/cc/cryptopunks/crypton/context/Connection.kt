@@ -7,7 +7,8 @@ interface Connection : Net {
     data class Config(
         val scope: CoroutineScope,
         val account: Address = Address.Empty,
-        val password: Password = Password.Empty
+        val password: Password = Password.Empty,
+        val resource: String = ""
     )
 
     interface Factory : (Config) -> Connection {

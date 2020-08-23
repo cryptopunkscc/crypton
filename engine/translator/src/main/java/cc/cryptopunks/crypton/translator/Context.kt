@@ -1,13 +1,14 @@
 package cc.cryptopunks.crypton.translator
 
-typealias TranslationContext = Context
-
 typealias Commands = Map<Any, Map<String, Any>>
 
 fun commands(vararg commands: Pair<Any, Map<String, Any>>): Commands = mapOf(*commands)
 
+typealias TranslationContext = Context
+
 data class Context(
     val commands: Commands = emptyMap(),
+    val scope: List<String> = emptyList(),
     val route: Any = Unit,
     val isRoute: Any.() -> Boolean = { this is Unit },
     val empty: Any.() -> Any = { this },

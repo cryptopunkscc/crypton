@@ -23,7 +23,7 @@ class ReuseConnectionTest {
      * @see [ReuseConnectionTest_test1.log]
      * @see <a href="https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-invalid-from">invalid-from</a>
      */
-    @Test
+    @Test(expected = AssertionError::class)
     fun clientWithoutCustomResource() {
         createXmppConnection {
             setUsernameAndPassword(test1, password)
@@ -65,7 +65,7 @@ class ReuseConnectionTest {
      * @see [ReuseConnectionTest_test2.log]
      * @see <a href="https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-conflict">conflict</a>
      */
-    @Test
+    @Test(expected = AssertionError::class)
     fun clientWithCustomResource() {
         createXmppConnection {
             setUsernameAndPassword(test1, password)

@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    api project(':android:debug')
     api project(':android:intent')
     api project(':android:account')
     api project(':android:roster')

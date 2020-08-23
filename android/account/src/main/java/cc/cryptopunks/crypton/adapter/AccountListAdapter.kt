@@ -11,13 +11,12 @@ import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.fragment.showRemoveAccountFragment
 import cc.cryptopunks.crypton.util.ext.inflate
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.account_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
@@ -31,17 +30,15 @@ internal class AccountListAdapter(
     CoroutineScope,
     Connectable {
 
-    private val log = typedLog()
-
     private var items = listOf<Address>()
 
     private val channel = BroadcastChannel<Any>(1)
 
     override fun Connector.connect(): Job = launch {
         launch {
-            input.filterIsInstance<Account.Service.Accounts>().collect {
-                log.d("items $it")
-                items = it.list
+            input.filterIsInstance<Account.Many>().collect { (accounts) ->
+                log.d { "items $accounts" }
+                items = accounts.toList()
                 notifyDataSetChanged()
             }
         }
@@ -71,10 +68,7 @@ internal class AccountListAdapter(
                 fragmentManager.showRemoveAccountFragment(address)
             }
             connectionSwitch.setOnCheckedChangeListener { _, _ ->
-                launch {
-                    delay(400)
-//                    channel.send(Account.Service.Add())
-                }
+                // TODO
             }
         }
 

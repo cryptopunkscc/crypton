@@ -3,16 +3,15 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import cc.cryptopunks.crypton.activity.MainActivity
-import cc.cryptopunks.crypton.backend.internal.mainHandlers
-import cc.cryptopunks.crypton.context.AppModule
-import cc.cryptopunks.crypton.context.Engine
+import cc.cryptopunks.crypton.context.RootModule
+import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Notification
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.debug.drawer.initAppDebug
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.module.RoomRepo
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.selector.newSessionsFlow
-import cc.cryptopunks.crypton.service.chatHandlers
+import cc.cryptopunks.crypton.service.cryptonHandlers
 import cc.cryptopunks.crypton.service.initExceptionService
 import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
@@ -24,16 +23,17 @@ import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.initAndroidLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class App :
     Application(),
-    Engine {
+    Core {
 
     private val mainActivityClass = MainActivity::class
 
     override val scope by lazy {
-        AppModule(
+        RootModule(
             mainClass = mainActivityClass,
             mainExecutor = MainExecutor(Dispatchers.Main.asExecutor()),
             ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
@@ -49,8 +49,7 @@ class App :
                 )
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
-            mainHandlers = mainHandlers,
-            chatHandlers = chatHandlers,
+            handlers = cryptonHandlers(),
             navigateChatId = R.id.chatFragment
         )
     }
@@ -59,21 +58,17 @@ class App :
         super.onCreate()
         initExceptionService()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        initAndroidLog()
+        scope.initAndroidLog()
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
         scope.apply {
             startAppService()
-            launch { newSessionsFlow().collect(handleNewSession()) }
+            launch { newSessionsFlow().collect { currentAccount = it.address } }
         }
     }
 
     private companion object {
         private const val OMEMO_STORE_NAME = "omemo"
     }
-}
-
-fun App.handleNewSession() = scope.handle<SessionScope> {
-    currentAccount = address
 }

@@ -19,3 +19,10 @@ sudo /opt/ejabberd-20.04/bin/ejabberdctl register admin localhost admin
 ```
 http://127.0.0.1:5280/admin/
 ```
+
+## Bash
+```
+sudo systemctl enable --now ejabberd
+sudo systemctl restart ejabberd
+sudo systemctl status ejabberd
+```

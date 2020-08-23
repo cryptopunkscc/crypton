@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.sys.network
 
 import android.net.ConnectivityManager
 import cc.cryptopunks.crypton.context.Network
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -30,17 +30,17 @@ internal class NetworkCallbacks(
     }
 
     override fun onAvailable(network: android.net.Network) {
-        log.d("available: $network")
+        log.d { "available: $network" }
         send(Network.Status.Available, network)
     }
 
     override fun onLost(network: android.net.Network) {
-        log.d("lost: $network")
+        log.d { "lost: $network" }
         send(Network.Status.Lost, network)
     }
 
     override fun onUnavailable() {
-        log.d("unavailable")
+        log.d { "unavailable" }
         send(Network.Status.Unavailable)
     }
 

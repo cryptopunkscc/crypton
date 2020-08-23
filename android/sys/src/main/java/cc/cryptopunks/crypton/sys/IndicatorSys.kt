@@ -10,6 +10,8 @@ internal class IndicatorSys(
     private val context: Context
 ) : Indicator.Sys {
 
+    override val isIndicatorVisible: Boolean get() = IndicatorService.isRunning
+
     override fun showIndicator() {
         ContextCompat.startForegroundService(context, Intent(context, IndicatorService::class.java))
     }

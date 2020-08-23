@@ -12,8 +12,8 @@ crypton {
 
 buildscript {
     ext {
-        version_code = 10
-        version_name = "0.4"
+        version_code = 11
+        version_name = "0.5"
         min_sdk = 22
         target_sdk = 27 // TODO temporary downgraded required by Omemo
         compile_sdk = 29
@@ -62,7 +62,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
         // NOTE: Do not place your application dependencies here; they belong

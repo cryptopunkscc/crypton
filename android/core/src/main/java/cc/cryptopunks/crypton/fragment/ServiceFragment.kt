@@ -7,6 +7,8 @@ import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.createBinding
 import cc.cryptopunks.crypton.minus
 import cc.cryptopunks.crypton.remove
+import cc.cryptopunks.crypton.service
+import cc.cryptopunks.crypton.serviceName
 import kotlinx.coroutines.runBlocking
 
 abstract class ServiceFragment :
@@ -14,7 +16,7 @@ abstract class ServiceFragment :
     Connectable {
 
     protected val binding: Connectable.Binding by lazy {
-        runBlocking { appScope.connectableBindingsStore.createBinding() }
+        runBlocking { rootScope.connectableBindingsStore.createBinding() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +24,7 @@ abstract class ServiceFragment :
         binding + onCreateService()
     }
 
-    protected open fun onCreateService(): Connectable? = appScope
+    protected open fun onCreateService(): Connectable? = rootScope.service(serviceName)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,16 +34,6 @@ abstract class ServiceFragment :
     @Suppress("UNCHECKED_CAST")
     protected open fun onCreateActor(view: View): Actor? = view as? Actor
 
-    override fun onStart() {
-        super.onStart()
-        binding.send(Actor.Start)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.send(Actor.Stop)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding.minus<Actor>()
@@ -50,11 +42,11 @@ abstract class ServiceFragment :
     override fun onDestroy() {
         super.onDestroy()
         runBlocking {
-            binding.cancel(Destroy(log))
-            log.d("binding canceled")
-            appScope.connectableBindingsStore.remove(binding)
-            log.d("binding removed")
+            binding.cancel(Destroy(this@ServiceFragment))
+            log.d { "binding canceled" }
+            rootScope.connectableBindingsStore.remove(binding)
+            log.d { "binding removed" }
         }
-        log.d("destroyed")
+        log.d { "destroyed" }
     }
 }

@@ -4,18 +4,27 @@ import android.view.Gravity
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import cc.cryptopunks.crypton.context.*
-import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.isFrom
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import cc.cryptopunks.crypton.view.MessageView
 import cc.cryptopunks.crypton.widget.GenericViewHolder
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -39,15 +48,15 @@ class MessageAdapter(
 
     private val dateFormat = SimpleDateFormat("d MMM • HH:mm", Locale.getDefault())
 
-    fun setMessages(messages: Chat.Service.PagedMessages?) {
-        log.d("submit messages $messages")
+    fun setMessages(messages: Chat.PagedMessages?) {
+        log.d { "submit messages $messages" }
         account = messages?.account ?: account
         submitList(messages?.list)
     }
 
     fun outputFlow() = flowOf(
         clicks.asFlow(),
-        read.asFlow().bufferedThrottle(200).map { Chat.Service.MessagesRead(it) }
+        read.asFlow().bufferedThrottle(200).map { Exec.MessagesRead(it) }
     ).flattenMerge()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -78,9 +87,11 @@ class MessageAdapter(
     }
 
     override fun getItemViewType(position: Int): Int =
-        if (getItem(position)?.from?.address == account)
-            Gravity.RIGHT else
-            Gravity.LEFT
+        when (getItem(position)?.isFrom(account)) {
+            null -> Gravity.CENTER_HORIZONTAL
+            true -> Gravity.RIGHT
+            false -> Gravity.LEFT
+        }
 
     private object Diff : DiffUtil.ItemCallback<Message>() {
         override fun areItemsTheSame(

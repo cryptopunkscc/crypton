@@ -13,18 +13,18 @@ class MockMessageNet(
 
     override suspend fun sendMessage(message: Message): Job {
         delay(500)
-        state { messageEvents.send(Message.Net.Incoming(message.copy(status = Message.Status.Sending))) }
+        state { messageEvents.send(Message.Incoming(message.copy(status = Message.Status.Sending))) }
         return Job().apply {
             delay(1000)
-            state { messageEvents.send(Message.Net.Incoming(message.copy(status = Message.Status.Sent))) }
+            state { messageEvents.send(Message.Incoming(message.copy(status = Message.Status.Sent))) }
             complete()
         }
     }
 
     override fun readArchived(
-        query: Message.Net.ReadArchived.Query
+        query: Message.Net.ReadQuery
     ): Flow<List<Message>> = state.defaults.messages.asFlow()
 
-    override fun incomingMessages(): Flow<Message.Net.Incoming> = state.messageEvents.consumeAsFlow()
+    override fun incomingMessages(): Flow<Message.Incoming> = state.messageEvents.consumeAsFlow()
 
 }

@@ -22,6 +22,11 @@ data class Message(
     val readAt: Long = 0,
     val encrypted: Boolean = true
 ) {
+
+    companion object {
+        val Empty = Message()
+    }
+
     enum class Status {
         None,
         Queued,
@@ -61,26 +66,19 @@ data class Message(
         gone
     }
 
-    object Service {
-        object FetchArchived
-        data class Save(val messages: List<Message>)
-    }
+    data class Incoming(val message: Message) : Api.Event
 
     interface Net {
         suspend fun sendMessage(message: Message): Job
         fun incomingMessages(): Flow<Incoming>
-        fun readArchived(query: ReadArchived.Query): Flow<List<Message>>
+        fun readArchived(query: ReadQuery): Flow<List<Message>>
 
-        object ReadArchived {
-            data class Query(
-                val since: Long? = null,
-                val afterUid: String? = null,
-                val until: Long = System.currentTimeMillis(),
-                val chat: Chat? = null
-            )
-        }
-
-        data class Incoming(val message: Message) : Api.Event
+        data class ReadQuery(
+            val since: Long? = null,
+            val afterUid: String? = null,
+            val until: Long = System.currentTimeMillis(),
+            val chat: Chat? = null
+        )
     }
 
     interface Repo {
@@ -114,17 +112,25 @@ data class Message(
 
     class Exception(message: String? = null) : kotlin.Exception(message)
 
-    companion object {
-        val Empty = Message()
-    }
-
     val isUnread get() = readAt == 0L && status == Status.Received
 
-    val author: String get() = when {
-        !chat.isConference -> from.address.local
-        from.address != chat -> from.address.local
-        else -> from.resource
+    val author: String
+        get() = when {
+            !chat.isConference -> from.address.local
+            from.address != chat -> from.address.local
+            else -> from.resource
+        }
+}
+
+val Message.sender
+    get() = when {
+        from.address.isConference -> from.resource
+        else -> from.address.local
     }
+
+fun Message.isFrom(address: Address) = when {
+    from.address.isConference -> from.resource == address.local
+    else -> from.address == address
 }
 
 fun Message.calculateId() = copy(

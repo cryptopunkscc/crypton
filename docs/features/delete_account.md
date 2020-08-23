@@ -18,7 +18,7 @@ User can remove account from local application database.
 
 ## Command
 ```kotlin
-Account.Service.Remove(address, deviceOnly = false)
+Account.Remove(address, deviceOnly = false)
 ```
 
 ## Requires

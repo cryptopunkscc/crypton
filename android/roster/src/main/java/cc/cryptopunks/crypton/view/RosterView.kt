@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cc.cryptopunks.crypton.adapter.RosterAdapter
 import cc.cryptopunks.crypton.roster.R
 import cc.cryptopunks.crypton.Connector
+import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.navigate.navigateChat
 import cc.cryptopunks.crypton.navigate.navigateCreateChat
-import cc.cryptopunks.crypton.util.typedLog
+import cc.cryptopunks.crypton.util.logger.typedLog
 import cc.cryptopunks.crypton.widget.ActorLayout
 import kotlinx.android.synthetic.main.roster.view.*
 import kotlinx.coroutines.Job
@@ -35,7 +37,7 @@ class RosterView(
     private val log = typedLog()
 
     init {
-        log.d("init")
+        log.builder.d { status = "Init" }
         View.inflate(context, R.layout.roster, this)
         rosterRecyclerView.apply {
             addItemDecoration(rosterItemDecorator)
@@ -48,16 +50,16 @@ class RosterView(
     }
 
     override fun Connector.connect(): Job = launch {
-        log.d("Connect")
+        log.d { "Connect" }
         launch {
-            input.filterIsInstance<Roster.Service.Items>().collect {
-                log.d("Received ${it.list.size} items")
+            input.filterIsInstance<Roster.Items>().collect {
+                log.d { "Received ${it.list.size} items" }
                 rosterAdapter.submitList(it.list)
             }
         }
         launch {
-            Roster.Service.GetItems.out()
-            Roster.Service.SubscribeItems(true).out()
+            Get.RosterItems.out()
+            Subscribe.RosterItems(true).out()
         }
         launch {
             rosterAdapter.clicks.asFlow().collect {

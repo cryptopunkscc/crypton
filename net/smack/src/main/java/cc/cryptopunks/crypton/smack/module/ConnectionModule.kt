@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Api
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Connection
+import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
@@ -11,13 +12,13 @@ import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.ChatNet
 import cc.cryptopunks.crypton.smack.net.message.MessageNet
+import cc.cryptopunks.crypton.smack.net.omemo.DeviceNet
 import cc.cryptopunks.crypton.smack.net.omemo.InitOmemo
 import cc.cryptopunks.crypton.smack.net.roster.rosterEventFlow
 import cc.cryptopunks.crypton.smack.util.SmackPresence
 import cc.cryptopunks.crypton.smack.util.address
 import cc.cryptopunks.crypton.smack.util.entityBareJid
 import cc.cryptopunks.crypton.smack.util.presence
-import cc.cryptopunks.crypton.util.typedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
@@ -42,13 +43,18 @@ internal fun createConnection(
 internal class ConnectionModule(
     scope: CoroutineScope,
     private val account: Address,
-    private val smack: SmackCore
+    private val smack: SmackCore,
+    private val deviceNet: DeviceNet = DeviceNet(smack)
 ) : SmackCore by smack,
     Connection,
     Message.Net by MessageNet(smack),
-    Chat.Net by ChatNet(smack, account) {
+    Chat.Net by ChatNet(smack, account),
+    Device.Net by deviceNet {
 
-    override val log = typedLog()
+    init {
+        omemoManager.setTrustCallback(deviceNet)
+    }
+
     private val initOmemo by lazy { InitOmemo(omemoManager) }
 
     private val netEvents by lazy {
@@ -143,18 +149,17 @@ internal class ConnectionModule(
                     Presence.Status.Subscribed,
                     Presence.Status.Subscribe -> to = presence.resource.address.entityBareJid()
                 }
-            }.also {
-                log.d("Sending $presence")
             }
         )
     }
 
     override fun iAmSubscribed(address: Address) = roster.iAmSubscribedTo(address.entityBareJid())
 
-    override fun subscribe(address: Address) = roster.createEntry(address.entityBareJid(), address.local, emptyArray())
+    override fun subscribe(address: Address) =
+        roster.createEntry(address.entityBareJid(), address.local, emptyArray())
 
 
-    override val rosterEvents: Flow<Roster.Net.Event> get() = roster.rosterEventFlow()
+    override val rosterEvents: Flow<Roster.Event> get() = roster.rosterEventFlow()
 
     override fun getCachedPresences(): List<Presence> = roster.run {
         entries.map { entry -> getPresence(entry.jid).presence(entry.jid) }

@@ -5,4 +5,5 @@
     <item name="navigateAccountList" type="id" />
     <item name="navigateCreateChat" type="id" />
     <item name="navigateChat" type="id" />
+    <item name="navigateDebug" type="id" />
 </resources>

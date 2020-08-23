@@ -3,12 +3,14 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.Subscribe
+import cc.cryptopunks.crypton.context.inContext
 import cc.cryptopunks.crypton.util.all
 import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
@@ -25,14 +27,14 @@ suspend fun ClientDsl.tryRemoveAccount(
     address: Address,
     password: String
 ) {
-    send(Account.Service.Add(Account(address, Password(password))))
+    send(Exec.Login(Account(address, Password(password))))
     expect(
-        Account.Service.Connecting(address),
-        should<Account.Service.Status> {
+        Account.Connecting(address),
+        should<Account.Status> {
             when (this) {
-                is Account.Service.Error -> true
-                is Account.Service.Connected -> true.also {
-                    send(Account.Service.Remove(address, deviceOnly = false))
+                is Account.Error -> true
+                is Account.Connected -> true.also {
+                    send(Exec.RemoveAccount(deviceOnly = false).inContext(address))
                 }
                 else -> false
             }
@@ -44,7 +46,7 @@ suspend fun ClientDsl.tryRemoveAccount(
 suspend fun ClientDsl.removeAccounts(vararg addresses: Address) {
     send(
         *addresses.map { address ->
-            Account.Service.Remove(address, deviceOnly = false)
+            Exec.RemoveAccount(deviceOnly = false).inContext(address)
         }.toTypedArray()
     )
     flush()
@@ -55,10 +57,10 @@ suspend fun ClientDsl.register(
     address: Address,
     password: String
 ) {
-    send(Account.Service.Register(Account(address, Password(password))))
+    send(Exec.Register(Account(address, Password(password))))
     expect(
-        Account.Service.Connecting(address),
-        Account.Service.Connected(address)
+        Account.Connecting(address),
+        Account.Connected(address)
     )
 }
 
@@ -67,8 +69,8 @@ suspend fun ClientDsl.createChat(
     chat: Address,
     users: List<Address> = listOf(chat)
 ) {
-    send(Chat.Service.Create(Chat(chat, account, users)))
-    expect(Chat.Service.ChatCreated(chat = chat))
+    send(Exec.CreateChat(Chat(chat, account, users)).inContext(account))
+    expect(Account.ChatCreated(chat = chat))
 }
 
 suspend fun ClientDsl.openChat(
@@ -76,8 +78,7 @@ suspend fun ClientDsl.openChat(
     chat: Address
 ) {
     send(
-        Route.Chat(account.id, chat.id),
-        Chat.Service.SubscribeLastMessage(true)
+        Subscribe.LastMessage(true).inContext(account, chat)
     )
     flush()
 }
@@ -100,10 +101,10 @@ suspend fun ClientDsl.sendMessage(
     }
     openSubscription()
     send(
-        Chat.Service.EnqueueMessage(message)
+        Exec.EnqueueMessage(message).inContext(account, chat)
     )
 
-    waitFor<Chat.Service.Messages> {
+    waitFor<Chat.Messages> {
         list.any { it.status == Message.Status.Sent }
     }.list.run {
         forEach { println(it) }
@@ -119,7 +120,7 @@ suspend fun ClientDsl.expectReceived(
     chat: Address
 ) {
     expect(
-        should<Chat.Service.Messages> {
+        should<Chat.Messages> {
             require(this.account == account) { this.account }
             require(list.size == 1) { list }
             list[0].run {
@@ -141,8 +142,8 @@ suspend fun ClientDsl.acceptSubscription(
     account: Address,
     subscriber: Address
 ) {
-    send(Roster.Service.SubscribeItems(true, account))
-    waitFor<Roster.Service.Items> {
+    send(Subscribe.RosterItems(true, account))
+    waitFor<Roster.Items> {
         list.any {
             all(
                 it.account == account,
@@ -151,13 +152,13 @@ suspend fun ClientDsl.acceptSubscription(
             )
         }
     }
-    send(Roster.Service.Join(account, subscriber))
+    send(Exec.JoinChat.inContext(account, subscriber))
 }
 
 suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, chat: Address) {
     expect(
-        should<Roster.Service.Items> {
-            log.d("Expect RosterItemMessage: $text, $account, $chat")
+        should<Roster.Items> {
+//            log.d { "Expect RosterItemMessage: $text, $account, $chat" }
             list.firstOrNull { it.account == account && it.chatAddress == chat }?.run {
                 require(title == chat.id) { title }
                 require(presence == Presence.Status.Available) { presence }
@@ -181,7 +182,7 @@ But was:
             true
         }
     ) { input ->
-        (input as? Roster.Service.Items)?.run {
+        (input as? Roster.Items)?.run {
             list.any { it.account == account }
         } ?: false
     }

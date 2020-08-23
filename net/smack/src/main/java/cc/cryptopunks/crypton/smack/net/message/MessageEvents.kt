@@ -48,7 +48,7 @@ internal fun SmackCore.createMessageEventBroadcast(): BroadcastChannel<CryptonMe
 
 private fun SendChannel<CryptonMessage>.stanzaListener(connection: XMPPConnection) =
     StanzaListener { stanza ->
-        println("incoming stanza")
+//        println("incoming stanza")
         when {
             stanza.hasOmemoExtension -> Unit
             stanza is SmackMessage -> when {
@@ -63,7 +63,7 @@ private fun SendChannel<CryptonMessage>.stanzaListener(connection: XMPPConnectio
                 ) -> stanza
 
                 else -> {
-                    println("Unknown stanza received")
+//                    println("Unknown stanza received") TODO
                     null
                 }
             }?.run {
@@ -75,13 +75,14 @@ private fun SendChannel<CryptonMessage>.stanzaListener(connection: XMPPConnectio
                     stanza.body.isNullOrEmpty() -> null
                     else -> cryptonMessage(Message.Status.Received)
                 }?.also {
-                    println("offering message $it")
+//                    println("offering message $it") TODO
                     offer(it.copy(encrypted = false))
-                } ?: println("Unknown stanza with empty body received")
+                }
+//                    ?: println("Unknown stanza with empty body received") TODO
             }
 
             else -> {
-                println("Unknown stanza received")
+//                println("Unknown stanza received") TODO
             }
         }
     }
@@ -95,17 +96,21 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         stanza: Stanza,
         decryptedMessage: OmemoMessage.Received
     ) {
-        println("Omemo omemo stanza received")
+//        println("Omemo omemo stanza received")
         when {
-            decryptedMessage.body.isNullOrBlank() -> println("Null or blank body")
+            decryptedMessage.body.isNullOrBlank() -> {
+//                println("Null or blank body")
+            }
             stanza is SmackMessage -> stanza.cryptonMessage(
                 status = Message.Status.Received,
                 decrypted = decryptedMessage
             ).also {
-                println("offering omemo message $it")
+//                println("offering omemo message $it")
                 offer(it)
             }
-            else -> println("Unknown omemo stanza received")
+            else -> {
+//                println("Unknown omemo stanza received")
+            }
         }
     }
 
@@ -115,12 +120,12 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         wrappingMessage: SmackMessage,
         decryptedCarbonCopy: OmemoMessage.Received
     ) {
-        println("Omemo omemo carbon copy received")
+//        println("Omemo omemo carbon copy received")
         carbonCopy.cryptonMessage(
             status = Message.Status.Sent,
             decrypted = decryptedCarbonCopy
         ).also {
-            println("offering carbon copy $it")
+//            println("offering carbon copy $it")
             offer(it)
         }
     }
@@ -130,16 +135,18 @@ private fun SendChannel<CryptonMessage>.omemoListener() = object :
         stanza: Stanza,
         decryptedOmemoMessage: OmemoMessage.Received
     ) {
-        println("Omemo muc stanza received")
+//        println("Omemo muc stanza received")
         when (stanza) {
             is SmackMessage -> stanza.cryptonMessage(
                 status = Message.Status.Received,
                 decrypted = decryptedOmemoMessage
             ).also {
-                println("offering omemo muc message $it")
+//                println("offering omemo muc message $it")
                 offer(it)
             }
-            else -> println("Unknown muc omemo stanza received")
+            else -> {
+//                println("Unknown muc omemo stanza received")
+            }
         }
     }
 }

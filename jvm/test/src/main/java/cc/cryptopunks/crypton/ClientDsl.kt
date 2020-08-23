@@ -1,6 +1,8 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.util.TypedLog
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.util.logger.coroutineLog
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -19,76 +21,22 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert
 
-class TrafficError(
-    message: String?,
-    cause: Throwable
-) : Exception(message, cause)
-
-class ExpectedTraffic(
-    private val log: TypedLog
-) {
-    private val expected = mutableListOf<(Any) -> Any?>()
-    val traffic = mutableListOf<Any>()
-
-    fun <T> next(check: T.() -> Unit) {
-        val exception = Exception()
-        expected.add {
-            try {
-                val t = it as T
-                check(t)
-            } catch (e: Throwable) {
-                TrafficError(
-                    message = e.message,
-                    cause = exception
-                )
-            }
-        }
-    }
-
-    fun <T> lazy(check: T.() -> Unit) {
-        expected.add {
-            try {
-                check(it as T)
-                true
-            } catch (e: Throwable) {
-                log.d("WARNING: lazy check skipping $it")
-                false
-            }
-        }
-    }
-
-    fun check(value: Any) = expected.run {
-        traffic.add(value)
-        firstOrNull()?.let { check ->
-            when (val result = check(value)) {
-                null -> Unit
-                is Unit -> removeAt(0)
-                is Throwable -> throw result.also {
-                    it.printStackTrace()
-                }
-                is Boolean -> if (result) removeAt(0) else Unit
-                else -> throw Error("unknown result $result")
-            }
-        }
-    }
-}
-
-class ClientDsl(
-    private val connector: Connector,
-    val log: TypedLog
+class ClientDsl internal constructor(
+    name: String,
+    private val connector: Connector
 ) : CoroutineScope {
+    override val coroutineContext = Job() + newSingleThreadContext(javaClass.simpleName) + CoroutineLog.Label(name)
     private val input = BroadcastChannel<Any>(Channel.BUFFERED)
     private var subscription: ReceiveChannel<Any> = Channel()
     private val actions = Channel<() -> Job>(Channel.BUFFERED)
+    val log = coroutineContext.log
     val expected = ExpectedTraffic(log)
-    override val coroutineContext = Job() + newSingleThreadContext(log.label)
 
     init {
         launch {
             connector.input.onCompletion {
-                log.d("Close client $it")
+                log.d { "Close client $it" }
             }.collect {
-                log.d("Received $it")
                 expected.check(it)
                 input.send(it)
             }
@@ -96,9 +44,9 @@ class ClientDsl(
     }
 
     fun printTraffic() {
-        log.d("TRAFFIC")
+        log.d { "TRAFFIC" }
         expected.traffic.forEach {
-            log.d(it.toString())
+            log.d { (it.toString()) }
         }
     }
 

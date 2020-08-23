@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.feature.testDirectMessaging
 import cc.cryptopunks.crypton.feature.testMultiUserChat
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -9,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 
 class FeatureTest {
@@ -19,6 +21,7 @@ class FeatureTest {
     }
 
     @Test
+    @Ignore("Feature is not finished")
     fun `as a user I can use multi user chat`() = runBlocking {
         testMultiUserChat()
     }
@@ -26,7 +29,7 @@ class FeatureTest {
     @After
     fun tearDown() = runBlocking {
         section("BEGIN CLEANING AFTER TEST")
-        connectClient {
+        connectDslClient {
             removeAccounts(
                 address1,
                 address2,
@@ -44,19 +47,19 @@ class FeatureTest {
         @JvmStatic
         fun beforeAll() {
             section("STARTING SERVER")
-            runBlocking {
+            runBlocking(CoroutineLog.Label("BeforeClass")) {
                 TestServer().apply {
                     start()
                     section("BEGIN CLEANING BEFORE TESTS")
                     listOf(
-                        launch { connectClient { tryRemoveAccount(address1, pass) } },
-                        launch { connectClient { tryRemoveAccount(address2, pass) } },
-                        launch { connectClient { tryRemoveAccount(address3, pass) } }
+                        launch { connectDslClient { tryRemoveAccount(address1, pass) } },
+                        launch { connectDslClient { tryRemoveAccount(address2, pass) } },
+                        launch { connectDslClient { tryRemoveAccount(address3, pass) } }
                     ).joinAll()
                     section("END CLEANING BEFORE TESTS")
                     stop()
                 }
-                delay(1000)
+                delay(3000)
                 server.start()
             }
         }

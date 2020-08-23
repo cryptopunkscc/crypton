@@ -34,7 +34,7 @@ abstract class BaseFragment : LoggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = layoutRes.takeIf { it > 0 }?.let {
-        log.d("onCreateView")
+        log.d { "onCreateView" }
         inflater.inflate(it, container, false)
     }
 
@@ -61,7 +61,7 @@ abstract class BaseFragment : LoggerFragment() {
 
 val Fragment.baseActivity get() = context as BaseActivity
 
-val Fragment.appScope get() = baseActivity.appScope
+val Fragment.rootScope get() = baseActivity.rootScope
 
 private fun Activity.hideKeyboard() = window?.decorView?.windowToken.let { token ->
     getSystemService(Activity.INPUT_METHOD_SERVICE).let {

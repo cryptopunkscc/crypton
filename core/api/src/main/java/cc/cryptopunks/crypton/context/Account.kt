@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Subscription
+import cc.cryptopunks.crypton.Scoped
 import kotlinx.coroutines.flow.Flow
-import java.util.concurrent.CancellationException
 
 data class Account(
     val address: Address = Address.Empty,
@@ -10,6 +9,8 @@ data class Account(
     val enabled: Boolean = true
 ) {
     val domain get() = address.domain
+
+    interface Action : Scoped<SessionScope>
 
     companion object {
         val Empty = Account()
@@ -26,33 +27,14 @@ data class Account(
 
     data class Authenticated(val resumed: Boolean) : Event
 
-    interface Service {
+    data class Connecting(val account: Address) : Status
+    data class Connected(val account: Address) : Status
+    data class Error(val account: Address, val message: String? = null) : Status
+    data class Many(val accounts: Set<Address>)
+    data class HasAccounts(val condition: Boolean)
+    data class ChatCreated(val chat: Address)
 
-        // input
-        data class Set(val field: Field, val text: CharSequence)
-
-        data class Register(val account: Account? = null) : Connect
-        data class Add(val account: Account? = null) : Connect
-        data class Login(val address: Address) : Connect
-        data class Logout(val address: Address) : CancellationException()
-        data class Remove(val address: Address, val deviceOnly: Boolean = true) : CancellationException()
-        data class SubscribeAccountList(override val enable: Boolean) : Subscription
-        object GetAccountList
-        data class Enable(val address: Address, val condition: Boolean)
-
-        interface Connect
-
-        // output
-        data class Connecting(override val address: Address) : Status
-        data class Connected(override val address: Address) : Status
-        data class Error(override val address: Address, val message: String? = null) : Status
-        data class Accounts(val list: List<Address>)
-        data class HasAccounts(val condition: Boolean)
-
-        interface Status {
-            val address: Address
-        }
-    }
+    interface Status
 
     interface Net {
         fun createAccount()

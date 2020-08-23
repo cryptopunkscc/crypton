@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.iterator
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.synthetic.main.chat_message_item.view.*
@@ -75,8 +75,8 @@ class MessageView(
 
     private val onMenuItemCharSequence = MenuItem.OnMenuItemClickListener { item ->
         when (item.itemId) {
-            R.id.copyToClipboard -> Chat.Service.Copy(message!!)
-            R.id.delete -> Chat.Service.Delete(message!!)
+            R.id.copyToClipboard -> Exec.Copy(message!!)
+            R.id.delete -> Exec.DeleteMessage(message!!)
             else -> null
         }?.let {
             optionClicks.offer(it)

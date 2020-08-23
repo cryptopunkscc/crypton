@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -25,19 +28,16 @@ dependencies {
 
     debugApi "io.palaima.debugdrawer:debugdrawer:0.8.0"
     releaseApi "io.palaima.debugdrawer:debugdrawer-no-op:0.8.0"
-
     implementation 'io.palaima.debugdrawer:debugdrawer-base:0.8.0'
-
     implementation 'io.palaima.debugdrawer:debugdrawer-commons:0.8.0'
-
     implementation 'io.palaima.debugdrawer:debugdrawer-actions:0.8.0'
-
-    implementation 'com.jakewharton.scalpel:scalpel:1.1.2'
-    implementation 'io.palaima.debugdrawer:debugdrawer-scalpel:0.8.0'
-
     implementation 'io.palaima.debugdrawer:debugdrawer-timber:0.8.0'
-
     implementation 'io.palaima.debugdrawer:debugdrawer-fps:0.8.0'
+    implementation 'io.palaima.debugdrawer:debugdrawer-scalpel:0.8.0'
+    implementation 'com.jakewharton.scalpel:scalpel:1.1.2'
 
     api project(':core:api')
+    api project(':core:cli')
+    api project(':android:core')
+    api project(':android:widget')
 }

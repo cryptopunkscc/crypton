@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.adapter
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.view.RosterItemView
 import kotlinx.coroutines.CoroutineScope
@@ -18,11 +19,11 @@ class RosterAdapter(
     RecyclerView.Adapter<RosterAdapter.ViewHolder>(),
     CoroutineScope {
 
-    val clicks = BroadcastChannel<Roster.Service.Select>(Channel.BUFFERED)
+    val clicks = BroadcastChannel<Exec.Select>(Channel.BUFFERED)
 
     private val onClickListener = View.OnClickListener {
         (it as? RosterItemView)?.item?.let { item ->
-            clicks.offer(Roster.Service.Select(item))
+            clicks.offer(Exec.Select(item))
         }
     }
 

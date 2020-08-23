@@ -34,6 +34,10 @@ class SmackConnectionFactory(
         scope = config.scope,
         account = config.account,
         configuration = connectionConfig
+            .apply {
+                if (config.resource.isNotEmpty())
+                    setResource(config.resource)
+            }
             .setUsernameAndPassword(
                 config.account.local,
                 String(config.password.byteArray)
@@ -44,7 +48,7 @@ class SmackConnectionFactory(
 
     private val connectionConfig
         get() = XMPPTCPConnectionConfiguration.builder()
-            .enableDefaultDebugger()
+//            .enableDefaultDebugger()
 //            .setResource(factoryConfig.resource)
             .setHostAddress(factoryConfig.hostAddress?.let(InetAddress::getByName))
             .setSecurityMode(ConnectionConfiguration.SecurityMode.valueOf(factoryConfig.securityMode.name))

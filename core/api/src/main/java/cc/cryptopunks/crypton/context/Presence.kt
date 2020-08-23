@@ -6,14 +6,12 @@ data class Presence(
     val resource: Resource,
     val status: Status
 ) {
-    interface Net {
-        fun sendPresence(presence: Presence)
-        fun getCachedPresences(): List<Presence>
-        fun subscribe(address: Address)
-        fun iAmSubscribed(address: Address): Boolean
+    companion object {
+        val Empty = Presence(
+            resource = Resource.Empty,
+            status = Status.Unavailable
+        )
     }
-
-    class Store : OpenStore<Map<Address, Presence>>(emptyMap())
 
     enum class Status {
         /** The user is available to receive messages (default). */
@@ -41,10 +39,12 @@ data class Presence(
         Probe
     }
 
-    companion object {
-        val Empty = Presence(
-            resource = Resource.Empty,
-            status = Status.Unavailable
-        )
+    class Store : OpenStore<Map<Address, Presence>>(emptyMap())
+
+    interface Net {
+        fun sendPresence(presence: Presence)
+        fun getCachedPresences(): List<Presence>
+        fun subscribe(address: Address)
+        fun iAmSubscribed(address: Address): Boolean
     }
 }

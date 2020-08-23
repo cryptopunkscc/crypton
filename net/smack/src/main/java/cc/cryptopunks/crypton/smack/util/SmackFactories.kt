@@ -1,11 +1,14 @@
 package cc.cryptopunks.crypton.smack.util
 
 import cc.cryptopunks.crypton.context.*
+import org.jivesoftware.smackx.delay.packet.DelayInformation
 import org.jivesoftware.smack.packet.Message as SmackMessage
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.omemo.OmemoMessage
 import org.jivesoftware.smackx.sid.element.StanzaIdElement
+import org.jxmpp.jid.EntityBareJid
+import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 
 internal fun Forwarded.cryptonMessage(): CryptonMessage =
@@ -14,7 +17,7 @@ internal fun Forwarded.cryptonMessage(): CryptonMessage =
 internal fun SmackMessage.cryptonMessage(
     status: Message.Status = Message.Status.None,
     id: String = stanzaElementId(),
-    timestamp: Long = System.currentTimeMillis(),
+    timestamp: Long = timestamp() ?: System.currentTimeMillis(),
     from: Resource = this.from.resource(),
     to: Resource = this.to.resource(),
     decrypted: OmemoMessage.Received? = null,
@@ -40,6 +43,11 @@ internal fun SmackMessage.cryptonMessage(
     encrypted = encrypted
 )
 
+internal fun SmackMessage.timestamp() = delay()?.stamp?.time
+
+internal fun SmackMessage.delay() =
+    extensions.filterIsInstance<DelayInformation>().firstOrNull()
+
 internal fun SmackMessage.stanzaElementId() =
     extensions.filterIsInstance<StanzaIdElement>().firstOrNull()?.id ?: stanzaId ?: ""
 
@@ -62,8 +70,8 @@ internal fun SmackPresence.presence(address: SmackJid?) = Presence(
     status = Presence.Status.values().first { it.name.toLowerCase() == type.name }
 )
 
-internal fun Address.entityBareJid() = JidCreate.entityBareFrom(toString())
-internal fun Resource.entityFullJid() = JidCreate.entityFullFrom(toString())
+internal fun Address.entityBareJid(): EntityBareJid = JidCreate.entityBareFrom(toString())
+internal fun Resource.entityFullJid(): EntityFullJid = JidCreate.entityFullFrom(toString())
 
 
 internal fun MultiUserChat.toChat(account: Address) = Chat(

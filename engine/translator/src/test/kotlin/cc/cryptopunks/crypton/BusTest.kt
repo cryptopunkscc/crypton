@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.translator.Context
 import cc.cryptopunks.crypton.translator.translateCli
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -20,6 +21,7 @@ class BusTest {
                 listOf("cmd0 0 1")
                     .asFlow()
                     .translateCli(Context(TEST_COMMANDS))
+                    .mapNotNull { it.result }
                     .toList()
             )
         }
@@ -43,6 +45,7 @@ class BusTest {
                             TEST_COMMANDS
                         )
                     )
+                    .mapNotNull { it.result }
                     .toList()
             )
         }
@@ -59,9 +62,10 @@ class BusTest {
                             TEST_COMMANDS
                         )
                     )
+                    .mapNotNull { it.result }
                     .onEach { println(it) }
                     .toList()
-                    .all { it is IllegalStateException }
+                    .all { it is Check.Suggest }
             )
         }
     }

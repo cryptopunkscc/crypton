@@ -16,6 +16,7 @@ import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.packet.MUCUser
 import org.jxmpp.jid.EntityJid
 import org.jxmpp.jid.parts.Resourcepart
+import java.util.Date
 
 internal class ChatNet(
     private val smackCore: SmackCore,
@@ -32,21 +33,21 @@ internal class ChatNet(
 
     override fun configureConference(chat: Address) = smackCore.configureConference(chat)
 
-    override fun inviteToConference(chat: Address, users: List<Address>) =
+    override fun inviteToConference(chat: Address, users: Set<Address>) =
         smackCore.inviteToConference(chat, users)
 
-    override fun conferenceInvitationsFlow(): Flow<Chat.Net.ConferenceInvitation> =
+    override fun conferenceInvitationsFlow(): Flow<Chat.Invitation> =
         smackCore.invitationsFlow()
 
     override fun joinConference(
         address: Address,
         nickname: String,
-        historySince: Int
+        historySince: Long
     ): Unit = mucManager.run {
         getMultiUserChat(address.entityBareJid()).run {
             join(
                 getEnterConfigurationBuilder(Resourcepart.from(nickname))
-                    .requestHistorySince(historySince)
+                    .requestHistorySince(Date(historySince) )
                     .build()
             )
         }
@@ -59,10 +60,10 @@ internal class ChatNet(
         mucManager.mucServiceDomains.map(mucManager::getHostedRooms).flatten()
             .map { it.jid.address() }.toSet()
 
-    override fun getChatInfo(address: Address): Chat.Service.Info {
+    override fun getChatInfo(address: Address): Chat.Info {
         val conference = mucManager.getMultiUserChat(address.entityBareJid())
         val info = mucManager.getRoomInfo(address.entityBareJid())
-        return Chat.Service.Info(
+        return Chat.Info(
             account = account,
             address = address,
             name = info.name,
@@ -81,9 +82,9 @@ internal class ChatNet(
 
 internal fun SmackCore.inviteToConference(
     chat: Address,
-    users: List<Address>
+    users: Set<Address>
 ) {
-    log.d("Muc inviting $users")
+    log.d { "Muc inviting $users" }
     mucManager.getMultiUserChat(chat.entityBareJid()).apply {
         users.forEach { user ->
             invite(user.entityBareJid(), "no reason")
@@ -94,7 +95,7 @@ internal fun SmackCore.inviteToConference(
 internal fun SmackCore.createOrJoinConference(
     chat: Chat
 ) = chat.also {
-    log.d("Creating conference $chat")
+    log.d { "Creating conference $chat" }
     mucManager.getMultiUserChat(chat.address.entityBareJid())
         .createOrJoin(Resourcepart.from(chat.account.local))
 }
@@ -102,7 +103,7 @@ internal fun SmackCore.createOrJoinConference(
 internal fun SmackCore.configureConference(
     chat: Address
 ) {
-    log.d("Configuring conference $chat")
+    log.d { "Configuring conference $chat" }
     mucManager.getMultiUserChat(chat.entityBareJid()).apply {
         sendConfigurationForm(
             configurationForm.createAnswerForm().apply {
@@ -116,7 +117,7 @@ internal fun SmackCore.configureConference(
 }
 
 internal fun SmackCore.invitationsFlow() =
-    callbackFlow<Chat.Net.ConferenceInvitation> {
+    callbackFlow<Chat.Invitation> {
         InvitationListener { conn: XMPPConnection,
                              room: MultiUserChat,
                              inviter: EntityJid,
@@ -125,13 +126,13 @@ internal fun SmackCore.invitationsFlow() =
                              message: Message,
                              invitation: MUCUser.Invite ->
             offer(
-                Chat.Net.ConferenceInvitation(
+                Chat.Invitation(
                     address = room.room.address(),
                     inviter = inviter.resource(),
                     password = password,
                     reason = reason
                 ).also {
-                    log.d("new invitation $it")
+                    log.d { "new invitation $it" }
                 }
             )
         }.let { listener ->

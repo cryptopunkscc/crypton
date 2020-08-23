@@ -23,7 +23,7 @@ Creating chat is required for sending direct messages
 
 ## Command
 ```kotlin
-Chat.Service.CrateChat
+Chat.CrateChat
 ```
 
 ## Requires
@@ -33,7 +33,7 @@ Session
 
 ## Returns
 ```kotlin
-Chat.Service.ChatCreated
+Account.ChatCreated
 ```
 
 ## Errors
