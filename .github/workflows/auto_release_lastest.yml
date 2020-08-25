@@ -1,8 +1,9 @@
 name: Release lastest
 
-on:
-  push:
-    branches: [ master ]
+on: [ workflow_dispatch ]
+#on:
+#  push:
+#    branches: [ master ]
 
 jobs:
   snapshot-release:
