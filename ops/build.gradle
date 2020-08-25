@@ -1,0 +1,17 @@
+apply plugin: 'application'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+mainClassName = "crypton.ops.MainKt"
+apply plugin: 'com.github.johnrengelman.shadow'
+shadowJar {
+    archiveName('ops.jar')
+    minimize()
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation project(':engine:translator')
+    testImplementation "junit:junit:$junit_version"
+}

@@ -10,9 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-    - name: Decrypt signing.properties
-      run: ./scripts/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+      with:
+        fetch-depth: 0
 
     - uses: actions/cache@v2
       with:
@@ -20,6 +19,18 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+
+    - name: Decrypt signing.properties
+      run: ./ops/bash/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+
+    - name: Update latest notes
+      run: |
+        git config user.name "yang"
+        git config user.email "cryptopunkyang@pm.me"
+        ./ops/bash/update-latest-notes.sh
+        git add latest_notes.md version.code version.hash version.name
+        git commit -m "Snapshot `cat ./version.code`"
+        git push
 
     - name: Build crypton apk
       uses: eskatos/gradle-command-action@v1.3.2

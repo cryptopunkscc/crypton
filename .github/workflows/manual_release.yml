@@ -1,9 +1,7 @@
-name: Release tagged
+name: Release
+#name: Release tagged
 
-on:
-  push:
-    tags:
-      - 'v*'
+on: [ workflow_dispatch ]
 
 jobs:
   tagged-release:
@@ -11,9 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-    - name: Decrypt signing.properties
-      run: ./scripts/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+      with:
+        fetch-depth: 0
 
     - uses: actions/cache@v2
       with:
@@ -21,6 +18,22 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+
+    - name: Decrypt signing.properties
+      run: ./ops/bash/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+
+    - name: Update release notes
+      run: |
+        git config user.name "yang"
+        git config user.email "cryptopunkyang@pm.me"
+        ./ops/bash/update-release-notes.sh
+        git add release_notes.md
+        VERSION_NAME=v$(cat ./version.name)
+        echo ::set-env name=VERSION_NAME::"$VERSION_NAME"
+        git commit -m "Release $VERSION_NAME"
+        git push
+        git tag "$VERSION_NAME"
+        git push origin "$VERSION_NAME"
 
     - name: Build android client apk
       uses: eskatos/gradle-command-action@v1.3.2
@@ -31,6 +44,7 @@ jobs:
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: ${{ env.VERSION_NAME }}}
         prerelease: false
         files: |
           android/app/build/outputs/apk/**/*.apk

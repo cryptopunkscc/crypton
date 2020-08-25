@@ -10,6 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Decrypt signing.properties
+      run: ./ops/bash/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+
     - uses: actions/cache@v2
       with:
         path: ~/.gradle/caches
@@ -20,7 +23,7 @@ jobs:
     - name: Gradle Command
       uses: eskatos/gradle-command-action@v1.3.2
       with:
-        arguments: "clean assembleDebug"
+        arguments: "clean assembleRemoteRelease"
 
     - name: Codecov
       uses: codecov/codecov-action@v1.0.7

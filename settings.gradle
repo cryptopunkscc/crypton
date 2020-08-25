@@ -7,7 +7,6 @@ include ':core:api',
         ':core:mock:net',
         ':core:mock:repo',
 
-
         ':engine:json',
         ':engine:log',
         ':engine:paging',
@@ -43,4 +42,6 @@ include ':core:api',
         ':android:roster',
         ':android:chat',
 
-        ':playground:smack'
+        ':playground:smack',
+
+        ':ops'

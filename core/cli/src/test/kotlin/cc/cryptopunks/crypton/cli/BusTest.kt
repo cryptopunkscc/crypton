@@ -1,8 +1,8 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.cli
 
+import cc.cryptopunks.crypton.TEST_COMMANDS
 import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.translator.Context
-import cc.cryptopunks.crypton.translator.translateCli
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
