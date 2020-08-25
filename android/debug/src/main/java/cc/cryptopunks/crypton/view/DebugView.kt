@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.cli.context
 import cc.cryptopunks.crypton.debug.R
 import cc.cryptopunks.crypton.translator.Check
 import cc.cryptopunks.crypton.translator.TranslationContext
-import cc.cryptopunks.crypton.translator.translateCli
+import cc.cryptopunks.crypton.cli.translateCli
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
