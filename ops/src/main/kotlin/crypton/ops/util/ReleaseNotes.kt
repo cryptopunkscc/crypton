@@ -22,7 +22,7 @@ fun Project.updateReleaseNotes(): File {
         removePrefix("## ").split("build").first().trim()
     }
     val latestTag = Git.latestTag().split("-").first()
-    if (latestTag != notesTag && versionHash != Git.headSha())
+    if (latestTag != notesTag)
 
         file(NEW_RELEASE_NOTES_MD).apply {
             if (!exists()) createNewFile()

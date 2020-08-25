@@ -1,0 +1,33 @@
+name: Prepare latest
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  prepare-snapshot:
+    name: Prepare Snapshot Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Decrypt signing.properties
+      run: ./ops/bash/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+
+    - name: Update latest notes
+      run: |
+        git config user.name "yang"
+        git config user.email "cryptopunkyang@pm.me"
+        ./ops/bash/update-latest-notes.sh
+        git add latest_notes.md version.code version.hash version.name
+        git commit -m "Snapshot `cat ./version.code`"
+        git push --force

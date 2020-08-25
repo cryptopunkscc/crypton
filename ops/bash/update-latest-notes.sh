@@ -9,4 +9,6 @@ git add "$dir/latest_notes.md" \
   "$dir/version.hash" \
   "$dir/version.name"
 
-#git commit -S -m "Update latest_notes.md"
+#git commit -S --amend --no-edit
+
+git commit -S -m "Update latest_notes.md"
