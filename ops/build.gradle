@@ -13,4 +13,5 @@ shadowJar {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':engine:translator')
+    testImplementation "junit:junit:$junit_version"
 }

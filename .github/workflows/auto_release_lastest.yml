@@ -14,6 +14,11 @@ jobs:
     - name: Decrypt signing.properties
       run: ./ops/bash/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
 
+    - name: Update latest notes
+      run: ./ops/bash/update-latest-notes.sh
+
+    - run: git push
+
     - uses: actions/cache@v2
       with:
         path: ~/.gradle/caches

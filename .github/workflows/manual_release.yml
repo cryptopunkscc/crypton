@@ -1,9 +1,10 @@
-name: Release tagged
+name: Release
+#name: Release tagged
 
-on:
-  push:
-    tags:
-      - 'v*'
+#on:
+#  push:
+#    tags:
+#      - 'v*'
 
 jobs:
   tagged-release:
@@ -14,6 +15,11 @@ jobs:
 
     - name: Decrypt signing.properties
       run: ./ops/bash/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+
+    - name: Update release notes
+      run: ./ops/bash/update-relese-notes.sh
+
+    - run: git push
 
     - uses: actions/cache@v2
       with:

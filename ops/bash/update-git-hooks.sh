@@ -5,14 +5,19 @@ set -euxo pipefail
 dir=$(dirname "$BASH_SOURCE")
 projectDir="$dir/../.."
 
-inputPath="$(pwd)"/"$dir"/pre-commit.sh
-outputPath="$projectDir"/.git/hooks/pre-commit
+hooks=(pre-commit pre-push)
 
+for hook in ${hooks[*]} ; do
 
-if [ -L "$outputPath" ]; then
-  rm "$projectDir"/.git/hooks/pre-commit
-fi
+  inputPath="$(pwd)"/"$dir"/"$hook".sh
+  outputPath="$projectDir"/.git/hooks/$hook
 
-ln -s  "$inputPath" "$outputPath"
+  if [ -L "$outputPath" ]; then
+    rm "$outputPath"
+  fi
 
-echo Created sym link to "$inputPath"
+  ln -s  "$inputPath" "$outputPath"
+
+  echo Created sym link to "$inputPath" in "$outputPath"
+
+done
