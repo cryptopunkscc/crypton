@@ -55,8 +55,7 @@ fun Project.generateReleaseNotes(
     ).let {
         if (latest) it.incrementVersion(this)
         else it
-    }
-        .formatReleaseNotes()
+    }.formatReleaseNotes()
 
 private fun Changelog.formatReleaseNotes(): String =
     StringBuilder().apply {

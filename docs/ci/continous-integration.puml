@@ -1,0 +1,24 @@
+@startuml
+
+actor Dev
+entity OpsLocal
+database GitLocal
+database GitOrigin
+database GitCI
+control CI
+entity OpsCI
+
+
+Dev -> GitLocal: commit
+OpsLocal <-- GitLocal: pre-commit
+OpsLocal -> GitLocal: increment version code
+GitLocal -> GitOrigin: push to dev
+GitOrigin --> CI: start pre-snapshot action
+CI --> OpsCI: pre update latest
+CI <- OpsCI: generate raw latest release notes
+CI <- OpsCI: increment version name
+CI -> GitCI: commit
+GitCI -> GitOrigin: push to dev
+Dev --> CI: start release snapshot action
+CI -> CI: generate & release snapshot
+@enduml
