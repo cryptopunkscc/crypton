@@ -10,8 +10,10 @@ private const val LATEST_NOTES_MD = "latest_notes.md"
 
 fun Project.updateLatestNotes(): File =
     file(LATEST_NOTES_MD).apply {
-        if (!exists()) createNewFile()
-        writeText(generateReleaseNotes(latest = true))
+        if (versionHash != Git.headSha(1)) {
+            if (!exists()) createNewFile()
+            writeText(generateReleaseNotes(latest = true))
+        }
     }
 
 fun Project.updateReleaseNotes(): File {
@@ -22,7 +24,7 @@ fun Project.updateReleaseNotes(): File {
         removePrefix("## ").split("build").first().trim()
     }
     val latestTag = Git.latestTag().split("-").first()
-    if (latestTag != notesTag && versionHash != Git.headSha())
+    if (latestTag != notesTag)
 
         file(NEW_RELEASE_NOTES_MD).apply {
             if (!exists()) createNewFile()
@@ -55,8 +57,7 @@ fun Project.generateReleaseNotes(
     ).let {
         if (latest) it.incrementVersion(this)
         else it
-    }
-        .formatReleaseNotes()
+    }.formatReleaseNotes()
 
 private fun Changelog.formatReleaseNotes(): String =
     StringBuilder().apply {

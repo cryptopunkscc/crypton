@@ -1,0 +1,29 @@
+name: Validate Pre-snapshot
+
+on:
+  pull_request:
+    branches: [ pre-snapshot ]
+
+jobs:
+  prepare-snapshot:
+    name: Prepare Snapshot Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Update latest notes
+      run: |
+        . .env
+        ci-configure-git.sh
+        decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+        ci-pre-snapshot.sh
+        cat latest_notes.md

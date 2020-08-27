@@ -41,13 +41,15 @@ private fun Change.conventionalType() = when {
 private val conventionalTypeMap = Change.Type.values().associateBy { it.name }
 
 
-fun String.parseChanges(): Sequence<Change> = this
+fun String.parseChanges(): List<Change> = this
     .lineSequence()
+    .asIterable()
     .parseChange()
 
-fun Sequence<String>.parseChange(): Sequence<Change> = this
+fun Iterable<String>.parseChange(): List<Change> = this
     .filter(String::isNotEmpty)
     .mapNotNull(String::parseChange)
+    .removeDuplicates()
 
 
 private fun String.parseChange() =
@@ -59,6 +61,10 @@ private fun String.parseChange() =
             isBreaking = type.isBreakingChange()
         )
     }
+
+private fun Iterable<Change>.removeDuplicates(): List<Change> = this
+    .groupBy { it.type to it.description }
+    .map { it.value.first() }
 
 internal val changeRegex = Regex("^\\w+(\\(\\w+\\))?\\!?: .+\$")
 

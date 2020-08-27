@@ -1,10 +1,10 @@
-name: Release
+name: Release Version
 #name: Release tagged
 
 on: [ workflow_dispatch ]
 
 jobs:
-  manual-release:
+  tagged-release:
     name: Tagged Release
     runs-on: ubuntu-latest
     steps:

@@ -15,11 +15,10 @@ fun Project.buildChangeLog(changes: List<Change>, latest: Boolean) = Changelog(
     code = versionCode,
     map = changes.groupBy(Change::conventionalType).toMap(),
     latest = latest,
-    commit = Git.headSha()
+    commit = Git.headSha(1)
 )
 
 fun Changelog.incrementVersion(project: Project) = when {
-    commit == project.versionHash -> VersionPart.None
     map.containsKey(Change.Type.BREAKING_CHANGE) -> VersionPart.Minor
     map.keys.intersect(patches).isNotEmpty() -> VersionPart.Patch
     map.keys.isNotEmpty() -> VersionPart.Code

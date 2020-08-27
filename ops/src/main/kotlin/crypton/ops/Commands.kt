@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.translator.Commands
 import cc.cryptopunks.crypton.translator.command
 import cc.cryptopunks.crypton.translator.param
 import crypton.ops.util.BUILD_VERSION
+import crypton.ops.util.Git
 import crypton.ops.util.MAJOR
 import crypton.ops.util.MINOR
 import crypton.ops.util.PATCH
@@ -24,5 +25,8 @@ val commands: Commands = mapOf("main" to mapOf(
             "latest" to command { project(route).updateLatestNotes() },
             "release" to command { project(route).updateReleaseNotes() }
         )
+    ),
+    "print" to mapOf(
+        "changes" to command { Git.messages() }
     )
 ))
