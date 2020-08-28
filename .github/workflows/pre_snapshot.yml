@@ -20,6 +20,11 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.head_ref }}
 
+    - name: Assert snapshot version
+      run: |
+        . .env
+        assert-snapshot
+
     - uses: actions/cache@v2
       with:
         path: ~/.gradle/caches

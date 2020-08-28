@@ -1,7 +1,16 @@
 #!/bin/bash
 
+function read-version() {
+  sed -n "$1"p <version
+}
+
 function full-version() {
-  echo "$(cat version.name)-$(cat version.code)"
+  echo "$(read-version 2)-$(read-version 1)"
+}
+
+function git-head-sha() {
+  local line=${1:-0}
+  git rev-parse HEAD~"$line"
 }
 
 function release-snapshot() {
@@ -42,8 +51,29 @@ function decrypt-signing-properties() {
     --output "$signingProperties" "$signingPropertiesGpg"
 }
 
+function assert-snapshot() {
+  local changelog="$(read-version 4)"
+  local current="$(git-head-sha 0)"
+  local previous="$(git-head-sha 1)"
+  case "$changelog" in
+  "$current") exit 1 ;;
+  "$previous") exit 2 ;;
+  esac
+}
+
 function update-latest-notes() {
-  ops "$CRYPTON_ROOT" generate notes latest
+  $(assert-snapshot)
+  local code=$?
+  case $code in
+  "")
+    echo Updating snapshot
+    ops "$CRYPTON_ROOT" generate notes latest
+    cat "$CRYPTON_ROOT/latest_notes.md"
+    ;;
+  "1") echo "Update snapshot aborted. Snapshot hash is same as current" ;;
+  "2") echo "Update snapshot aborted. Snapshot hash is same as previous" ;;
+  *) echo "Update snapshot aborted. Unknown error $code" ;;
+  esac
 }
 
 function ci-configure-git() {
@@ -56,7 +86,7 @@ function ci-set-git-token() {
 }
 
 function ci-pre-snapshot() {
-  update-latest-notes
+  ops "$CRYPTON_ROOT" generate notes latest
   git add "$CRYPTON_ROOT"
   git commit \
     -m "Snapshot $(full-version)" \

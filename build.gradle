@@ -12,8 +12,9 @@ crypton {
 
 buildscript {
     ext {
-        version_code = file('version.code').getText().toInteger()
-        version_name = file('version.name').getText().trim()
+        def version = file('version').getText().readLines()
+        version_code = version[0].toInteger()
+        version_name = version[1].trim()
         min_sdk = 22
         target_sdk = 27 // TODO temporary downgraded required by Omemo
         compile_sdk = 29

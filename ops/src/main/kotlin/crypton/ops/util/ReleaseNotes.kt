@@ -10,9 +10,13 @@ private const val LATEST_NOTES_MD = "latest_notes.md"
 
 fun Project.updateLatestNotes(): File =
     file(LATEST_NOTES_MD).apply {
-        if (versionHash != Git.headSha(1)) {
+        if (version.snapshotHash != Git.headSha(1)) {
             if (!exists()) createNewFile()
-            writeText(generateReleaseNotes(latest = true))
+            generateReleaseNotes(latest = true).apply {
+                println(project)
+                project.writeVersion()
+                writeReleaseNotes()
+            }
         }
     }
 
@@ -28,8 +32,6 @@ fun Project.updateReleaseNotes(): File {
 
         file(NEW_RELEASE_NOTES_MD).apply {
             if (!exists()) createNewFile()
-
-            writeText(generateReleaseNotes())
 
             releaseNotes.reader().buffered().lineSequence().forEach { line ->
                 appendText("$line\n")
@@ -47,17 +49,25 @@ fun Project.generateReleaseNotes(
     from: String = Git.latestTag(),
     to: String = "HEAD",
     latest: Boolean = false
-): String =
+): Changelog =
     buildChangeLog(
         changes = Git
             .messages(from, to)
             .parseChanges()
             .toList(),
         latest = latest
-    ).let {
-        if (latest) it.incrementVersion(this)
-        else it
-    }.formatReleaseNotes()
+    ).run {
+        if (!latest) this
+        else incrementVersion()
+    }
+
+private fun Changelog.writeReleaseNotes() = when (latest) {
+    true -> project.file(LATEST_NOTES_MD)
+    false -> project.file(RELEASE_NOTES_MD)
+}.apply {
+    writeText(formatReleaseNotes())
+}
+
 
 private fun Changelog.formatReleaseNotes(): String =
     StringBuilder().apply {
@@ -68,11 +78,11 @@ private fun Changelog.formatReleaseNotes(): String =
                 appendln(change.format())
             }
         }
-    }.appendln().toString()
+    }.toString()
 
 private val changeComparator = Comparator<Change.Type> { l, r -> l.ordinal.compareTo(r.ordinal) }
 
-private fun Changelog.title() = "v$formattedVersion build $code".let { version ->
+private fun Changelog.title() = "v$formattedVersion build ${version.build}".let { version ->
     if (latest) "Snapshot $version"
     else version
 }.markdownH(2)
