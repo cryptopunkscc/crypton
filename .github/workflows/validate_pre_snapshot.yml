@@ -23,7 +23,7 @@ jobs:
     - name: Update latest notes
       run: |
         . .env
-        ci-configure-git.sh
-        decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
-        ci-pre-snapshot.sh
+        ci-configure-git
+        decrypt-signing-properties ${{ secrets.SECRET_KEY }}
+        ci-pre-snapshot
         cat latest_notes.md

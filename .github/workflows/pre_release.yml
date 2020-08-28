@@ -20,7 +20,9 @@ jobs:
           ${{ runner.os }}-gradle-
 
     - name: Decrypt signing.properties
-      run: ./ops/bash/decrypt_signing_properties.sh ${{ secrets.SECRET_KEY }}
+      run: |
+        . .env
+        decrypt-signing-properties ${{ secrets.SECRET_KEY }}
 
     - name: Update release notes
       run: |

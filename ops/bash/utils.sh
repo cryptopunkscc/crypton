@@ -1,5 +1,12 @@
 #!/bin/bash
 
+function android-migration-test() {
+  adb shell am instrument \
+    -w -r -e debug false \
+    -e class 'MigrationTest' \
+    cc.cryptopunks.crypton.data.test/androidx.test.runner.AndroidJUnitRunner
+}
+
 function read-version() {
   sed -n "$1"p <version
 }
@@ -66,13 +73,38 @@ function update-latest-notes() {
   local code=$?
   case $code in
   "")
-    echo Updating snapshot
+    echo Updating latest notes
     ops "$CRYPTON_ROOT" generate notes latest
     cat "$CRYPTON_ROOT/latest_notes.md"
     ;;
-  "1") echo "Update snapshot aborted. Snapshot hash is same as current" ;;
-  "2") echo "Update snapshot aborted. Snapshot hash is same as previous" ;;
-  *) echo "Update snapshot aborted. Unknown error $code" ;;
+  "1") echo "Update latest notes aborted. Snapshot hash is same as current" ;;
+  "2") echo "Update latest notes aborted. Snapshot hash is same as previous" ;;
+  *) echo "Update latest notes aborted. Unknown error $code" ;;
+  esac
+}
+
+function assert-release() {
+  local changelog="$(read-version 3)"
+  local current="$(git-head-sha 0)"
+  local previous="$(git-head-sha 1)"
+  case "$changelog" in
+  "$current") exit 1 ;;
+  "$previous") exit 2 ;;
+  esac
+}
+
+function ci-update-release-notes() {
+  $(assert-release)
+  local code=$?
+  case $code in
+  "")
+    echo Updating release notes
+    ops "$CRYPTON_ROOT" generate notes release
+    cat "$CRYPTON_ROOT/release_notes.md"
+    ;;
+  "1") echo "Update release notes aborted. Snapshot hash is same as current" ;;
+  "2") echo "Update release notes aborted. Snapshot hash is same as previous" ;;
+  *) echo "Update release notes aborted. Unknown error $code" ;;
   esac
 }
 
@@ -105,4 +137,39 @@ function ops-rebuild() {
 
 function git-add-amend-push() {
   git add . && git commit -S --amend --no-edit && git push --force
+}
+
+function git-update-hooks() {
+
+  local scriptDir=$(dirname "$BASH_SOURCE")
+  local opsBash="$(pwd)/$scriptDir"
+
+  hooks=(pre-commit pre-push)
+
+  for hook in ${hooks[*]}; do
+
+    inputPath="$opsBash/$hook".sh
+    outputPath="$CRYPTON_ROOT/.git/hooks/$hook"
+
+    if [ -L "$outputPath" ]; then
+      rm "$outputPath"
+    fi
+
+    ln -s "$inputPath" "$outputPath"
+
+    echo Created sym link to "$inputPath" in "$outputPath"
+
+  done
+}
+
+function ops-update-chmod() {
+    chmod +x "$CRYPTON_ROOT/ops/bash/*"
+}
+
+function git-add-commit() {
+  git add .
+  case $1 in
+  "") git commit -S ;;
+  *) git commit -S "$1" ;;
+  esac
 }
