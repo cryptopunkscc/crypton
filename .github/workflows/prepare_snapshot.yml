@@ -1,0 +1,42 @@
+name: Prepare Snapshot
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  prepare-snapshot:
+    name: Prepare Snapshot
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref }}
+
+    - name: Assert snapshot version
+      run: |
+        . .env
+        assert-snapshot
+
+    - name: Cancel running workflows
+      uses: everphone-gmbh/cancel-previous-workflows@v5
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Update latest notes
+      run: |
+        . .env
+        decrypt-signing-properties ${{ secrets.SECRET_KEY }}
+        ci-configure-git
+        ci-set-git-token ${{ secrets.GITHUB_TOKEN }}
+        ci-prepare-snapshot
+        cat latest_notes.md

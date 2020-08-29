@@ -10,8 +10,8 @@ import crypton.ops.util.MINOR
 import crypton.ops.util.PATCH
 import crypton.ops.util.increment
 import crypton.ops.util.project
-import crypton.ops.util.updateLatestNotes
-import crypton.ops.util.updateReleaseNotes
+import crypton.ops.util.updateSnapshotNotes
+import crypton.ops.util.updateVersionNotes
 
 val commands: Commands = mapOf("main" to mapOf(
     "increment" to mapOf(
@@ -22,8 +22,8 @@ val commands: Commands = mapOf("main" to mapOf(
     ),
     "generate" to mapOf(
         "notes" to mapOf(
-            "latest" to command { project(route).updateLatestNotes() },
-            "release" to command { project(route).updateReleaseNotes() }
+            "snapshot" to command { project(route).updateSnapshotNotes() },
+            "version" to command { project(route).updateVersionNotes() }
         )
     ),
     "print" to mapOf(

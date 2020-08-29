@@ -14,11 +14,11 @@ class ReleaseNotesKtTest {
 
     @Test
     fun `should update latest notes`() {
-        project.updateLatestNotes()
+        project.updateSnapshotNotes()
     }
 
     @Test
     fun `should update release notes`() {
-        project.updateReleaseNotes()
+        project.updateVersionNotes()
     }
 }

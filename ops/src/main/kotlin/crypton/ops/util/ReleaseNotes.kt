@@ -8,7 +8,7 @@ private const val RELEASE_NOTES_MD = "release_notes.md"
 private const val NEW_RELEASE_NOTES_MD = "$RELEASE_NOTES_MD.new"
 private const val LATEST_NOTES_MD = "latest_notes.md"
 
-fun Project.updateLatestNotes(): File =
+fun Project.updateSnapshotNotes(): File =
     file(LATEST_NOTES_MD).apply {
         if (version.snapshotHash != Git.headSha(1)) {
             if (!exists()) createNewFile()
@@ -20,11 +20,11 @@ fun Project.updateLatestNotes(): File =
         }
     }
 
-fun Project.updateReleaseNotes(): File {
-    val releaseNotes = file(RELEASE_NOTES_MD).apply {
+fun Project.updateVersionNotes(): File {
+    val versionNotes = file(RELEASE_NOTES_MD).apply {
         if (!exists()) createNewFile()
     }
-    val notesTag = releaseNotes.reader().buffered().readLine()?.run {
+    val notesTag = versionNotes.reader().buffered().readLine()?.run {
         removePrefix("## ").split("build").first().trim()
     }
     val latestTag = Git.latestTag().split("-").first()
@@ -33,15 +33,15 @@ fun Project.updateReleaseNotes(): File {
         file(NEW_RELEASE_NOTES_MD).apply {
             if (!exists()) createNewFile()
 
-            releaseNotes.reader().buffered().lineSequence().forEach { line ->
+            versionNotes.reader().buffered().lineSequence().forEach { line ->
                 appendText("$line\n")
             }
 
-            copyTo(releaseNotes, true)
+            copyTo(versionNotes, true)
             delete()
         }
 
-    return releaseNotes
+    return versionNotes
 }
 
 

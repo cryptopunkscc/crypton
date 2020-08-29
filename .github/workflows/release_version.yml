@@ -1,16 +1,16 @@
 name: Release Version
-#name: Release tagged
 
-on: [ workflow_dispatch ]
+on:
+  push:
+    tags:
+      - "v*"
 
 jobs:
-  tagged-release:
-    name: Tagged Release
+  release-version:
+    name: Release Version
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
 
     - uses: actions/cache@v2
       with:
@@ -23,19 +23,7 @@ jobs:
       run: |
         . .env
         decrypt-signing-properties ${{ secrets.SECRET_KEY }}
-
-    - name: Update release notes
-      run: |
-        git config user.name "yang"
-        git config user.email "cryptopunkyang@pm.me"
-        ./ops/bash/update-release-notes.sh
-        git add release_notes.md
-        VERSION_NAME=v$(cat ./version.name)
-        echo ::set-env name=VERSION_NAME::"$VERSION_NAME"
-        git commit -m "Release $VERSION_NAME"
-        git push
-        git tag "$VERSION_NAME"
-        git push origin "$VERSION_NAME"
+        echo ::set-env name=VERSION_NAME::"$(version-name)"
 
     - name: Build android client apk
       uses: eskatos/gradle-command-action@v1.3.2

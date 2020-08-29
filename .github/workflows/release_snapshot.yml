@@ -7,6 +7,7 @@ on:
 
 jobs:
   prepare-snapshot:
+    name: Release Snapshot
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

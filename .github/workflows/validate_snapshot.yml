@@ -25,5 +25,5 @@ jobs:
         . .env
         ci-configure-git
         decrypt-signing-properties ${{ secrets.SECRET_KEY }}
-        ci-pre-snapshot
+        ci-prepare-snapshot
         cat latest_notes.md

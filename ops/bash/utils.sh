@@ -11,8 +11,24 @@ function read-version() {
   sed -n "$1"p <version
 }
 
-function full-version() {
-  echo "$(read-version 2)-$(read-version 1)"
+function version-code() {
+  read-version 1
+}
+
+function version-name() {
+  read-version 2
+}
+
+function version-hash() {
+  read-version 3
+}
+
+function version-full() {
+  echo "$(version-name)-$(version-code)"
+}
+
+function version-snapshot-hash() {
+  read-version 4
 }
 
 function git-head-sha() {
@@ -22,9 +38,18 @@ function git-head-sha() {
 
 function release-snapshot() {
   local currentBranch=$(git rev-parse --abbrev-ref HEAD)
-  git checkout pre-snapshot
+  git checkout dev
   git pull
-  git tag -fa latest -m "$(full-version)"
+  git tag -fa latest -m "$(version-full)"
+  git push -f origin latest
+  git checkout "$currentBranch"
+}
+
+function relese-version() {
+  local currentBranch=$(git rev-parse --abbrev-ref HEAD)
+  git checkout master
+  git pull
+  git tag -fa "v$(version-name)" -m "$(version-full)"
   git push -f origin latest
   git checkout "$currentBranch"
 }
@@ -72,18 +97,18 @@ function update-latest-notes() {
   $(assert-snapshot)
   local code=$?
   case $code in
-  "")
+  ""|0)
     echo Updating latest notes
-    ops "$CRYPTON_ROOT" generate notes latest
+    ops "$CRYPTON_ROOT" generate notes snapshot
     cat "$CRYPTON_ROOT/latest_notes.md"
     ;;
-  "1") echo "Update latest notes aborted. Snapshot hash is same as current" ;;
-  "2") echo "Update latest notes aborted. Snapshot hash is same as previous" ;;
+  1) echo "Update latest notes aborted. Snapshot hash is same as current" ;;
+  2) echo "Update latest notes aborted. Snapshot hash is same as previous" ;;
   *) echo "Update latest notes aborted. Unknown error $code" ;;
   esac
 }
 
-function assert-release() {
+function assert-version() {
   local changelog="$(read-version 3)"
   local current="$(git-head-sha 0)"
   local previous="$(git-head-sha 1)"
@@ -93,17 +118,17 @@ function assert-release() {
   esac
 }
 
-function ci-update-release-notes() {
-  $(assert-release)
+function update-release-notes() {
+  $(assert-version)
   local code=$?
   case $code in
-  "")
+  ""|0)
     echo Updating release notes
     ops "$CRYPTON_ROOT" generate notes release
     cat "$CRYPTON_ROOT/release_notes.md"
     ;;
-  "1") echo "Update release notes aborted. Snapshot hash is same as current" ;;
-  "2") echo "Update release notes aborted. Snapshot hash is same as previous" ;;
+  1) echo "Update release notes aborted. Snapshot hash is same as current" ;;
+  2) echo "Update release notes aborted. Snapshot hash is same as previous" ;;
   *) echo "Update release notes aborted. Unknown error $code" ;;
   esac
 }
@@ -117,18 +142,31 @@ function ci-set-git-token() {
   git remote set-url origin "https://x-access-token:$1@github.com/$GITHUB_REPOSITORY"
 }
 
-function ci-pre-snapshot() {
-  ops "$CRYPTON_ROOT" generate notes latest
+function ci-prepare-snapshot() {
+  ops "$CRYPTON_ROOT" generate notes snapshot
   git add "$CRYPTON_ROOT"
   git commit \
-    -m "Snapshot $(full-version)" \
+    -m "Snapshot $(version-full)" \
     -m "$(cat latest_notes.md)"
   #    -m "$(ops "$CRYPTON_ROOT" print changes)"
-  git push origin pre-snapshot
+  git push origin dev
+}
+
+function ci-prepare-version() {
+  ops "$CRYPTON_ROOT" generate notes version
+  git add "$CRYPTON_ROOT"
+  git commit \
+    -m "Snapshot $(version-full)" \
+    -m "$(cat release_notes.md)"
+  git push origin master
 }
 
 function prepare-and-release-snapshot() {
-  ci-pre-snapshot && release-snapshot
+  ci-prepare-snapshot && release-snapshot
+}
+
+function prepare-and-release-version() {
+  ci-prepare-version && release-version
 }
 
 function ops-rebuild() {
@@ -170,6 +208,6 @@ function git-add-commit() {
   git add .
   case $1 in
   "") git commit -S ;;
-  *) git commit -S "$1" ;;
+  *) git commit -S "$@" ;;
   esac
 }

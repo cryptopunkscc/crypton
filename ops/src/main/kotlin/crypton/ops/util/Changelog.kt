@@ -1,7 +1,6 @@
 package crypton.ops.util
 
 data class Changelog(
-    val commit: String,
     val map: Map<Change.Type, List<Change>>,
     val latest: Boolean,
     val version: Version = Version(),
@@ -13,7 +12,6 @@ data class Changelog(
 fun Project.buildChangeLog(changes: List<Change>, latest: Boolean) = Changelog(
     map = changes.groupBy(Change::conventionalType).toMap(),
     latest = latest,
-    commit = Git.headSha(1),
     version = version,
     project = this
 )

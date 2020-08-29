@@ -42,7 +42,7 @@ fun Reader.parseVersion(): Version =
                 hash = get(2),
                 snapshotHash = get(3)
             )
-            else -> throw Exception()
+            else -> throw Exception("Invalid size: $size")
         }
     }
 
