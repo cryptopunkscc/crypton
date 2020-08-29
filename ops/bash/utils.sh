@@ -45,13 +45,13 @@ function release-snapshot() {
   git checkout "$currentBranch"
 }
 
-function relese-version() {
+function release-version() {
   local currentBranch=$(git rev-parse --abbrev-ref HEAD)
   local tag="v$(version-name)"
   git checkout master
   git pull
   git tag -fa "$tag" -m "$(version-full)"
-  git push -f origin "$tag"
+  git push -f --tags
   git checkout "$currentBranch"
 }
 
