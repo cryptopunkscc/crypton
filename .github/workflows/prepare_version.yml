@@ -15,7 +15,7 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.head_ref }}
 
-    - name: Assert version version
+    - name: Assert version
       run: |
         . .env
         assert-version
@@ -32,11 +32,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    - name: Update latest notes
+    - name: Update version notes
       run: |
         . .env
         decrypt-signing-properties ${{ secrets.SECRET_KEY }}
         ci-configure-git
         ci-set-git-token ${{ secrets.GITHUB_TOKEN }}
-        ci-pre-version
-        cat latest_notes.md
+        ci-prepare-version
+        cat release_notes.md

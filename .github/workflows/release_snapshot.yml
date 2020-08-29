@@ -6,7 +6,7 @@ on:
       - "latest"
 
 jobs:
-  prepare-snapshot:
+  release-snapshot:
     name: Release Snapshot
     runs-on: ubuntu-latest
     steps:

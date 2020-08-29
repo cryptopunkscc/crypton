@@ -10,13 +10,10 @@ private const val LATEST_NOTES_MD = "latest_notes.md"
 
 fun Project.updateSnapshotNotes(): File =
     file(LATEST_NOTES_MD).apply {
-        if (version.snapshotHash != Git.headSha(1)) {
-            if (!exists()) createNewFile()
-            generateReleaseNotes(latest = true).apply {
-                println(project)
-                project.writeVersion()
-                writeReleaseNotes()
-            }
+        if (!exists()) createNewFile()
+        generateReleaseNotes(latest = true).apply {
+            project.writeVersion()
+            writeReleaseNotes()
         }
     }
 
@@ -24,22 +21,21 @@ fun Project.updateVersionNotes(): File {
     val versionNotes = file(RELEASE_NOTES_MD).apply {
         if (!exists()) createNewFile()
     }
-    val notesTag = versionNotes.reader().buffered().readLine()?.run {
-        removePrefix("## ").split("build").first().trim()
-    }
-    val latestTag = Git.latestTag().split("-").first()
-    if (latestTag != notesTag)
 
-        file(NEW_RELEASE_NOTES_MD).apply {
-            if (!exists()) createNewFile()
+    file(NEW_RELEASE_NOTES_MD).apply {
+        if (!exists()) createNewFile()
 
-            versionNotes.reader().buffered().lineSequence().forEach { line ->
-                appendText("$line\n")
-            }
-
-            copyTo(versionNotes, true)
-            delete()
+        generateReleaseNotes().apply {
+            project.writeVersion()
+            writeReleaseNotes()
         }
+
+        versionNotes.forEachLine { line -> appendText("$line\n") }
+
+        copyTo(versionNotes, true)
+
+        delete()
+    }
 
     return versionNotes
 }
@@ -57,13 +53,13 @@ fun Project.generateReleaseNotes(
             .toList(),
         latest = latest
     ).run {
-        if (!latest) this
+        if (!latest) incrementHash()
         else incrementVersion()
     }
 
 private fun Changelog.writeReleaseNotes() = when (latest) {
     true -> project.file(LATEST_NOTES_MD)
-    false -> project.file(RELEASE_NOTES_MD)
+    false -> project.file(NEW_RELEASE_NOTES_MD)
 }.apply {
     writeText(formatReleaseNotes())
 }

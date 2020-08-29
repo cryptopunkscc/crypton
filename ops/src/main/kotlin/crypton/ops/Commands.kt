@@ -27,6 +27,7 @@ val commands: Commands = mapOf("main" to mapOf(
         )
     ),
     "print" to mapOf(
+        "latest-tag" to command { Git.latestTag() },
         "changes" to command { Git.messages() }
     )
 ))

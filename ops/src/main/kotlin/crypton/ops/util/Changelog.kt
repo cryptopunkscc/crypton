@@ -16,6 +16,12 @@ fun Project.buildChangeLog(changes: List<Change>, latest: Boolean) = Changelog(
     project = this
 )
 
+fun Changelog.incrementHash() = copy(
+    version = version.copy(hash = Git.headSha())
+).run {
+    copy(project = project.copy(version = version))
+}
+
 fun Changelog.incrementVersion() = when {
     map.containsKey(Change.Type.BREAKING_CHANGE) -> VersionPart.Minor
     map.keys.intersect(patches).isNotEmpty() -> VersionPart.Patch
@@ -28,7 +34,7 @@ fun Changelog.incrementVersion() = when {
             version = version.copy(
                 build = version.build + 1,
                 hash = if (!latest) Git.headSha() else version.hash,
-                snapshotHash = if (latest) Git.headSha() else version.hash
+                snapshotHash = if (latest) Git.headSha() else version.snapshotHash
             )
         )
         else -> copy(
@@ -36,7 +42,7 @@ fun Changelog.incrementVersion() = when {
                 build = version.build + 1,
                 name = version.name.increment(part.index),
                 hash = if (!latest) Git.headSha() else version.hash,
-                snapshotHash = if (latest) Git.headSha() else version.hash
+                snapshotHash = if (latest) Git.headSha() else version.snapshotHash
             )
         )
     }

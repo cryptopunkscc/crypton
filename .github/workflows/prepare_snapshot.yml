@@ -15,7 +15,7 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.head_ref }}
 
-    - name: Assert snapshot version
+    - name: Assert snapshot
       run: |
         . .env
         assert-snapshot

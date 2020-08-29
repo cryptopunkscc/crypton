@@ -47,10 +47,11 @@ function release-snapshot() {
 
 function relese-version() {
   local currentBranch=$(git rev-parse --abbrev-ref HEAD)
+  local tag="v$(version-name)"
   git checkout master
   git pull
-  git tag -fa "v$(version-name)" -m "$(version-full)"
-  git push -f origin latest
+  git tag -fa "$tag" -m "$(version-full)"
+  git push -f origin "$tag"
   git checkout "$currentBranch"
 }
 
@@ -124,7 +125,7 @@ function update-release-notes() {
   case $code in
   ""|0)
     echo Updating release notes
-    ops "$CRYPTON_ROOT" generate notes release
+    ops "$CRYPTON_ROOT" generate notes version
     cat "$CRYPTON_ROOT/release_notes.md"
     ;;
   1) echo "Update release notes aborted. Snapshot hash is same as current" ;;
@@ -156,7 +157,7 @@ function ci-prepare-version() {
   ops "$CRYPTON_ROOT" generate notes version
   git add "$CRYPTON_ROOT"
   git commit \
-    -m "Snapshot $(version-full)" \
+    -m "Version $(version-full)" \
     -m "$(cat release_notes.md)"
   git push origin master
 }
