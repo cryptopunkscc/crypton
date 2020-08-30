@@ -42,9 +42,12 @@ fun Project.updateVersionNotes(): File {
 
 
 fun Project.generateReleaseNotes(
-    from: String = Git.latestTag(),
-    to: String = "HEAD",
-    latest: Boolean = false
+    latest: Boolean = false,
+    from: String = when {
+        latest -> version.snapshotHash
+        else -> version.hash
+    }.takeIf { it.isNotEmpty() } ?: Git.latestTag(),
+    to: String = "HEAD"
 ): Changelog =
     buildChangeLog(
         changes = Git

@@ -7,7 +7,8 @@ import kotlin.reflect.KClass
 
 interface Scope : CoroutineScope {
     val handlers: HandlerRegistry
-    suspend infix fun resolve(context: Context): Pair<Scope, Any> = this to Unit }
+    suspend infix fun resolve(context: Context): Pair<Scope, Any> = this to Unit 
+}
 
 interface Scoped<S : CoroutineScope>
 
