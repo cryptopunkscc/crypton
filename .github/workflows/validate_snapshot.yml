@@ -2,7 +2,7 @@ name: Validate Pre-snapshot
 
 on:
   pull_request:
-    branches: [ pre-snapshot ]
+    branches: [ snapshot ]
 
 jobs:
   prepare-snapshot:

@@ -19,6 +19,8 @@ interface Net :
     suspend fun initOmemo()
     fun isOmemoInitialized(): Boolean
     fun netEvents(): Flow<Api.Event>
+    fun sendStanza(stanza: Stanza)
+    fun createStanzaCollectorAndSend(stanza: Stanza)
 
     interface Event : Api.Event, Scoped<SessionScope>, Async
 

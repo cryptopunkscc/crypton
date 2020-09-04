@@ -6,11 +6,17 @@ import cc.cryptopunks.crypton.util.logger.coroutineLog
 import kotlinx.coroutines.CoroutineScope
 import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.chat2.ChatManager
+import org.jivesoftware.smack.packet.IQ
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.carbons.CarbonManager
 import org.jivesoftware.smackx.iqregister.AccountManager
+import org.jivesoftware.smackx.jingle.JingleManager
+import org.jivesoftware.smackx.jingle.JingleTransportMethodManager
+import org.jivesoftware.smackx.jingle.element.Jingle
+import org.jivesoftware.smackx.jingle.transports.jingle_s5b.JingleS5BTransportSession
+import org.jivesoftware.smackx.jingle_filetransfer.element.JingleFileTransfer
 import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
@@ -64,5 +70,13 @@ internal class SmackModule(
 
     override val carbonManager: CarbonManager by lazy {
         CarbonManager.getInstanceFor(connection)!!
+    }
+
+    override val jingleManager by lazy {
+        JingleManager.getInstanceFor(connection)!!
+    }
+
+    override val jingleTransportMethodManager by lazy {
+        JingleTransportMethodManager.getInstanceFor(connection)!!
     }
 }

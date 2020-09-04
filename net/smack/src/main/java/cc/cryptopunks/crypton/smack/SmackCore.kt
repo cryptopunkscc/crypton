@@ -8,6 +8,8 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.carbons.CarbonManager
 import org.jivesoftware.smackx.iqregister.AccountManager
+import org.jivesoftware.smackx.jingle.JingleManager
+import org.jivesoftware.smackx.jingle.JingleTransportMethodManager
 import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
@@ -23,4 +25,6 @@ internal interface SmackCore : CoroutineScope {
     val mamManager: MamManager
     val omemoManager: OmemoManager
     val carbonManager: CarbonManager
+    val jingleManager: JingleManager
+    val jingleTransportMethodManager: JingleTransportMethodManager
 }
