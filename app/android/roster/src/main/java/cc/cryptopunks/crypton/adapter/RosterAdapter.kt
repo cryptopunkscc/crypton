@@ -19,11 +19,11 @@ class RosterAdapter(
     RecyclerView.Adapter<RosterAdapter.ViewHolder>(),
     CoroutineScope {
 
-    val clicks = BroadcastChannel<Exec.Select>(Channel.BUFFERED)
+    val clicks = BroadcastChannel<Exec.Select.Item>(Channel.BUFFERED)
 
     private val onClickListener = View.OnClickListener {
         (it as? RosterItemView)?.item?.let { item ->
-            clicks.offer(Exec.Select(item))
+            clicks.offer(Exec.Select.Item(item))
         }
     }
 

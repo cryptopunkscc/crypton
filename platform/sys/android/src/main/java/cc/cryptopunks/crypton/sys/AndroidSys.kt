@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Sys
+import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.service.IndicatorService
 import kotlinx.coroutines.GlobalScope
 import kotlin.reflect.KClass
@@ -55,4 +56,11 @@ class AndroidSys(
     }
 
     override val executeSys: Execute.Sys = ExecuteSys
+
+    override val uriSys: URI.Sys by lazy {
+        URISys(
+            context = application
+        )
+    }
+
 }

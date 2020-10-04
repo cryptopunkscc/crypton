@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b07cb0bbe82ede681daf4044d776b8bf",
+    "identityHash": "59e71b2c58dffe553ffc9c673341db03",
     "entities": [
       {
         "tableName": "account",
@@ -70,7 +70,7 @@
       },
       {
         "tableName": "message",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `stanzaId` TEXT NOT NULL, `text` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `chatId` TEXT NOT NULL, `from` TEXT NOT NULL, `to` TEXT NOT NULL, `status` TEXT NOT NULL, `readAt` INTEGER NOT NULL, `encrypted` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`chatId`) REFERENCES `chat`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `stanzaId` TEXT NOT NULL, `text` TEXT NOT NULL, `type` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `chatId` TEXT NOT NULL, `from` TEXT NOT NULL, `to` TEXT NOT NULL, `status` TEXT NOT NULL, `readAt` INTEGER NOT NULL, `encrypted` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`chatId`) REFERENCES `chat`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -87,6 +87,12 @@
           {
             "fieldPath": "text",
             "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -292,7 +298,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b07cb0bbe82ede681daf4044d776b8bf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '59e71b2c58dffe553ffc9c673341db03')"
     ]
   }
 }

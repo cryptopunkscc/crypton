@@ -33,7 +33,7 @@ internal fun SmackMessage.cryptonMessage(
     encrypted: Boolean = true
 ) = CryptonMessage(
     id = id,
-    text = body,
+    body = Message.Text(body),
     from = from,
     to = to,
     chat = chat,

@@ -8,9 +8,11 @@ import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.Upload
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.net.api.NetEventBroadcast
 import cc.cryptopunks.crypton.smack.net.chat.ChatNet
+import cc.cryptopunks.crypton.smack.net.file.UploadNet
 import cc.cryptopunks.crypton.smack.net.message.MessageNet
 import cc.cryptopunks.crypton.smack.net.omemo.DeviceNet
 import cc.cryptopunks.crypton.smack.net.omemo.InitOmemo
@@ -49,7 +51,8 @@ internal class ConnectionModule(
     Connection,
     Message.Net by MessageNet(smack),
     Chat.Net by ChatNet(smack, account),
-    Device.Net by deviceNet {
+    Device.Net by deviceNet,
+    Upload.Net by UploadNet(smack) {
 
     init {
         omemoManager.setTrustCallback(deviceNet)

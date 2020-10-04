@@ -9,7 +9,8 @@ interface Net :
     Message.Net,
     Chat.Net,
     Roster.Net,
-    Device.Net {
+    Device.Net,
+    Upload.Net {
 
     fun connect()
     fun disconnect()

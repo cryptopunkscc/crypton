@@ -8,7 +8,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import cc.cryptopunks.crypton.debug.drawer.detachDebugDrawer
 import cc.cryptopunks.crypton.debug.drawer.initDebugDrawer
-import cc.cryptopunks.crypton.intent.IntentProcessor
+import cc.cryptopunks.crypton.intent.NewIntentProcessor
 import cc.cryptopunks.crypton.main.R
 import cc.cryptopunks.crypton.view.setupDrawerAccountView
 import com.google.android.material.navigation.NavigationView
@@ -22,7 +22,7 @@ private val topLevelDestinations = setOf(
 class MainActivity : FeatureActivity() {
 
     private val processIntent by lazy {
-        IntentProcessor(rootScope.clipboardRepo)
+        NewIntentProcessor(rootScope.clipboardRepo)
     }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -43,9 +43,9 @@ class MainActivity : FeatureActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intent?.let(processIntent)
+        intent.let(processIntent)
     }
 
     override fun onDestroy() {

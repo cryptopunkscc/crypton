@@ -10,6 +10,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.isFrom
+import cc.cryptopunks.crypton.context.isUnread
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.logger.typedLog
 import cc.cryptopunks.crypton.view.MessageView

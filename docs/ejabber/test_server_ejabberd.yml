@@ -48,7 +48,7 @@ listen:
     port: 5443
     ip: "::"
     module: ejabberd_http
-    tls: true
+    tls: false
     request_handlers:
       "/admin": ejabberd_web_admin
       "/api": mod_http_api
@@ -167,7 +167,11 @@ modules:
   mod_fail2ban: {}
   mod_http_api: {}
   mod_http_upload:
-    put_url: https://@HOST@:5443/upload
+    docroot: "/opt/ejabberd/upload/"
+    dir_mode: "0755"
+    max_size: infinity
+    put_url: http://10.0.2.2:5443/upload
+    ## put_url: http://@HOST@:5443/upload
   mod_last: {}
   mod_mam:
     ## Mnesia is limited to 2GB, better to use an SQL backend

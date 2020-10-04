@@ -3,16 +3,15 @@ package cc.cryptopunks.crypton.context
 import androidx.paging.DataSource
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import java.net.URL
 import java.security.MessageDigest
 
 typealias CryptonMessage = Message
 
-fun messageStatus(status: String) = Message.Status.valueOf(status)
-
 data class Message(
     val id: String = "",
     val stanzaId: String = "",
-    val text: String = "",
+    val body: Body = Body.Empty,
     val timestamp: Long = 0,
     val chat: Address = Address.Empty,
     val from: Resource = Resource.Empty,
@@ -23,9 +22,24 @@ data class Message(
     val encrypted: Boolean = true
 ) {
 
+    val text: String
+        get() = when (body) {
+            is Body.Empty -> ""
+            is Text -> body.string
+            is FileUrl -> body.url.toString()
+            else -> body.toString()
+        }
+
     companion object {
         val Empty = Message()
     }
+
+    interface Body {
+        object Empty : Body
+    }
+
+    data class Text(val string: String) : Body
+    data class FileUrl(val url: URL) : Body
 
     enum class Status {
         None,
@@ -36,7 +50,8 @@ data class Message(
         Received,
         Read,
         Info,
-        State
+        State,
+        Uploading
     }
 
     enum class State {
@@ -112,38 +127,40 @@ data class Message(
 
     class Exception(message: String? = null) : kotlin.Exception(message)
 
-    val isUnread get() = readAt == 0L && status == Status.Received
-
-    val author: String
-        get() = when {
-            !chat.isConference -> from.address.local
-            from.address != chat -> from.address.local
-            else -> from.resource
-        }
 }
 
-fun Message.validate() = apply {
+val Message.isUnread
+    get() = readAt == 0L && status == Message.Status.Received
+
+val Message.author: String
+    get() = when {
+        !chat.isConference -> from.address.local
+        from.address != chat -> from.address.local
+        else -> from.resource
+    }
+
+fun Message.validate(): Message = apply {
     chat.validate()
     from.address.validate()
     to.address.validate()
 }
 
-val Message.sender
+val Message.sender: String
     get() = when {
         from.address.isConference -> from.resource
         else -> from.address.local
     }
 
-fun Message.isFrom(address: Address) = when {
+fun Message.isFrom(address: Address): Boolean = when {
     from.address.isConference -> from.resource == address.local
     else -> from.address == address
 }
 
-fun Message.calculateId() = copy(
+fun Message.calculateId(): Message = copy(
     id = (text + from + to + timestamp).md5()
 )
 
-private fun String.md5() = MD5.digest(toByteArray()).printHexBinary()
+private fun String.md5(): String = MD5.digest(toByteArray()).printHexBinary()
 
 private val MD5 = MessageDigest.getInstance("MD5")
 

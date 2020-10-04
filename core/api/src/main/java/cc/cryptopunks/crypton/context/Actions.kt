@@ -43,7 +43,17 @@ object Exec {
     class ConfigureConference : Chat.Action
     data class SaveInfoMessage(val text: String) : Chat.Action // TODO
     object JoinChat : Chat.Action
-    data class Select(val item: Roster.Item) : Chat.Action
+    object Select {
+        data class Item(val item: Roster.Item) : Chat.Action
+        enum class Media: Chat.Action { File, Image, Video, Photo, Location }
+        object File : Chat.Action
+        object Image : Chat.Action
+        object Video : Chat.Action
+        object Photo : Chat.Action
+        object Location : Chat.Action
+    }
+
+    data class Upload(val uri: URI) : Chat.Action
 }
 
 object Get {

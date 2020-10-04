@@ -30,6 +30,7 @@ dependencies {
     implementation project(':app:android:widget')
     api project(':app:android:core')
     api project(':platform:util:android:notification')
+    api project(':app:android:intent')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

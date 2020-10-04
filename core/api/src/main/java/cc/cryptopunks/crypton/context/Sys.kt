@@ -8,5 +8,6 @@ interface Sys {
     val networkSys: Network.Sys
     val deviceSys: Device.Sys
     val executeSys: Execute.Sys
+    val uriSys: URI.Sys
 
 }
