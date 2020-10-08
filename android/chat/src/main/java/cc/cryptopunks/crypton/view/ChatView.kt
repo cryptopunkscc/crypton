@@ -50,6 +50,8 @@ class ChatView(
     ActorLayout(context),
     Message.Consumer {
 
+    var resumed: Boolean = false
+
     private val messageAdapter = MessageAdapter(coroutineContext)
 
     private val helper = ScrollHelper(context)
@@ -177,5 +179,6 @@ class ChatView(
         chatRecyclerView.adapter = null
     }
 
-    override fun canConsume(message: Message): Boolean = message.chat == address
+    override fun canConsume(message: Message): Boolean =
+        message.chat == address && resumed
 }

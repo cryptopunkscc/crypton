@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.cli.translateCli
 import cc.cryptopunks.crypton.translator.Check
-import cc.cryptopunks.crypton.translator.translateCli
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

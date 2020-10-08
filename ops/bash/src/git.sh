@@ -30,6 +30,10 @@ function git-add-amend-push() {
   git add . && git commit -S --amend --no-edit && git push --force
 }
 
+function git-add-amend() {
+  git add . && git commit -S --amend --no-edit
+}
+
 function git-add-commit() {
   git add .
   case $1 in
@@ -37,8 +41,3 @@ function git-add-commit() {
   *) git commit -S "$@" ;;
   esac
 }
-
-function git-update-snapshot() {
-    git push origin dev:snapshot --force
-}
-

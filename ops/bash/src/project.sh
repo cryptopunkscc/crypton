@@ -25,6 +25,10 @@ function version-snapshot-hash() {
   read-version 4
 }
 
+function git-update-snapshot() {
+    git push origin dev:snapshot --force
+}
+
 function release-snapshot() {
   local currentBranch=$(git rev-parse --abbrev-ref HEAD)
   git checkout snapshot

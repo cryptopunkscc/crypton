@@ -37,6 +37,16 @@ class ChatFragment : ServiceFragment() {
         ChatView(requireContext(), account!!, chat!!)
     }
 
+    override fun onResume() {
+        super.onResume()
+        (view as? ChatView)?.resumed = true
+    }
+
+    override fun onPause() {
+        (view as? ChatView)?.resumed = false
+        super.onPause()
+    }
+
     override fun onDestroy() {
         binding.send(Exec.ClearInfoMessages)
         super.onDestroy()

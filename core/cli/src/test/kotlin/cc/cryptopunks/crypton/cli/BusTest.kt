@@ -1,8 +1,11 @@
 package cc.cryptopunks.crypton.cli
 
-import cc.cryptopunks.crypton.TEST_COMMANDS
 import cc.cryptopunks.crypton.translator.Check
+import cc.cryptopunks.crypton.translator.Commands
 import cc.cryptopunks.crypton.translator.Context
+import cc.cryptopunks.crypton.translator.command
+import cc.cryptopunks.crypton.translator.named
+import cc.cryptopunks.crypton.translator.param
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -10,6 +13,21 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
+
+val TEST_COMMANDS: Commands = mapOf(
+    Unit to mapOf(
+        "cmd0" to command(
+            param(),
+            param()
+        ) { it },
+        "cmd1" to mapOf(
+            "subCmd0" to command(
+                named("arg0"),
+                named("arg1")
+            ) { it }
+        )
+    )
+)
 
 class BusTest {
 
