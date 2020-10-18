@@ -19,8 +19,8 @@ package ":engine" {
 [:engine:paging]
 [:engine:json]
 }
-package ":jvm" {
-[:jvm:server]
+package ":app" {
+[:app:jvm:server]
 }
 [:platform:repo:mock] --> [:core:api]
 [:platform:net:mock] --> [:core:api]
@@ -35,11 +35,11 @@ package ":jvm" {
 [:engine:connectable] --> [:engine:log]
 [:core:domain] --> [:engine:paging]
 [:core:domain] --> [:core:api]
-[:jvm:server] --> [:platform:repo:mock]
-[:jvm:server] --> [:platform:net:mock]
-[:jvm:server] --> [:platform:sys:mock]
-[:jvm:server] --> [:platform:net:smack:jvm]
-[:jvm:server] --> [:core:backend]
-[:jvm:server] --> [:engine:net]
-[:jvm:server] --> [:platform:log:jvm]
+[:app:jvm:server] --> [:platform:repo:mock]
+[:app:jvm:server] --> [:platform:net:mock]
+[:app:jvm:server] --> [:platform:sys:mock]
+[:app:jvm:server] --> [:platform:net:smack:jvm]
+[:app:jvm:server] --> [:core:backend]
+[:app:jvm:server] --> [:engine:net]
+[:app:jvm:server] --> [:platform:log:jvm]
 @enduml

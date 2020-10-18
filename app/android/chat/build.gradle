@@ -23,27 +23,14 @@ android {
     androidExtensions {
         experimental = true
     }
-    useLibrary 'android.test.runner'
-    useLibrary 'android.test.base'
-    useLibrary 'android.test.mock'
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
 }
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api project(':android:debug')
-    api project(':android:intent')
-    api project(':android:account')
-    api project(':android:roster')
-    api project(':android:chat')
-    api project(':android:drawer')
-    api project(':core:domain')
+    implementation project(':app:android:widget')
+    implementation project(':core:cli')
+    api project(':app:android:core')
+    api project(':platform:util:android:notification')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

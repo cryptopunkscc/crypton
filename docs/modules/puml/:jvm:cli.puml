@@ -14,8 +14,8 @@ package ":core" {
 [:core:cli]
 [:core:api]
 }
-package ":jvm" {
-[:jvm:cli]
+package ":app" {
+[:app:jvm:cli]
 }
 [:engine:net] --> [:engine:connectable]
 [:engine:net] --> [:engine:json]
@@ -25,7 +25,7 @@ package ":jvm" {
 [:engine:connectable] --> [:engine:util]
 [:engine:connectable] --> [:engine:log]
 [:core:api] --> [:engine:connectable]
-[:jvm:cli] --> [:engine:net]
-[:jvm:cli] --> [:platform:log:jvm]
-[:jvm:cli] --> [:core:cli]
+[:app:jvm:cli] --> [:engine:net]
+[:app:jvm:cli] --> [:platform:log:jvm]
+[:app:jvm:cli] --> [:core:cli]
 @enduml

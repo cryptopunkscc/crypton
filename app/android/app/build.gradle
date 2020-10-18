@@ -81,7 +81,7 @@ dependencies {
     implementation project(':platform:repo:room')
     implementation project(':platform:sys:android')
     implementation project(':platform:log:android')
-    implementation project(':android:error')
-    implementation project(':android:main')
+    implementation project(':app:android:error')
+    implementation project(':app:android:main')
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 }

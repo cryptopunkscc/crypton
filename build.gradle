@@ -4,9 +4,9 @@ apply plugin: 'crypton'
 
 crypton {
     outputs = [
-            ':android:app': './docs/modules/puml/:android:app.puml',
-            ':jvm:server' : './docs/modules/puml/:jvm:server.puml',
-            ':jvm:cli' : './docs/modules/puml/:jvm:cli.puml',
+            ':app:android:app': './docs/modules/puml/:android:app.puml',
+            ':app:jvm:server' : './docs/modules/puml/:jvm:server.puml',
+            ':app:jvm:cli' : './docs/modules/puml/:jvm:cli.puml',
     ]
 }
 
