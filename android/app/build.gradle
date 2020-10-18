@@ -64,6 +64,7 @@ android {
         exclude 'META-INF/account.kotlin_module'
         exclude 'META-INF/common.kotlin_module'
         exclude 'META-INF/api.kotlin_module'
+        exclude 'META-INF/android_debug.kotlin_module'
     }
     androidExtensions {
         experimental = true
@@ -76,10 +77,10 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':core:backend')
-    implementation project(':net:smack:android')
-    implementation project(':android:room')
-    implementation project(':android:sys')
-    implementation project(':android:log')
+    implementation project(':platform:net:smack:android')
+    implementation project(':platform:repo:room')
+    implementation project(':platform:sys:android')
+    implementation project(':platform:log:android')
     implementation project(':android:error')
     implementation project(':android:main')
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'

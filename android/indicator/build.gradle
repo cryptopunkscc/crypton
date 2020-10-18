@@ -35,7 +35,7 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api project(':android:core')
-    api project(':android:notification')
+    api project(':platform:util:android:notification')
 }
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

@@ -12,7 +12,7 @@ User can remove account from local application database.
 :core:api
 :core:domain:account
 :smack:net
-:android:room
+:platform:repo:room
 :android:account
 ```
 

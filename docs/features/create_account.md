@@ -14,7 +14,7 @@ This is key access feature to other features in application.
 :core:api
 :core:domain:account
 :net:smack
-:android:room
+:platform:repo:room
 :android:account
 ```
 

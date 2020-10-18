@@ -11,7 +11,7 @@ User is not forced for interactions to keep connection with external server pers
 :core:api
 :core:domain:app
 :net:smack
-:android:room
+:platform:repo:room
 ```
 
 ## Service

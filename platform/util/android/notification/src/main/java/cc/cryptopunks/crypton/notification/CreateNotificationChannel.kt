@@ -5,9 +5,8 @@ import android.app.NotificationManager
 import android.app.NotificationManager.*
 import android.os.Build
 import cc.cryptopunks.crypton.notification.CreateNotificationChannel.Importance.*
-import javax.inject.Inject
 
-class CreateNotificationChannel @Inject constructor(
+class CreateNotificationChannel(
     private val notificationManager: NotificationManager
 ) {
     operator fun invoke(
