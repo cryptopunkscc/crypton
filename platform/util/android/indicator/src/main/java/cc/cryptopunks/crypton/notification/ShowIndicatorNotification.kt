@@ -6,12 +6,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import cc.cryptopunks.crypton.context.Indicator
-import cc.cryptopunks.crypton.indicator.R
 
-class ShowIndicatorNotification(
+internal class ShowIndicatorNotification(
     private val showNotification: ShowForegroundNotification,
     private val context: Context,
-    private val mainActivityClass: Class<*>
+    private val mainActivityClass: Class<*>,
+    private val appNameResId: Int,
+    private val smallIconResId: Int
 ) : () -> Unit {
 
     override fun invoke() = showNotification(
@@ -21,8 +22,8 @@ class ShowIndicatorNotification(
 
     private fun createNotification(): Notification = NotificationCompat
         .Builder(context, Indicator.Notification.channelId)
-        .setContentTitle(context.getText(R.string.app_name))
-        .setSmallIcon(R.mipmap.ic_launcher_round)
+        .setContentTitle(context.getText(appNameResId))
+        .setSmallIcon(smallIconResId)
         .setContentIntent(pendingIntent())
         .setOngoing(true)
         .setShowWhen(false)

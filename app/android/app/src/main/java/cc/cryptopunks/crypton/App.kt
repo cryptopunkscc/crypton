@@ -46,7 +46,9 @@ class App :
                         mainActivityClass = mainActivityClass.java,
                         navGraphId = R.navigation.main
                     )
-                )
+                ),
+                appNameResId = R.string.app_name,
+                smallIconResId = R.mipmap.ic_launcher_round
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
             handlers = cryptonHandlers(),

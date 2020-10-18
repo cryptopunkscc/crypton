@@ -24,7 +24,9 @@ class IndicatorService : IntentService(Indicator.serviceName) {
             showNotification = ShowForegroundNotification(
                 service = this,
                 notificationManager = getSystemService()!!
-            )
+            ),
+            smallIconResId = smallIconResId,
+            appNameResId = appNameResId
         )
     }
 
@@ -53,6 +55,9 @@ class IndicatorService : IntentService(Indicator.serviceName) {
     override fun onHandleIntent(intent: Intent?) = Unit /*no-op*/
 
     companion object {
+        var appNameResId: Int = 0
+        var smallIconResId: Int = 0
+
         var isRunning = false
             private set
     }

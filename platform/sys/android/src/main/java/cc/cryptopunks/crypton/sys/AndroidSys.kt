@@ -3,15 +3,20 @@ package cc.cryptopunks.crypton.sys
 import android.app.Application
 import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.context.*
+import cc.cryptopunks.crypton.service.IndicatorService
 import kotlinx.coroutines.GlobalScope
 import kotlin.reflect.KClass
 
 class AndroidSys(
     application: Application,
-    notificationFactories: Map<KClass<out Notification>, (Notification) -> android.app.Notification>
+    notificationFactories: Map<KClass<out Notification>, (Notification) -> android.app.Notification>,
+    appNameResId: Int = 0,
+    smallIconResId: Int = 0
 ) : Sys {
 
     override val indicatorSys: Indicator.Sys by lazy {
+        IndicatorService.appNameResId = appNameResId
+        IndicatorService.smallIconResId = smallIconResId
         IndicatorSys(
             context = application
         )
