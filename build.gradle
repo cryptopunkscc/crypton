@@ -6,7 +6,7 @@ crypton {
     outputs = [
             ':app:android:app': './docs/modules/puml/:android:app.puml',
             ':app:jvm:server' : './docs/modules/puml/:jvm:server.puml',
-            ':app:jvm:cli' : './docs/modules/puml/:jvm:cli.puml',
+            ':app:jvm:cli'    : './docs/modules/puml/:jvm:cli.puml',
     ]
 }
 
@@ -52,6 +52,7 @@ buildscript {
                         ext_junit: "androidx.test.ext:junit:$versions.test.junit",
                 ],
                 room: [
+                        common  : "androidx.room:room-common:$versions.room",
                         ktx     : "androidx.room:room-ktx:$versions.room",
                         compiler: "androidx.room:room-compiler:$versions.room",
                         testing : "androidx.room:room-testing:$versions.room",

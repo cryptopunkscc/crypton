@@ -7,14 +7,21 @@ include ':core:api',
         ':platform:net:mock',
         ':platform:net:smack:android',
         ':platform:net:smack:jvm',
+
         ':platform:repo:mock',
+        ':platform:repo:data',
         ':platform:repo:room',
+        ':platform:repo:ormlite',
+
         ':platform:sys:mock',
         ':platform:sys:android',
+
         ':platform:fs:test',
         ':platform:fs:ormlite',
+
         ':platform:log:jvm',
         ':platform:log:android',
+
         ':platform:util:android:notification',
         ':platform:util:ormlite',
         ':platform:util:ormlite:jvm',

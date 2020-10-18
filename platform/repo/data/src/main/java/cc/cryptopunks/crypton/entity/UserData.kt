@@ -2,12 +2,12 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
 import cc.cryptopunks.crypton.context.address
+import com.j256.ormlite.table.DatabaseTable
 import kotlinx.coroutines.flow.Flow
 
-@Entity(
-    tableName = "user"
-)
-internal data class UserData(
+@DatabaseTable(tableName = "user")
+@Entity(tableName = "user")
+data class UserData(
     @PrimaryKey val id: AddressData
 ) {
 
@@ -34,4 +34,4 @@ internal data class UserData(
     }
 }
 
-internal fun UserData.user() = address(id)
+fun UserData.user() = address(id)

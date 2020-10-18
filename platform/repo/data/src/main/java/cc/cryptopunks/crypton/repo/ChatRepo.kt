@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.entity.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class ChatRepo(
+class ChatRepo(
     private val chatDao: ChatData.Dao,
     private val chatUserDao: ChatUserData.Dao,
     private val userDao: UserData.Dao

@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.entity.user
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class RosterRepo(
+class RosterRepo(
     private val dao: UserData.Dao
 ) : Roster.Repo {
 

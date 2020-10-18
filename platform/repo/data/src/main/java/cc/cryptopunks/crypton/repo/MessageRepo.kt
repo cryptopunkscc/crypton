@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-internal class MessageRepo(
+class MessageRepo(
     private val dao: MessageData.Dao,
     override val coroutineContext: CoroutineContext
 ) : Message.Repo,

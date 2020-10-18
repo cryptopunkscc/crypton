@@ -7,7 +7,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import cc.cryptopunks.crypton.context.address
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 
+@DatabaseTable(tableName = "chatUser")
 @Entity(
     tableName = "chatUser",
     primaryKeys = [
@@ -33,8 +36,21 @@ import cc.cryptopunks.crypton.context.address
         )
     ]
 )
-internal data class ChatUserData(
+data class ChatUserData(
+    @DatabaseField(
+        index = true,
+        uniqueCombo = true,
+        foreign = true,
+        foreignAutoRefresh = true
+    )
     val id: AddressData,
+
+    @DatabaseField(
+        index = true,
+        uniqueCombo = true,
+        foreign = true,
+        foreignAutoRefresh = true
+    )
     val chatId: AddressData
 ) {
 
@@ -55,4 +71,4 @@ internal data class ChatUserData(
     }
 }
 
-internal fun ChatUserData.user() = address(id)
+fun ChatUserData.user() = address(id)

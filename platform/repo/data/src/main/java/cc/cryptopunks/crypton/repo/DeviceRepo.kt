@@ -4,7 +4,7 @@ import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.entity.FingerprintData
 
-internal class DeviceRepo(
+class DeviceRepo(
     private val dao: FingerprintData.Dao
 ) : Device.Repo {
     override suspend fun set(fingerprint: Device.Fingerprint) {

@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.repo
 
 import cc.cryptopunks.crypton.context.Clip
 
-internal class ClipboardRepo : Clip.Board.Repo {
+class ClipboardRepo : Clip.Board.Repo {
 
     private var clip: Clip? = null
 

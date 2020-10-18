@@ -4,15 +4,17 @@ import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 
-@Entity(
-    tableName = "device"
-)
-internal data class FingerprintData(
+@DatabaseTable(tableName = "device")
+@Entity(tableName = "device")
+data class FingerprintData(
+    @DatabaseField(id = true)
     @PrimaryKey val fingerprint: String,
-    val deviceId: Int,
-    val address: AddressData,
-    val state: String
+    @DatabaseField val deviceId: Int,
+    @DatabaseField val address: AddressData,
+    @DatabaseField val state: String
 ) {
     @androidx.room.Dao
     interface Dao {

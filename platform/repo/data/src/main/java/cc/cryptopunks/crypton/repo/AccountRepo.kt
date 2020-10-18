@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.entity.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class AccountRepo(
+class AccountRepo(
     private val dao: AccountData.Dao
 ) : Account.Repo {
 

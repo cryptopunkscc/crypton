@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.messageStatus
 import cc.cryptopunks.crypton.context.resource
+import com.j256.ormlite.field.DatabaseField
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
@@ -26,17 +27,18 @@ import kotlinx.coroutines.flow.Flow
         )
     ]
 )
-internal data class MessageData(
+data class MessageData(
+    @DatabaseField(id = true)
     @PrimaryKey val id: String = "",
-    val stanzaId: String = "",
-    val text: String = "",
-    val timestamp: Long = 0,
-    val chatId: AddressData = EmptyAddressData,
-    val from: AddressData = EmptyAddressData,
-    val to: AddressData = EmptyAddressData,
-    val status: String = "",
-    val readAt: Long = 0,
-    val encrypted: Boolean = true
+    @DatabaseField val stanzaId: String = "",
+    @DatabaseField val text: String = "",
+    @DatabaseField val timestamp: Long = 0,
+    @DatabaseField(foreign = true) val chatId: AddressData = EmptyAddressData,
+    @DatabaseField val from: AddressData = EmptyAddressData,
+    @DatabaseField val to: AddressData = EmptyAddressData,
+    @DatabaseField val status: String = "",
+    @DatabaseField val readAt: Long = 0,
+    @DatabaseField val encrypted: Boolean = true
 ) {
 
     @androidx.room.Dao
@@ -98,7 +100,7 @@ internal data class MessageData(
     }
 }
 
-internal fun Message.messageData() = MessageData(
+fun Message.messageData() = MessageData(
     id = id,
     chatId = chat.id,
     stanzaId = stanzaId,
@@ -111,7 +113,7 @@ internal fun Message.messageData() = MessageData(
     encrypted = encrypted
 )
 
-internal fun MessageData.message() = Message(
+fun MessageData.message() = Message(
     id = id,
     stanzaId = stanzaId,
     to = resource(to),

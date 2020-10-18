@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.entity
 
 import androidx.paging.DataSource
-import androidx.room.Delete
 import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,16 +9,18 @@ import androidx.room.Query
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.address
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 import kotlinx.coroutines.flow.Flow
 
-@Entity(
-    tableName = "chat"
-)
-internal data class ChatData(
+@DatabaseTable(tableName = "chat")
+@Entity(tableName = "chat")
+data class ChatData(
+    @DatabaseField(id = true)
     @PrimaryKey val id: AddressData,
-    val accountId: AddressData,
-    val title: String,
-    val isMultiUser: Boolean
+    @DatabaseField val accountId: AddressData,
+    @DatabaseField val title: String,
+    @DatabaseField val isMultiUser: Boolean
 ) {
 
     @androidx.room.Dao
@@ -57,7 +58,7 @@ internal data class ChatData(
     }
 }
 
-internal fun ChatData.toDomain(users: List<Address> = emptyList()) =
+fun ChatData.toDomain(users: List<Address> = emptyList()) =
     Chat(
         title = title,
         address = address(id),
@@ -65,7 +66,7 @@ internal fun ChatData.toDomain(users: List<Address> = emptyList()) =
         users = users
     )
 
-internal fun Chat.chatData() = ChatData(
+fun Chat.chatData() = ChatData(
     title = title,
     id = address.id,
     accountId = account.id,

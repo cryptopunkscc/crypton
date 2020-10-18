@@ -4,12 +4,20 @@ import androidx.room.*
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Password
+import com.j256.ormlite.field.DataType
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 import kotlinx.coroutines.flow.Flow
 
+@DatabaseTable(tableName = "account")
 @Entity(tableName = "account")
-internal data class AccountData(
-    @PrimaryKey val id: AddressData,
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val password: ByteArray
+data class AccountData(
+    @DatabaseField(id = true)
+    @PrimaryKey
+    val id: AddressData,
+    @DatabaseField(dataType = DataType.BYTE_ARRAY)
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val password: ByteArray
 ) {
 
     @androidx.room.Dao
@@ -52,12 +60,12 @@ internal data class AccountData(
     override fun hashCode() = id.hashCode()
 }
 
-internal fun AccountData.toDomain() = Account(
+fun AccountData.toDomain() = Account(
     address = Address.from(id),
     password = Password(password)
 )
 
-internal fun Account.accountData() = AccountData(
+fun Account.accountData() = AccountData(
     id = address.id,
     password = password.byteArray
 )
