@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.util
+package cc.cryptopunks.crypton.room.internal
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase

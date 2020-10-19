@@ -1,0 +1,103 @@
+package cc.cryptopunks.crypton.repo.ormlite.dao
+
+import androidx.paging.DataSource
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.entity.AddressData
+import cc.cryptopunks.crypton.entity.MessageData
+import cc.cryptopunks.crypton.fs.ormlite.CryptonDao
+import cc.cryptopunks.crypton.fs.ormlite.DaoPositionalDataSource
+import cc.cryptopunks.crypton.fs.ormlite.OrmLiteCryptonDao
+import cc.cryptopunks.crypton.fs.ormlite.changesFlow
+import com.j256.ormlite.dao.Dao
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
+
+class MessageDao(
+    private val read: CoroutineContext,
+    private val write: CoroutineContext,
+    private val dao: Dao<MessageData, String>,
+) : MessageData.Dao,
+    CryptonDao<MessageData, String> by OrmLiteCryptonDao(
+        dao = dao,
+        read = read,
+        write = write
+    ) {
+
+    override fun latest(): MessageData? = dao
+        .queryBuilder()
+        .orderBy("timestamp", false)
+        .queryForFirst()
+
+    override fun latest(chatId: AddressData): MessageData? = dao
+        .queryBuilder()
+        .orderBy("timestamp", false).where()
+        .eq("chatId", chatId)
+        .queryForFirst()
+
+    override fun flowLatest(): Flow<MessageData?> = dao
+        .changesFlow { send(latest()) }
+
+    override fun flowLatest(chatId: AddressData): Flow<MessageData?> = dao
+        .changesFlow { send(latest(chatId)) }
+
+    override fun dataSourceFactory(chatId: AddressData): DataSource.Factory<Int, MessageData> =
+        DaoPositionalDataSource.Factory(dao) { eq("chatId", chatId) }
+
+    override suspend fun listUnread(): List<MessageData> = withContext(read) {
+        dao.queryBuilder().where()
+            .eq("readAt", null)
+            .query()
+    }
+
+    private suspend fun listUnread(chatId: AddressData): List<MessageData> = withContext(read) {
+        dao.queryBuilder().where()
+            .eq("chatId", chatId)
+            .eq("readAt", null)
+            .query()
+    }
+
+    private suspend fun listUnreadIds(chatId: AddressData): List<String> = withContext(read) {
+        dao.queryBuilder()
+            .selectColumns("id").where()
+            .eq("chatId", chatId)
+            .eq("readAt", null)
+            .queryRaw()
+            .mapNotNull { it.firstOrNull() }
+    }
+
+    override suspend fun list(
+        latest: Long,
+        oldest: Long
+    ): List<MessageData> = withContext(read) {
+        dao.queryBuilder().where()
+            .le("timestamp", latest)
+            .ge("timestamp", oldest)
+            .query()
+    }
+
+    override suspend fun list(
+        chat: AddressData,
+        status: String
+    ): List<MessageData> = withContext(read) {
+        dao.queryBuilder().where()
+            .eq("chatId", chat)
+            .ge("status", status)
+            .query()
+    }
+
+    override fun queueList(): List<MessageData> = dao
+        .queryForEq("status", Message.Status.Queued.name)
+
+    override fun flowUnreadList(): Flow<List<MessageData>> = dao
+        .changesFlow { send(listUnread()) }
+
+    override fun flowUnreadList(chatId: AddressData): Flow<List<MessageData>> = dao
+        .changesFlow { send(listUnread(chatId)) }
+
+    override fun flowQueueList(): Flow<List<MessageData>> = dao
+        .changesFlow { send(queueList()) }
+
+    override fun flowUnreadIds(chatId: AddressData): Flow<List<String>> = dao
+        .changesFlow { send(listUnreadIds(chatId)) }
+}

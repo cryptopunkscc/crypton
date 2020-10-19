@@ -64,7 +64,7 @@ data class ChatUserData(
         suspend fun insertIfNeeded(list: List<ChatUserData>)
 
         @Query("select * from chatUser where id = :id")
-        suspend fun get(id: AddressData) : ChatUserData
+        suspend fun get(id: AddressData) : ChatUserData?
 
         @Query("select * from chatUser where chatId = :chatId")
         suspend fun listByChat(chatId: AddressData) : List<ChatUserData>

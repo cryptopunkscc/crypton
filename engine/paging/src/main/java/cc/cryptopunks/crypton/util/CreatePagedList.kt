@@ -55,7 +55,7 @@ class CreatePagedList<K, V>(
         list else
         create(pagedList(list.lastKey as K?))
 
-    private fun pagedList(key: K?) = PagedList
+    private fun pagedList(key: K?): PagedList<V> = PagedList
         .Builder(dataSourceFactory.create(), config)
         .setInitialKey(key)
         .setNotifyExecutor(notifyExecutor)

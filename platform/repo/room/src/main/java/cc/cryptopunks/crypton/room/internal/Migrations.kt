@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.room.internal
 
 import androidx.room.migration.Migration
 

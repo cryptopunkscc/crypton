@@ -14,18 +14,18 @@ data class FingerprintData(
     @PrimaryKey val fingerprint: String,
     @DatabaseField val deviceId: Int,
     @DatabaseField val address: AddressData,
-    @DatabaseField val state: String
+    @DatabaseField val state: String,
 ) {
     @androidx.room.Dao
     interface Dao {
 
         @Insert
-        fun insert(fingerprintData: FingerprintData)
+        suspend fun insert(entity: FingerprintData)
 
-        @Query("select * from device where fingerprint == :fingerprint")
-        fun get(fingerprint: String): FingerprintData?
+        @Query("select * from device where fingerprint == :id")
+        suspend fun get(id: String): FingerprintData?
 
         @Query("delete from device where fingerprint == fingerprint")
-        fun clear()
+        suspend fun deleteAll()
     }
 }

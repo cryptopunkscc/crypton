@@ -45,7 +45,7 @@ data class Account(
 
     interface Repo {
         suspend fun contains(address: Address): Boolean
-        fun get(address: Address): Account
+        suspend fun get(address: Address): Account
         suspend fun insert(account: Account): Account
         suspend fun update(account: Account)
         suspend fun delete(address: Address)

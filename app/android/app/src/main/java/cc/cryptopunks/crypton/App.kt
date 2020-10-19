@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.debug.drawer.initAppDebug
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
-import cc.cryptopunks.crypton.module.RoomRepo
+import cc.cryptopunks.crypton.room.RoomAppRepo
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.selector.newSessionsFlow
 import cc.cryptopunks.crypton.service.cryptonHandlers
@@ -37,7 +37,7 @@ class App :
             mainClass = mainActivityClass,
             mainExecutor = MainExecutor(Dispatchers.Main.asExecutor()),
             ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
-            repo = RoomRepo(this),
+            repo = RoomAppRepo(this),
             sys = AndroidSys(
                 application = this,
                 notificationFactories = mapOf(

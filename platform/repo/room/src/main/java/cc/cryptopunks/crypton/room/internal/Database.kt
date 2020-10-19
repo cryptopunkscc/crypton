@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.data
+package cc.cryptopunks.crypton.room.internal
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

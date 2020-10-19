@@ -27,13 +27,13 @@ data class AccountData(
         suspend fun contains(id: AddressData): String?
 
         @Query("select * from account where id = :id")
-        fun get(id: AddressData): AccountData
+        suspend fun get(id: AddressData): AccountData?
 
         @Insert
-        suspend fun insert(data: AccountData)
+        suspend fun insert(entity: AccountData)
 
         @Update
-        suspend fun update(data: AccountData)
+        suspend fun update(entity: AccountData)
 
         @Query("delete from account where id = :id")
         suspend fun delete(id: AddressData)

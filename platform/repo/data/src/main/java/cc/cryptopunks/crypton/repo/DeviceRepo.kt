@@ -15,7 +15,7 @@ class DeviceRepo(
         dao.get(value.toString())?.toDomain()
 
     override suspend fun clear() {
-        dao.clear()
+        dao.deleteAll()
     }
 }
 

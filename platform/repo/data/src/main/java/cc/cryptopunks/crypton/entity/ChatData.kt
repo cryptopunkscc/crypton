@@ -27,13 +27,13 @@ data class ChatData(
     interface Dao {
 
         @Query("select * from chat where id = :id")
-        suspend fun get(id: AddressData): ChatData
+        suspend fun get(id: AddressData): ChatData?
 
         @Insert
-        suspend fun insert(data: ChatData)
+        suspend fun insert(entity: ChatData)
 
         @Insert(onConflict = OnConflictStrategy.IGNORE)
-        suspend fun insertIfNeeded(data: ChatData)
+        suspend fun insertIfNeeded(entity: ChatData)
 
         @Query("delete from chat where id in (:ids)")
         suspend fun delete(ids: List<AddressData>)

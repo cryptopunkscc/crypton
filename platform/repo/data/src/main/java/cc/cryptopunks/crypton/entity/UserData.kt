@@ -14,13 +14,13 @@ data class UserData(
     @androidx.room.Dao
     interface Dao {
         @Insert
-        suspend fun insert(user: UserData)
+        suspend fun insert(entity: UserData)
 
         @Insert(onConflict = OnConflictStrategy.IGNORE)
         suspend fun insertIfNeeded(list: List<UserData>)
 
         @Query("select * from User where id = :id")
-        suspend fun getById(id: AddressData): UserData
+        suspend fun get(id: AddressData): UserData?
 
         @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
         @Query(

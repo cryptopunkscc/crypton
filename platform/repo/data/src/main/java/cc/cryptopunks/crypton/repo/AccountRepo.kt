@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class AccountRepo(
-    private val dao: AccountData.Dao
+    private val dao: AccountData.Dao,
 ) : Account.Repo {
 
     override suspend fun contains(address: Address): Boolean =
         dao.contains(address.id) != null
 
-    override fun get(address: Address): Account =
-        dao.get(address.id).toDomain()
+    override suspend fun get(address: Address): Account =
+        requireNotNull(dao.get(address.id)).toDomain()
 
     override suspend fun insert(account: Account): Account =
         account.apply { dao.insert(accountData()) }

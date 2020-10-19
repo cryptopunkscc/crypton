@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.module
+package cc.cryptopunks.crypton.room
 
 import android.content.Context
 import androidx.room.Room
@@ -6,12 +6,12 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Repo
 import cc.cryptopunks.crypton.context.SessionRepo
-import cc.cryptopunks.crypton.data.Database
-import cc.cryptopunks.crypton.migrations
+import cc.cryptopunks.crypton.room.internal.Database
+import cc.cryptopunks.crypton.room.internal.migrations
 import cc.cryptopunks.crypton.repo.AccountRepo
 import cc.cryptopunks.crypton.repo.ClipboardRepo
 
-class RoomRepo(
+class RoomAppRepo(
     context: Context
 ) : Repo {
 

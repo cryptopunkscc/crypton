@@ -18,7 +18,7 @@ class ChatRepo(
 ) : Chat.Repo {
 
     override suspend fun get(address: Address): Chat =
-        chatDao.get(address.id).toDomain()
+        requireNotNull(chatDao.get(address.id)).toDomain()
 
     override suspend fun contains(address: Address): Boolean =
         chatDao.contains(address.id) != null

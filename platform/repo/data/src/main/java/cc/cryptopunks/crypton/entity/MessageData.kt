@@ -38,23 +38,23 @@ data class MessageData(
     @DatabaseField val to: AddressData = EmptyAddressData,
     @DatabaseField val status: String = "",
     @DatabaseField val readAt: Long = 0,
-    @DatabaseField val encrypted: Boolean = true
+    @DatabaseField val encrypted: Boolean = true,
 ) {
 
     @androidx.room.Dao
     interface Dao {
 
         @Insert(onConflict = OnConflictStrategy.IGNORE)
-        suspend fun insert(messages: List<MessageData>)
+        suspend fun insert(list: List<MessageData>)
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        suspend fun insertOrUpdate(data: MessageData)
+        suspend fun insertOrUpdate(entity: MessageData)
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun insertOrUpdate(list: List<MessageData>)
 
         @Query("select * from message where id == :id")
-        fun get(id: String): MessageData?
+        suspend fun get(id: String): MessageData?
 
         @Query("select * from message order by timestamp desc")
         fun latest(): MessageData?
@@ -72,7 +72,7 @@ data class MessageData(
         fun dataSourceFactory(chatId: AddressData): DataSource.Factory<Int, MessageData>
 
         @Query("delete from message where id == :id")
-        fun delete(id: String)
+        suspend fun delete(id: String)
 
         @Query("select * from message where readAt == 0 and status == 'Received'")
         suspend fun listUnread(): List<MessageData>

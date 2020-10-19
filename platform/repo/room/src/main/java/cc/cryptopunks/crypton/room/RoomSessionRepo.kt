@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.module
+package cc.cryptopunks.crypton.room
 
 import android.content.Context
 import androidx.room.Room
@@ -9,8 +9,8 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Repo
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionRepo
-import cc.cryptopunks.crypton.data.Database
-import cc.cryptopunks.crypton.migrations
+import cc.cryptopunks.crypton.room.internal.Database
+import cc.cryptopunks.crypton.room.internal.migrations
 import cc.cryptopunks.crypton.repo.ChatRepo
 import cc.cryptopunks.crypton.repo.DeviceRepo
 import cc.cryptopunks.crypton.repo.MessageRepo
@@ -21,10 +21,8 @@ class RoomSessionRepo(
     address: Address
 ) : SessionRepo {
 
-    override val queryContext =
-        Repo.Context.Query()
-    override val transactionContext =
-        Repo.Context.Transaction()
+    override val queryContext = Repo.Context.Query()
+    override val transactionContext = Repo.Context.Transaction()
 
     private val database: Database = Room.databaseBuilder(
         context,
