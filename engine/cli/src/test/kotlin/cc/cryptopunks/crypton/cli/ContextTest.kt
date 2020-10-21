@@ -1,14 +1,5 @@
-package cc.cryptopunks.crypton
+package cc.cryptopunks.crypton.cli
 
-import cc.cryptopunks.crypton.translator.Check
-import cc.cryptopunks.crypton.translator.Commands
-import cc.cryptopunks.crypton.translator.Context
-import cc.cryptopunks.crypton.translator.command
-import cc.cryptopunks.crypton.translator.execute
-import cc.cryptopunks.crypton.translator.named
-import cc.cryptopunks.crypton.translator.param
-import cc.cryptopunks.crypton.translator.prepare
-import cc.cryptopunks.crypton.translator.set
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -34,7 +25,7 @@ class ContextTest {
     fun `test root command`() {
         assertEquals(
             listOf("0", "1"),
-            Context(TEST_COMMANDS)
+            CliContext(TEST_COMMANDS)
                 .prepare()
                 .set("cmd0 0 1")
                 .execute()
@@ -45,7 +36,7 @@ class ContextTest {
     fun `test sub command`() {
         assertEquals(
             listOf("0", "1"),
-            Context(TEST_COMMANDS)
+            CliContext(TEST_COMMANDS)
                 .prepare()
                 .set("cmd1 subCmd0 arg1 1 arg0 0")
                 .execute()
@@ -56,7 +47,7 @@ class ContextTest {
     fun `suggest command`() {
         assertEquals(
             Check.Suggest(listOf("subCmd0")),
-            Context(TEST_COMMANDS)
+            CliContext(TEST_COMMANDS)
                 .prepare()
                 .set("cmd1")
                 .execute()
@@ -67,7 +58,7 @@ class ContextTest {
     fun `suggest arg`() {
         assertEquals(
             Check.Suggest(listOf("arg0")),
-            Context(TEST_COMMANDS)
+            CliContext(TEST_COMMANDS)
                 .prepare()
                 .set("cmd1 subCmd0 arg1 1")
                 .execute()

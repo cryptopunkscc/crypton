@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.cli.translateCli
-import cc.cryptopunks.crypton.translator.Check
+import cc.cryptopunks.crypton.core.cli.translateCli
+import cc.cryptopunks.crypton.cli.Check
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
 class CliClient(
-    private val cli: Flow<String>
+    private val cliInput: Flow<String>
 ) : Connectable {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO +
@@ -20,7 +20,7 @@ class CliClient(
 
     override fun Connector.connect(): Job = launch {
         launch {
-            cli.translateCli().mapNotNull { it.result }.collect { result ->
+            cliInput.translateCli().mapNotNull { it.result }.collect { result ->
                 when (result) {
                     is Throwable -> result.printStackTrace()
                     is Check.Suggest -> println(result)

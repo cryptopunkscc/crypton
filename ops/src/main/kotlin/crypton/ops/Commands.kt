@@ -1,8 +1,8 @@
 package crypton.ops
 
-import cc.cryptopunks.crypton.translator.Commands
-import cc.cryptopunks.crypton.translator.command
-import cc.cryptopunks.crypton.translator.param
+import cc.cryptopunks.crypton.cli.Commands
+import cc.cryptopunks.crypton.cli.command
+import cc.cryptopunks.crypton.cli.param
 import crypton.ops.util.BUILD_VERSION
 import crypton.ops.util.Git
 import crypton.ops.util.MAJOR

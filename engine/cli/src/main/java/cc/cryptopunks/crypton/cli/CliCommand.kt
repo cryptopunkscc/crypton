@@ -1,22 +1,22 @@
-package cc.cryptopunks.crypton.translator
+package cc.cryptopunks.crypton.cli
 
-data class Command(
+data class CliCommand(
     val params: List<Input>,
     val args: List<String>,
     val input: List<String>,
-    val run: Context.(List<String>) -> Any
+    val run: CliContext.(List<String>) -> Any
 )
 
-fun Command.canExecute() =
+fun CliCommand.canExecute() =
     params.filterNot { it is Input.Vararg }.all(Input::isNotEmpty)
 
-fun Command.emptyParams() =
+fun CliCommand.emptyParams() =
     params.filter(Input::isEmpty)
 
 fun command(
     vararg params: Input,
-    run: Context.(List<String>) -> Any
-) = Command(
+    run: CliContext.(List<String>) -> Any
+) = CliCommand(
     params = params.toList(),
     args = emptyList(),
     run = run,
@@ -24,7 +24,7 @@ fun command(
 )
 
 
-fun Command.append(arg: String) = copy(
+fun CliCommand.append(arg: String) = copy(
     input = input + arg,
     args = params.fold(args + arg) { args, param ->
         when {

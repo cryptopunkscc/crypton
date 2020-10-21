@@ -5,11 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.activity.BaseActivity
-import cc.cryptopunks.crypton.cli.context
+import cc.cryptopunks.crypton.cli.Check
+import cc.cryptopunks.crypton.cli.CliContext
+import cc.cryptopunks.crypton.core.cli.context
+import cc.cryptopunks.crypton.core.cli.translateCli
 import cc.cryptopunks.crypton.debug.R
-import cc.cryptopunks.crypton.translator.Check
-import cc.cryptopunks.crypton.translator.TranslationContext
-import cc.cryptopunks.crypton.cli.translateCli
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
@@ -33,7 +33,7 @@ class DebugView(
 
     private val debugAdapter = DebugAdapter()
 
-    private var translationContext: TranslationContext = context()
+    private var translationContext: CliContext = context()
 
     init {
         View.inflate(context, R.layout.debug_view, this)

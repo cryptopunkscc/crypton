@@ -1,6 +1,10 @@
-package cc.cryptopunks.crypton.cli
+package cc.cryptopunks.crypton.core.cli
 
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.cli.command
+import cc.cryptopunks.crypton.cli.commands
+import cc.cryptopunks.crypton.cli.named
+import cc.cryptopunks.crypton.cli.param
+import cc.cryptopunks.crypton.cli.vararg
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
@@ -9,11 +13,7 @@ import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.inContext
-import cc.cryptopunks.crypton.translator.command
-import cc.cryptopunks.crypton.translator.commands
-import cc.cryptopunks.crypton.translator.named
-import cc.cryptopunks.crypton.translator.param
-import cc.cryptopunks.crypton.translator.vararg
+import cc.cryptopunks.crypton.inContext
 
 private const val NAVIGATE = "navigate"
 private const val MAIN = "main"
@@ -100,14 +100,12 @@ private val invite = INVITE to command(vararg()) { users ->
 }
 
 private val deleteChat = DELETE to command(vararg()) { chats ->
-    run {
-        Exec.DeleteChat.inContext(
-            when (chats.isEmpty()) {
-                true -> (route as Route.Chat).run { listOf(address.id) }
-                false -> chats
-            }
-        )
-    }
+    Exec.DeleteChat.inContext(
+        when (chats.isEmpty()) {
+            true -> (route as Route.Chat).run { listOf(address.id) }
+            false -> chats
+        }
+    )
 }
 
 private val getInfo = INFO to command(
@@ -124,6 +122,8 @@ private val configure = CONFIGURE to command {
 private val purgeDevices = PURGE to mapOf(DEVICES to command(param()) { (account) ->
     Exec.PurgeDeviceList.inContext(account)
 })
+
+private val dupa = PURGE to DEVICES to INFO to command {}
 
 private val navigate = NAVIGATE to mapOf(
     navigateMain,

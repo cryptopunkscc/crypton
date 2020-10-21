@@ -1,17 +1,18 @@
-package cc.cryptopunks.crypton.cli
+package cc.cryptopunks.crypton.core.cli
 
-import cc.cryptopunks.crypton.translator.Check
-import cc.cryptopunks.crypton.translator.Commands
-import cc.cryptopunks.crypton.translator.Context
-import cc.cryptopunks.crypton.translator.command
-import cc.cryptopunks.crypton.translator.named
-import cc.cryptopunks.crypton.translator.param
+import cc.cryptopunks.crypton.cli.Check
+import cc.cryptopunks.crypton.cli.Commands
+import cc.cryptopunks.crypton.cli.CliContext
+import cc.cryptopunks.crypton.cli.command
+import cc.cryptopunks.crypton.cli.named
+import cc.cryptopunks.crypton.cli.param
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 val TEST_COMMANDS: Commands = mapOf(
@@ -38,7 +39,7 @@ class BusTest {
                 listOf(listOf("0", "1")),
                 listOf("cmd0 0 1")
                     .asFlow()
-                    .translateCli(Context(TEST_COMMANDS))
+                    .translateCli(CliContext(TEST_COMMANDS))
                     .mapNotNull { it.result }
                     .toList()
             )
@@ -59,7 +60,7 @@ class BusTest {
                 listOf("cmd1", "subCmd0", "arg1 1", "arg0", "0")
                     .asFlow()
                     .translateCli(
-                        Context(
+                        CliContext(
                             TEST_COMMANDS
                         )
                     )
@@ -76,7 +77,7 @@ class BusTest {
                 listOf("uknown", "comand", "foo", "bar")
                     .asFlow()
                     .translateCli(
-                        Context(
+                        CliContext(
                             TEST_COMMANDS
                         )
                     )

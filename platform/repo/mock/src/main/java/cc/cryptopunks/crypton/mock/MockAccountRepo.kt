@@ -12,7 +12,7 @@ class MockAccountRepo : Account.Repo {
 
     override suspend fun contains(address: Address): Boolean = address in store.get()
 
-    override fun get(address: Address): Account = store.get()[address]!!
+    override suspend fun get(address: Address): Account = store.get()[address]!!
 
     override suspend fun insert(account: Account): Account {
         store reduce { plus(account.address to account) }

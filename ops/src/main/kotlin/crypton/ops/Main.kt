@@ -1,13 +1,13 @@
 package crypton.ops
 
-import cc.cryptopunks.crypton.translator.Context
-import cc.cryptopunks.crypton.translator.prepare
-import cc.cryptopunks.crypton.translator.process
+import cc.cryptopunks.crypton.cli.CliContext
+import cc.cryptopunks.crypton.cli.prepare
+import cc.cryptopunks.crypton.cli.process
 import java.io.File
 
 fun main(args: Array<String>) {
     require(args.size > 1)
-    Context(
+    CliContext(
         commands = commands,
         route = File(args.first()).normalize().absolutePath,
         isRoute = { this is String },

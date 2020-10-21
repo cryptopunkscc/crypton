@@ -12,8 +12,8 @@ import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.cli.context
-import cc.cryptopunks.crypton.cli.translateMessageInput
+import cc.cryptopunks.crypton.cli.Check
+import cc.cryptopunks.crypton.cli.prepare
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
@@ -21,8 +21,8 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.translator.Check
-import cc.cryptopunks.crypton.translator.prepare
+import cc.cryptopunks.crypton.core.cli.context
+import cc.cryptopunks.crypton.core.cli.translateMessageInput
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges

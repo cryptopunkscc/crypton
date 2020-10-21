@@ -1,15 +1,15 @@
-package cc.cryptopunks.crypton.cli
+package cc.cryptopunks.crypton.core.cli
 
+import cc.cryptopunks.crypton.cli.CliContext
+import cc.cryptopunks.crypton.cli.prepare
+import cc.cryptopunks.crypton.cli.process
 import cc.cryptopunks.crypton.context.Exec
-import cc.cryptopunks.crypton.translator.Context
-import cc.cryptopunks.crypton.translator.prepare
-import cc.cryptopunks.crypton.translator.process
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 
 fun Flow<CharSequence>.translateMessageInput(
-    context: Context = context().prepare()
+    context: CliContext = context().prepare()
 ): Flow<Any?> =
     map { message ->
         when {
@@ -19,7 +19,7 @@ fun Flow<CharSequence>.translateMessageInput(
         }
     }
 
-fun Flow<Any>.translateCli(context: Context = Context()): Flow<Context> =
+fun Flow<Any>.translateCli(context: CliContext = CliContext()): Flow<CliContext> =
     scan(context.prepare()) { ctx, input ->
         when (input) {
             is String -> ctx.process(input).prepare()

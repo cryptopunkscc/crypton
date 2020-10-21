@@ -1,10 +1,10 @@
-package cc.cryptopunks.crypton.cli
+package cc.cryptopunks.crypton.core.cli
 
+import cc.cryptopunks.crypton.cli.CliContext
 import cc.cryptopunks.crypton.context.Route
-import cc.cryptopunks.crypton.translator.Context
 
 fun context(route: Route<*> = Route.Main) =
-    Context(
+    CliContext(
         route = route,
         isRoute = { this is Route<*> },
         empty = { (this as? Route<*>?)?.empty() ?: Unit },

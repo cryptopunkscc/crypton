@@ -34,7 +34,7 @@ include ':core:api',
         ':engine:connectable',
         ':engine:net',
         ':engine:util',
-        ':engine:translator',
+        ':engine:cli',
         ':engine:example',
 
         ':app:jvm:server',

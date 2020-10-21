@@ -1,13 +1,13 @@
-package cc.cryptopunks.crypton.cli
+package cc.cryptopunks.crypton.core.cli
 
+import cc.cryptopunks.crypton.cli.execute
+import cc.cryptopunks.crypton.cli.prepare
+import cc.cryptopunks.crypton.cli.set
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
-import cc.cryptopunks.crypton.translator.execute
-import cc.cryptopunks.crypton.translator.prepare
-import cc.cryptopunks.crypton.translator.set
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
