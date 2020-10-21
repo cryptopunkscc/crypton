@@ -4,15 +4,18 @@ import cc.cryptopunks.crypton.context.Repo
 import cc.cryptopunks.crypton.repo.AccountRepo
 import cc.cryptopunks.crypton.repo.ClipboardRepo
 import cc.cryptopunks.crypton.repo.ormlite.dao.AccountDao
-import com.j256.ormlite.support.ConnectionSource
+import cc.cryptopunks.crypton.util.ormlite.ConnectionSourceFactory
 
 class OrmLiteAppRepo(
-    connection: ConnectionSource,
+    createConnection: ConnectionSourceFactory,
     read: Repo.Context.Query = Repo.Context.Query(),
     write: Repo.Context.Transaction = Repo.Context.Transaction(),
 ) : Repo {
 
-    override val accountRepo = AccountRepo(AccountDao(connection, read, write))
+    private val connection = createConnection("crypton")
+    val accountDao = AccountDao(connection, read, write)
+
+    override val accountRepo = AccountRepo(accountDao)
     override val clipboardRepo = ClipboardRepo()
-    override val createSessionRepo = OrmLiteSessionRepo.Factory(connection, read, write)
+    override val createSessionRepo = OrmLiteSessionRepo.Factory(createConnection, read, write)
 }

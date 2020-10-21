@@ -1,6 +1,11 @@
 package cc.cryptopunks.crypton.entity
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.Update
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Password
@@ -14,10 +19,10 @@ import kotlinx.coroutines.flow.Flow
 data class AccountData(
     @DatabaseField(id = true)
     @PrimaryKey
-    val id: AddressData,
+    val id: AddressData = "",
     @DatabaseField(dataType = DataType.BYTE_ARRAY)
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    val password: ByteArray
+    val password: ByteArray = ByteArray(0)
 ) {
 
     @androidx.room.Dao

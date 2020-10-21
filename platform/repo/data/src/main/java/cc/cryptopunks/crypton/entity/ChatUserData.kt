@@ -39,19 +39,15 @@ import com.j256.ormlite.table.DatabaseTable
 data class ChatUserData(
     @DatabaseField(
         index = true,
-        uniqueCombo = true,
-        foreign = true,
-        foreignAutoRefresh = true
+        uniqueCombo = true
     )
-    val id: AddressData,
+    val id: AddressData = "",
 
     @DatabaseField(
         index = true,
-        uniqueCombo = true,
-        foreign = true,
-        foreignAutoRefresh = true
+        uniqueCombo = true
     )
-    val chatId: AddressData
+    val chatId: AddressData = ""
 ) {
 
     @androidx.room.Dao

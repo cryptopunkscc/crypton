@@ -2,13 +2,16 @@ package cc.cryptopunks.crypton.entity
 
 import androidx.room.*
 import cc.cryptopunks.crypton.context.address
+import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import kotlinx.coroutines.flow.Flow
 
 @DatabaseTable(tableName = "user")
 @Entity(tableName = "user")
 data class UserData(
-    @PrimaryKey val id: AddressData
+    @PrimaryKey
+    @DatabaseField(id = true)
+    val id: AddressData = ""
 ) {
 
     @androidx.room.Dao

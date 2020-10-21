@@ -15,7 +15,7 @@ internal fun SessionScope.rosterItemStatesFlow(chatAddress: Address): Flow<Roste
         flowOf(Unit),
         presenceFlow(chatAddress),
         latestMessageFlow(chatAddress),
-        messageRepo.unreadCountFlow(chatAddress)
+        messageRepo.flowUnreadCount(chatAddress)
     ).flattenMerge().scan(
         Roster.Item(
             account = address,

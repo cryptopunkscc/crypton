@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class AccountRepo(
-    private val dao: AccountData.Dao,
+    val dao: AccountData.Dao,
 ) : Account.Repo {
 
     override suspend fun contains(address: Address): Boolean =

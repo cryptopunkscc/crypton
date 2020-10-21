@@ -11,6 +11,8 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -91,25 +93,30 @@ class MessageRepo(
         dao.run {
             if (chatAddress == null) flowLatest()
             else flowLatest(chatAddress.id)
-        }.filterNotNull().map { it.message() }
+        }.filterNotNull()
+            .distinctUntilChanged()
+            .map { it.message() }
 
     override fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message> =
         dao.dataSourceFactory(chatAddress.id).map { it.message() }
 
-    override fun unreadListFlow(): Flow<List<Message>> =
-        unreadMessagesChannel.asFlow()
+    override fun flowListUnread(): Flow<List<Message>> =
+        unreadMessagesChannel.asFlow().distinctUntilChanged()
 
-    override suspend fun queuedList(): List<Message> =
-        dao.queueList().map(MessageData::message)
+    override suspend fun listQueued(): List<Message> =
+        dao.listQueued().map(MessageData::message)
 
-    override fun queuedListFlow(): Flow<List<Message>> =
-        dao.flowQueueList().map { it.map(MessageData::message) }
+    override fun flowListQueued(): Flow<List<Message>> =
+        dao.flowQueueList()
+            .filter { it.isNotEmpty() }
+            .distinctUntilChanged()
+            .map { it.map(MessageData::message) }
 
 
-    override fun unreadCountFlow(chatAddress: Address): Flow<Int> =
-        unreadListFlow().map { list ->
+    override fun flowUnreadCount(chatAddress: Address): Flow<Int> =
+        flowListUnread().map { list ->
             list.filter { message ->
                 message.chat == chatAddress
             }.size
-        }
+        }.distinctUntilChanged()
 }

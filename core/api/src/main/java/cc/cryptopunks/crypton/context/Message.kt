@@ -84,21 +84,21 @@ data class Message(
     interface Repo {
         suspend fun insertOrUpdate(message: Message)
         suspend fun insertOrUpdate(messages: List<Message>)
-        suspend fun latest(): Message?
-        suspend fun latest(chat: Address): Message?
         suspend fun get(id: String): Message?
         suspend fun delete(id: String)
         suspend fun delete(message: Message)
         suspend fun delete(message: List<Message>)
-        suspend fun listUnread(): List<Message>
+        suspend fun latest(): Message?
+        suspend fun latest(chat: Address): Message?
         suspend fun list(range: LongRange = 0..System.currentTimeMillis()): List<Message>
         suspend fun list(chat: Address, status: Status): List<Message>
-        fun flowLatest(chatAddress: Address? = null): Flow<Message>
+        suspend fun listUnread(): List<Message>
+        suspend fun listQueued(): List<Message>
         fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message>
-        suspend fun queuedList(): List<Message>
-        fun unreadListFlow(): Flow<List<Message>>
-        fun queuedListFlow(): Flow<List<Message>>
-        fun unreadCountFlow(chatAddress: Address): Flow<Int>
+        fun flowLatest(chatAddress: Address? = null): Flow<Message>
+        fun flowListQueued(): Flow<List<Message>>
+        fun flowListUnread(): Flow<List<Message>>
+        fun flowUnreadCount(chatAddress: Address): Flow<Int>
         suspend fun notifyUnread()
     }
 

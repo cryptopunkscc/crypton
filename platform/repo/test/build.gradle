@@ -1,0 +1,63 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+android {
+    compileSdkVersion compile_sdk
+    defaultConfig {
+        minSdkVersion min_sdk
+        targetSdkVersion target_sdk
+        versionCode version_code
+        versionName version_name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+    packagingOptions {
+        exclude 'META-INF/core_debug.kotlin_module'
+        exclude 'META-INF/core_release.kotlin_module'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/chat.kotlin_module'
+        exclude 'META-INF/roster.kotlin_module'
+        exclude 'META-INF/session.kotlin_module'
+        exclude 'META-INF/account.kotlin_module'
+        exclude 'META-INF/common.kotlin_module'
+        exclude 'META-INF/api.kotlin_module'
+        exclude 'META-INF/android_debug.kotlin_module'
+        exclude 'META-INF/ormlite.kotlin_module'
+    }
+}
+dependencies {
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "junit:junit:$junit_version"
+    implementation project(':core:api')
+    implementation project(':engine:paging')
+    implementation project(':platform:repo:data')
+    implementation project(':platform:repo:room')
+    implementation project(':platform:repo:ormlite')
+    testImplementation project(':platform:util:ormlite:jvm')
+    androidTestImplementation "androidx.test:core:$versions.test.core"
+    androidTestImplementation "androidx.test:runner:$versions.test.runner"
+    androidTestImplementation "androidx.test:rules:$versions.test.rules"
+    androidTestImplementation "androidx.test.ext:junit:$versions.test.junit"
+    androidTestImplementation deps.room.testing
+}

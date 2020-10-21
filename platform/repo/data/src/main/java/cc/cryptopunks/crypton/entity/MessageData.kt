@@ -13,8 +13,10 @@ import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.messageStatus
 import cc.cryptopunks.crypton.context.resource
 import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 import kotlinx.coroutines.flow.Flow
 
+@DatabaseTable(tableName = "message")
 @Entity(
     tableName = "message",
     indices = [Index("chatId")],
@@ -29,16 +31,26 @@ import kotlinx.coroutines.flow.Flow
 )
 data class MessageData(
     @DatabaseField(id = true)
-    @PrimaryKey val id: String = "",
-    @DatabaseField val stanzaId: String = "",
-    @DatabaseField val text: String = "",
-    @DatabaseField val timestamp: Long = 0,
-    @DatabaseField(foreign = true) val chatId: AddressData = EmptyAddressData,
-    @DatabaseField val from: AddressData = EmptyAddressData,
-    @DatabaseField val to: AddressData = EmptyAddressData,
-    @DatabaseField val status: String = "",
-    @DatabaseField val readAt: Long = 0,
-    @DatabaseField val encrypted: Boolean = true,
+    @PrimaryKey
+    val id: String = "",
+    @DatabaseField
+    val stanzaId: String = "",
+    @DatabaseField
+    val text: String = "",
+    @DatabaseField
+    val timestamp: Long = 0,
+    @DatabaseField(index = true)
+    val chatId: AddressData = EmptyAddressData,
+    @DatabaseField
+    val from: AddressData = EmptyAddressData,
+    @DatabaseField
+    val to: AddressData = EmptyAddressData,
+    @DatabaseField
+    val status: String = "",
+    @DatabaseField
+    val readAt: Long = 0,
+    @DatabaseField
+    val encrypted: Boolean = true,
 ) {
 
     @androidx.room.Dao
@@ -56,6 +68,9 @@ data class MessageData(
         @Query("select * from message where id == :id")
         suspend fun get(id: String): MessageData?
 
+        @Query("delete from message where id == :id")
+        suspend fun delete(id: String)
+
         @Query("select * from message order by timestamp desc")
         fun latest(): MessageData?
 
@@ -71,26 +86,23 @@ data class MessageData(
         @Query("select * from message where chatId == :chatId order by timestamp desc")
         fun dataSourceFactory(chatId: AddressData): DataSource.Factory<Int, MessageData>
 
-        @Query("delete from message where id == :id")
-        suspend fun delete(id: String)
-
-        @Query("select * from message where readAt == 0 and status == 'Received'")
-        suspend fun listUnread(): List<MessageData>
-
         @Query("select * from message where timestamp <= :latest and timestamp >= :oldest")
         suspend fun list(latest: Long, oldest: Long): List<MessageData>
 
         @Query("select * from message where chatId == :chat and status == :status")
         suspend fun list(chat: AddressData, status: String): List<MessageData>
 
+        @Query("select * from message where readAt == 0 and status == 'Received'")
+        suspend fun listUnread(): List<MessageData>
+
+        @Query("select * from message where status == 'Queued'")
+        suspend fun listQueued(): List<MessageData>
+
         @Query("select * from message where readAt == 0")
         fun flowUnreadList(): Flow<List<MessageData>>
 
         @Query("select * from message where readAt == 0 and chatId == :chatId and status == 'Received'")
         fun flowUnreadList(chatId: AddressData): Flow<List<MessageData>>
-
-        @Query("select * from message where status == 'Queued'")
-        fun queueList(): List<MessageData>
 
         @Query("select * from message where status == 'Queued'")
         fun flowQueueList(): Flow<List<MessageData>>

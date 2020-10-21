@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.repo.ormlite.dao
 
 import cc.cryptopunks.crypton.entity.AddressData
 import cc.cryptopunks.crypton.entity.ChatData
-import cc.cryptopunks.crypton.fs.ormlite.CryptonDao
-import cc.cryptopunks.crypton.fs.ormlite.OrmLiteCryptonDao
+import cc.cryptopunks.crypton.util.ormlite.CryptonDao
+import cc.cryptopunks.crypton.util.ormlite.OrmLiteCryptonDao
 import com.j256.ormlite.dao.Dao
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
@@ -19,7 +19,7 @@ class ChatDao(
         write = write,
     ) {
 
-    override suspend fun list(accountIds: List<AddressData>): List<ChatData> = withContext(read) {
-        dao.queryBuilder().where().`in`("id", accountIds).query()
+    override suspend fun list(ids: List<AddressData>): List<ChatData> = withContext(read) {
+        dao.queryBuilder().where().`in`("id", ids).query()
     }
 }

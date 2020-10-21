@@ -3,9 +3,9 @@ package cc.cryptopunks.crypton.repo.ormlite.dao
 import cc.cryptopunks.crypton.entity.AddressData
 import cc.cryptopunks.crypton.entity.ChatUserData
 import cc.cryptopunks.crypton.entity.UserData
-import cc.cryptopunks.crypton.fs.ormlite.CryptonDao
-import cc.cryptopunks.crypton.fs.ormlite.OrmLiteCryptonDao
-import cc.cryptopunks.crypton.fs.ormlite.changesFlow
+import cc.cryptopunks.crypton.util.ormlite.CryptonDao
+import cc.cryptopunks.crypton.util.ormlite.OrmLiteCryptonDao
+import cc.cryptopunks.crypton.util.ormlite.changesFlow
 import com.j256.ormlite.dao.Dao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flattenMerge

@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.repo.ormlite.dao
 
 import cc.cryptopunks.crypton.entity.AccountData
-import cc.cryptopunks.crypton.fs.ormlite.CryptonDao
-import cc.cryptopunks.crypton.fs.ormlite.OrmLiteCryptonDao
-import cc.cryptopunks.crypton.fs.ormlite.createDao
+import cc.cryptopunks.crypton.util.ormlite.CryptonDao
+import cc.cryptopunks.crypton.util.ormlite.OrmLiteCryptonDao
+import cc.cryptopunks.crypton.util.ormlite.createDao
 import com.j256.ormlite.support.ConnectionSource
 import kotlin.coroutines.CoroutineContext
 

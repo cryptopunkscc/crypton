@@ -26,7 +26,7 @@ class ChatRepo(
     override suspend fun list(): List<Chat> =
         chatDao.list().map { it.toDomain() }
 
-    override suspend fun list(accounts: List<Address>): List<Chat> =
+    suspend fun list(accounts: List<Address>): List<Chat> =
         chatDao.list(accounts.map(Address::id)).map { it.toDomain() }
 
     override suspend fun insert(chat: Chat)  =

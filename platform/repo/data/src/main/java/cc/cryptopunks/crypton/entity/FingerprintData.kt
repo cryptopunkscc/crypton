@@ -11,10 +11,10 @@ import com.j256.ormlite.table.DatabaseTable
 @Entity(tableName = "device")
 data class FingerprintData(
     @DatabaseField(id = true)
-    @PrimaryKey val fingerprint: String,
-    @DatabaseField val deviceId: Int,
-    @DatabaseField val address: AddressData,
-    @DatabaseField val state: String,
+    @PrimaryKey val fingerprint: String = "",
+    @DatabaseField val deviceId: Int = -1,
+    @DatabaseField val address: AddressData = "",
+    @DatabaseField val state: String = "",
 ) {
     @androidx.room.Dao
     interface Dao {

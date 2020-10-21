@@ -38,7 +38,7 @@ internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
 }
 
 private suspend fun SessionScope.syncConferences(list: Set<Address>) =
-    chatRepo.list(listOf(address)).map(Chat::address).let { savedChats ->
+    chatRepo.list().map(Chat::address).let { savedChats ->
         list - savedChats
     }.also {
         log.d { "Creating conferences $it" }

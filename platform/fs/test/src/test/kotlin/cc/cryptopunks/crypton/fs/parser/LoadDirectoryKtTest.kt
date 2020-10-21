@@ -1,12 +1,12 @@
 package cc.cryptopunks.crypton.fs.parser
 
-import cc.cryptopunks.crypton.fs.parser.mp3.TYPE_ID3V2
-import cc.cryptopunks.crypton.fs.parser.mp3.TYPE_MP3
 import cc.cryptopunks.crypton.fs.Repository
 import cc.cryptopunks.crypton.fs.interactor.loadDirectory
 import cc.cryptopunks.crypton.fs.ormlite.OrmLiteLoreRepo
-import cc.cryptopunks.crypton.fs.ormlite.createConnectionSource
 import cc.cryptopunks.crypton.fs.parser.mp3.TYPE_ID3V1
+import cc.cryptopunks.crypton.fs.parser.mp3.TYPE_ID3V2
+import cc.cryptopunks.crypton.fs.parser.mp3.TYPE_MP3
+import cc.cryptopunks.crypton.util.ormlite.jvm.createJdbcH2ConnectionSource
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Test
@@ -32,7 +32,9 @@ class LoadDirectoryKtTest {
     @Test
     fun testOrmLiteLoreRepo() {
         runBlocking {
-            val repo = OrmLiteLoreRepo(createConnectionSource())
+            val repo = OrmLiteLoreRepo(createJdbcH2ConnectionSource(
+                dir.resolve("lore").canonicalPath
+            ))
             Repository(
                 dir = dir,
                 loreRepo = repo

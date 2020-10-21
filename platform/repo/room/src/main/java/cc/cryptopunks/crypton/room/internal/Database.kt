@@ -15,7 +15,7 @@ import cc.cryptopunks.crypton.entity.*
     ],
     version = 1
 )
-internal abstract class Database : RoomDatabase() {
+abstract class Database : RoomDatabase() {
     abstract val accountDao: AccountData.Dao
     abstract val chatDao: ChatData.Dao
     abstract val userDao: UserData.Dao

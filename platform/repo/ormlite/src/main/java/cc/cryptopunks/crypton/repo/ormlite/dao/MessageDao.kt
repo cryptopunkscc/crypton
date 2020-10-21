@@ -4,10 +4,10 @@ import androidx.paging.DataSource
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.entity.AddressData
 import cc.cryptopunks.crypton.entity.MessageData
-import cc.cryptopunks.crypton.fs.ormlite.CryptonDao
-import cc.cryptopunks.crypton.fs.ormlite.DaoPositionalDataSource
-import cc.cryptopunks.crypton.fs.ormlite.OrmLiteCryptonDao
-import cc.cryptopunks.crypton.fs.ormlite.changesFlow
+import cc.cryptopunks.crypton.util.ormlite.CryptonDao
+import cc.cryptopunks.crypton.util.ormlite.DaoPositionalDataSource
+import cc.cryptopunks.crypton.util.ormlite.OrmLiteCryptonDao
+import cc.cryptopunks.crypton.util.ormlite.changesFlow
 import com.j256.ormlite.dao.Dao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -46,14 +46,9 @@ class MessageDao(
 
     override suspend fun listUnread(): List<MessageData> = withContext(read) {
         dao.queryBuilder().where()
-            .eq("readAt", null)
-            .query()
-    }
-
-    private suspend fun listUnread(chatId: AddressData): List<MessageData> = withContext(read) {
-        dao.queryBuilder().where()
-            .eq("chatId", chatId)
-            .eq("readAt", null)
+            .eq("readAt", 0)
+            .and()
+            .eq("status", Message.Status.Received.name)
             .query()
     }
 
@@ -61,32 +56,43 @@ class MessageDao(
         dao.queryBuilder()
             .selectColumns("id").where()
             .eq("chatId", chatId)
-            .eq("readAt", null)
+            .and()
+            .eq("readAt", 0)
             .queryRaw()
             .mapNotNull { it.firstOrNull() }
     }
 
     override suspend fun list(
         latest: Long,
-        oldest: Long
+        oldest: Long,
     ): List<MessageData> = withContext(read) {
         dao.queryBuilder().where()
             .le("timestamp", latest)
+            .and()
             .ge("timestamp", oldest)
+            .query()
+    }
+
+    private suspend fun listUnread(chatId: AddressData): List<MessageData> = withContext(read) {
+        dao.queryBuilder().where()
+            .eq("chatId", chatId)
+            .and()
+            .eq("readAt", 0)
             .query()
     }
 
     override suspend fun list(
         chat: AddressData,
-        status: String
+        status: String,
     ): List<MessageData> = withContext(read) {
         dao.queryBuilder().where()
             .eq("chatId", chat)
+            .and()
             .ge("status", status)
             .query()
     }
 
-    override fun queueList(): List<MessageData> = dao
+    override suspend fun listQueued(): List<MessageData> = dao
         .queryForEq("status", Message.Status.Queued.name)
 
     override fun flowUnreadList(): Flow<List<MessageData>> = dao
@@ -96,7 +102,7 @@ class MessageDao(
         .changesFlow { send(listUnread(chatId)) }
 
     override fun flowQueueList(): Flow<List<MessageData>> = dao
-        .changesFlow { send(queueList()) }
+        .changesFlow { send(listQueued()) }
 
     override fun flowUnreadIds(chatId: AddressData): Flow<List<String>> = dao
         .changesFlow { send(listUnreadIds(chatId)) }

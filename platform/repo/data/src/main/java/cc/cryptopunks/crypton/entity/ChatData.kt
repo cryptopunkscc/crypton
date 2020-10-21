@@ -17,10 +17,14 @@ import kotlinx.coroutines.flow.Flow
 @Entity(tableName = "chat")
 data class ChatData(
     @DatabaseField(id = true)
-    @PrimaryKey val id: AddressData,
-    @DatabaseField val accountId: AddressData,
-    @DatabaseField val title: String,
-    @DatabaseField val isMultiUser: Boolean
+    @PrimaryKey
+    val id: AddressData = "",
+    @DatabaseField
+    val accountId: AddressData = "",
+    @DatabaseField
+    val title: String = "",
+    @DatabaseField
+    val isMultiUser: Boolean = false,
 ) {
 
     @androidx.room.Dao
@@ -44,8 +48,8 @@ data class ChatData(
         @Query("select id from chat where id = :id")
         suspend fun contains(id: AddressData): AddressData?
 
-        @Query("select * from chat where accountId in (:accountIds)")
-        suspend fun list(accountIds: List<AddressData>): List<ChatData>
+        @Query("select * from chat where id in (:ids)")
+        suspend fun list(ids: List<AddressData>): List<ChatData>
 
         @Query("select * from chat")
         suspend fun list(): List<ChatData>

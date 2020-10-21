@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.fs.ormlite
 
 import cc.cryptopunks.crypton.fs.Lore
+import cc.cryptopunks.crypton.util.ormlite.createDao
 import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.support.ConnectionSource
 

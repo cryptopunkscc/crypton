@@ -12,6 +12,7 @@ include ':core:api',
         ':platform:repo:data',
         ':platform:repo:room',
         ':platform:repo:ormlite',
+        ':platform:repo:test',
 
         ':platform:sys:mock',
         ':platform:sys:android',

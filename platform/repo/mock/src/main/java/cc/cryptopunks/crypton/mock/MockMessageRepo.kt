@@ -90,18 +90,18 @@ class MockMessageRepo : Message.Repo {
             ).also { dataSources + it }
         }
 
-    override suspend fun queuedList(): List<Message> =
+    override suspend fun listQueued(): List<Message> =
         store.get().values.filter { it.status == Message.Status.Queued }.sortedBy { it.timestamp }
 
-    override fun unreadListFlow(): Flow<List<Message>> = store.changesFlow().map { map ->
+    override fun flowListUnread(): Flow<List<Message>> = store.changesFlow().map { map ->
         map.filterValues { it.isUnread }.values.sortedBy { it.timestamp }
     }
 
-    override fun queuedListFlow(): Flow<List<Message>> = store.changesFlow().map { map ->
+    override fun flowListQueued(): Flow<List<Message>> = store.changesFlow().map { map ->
         map.filterValues { it.status == Message.Status.Queued }.values.sortedBy { it.timestamp }
     }.filter { it.isNotEmpty() }
 
-    override fun unreadCountFlow(chatAddress: Address): Flow<Int> = store.changesFlow()
+    override fun flowUnreadCount(chatAddress: Address): Flow<Int> = store.changesFlow()
         .map { it.filterValues { it.chat == chatAddress } }
         .map { it.count { it.value.isUnread } }
 
