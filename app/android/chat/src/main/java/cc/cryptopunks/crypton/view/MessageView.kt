@@ -88,7 +88,7 @@ class MessageView(
         when (gravity) {
             Gravity.LEFT -> setPadding(0, 0, padding, 0)
             Gravity.RIGHT -> setPadding(padding, 0, 0, 0)
-            else -> throw Exception("Unsupported gravity")
+            else -> throw Exception("Unsupported gravity $gravity")
         }
         linearLayout.gravity = gravity
         cardContainer.gravity = gravity

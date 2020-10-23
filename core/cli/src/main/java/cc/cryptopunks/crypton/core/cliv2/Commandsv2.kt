@@ -1,10 +1,10 @@
-package cc.cryptopunks.crypton.core.cli
+package cc.cryptopunks.crypton.core.cliv2
 
-import cc.cryptopunks.crypton.cli.command
-import cc.cryptopunks.crypton.cli.commands
-import cc.cryptopunks.crypton.cli.named
-import cc.cryptopunks.crypton.cli.param
-import cc.cryptopunks.crypton.cli.vararg
+import cc.cryptopunks.crypton.cliv2.command
+import cc.cryptopunks.crypton.cliv2.commands
+import cc.cryptopunks.crypton.cliv2.named
+import cc.cryptopunks.crypton.cliv2.param
+import cc.cryptopunks.crypton.cliv2.text
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
@@ -12,7 +12,6 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.address
-import cc.cryptopunks.crypton.context.inContext
 import cc.cryptopunks.crypton.inContext
 
 private const val NAVIGATE = "navigate"
@@ -42,6 +41,7 @@ private val navigateMain = MAIN to command { Route.Main }
 private val navigateChat = CHAT to command(
     param()
 ) { (address) ->
+    val account: String by config
     Route.Chat(account, address)
 }
 
@@ -72,17 +72,18 @@ private val rosterItems = GET to mapOf(
     })
 
 private val chat = CHAT to command(param()) { (address) ->
+    val account: String by config
     Exec.CreateChat(Chat(address(address), address(account)))
 }
 
-private val sendMessage = SEND to mapOf(MESSAGE to command(vararg()) { message ->
+private val sendMessage = SEND to mapOf(MESSAGE to command(text()) { message ->
     Exec.EnqueueMessage(message.joinToString(" "))
 })
 
 private val join = JOIN to command {
-    (route as Route.Chat).run {
-        Exec.JoinChat.inContext(account, address)
-    }
+    val account: String by config
+    val chat: String by config
+    Exec.JoinChat.inContext(account, chat)
 }
 
 private val listRooms = ROOMS to command(param()) { (account) ->
@@ -93,16 +94,16 @@ private val listJoinedRooms = JOINED to mapOf(ROOMS to command(param()) { (accou
     Get.JoinedRooms.inContext(account)
 })
 
-private val invite = INVITE to command(vararg()) { users ->
-    (route as Route.Chat).run {
-        Exec.Invite(users.map { address(it) }.toSet()).inContext(account, address)
-    }
+private val invite = INVITE to command(text()) { users ->
+    val account: String by config
+    val chat: String by config
+    Exec.Invite(users.map { address(it) }.toSet()).inContext(account, chat)
 }
 
-private val deleteChat = DELETE to command(vararg()) { chats ->
+private val deleteChat = DELETE to command(text()) { chats ->
     Exec.DeleteChat.inContext(
         when (chats.isEmpty()) {
-            true -> (route as Route.Chat).run { listOf(address.id) }
+            true -> listOf(config["chat"] as String)
             false -> chats
         }
     )
@@ -140,7 +141,7 @@ val mainCommands = mapOf(
     purgeDevices
 )
 
-val chatCommands = mainCommands + mapOf(
+val chatCommands = mapOf(
     sendMessage,
     join,
     invite,
@@ -149,7 +150,5 @@ val chatCommands = mainCommands + mapOf(
 )
 
 val cryptonCommands = commands(
-    Route.Main to mainCommands,
-    Route.Chat(isConference = false) to chatCommands,
-    Route.Chat(isConference = true) to chatCommands
-).mapValues { (_, commands) -> commands + navigate }
+    chatCommands + mainCommands
+)
