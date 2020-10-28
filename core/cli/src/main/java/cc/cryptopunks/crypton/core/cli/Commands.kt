@@ -86,7 +86,7 @@ private val join = JOIN to command {
 }
 
 private val listRooms = ROOMS to command(param()) { (account) ->
-    Get.Rooms.inContext(account)
+    Get.HostedRooms.inContext(account)
 }
 
 private val listJoinedRooms = JOINED to mapOf(ROOMS to command(param()) { (account) ->

@@ -21,13 +21,16 @@ internal fun SessionScope.rosterItemStatesFlow(chatAddress: Address): Flow<Roste
             account = address,
             chatAddress = chatAddress,
             letter = chatAddress.toString().firstOrNull()?.toLowerCase() ?: 'a',
-            title = chatAddress.toString()
+            title = chatAddress.toString(),
+            updatedAt = System.currentTimeMillis()
         )
     ) { item, changed ->
         when (changed) {
             is Presence.Status -> item.copy(presence = changed)
             is Message -> item.copy(message = changed)
             is Int -> item.copy(unreadMessagesCount = changed)
-            else -> item
+            else -> null
         }
+            ?.copy(updatedAt = System.currentTimeMillis())
+            ?: item
     }

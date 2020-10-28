@@ -60,7 +60,7 @@ object Get {
 
     // Account
 
-    object Rooms : Account.Action
+    object HostedRooms : Account.Action
     object JoinedRooms : Account.Action
 
     // Chat

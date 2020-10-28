@@ -19,7 +19,5 @@ internal fun handleAccountsSubscription() =
 
 internal fun handleGetAccountList() =
     handle { out, _: Get.Accounts ->
-        accounts.get().takeIf {
-            it.accounts.isNotEmpty()
-        }?.out()
+        Account.Many(accountRepo.addressList().toSet()).out()
     }

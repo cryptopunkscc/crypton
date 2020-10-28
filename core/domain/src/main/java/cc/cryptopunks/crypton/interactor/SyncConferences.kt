@@ -26,7 +26,7 @@ internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
     fib.withIndex().asFlow().map { (attempt, wait) ->
         delay(1500L * wait)
         log.d { "Syncing conferences attempt $attempt $wait" }
-        listRooms()
+        listHostedRooms()
     }.filter { it.isNotEmpty() }.firstOrNull()?.let { rooms ->
         log.d { "Fetched conferences $rooms" }
         syncConferences(rooms).map { it.address }.onEach { room ->

@@ -33,6 +33,10 @@ class BackendService(
         }
     }
 
+    fun init() = apply {
+        lazyInit
+    }
+
     override fun Connector.connect(): Job = launch {
         lazyInit
         log.builder.d { status = "Connect" }

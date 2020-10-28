@@ -13,4 +13,5 @@ dependencies {
     implementation project(':engine:net')
     implementation project(':platform:log:jvm')
     implementation project(':core:cli')
+    implementation "com.googlecode.lanterna:lanterna:3.0.4" // Terminal GUI
 }
