@@ -40,6 +40,7 @@ include ':core:api',
         ':app:jvm:server',
         ':app:jvm:test',
         ':app:jvm:cli',
+        ':app:jvm:embedded',
 
         ':app:android:app',
         ':app:android:resources',

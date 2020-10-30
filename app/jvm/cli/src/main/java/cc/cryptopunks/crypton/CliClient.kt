@@ -1,35 +1,77 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.core.cli.translateCli
-import cc.cryptopunks.crypton.cli.Check
+import cc.cryptopunks.crypton.cliv2.Cli
+import cc.cryptopunks.crypton.cliv2.prepareIfNeeded
+import cc.cryptopunks.crypton.cliv2.reduce
+import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.format.format
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class CliClient(
-    private val cliInput: Flow<String>
-) : Connectable {
-
-    override val coroutineContext = SupervisorJob() + Dispatchers.IO +
-        CoroutineLog.Label(javaClass.simpleName)
-
-    override fun Connector.connect(): Job = launch {
-        launch {
-            cliInput.translateCli().mapNotNull { it.result }.collect { result ->
+fun cliClient(
+    console: Connector,
+    backend: Connector,
+    context: Cli.Context
+): suspend () -> Unit = {
+    withContext(
+        SupervisorJob() + Dispatchers.IO + CoroutineLog.Label("CliClient")
+    ) {
+        val inputJob = launch {
+            backend.input
+                .map { any ->
+                    any.formatCliOutput() ?: any.toString()
+                }
+                .collect(console.output)
+        }
+        console.input
+            .filterIsInstance<String>()
+            .scan(context) { context, input ->
+                context.reduce(input)
+            }
+            .map { context ->
+                context.unwrapCliResult()
+            }
+            .collect { result ->
                 when (result) {
-                    is Throwable -> result.printStackTrace()
-                    is Check.Suggest -> println(result)
-                    else -> output(result)
+                    is Action -> backend.output(result)
+                    else -> result.formatCliOutput()?.let { console.output(it) }
                 }
             }
-        }
-        launch {
-            input.collect { println(it) }
-        }
+        delay(1000) // TODO ultimately, coroutine should wait for expected result
+        inputJob.cancel()
     }
 }
+
+fun Any.unwrapCliResult(): Any =
+    when (this) {
+        is Cli.Context -> result.unwrapCliResult()
+        is Cli.Result.Return -> value.unwrapCliResult()
+        is Cli.Result.Suggestion -> value.unwrapCliResult()
+        is Cli.Result.Error -> throwable
+        else -> this
+    }
+
+fun Any.formatCliOutput(): String? =
+    when (this) {
+        is Cli.Config -> map.toString()
+        is Cli.Execute -> format()
+        is Cli.Param -> format()
+        is Cli.Params -> format()
+        is Roster.Items -> format()
+        is Roster.Item -> format()
+        is Chat.Messages -> format()
+        is Message -> format()
+        is Map<*, *> -> toMap().toString()
+        is Throwable -> stackTraceToString()
+        else -> null
+    }

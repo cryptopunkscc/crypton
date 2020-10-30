@@ -1,61 +1,55 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.backend.BackendService
-import cc.cryptopunks.crypton.context.RootModule
-import cc.cryptopunks.crypton.context.RootScope
-import cc.cryptopunks.crypton.context.Connection
-import cc.cryptopunks.crypton.mock.MockRepo
-import cc.cryptopunks.crypton.mock.MockSys
 import cc.cryptopunks.crypton.net.connect
 import cc.cryptopunks.crypton.net.startServerSocket
-import cc.cryptopunks.crypton.service.cryptonHandlers
-import cc.cryptopunks.crypton.smack.SmackConnectionFactory
-import cc.cryptopunks.crypton.smack.initSmack
-import cc.cryptopunks.crypton.util.IOExecutor
-import cc.cryptopunks.crypton.util.Log
-import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.typedLog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asExecutor
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.net.InetSocketAddress
 
-fun main() {
-    runBlocking {
-        initJvmLog()
-        TrustAllManager.install()
-        startCryptonServer()
+
+fun server(
+    config: Map<String, Any?>,
+    backend: Connectable
+): suspend  () -> Unit = {
+    withContext(
+        CoroutineLog.Label("CryptonServer")
+    ) {
+        ServerConfig(config).run {
+            startServerSocket(
+                InetSocketAddress(
+                    socketAddress,
+                    socketPort
+                )
+            ).connect(backend)
+        }
     }
 }
 
-suspend fun startCryptonServer() = withContext(
-    CoroutineLog.Label("CryptonServer")
-) {
-    initSmack(File("./omemo_store"))
-    startServerSocket(address).connect(BackendService(rootScope))
+internal class ServerConfig(
+    map: Map<String, Any?> = emptyMap()
+) : MutableMap<String, Any?> by map.toMutableMap() {
+    var home: String by this
+    var omemoStore: String by this
+    var name: String by this
+    var socketAddress: String by this
+    var socketPort: Int by this
+    var hostAddress: String? by this
+    var securityMode: String by this
+    var inMemory: String by this
 }
 
-private val address = InetSocketAddress("127.0.0.1", 2323)
 
-private val log = Server.typedLog()
+internal fun ServerConfig.default() = apply {
+    home = "~/.crypton".replaceFirst("~", System.getProperty("user.home"))
+    omemoStore = "omemo_store"
+    socketPort = 2323
+    socketAddress = "127.0.0.1"
+    hostAddress = null
+    securityMode = "ifPossible"
+    inMemory = "false"
+}
 
-private object Server
-
-private val rootScope: RootScope
-    get() = RootModule(
-        sys = MockSys(),
-        repo = MockRepo(),
-        mainClass = Nothing::class,
-        ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
-        mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
-        createConnection = createConnectionFactory,
-        handlers = cryptonHandlers()
-    )
-
-private val createConnectionFactory = SmackConnectionFactory {
+internal fun ServerConfig.local() = apply {
     hostAddress = "127.0.0.1"
-    securityMode = Connection.Factory.Config.SecurityMode.disabled
+    securityMode = "disabled"
 }

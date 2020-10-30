@@ -10,11 +10,6 @@ interface Scope : CoroutineScope {
     suspend infix fun resolve(context: Context): Pair<Scope, Any> = this to Unit 
 }
 
-interface Scoped<S : CoroutineScope>
-
-@Suppress("UNCHECKED_CAST")
-internal fun Scope.handlerFor(any: Any): Handle<Scope, Any>? = handlers[any::class]
-
 interface Failure
 
 data class InvalidAction(
@@ -41,9 +36,11 @@ data class ActionFailed(
     constructor(action: Any, throwable: Throwable) : this(
         action = action.javaClass.name,
         message = throwable.message,
-        stackTrace = throwable.stringStackTrace()
+        stackTrace = StringWriter().also { throwable.printStackTrace(PrintWriter(it)) }.toString()
+//        stackTrace = stringStackTrace(throwable)
     )
 }
 
-fun Throwable.stringStackTrace() =
-    StringWriter().also { printStackTrace(PrintWriter(it)) }.toString()
+// TODO WTF error
+private fun stringStackTrace(throwable: Throwable) =
+    StringWriter().also { throwable.printStackTrace(PrintWriter(it)) }.toString()

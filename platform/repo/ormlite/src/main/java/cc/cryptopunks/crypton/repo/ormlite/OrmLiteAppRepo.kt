@@ -7,9 +7,9 @@ import cc.cryptopunks.crypton.repo.ormlite.dao.AccountDao
 import cc.cryptopunks.crypton.util.ormlite.ConnectionSourceFactory
 
 class OrmLiteAppRepo(
-    createConnection: ConnectionSourceFactory,
     read: Repo.Context.Query = Repo.Context.Query(),
     write: Repo.Context.Transaction = Repo.Context.Transaction(),
+    createConnection: ConnectionSourceFactory,
 ) : Repo {
 
     private val connection = createConnection("crypton")

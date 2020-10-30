@@ -4,7 +4,10 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.handle
 
-internal fun handleGetRooms() = handle { out, _: Get.Rooms ->
-    require(false)
-    Chat.AllRooms(listRooms().toSet()).out()
+internal fun handleGetHostedRooms() = handle { out, _: Get.HostedRooms ->
+    Chat.AllRooms(listHostedRooms().toSet()).out()
+}
+
+internal fun handleGetJoinedRooms() = handle { out, _: Get.JoinedRooms ->
+    Chat.JoinedRooms(listJoinedRooms()).out()
 }

@@ -11,7 +11,8 @@ object Roster {
         val account: Address = Address.Empty,
         val message: Message = Message.Empty,
         val presence: Presence.Status = Presence.Status.Unavailable,
-        val unreadMessagesCount: Int = 0
+        val unreadMessagesCount: Int = 0,
+        val updatedAt: Long = 0
     )
 
     data class Items(val list: List<Item>)

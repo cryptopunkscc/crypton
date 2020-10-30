@@ -36,7 +36,7 @@ class MockChatNet(
         TODO("Not yet implemented")
     }
 
-    override fun listRooms(): Set<Address> {
+    override fun listHostedRooms(): Set<Address> {
         TODO("Not yet implemented")
     }
 

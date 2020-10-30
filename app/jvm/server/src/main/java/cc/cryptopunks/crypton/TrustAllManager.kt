@@ -22,7 +22,6 @@ object TrustAllManager : X509TrustManager {
 
     override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
 
-    // Install the all-trusting trust manager
     fun install() = try {
         SSLContext.getInstance("SSL").run {
             init(null, arrayOf(TrustAllManager), SecureRandom())

@@ -56,7 +56,7 @@ internal class ChatNet(
     override fun listJoinedRooms(): Set<Address> =
         mucManager.joinedRooms.map { it.address() }.toSet()
 
-    override fun listRooms(): Set<Address> =
+    override fun listHostedRooms(): Set<Address> =
         mucManager.mucServiceDomains.map(mucManager::getHostedRooms).flatten()
             .map { it.jid.address() }.toSet()
 

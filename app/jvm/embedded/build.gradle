@@ -1,0 +1,16 @@
+apply plugin: 'application'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+mainClassName = "cc.cryptopunks.crypton.MainKt"
+apply plugin: 'com.github.johnrengelman.shadow'
+shadowJar {
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    api project(':app:jvm:cli')
+    api project(':app:jvm:server')
+    api project(':engine:net')
+}

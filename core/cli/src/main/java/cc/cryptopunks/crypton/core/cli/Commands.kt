@@ -86,7 +86,7 @@ private val join = JOIN to command {
 }
 
 private val listRooms = ROOMS to command(param()) { (account) ->
-    Get.Rooms.inContext(account)
+    Get.HostedRooms.inContext(account)
 }
 
 private val listJoinedRooms = JOINED to mapOf(ROOMS to command(param()) { (account) ->
@@ -122,8 +122,6 @@ private val configure = CONFIGURE to command {
 private val purgeDevices = PURGE to mapOf(DEVICES to command(param()) { (account) ->
     Exec.PurgeDeviceList.inContext(account)
 })
-
-private val dupa = PURGE to DEVICES to INFO to command {}
 
 private val navigate = NAVIGATE to mapOf(
     navigateMain,

@@ -1,7 +1,7 @@
 apply plugin: 'application'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
-mainClassName = "cc.cryptopunks.crypton.CliKt"
+mainClassName = "cc.cryptopunks.crypton.MainKt"
 apply plugin: 'com.github.johnrengelman.shadow'
 shadowJar {
     manifest {
@@ -12,5 +12,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':engine:net')
     implementation project(':platform:log:jvm')
-    implementation project(':core:cli')
+    api project(':core:cli')
+    implementation "com.googlecode.lanterna:lanterna:3.0.4" // Terminal GUI
 }

@@ -1,18 +1,19 @@
 package cc.cryptopunks.crypton.net
 
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.ext.invokeOnClose
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.log
-import io.ktor.network.selector.ActorSelectorManager
-import io.ktor.network.sockets.ServerSocket
-import io.ktor.network.sockets.Socket
-import io.ktor.network.sockets.aSocket
+import io.ktor.network.selector.*
+import io.ktor.network.sockets.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.newSingleThreadContext
 import java.net.InetSocketAddress
@@ -32,7 +33,6 @@ suspend fun startServerSocket(
             }
         }
 }
-
 
 suspend fun ServerSocket.connect(
     connectable: Connectable
@@ -68,5 +68,17 @@ private fun Connectable.tryConnectTo(socket: Socket, log: CoroutineLog) = let {
     } catch (e: Throwable) {
         e.printStackTrace()
         socket.close()
+    }
+}
+
+suspend fun ServerSocket.connectable(): Flow<Connector> = flow {
+    while (true) emit(accept())
+}.mapNotNull { socket ->
+    try {
+        socket.connector()
+    } catch (e: Throwable) {
+        e.printStackTrace()
+        socket.close()
+        null
     }
 }
