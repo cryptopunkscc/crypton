@@ -21,10 +21,10 @@ internal fun handleLastMessageSubscription() =
             messageRepo.flowLatest()
         ).flattenMerge().onEach {
             log.d { "last message $it" }
-        }.bufferedThrottle(100).map { messages ->
+        }.map { messages ->
             Chat.Messages(
                 account = address,
-                list = messages
+                list = listOf(messages)
             )
         }.onStart {
             log.d { "start LastMessageSubscription" }

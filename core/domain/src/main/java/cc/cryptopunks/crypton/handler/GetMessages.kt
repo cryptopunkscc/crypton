@@ -9,8 +9,8 @@ internal fun handleGetMessages() = handle { out, _: Get.Messages ->
         range = System.currentTimeMillis().let { currentTime ->
             currentTime - SEVEN_DAYS_MILLIS..currentTime
         }
-    ).filter { it.chat == address }.let {
-        out(Chat.Messages(address, it))
+    ).forEach {
+        out(Chat.Messages(address, listOf(it)))
     }
 }
 

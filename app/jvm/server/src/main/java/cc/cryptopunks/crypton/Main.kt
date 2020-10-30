@@ -3,15 +3,14 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.backend.BackendService
 import kotlinx.coroutines.runBlocking
 
-fun main() {
+internal fun main() {
     runBlocking {
         initJvmLog()
         TrustAllManager.install()
 
-        val config = Server.Config().default().local()
-        val scope = config.rootScope()
-        val service = BackendService(scope).init()
+        val config = ServerConfig().default().local()
+        val backend = BackendService(createRootScope(config)).init()
 
-        Server(config, service).start()
+        server(config, backend).invoke()
     }
 }

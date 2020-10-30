@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.core.cliv2
 
 import cc.cryptopunks.crypton.cliv2.Cli
-import cc.cryptopunks.crypton.cliv2.prepare
 
 internal class MutableConfig(
     map: Map<String, Any?>
@@ -13,7 +12,8 @@ internal class MutableConfig(
 internal fun Cli.Context.configure(
     block: MutableConfig.() -> Unit
 ): Cli.Context =
-    MutableConfig(config.map).apply(block).let { map ->
-        prepare().copy(config = config.copy(map = map))
-    }
+    copy(
+        config = config.copy(map = MutableConfig(config.map).apply(block)),
+        result = Cli.Result.Return(Unit)
+    )
 

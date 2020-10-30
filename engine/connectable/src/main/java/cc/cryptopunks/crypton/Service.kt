@@ -128,6 +128,8 @@ private fun Scope.handleRequest(
         }
 }
 
+@Suppress("UNCHECKED_CAST")
+private fun Scope.handlerFor(any: Any): Handle<Scope, Any>? = handlers[any::class]
 
 private suspend fun logConnectionStarted() = log.builder.d {
     status = Log.Event.Status.Start.name

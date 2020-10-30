@@ -4,6 +4,8 @@ import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.cliv2.command
 import cc.cryptopunks.crypton.cliv2.commands
 import cc.cryptopunks.crypton.cliv2.named
+import cc.cryptopunks.crypton.cliv2.option
+import cc.cryptopunks.crypton.cliv2.optional
 import cc.cryptopunks.crypton.cliv2.param
 import cc.cryptopunks.crypton.cliv2.raw
 import cc.cryptopunks.crypton.cliv2.text
@@ -29,6 +31,7 @@ private const val ACCOUNTS = "accounts"
 private const val PASSWORD = "password"
 private const val SEND = "send"
 private const val MESSAGE = "message"
+private const val MESSAGES = "messages"
 private const val INVITE = "invite"
 private const val JOIN = "join"
 private const val JOINED = "joined"
@@ -78,9 +81,10 @@ private val roster = ROSTER to mapOf(
             Get.RosterItems
         },
         SUBSCRIBE to command(
+            option("cancel").optional().copy(description = "Cancel subscription", value = false),
             description = "Subscribe roster for all accounts."
-        ) {
-            Subscribe.RosterItems(true)
+        ) { (cancel) ->
+            Subscribe.RosterItems(!cancel.toBoolean(), list = false)
         }
     )
 )
@@ -128,14 +132,16 @@ private val chat = CHAT to mapOf(
         Get.ChatInfo.inContext(account, chat)
     },
     DELETE to command(
-        text().copy(name = "local1@domain, local2@domain"),
+//        text().copy(name = "local1@domain, local2@domain"),
         description = "Delete each chat form given list"
     ) { (chats) ->
+        val chat: String by config
         Exec.DeleteChat.inContext(
-            when (chats.isEmpty()) {
-                true -> listOf(config["chat"] as String)
-                false -> chats.split(" ")
-            }
+            chat
+//            when (chats.isEmpty()) {
+//                true -> listOf(config["chat"] as String)
+//                false -> chats.split(" ")
+//            }
         )
     },
     CONFIGURE to command(
@@ -143,11 +149,28 @@ private val chat = CHAT to mapOf(
     ) {
         Exec.ConfigureConference()
     },
+    MESSAGES to commands(
+        GET to command(
+            description = "Get roster for all accounts."
+        ) {
+            val account: String by config
+            val chat: String by config
+            Get.Messages.inContext(account, chat)
+        },
+        SUBSCRIBE to command(
+            option("cancel").optional().copy(description = "Cancel subscription", value = false),
+            description = "Subscribe roster for all accounts."
+        ) { (cancel) ->
+            val account: String by config
+            val chat: String by config
+            Subscribe.LastMessage(!cancel.toBoolean()).inContext(account, chat)
+        }
+    )
 )
 
 private val send = SEND to mapOf(
     MESSAGE to command(
-        text().copy(value = "message", description = "Message text"),
+        text().copy(name = "message", description = "Message text"),
         description = "Send a message in chat."
     ) { (message) ->
         val account: String by config
@@ -170,7 +193,7 @@ private val config = CONFIG to command(
     named("chat").copy(optional = true)
 ).raw { args ->
     if (args.filterNotNull().isEmpty()) copy(
-        result = Cli.Result.Return(config)
+        result = Cli.Result.Return(config.toMap())
     ) else configure {
         args.getOrNull(0)?.run { account = toString() }
         args.getOrNull(1)?.run { chat = toString() }

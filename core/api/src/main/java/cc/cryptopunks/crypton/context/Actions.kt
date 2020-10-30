@@ -77,7 +77,8 @@ object Subscribe {
     data class Accounts(override val enable: Boolean) : Main.Action, Subscription
     data class RosterItems(
         override val enable: Boolean,
-        val account: Address? = null
+        val account: Address? = null,
+        val list: Boolean = true
     ) : Main.Action, Subscription
 
     // Chat

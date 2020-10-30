@@ -19,7 +19,9 @@ object Cli {
         ) : (String) -> Boolean by match
     }
 
-    interface Element
+    interface Element {
+        object Empty : Element
+    }
 
     data class Elements(val collection: Collection<Element>) : Element {
         constructor(vararg elements: Element) : this(elements.toList())
@@ -92,7 +94,6 @@ object Cli {
 
 // API
 
-
 fun commands(args: Map<*, *>): Cli.Commands =
     commands(args.map { (k, v) -> k to v })
 
@@ -163,23 +164,34 @@ fun Cli.Command.Template.raw(
 fun name() = Cli.Param(Cli.Param.Type.Name)
 fun param(type: Cli.Param.Type = Cli.Param.Type.Positional) = Cli.Param(type)
 fun named(name: String) = Cli.Param(Cli.Param.Type.Named(name))
-fun option(on: String, off: String? = null) = Cli.Param(Cli.Param.Type.Option(on, off))
+fun option(on: String, off: String? = null) =
+    Cli.Param(Cli.Param.Type.Option(on, off), value = false)
+
 fun text() = Cli.Param(Cli.Param.Type.Text, optional = true)
 
 fun Cli.Param.optional() = copy(optional = true)
 
-fun Cli.Context.reduce(input: String) = reduce(Cli.Input.Raw(input))
+fun Array<out Any>.joinArgs() = joinToString(" ")
 
-fun Cli.Context.reduce(element: Cli.Element): Cli.Context =
-    when (element) {
-        is Cli.Elements -> reduce(element.collection)
-        is Cli.Input.Raw -> reduce(element.split())
-        is Cli.Input.Chunk -> reduce(plus(element))
-//        is Cli.Result.Ready -> reduce(Cli.Input.Execute)
-        is Cli.Input.Execute -> reduce(buildCommand())
-        is Cli.Command -> run(element)
-        is Cli.Execute -> copy(execute = element)
-        is Cli.Result -> copy(result = element)
+fun Cli.Context.reduce(input: String) = reduce(Cli.Input.Raw(input).also { println(input) })
+
+fun Cli.Context.reduce(element: Cli.Element): Cli.Context = when (element) {
+    is Cli.Elements -> reduce(element.collection)
+    is Cli.Input.Raw -> reduce(element.split())
+    is Cli.Input.Chunk -> prepareIfNeeded().run { reduce(plus(element)) }
+    is Cli.Result.Ready -> reduce(Cli.Input.Execute)
+    is Cli.Input.Execute -> reduce(buildCommand())
+    is Cli.Command -> run(element)
+    is Cli.Execute -> copy(execute = element)
+    is Cli.Result -> copy(result = element)
+    else -> this
+}
+
+
+fun Cli.Context.prepareIfNeeded(): Cli.Context =
+    when (result) {
+        is Cli.Result.Return,
+        is Cli.Result.Error -> prepare()
         else -> this
     }
 
@@ -260,9 +272,15 @@ private operator fun Cli.Command.Builder.plus(
                 empty = empty.filter { it.index != param.index },
                 filled = filled + param.copy(value = arg.value)
             )
+//            is Cli.Param.Type.Text -> copy(
+//                empty = empty.dropLastWhile { it.type == Cli.Param.Type.Text },
+//                filled = filled.dropLastWhile { it.type == Cli.Param.Type.Text } + param.copy(
+//                    value = param.value?.let { it.toString() + Cli.DELIMITER + arg.value }
+//                        ?: arg.value
+//                )
+//            )
             is Cli.Param.Type.Text -> copy(
-                empty = empty.dropLastWhile { it.type == Cli.Param.Type.Text },
-                filled = filled.dropLastWhile { it.type == Cli.Param.Type.Text } + param.copy(
+                empty = empty.dropLastWhile { it.type == Cli.Param.Type.Text } + param.copy(
                     value = param.value?.let { it.toString() + Cli.DELIMITER + arg.value }
                         ?: arg.value
                 )
@@ -295,6 +313,7 @@ private fun Cli.Context.buildCommand(): Cli.Element =
                     run = execute.run
                 )
             is Cli.Commands -> Cli.Result.Suggestion(execute)
+            is Cli.Command -> Cli.Element.Empty
             else -> execute
         }
     }

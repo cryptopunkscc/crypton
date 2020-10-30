@@ -13,7 +13,8 @@ fun columnFormatter(
 }
 
 private fun List<Int>.spreadTo(strings: List<String?>) = strings.mapIndexed { index, string ->
-    maxOf(
+    if (index == size - 1) string?.length ?: 0
+    else maxOf(
         getOrNull(index) ?: 0,
         string?.length ?: 0
     )

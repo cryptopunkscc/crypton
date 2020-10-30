@@ -24,7 +24,7 @@ class CliContextTest {
 
     @Test
     fun testSetConfig() {
-        Cli.Context(commands).reduce("$setConfig; $getConfig").run {
+        Cli.Context(commands).reduce("$setConfig $getConfig").run {
             println(result)
             Assert.assertEquals(
                 Cli.Result.Return(Cli.Config(mapOf("email" to setConfig))),
