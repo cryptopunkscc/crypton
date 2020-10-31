@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.repo
 import androidx.paging.DataSource
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.context.validate
 import cc.cryptopunks.crypton.entity.ChatData
 import cc.cryptopunks.crypton.entity.ChatUserData
 import cc.cryptopunks.crypton.entity.UserData
@@ -30,16 +31,13 @@ class ChatRepo(
         chatDao.list(accounts.map(Address::id)).map { it.toDomain() }
 
     override suspend fun insert(chat: Chat)  =
-        chat.run {
+        chat.validate().run {
             chatDao.insert(chatData())
             insertUsersIfNeeded()
         }
 
     override suspend fun insertIfNeeded(chat: Chat) {
-        if (!contains(chat)) chat.apply {
-            chatDao.insert(chatData())
-            insertUsersIfNeeded()
-        }
+        if (!contains(chat)) insert(chat)
     }
 
     private suspend fun Chat.insertUsersIfNeeded() {

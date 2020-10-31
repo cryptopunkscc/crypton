@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.messageStatus
 import cc.cryptopunks.crypton.context.resource
+import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +36,7 @@ data class MessageData(
     val id: String = "",
     @DatabaseField
     val stanzaId: String = "",
-    @DatabaseField
+    @DatabaseField(dataType = DataType.LONG_STRING)
     val text: String = "",
     @DatabaseField
     val timestamp: Long = 0,
@@ -88,6 +89,9 @@ data class MessageData(
 
         @Query("select * from message where timestamp <= :latest and timestamp >= :oldest")
         suspend fun list(latest: Long, oldest: Long): List<MessageData>
+
+        @Query("select * from message where chatId == :chat and timestamp <= :latest and timestamp >= :oldest")
+        suspend fun list(chat: AddressData, latest: Long, oldest: Long): List<MessageData>
 
         @Query("select * from message where chatId == :chat and status == :status")
         suspend fun list(chat: AddressData, status: String): List<MessageData>

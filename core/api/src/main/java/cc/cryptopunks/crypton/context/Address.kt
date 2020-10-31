@@ -15,8 +15,8 @@ data class Address(
     val id get() = string
 
     fun validate() {
-        local.isNotBlank() || throw Exception.InvalidAddress
-        domain.split('.').size == 2 || throw Exception.InvalidAddress
+        require(local.isNotBlank())
+        require(domain.isNotBlank())
     }
 
     override fun toString(): String = string

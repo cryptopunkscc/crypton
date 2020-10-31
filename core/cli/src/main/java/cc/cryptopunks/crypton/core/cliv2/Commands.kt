@@ -90,7 +90,12 @@ private val roster = ROSTER to mapOf(
 )
 
 private val deleteAccount = DELETE to mapOf(
-    ACCOUNT to command()
+    ACCOUNT to command(
+        config("account"),
+        description = "Delete account."
+    ) { (account) ->
+        Exec.RemoveAccount().inContext(account)
+    }
 )
 
 private val chat = CHAT to mapOf(
@@ -172,15 +177,27 @@ private val send = SEND to mapOf(
     MESSAGE to command(
         config("account"),
         config("chat"),
+        option("-!").optional().copy(description = "Send not encrypted message. Not recommended!"),
         text().copy(name = "message", description = "Message text"),
         description = "Send a message in chat."
-    ) { (account, chat, message) ->
-        Exec.EnqueueMessage(message).inContext(account, chat)
+    ) { (account, chat, notEncrypted, message) ->
+        Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inContext(account, chat)
     }
 )
 
+private val message = "-" to command(
+    config("account"),
+    config("chat"),
+    option("-!").optional().copy(description = "Send not encrypted message. Not recommended!"),
+    text().copy(name = "message", description = "Message text"),
+    description = "Send a message in chat."
+) { (account, chat, notEncrypted, message) ->
+    Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inContext(account, chat)
+}
+
 private val devices = DEVICES to mapOf(
     PURGE to command(
+        config("account"),
         description = "Purge device list for account"
     ) { (account) ->
         Exec.PurgeDeviceList.inContext(account)
@@ -219,6 +236,7 @@ val cryptonCommands = commands(
     addAccount,
     createAccount,
     deleteAccount,
+    message,
     send,
     roster,
     chat,

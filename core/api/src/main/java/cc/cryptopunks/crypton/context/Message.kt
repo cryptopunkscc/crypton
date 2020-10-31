@@ -90,7 +90,7 @@ data class Message(
         suspend fun delete(message: List<Message>)
         suspend fun latest(): Message?
         suspend fun latest(chat: Address): Message?
-        suspend fun list(range: LongRange = 0..System.currentTimeMillis()): List<Message>
+        suspend fun list(chat: Address? = null, range: LongRange = 0..System.currentTimeMillis()): List<Message>
         suspend fun list(chat: Address, status: Status): List<Message>
         suspend fun listUnread(): List<Message>
         suspend fun listQueued(): List<Message>
@@ -120,6 +120,12 @@ data class Message(
             from.address != chat -> from.address.local
             else -> from.resource
         }
+}
+
+fun Message.validate() = apply {
+    chat.validate()
+    from.address.validate()
+    to.address.validate()
 }
 
 val Message.sender

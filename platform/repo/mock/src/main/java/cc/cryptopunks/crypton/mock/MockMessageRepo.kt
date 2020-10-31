@@ -68,7 +68,7 @@ class MockMessageRepo : Message.Repo {
     override suspend fun listUnread(): List<Message> =
         store.get().values.filter { it.isUnread }.sortedBy { it.timestamp }
 
-    override suspend fun list(range: LongRange): List<Message> =
+    override suspend fun list(chat: Address?, range: LongRange): List<Message> =
         store.get().values.toList()
 
     override suspend fun list(chat: Address, status: Message.Status): List<Message> {

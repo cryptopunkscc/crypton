@@ -85,3 +85,7 @@ data class Chat(
         fun flowList(): Flow<List<Chat>>
     }
 }
+
+fun Chat.validate() = apply {
+    address.validate()
+}

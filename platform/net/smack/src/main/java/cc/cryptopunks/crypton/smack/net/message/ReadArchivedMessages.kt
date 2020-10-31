@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.smack.net.message
 import cc.cryptopunks.crypton.context.CryptonMessage
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.smack.SmackCore
+import cc.cryptopunks.crypton.smack.util.address
 import cc.cryptopunks.crypton.smack.util.ext.hasOmemoExtension
 import cc.cryptopunks.crypton.smack.util.ext.replaceBody
 import cc.cryptopunks.crypton.smack.util.cryptonMessage
@@ -27,6 +28,7 @@ private fun Message.Net.ReadQuery.mamQueryArgs() = MamManager.MamQueryArgs
     .build()
 
 private fun SmackCore.flowMessages(query: MamManager.MamQuery): Flow<List<CryptonMessage>> = flow {
+    val account = connection.user.address()
     while (query.messageCount > 0) {
         val decryptedQueryResult = omemoManager.decryptMamQueryResult(query)
         query.page.forwarded
@@ -37,7 +39,14 @@ private fun SmackCore.flowMessages(query: MamManager.MamQuery): Flow<List<Crypto
                 }
             }
             .map(Forwarded::cryptonMessage)
-            .map { it.copy(readAt = System.currentTimeMillis()) }
+            .map {
+                it.copy(
+                    readAt = System.currentTimeMillis(),
+                    chat = setOf(it.from.address, it.to.address)
+                        .minus(account)
+                        .last()
+                )
+            }
             .filter { it.text.isNotBlank() }
             .let { emit(it) }
         query.pageNext(PAGE_SIZE)

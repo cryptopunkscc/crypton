@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.handle
 
 internal fun handleGetMessages() = handle { out, _: Get.Messages ->
     messageRepo.list(
+        chat = chat.address,
         range = System.currentTimeMillis().let { currentTime ->
             currentTime - SEVEN_DAYS_MILLIS..currentTime
         }

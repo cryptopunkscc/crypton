@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.repo
 import androidx.paging.DataSource
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.validate
 import cc.cryptopunks.crypton.entity.MessageData
 import cc.cryptopunks.crypton.entity.message
 import cc.cryptopunks.crypton.entity.messageData
@@ -39,13 +40,13 @@ class MessageRepo(
     }
 
     override suspend fun insertOrUpdate(message: Message) {
-        latest = message
+        latest = message.validate()
         dao.insertOrUpdate(message.messageData())
     }
 
     override suspend fun insertOrUpdate(messages: List<Message>) {
         dao.insertOrUpdate(messages.map {
-            latest = it
+            latest = it.validate()
             it.messageData()
         })
     }
@@ -83,8 +84,10 @@ class MessageRepo(
     override suspend fun listUnread(): List<Message> =
         dao.listUnread().map { it.message() }
 
-    override suspend fun list(range: LongRange): List<Message> =
-        dao.list(oldest = range.first, latest = range.last).map { it.message() }
+    override suspend fun list(chat: Address?, range: LongRange): List<Message> = if (chat == null)
+        dao.list(oldest = range.first, latest = range.last).map { it.message() } else
+        dao.list(oldest = range.first, latest = range.last, chat = chat.id).map { it.message() }
+
 
     override suspend fun list(chat: Address, status: Message.Status): List<Message> =
         dao.list(chat.id, status.name).map { it.message() }

@@ -73,6 +73,20 @@ class MessageDao(
             .query()
     }
 
+    override suspend fun list(
+        chat: AddressData,
+        latest: Long,
+        oldest: Long,
+    ): List<MessageData> = withContext(read) {
+        dao.queryBuilder().where()
+            .eq("chatId", chat)
+            .and()
+            .le("timestamp", latest)
+            .and()
+            .ge("timestamp", oldest)
+            .query()
+    }
+
     private suspend fun listUnread(chatId: AddressData): List<MessageData> = withContext(read) {
         dao.queryBuilder().where()
             .eq("chatId", chatId)
