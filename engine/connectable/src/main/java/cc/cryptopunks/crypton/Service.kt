@@ -110,6 +110,9 @@ private fun Scope.handleRequest(
 ) {
     handlerFor(action)
         ?.let { handle ->
+            log.builder.d {
+                status = Log.Event.Status.Start.name
+            }
             runCatching {
                 handle(out, action)
                 log.builder.d {

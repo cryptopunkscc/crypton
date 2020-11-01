@@ -35,7 +35,7 @@ object Cli {
     sealed class Result : Element {
         object Pending : Result()
         object Ready : Result()
-        data class Error(val throwable: Throwable) : Result()
+        data class Error(val value: Any) : Result()
         data class Return(val value: Any) : Result()
         data class Suggestion(val value: Any) : Result()
     }
@@ -288,7 +288,6 @@ private fun Cli.Context.builder(template: Cli.Command.Template, chunk: Cli.Input
             when (param.type) {
                 is Cli.Param.Type.Name -> param.copy(value = chunk.value)
                 is Cli.Param.Type.Config -> param.copy(value = config[param.type.key])
-                    .apply { if (!optional) requireNotNull(value) }
                 else -> null
             }
         },
@@ -296,18 +295,20 @@ private fun Cli.Context.builder(template: Cli.Command.Template, chunk: Cli.Input
     )
 
 private fun Cli.Context.buildCommand(): Cli.Element =
-    run {
-        when (execute) {
-            is Cli.Command.Builder -> if (execute.isEnough().not())
-                Cli.Result.Suggestion(execute.empty) else
-                Cli.Command(
-                    params = execute.params,
-                    run = execute.run
-                )
-            is Cli.Commands -> Cli.Result.Suggestion(execute)
-            is Cli.Command -> Cli.Element.Empty
-            else -> execute
+    when (execute) {
+        is Cli.Command.Builder -> when {
+            execute.isEnough() -> Cli.Command(
+                params = execute.params,
+                run = execute.run
+            )
+            else -> Cli.Result.Suggestion(
+                Cli.Params(execute.empty)
+            )
         }
+
+        is Cli.Commands -> Cli.Result.Suggestion(execute)
+        is Cli.Command -> Cli.Element.Empty
+        else -> execute
     }
 
 private val Cli.Command.Builder.params: List<Cli.Param>
@@ -321,7 +322,16 @@ private fun Cli.Command.Builder.isEnough(): Boolean =
 
 private fun Cli.Context.run(command: Cli.Command): Cli.Context =
     try {
-        command.run { run(params.map(Cli.Param::value)) }
+        if (command == execute) this
+        else command.run {
+            params.filter { !it.optional && it.value == null }.let { invalid ->
+                if (invalid.isEmpty()) copy(execute = command).run(params.map(Cli.Param::value))
+                else copy(execute = command, result = Cli.Result.Error(Cli.Params(invalid)))
+            }
+        }
     } catch (e: Throwable) {
-        copy(result = Cli.Result.Error(e))
+        copy(
+            execute = command,
+            result = Cli.Result.Error(e)
+        )
     }

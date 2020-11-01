@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.cliv2.Cli
-import cc.cryptopunks.crypton.cliv2.prepareIfNeeded
 import cc.cryptopunks.crypton.cliv2.reduce
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
@@ -54,12 +53,14 @@ fun cliClient(
 
 fun Any.unwrapCliResult(): Any =
     when (this) {
-        is Cli.Context -> result.unwrapCliResult()
-        is Cli.Result.Return -> value.unwrapCliResult()
-        is Cli.Result.Suggestion -> value.unwrapCliResult()
-        is Cli.Result.Error -> throwable
-        else -> this
+        is Cli.Context -> result
+        is Cli.Result.Return -> value
+        is Cli.Result.Suggestion -> value
+        is Cli.Result.Error -> value
+        else -> null
     }
+        ?.unwrapCliResult()
+        ?: this
 
 fun Any.formatCliOutput(): String? =
     when (this) {
