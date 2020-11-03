@@ -6,8 +6,8 @@ import cc.cryptopunks.crypton.emitter.flushMessageQueueFlow
 import cc.cryptopunks.crypton.emitter.handlePresenceFlow
 import cc.cryptopunks.crypton.emitter.insertInvitationFlow
 import cc.cryptopunks.crypton.emitter.joinConferencesFlow
+import cc.cryptopunks.crypton.emitter.reconnectSessionFlow
 import cc.cryptopunks.crypton.emitter.saveMessagesFlow
-import cc.cryptopunks.crypton.emitter.sessionActionsFlow
 import cc.cryptopunks.crypton.emitter.startSessionServicesFlow
 import cc.cryptopunks.crypton.emitter.syncConferencesFlow
 import cc.cryptopunks.crypton.emitter.toggleIndicatorFlow
@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.onStart
 
 internal fun RootScope.appActionsFlow() = flowOf(
     toggleIndicatorFlow(),
-    sessionActionsFlow(),
+//    sessionActionsFlow(),
     startSessionServicesFlow()
 ).flattenMerge().onStart {
     log.builder.d { status = Log.Event.Status.Start.name }
@@ -33,6 +33,7 @@ internal fun RootScope.appActionsFlow() = flowOf(
 }
 
 internal fun SessionScope.accountActionsFlow() = flowOf(
+    reconnectSessionFlow(),
     saveMessagesFlow(),
     handlePresenceFlow(),
     flushMessageQueueFlow(),

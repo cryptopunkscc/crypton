@@ -62,7 +62,7 @@ private suspend fun Service.Connection.handle() = connector.input
 private suspend fun Service.Connection.resolve(arg: Any): Pair<Scope, Any> =
     when (arg) {
         is Context -> runCatching {
-            scope.resolve(arg)
+            scope resolve arg
         }.getOrElse {
 
             scope to CannotResolve(arg)
@@ -85,9 +85,12 @@ private fun Scope.handleSubscription(
     subscription: Subscription,
     out: Output
 ) {
-    if (!subscription.enable) subscriptions.remove(subscription::class)?.cancel()
-    else subscriptions.getOrPut(subscription::class) {
-        handleRequest(subscription, out)
+    val type = subscription::class
+    if (!subscription.enable) subscriptions.remove(type)?.cancel()
+    else subscriptions.getOrPut(type) {
+        handleRequest(subscription, out).apply {
+            invokeOnCompletion { subscriptions -= type }
+        }
     }
 }
 
@@ -96,8 +99,9 @@ private fun Scope.handleAsync(
     action: Async,
     out: Output
 ) {
-    handleRequest(action, out).also {
-        async[it] = action
+    handleRequest(action, out).also { job ->
+        job.invokeOnCompletion { async -= job }
+        async[job] = action
     }
 }
 

@@ -62,6 +62,7 @@ object Get {
 
     object HostedRooms : Account.Action
     object JoinedRooms : Account.Action
+    data class SubscriptionStatus(val address: Address): Account.Action
 
     // Chat
 
@@ -80,6 +81,9 @@ object Subscribe {
         val account: Address? = null,
         val list: Boolean = true
     ) : Main.Action, Subscription
+
+    // Account
+    object ReconnectSession : Account.Action, Subscription
 
     // Chat
 

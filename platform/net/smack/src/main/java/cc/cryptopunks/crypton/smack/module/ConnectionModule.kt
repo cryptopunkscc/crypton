@@ -155,6 +155,10 @@ internal class ConnectionModule(
 
     override fun iAmSubscribed(address: Address) = roster.iAmSubscribedTo(address.entityBareJid())
 
+    override fun subscriptionStatus(address: Address) = roster.getEntry(address.entityBareJid())?.run {
+        Roster.Item.Status.valueOf(type.name)
+    } ?: Roster.Item.Status.none
+
     override fun subscribe(address: Address) =
         roster.createEntry(address.entityBareJid(), address.local, emptyArray())
 

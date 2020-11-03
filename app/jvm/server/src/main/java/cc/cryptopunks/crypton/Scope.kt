@@ -2,11 +2,11 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.RootModule
-import cc.cryptopunks.crypton.mock.MockSys
 import cc.cryptopunks.crypton.repo.ormlite.OrmLiteAppRepo
 import cc.cryptopunks.crypton.service.cryptonHandlers
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
+import cc.cryptopunks.crypton.sys.JvmSys
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.ormlite.jvm.createJdbcH2ConnectionSource
@@ -18,7 +18,7 @@ import java.io.File
 fun createRootScope(config: Map<String, Any?>) = RootScopeConfig(config).run {
     initSmack(File(omemoStorePath))
     RootModule(
-        sys = MockSys(),
+        sys = JvmSys(),
         repo = OrmLiteAppRepo { name: String ->
             createJdbcH2ConnectionSource(
                 home = "$home/$profile/",

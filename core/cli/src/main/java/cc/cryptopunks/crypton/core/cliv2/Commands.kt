@@ -26,6 +26,7 @@ private const val CREATE = "create"
 private const val ROSTER = "roster"
 private const val GET = "get"
 private const val SUBSCRIBE = "subscribe"
+private const val SUBSCRIPTION = "subscription"
 private const val ITEMS = "items"
 private const val ACCOUNT = "account"
 private const val ACCOUNTS = "accounts"
@@ -86,7 +87,14 @@ private val roster = ROSTER to mapOf(
         ) { (cancel) ->
             Subscribe.RosterItems(!cancel.toBoolean(), list = false)
         }
-    )
+    ),
+    SUBSCRIPTION to command(
+        config("account"),
+        param().copy(name = "local@domain"),
+        description = "Get roster subscription status"
+    ) { (account, buddy) ->
+        Get.SubscriptionStatus(address(buddy)).inContext(account)
+    }
 )
 
 private val deleteAccount = DELETE to mapOf(

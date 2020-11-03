@@ -19,6 +19,7 @@ import cc.cryptopunks.crypton.handler.handleGetMessages
 import cc.cryptopunks.crypton.handler.handleGetPagedMessages
 import cc.cryptopunks.crypton.handler.handleGetHostedRooms
 import cc.cryptopunks.crypton.handler.handleGetRosterItems
+import cc.cryptopunks.crypton.handler.handleGetSubscriptionStatus
 import cc.cryptopunks.crypton.handler.handleInsertInvitation
 import cc.cryptopunks.crypton.handler.handleInvite
 import cc.cryptopunks.crypton.handler.handleJoinChat
@@ -31,6 +32,7 @@ import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handlePresence
 import cc.cryptopunks.crypton.handler.handlePurgeDeviceList
+import cc.cryptopunks.crypton.handler.handleReconnectSession
 import cc.cryptopunks.crypton.handler.handleRegisterAccount
 import cc.cryptopunks.crypton.handler.handleRemoveAccount
 import cc.cryptopunks.crypton.handler.handleRosterItemsSubscription
@@ -64,6 +66,7 @@ fun sessionServiceHandlers() = createHandlers {
     +handleInsertInvitation()
     +handleFlushMessageQueue()
     +handleUpdateChatNotification()
+    +handleReconnectSession()
 }
 
 fun mainHandlers() = createHandlers {
@@ -89,6 +92,7 @@ fun accountHandlers() = createHandlers {
     +handleGetJoinedRooms()
     +handleAccountsSubscription()
     +handlePurgeDeviceList()
+    +handleGetSubscriptionStatus()
 }
 
 fun chatHandlers() = createHandlers {

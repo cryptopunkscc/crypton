@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.backend.BackendService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -17,7 +18,12 @@ open class TestServer {
 
     fun start() = runBlocking {
         serverJob = scope.launch {
-            startCryptonServer()
+            val config = ServerConfig().default().local().apply {
+                profile = "test_server"
+            }
+            val backend = BackendService(createRootScope(config)).init()
+
+            server(config, backend).invoke()
         }
         delay(1000)
     }

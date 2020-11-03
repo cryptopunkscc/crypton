@@ -16,6 +16,7 @@ include ':core:api',
 
         ':platform:sys:mock',
         ':platform:sys:android',
+        ':platform:sys:jvm',
 
         ':platform:fs:test',
         ':platform:fs:ormlite',

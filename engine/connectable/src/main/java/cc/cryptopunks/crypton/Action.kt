@@ -12,7 +12,7 @@ interface Action {
 interface Async : Action
 
 interface Subscription : Action {
-    val enable: Boolean
+    val enable: Boolean get() = true
 }
 
 interface Scoped<S : CoroutineScope> : Action

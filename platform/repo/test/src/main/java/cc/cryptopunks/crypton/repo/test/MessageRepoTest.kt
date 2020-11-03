@@ -179,7 +179,7 @@ abstract class MessageRepoTest {
             // then
             assertEquals(
                 list.take(3),
-                list((timestamp)..(timestamp + 2))
+                list(range = (timestamp)..(timestamp + 2))
             )
         }
     }

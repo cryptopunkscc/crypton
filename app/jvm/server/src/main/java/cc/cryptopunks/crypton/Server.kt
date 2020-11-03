@@ -25,12 +25,12 @@ fun server(
     }
 }
 
-internal class ServerConfig(
+class ServerConfig(
     map: Map<String, Any?> = emptyMap()
 ) : MutableMap<String, Any?> by map.toMutableMap() {
     var home: String by this
     var omemoStore: String by this
-    var name: String by this
+    var profile: String by this
     var socketAddress: String by this
     var socketPort: Int by this
     var hostAddress: String? by this
@@ -39,17 +39,19 @@ internal class ServerConfig(
 }
 
 
-internal fun ServerConfig.default() = apply {
+fun ServerConfig.default() = apply {
     home = "~/.crypton".replaceFirst("~", System.getProperty("user.home"))
+    profile = "default"
     omemoStore = "omemo_store"
     socketPort = 2323
     socketAddress = "127.0.0.1"
     hostAddress = null
-    securityMode = "ifPossible"
+    securityMode = "ifpossible"
     inMemory = "false"
 }
 
-internal fun ServerConfig.local() = apply {
+fun ServerConfig.local() = apply {
     hostAddress = "127.0.0.1"
     securityMode = "disabled"
+    profile = "local"
 }
