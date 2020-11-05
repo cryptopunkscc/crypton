@@ -1,17 +1,16 @@
 @startuml
 package ":platform" {
-[:platform:repo:mock]
-[:platform:net:mock]
-[:platform:sys:mock]
+[:platform:repo:ormlite]
+[:platform:util:ormlite:jvm]
+[:platform:sys:jvm]
 [:platform:net:smack:jvm]
 [:platform:log:jvm]
-}
-package ":core" {
-[:core:backend]
-[:core:api]
-[:core:domain]
+[:platform:util:ormlite]
+[:platform:repo:data]
+[:platform:sys:mock]
 }
 package ":engine" {
+[:engine:cli]
 [:engine:net]
 [:engine:connectable]
 [:engine:util]
@@ -19,26 +18,36 @@ package ":engine" {
 [:engine:paging]
 [:engine:json]
 }
+package ":core" {
+[:core:backend]
+[:core:api]
+[:core:domain]
+}
 package ":app" {
 [:app:jvm:server]
 }
-[:platform:repo:mock] --> [:core:api]
-[:platform:net:mock] --> [:core:api]
-[:platform:sys:mock] --> [:core:api]
+[:platform:repo:ormlite] --> [:platform:util:ormlite]
+[:platform:repo:ormlite] --> [:platform:repo:data]
+[:platform:util:ormlite:jvm] --> [:platform:util:ormlite]
+[:platform:sys:jvm] --> [:core:api]
+[:platform:sys:jvm] --> [:platform:sys:mock]
 [:platform:net:smack:jvm] --> [:core:api]
 [:core:backend] --> [:core:domain]
 [:engine:net] --> [:engine:connectable]
 [:engine:net] --> [:engine:json]
 [:platform:log:jvm] --> [:engine:log]
+[:platform:repo:data] --> [:core:api]
 [:core:api] --> [:engine:connectable]
 [:engine:connectable] --> [:engine:util]
 [:engine:connectable] --> [:engine:log]
+[:platform:sys:mock] --> [:core:api]
 [:core:domain] --> [:engine:paging]
 [:core:domain] --> [:core:api]
-[:app:jvm:server] --> [:platform:repo:mock]
-[:app:jvm:server] --> [:platform:net:mock]
-[:app:jvm:server] --> [:platform:sys:mock]
+[:app:jvm:server] --> [:platform:repo:ormlite]
+[:app:jvm:server] --> [:platform:util:ormlite:jvm]
+[:app:jvm:server] --> [:platform:sys:jvm]
 [:app:jvm:server] --> [:platform:net:smack:jvm]
+[:app:jvm:server] --> [:engine:cli]
 [:app:jvm:server] --> [:core:backend]
 [:app:jvm:server] --> [:engine:net]
 [:app:jvm:server] --> [:platform:log:jvm]

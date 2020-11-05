@@ -33,7 +33,7 @@ package ":engine" {
 [:engine:connectable]
 [:engine:util]
 [:engine:log]
-[:engine:translator]
+[:engine:cli]
 }
 [:core:backend] --> [:core:domain]
 [:platform:net:smack:android] --> [:core:api]
@@ -69,7 +69,7 @@ package ":engine" {
 [:app:android:chat] --> [:app:android:widget]
 [:app:android:chat] --> [:core:cli]
 [:app:android:drawer] --> [:app:android:core]
-[:core:cli] --> [:engine:translator]
+[:core:cli] --> [:engine:cli]
 [:core:cli] --> [:core:api]
 [:app:android:core] --> [:core:api]
 [:app:android:core] --> [:app:android:resources]
