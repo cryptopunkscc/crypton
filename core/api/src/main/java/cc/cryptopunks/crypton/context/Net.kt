@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface Net :
     Account.Net,
-    Presence.Net,
     Message.Net,
     Chat.Net,
     Roster.Net,
@@ -24,9 +23,7 @@ interface Net :
 
     object Connected : Event
     object OmemoInitialized : Event
-    data class Disconnected(val throwable: Throwable? = null) : Event {
-        val hasError get() = throwable != null
-    }
+    data class Disconnected(val throwable: Throwable? = null) : Event
 
     open class Exception(
         message: String? = null,

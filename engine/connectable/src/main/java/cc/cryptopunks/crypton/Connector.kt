@@ -3,6 +3,8 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.coroutineLog
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.Flow
@@ -41,9 +43,8 @@ fun connector(
     outputChannel: SendChannel<Any>
 ) = Connector(
     input = inputChannel.consumeAsFlow(),
-    output = {
-        outputChannel.send(it)
-    }
+    output = { outputChannel.send(it) },
+//    close = { inputChannel.cancel() }
 )
 
 fun Connector.logging() = copy(
@@ -76,3 +77,26 @@ private fun Any.unwrap() = when (this) {
     is Context -> action()
     else -> this
 }
+
+fun Connectable.connector(): Connector =
+    connectorAdapter().run {
+        val job = first.connect()
+        second.copy(
+            close = {
+                job.cancel()
+                first.close()
+                second.close()
+            }
+        )
+    }
+
+fun connectorAdapter(
+    first: BroadcastChannel<Any> = BroadcastChannel(Channel.BUFFERED),
+    second: BroadcastChannel<Any> = BroadcastChannel(Channel.BUFFERED)
+): Pair<Connector, Connector> = connector(
+    inputChannel = first.openSubscription(),
+    outputChannel = second
+) to connector(
+    inputChannel = second.openSubscription(),
+    outputChannel = first
+)

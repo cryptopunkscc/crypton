@@ -28,7 +28,7 @@ jobs:
     - name: Build android client apk
       uses: eskatos/gradle-command-action@v1.3.2
       with:
-        arguments: "clean android:app:assembleRemoteRelease"
+        arguments: "clean app:android:app:assembleRemoteRelease"
 
     - name: Upload Release Asset
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -37,4 +37,4 @@ jobs:
         automatic_release_tag: ${{ env.VERSION_NAME }}
         prerelease: false
         files: |
-          android/app/build/outputs/apk/**/*.apk
+          app/android/app/build/outputs/apk/**/*.apk

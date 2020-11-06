@@ -26,7 +26,7 @@ internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
     fib.withIndex().asFlow().map { (attempt, wait) ->
         delay(1500L * wait)
         log.d { "Syncing conferences attempt $attempt $wait" }
-        listRooms()
+        listHostedRooms()
     }.filter { it.isNotEmpty() }.firstOrNull()?.let { rooms ->
         log.d { "Fetched conferences $rooms" }
         syncConferences(rooms).map { it.address }.onEach { room ->
@@ -38,7 +38,7 @@ internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
 }
 
 private suspend fun SessionScope.syncConferences(list: Set<Address>) =
-    chatRepo.list(listOf(address)).map(Chat::address).let { savedChats ->
+    chatRepo.list().map(Chat::address).let { savedChats ->
         list - savedChats
     }.also {
         log.d { "Creating conferences $it" }

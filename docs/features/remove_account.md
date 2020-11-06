@@ -13,7 +13,7 @@ User can remove account from server.
 :core:api
 :core:domain:account
 :smack:net
-:android:room
+:platform:repo:room
 :android:account
 ```
 

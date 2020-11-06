@@ -17,7 +17,7 @@ Creating chat is required for sending direct messages
 :core:api
 :core:domain:chat
 :android:chat
-:android:room
+:platform:repo:room
 :net:smack
 ```
 

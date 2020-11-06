@@ -17,14 +17,14 @@ import kotlinx.coroutines.flow.onStart
 internal fun handleLastMessageSubscription() =
     handle { out, _: Subscribe.LastMessage ->
         flowOf(
-            messageRepo.list().asFlow(),
-            messageRepo.flowLatest()
+            messageRepo.list(chat.address).asFlow(),
+            messageRepo.flowLatest(chat.address)
         ).flattenMerge().onEach {
             log.d { "last message $it" }
-        }.bufferedThrottle(100).map { messages ->
+        }.map { messages ->
             Chat.Messages(
                 account = address,
-                list = messages
+                list = listOf(messages)
             )
         }.onStart {
             log.d { "start LastMessageSubscription" }

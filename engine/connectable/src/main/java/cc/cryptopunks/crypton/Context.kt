@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton
 
-data class Context(val id: String = "", val next: Any = Unit)
+data class Context(val id: String = "", val next: Any = Unit): Action
 
 
 fun Context.action(): Any = when (next) {

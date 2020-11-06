@@ -68,7 +68,7 @@ data class Chat(
         fun conferenceInvitationsFlow(): Flow<Invitation>
         fun joinConference(address: Address, nickname: String, historySince: Long = 0)
         fun listJoinedRooms(): Set<Address>
-        fun listRooms(): Set<Address>
+        fun listHostedRooms(): Set<Address>
         fun getChatInfo(chat: Address): Info
     }
 
@@ -77,7 +77,6 @@ data class Chat(
         suspend fun get(address: Address): Chat
         suspend fun contains(address: Address): Boolean
         suspend fun list(): List<Chat>
-        suspend fun list(addresses: List<Address>): List<Chat>
         suspend fun insert(chat: Chat)
         suspend fun insertIfNeeded(chat: Chat)
         suspend fun delete(chats: List<Address>)
@@ -85,4 +84,8 @@ data class Chat(
         fun dataSourceFactory(): DataSource.Factory<Int, Chat>
         fun flowList(): Flow<List<Chat>>
     }
+}
+
+fun Chat.validate() = apply {
+    address.validate()
 }

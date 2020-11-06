@@ -11,7 +11,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import java.util.concurrent.CancellationException
 
-fun RootScope.createSession(address: Address): SessionModule =
+suspend fun RootScope.createSession(address: Address): SessionModule =
     createSession(accountRepo.get(address))
 
 

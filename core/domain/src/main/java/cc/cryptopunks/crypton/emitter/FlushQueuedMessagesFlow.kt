@@ -20,7 +20,7 @@ internal fun SessionScope.flushMessageQueueFlow(): Flow<Exec.FlushQueuedMessages
     flowOf(
         netEvents().filterIsInstance<Net.OmemoInitialized>().map {
             log.v { "flush by Net.OmemoInitialized" }
-            messageRepo.queuedList().map { it.chat }
+            messageRepo.listQueued().map { it.chat }
         }.bufferedThrottle(3000).map { it.last() },
         presenceChangedFlow().filter {
             it.presence.status == Presence.Status.Available
@@ -28,7 +28,7 @@ internal fun SessionScope.flushMessageQueueFlow(): Flow<Exec.FlushQueuedMessages
             log.v { "flush by Presence.Status.Subscribed" }
             listOf(it.presence.resource.address)
         },
-        messageRepo.queuedListFlow().map { list ->
+        messageRepo.flowListQueued().map { list ->
             log.v { "flush by queuedListFlow $address $list" }
             list.map { it.chat }
         }

@@ -32,11 +32,11 @@ Bundle of non domain, non platform specific adapters and libs.
 Should contain reusable mock implementations of repositories, network api and system interfaces specified in `:core:api`
 
 ## `:jvm`
-JVM specific implementations except smack adapter. which is specified in `:net:smack` and provided by `:net:smack:jvm` module
+JVM specific implementations except smack adapter. which is specified in `:net:smack` and provided by `:platform:net:smack:jvm` module
 
 ## `:android`
-Contains all android related code except smack adapter. which is specified in `:net:smack` and provided by `:net:smack:android` module.
+Contains all android related code except smack adapter. which is specified in `:net:smack` and provided by `:platform:net:smack:android` module.
 
 ## `:net:smack`
 Implementation of crypton network api adapters for smack. 
-Contains reusable implementation which is provided through platform specific proxy modules [`:net:smack:jvm`, `:net:smack:android`].
+Contains reusable implementation which is provided through platform specific proxy modules [`:platform:net:smack:jvm`, `:platform:net:smack:android`].

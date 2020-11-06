@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.util.logger.log
 internal suspend fun SessionScope.flushQueuedMessages(
     filter: (Message) -> Boolean
 ) {
-    messageRepo.queuedList().let { list: List<Message> ->
+    messageRepo.listQueued().let { list: List<Message> ->
         log.d { "Flush pending messages $list" }
         list.filter(filter).forEach { message ->
             sendOrSubscribe(message)

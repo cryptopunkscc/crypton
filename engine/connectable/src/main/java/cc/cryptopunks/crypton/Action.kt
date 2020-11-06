@@ -1,5 +1,7 @@
 package cc.cryptopunks.crypton
 
+import kotlinx.coroutines.CoroutineScope
+
 interface Action {
     data class Error(
         val message: String?,
@@ -10,5 +12,7 @@ interface Action {
 interface Async : Action
 
 interface Subscription : Action {
-    val enable: Boolean
+    val enable: Boolean get() = true
 }
+
+interface Scoped<S : CoroutineScope> : Action

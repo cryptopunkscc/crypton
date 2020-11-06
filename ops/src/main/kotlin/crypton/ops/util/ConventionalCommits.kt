@@ -25,7 +25,7 @@ data class Change(
         BREAKING_CHANGE(Minor),
         feat(Patch),
         fix(Patch),
-        refactor(Patch),
+        refactor(None),
         doc(None),
         ci(None),
         chore(None),

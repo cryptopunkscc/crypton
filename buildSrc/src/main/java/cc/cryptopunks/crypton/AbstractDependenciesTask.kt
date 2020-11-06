@@ -15,10 +15,11 @@ abstract class AbstractDependenciesTask : DefaultTask() {
 
     private fun getModulesDependencies(): Map<String, Set<String>> =
         mutableMapOf<String, MutableSet<String>>().apply {
-            project.subprojects.filter(hasGradleFile).forEach {project ->
+            project.subprojects.filter(hasGradleFile).forEach { project ->
                 if (!contains(project.path)) set(project.path, mutableSetOf())
                 project.configurations.filterNot(isTestImplementation).forEach { configuration ->
                     configuration.dependencies.filter(isProjectDependency)
+                        .filter { it.moduleName != project.path }
                         .forEach { dependency: Dependency ->
                             getValue(project.path).add(dependency.moduleName)
                         }
@@ -32,7 +33,7 @@ abstract class AbstractDependenciesTask : DefaultTask() {
 
     private val isTestImplementation = { configuration: Configuration ->
         configuration.name.let {
-            "testImplementation" in it  || "androidTestImplementation" in it
+            "testImplementation" in it || "androidTestImplementation" in it
         }
     }
 

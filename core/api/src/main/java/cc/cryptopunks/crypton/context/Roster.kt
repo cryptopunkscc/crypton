@@ -11,8 +11,41 @@ object Roster {
         val account: Address = Address.Empty,
         val message: Message = Message.Empty,
         val presence: Presence.Status = Presence.Status.Unavailable,
-        val unreadMessagesCount: Int = 0
-    )
+        val unreadMessagesCount: Int = 0,
+        val updatedAt: Long = 0
+    ) {
+        enum class Status(val symbol: Char) {
+            /**
+             * The user does not have a subscription to the contact's presence, and the contact does not
+             * have a subscription to the user's presence; this is the default value, so if the
+             * subscription attribute is not included then the state is to be understood as "none".
+             */
+            none('⊥'),
+
+            /**
+             * The user has a subscription to the contact's presence, but the contact does not have a
+             * subscription to the user's presence.
+             */
+            to('←'),
+
+            /**
+             * The contact has a subscription to the user's presence, but the user does not have a
+             * subscription to the contact's presence.
+             */
+            from('→'),
+
+            /**
+             * The user and the contact have subscriptions to each other's presence (also called a
+             * "mutual subscription").
+             */
+            both('↔'),
+
+            /**
+             * The user wishes to stop receiving presence updates from the subscriber.
+             */
+            remove('⚡'),
+        }
+    }
 
     data class Items(val list: List<Item>)
 
@@ -31,7 +64,11 @@ object Roster {
         fun addContact(user: Address)
         fun invite(address: Address)
         fun invited(address: Address)
-
+        fun subscriptionStatus(address: Address) : Item.Status
+        fun subscribe(address: Address)
+        fun iAmSubscribed(address: Address): Boolean
+        fun sendPresence(presence: Presence)
+        fun getCachedPresences(): List<Presence>
         val rosterEvents: Flow<Event>
     }
 

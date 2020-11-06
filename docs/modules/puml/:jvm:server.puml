@@ -1,14 +1,15 @@
 @startuml
+package ":platform" {
+[:platform:repo:mock]
+[:platform:net:mock]
+[:platform:sys:mock]
+[:platform:net:smack:jvm]
+[:platform:log:jvm]
+}
 package ":core" {
-[:core:mock:repo]
-[:core:mock:net]
-[:core:mock:sys]
 [:core:backend]
 [:core:api]
 [:core:domain]
-}
-package ":net" {
-[:net:smack:jvm]
 }
 package ":engine" {
 [:engine:net]
@@ -18,28 +19,27 @@ package ":engine" {
 [:engine:paging]
 [:engine:json]
 }
-package ":jvm" {
-[:jvm:log]
-[:jvm:server]
+package ":app" {
+[:app:jvm:server]
 }
-[:core:mock:repo] --> [:core:api]
-[:core:mock:net] --> [:core:api]
-[:core:mock:sys] --> [:core:api]
-[:net:smack:jvm] --> [:core:api]
+[:platform:repo:mock] --> [:core:api]
+[:platform:net:mock] --> [:core:api]
+[:platform:sys:mock] --> [:core:api]
+[:platform:net:smack:jvm] --> [:core:api]
 [:core:backend] --> [:core:domain]
 [:engine:net] --> [:engine:connectable]
 [:engine:net] --> [:engine:json]
-[:jvm:log] --> [:engine:log]
+[:platform:log:jvm] --> [:engine:log]
 [:core:api] --> [:engine:connectable]
 [:engine:connectable] --> [:engine:util]
 [:engine:connectable] --> [:engine:log]
 [:core:domain] --> [:engine:paging]
 [:core:domain] --> [:core:api]
-[:jvm:server] --> [:core:mock:repo]
-[:jvm:server] --> [:core:mock:net]
-[:jvm:server] --> [:core:mock:sys]
-[:jvm:server] --> [:net:smack:jvm]
-[:jvm:server] --> [:core:backend]
-[:jvm:server] --> [:engine:net]
-[:jvm:server] --> [:jvm:log]
+[:app:jvm:server] --> [:platform:repo:mock]
+[:app:jvm:server] --> [:platform:net:mock]
+[:app:jvm:server] --> [:platform:sys:mock]
+[:app:jvm:server] --> [:platform:net:smack:jvm]
+[:app:jvm:server] --> [:core:backend]
+[:app:jvm:server] --> [:engine:net]
+[:app:jvm:server] --> [:platform:log:jvm]
 @enduml

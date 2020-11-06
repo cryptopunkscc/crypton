@@ -25,7 +25,7 @@ Message
 ```
 :core:api
 :core:domain:roster
-:android:room
+:platform:repo:room
 :android:roster
 ```
 

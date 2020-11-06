@@ -4,14 +4,8 @@ import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.encodeContext
 import cc.cryptopunks.crypton.json.formatJson
 import cc.cryptopunks.crypton.json.parseJson
-import io.ktor.network.sockets.Socket
-import io.ktor.network.sockets.openReadChannel
-import io.ktor.network.sockets.openWriteChannel
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.ByteWriteChannel
-import io.ktor.utils.io.cancel
-import io.ktor.utils.io.close
-import io.ktor.utils.io.writePacket
+import io.ktor.network.sockets.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
@@ -86,16 +80,16 @@ private suspend fun ByteWriteChannel.send(any: Any) = try {
 }
 
 private suspend fun ByteWriteChannel.send(type: String, message: String) {
-    send(type)
-    send(message)
+    send(type.encodeToByteArray())
+    send(message.encodeToByteArray())
 }
 
-private suspend fun ByteWriteChannel.send(packet: String) {
-    write(packet.length) { buffer ->
-        buffer.putInt(packet.length)
+private suspend fun ByteWriteChannel.send(packet: ByteArray) {
+    write(packet.size) { buffer ->
+        buffer.putInt(packet.size)
     }
     writePacket {
-        append(packet)
+        writeFully(packet)
     }
 }
 

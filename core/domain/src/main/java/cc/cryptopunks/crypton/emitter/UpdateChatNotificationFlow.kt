@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal fun SessionScope.updateChatNotificationFlow(): Flow<Exec.UpdateNotification> =
-    messageRepo.unreadListFlow().bufferedThrottle(500).map {
+    messageRepo.flowListUnread().bufferedThrottle(500).map {
         Exec.UpdateNotification(it.flatten())
     }
