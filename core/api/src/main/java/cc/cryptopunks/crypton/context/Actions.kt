@@ -83,11 +83,12 @@ object Subscribe {
     ) : Main.Action, Subscription
 
     // Account
+
     object ReconnectSession : Account.Action, Subscription
 
     // Chat
 
     data class PagedMessages(override val enable: Boolean) : Chat.Action, Subscription
     data class LastMessage(override val enable: Boolean) : Chat.Action, Subscription
-
+    data class OnMessageExecute(val command: String, override val enable: Boolean = true) : Chat.Action, Subscription
 }

@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.sys
 
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
+import cc.cryptopunks.crypton.context.Execute
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
@@ -16,5 +17,6 @@ class JvmSys(
     override val notificationSys: Notification.Sys = MockNotificationSys(),
     override val clipboardSys: Clip.Board.Sys = MockClipBoardSys(),
     override val networkSys: Network.Sys = JvmNetworkSys(),
-    override val deviceSys: Device.Sys = MockDeviceSys()
+    override val deviceSys: Device.Sys = MockDeviceSys(),
+    override val executeSys: Execute.Sys = JvmExecuteSys
 ) : Sys

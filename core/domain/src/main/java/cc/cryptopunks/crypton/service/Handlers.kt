@@ -28,6 +28,7 @@ import cc.cryptopunks.crypton.handler.handleListAccounts
 import cc.cryptopunks.crypton.handler.handleLogin
 import cc.cryptopunks.crypton.handler.handleLogout
 import cc.cryptopunks.crypton.handler.handleMessageRead
+import cc.cryptopunks.crypton.handler.handleOnMessageExecuteSubscription
 import cc.cryptopunks.crypton.handler.handlePageMessagesSubscription
 import cc.cryptopunks.crypton.handler.handlePopClipboard
 import cc.cryptopunks.crypton.handler.handlePresence
@@ -107,4 +108,5 @@ fun chatHandlers() = createHandlers {
     +handleClearInfoMessages()
     +handleLastMessageSubscription()
     +handlePageMessagesSubscription()
+    +handleOnMessageExecuteSubscription()
 }

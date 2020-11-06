@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.handler
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.handle
-import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect

@@ -45,6 +45,8 @@ private const val CONFIG = "config"
 private const val CONFIGURE = "configure"
 private const val PURGE = "purge"
 private const val DEVICES = "devices"
+private const val ON = "on"
+private const val EXEC = "exec"
 
 private val login = LOGIN to command(
     param(),
@@ -178,6 +180,16 @@ private val chat = CHAT to mapOf(
         ) { (account, chat, cancel) ->
             Subscribe.LastMessage(!cancel.toBoolean()).inContext(account, chat)
         }
+    ),
+    ON to mapOf(
+        MESSAGE to mapOf(EXEC to command(
+            config("account"),
+            config("chat"),
+            param().copy(name = "command"),
+            description = "Register subscription which will execute given command when any new message arrive in chat scope."
+        ) { (account, chat, command) ->
+            Subscribe.OnMessageExecute(command).inContext(account, chat)
+        })
     )
 )
 
