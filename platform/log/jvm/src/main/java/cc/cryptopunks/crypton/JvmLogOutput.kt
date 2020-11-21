@@ -6,6 +6,8 @@ import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.TypedLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun CoroutineScope.initJvmLog() = launch {
     Log.output(CoroutineLog)
@@ -25,6 +27,8 @@ object JvmLogOutput : Log.Output {
 }
 
 private fun Log.Event.formatMessage() = listOf(
+    dateFormat.format(timestamp),
+    "|",
     label,
     "|",
     status,
@@ -34,5 +38,7 @@ private fun Log.Event.formatMessage() = listOf(
     "|:",
     message
 )
+
+private val dateFormat = SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS", Locale.UK)
 
 private fun String.removePackage() = replace("cc.cryptopunks.crypton.context.", "")
