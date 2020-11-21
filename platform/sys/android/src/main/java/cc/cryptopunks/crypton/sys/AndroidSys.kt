@@ -42,9 +42,9 @@ class AndroidSys(
     }
 
     override val networkSys: Network.Sys by lazy {
-        NetworkSys(
+        AndroidNetworkSysV2(
             scope = GlobalScope,
-            connectivityManager = application.getSystemService()!!
+            connectivity = application.getSystemService()!!
         )
     }
 

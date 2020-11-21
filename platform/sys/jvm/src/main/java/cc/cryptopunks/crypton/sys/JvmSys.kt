@@ -11,12 +11,13 @@ import cc.cryptopunks.crypton.mock.MockClipBoardSys
 import cc.cryptopunks.crypton.mock.MockDeviceSys
 import cc.cryptopunks.crypton.mock.MockIndicatorSys
 import cc.cryptopunks.crypton.mock.MockNotificationSys
+import kotlinx.coroutines.GlobalScope
 
 class JvmSys(
     override val indicatorSys: Indicator.Sys = MockIndicatorSys(),
     override val notificationSys: Notification.Sys = MockNotificationSys(),
     override val clipboardSys: Clip.Board.Sys = MockClipBoardSys(),
-    override val networkSys: Network.Sys = JvmNetworkSys(),
+    override val networkSys: Network.Sys = JvmNetworkSys(GlobalScope),
     override val deviceSys: Device.Sys = MockDeviceSys(),
     override val executeSys: Execute.Sys = JvmExecuteSys
 ) : Sys

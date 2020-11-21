@@ -30,8 +30,10 @@ internal tailrec suspend fun SessionScope.reconnectIfNeeded(
     delayInMillis: Long = 3000
 ): Throwable? {
     val result = try {
-        log.d { "reconnecting: $address" }
-        if (!isConnected()) {
+        if (!networkSys.status.isConnected) {
+            log.d { "skip reconnecting: $address, network status: ${networkSys.status}." }
+        } else if (!isConnected()) {
+            log.d { "reconnecting: $address" }
             connect()
             if (!isAuthenticated()) login()
             initOmemo()

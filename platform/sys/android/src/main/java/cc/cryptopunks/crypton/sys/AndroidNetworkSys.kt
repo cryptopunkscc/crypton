@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-internal class NetworkSys(
+internal class AndroidNetworkSys(
     connectivityManager: ConnectivityManager,
     scope: CoroutineScope
 ) :
