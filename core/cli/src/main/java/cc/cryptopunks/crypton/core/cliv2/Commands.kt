@@ -160,9 +160,11 @@ private val chat = CHAT to mapOf(
         Exec.DeleteChat.inContext(account, chat)
     },
     CONFIGURE to command(
+        config("account"),
+        config("chat"),
         description = "Configure conference (WIP)."
-    ) {
-        Exec.ConfigureConference()
+    ) { (account, chat) ->
+        Exec.ConfigureConference().inContext(account, chat)
     },
     MESSAGES to commands(
         GET to command(

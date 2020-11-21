@@ -4,6 +4,11 @@ import kotlinx.coroutines.flow.Flow
 
 object Roster {
 
+    data class Subscription(
+        val address: Address,
+        val status: Item.Status
+    )
+
     data class Item(
         val title: String,
         val letter: Char,

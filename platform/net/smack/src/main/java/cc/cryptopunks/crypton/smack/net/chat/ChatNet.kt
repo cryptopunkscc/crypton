@@ -47,7 +47,7 @@ internal class ChatNet(
         getMultiUserChat(address.entityBareJid()).run {
             join(
                 getEnterConfigurationBuilder(Resourcepart.from(nickname))
-                    .requestHistorySince(Date(historySince) )
+                    .requestHistorySince(Date(historySince))
                     .build()
             )
         }
@@ -67,7 +67,16 @@ internal class ChatNet(
             account = account,
             address = address,
             name = info.name,
-            members = conference.run { owners + admins + members }.map {
+            isMemberOnly = info.isMembersOnly,
+            isNonAnonymous = info.isNonanonymous,
+            isPersistent = info.isPersistent,
+            members = conference.run {
+                listOfNotNull(
+                    runCatching { owners }.getOrNull(),
+                    runCatching { admins }.getOrNull(),
+                    runCatching { members }.getOrNull()
+                ).flatten()
+            }.map {
                 Chat.Member(
                     nick = it.nick?.run { toString() },
                     address = it.jid.address(),

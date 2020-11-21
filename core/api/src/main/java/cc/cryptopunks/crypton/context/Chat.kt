@@ -50,6 +50,9 @@ data class Chat(
         val name: String,
         val account: Address,
         val address: Address,
+        val isMemberOnly: Boolean,
+        val isNonAnonymous: Boolean,
+        val isPersistent: Boolean,
         val members: Set<Member> = emptySet()
     )
 
