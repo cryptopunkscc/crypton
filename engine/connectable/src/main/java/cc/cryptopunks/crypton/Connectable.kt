@@ -35,3 +35,5 @@ interface Connectable : CoroutineScope {
 
 inline fun <reified T : Connectable> Connectable.Binding.minus() =
     services.filterIsInstance<T>().forEach { minus(it) }
+
+fun Connectable.dispatch(vararg any: Any) = connector(*any).connect()

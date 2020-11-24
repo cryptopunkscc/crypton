@@ -27,7 +27,7 @@ class RosterItemStatesFlowSelectorTest {
 
     @Before
     fun setUp() {
-        Log.init(mockk(relaxed = true))
+//        Log.init(mockk(relaxed = true))
     }
 
     @Test

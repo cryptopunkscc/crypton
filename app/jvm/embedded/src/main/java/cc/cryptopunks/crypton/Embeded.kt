@@ -11,8 +11,9 @@ import cc.cryptopunks.crypton.cliv2.param
 import cc.cryptopunks.crypton.cliv2.raw
 import cc.cryptopunks.crypton.cliv2.reduce
 import cc.cryptopunks.crypton.cliv2.text
-import cc.cryptopunks.crypton.core.cliv2.cryptonCommands
 import cc.cryptopunks.crypton.net.clientSocketConnector
+import cc.cryptopunks.crypton.service.cliCommands
+import cc.cryptopunks.crypton.service.cryptonFeatures
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -85,7 +86,7 @@ private val embeddedCommands: Cli.Commands = commands(
                     flowOf(text).systemFlowConnector(),
                 backend = clientSocketConnector(config),
                 context = Cli.Context(
-                    commands = cryptonCommands,
+                    commands = cryptonFeatures().cliCommands(),
                     defaults = config
                 )
             ).invoke()
@@ -95,24 +96,24 @@ private val embeddedCommands: Cli.Commands = commands(
         option("-i").optional().copy(value = false, description = "Run interactive mode"),
         text()
     ) { (interactive, text) ->
-        val backend = BackendService(createRootScope(config)).init()
         runBlocking {
+            initJvmLog()
+            val backend = BackendService(createRootScope(config))
             listOf(
                 launch {
                     if (interactive.toBoolean()) cliClient(
                         console = consoleConnector(arrayOf(text)),
                         backend = backend.connector(),
                         context = Cli.Context(
-                            commands = cryptonCommands,
+                            commands = backend.scope.features.cliCommands(),
                             defaults = config
                         )
                     ).invoke()
                 },
                 launch {
-                    initJvmLog()
                     server(
                         config = config,
-                        backend = backend
+                        backend = backend.init()
                     ).invoke()
                 }
             ).joinAll()

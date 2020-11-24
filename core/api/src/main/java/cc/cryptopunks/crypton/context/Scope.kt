@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.Features
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.util.Executors
@@ -16,6 +17,8 @@ interface RootScope :
     Executors,
     Sys,
     Repo {
+
+    val features: Features
 
     val mainClass: KClass<*>
     val navigateChatId: Int

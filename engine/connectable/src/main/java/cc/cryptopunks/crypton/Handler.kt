@@ -3,11 +3,12 @@ package cc.cryptopunks.crypton
 import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 
-fun <CS : CoroutineScope, S : Scoped<CS>> handle(block: Handle<CS, S>) = block
+fun <CS : CoroutineScope, S : Scoped<CS>> handle(block: Handle<CS, S>): Handle<CS, S> = block
 
 fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =
     HandlerRegistryBuilder().apply(build).handlers
 
+val NonHandle: Handle<CoroutineScope, Scoped<CoroutineScope>> = { _, _ -> }
 
 typealias Handle<S, T> = suspend S.(Output, T) -> Unit
 
@@ -21,10 +22,10 @@ class HandlerRegistryBuilder internal constructor() {
     }
 
     inline operator fun <CS : CoroutineScope, reified S : Scoped<CS>> Handle<CS, S>.unaryPlus() {
-        unsafePlus(S::class, this)
+        unsafePlus(S::class, this as Handle<CoroutineScope, Scoped<CoroutineScope>>)
     }
 
-    fun unsafePlus(type: KClass<*>, handle: Handle<*, *>) {
+    fun unsafePlus(type: KClass<*>, handle: Handle<CoroutineScope, Scoped<CoroutineScope>>) {
         handlers += (type to handle as Handle<Scope, Any>)
     }
 }

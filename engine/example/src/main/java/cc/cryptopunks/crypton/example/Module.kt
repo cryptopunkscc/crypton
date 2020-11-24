@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.example
 import cc.cryptopunks.crypton.Context
 import cc.cryptopunks.crypton.HandlerRegistry
 import cc.cryptopunks.crypton.Scope
-import cc.cryptopunks.crypton.util.logger.typedLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 

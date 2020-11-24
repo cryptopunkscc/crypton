@@ -12,6 +12,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':engine:net')
     implementation project(':platform:log:jvm')
-    api project(':core:cli')
+    api project(':core:domain')
     implementation "com.googlecode.lanterna:lanterna:3.0.4" // Terminal GUI
 }

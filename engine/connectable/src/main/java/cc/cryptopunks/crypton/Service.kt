@@ -9,7 +9,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -28,7 +31,7 @@ private data class Service(
     override val coroutineContext = CoroutineLog.Label(name) + scope.coroutineContext
 
     override fun Connector.connect(): Job = launch {
-        Connection(scope, this@connect).handle()
+        Connection(scope, this@connect).handle().joinAll()
     }
 
     data class Connection(
@@ -48,15 +51,21 @@ private suspend fun Service.Connection.handle() = connector.input
     .onCompletion { throwable ->
 
         logConnectionFinished(throwable)
-        (async.keys + subs.values).forEach { job ->
-            job.cancel(CancellationException("Complete input $job $throwable"))
+
+        if (throwable != null) {
+            (async.keys + subs.values).forEach { job ->
+                job.cancel(CancellationException("Complete input $job $throwable"))
+            }
+            async.clear()
+            subs.clear()
         }
-        async.clear()
-        subs.clear()
     }
     .collect { arg ->
         val (scope, action) = resolve(arg)
         handleAction(scope, action)
+    }
+    .let {
+        async.keys + subs.values
     }
 
 private suspend fun Service.Connection.resolve(arg: Any): Pair<Scope, Any> =
@@ -72,13 +81,14 @@ private suspend fun Service.Connection.resolve(arg: Any): Pair<Scope, Any> =
         }
     }
 
-private suspend fun Service.Connection.handleAction(scope: Scope, action: Any) =
+private suspend fun Service.Connection.handleAction(scope: Scope, action: Any) {
     when (action) {
         is Subscription -> scope.handleSubscription(subs, action, out)
         is Async -> scope.handleAsync(async, action, out)
         is Failure -> action.out()
         else -> scope.handleRequest(action, out).join()
     }
+}
 
 private fun Scope.handleSubscription(
     subscriptions: MutableMap<KClass<*>, Job>,
@@ -156,3 +166,40 @@ private suspend fun Scope.logNoHandlersFor(action: Any) = log.e {
             .replace("$", ".")
     }
 }
+
+
+interface Failure
+
+data class InvalidAction(
+    val action: String,
+    val availableActions: List<String>
+) : Failure {
+    constructor(action: Any, availableActions: Collection<KClass<*>>) : this(
+        action = action.javaClass.name,
+        availableActions = availableActions.map { it.java.name }
+    )
+}
+
+data class CannotResolve(
+    val contextId: String
+) : Failure {
+    constructor(context: Context) : this(context.id)
+}
+
+data class ActionFailed(
+    val action: String,
+    val stackTrace: String,
+    val message: String?
+): Failure {
+    constructor(action: Any, throwable: Throwable) : this(
+        action = action.javaClass.name,
+        message = throwable.message,
+        stackTrace = StringWriter().also { throwable.printStackTrace(PrintWriter(it)) }.toString()
+//        stackTrace = stringStackTrace(throwable)
+    )
+}
+
+// TODO WTF error
+private fun stringStackTrace(throwable: Throwable) =
+    StringWriter().also { throwable.printStackTrace(PrintWriter(it)) }.toString()
+

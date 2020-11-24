@@ -5,6 +5,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api project(':engine:paging')
     api project(':core:api')
+    api project(':engine:feature')
     testImplementation project(':platform:repo:mock')
     testImplementation project(':platform:net:mock')
     testImplementation "junit:junit:$junit_version"

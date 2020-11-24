@@ -5,4 +5,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api "androidx.paging:paging-common:$paging_version"
     api project(':engine:connectable')
+    api project(':engine:feature')
 }

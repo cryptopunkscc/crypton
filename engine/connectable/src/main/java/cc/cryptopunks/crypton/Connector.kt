@@ -23,6 +23,13 @@ data class Connector(
     suspend fun Any.out() = output(this)
 }
 
+fun Flow<Any>.connector(
+    output: suspend (Any) -> Unit = {}
+) = Connector(
+    input = this,
+    output = output
+)
+
 fun Any.connector(
     output: suspend (Any) -> Unit = {}
 ) = Connector(
@@ -34,7 +41,7 @@ fun connector(
     vararg args: Any,
     output: suspend (Any) -> Unit = {}
 ) = Connector(
-    input = args.asFlow(),
+    input = args.toList().asFlow(),
     output = output
 )
 

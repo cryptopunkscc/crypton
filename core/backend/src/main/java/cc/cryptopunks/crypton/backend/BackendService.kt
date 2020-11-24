@@ -3,9 +3,10 @@ package cc.cryptopunks.crypton.backend
 import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.context.RootScope
+import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.contextDecoder
+import cc.cryptopunks.crypton.dispatch
 import cc.cryptopunks.crypton.service
-import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.serviceName
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.log
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 
 class BackendService(
-    private val scope: RootScope
+    val scope: RootScope
 ) : Connectable {
 
     private val job = SupervisorJob()
@@ -27,7 +28,7 @@ class BackendService(
         CoroutineLog.Label(javaClass.simpleName)
 
     private val lazyInit by lazy {
-        scope.startAppService()
+        scope.service().dispatch(Subscribe.AppService)
         job.invokeOnCompletion {
             scope.cancel("Close BackendService", it)
         }

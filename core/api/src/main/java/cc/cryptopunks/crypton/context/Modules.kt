@@ -2,8 +2,10 @@ package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.Context
+import cc.cryptopunks.crypton.Features
 import cc.cryptopunks.crypton.HandlerRegistry
 import cc.cryptopunks.crypton.Scope
+import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
@@ -21,7 +23,7 @@ class RootModule(
     val sys: Sys,
     val repo: Repo,
     override val mainClass: KClass<*>,
-    override val handlers: HandlerRegistry,
+    override val features: Features,
     override val createConnection: Connection.Factory,
     override val mainExecutor: MainExecutor,
     override val ioExecutor: IOExecutor,
@@ -35,6 +37,8 @@ class RootModule(
     override val coroutineContext: CoroutineContext = SupervisorJob() +
         Dispatchers.IO +
         CoroutineLog.Label(javaClass.simpleName)
+
+    override val handlers: HandlerRegistry = features.createHandlers()
 
     override val sessions = SessionScope.Store()
     override val clipboardStore = Clip.Board.Store()

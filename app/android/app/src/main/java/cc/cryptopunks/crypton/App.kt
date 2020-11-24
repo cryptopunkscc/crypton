@@ -6,14 +6,14 @@ import cc.cryptopunks.crypton.activity.MainActivity
 import cc.cryptopunks.crypton.context.RootModule
 import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Notification
+import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.debug.drawer.initAppDebug
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.room.RoomAppRepo
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.selector.newSessionsFlow
-import cc.cryptopunks.crypton.service.cryptonHandlers
+import cc.cryptopunks.crypton.service.cryptonFeatures
 import cc.cryptopunks.crypton.service.initExceptionService
-import cc.cryptopunks.crypton.service.startAppService
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.sys.AndroidSys
@@ -51,7 +51,7 @@ class App :
                 smallIconResId = R.mipmap.ic_launcher_round
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
-            handlers = cryptonHandlers(),
+            features = cryptonFeatures(),
             navigateChatId = R.id.chatFragment
         )
     }
@@ -65,7 +65,7 @@ class App :
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
         scope.apply {
-            startAppService()
+            service().dispatch(Subscribe.AppService)
             launch { newSessionsFlow().collect { currentAccount = it.address } }
         }
     }

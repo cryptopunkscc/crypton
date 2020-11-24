@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.RootModule
 import cc.cryptopunks.crypton.repo.ormlite.OrmLiteAppRepo
-import cc.cryptopunks.crypton.service.cryptonHandlers
+import cc.cryptopunks.crypton.service.cryptonFeatures
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.sys.JvmSys
@@ -30,7 +30,7 @@ fun createRootScope(config: Map<String, Any?>) = RootScopeConfig(config).run {
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
         createConnection = createConnectionFactory(this),
-        handlers = cryptonHandlers()
+        features = cryptonFeatures()
     )
 }
 

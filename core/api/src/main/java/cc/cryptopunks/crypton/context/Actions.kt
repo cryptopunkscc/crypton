@@ -8,12 +8,7 @@ object Exec {
     // Internal
 
     data class ToggleIndicator(val show: Boolean) : Main.Action
-    data class Session(val action: Action) : Main.Action, Async {
-        enum class Action { Reconnect, Interrupt }
-    }
-
     object SyncConferences : Account.Action, Async
-    object SessionService : Account.Action, Async
     data class UpdateNotification(val messages: List<Message>) : Account.Action
     data class HandlePresence(val presence: Presence) : Account.Action
     data class SaveMessages(val messages: List<Message>) : Account.Action
@@ -55,6 +50,7 @@ object Get {
 
     // Main
 
+    object AccountNames : Main.Action
     object Accounts : Main.Action
     object RosterItems : Main.Action
 
@@ -72,6 +68,11 @@ object Get {
 }
 
 object Subscribe {
+
+    // Internal
+
+    object AppService : Main.Action, Subscription
+    object SessionService : Account.Action, Subscription
 
     // Main
 

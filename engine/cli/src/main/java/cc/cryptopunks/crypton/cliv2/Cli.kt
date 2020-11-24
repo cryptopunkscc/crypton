@@ -52,6 +52,7 @@ object Cli {
         ) : Execute
 
         data class Template(
+            val name: String,
             val description: String? = null,
             val params: List<Param>,
             val run: Context.(List<Any?>) -> Context,
@@ -135,9 +136,11 @@ fun commands(args: Iterable<Pair<*, *>>): Cli.Commands =
 
 fun command(
     vararg params: Cli.Param,
+    name: String = "",
     description: String? = null,
     run: Cli.Context.(List<String>) -> Any = { this }
 ) = Cli.Command.Template(
+    name = name,
     description = description,
     params = params
         .mapIndexed { index, param -> param.copy(index = index) }
