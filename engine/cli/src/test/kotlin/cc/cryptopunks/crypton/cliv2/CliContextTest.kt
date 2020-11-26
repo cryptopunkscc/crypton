@@ -49,10 +49,9 @@ class CliContextTest {
         testContext().reduce("foo bar").run {
             println(result)
             Assert.assertEquals(
-                Cli.Result.Suggestion(barCommand.params.filter {
-                    it.type !is Cli.Param.Type.Name &&
-                    it.type !is Cli.Param.Type.Config
-                }),
+                Cli.Result.Suggestion(Cli.Params(barCommand.params.filter {
+                    it.type !is Cli.Param.Type.Name && it.type !is Cli.Param.Type.Config
+                })),
                 result
             )
         }

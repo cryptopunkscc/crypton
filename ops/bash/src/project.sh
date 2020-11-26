@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 
 function read-version() {
   sed -n "$1"p <version
@@ -32,7 +33,8 @@ function git-update-snapshot() {
 function release-snapshot() {
   local currentBranch=$(git rev-parse --abbrev-ref HEAD)
   git checkout snapshot
-  git pull
+  git fetch origin snapshot
+  git reset --hard origin/snapshot
   git tag -fa latest -m "$(version-full)"
   git push -f origin latest
   git checkout "$currentBranch"
