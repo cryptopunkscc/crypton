@@ -29,17 +29,6 @@ jobs:
       with:
         arguments: "clean app:android:app:assembleRemoteRelease app:jvm:embedded:shadowJar"
 
-    - name: Update Release Body
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: latest
-        release_name: Development Build
-        body_path: latest_notes.md
-        draft: true
-        prerelease: true
-
     - name: Upload Release Asset
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -50,3 +39,19 @@ jobs:
         files: |
           app/android/app/build/outputs/apk/**/*.apk
           app/jvm/embedded/build/libs/*.jar
+
+    - id: get-body
+      run: |
+        export BODY="$(cat latest_notes.md)"
+        BODY="${BODY//'%'/'%25'}"
+        BODY="${BODY//$'\n'/'%0A'}"
+        BODY="${BODY//$'\r'/'%0D'}"
+        echo "::set-output name=snapshot-body::${BODY}"
+
+    - name: Update Release Body
+      uses: meeDamian/github-release@2.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: "latest"
+        body: ${{ steps.get-body.outputs.snapshot-body }}
+        allow_override: true
