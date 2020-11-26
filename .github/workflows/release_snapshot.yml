@@ -29,6 +29,17 @@ jobs:
       with:
         arguments: "clean app:android:app:assembleRemoteRelease app:jvm:embedded:shadowJar"
 
+    - name: Update Release Body
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: latest
+        release_name: Development Build
+        body_path: latest_notes.md
+        draft: true
+        prerelease: true
+
     - name: Upload Release Asset
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
