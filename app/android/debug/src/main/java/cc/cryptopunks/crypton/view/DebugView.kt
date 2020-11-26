@@ -3,12 +3,12 @@ package cc.cryptopunks.crypton.view
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.activity.BaseActivity
-import cc.cryptopunks.crypton.cli.Check
-import cc.cryptopunks.crypton.cli.CliContext
-import cc.cryptopunks.crypton.core.cli.context
-import cc.cryptopunks.crypton.core.cli.translateCli
+import cc.cryptopunks.crypton.cliCommands
+import cc.cryptopunks.crypton.cliv2.Cli
+import cc.cryptopunks.crypton.cliv2.reduce
 import cc.cryptopunks.crypton.debug.R
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.ScrollHelper
@@ -23,17 +23,22 @@ import kotlinx.android.synthetic.main.debug_view.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class DebugView(
     context: BaseActivity
 ) : ActorLayout(context) {
 
+    private val cliContext = Cli.Context(
+        context.rootScope.features.cliCommands()
+    )
+
     private val helper = ScrollHelper(context)
 
     private val debugAdapter = DebugAdapter()
 
-    private var translationContext: CliContext = context()
+    private var command: Any? = null
 
     init {
         View.inflate(context, R.layout.debug_view, this)
@@ -63,19 +68,25 @@ class DebugView(
             }
         }
         launch {
-            messageInputView.input.textChanges().translateCli(translationContext).collect {
-                translationContext = it
-            }
+            messageInputView.input.textChanges()
+                .map { it.toString() }
+//                .scan(cliContext, Cli.Context::reduce)
+                .map { cliContext.reduce(it) }
+                .map { it.result }
+                .collect { result ->
+                    command = result
+                }
         }
         launch {
             messageInputView.button.clicks().collect {
-                when (val result = translationContext.result) {
-                    is Check.Suggest -> debugAdapter += Log.Event(
+                when (val command = command) {
+                    is Cli.Result.Suggestion -> debugAdapter += Log.Event(
                         label = "Debug",
-                        message = result.toString(),
-                        action = result
+                        message = command.toString(),
+                        action = command
                     )
-                    is Any -> result.out()
+                    is Action -> command.out()
+                    is Any -> println(command) // FIXME
                 }
             }
         }

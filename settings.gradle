@@ -1,7 +1,6 @@
 include ':core:api',
         ':core:domain',
         ':core:backend',
-        ':core:cli',
         ':core:fs',
 
         ':platform:net:mock',

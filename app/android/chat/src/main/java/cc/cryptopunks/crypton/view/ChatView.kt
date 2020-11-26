@@ -12,17 +12,17 @@ import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
-import cc.cryptopunks.crypton.cli.Check
-import cc.cryptopunks.crypton.cli.prepare
+import cc.cryptopunks.crypton.cliCommands
+import cc.cryptopunks.crypton.cliv2.Cli
+import cc.cryptopunks.crypton.cliv2.cliConfig
+import cc.cryptopunks.crypton.cliv2.reduce
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Route
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.core.cli.context
-import cc.cryptopunks.crypton.core.cli.translateMessageInput
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
@@ -38,19 +38,33 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class ChatView(
     context: Context,
-    private val account: Address,
+    rootScope: RootScope,
+    account: Address,
     private val address: Address
 ) :
     ActorLayout(context),
     Message.Consumer {
 
     var resumed: Boolean = false
+
+    private val cliContext = Cli.Context(
+
+        commands = rootScope
+            .features
+            .cliCommands(),
+
+        config = cliConfig(
+            "account" to account,
+            "address" to address
+        )
+    )
 
     private val messageAdapter = MessageAdapter(coroutineContext)
 
@@ -116,22 +130,11 @@ class ChatView(
             flowOf(
                 messageAdapter.outputFlow(),
                 messageInputView.button.clicks().mapNotNull {
-                    when (command) {
-                        is Check.Suggest ->
-                            Toast.makeText(
-                                context,
-                                command.toString(),
-                                Toast.LENGTH_SHORT
-                            ).run {
-                                setGravity(
-                                    Gravity.TOP or Gravity.CENTER_HORIZONTAL,
-                                    0, IntArray(2).also {
-                                        messageInputView.getLocationInWindow(it)
-                                    }[1] - messageInputView.measuredHeight
-                                )
-                                show()
-                                null
-                            }
+                    when (val command = command) {
+                        is Cli.Result.Suggestion -> {
+                            command.displayToast(context, y = messageInputView.getViewTop())
+                            null
+                        }
 
                         else -> {
                             if (command != null) getInputAndClear()
@@ -145,16 +148,11 @@ class ChatView(
                 .collect(output)
         }
         launch {
-            messageInputView.input.textChanges().debounce(100).translateMessageInput(
-                context(
-                    route = Route.Chat(
-                        account = account,
-                        address = address
-                    )
-                ).prepare()
-            ).collect {
-                command = it
-            }
+            messageInputView.input
+                .textChanges()
+                .debounce(100)
+                .map(cliContext::decodeMessageInput)
+                .collect { command = it }
         }
         launch {
             delay(5)
@@ -182,3 +180,21 @@ class ChatView(
     override fun canConsume(message: Message): Boolean =
         message.chat == address && resumed
 }
+
+fun View.getViewTop(): Int =
+    IntArray(2).also { getLocationInWindow(it) }[1] - measuredHeight
+
+fun Cli.Result.Suggestion.displayToast(context: Context, x: Int = 0, y: Int) {
+    Toast.makeText(context, value.toString(), Toast.LENGTH_SHORT).run {
+        setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, x, y)
+        show()
+        Unit
+    }
+}
+
+private fun Cli.Context.decodeMessageInput(message: CharSequence): Any? =
+    when {
+        message.isBlank() -> null
+        message[0] == '/' -> reduce(message.drop(1).toString()).result
+        else -> Exec.EnqueueMessage(message.toString())
+    }

@@ -1,6 +1,5 @@
-package cc.cryptopunks.crypton.service
+package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.Features
 import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.cliv2.commands
 

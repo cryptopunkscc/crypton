@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
@@ -15,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class ChatFragment : ServiceFragment() {
 
-    override fun onCreateService(): Connectable? {
+    override fun onCreateService(): Connectable? =
         launch {
             val args = requireArguments()
             val accountAddress = args.account!!
@@ -25,16 +24,19 @@ class ChatFragment : ServiceFragment() {
                 .sessionScope(accountAddress)
                 .chatScope(chatAddress)
                 .service(serviceName)
-        }
-        return MessageAdapter()
-    }
+        }.let { null }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = requireArguments().run {
-        ChatView(requireContext(), account!!, chat!!)
+        ChatView(
+            context = requireContext(),
+            rootScope = rootScope,
+            account = account!!,
+            address = chat!!
+        )
     }
 
     override fun onResume() {

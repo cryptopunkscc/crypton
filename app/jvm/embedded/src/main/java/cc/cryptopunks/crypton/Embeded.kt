@@ -12,7 +12,6 @@ import cc.cryptopunks.crypton.cliv2.raw
 import cc.cryptopunks.crypton.cliv2.reduce
 import cc.cryptopunks.crypton.cliv2.text
 import cc.cryptopunks.crypton.net.clientSocketConnector
-import cc.cryptopunks.crypton.service.cliCommands
 import cc.cryptopunks.crypton.service.cryptonFeatures
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.joinAll

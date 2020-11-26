@@ -35,8 +35,7 @@ class MessageAdapter(
     override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.Main
 ) :
     PagedListAdapter<Message, ViewHolder>(Diff),
-    CoroutineScope,
-    Connectable {
+    CoroutineScope {
 
     private val log = typedLog()
 

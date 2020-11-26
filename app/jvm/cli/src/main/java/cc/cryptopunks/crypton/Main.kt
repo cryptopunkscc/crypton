@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.net.clientSocketConnector
-import cc.cryptopunks.crypton.service.cliCommands
 import cc.cryptopunks.crypton.service.cryptonFeatures
 import kotlinx.coroutines.runBlocking
 

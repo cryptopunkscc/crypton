@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.cliv2.reduce
+import cc.cryptopunks.crypton.cliv2.unwrapCliResult
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Roster
@@ -34,12 +35,8 @@ fun cliClient(
         }
         console.input
             .filterIsInstance<String>()
-            .scan(context) { context, input ->
-                context.reduce(input)
-            }
-            .map { context ->
-                context.unwrapCliResult()
-            }
+            .scan(context, Cli.Context::reduce)
+            .map(Any::unwrapCliResult)
             .collect { result ->
                 when (result) {
                     is Action -> backend.output(result)
@@ -50,17 +47,6 @@ fun cliClient(
         inputJob.cancel()
     }
 }
-
-fun Any.unwrapCliResult(): Any =
-    when (this) {
-        is Cli.Context -> result
-        is Cli.Result.Return -> value
-        is Cli.Result.Suggestion -> value
-        is Cli.Result.Error -> value
-        else -> null
-    }
-        ?.unwrapCliResult()
-        ?: this
 
 fun Any.formatCliOutput(): String? =
     when (this) {

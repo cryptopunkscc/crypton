@@ -1,7 +1,5 @@
 package cc.cryptopunks.crypton.cliv2
 
-import kotlin.IllegalArgumentException
-
 object Cli {
 
     data class Context(
@@ -134,6 +132,8 @@ fun commands(args: Iterable<Pair<*, *>>): Cli.Commands =
         }
     }
 
+fun cliConfig(vararg args: Pair<String, Any>) = Cli.Config(args.toMap())
+
 fun command(
     vararg params: Cli.Param,
     name: String = "",
@@ -173,6 +173,17 @@ fun Cli.Param.optional() = copy(optional = true)
 
 // API
 
+fun Any.unwrapCliResult(): Any =
+    when (this) {
+        is Cli.Context -> result
+        is Cli.Result.Return -> value
+        is Cli.Result.Suggestion -> value
+        is Cli.Result.Error -> value
+        else -> null
+    }
+        ?.unwrapCliResult()
+        ?: this
+
 fun Array<out Any>.joinArgs() = joinToString(" ")
 
 fun Cli.Context.prepareIfNeeded(): Cli.Context =
@@ -189,7 +200,7 @@ fun Cli.Context.prepare() = copy(
 
 fun Cli.Context.reduce(input: String) = reduce(Cli.Input.Raw(input))
 
-fun Cli.Context.reduce(element: Cli.Element): Cli.Context = when (element) {
+internal fun Cli.Context.reduce(element: Cli.Element): Cli.Context = when (element) {
     is Cli.Elements -> reduce(element.collection)
     is Cli.Input.Raw -> reduce(element.split())
     is Cli.Input.Chunk -> prepareIfNeeded().run { reduce(plus(element)) }

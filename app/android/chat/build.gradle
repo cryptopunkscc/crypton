@@ -28,7 +28,6 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':app:android:widget')
-    implementation project(':core:cli')
     api project(':app:android:core')
     api project(':platform:util:android:notification')
 }

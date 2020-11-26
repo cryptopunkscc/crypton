@@ -1,18 +1,18 @@
 package crypton.ops
 
-import cc.cryptopunks.crypton.cli.CliContext
-import cc.cryptopunks.crypton.cli.prepare
-import cc.cryptopunks.crypton.cli.process
+import cc.cryptopunks.crypton.cliv2.Cli
+import cc.cryptopunks.crypton.cliv2.cliConfig
+import cc.cryptopunks.crypton.cliv2.reduce
 import java.io.File
 
 fun main(args: Array<String>) {
     require(args.size > 1)
-    CliContext(
+    Cli.Context(
         commands = commands,
-        route = File(args.first()).normalize().absolutePath,
-        isRoute = { this is String },
-        empty = { "main" }
-    ).prepare().process(args.drop(1).joinToString(" ")).run {
+        config = cliConfig(
+            "path" to File(args.first()).normalize().absolutePath
+        )
+    ).reduce(args.drop(1).joinToString(" ")).run {
         println(result)
     }
 }

@@ -38,7 +38,7 @@ dependencies {
     implementation 'com.jakewharton.scalpel:scalpel:1.1.2'
 
     api project(':core:api')
-    api project(':core:cli')
+    api project(':core:domain')
     api project(':app:android:core')
     api project(':app:android:widget')
 }
