@@ -7,10 +7,12 @@ import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Sys
+import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.mock.MockClipBoardSys
 import cc.cryptopunks.crypton.mock.MockDeviceSys
 import cc.cryptopunks.crypton.mock.MockIndicatorSys
 import cc.cryptopunks.crypton.mock.MockNotificationSys
+import cc.cryptopunks.crypton.mock.MockURISys
 import kotlinx.coroutines.GlobalScope
 
 class JvmSys(
@@ -19,5 +21,6 @@ class JvmSys(
     override val clipboardSys: Clip.Board.Sys = MockClipBoardSys(),
     override val networkSys: Network.Sys = JvmNetworkSys(GlobalScope),
     override val deviceSys: Device.Sys = MockDeviceSys(),
-    override val executeSys: Execute.Sys = JvmExecuteSys
+    override val executeSys: Execute.Sys = JvmExecuteSys,
+    override val uriSys: URI.Sys = MockURISys
 ) : Sys

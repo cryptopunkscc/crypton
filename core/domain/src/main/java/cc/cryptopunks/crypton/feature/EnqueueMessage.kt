@@ -37,7 +37,7 @@ internal fun enqueueMessage() = feature(
 
 private fun Chat.queuedMessage(enqueueMessage: Exec.EnqueueMessage) =
     Message(
-        text = enqueueMessage.text,
+        body = Message.Text(enqueueMessage.text),
         encrypted = enqueueMessage.encrypted,
         from = Resource(account),
         to = Resource(address),

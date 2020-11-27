@@ -80,7 +80,7 @@ class RosterItemStatesFlowSelectorTest {
         val messages = (0..1).map {
             Message(
                 id = it.toString(),
-                text = "text$it",
+                body = Message.Text("text$it"),
                 chat = chats[it].address,
                 to = Resource(addresses[it]),
                 from = Resource(addresses[it + 2]),

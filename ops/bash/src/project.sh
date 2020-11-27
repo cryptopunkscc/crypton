@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 function read-version() {
   sed -n "$1"p <version
 }

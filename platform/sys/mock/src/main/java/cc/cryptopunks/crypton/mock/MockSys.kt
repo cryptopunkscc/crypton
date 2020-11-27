@@ -16,5 +16,5 @@ class MockSys(
     override val networkSys: Network.Sys = MockNetworkSys(),
     override val deviceSys: Device.Sys = MockDeviceSys(),
     override val executeSys: Execute.Sys = MockExecuteSys,
-    override val uriSys: URI.Sys = MockURISys(),
+    override val uriSys: URI.Sys = MockURISys,
 ) : Sys
