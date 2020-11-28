@@ -47,7 +47,7 @@ private fun SmackCore.flowMessages(query: MamManager.MamQuery): Flow<List<Crypto
                         .last()
                 )
             }
-            .filter { it.text.isNotBlank() }
+            .filter { it.body.isNotBlank() }
             .let { emit(it) }
         query.pageNext(PAGE_SIZE)
     }

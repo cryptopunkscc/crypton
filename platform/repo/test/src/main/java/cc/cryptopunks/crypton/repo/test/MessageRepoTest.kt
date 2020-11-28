@@ -37,7 +37,7 @@ abstract class MessageRepoTest {
     private val message = Message(
         id = id,
         stanzaId = id,
-        body = Message.Text("text"),
+        body = "text",
         timestamp = timestamp,
         chat = user2,
         from = Resource(user1),
@@ -325,7 +325,7 @@ abstract class MessageRepoTest {
             val list = (0..5).map {
                 message.copy(
                     id = "$it",
-                    body = Message.Text("text$it"),
+                    body = "text$it",
                     chat = if (it % 2 == 0) user1 else user2,
                     timestamp = timestamp + it
                 )

@@ -72,7 +72,7 @@ class MockState(
                     notifiedAt = 0,
                     readAt = 0,
                     timestamp = 0,
-                    body = Message.Text(messageText)
+                    body = messageText
                 )
             }
         }

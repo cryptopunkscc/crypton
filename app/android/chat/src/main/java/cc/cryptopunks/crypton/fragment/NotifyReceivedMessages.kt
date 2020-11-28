@@ -77,7 +77,7 @@ class AndroidChatNotificationFactory(
             mutableMapOf<Address, Person>().also { cache ->
                 messages.forEach { message ->
                     style.addMessage(
-                        message.text,
+                        message.body,
                         message.timestamp,
                         cache.getOrPut(
                             message.from.address

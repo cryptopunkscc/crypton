@@ -14,8 +14,6 @@ import cc.cryptopunks.crypton.context.resource
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import cc.cryptopunks.crypton.json.formatJson
-import cc.cryptopunks.crypton.json.parseJson
 import kotlinx.coroutines.flow.Flow
 
 @DatabaseTable(tableName = "message")
@@ -40,7 +38,7 @@ data class MessageData(
     @DatabaseField(dataType = DataType.LONG_STRING)
     val text: String = "",
     @DatabaseField
-    val type: String = typeName<String>(),
+    val type: String = Message.Type.Text.name,
     @DatabaseField
     val timestamp: Long = 0,
     @DatabaseField(index = true)
@@ -126,8 +124,8 @@ internal fun Message.messageData() = MessageData(
     chatId = chat.id,
     stanzaId = stanzaId,
     timestamp = timestamp,
-    text = body.formatJson(),
-    type = typeName,
+    text = body,
+    type = type.name,
     from = from.id,
     to = to.id,
     status = status.name,
@@ -135,22 +133,18 @@ internal fun Message.messageData() = MessageData(
     encrypted = encrypted
 )
 
-private val Message.typeName get() = body.javaClass.name
-
-
 internal fun MessageData.message() = Message(
     id = id,
     stanzaId = stanzaId,
     to = resource(to),
     from = resource(from),
     chat = address(chatId),
-    body = parseBody(),
+    body = text,
+    type = Message.Type.valueOf(type),
     timestamp = timestamp,
     status = messageStatus,
     readAt = readAt,
     encrypted = encrypted
 )
-
-private fun MessageData.parseBody() = text.parseJson(Class.forName(type).kotlin) as Message.Body
 
 private val MessageData.messageStatus get() = Message.Status.valueOf(status)

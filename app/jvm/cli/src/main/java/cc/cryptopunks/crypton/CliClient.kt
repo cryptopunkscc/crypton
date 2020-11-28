@@ -6,7 +6,9 @@ import cc.cryptopunks.crypton.cliv2.unwrapCliResult
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Roster
+import cc.cryptopunks.crypton.context.Upload
 import cc.cryptopunks.crypton.format.format
+import cc.cryptopunks.crypton.json.formatJsonPretty
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -57,6 +59,7 @@ fun Any.formatCliOutput(): String? =
         is Roster.Items -> format()
         is Roster.Item -> format()
         is Chat.Messages -> format()
+        is Upload.Progress -> formatJsonPretty()
         is Message -> format()
         is Map<*, *> -> toMap().toString()
         is Throwable -> stackTraceToString()

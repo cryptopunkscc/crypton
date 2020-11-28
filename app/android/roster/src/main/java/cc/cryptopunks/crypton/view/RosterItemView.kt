@@ -86,9 +86,9 @@ class RosterItemView(
         }
 
     private fun Message.textViewModel() = when {
-        text.isEmpty() -> View.GONE to null
+        body.isEmpty() -> View.GONE to null
         from.address == Address.Empty -> View.GONE to null
-        else -> View.VISIBLE to "$sender: $text"
+        else -> View.VISIBLE to "$sender: $body"
     }
 
     private fun Message.dateViewModel() = when {

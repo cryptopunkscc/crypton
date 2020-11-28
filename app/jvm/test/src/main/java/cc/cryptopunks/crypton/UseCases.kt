@@ -92,7 +92,7 @@ suspend fun ClientDsl.sendMessage(
         status: Message.Status
     ) {
         assertEquals(toString(), chat, this.chat)
-        assertEquals(toString(), message, text)
+        assertEquals(toString(), message, body)
         assertEquals(toString(), Resource(account), from)
         assertEquals(toString(), Resource(chat), to)
         assertEquals(toString(), 0L, notifiedAt)
@@ -124,7 +124,7 @@ suspend fun ClientDsl.expectReceived(
             require(this.account == account) { this.account }
             require(list.size == 1) { list }
             list[0].run {
-                require(text == message) { text }
+                require(body == message) { body }
                 require(from.address == chat) { from.address }
                 require(to.address == account) { to.address }
                 require(this.chat == chat) { this.chat }
@@ -163,7 +163,7 @@ suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, ch
                 require(title == chat.id) { title }
                 require(presence == Presence.Status.Available) { presence }
                 message.run {
-                    assertEquals("\n" + list.joinToString("\n"), text, this.text)
+                    assertEquals("\n" + list.joinToString("\n"), text, this.body)
                     require(this.chat == chat) { this.chat }
                     require(from.address == chat) { from.address }
                     require(to.address == account) { to.address }

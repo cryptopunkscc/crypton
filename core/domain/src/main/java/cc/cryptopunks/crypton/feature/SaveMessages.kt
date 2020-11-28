@@ -38,7 +38,7 @@ internal fun saveMessages() = feature(
     handler = { _, (messages): Exec.SaveMessages ->
         messages.forEach { message ->
             when (message.status) {
-                Message.Status.State -> when (message.text) {
+                Message.Status.State -> when (message.body) {
                     Message.State.composing.name -> saveMessage(message.copy(id = message.simpleStatusId()))
                     Message.State.paused.name,
                     Message.State.active.name -> messageRepo.delete(id = message.simpleStatusId())

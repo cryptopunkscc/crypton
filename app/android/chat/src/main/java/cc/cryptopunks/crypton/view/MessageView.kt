@@ -36,7 +36,7 @@ class MessageView(
         set(value) {
             field = value?.apply {
                 when {
-                    value.status == Message.Status.State && value.text == Message.State.composing.name -> {
+                    value.status == Message.Status.State && value.body == Message.State.composing.name -> {
                         bodyTextView.text = "..."
                         authorTextView.text = author
                         statusTextView.text = null
@@ -44,10 +44,7 @@ class MessageView(
                         encryptedIcon.visibility = View.GONE
                     }
                     else -> {
-                        bodyTextView.text = when(val body = body) {
-                            is Message.Text -> body.string
-                            else -> null
-                        }
+                        bodyTextView.text = body
                         timestampTextView.text = dateFormat.format(timestamp)
                         authorTextView.text = " $BULLET $author"
                         statusTextView.text = StringBuffer(" $BULLET $status").apply {

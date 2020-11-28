@@ -3,7 +3,6 @@ package cc.cryptopunks.crypton.context
 import androidx.paging.DataSource
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import java.net.URL
 import java.security.MessageDigest
 
 typealias CryptonMessage = Message
@@ -11,7 +10,8 @@ typealias CryptonMessage = Message
 data class Message(
     val id: String = "",
     val stanzaId: String = "",
-    val body: Body = Body.Empty,
+    val body: String = "",
+    val type: Type = Type.Text,
     val timestamp: Long = 0,
     val chat: Address = Address.Empty,
     val from: Resource = Resource.Empty,
@@ -22,24 +22,14 @@ data class Message(
     val encrypted: Boolean = true
 ) {
 
-    val text: String
-        get() = when (body) {
-            is Body.Empty -> ""
-            is Text -> body.string
-            is FileUrl -> body.url.toString()
-            else -> body.toString()
-        }
-
     companion object {
         val Empty = Message()
     }
 
-    interface Body {
-        object Empty : Body
+    enum class Type {
+        Text,
+        Url
     }
-
-    data class Text(val string: String) : Body
-    data class FileUrl(val url: URL) : Body
 
     enum class Status {
         None,
@@ -157,7 +147,7 @@ fun Message.isFrom(address: Address): Boolean = when {
 }
 
 fun Message.calculateId(): Message = copy(
-    id = (text + from + to + timestamp).md5()
+    id = (body + from + to + timestamp).md5()
 )
 
 private fun String.md5(): String = MD5.digest(toByteArray()).printHexBinary()

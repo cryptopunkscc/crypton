@@ -10,7 +10,7 @@ internal fun saveInfoMessage() = feature(
     handler = { _, (text): Exec.SaveInfoMessage ->
         messageRepo.insertOrUpdate(
             Message(
-                body = Message.Text(text),
+                body = text,
                 chat = chat.address,
                 status = Message.Status.Info,
                 to = Resource(address),

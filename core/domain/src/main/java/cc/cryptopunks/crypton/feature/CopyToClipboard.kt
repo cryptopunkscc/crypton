@@ -6,6 +6,6 @@ import cc.cryptopunks.crypton.feature
 internal fun copyToClipboard() = feature(
 
     handler = { _, (message): Exec.Copy ->
-        clipboardSys.setClip(message.text)
+        clipboardSys.setClip(message.body)
     }
 )

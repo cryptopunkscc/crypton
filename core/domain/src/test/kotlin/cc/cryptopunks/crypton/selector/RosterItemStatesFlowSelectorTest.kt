@@ -12,7 +12,6 @@ import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.mock.MockConnectionFactory
 import cc.cryptopunks.crypton.mock.MockSessionRepo
-import cc.cryptopunks.crypton.util.Log
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
@@ -80,7 +79,7 @@ class RosterItemStatesFlowSelectorTest {
         val messages = (0..1).map {
             Message(
                 id = it.toString(),
-                body = Message.Text("text$it"),
+                body = "text$it",
                 chat = chats[it].address,
                 to = Resource(addresses[it]),
                 from = Resource(addresses[it + 2]),
