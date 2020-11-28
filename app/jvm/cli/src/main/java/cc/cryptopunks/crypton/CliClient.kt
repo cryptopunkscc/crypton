@@ -35,8 +35,8 @@ fun cliClient(
         }
         console.input
             .filterIsInstance<String>()
-            .scan(context, Cli.Context::reduce)
-            .map(Any::unwrapCliResult)
+            .scan(context, { context, input -> context.reduce(input) })
+            .map { it.unwrapCliResult() }
             .collect { result ->
                 when (result) {
                     is Action -> backend.output(result)

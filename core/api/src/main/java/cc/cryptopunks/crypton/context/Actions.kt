@@ -72,7 +72,7 @@ object Subscribe {
     // Internal
 
     object AppService : Main.Action, Subscription
-    object SessionService : Account.Action, Subscription
+    object SessionService : Account.Action, Async
 
     // Main
 
