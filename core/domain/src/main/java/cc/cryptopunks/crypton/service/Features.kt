@@ -48,16 +48,16 @@ import cc.cryptopunks.crypton.feature.syncConferences
 import cc.cryptopunks.crypton.feature.toggleIndicator
 import cc.cryptopunks.crypton.feature.updateChatNotification
 import cc.cryptopunks.crypton.features
+import cc.cryptopunks.crypton.handler.uploadFile
 
 fun cryptonFeatures(): Features = features(
-
+    // cli
     cliConfigure(),
     cliSetAccount(),
     cliSetChat(),
 
+    // main
     startAppServices(),
-    startSessionService(),
-
     toggleIndicator(),
     addAccount(),
     registerAccount(),
@@ -65,7 +65,12 @@ fun cryptonFeatures(): Features = features(
     subscribeAccounts(),
     getAccounts(),
     enableAccount(),
+    getRosterItems(),
+    subscribeRosterItems(),
+    popClipboard(),
 
+    // account
+    startSessionService(),
     connect(),
     logout(),
     removeAccount(),
@@ -73,35 +78,31 @@ fun cryptonFeatures(): Features = features(
     handlePresence(),
     insertInvitation(),
     purgeDeviceList(),
-
-    subscribeRosterItems(),
-    getRosterItems(),
+    createChat(),
+    joinChat(),
     getHostedRooms(),
     getJoinedRooms(),
     getSubscriptionStatus(),
-    joinChat(),
+    messageRead(),
+    flushMessageQueue(),
+    saveMessages(),
 
+    // chat
     clearInfoMessages(),
     copyToClipboard(),
-
-    createChat(),
     getChatInfo(),
     deleteChat(),
     configureChat(),
     syncConferences(),
     updateChatNotification(),
     inviteToConference(),
-
-    saveMessages(),
     saveInfoMessage(),
     enqueueMessage(),
-    flushMessageQueue(),
-    subscribeLastMessage(),
-    subscribeOnMessageExecute(),
-    subscribePagedMessages(),
     deleteMessage(),
     getMessages(),
     getPagedMessages(),
-    messageRead(),
-    popClipboard()
+    subscribeLastMessage(),
+    subscribePagedMessages(),
+    subscribeOnMessageExecute(),
+    uploadFile(),
 )

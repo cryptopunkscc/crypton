@@ -17,7 +17,7 @@ internal class UploadNet(
         launch(Dispatchers.IO) {
             val name = file.name
             val url = httpFileUploadManager.uploadFile(file) { uploaded, total ->
-                launch { send(Upload.Progress(name, uploaded, total)) }
+                offer(Upload.Progress(name, uploaded, total))
             }
             val size = file.length()
             send(Upload.Progress(name, size, size, url))

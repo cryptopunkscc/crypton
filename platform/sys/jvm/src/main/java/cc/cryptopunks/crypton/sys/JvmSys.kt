@@ -12,7 +12,6 @@ import cc.cryptopunks.crypton.mock.MockClipBoardSys
 import cc.cryptopunks.crypton.mock.MockDeviceSys
 import cc.cryptopunks.crypton.mock.MockIndicatorSys
 import cc.cryptopunks.crypton.mock.MockNotificationSys
-import cc.cryptopunks.crypton.mock.MockURISys
 import kotlinx.coroutines.GlobalScope
 
 class JvmSys(
@@ -22,5 +21,5 @@ class JvmSys(
     override val networkSys: Network.Sys = JvmNetworkSys(GlobalScope),
     override val deviceSys: Device.Sys = MockDeviceSys(),
     override val executeSys: Execute.Sys = JvmExecuteSys,
-    override val uriSys: URI.Sys = MockURISys
+    override val uriSys: URI.Sys = JvmUriSys
 ) : Sys

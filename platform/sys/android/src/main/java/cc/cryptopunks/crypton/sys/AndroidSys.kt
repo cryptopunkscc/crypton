@@ -55,12 +55,11 @@ class AndroidSys(
         )
     }
 
-    override val executeSys: Execute.Sys = ExecuteSys
+    override val executeSys: Execute.Sys get() = ExecuteSys
 
     override val uriSys: URI.Sys by lazy {
-        URISys(
+        AndroidUriSys(
             context = application
         )
     }
-
 }
