@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.calculateId
 
-fun Chat.createMessage(): Message =
+fun Chat.createEmptyMessage(): Message =
     Message(
         from = Resource(account),
         to = Resource(address),

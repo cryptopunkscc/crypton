@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.sys
 import android.app.Application
 import android.content.Context
 import androidx.core.content.getSystemService
-import cc.cryptopunks.crypton.context.AesGcm
+import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
@@ -67,7 +67,7 @@ class AndroidSys(
         )
     }
 
-    override val aesGcmSys: AesGcm.Sys get() = AndroidAesGcmSys
+    override val cryptoSys: Crypto.Sys get() = AndroidCryptoSys
 
     override val fileSys: File.Sys
         get() = TODO("Not yet implemented")

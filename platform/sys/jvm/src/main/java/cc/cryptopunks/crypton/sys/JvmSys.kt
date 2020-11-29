@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.sys
 
-import cc.cryptopunks.crypton.context.AesGcm
 import cc.cryptopunks.crypton.context.Clip
+import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
 import cc.cryptopunks.crypton.context.File
@@ -26,14 +26,7 @@ class JvmSys(
     override val deviceSys: Device.Sys = MockDeviceSys(),
     override val executeSys: Execute.Sys = JvmExecuteSys,
     override val uriSys: URI.Sys = JvmUriSys,
-    override val aesGcmSys: AesGcm.Sys = JvmAesGcmSys,
+    override val cryptoSys: Crypto.Sys = JvmCryptoSys,
     override val fileSys: File.Sys = JvmFileSys(JavaFile(home)),
 ) : Sys
-
-private class JvmFileSys(
-    val home: JavaFile
-) : File.Sys {
-    override fun cacheDir(): JavaFile = home.resolve("cache")
-    override fun tmpDir(): JavaFile = home.resolve("tmp")
-}
 

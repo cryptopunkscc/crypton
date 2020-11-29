@@ -7,11 +7,12 @@ import cc.cryptopunks.crypton.context.AesGcm
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
-import cc.cryptopunks.crypton.context.encode
-import cc.cryptopunks.crypton.factory.createMessage
+import cc.cryptopunks.crypton.factory.createEmptyMessage
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.util.hexToBytes
 import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.util.toHex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
@@ -39,9 +40,10 @@ fun uploadFile() = feature(
 
         val encryptedFile = withContext(Dispatchers.IO) {
             fileSys.tmpDir().resolve(file.name).apply {
+                createNewFile()
                 deleteOnExit()
                 outputStream().use { out ->
-                    aesGcmSys.encrypt(
+                    cryptoSys.encrypt(
                         inputStream = FileInputStream(file),
                         secure = secure
                     ).copyTo(out)
@@ -65,17 +67,45 @@ fun uploadFile() = feature(
             .toList()
             .last()
             .let { result ->
-                val aesGcmUrl = AesGcm.Url(
+                val aesGcmUrl = AesGcm.Link(
                     url = result.url!!.toString(),
                     secure = secure
                 )
 
                 messageRepo.insertOrUpdate(
-                    chat.createMessage().copy(
-                        body = aesGcmUrl.encode(),
+                    chat.createEmptyMessage().copy(
+                        body = aesGcmUrl.encodeString(),
                         type = Message.Type.Url
                     )
                 )
             }
     }
 )
+
+private const val HTTPS = "https"
+
+private const val AES_GCM = "aesgcm"
+
+private fun AesGcm.Link.encodeString(): String =
+    listOf(
+        "$AES_GCM:",
+        url.removePrefix("$HTTPS:"),
+        "#",
+        secure.iv.toHex(),
+        secure.key.toHex(),
+    ).joinToString("")
+
+
+
+private fun String.decodeAesGcmUrl(): AesGcm.Link = this
+    .split(":|#")
+    .let { (scheme, link, ivKey) ->
+        require(scheme == AES_GCM)
+        AesGcm.Link(
+            url = "$HTTPS:$link",
+            secure = AesGcm.Secure(
+                key = ivKey.takeLast(64).hexToBytes(),
+                iv = ivKey.dropLast(64).hexToBytes(),
+            )
+        )
+    }

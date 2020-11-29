@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.mock
 
-import cc.cryptopunks.crypton.context.AesGcm
+import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
@@ -19,7 +19,7 @@ class MockSys(
     override val deviceSys: Device.Sys = MockDeviceSys(),
     override val executeSys: Execute.Sys = MockExecuteSys,
     override val uriSys: URI.Sys = MockURISys,
-    override val aesGcmSys: AesGcm.Sys = MockAesGcmSys,
+    override val cryptoSys: Crypto.Sys = MockCryptoSys,
     override val fileSys: File.Sys = MockFileSys,
 ) : Sys
 

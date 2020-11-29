@@ -61,8 +61,9 @@ fun Any.formatCliOutput(): String =
         is Message -> format()
         is Map<*, *> -> toMap().toString()
         is Throwable -> stackTraceToString()
+        is ActionFailed -> format()
         else -> try {
-            formatJsonPretty()
+            javaClass.name + ": " + formatJsonPretty()
         } catch (e: Throwable) {
             e.stackTraceToString()
         }

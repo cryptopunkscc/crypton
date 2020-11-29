@@ -1,10 +1,19 @@
 package cc.cryptopunks.crypton.mock
 
 import cc.cryptopunks.crypton.context.AesGcm
+import cc.cryptopunks.crypton.context.Crypto
 import java.io.InputStream
 import java.io.OutputStream
 
-object MockAesGcmSys : AesGcm.Sys {
+object MockCryptoSys : Crypto.Sys {
+    override fun encodeBase64(array: ByteArray): String {
+        TODO("Not yet implemented")
+    }
+
+    override fun decodeBase64(string: String): ByteArray {
+        TODO("Not yet implemented")
+    }
+
     override fun encrypt(inputStream: InputStream, secure: AesGcm.Secure): InputStream {
         TODO("Not yet implemented")
     }

@@ -44,7 +44,7 @@ private fun SmackCore.flowMessages(query: MamManager.MamQuery): Flow<List<Crypto
                     readAt = System.currentTimeMillis(),
                     chat = setOf(it.from.address, it.to.address)
                         .minus(account)
-                        .last()
+                        .lastOrNull() ?: account
                 )
             }
             .filter { it.body.isNotBlank() }
