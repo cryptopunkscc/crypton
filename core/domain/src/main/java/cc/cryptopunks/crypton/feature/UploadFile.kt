@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.handler
+package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.cliv2.command
 import cc.cryptopunks.crypton.cliv2.config

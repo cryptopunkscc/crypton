@@ -16,6 +16,7 @@ import cc.cryptopunks.crypton.feature.enableAccount
 import cc.cryptopunks.crypton.feature.enqueueMessage
 import cc.cryptopunks.crypton.feature.flushMessageQueue
 import cc.cryptopunks.crypton.feature.getAccountNames
+import cc.cryptopunks.crypton.feature.getAccounts
 import cc.cryptopunks.crypton.feature.getChatInfo
 import cc.cryptopunks.crypton.feature.getHostedRooms
 import cc.cryptopunks.crypton.feature.getJoinedRooms
@@ -27,7 +28,6 @@ import cc.cryptopunks.crypton.feature.handlePresence
 import cc.cryptopunks.crypton.feature.insertInvitation
 import cc.cryptopunks.crypton.feature.inviteToConference
 import cc.cryptopunks.crypton.feature.joinChat
-import cc.cryptopunks.crypton.feature.getAccounts
 import cc.cryptopunks.crypton.feature.logout
 import cc.cryptopunks.crypton.feature.messageRead
 import cc.cryptopunks.crypton.feature.popClipboard
@@ -47,8 +47,8 @@ import cc.cryptopunks.crypton.feature.subscribeRosterItems
 import cc.cryptopunks.crypton.feature.syncConferences
 import cc.cryptopunks.crypton.feature.toggleIndicator
 import cc.cryptopunks.crypton.feature.updateChatNotification
+import cc.cryptopunks.crypton.feature.uploadFile
 import cc.cryptopunks.crypton.features
-import cc.cryptopunks.crypton.handler.uploadFile
 
 fun cryptonFeatures(): Features = features(
     // cli

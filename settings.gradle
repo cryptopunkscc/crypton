@@ -3,6 +3,8 @@ include ':core:api',
         ':core:backend',
         ':core:fs',
 
+        ':platform:crypto:jvm',
+
         ':platform:net:mock',
         ':platform:net:smack:android',
         ':platform:net:smack:jvm',

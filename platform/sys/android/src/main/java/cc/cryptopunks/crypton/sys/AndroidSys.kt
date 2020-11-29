@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.sys
 
 import android.app.Application
 import androidx.core.content.getSystemService
+import cc.cryptopunks.crypton.context.AesGcm
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
@@ -62,4 +63,6 @@ class AndroidSys(
             context = application
         )
     }
+
+    override val aesGcmSys: AesGcm.Sys get() = AndroidAesGcmSys
 }

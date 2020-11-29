@@ -3,7 +3,5 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation project(':platform:sys:mock')
-    implementation project(':platform:crypto:jvm')
     api project(':core:api')
 }

@@ -9,5 +9,6 @@ interface Sys {
     val deviceSys: Device.Sys
     val executeSys: Execute.Sys
     val uriSys: URI.Sys
+    val aesGcmSys: AesGcm.Sys
 
 }

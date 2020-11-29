@@ -6,7 +6,6 @@ import cc.cryptopunks.crypton.cliv2.unwrapCliResult
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.Upload
 import cc.cryptopunks.crypton.format.format
 import cc.cryptopunks.crypton.json.formatJsonPretty
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
@@ -30,9 +29,7 @@ fun cliClient(
     ) {
         val inputJob = launch {
             backend.input
-                .map { any ->
-                    any.formatCliOutput() ?: any.toString()
-                }
+                .map { any -> any.formatCliOutput() }
                 .collect(console.output)
         }
         console.input
@@ -42,7 +39,7 @@ fun cliClient(
             .collect { result ->
                 when (result) {
                     is Action -> backend.output(result)
-                    else -> result.formatCliOutput()?.let { console.output(it) }
+                    else -> result.formatCliOutput().let { console.output(it) }
                 }
             }
         delay(1000) // TODO ultimately, coroutine should wait for expected result
@@ -50,8 +47,10 @@ fun cliClient(
     }
 }
 
-fun Any.formatCliOutput(): String? =
+fun Any.formatCliOutput(): String =
     when (this) {
+        is String -> this
+        is CharSequence -> toString()
         is Cli.Config -> map.toString()
         is Cli.Execute -> format()
         is Cli.Param -> format()
@@ -59,9 +58,12 @@ fun Any.formatCliOutput(): String? =
         is Roster.Items -> format()
         is Roster.Item -> format()
         is Chat.Messages -> format()
-        is Upload.Progress -> formatJsonPretty()
         is Message -> format()
         is Map<*, *> -> toMap().toString()
         is Throwable -> stackTraceToString()
-        else -> null
+        else -> try {
+            formatJsonPretty()
+        } catch (e: Throwable) {
+            e.stackTraceToString()
+        }
     }

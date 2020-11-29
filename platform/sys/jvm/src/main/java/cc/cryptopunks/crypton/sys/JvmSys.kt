@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.sys
 
+import cc.cryptopunks.crypton.context.AesGcm
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
@@ -21,5 +22,6 @@ class JvmSys(
     override val networkSys: Network.Sys = JvmNetworkSys(GlobalScope),
     override val deviceSys: Device.Sys = MockDeviceSys(),
     override val executeSys: Execute.Sys = JvmExecuteSys,
-    override val uriSys: URI.Sys = JvmUriSys
+    override val uriSys: URI.Sys = JvmUriSys,
+    override val aesGcmSys: AesGcm.Sys = JvmAesGcmSys,
 ) : Sys
