@@ -5,34 +5,38 @@ import java.io.OutputStream
 import javax.crypto.Cipher
 import javax.crypto.CipherInputStream
 import javax.crypto.CipherOutputStream
-import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 private const val KEY_TYPE = "AES"
 private const val CIPHER_MODE = "AES/GCM/NoPadding"
+private const val TAG_LENGTH_BIT = 128
 
 private val aesCipher get() = Cipher.getInstance(CIPHER_MODE)
 
-fun InputStream.aesEncrypt(
+fun InputStream.withAes(
     iv: ByteArray,
-    key: ByteArray
+    key: ByteArray,
+    mode: Int = Cipher.ENCRYPT_MODE
 ): InputStream =
-    CipherInputStream(this, getAesCipher(key, iv))
+    CipherInputStream(this, getAesCipher(iv, key, mode))
 
-fun OutputStream.aesDecrypt(
+fun OutputStream.withAes(
     iv: ByteArray,
-    key: ByteArray
+    key: ByteArray,
+    mode: Int = Cipher.ENCRYPT_MODE
 ): OutputStream =
-    CipherOutputStream(this, getAesCipher(key, iv))
+    CipherOutputStream(this, getAesCipher(iv, key, mode))
 
 private fun getAesCipher(
     iv: ByteArray,
-    key: ByteArray
+    key: ByteArray,
+    mode: Int = Cipher.ENCRYPT_MODE
 ): Cipher = aesCipher.apply {
     init(
-        Cipher.ENCRYPT_MODE,
+        mode,
         SecretKeySpec(key, KEY_TYPE),
-        IvParameterSpec(iv)
+        GCMParameterSpec(TAG_LENGTH_BIT, iv)
     )
 }
 

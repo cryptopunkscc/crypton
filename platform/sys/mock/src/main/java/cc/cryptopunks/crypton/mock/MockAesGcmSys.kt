@@ -5,11 +5,11 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object MockAesGcmSys : AesGcm.Sys {
-    override fun encrypt(inputStream: InputStream, iv: ByteArray, key: ByteArray): InputStream {
+    override fun encrypt(inputStream: InputStream, secure: AesGcm.Secure): InputStream {
         TODO("Not yet implemented")
     }
 
-    override fun decrypt(outputStream: OutputStream, iv: ByteArray, key: ByteArray): OutputStream {
+    override fun decrypt(outputStream: OutputStream, secure: AesGcm.Secure): OutputStream {
         TODO("Not yet implemented")
     }
 }

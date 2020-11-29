@@ -6,8 +6,12 @@ import kotlin.random.Random
 
 object AesGcm {
 
-    class Url(
+    data class Url(
         val url: String,
+        val secure: Secure,
+    )
+
+    class Secure(
         val iv: ByteArray = randomIv(),
         val key: ByteArray = randomKey()
     )
@@ -16,14 +20,12 @@ object AesGcm {
 
         fun encrypt(
             inputStream: InputStream,
-            iv: ByteArray,
-            key: ByteArray
+            secure: Secure
         ): InputStream
 
         fun decrypt(
             outputStream: OutputStream,
-            iv: ByteArray,
-            key: ByteArray
+            secure: Secure
         ): OutputStream
     }
 
@@ -40,16 +42,20 @@ fun AesGcm.Url.encode(): String = listOf(
     "$AES_GCM:",
     url.removePrefix("$HTTPS:"),
     "#",
-    String(iv),
-    String(key),
+    secure.encode()
 ).joinToString("")
+
+fun AesGcm.Secure.encode(): String =
+    String(iv) + String(key)
 
 fun String.decodeAesGcmUrl(): AesGcm.Url = split(":|#")
     .let { (scheme, link, ivKey) ->
         require(scheme == AES_GCM)
         AesGcm.Url(
             url = "$HTTPS:$link",
-            key = ivKey.takeLast(64).toByteArray(),
-            iv = ivKey.dropLast(64).toByteArray()
+            secure = AesGcm.Secure(
+                key = ivKey.takeLast(64).toByteArray(),
+                iv = ivKey.dropLast(64).toByteArray()
+            )
         )
     }

@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.AesGcm
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
+import cc.cryptopunks.crypton.context.File
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
@@ -19,4 +20,6 @@ class MockSys(
     override val executeSys: Execute.Sys = MockExecuteSys,
     override val uriSys: URI.Sys = MockURISys,
     override val aesGcmSys: AesGcm.Sys = MockAesGcmSys,
+    override val fileSys: File.Sys = MockFileSys,
 ) : Sys
+

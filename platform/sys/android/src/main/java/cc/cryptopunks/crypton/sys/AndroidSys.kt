@@ -1,12 +1,15 @@
 package cc.cryptopunks.crypton.sys
 
 import android.app.Application
+import android.content.Context
 import androidx.core.content.getSystemService
 import cc.cryptopunks.crypton.context.AesGcm
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
+import cc.cryptopunks.crypton.context.File
 import cc.cryptopunks.crypton.context.Indicator
+import cc.cryptopunks.crypton.context.JavaFile
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Sys
@@ -65,4 +68,15 @@ class AndroidSys(
     }
 
     override val aesGcmSys: AesGcm.Sys get() = AndroidAesGcmSys
+
+    override val fileSys: File.Sys
+        get() = TODO("Not yet implemented")
+}
+
+class AndroidFileSys(
+    val context: Context
+) : File.Sys {
+
+    override fun cacheDir(): JavaFile = context.cacheDir
+    override fun tmpDir(): JavaFile = context.cacheDir
 }
