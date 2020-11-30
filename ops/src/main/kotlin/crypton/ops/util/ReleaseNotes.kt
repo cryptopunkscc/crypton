@@ -44,7 +44,7 @@ fun Project.updateVersionNotes(): File {
 fun Project.generateReleaseNotes(
     latest: Boolean = false,
     from: String = when {
-        latest -> version.snapshotHash
+        latest -> version.hash
         else -> version.hash
     }.takeIf { it.isNotEmpty() } ?: Git.latestTag(),
     to: String = "HEAD"
