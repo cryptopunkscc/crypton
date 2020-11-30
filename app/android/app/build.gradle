@@ -67,6 +67,7 @@ android {
         exclude 'META-INF/android_debug.kotlin_module'
         exclude 'META-INF/android_release.kotlin_module'
         exclude 'META-INF/cli.kotlin_module'
+        exclude 'META-INF/jvm.kotlin_module'
     }
     androidExtensions {
         experimental = true

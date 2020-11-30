@@ -25,7 +25,7 @@ class OrmLiteRepoTest
 
 
 class OrmLiteAccountRepoTest : AccountRepoTest() {
-    private val appRepo = OrmLiteAppRepo(JvmConnectionSourceFactory(inMemory = true))
+    private val appRepo = OrmLiteAppRepo(createConnection = JvmConnectionSourceFactory(inMemory = true))
     override val repo = appRepo.accountRepo
     override fun clearDatabase() = runBlocking { appRepo.accountDao.deleteAll() }
 }

@@ -20,7 +20,6 @@ import cc.cryptopunks.crypton.createChat
 import cc.cryptopunks.crypton.openChat
 import cc.cryptopunks.crypton.pass
 import cc.cryptopunks.crypton.prepare
-import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -119,7 +118,7 @@ private suspend fun client2() = Client2.connectDslClient {
     waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress
-                && it.message.text == "yolo"
+                && it.message.body == "yolo"
         }
     }
 
@@ -164,7 +163,7 @@ private suspend fun client3() = Client3.connectDslClient {
     waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress
-                && it.message.text == "yolo"
+                && it.message.body == "yolo"
         }
     }
 

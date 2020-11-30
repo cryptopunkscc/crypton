@@ -11,4 +11,5 @@
 . ./ops/bash/src/git.sh
 . ./ops/bash/src/ops.sh
 . ./ops/bash/src/project.sh
+. ./ops/bash/src/ejabber.sh
 . ./ops/bash/src/build.sh

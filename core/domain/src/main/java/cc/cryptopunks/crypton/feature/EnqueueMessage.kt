@@ -7,9 +7,7 @@ import cc.cryptopunks.crypton.cliv2.optional
 import cc.cryptopunks.crypton.cliv2.text
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
-import cc.cryptopunks.crypton.context.Message
-import cc.cryptopunks.crypton.context.Resource
-import cc.cryptopunks.crypton.context.calculateId
+import cc.cryptopunks.crypton.factory.createEmptyMessage
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log
@@ -36,12 +34,8 @@ internal fun enqueueMessage() = feature(
 )
 
 private fun Chat.queuedMessage(enqueueMessage: Exec.EnqueueMessage) =
-    Message(
-        text = enqueueMessage.text,
-        encrypted = enqueueMessage.encrypted,
-        from = Resource(account),
-        to = Resource(address),
-        status = Message.Status.Queued,
-        chat = address,
-        timestamp = System.currentTimeMillis()
-    ).calculateId()
+    createEmptyMessage().copy(
+        body = enqueueMessage.text,
+        encrypted = enqueueMessage.encrypted
+    )
+

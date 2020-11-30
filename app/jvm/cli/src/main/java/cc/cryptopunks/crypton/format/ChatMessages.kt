@@ -8,4 +8,4 @@ fun Chat.Messages.format(): String =
     list.joinToString("\n", transform = Message::format)
 
 fun Message.format(): String =
-    "${Date(timestamp)} $chat - $from ($status): $text"
+    "${Date(timestamp)} <$id> - $chat - $from ($status): $body"

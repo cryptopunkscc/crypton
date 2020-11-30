@@ -10,7 +10,6 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.address
-import cc.cryptopunks.crypton.context.messageStatus
 import cc.cryptopunks.crypton.context.resource
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
@@ -38,6 +37,8 @@ data class MessageData(
     val stanzaId: String = "",
     @DatabaseField(dataType = DataType.LONG_STRING)
     val text: String = "",
+    @DatabaseField
+    val type: String = Message.Type.Text.name,
     @DatabaseField
     val timestamp: Long = 0,
     @DatabaseField(index = true)
@@ -116,12 +117,15 @@ data class MessageData(
     }
 }
 
-fun Message.messageData() = MessageData(
+private inline fun <reified T> typeName() = T::class.java.name
+
+internal fun Message.messageData() = MessageData(
     id = id,
     chatId = chat.id,
     stanzaId = stanzaId,
     timestamp = timestamp,
-    text = text,
+    text = body,
+    type = type.name,
     from = from.id,
     to = to.id,
     status = status.name,
@@ -129,15 +133,18 @@ fun Message.messageData() = MessageData(
     encrypted = encrypted
 )
 
-fun MessageData.message() = Message(
+internal fun MessageData.message() = Message(
     id = id,
     stanzaId = stanzaId,
     to = resource(to),
     from = resource(from),
     chat = address(chatId),
-    text = text,
+    body = text,
+    type = Message.Type.valueOf(type),
     timestamp = timestamp,
-    status = messageStatus(status),
+    status = messageStatus,
     readAt = readAt,
     encrypted = encrypted
 )
+
+private val MessageData.messageStatus get() = Message.Status.valueOf(status)

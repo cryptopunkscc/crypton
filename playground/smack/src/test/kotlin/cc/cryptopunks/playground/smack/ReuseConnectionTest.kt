@@ -3,9 +3,11 @@ package cc.cryptopunks.playground.smack
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.junit.Assert
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 import org.jxmpp.jid.parts.Localpart
 
+@Ignore
 class ReuseConnectionTest {
 
     companion object {

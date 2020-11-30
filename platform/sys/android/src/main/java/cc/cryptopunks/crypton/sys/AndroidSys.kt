@@ -1,14 +1,19 @@
 package cc.cryptopunks.crypton.sys
 
 import android.app.Application
+import android.content.Context
 import androidx.core.content.getSystemService
+import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
+import cc.cryptopunks.crypton.context.File
 import cc.cryptopunks.crypton.context.Indicator
+import cc.cryptopunks.crypton.context.JavaFile
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Sys
+import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.service.IndicatorService
 import kotlinx.coroutines.GlobalScope
 import kotlin.reflect.KClass
@@ -54,5 +59,24 @@ class AndroidSys(
         )
     }
 
-    override val executeSys: Execute.Sys = ExecuteSys
+    override val executeSys: Execute.Sys get() = ExecuteSys
+
+    override val uriSys: URI.Sys by lazy {
+        AndroidUriSys(
+            context = application
+        )
+    }
+
+    override val cryptoSys: Crypto.Sys get() = AndroidCryptoSys
+
+    override val fileSys: File.Sys
+        get() = TODO("Not yet implemented")
+}
+
+class AndroidFileSys(
+    val context: Context
+) : File.Sys {
+    override fun filesDir(): JavaFile = context.filesDir
+    override fun cacheDir(): JavaFile = context.cacheDir
+    override fun tmpDir(): JavaFile = context.cacheDir.resolve("tmp").apply { mkdir() }
 }

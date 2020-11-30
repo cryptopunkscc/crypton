@@ -2,7 +2,12 @@ package cc.cryptopunks.crypton.room.internal
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import cc.cryptopunks.crypton.entity.*
+import cc.cryptopunks.crypton.entity.AccountData
+import cc.cryptopunks.crypton.entity.ChatData
+import cc.cryptopunks.crypton.entity.ChatUserData
+import cc.cryptopunks.crypton.entity.FingerprintData
+import cc.cryptopunks.crypton.entity.MessageData
+import cc.cryptopunks.crypton.entity.UserData
 
 @Database(
     entities = [

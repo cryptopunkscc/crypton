@@ -1,12 +1,15 @@
 package cc.cryptopunks.crypton.mock
 
+import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Clip
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
+import cc.cryptopunks.crypton.context.File
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Sys
+import cc.cryptopunks.crypton.context.URI
 
 class MockSys(
     override val indicatorSys: Indicator.Sys = MockIndicatorSys(),
@@ -14,5 +17,9 @@ class MockSys(
     override val clipboardSys: Clip.Board.Sys = MockClipBoardSys(),
     override val networkSys: Network.Sys = MockNetworkSys(),
     override val deviceSys: Device.Sys = MockDeviceSys(),
-    override val executeSys: Execute.Sys = MockExecuteSys
+    override val executeSys: Execute.Sys = MockExecuteSys,
+    override val uriSys: URI.Sys = MockURISys,
+    override val cryptoSys: Crypto.Sys = MockCryptoSys,
+    override val fileSys: File.Sys = MockFileSys,
 ) : Sys
+

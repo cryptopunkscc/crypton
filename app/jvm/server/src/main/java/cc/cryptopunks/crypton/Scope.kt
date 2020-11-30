@@ -18,7 +18,7 @@ import java.io.File
 fun createRootScope(config: Map<String, Any?>) = RootScopeConfig(config).run {
     initSmack(File(omemoStorePath))
     RootModule(
-        sys = JvmSys(),
+        sys = JvmSys(home),
         repo = OrmLiteAppRepo { name: String ->
             createJdbcH2ConnectionSource(
                 home = "$home/$profile/",

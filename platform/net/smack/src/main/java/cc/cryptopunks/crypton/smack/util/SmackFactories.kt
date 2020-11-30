@@ -21,7 +21,7 @@ internal fun SmackMessage.cryptonMessage(
     from: Resource = this.from.resource(),
     to: Resource = this.to.resource(),
     decrypted: OmemoMessage.Received? = null,
-    body: String = decrypted?.body ?: this.body ?: "",
+    text: String = decrypted?.body ?: this.body ?: "",
     chat: Address = when (status) {
         Message.Status.State ->
             if (to.address.isConference) to.address
@@ -33,7 +33,7 @@ internal fun SmackMessage.cryptonMessage(
     encrypted: Boolean = true
 ) = CryptonMessage(
     id = id,
-    text = body,
+    body = text,
     from = from,
     to = to,
     chat = chat,

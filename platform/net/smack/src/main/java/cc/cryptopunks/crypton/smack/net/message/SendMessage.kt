@@ -34,14 +34,14 @@ private fun SmackCore.encryptConferenceMessage(message: Message): SmackMessage {
     val toJid = message.to.address.entityBareJid()
     val conference = mucManager.getMultiUserChat(toJid)
 
-    return omemoManager.encrypt(conference, message.text).asMessage(toJid).apply {
+    return omemoManager.encrypt(conference, message.body).asMessage(toJid).apply {
         type = org.jivesoftware.smack.packet.Message.Type.groupchat
     }
 }
 
 private fun SmackCore.createConferenceMessage(message: Message): SmackMessage =
     mucManager.getMultiUserChat(message.to.address.entityBareJid()).createMessage().apply {
-        body = message.text
+        body = message.body
     }
 
 private fun SmackCore.prepareChatMessage(message: Message): SmackMessage =
@@ -52,7 +52,7 @@ private fun SmackCore.prepareChatMessage(message: Message): SmackMessage =
 
 private fun SmackCore.encryptChatMessage(message: Message): SmackMessage =
     message.to.address.entityBareJid().let { toJid ->
-        omemoManager.encrypt(toJid, message.text).asMessage(toJid).apply {
+        omemoManager.encrypt(toJid, message.body).asMessage(toJid).apply {
             type = org.jivesoftware.smack.packet.Message.Type.chat
         }
     }
@@ -60,6 +60,6 @@ private fun SmackCore.encryptChatMessage(message: Message): SmackMessage =
 private fun createChatMessage(message: Message) =
     SmackMessage().apply {
         to = message.to.address.entityBareJid()
-        body = message.text
+        body = message.body
         type = SmackMessage.Type.chat
     }

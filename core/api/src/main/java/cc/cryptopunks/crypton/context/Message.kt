@@ -1,18 +1,17 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
+import cc.cryptopunks.crypton.util.md5
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import java.security.MessageDigest
 
 typealias CryptonMessage = Message
-
-fun messageStatus(status: String) = Message.Status.valueOf(status)
 
 data class Message(
     val id: String = "",
     val stanzaId: String = "",
-    val text: String = "",
+    val body: String = "",
+    val type: Type = body.parseType(),
     val timestamp: Long = 0,
     val chat: Address = Address.Empty,
     val from: Resource = Resource.Empty,
@@ -27,6 +26,11 @@ data class Message(
         val Empty = Message()
     }
 
+    enum class Type {
+        Text,
+        Url
+    }
+
     enum class Status {
         None,
         Queued,
@@ -36,7 +40,8 @@ data class Message(
         Received,
         Read,
         Info,
-        State
+        State,
+        Uploading
     }
 
     enum class State {
@@ -111,45 +116,42 @@ data class Message(
     }
 
     class Exception(message: String? = null) : kotlin.Exception(message)
-
-    val isUnread get() = readAt == 0L && status == Status.Received
-
-    val author: String
-        get() = when {
-            !chat.isConference -> from.address.local
-            from.address != chat -> from.address.local
-            else -> from.resource
-        }
 }
 
-fun Message.validate() = apply {
+private fun String.parseType() =
+    if (split(":").firstOrNull() in knownProtocols)
+        Message.Type.Url else
+        Message.Type.Text
+
+private val knownProtocols = listOf("http", "https", "aesgcm")
+
+val Message.isUnread
+    get() = readAt == 0L && status == Message.Status.Received
+
+val Message.author: String
+    get() = when {
+        !chat.isConference -> from.address.local
+        from.address != chat -> from.address.local
+        else -> from.resource
+    }
+
+fun Message.validate(): Message = apply {
     chat.validate()
     from.address.validate()
     to.address.validate()
 }
 
-val Message.sender
+val Message.sender: String
     get() = when {
         from.address.isConference -> from.resource
         else -> from.address.local
     }
 
-fun Message.isFrom(address: Address) = when {
+fun Message.isFrom(address: Address): Boolean = when {
     from.address.isConference -> from.resource == address.local
     else -> from.address == address
 }
 
-fun Message.calculateId() = copy(
-    id = (text + from + to + timestamp).md5()
+fun Message.calculateId(): Message = copy(
+    id = (body + from + to + timestamp).md5()
 )
-
-private fun String.md5() = MD5.digest(toByteArray()).printHexBinary()
-
-private val MD5 = MessageDigest.getInstance("MD5")
-
-private fun ByteArray.printHexBinary(): String =
-    asSequence().map(Byte::toInt).fold(StringBuilder(size * 2)) { acc, i ->
-        acc.append(HEX_CHARS[i shr 4 and 0xF]).append(HEX_CHARS[i and 0xF])
-    }.toString()
-
-private val HEX_CHARS = "0123456789ABCDEF".toCharArray()

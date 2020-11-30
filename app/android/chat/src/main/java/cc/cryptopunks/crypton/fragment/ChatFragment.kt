@@ -1,10 +1,12 @@
 package cc.cryptopunks.crypton.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.intent.processActivityResult
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
 import cc.cryptopunks.crypton.service
@@ -23,6 +25,7 @@ class ChatFragment : ServiceFragment() {
             binding + rootScope
                 .sessionScope(accountAddress)
                 .chatScope(chatAddress)
+                .fragmentScope()
                 .service(serviceName)
         }.let { null }
 
@@ -33,11 +36,22 @@ class ChatFragment : ServiceFragment() {
     ) = requireArguments().run {
         ChatView(
             context = requireContext(),
+            this@ChatFragment,
             rootScope = rootScope,
             account = account!!,
             address = chat!!
         )
     }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) = binding.processActivityResult(
+        requestCode = requestCode,
+        resultCode = resultCode,
+        intent = data
+    )
 
     override fun onResume() {
         super.onResume()

@@ -41,3 +41,7 @@ function git-add-commit() {
   *) git commit -S "$@" ;;
   esac
 }
+
+function git-add-commit-push() {
+  git-add-commit "" && git push
+}

@@ -5,5 +5,6 @@ function ops-rebuild() {
 }
 
 function ops-update-chmod() {
-    chmod +x "$CRYPTON_ROOT/ops/bash/*"
+    chmod +x "$CRYPTON_ROOT"/ops/bash/*
+    chmod +x "$CRYPTON_ROOT"/ops/bash/**/*
 }

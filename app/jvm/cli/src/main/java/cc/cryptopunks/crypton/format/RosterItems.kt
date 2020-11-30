@@ -7,4 +7,4 @@ internal fun Roster.Items.format() =
     list.joinToString("\n", transform = Roster.Item::format)
 
 internal fun Roster.Item.format() =
-    "${Date(updatedAt)} ($unreadMessagesCount) $account - $chatAddress: ${message.text}"
+    "${Date(updatedAt)} ($unreadMessagesCount) $account - $chatAddress: ${message.body}"

@@ -1,13 +1,16 @@
 package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.NonHandle
-import cc.cryptopunks.crypton.cli.configure
+import cc.cryptopunks.crypton.cli.account
+import cc.cryptopunks.crypton.cli.chat
 import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.cliv2.command
+import cc.cryptopunks.crypton.cliv2.configure
 import cc.cryptopunks.crypton.cliv2.named
 import cc.cryptopunks.crypton.cliv2.param
 import cc.cryptopunks.crypton.cliv2.raw
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.util.invoke
 
 internal fun cliConfigure() = feature(
 
@@ -19,8 +22,10 @@ internal fun cliConfigure() = feature(
         if (args.filterNotNull().isEmpty()) copy(
             result = Cli.Result.Return(config.toMap())
         ) else configure {
-            args.getOrNull(0)?.run { account = toString() }
-            args.getOrNull(1)?.run { chat = toString() }
+            args.let { (a, c) ->
+                a { account = toString() }
+                c { chat = toString() }
+            }
         }
     },
 

@@ -33,4 +33,4 @@ internal fun subscribeOnMessageExecute() = feature(
     }
 )
 
-private fun Message.formatArgs() = listOf(from, to, text).map(Any::toString)
+private fun Message.formatArgs() = listOf(from, to, body).map(Any::toString)

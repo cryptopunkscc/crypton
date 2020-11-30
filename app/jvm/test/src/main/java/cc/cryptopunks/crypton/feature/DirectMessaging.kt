@@ -63,7 +63,7 @@ private suspend fun client1() = Client1.connectDslClient {
     delay(1000)
     sendMessage("yo", address1, address2)
     waitFor<Chat.Messages> {
-        list.any { it.text == "yo yo" }
+        list.any { it.body == "yo yo" }
     }
     delay(1000)
     printTraffic()
@@ -74,7 +74,7 @@ private suspend fun client2() = Client2.connectDslClient {
     acceptSubscription(address2, address1)
     delay(1000)
     waitFor<Roster.Items> {
-        list.any { it.chatAddress == address1 && it.message.text == "yo" }
+        list.any { it.chatAddress == address1 && it.message.body == "yo" }
     }
     openChat(address2, address1)
     delay(1000)

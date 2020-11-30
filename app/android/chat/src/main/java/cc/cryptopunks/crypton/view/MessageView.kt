@@ -8,6 +8,7 @@ import androidx.core.view.iterator
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.author
 import cc.cryptopunks.crypton.util.ext.inflate
 import kotlinx.android.synthetic.main.chat_message_item.view.*
 import kotlinx.coroutines.Job
@@ -35,7 +36,7 @@ class MessageView(
         set(value) {
             field = value?.apply {
                 when {
-                    value.status == Message.Status.State && value.text == Message.State.composing.name -> {
+                    value.status == Message.Status.State && value.body == Message.State.composing.name -> {
                         bodyTextView.text = "..."
                         authorTextView.text = author
                         statusTextView.text = null
@@ -43,7 +44,7 @@ class MessageView(
                         encryptedIcon.visibility = View.GONE
                     }
                     else -> {
-                        bodyTextView.text = text
+                        bodyTextView.text = body
                         timestampTextView.text = dateFormat.format(timestamp)
                         authorTextView.text = " $BULLET $author"
                         statusTextView.text = StringBuffer(" $BULLET $status").apply {

@@ -70,7 +70,7 @@ private fun SendChannel<CryptonMessage>.stanzaListener(connection: XMPPConnectio
                 when {
                     stanza.hasChatStateExtension -> cryptonMessage(
                         status = Message.Status.State,
-                        body = stanza.chatStateExtension.name
+                        text = stanza.chatStateExtension.name
                     )
                     stanza.body.isNullOrEmpty() -> null
                     else -> cryptonMessage(Message.Status.Received)

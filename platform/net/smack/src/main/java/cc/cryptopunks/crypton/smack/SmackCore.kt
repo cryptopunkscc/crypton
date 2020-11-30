@@ -7,6 +7,7 @@ import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
 import org.jivesoftware.smackx.carbons.CarbonManager
+import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
@@ -23,4 +24,5 @@ internal interface SmackCore : CoroutineScope {
     val mamManager: MamManager
     val omemoManager: OmemoManager
     val carbonManager: CarbonManager
+    val httpFileUploadManager: HttpFileUploadManager
 }

@@ -4,6 +4,7 @@ import androidx.paging.DataSource
 import androidx.paging.listDataSource
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.isUnread
 import cc.cryptopunks.crypton.util.Store
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob

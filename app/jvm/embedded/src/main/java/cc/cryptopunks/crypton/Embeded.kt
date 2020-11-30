@@ -31,7 +31,9 @@ fun embeddedServer(
         )
     )
         .reduce(args.joinArgs())
-        .unwrapCliResult().formatCliOutput()?.let(::println)
+        .unwrapCliResult()
+        .formatCliOutput()
+        .let(::println)
 }
 
 internal class EmbeddedConfig(
