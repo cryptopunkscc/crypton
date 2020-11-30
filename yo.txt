@@ -1,1 +1,0 @@
-Yo, this is a test file sent by crypton cli.

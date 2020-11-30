@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.JavaFile
 internal class JvmFileSys(
     private val home: JavaFile
 ) : File.Sys {
+    override fun filesDir(): JavaFile = home.resolve("files").apply { mkdir() }
     override fun cacheDir(): JavaFile = home.resolve("cache").apply { mkdir() }
     override fun tmpDir(): JavaFile = home.resolve("tmp").apply { mkdir() }
 }

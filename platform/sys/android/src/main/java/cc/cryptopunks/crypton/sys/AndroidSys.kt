@@ -76,7 +76,7 @@ class AndroidSys(
 class AndroidFileSys(
     val context: Context
 ) : File.Sys {
-
+    override fun filesDir(): JavaFile = context.filesDir
     override fun cacheDir(): JavaFile = context.cacheDir
-    override fun tmpDir(): JavaFile = context.cacheDir
+    override fun tmpDir(): JavaFile = context.cacheDir.resolve("tmp").apply { mkdir() }
 }

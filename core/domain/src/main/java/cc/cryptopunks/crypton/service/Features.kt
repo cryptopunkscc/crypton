@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.feature.copyToClipboard
 import cc.cryptopunks.crypton.feature.createChat
 import cc.cryptopunks.crypton.feature.deleteChat
 import cc.cryptopunks.crypton.feature.deleteMessage
+import cc.cryptopunks.crypton.feature.downloadFile
 import cc.cryptopunks.crypton.feature.enableAccount
 import cc.cryptopunks.crypton.feature.enqueueMessage
 import cc.cryptopunks.crypton.feature.flushMessageQueue
@@ -105,4 +106,5 @@ fun cryptonFeatures(): Features = features(
     subscribePagedMessages(),
     subscribeOnMessageExecute(),
     uploadFile(),
+    downloadFile()
 )

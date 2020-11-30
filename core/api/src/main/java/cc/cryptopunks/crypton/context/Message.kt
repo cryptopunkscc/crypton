@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
+import cc.cryptopunks.crypton.util.md5
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import java.security.MessageDigest
 
 typealias CryptonMessage = Message
 
@@ -11,7 +11,7 @@ data class Message(
     val id: String = "",
     val stanzaId: String = "",
     val body: String = "",
-    val type: Type = Type.Text,
+    val type: Type = body.parseType(),
     val timestamp: Long = 0,
     val chat: Address = Address.Empty,
     val from: Resource = Resource.Empty,
@@ -116,8 +116,14 @@ data class Message(
     }
 
     class Exception(message: String? = null) : kotlin.Exception(message)
-
 }
+
+private fun String.parseType() =
+    if (split(":").firstOrNull() in knownProtocols)
+        Message.Type.Url else
+        Message.Type.Text
+
+private val knownProtocols = listOf("http", "https", "aesgcm")
 
 val Message.isUnread
     get() = readAt == 0L && status == Message.Status.Received
@@ -149,14 +155,3 @@ fun Message.isFrom(address: Address): Boolean = when {
 fun Message.calculateId(): Message = copy(
     id = (body + from + to + timestamp).md5()
 )
-
-private fun String.md5(): String = MD5.digest(toByteArray()).printHexBinary()
-
-private val MD5 = MessageDigest.getInstance("MD5")
-
-private fun ByteArray.printHexBinary(): String =
-    asSequence().map(Byte::toInt).fold(StringBuilder(size * 2)) { acc, i ->
-        acc.append(HEX_CHARS[i shr 4 and 0xF]).append(HEX_CHARS[i and 0xF])
-    }.toString()
-
-private val HEX_CHARS = "0123456789ABCDEF".toCharArray()

@@ -33,6 +33,7 @@ object Exec {
     data class MessagesRead(val messages: List<Message>) : Account.Action
     data class DeleteMessage(val message: Message) : Account.Action
     data class CreateChat(val chat: Chat) : Account.Action
+    data class DownloadFromMessage(val messageId: String) : Account.Action
 
     // Chat
 

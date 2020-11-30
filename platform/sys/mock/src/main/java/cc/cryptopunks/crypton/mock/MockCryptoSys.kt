@@ -14,11 +14,19 @@ object MockCryptoSys : Crypto.Sys {
         TODO("Not yet implemented")
     }
 
-    override fun encrypt(inputStream: InputStream, secure: AesGcm.Secure): InputStream {
+    override fun transform(
+        stream: InputStream,
+        secure: AesGcm.Secure,
+        mode: Crypto.Mode
+    ): InputStream {
         TODO("Not yet implemented")
     }
 
-    override fun decrypt(outputStream: OutputStream, secure: AesGcm.Secure): OutputStream {
+    override fun transform(
+        stream: OutputStream,
+        secure: AesGcm.Secure,
+        mode: Crypto.Mode
+    ): OutputStream {
         TODO("Not yet implemented")
     }
 }

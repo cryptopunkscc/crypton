@@ -45,7 +45,7 @@ object Cli {
 
         data class Builder(
             val run: Context.(List<Any?>) -> Context,
-            val empty: List<Param> = emptyList(),
+            val remaining: List<Param> = emptyList(),
             val filled: List<Param> = emptyList(),
         ) : Execute
 
@@ -146,9 +146,7 @@ fun command(
         .mapIndexed { index, param -> param.copy(index = index) }
         .validate(),
     run = { args ->
-        copy(
-            result = Cli.Result.Return(run(args.map { it?.toString() ?: "" }))
-        )
+        copy(result = Cli.Result.Return(run(args.map { it?.toString() ?: "" })))
     }
 )
 
@@ -166,7 +164,9 @@ fun name() = Cli.Param(Cli.Param.Type.Name)
 fun config(key: String) = Cli.Param(Cli.Param.Type.Config(key))
 fun param(type: Cli.Param.Type = Cli.Param.Type.Positional) = Cli.Param(type)
 fun named(name: String) = Cli.Param(Cli.Param.Type.Named(name))
-fun option(on: String, off: String? = null) = Cli.Param(Cli.Param.Type.Option(on, off), value = false)
+fun option(on: String, off: String? = null) =
+    Cli.Param(Cli.Param.Type.Option(on, off), value = false)
+
 fun text() = Cli.Param(Cli.Param.Type.Text, optional = true)
 
 fun Cli.Param.optional() = copy(optional = true)
@@ -212,6 +212,13 @@ internal fun Cli.Context.reduce(element: Cli.Element): Cli.Context = when (eleme
     else -> this
 }
 
+fun Cli.Context.configure(
+    block: MutableMap<String, Any?>.() -> Unit
+): Cli.Context = copy(
+    config = Cli.Config(config.toMutableMap().apply(block)),
+    result = Cli.Result.Return(Unit)
+)
+
 // PRIVATE
 private fun Cli.Context.reduce(elements: Collection<Cli.Element>): Cli.Context =
     elements.fold(this, Cli.Context::reduce)
@@ -239,7 +246,7 @@ private fun Cli.Context.plus(input: Cli.Input.Chunk): Cli.Element =
             is Cli.Command.Builder -> Cli.Elements(
                 element,
                 if (element.isReady()) Cli.Result.Ready
-                else Cli.Result.Suggestion(Cli.Params(element.empty))
+                else Cli.Result.Suggestion(Cli.Params(element.remaining))
             )
             is Cli.Commands -> Cli.Elements(
                 element,
@@ -260,12 +267,12 @@ private operator fun Cli.Command.Builder.plus(
     arg: Cli.Input.Chunk,
 ): Cli.Command.Builder =
     run {
-        empty.firstOrNull { param ->
+        remaining.firstOrNull { param ->
             when (param.type) {
                 is Cli.Param.Type.Named -> param.type.name == arg.value
                 is Cli.Param.Type.Option -> param.type.on == arg.value || param.type.off == arg.value
                 is Cli.Param.Type.Positional -> true
-                is Cli.Param.Type.Text -> empty.filter { it.type !is Cli.Param.Type.Named && it.type !is Cli.Param.Type.Option }.size == 1
+                is Cli.Param.Type.Text -> remaining.filter { it.type !is Cli.Param.Type.Named && it.type !is Cli.Param.Type.Option }.size == 1
                 else -> throw IllegalStateException()
             }
         } ?: filled.lastOrNull { param ->
@@ -274,18 +281,18 @@ private operator fun Cli.Command.Builder.plus(
     }?.let { param ->
         when (param.type) {
             is Cli.Param.Type.Named -> copy(
-                empty = listOf(param.copy(type = Cli.Param.Type.Positional)) + (empty - param)
+                remaining = listOf(param.copy(type = Cli.Param.Type.Positional)) + (remaining - param)
             )
             is Cli.Param.Type.Option -> copy(
-                empty = empty.filter { it.index != param.index },
+                remaining = remaining.filter { it.index != param.index },
                 filled = filled + param.copy(value = arg.value == param.type.on)
             )
             is Cli.Param.Type.Positional -> copy(
-                empty = empty.filter { it.index != param.index },
+                remaining = remaining.filter { it.index != param.index },
                 filled = filled + param.copy(value = arg.value)
             )
             is Cli.Param.Type.Text -> copy(
-                empty = empty.dropLastWhile { it.type == Cli.Param.Type.Text } + param.copy(
+                remaining = remaining.dropLastWhile { it.type == Cli.Param.Type.Text } + param.copy(
                     value = param.value?.let { it.toString() + Cli.DELIMITER + arg.value }
                         ?: arg.value
                 )
@@ -297,7 +304,7 @@ private operator fun Cli.Command.Builder.plus(
 
 private fun Cli.Context.builder(template: Cli.Command.Template, chunk: Cli.Input.Chunk) =
     Cli.Command.Builder(
-        empty = template.params.filter { it.type !is Cli.Param.Type.Name && it.type !is Cli.Param.Type.Config },
+        remaining = template.params.filter { it.type !is Cli.Param.Type.Name && it.type !is Cli.Param.Type.Config },
         filled = template.params.mapNotNull { param ->
             when (param.type) {
                 is Cli.Param.Type.Name -> param.copy(value = chunk.value)
@@ -316,7 +323,7 @@ private fun Cli.Context.buildCommand(): Cli.Element =
                 run = execute.run
             )
             else -> Cli.Result.Suggestion(
-                Cli.Params(execute.empty)
+                Cli.Params(execute.remaining)
             )
         }
 
@@ -326,13 +333,13 @@ private fun Cli.Context.buildCommand(): Cli.Element =
     }
 
 private val Cli.Command.Builder.params: List<Cli.Param>
-    get() = (filled + empty).sortedBy(Cli.Param::index)
+    get() = (filled + remaining).sortedBy(Cli.Param::index)
 
 private fun Cli.Command.Builder.isReady(): Boolean =
-    empty.isEmpty()
+    remaining.isEmpty()
 
 private fun Cli.Command.Builder.isEnough(): Boolean =
-    empty.isEmpty() || empty.all { it.optional }
+    remaining.isEmpty() || remaining.all { it.optional }
 
 private fun Cli.Context.run(command: Cli.Command): Cli.Context =
     try {

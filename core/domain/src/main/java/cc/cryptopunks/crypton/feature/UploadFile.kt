@@ -4,21 +4,22 @@ import cc.cryptopunks.crypton.cliv2.command
 import cc.cryptopunks.crypton.cliv2.config
 import cc.cryptopunks.crypton.cliv2.param
 import cc.cryptopunks.crypton.context.AesGcm
+import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.factory.createEmptyMessage
+import cc.cryptopunks.crypton.factory.encodeString
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
-import cc.cryptopunks.crypton.util.hexToBytes
 import cc.cryptopunks.crypton.util.logger.log
-import cc.cryptopunks.crypton.util.toHex
+import cc.cryptopunks.crypton.util.rename
+import cc.cryptopunks.crypton.util.useCopyTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
-import java.io.FileInputStream
 
 fun uploadFile() = feature(
 
@@ -42,16 +43,15 @@ fun uploadFile() = feature(
             fileSys.tmpDir().resolve(file.name).apply {
                 createNewFile()
                 deleteOnExit()
-                outputStream().use { out ->
-                    cryptoSys.encrypt(
-                        inputStream = FileInputStream(file),
-                        secure = secure
-                    ).copyTo(out)
-                }
+                cryptoSys.transform(
+                    stream = file.inputStream(),
+                    secure = secure,
+                    mode = Crypto.Mode.Encrypt
+                ).useCopyTo(outputStream())
             }
         }
 
-        upload(encryptedFile).debounce(200)
+        upload(encryptedFile).debounce(100)
 //        .scan(Message()) { message, progress ->
 //            progress.run {
 //                message.copy(
@@ -71,7 +71,7 @@ fun uploadFile() = feature(
                     url = result.url!!.toString(),
                     secure = secure
                 )
-
+                encryptedFile.rename { "$it.up" }
                 messageRepo.insertOrUpdate(
                     chat.createEmptyMessage().copy(
                         body = aesGcmUrl.encodeString(),
@@ -81,31 +81,3 @@ fun uploadFile() = feature(
             }
     }
 )
-
-private const val HTTPS = "https"
-
-private const val AES_GCM = "aesgcm"
-
-private fun AesGcm.Link.encodeString(): String =
-    listOf(
-        "$AES_GCM:",
-        url.removePrefix("$HTTPS:"),
-        "#",
-        secure.iv.toHex(),
-        secure.key.toHex(),
-    ).joinToString("")
-
-
-
-private fun String.decodeAesGcmUrl(): AesGcm.Link = this
-    .split(":|#")
-    .let { (scheme, link, ivKey) ->
-        require(scheme == AES_GCM)
-        AesGcm.Link(
-            url = "$HTTPS:$link",
-            secure = AesGcm.Secure(
-                key = ivKey.takeLast(64).hexToBytes(),
-                iv = ivKey.dropLast(64).hexToBytes(),
-            )
-        )
-    }
