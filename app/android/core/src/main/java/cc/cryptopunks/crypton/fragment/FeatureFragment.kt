@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.fragment
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
+import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.activity.FeatureActivity
 import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.SessionScope
@@ -21,17 +22,22 @@ abstract class FeatureFragment :
         retainInstance = true
     }
 
-    fun SessionScope.fragmentScope() = SessionFragmentScope(this@FeatureFragment, this)
-    fun ChatScope.fragmentScope() = ChatFragmentScope(this@FeatureFragment, this)
+    fun SessionScope.fragmentScope() = SessionFragmentModule(this@FeatureFragment, this)
+    fun ChatScope.fragmentScope() = ChatFragmentModule(this@FeatureFragment, this)
 }
 
+interface FragmentScope : Scope {
+    val fragment: Fragment
+}
 
-class SessionFragmentScope internal constructor(
-    val fragment: Fragment,
+class SessionFragmentModule internal constructor(
+    override val fragment: Fragment,
     scope: SessionScope
-) : SessionScope by scope
+) : SessionScope by scope,
+    FragmentScope
 
-class ChatFragmentScope internal constructor(
-    val fragment: Fragment,
+class ChatFragmentModule internal constructor(
+    override val fragment: Fragment,
     scope: ChatScope
-) : ChatScope by scope
+) : ChatScope by scope,
+    FragmentScope

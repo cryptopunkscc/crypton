@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.Context
 import cc.cryptopunks.crypton.Features
 import cc.cryptopunks.crypton.HandlerRegistry
+import cc.cryptopunks.crypton.Resolvers
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.createHandlers
 import cc.cryptopunks.crypton.util.Executors
@@ -24,10 +25,11 @@ class RootModule(
     val repo: Repo,
     override val mainClass: KClass<*>,
     override val features: Features,
+    override val resolvers: Resolvers,
     override val createConnection: Connection.Factory,
     override val mainExecutor: MainExecutor,
     override val ioExecutor: IOExecutor,
-    override val navigateChatId: Int = 0
+    override val navigateChatId: Int = 0,
 ) :
     RootScope,
     Executors,
@@ -80,10 +82,11 @@ class SessionModule(
     Net by connection,
     SessionRepo by sessionRepo {
 
-    override val coroutineContext: CoroutineContext = SupervisorJob(rootScope.coroutineContext[Job]) +
-        newSingleThreadContext(address.id) +
-        CoroutineLog.Label(javaClass.simpleName) +
-        CoroutineLog.Scope(address.id)
+    override val coroutineContext: CoroutineContext =
+        SupervisorJob(rootScope.coroutineContext[Job]) +
+            newSingleThreadContext(address.id) +
+            CoroutineLog.Label(javaClass.simpleName) +
+            CoroutineLog.Scope(address.id)
 
     override val presenceStore = Presence.Store()
     override val subscriptions = Store(emptySet<Address>())
@@ -113,7 +116,7 @@ class SessionModule(
 }
 
 class ChatModule(
-    private val sessionScope: SessionScope,
+    override val sessionScope: SessionScope,
     override val chat: Chat
 ) :
     SessionScope by sessionScope,

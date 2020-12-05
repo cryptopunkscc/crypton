@@ -30,7 +30,7 @@ function git-update-snapshot() {
 
 function release-snapshot() {
   local currentBranch=$(git rev-parse --abbrev-ref HEAD)
-  git checkout snapshot
+  git checkout snapshot || return
   git fetch origin snapshot
   git reset --hard origin/snapshot
   git tag -fa latest -m "$(version-full)"

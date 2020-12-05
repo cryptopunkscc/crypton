@@ -69,8 +69,11 @@ class AndroidSys(
 
     override val cryptoSys: Crypto.Sys get() = AndroidCryptoSys
 
-    override val fileSys: File.Sys
-        get() = TODO("Not yet implemented")
+    override val fileSys: File.Sys by lazy {
+        AndroidFileSys(
+            context = application
+        )
+    }
 }
 
 class AndroidFileSys(

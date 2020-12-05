@@ -6,7 +6,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.children
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cryptopunks.crypton.Action
@@ -24,7 +23,6 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.intent.showFileChooser
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
@@ -47,7 +45,6 @@ import kotlinx.coroutines.launch
 
 class ChatView(
     context: Context,
-    private val fragment: Fragment,
     rootScope: RootScope,
     account: Address,
     private val address: Address
@@ -135,13 +132,11 @@ class ChatView(
                 messageAdapter.outputFlow(),
                 messageInputView.button.clicks().mapNotNull {
                     when (val command = command) {
+
+                        is Cli.Result.Return -> command.value
+
                         is Cli.Result.Suggestion -> {
                             command.displayToast(context, y = messageInputView.getViewTop())
-                            null
-                        }
-
-                        is Exec.Select.File -> {
-                            fragment.showFileChooser()
                             null
                         }
 

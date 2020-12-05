@@ -12,7 +12,7 @@ private const val GLOBAL_SHARED_PREFS = "global_shard_prefs"
 
 fun bundle(build: (Bundle) -> Unit) = Bundle().apply(build)
 
-val Context.sharedPrefs get() = getSharedPreferences(GLOBAL_SHARED_PREFS, Context.MODE_PRIVATE)
+val Context.sharedPrefs get() = getSharedPreferences(GLOBAL_SHARED_PREFS, Context.MODE_PRIVATE)!!
 
 
 var Bundle.account by BundleAddress

@@ -24,6 +24,7 @@ object JvmLogOutput : Log.Output {
         .formatColumn()
         .joinToString(" ")
         .let(::println)
+        .also { event.throwable?.printStackTrace() }
 }
 
 private fun Log.Event.formatMessage() = listOf(

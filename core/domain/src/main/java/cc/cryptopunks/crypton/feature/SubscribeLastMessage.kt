@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -36,6 +37,8 @@ internal fun subscribeLastMessage() = feature(
             messageRepo.flowLatest(chat.address)
         ).flattenMerge().onEach {
             log.d { "last message $it" }
+        }.distinctUntilChangedBy {
+            it.id + it.status
         }.map { messages ->
             Chat.Messages(
                 account = address,

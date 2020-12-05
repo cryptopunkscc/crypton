@@ -8,12 +8,15 @@ import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.debug.drawer.initAppDebug
+import cc.cryptopunks.crypton.feature.androidFeatures
+import cc.cryptopunks.crypton.feature.androidResolvers
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
 import cc.cryptopunks.crypton.room.RoomAppRepo
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.selector.newSessionsFlow
 import cc.cryptopunks.crypton.service.cryptonFeatures
 import cc.cryptopunks.crypton.service.initExceptionService
+import cc.cryptopunks.crypton.service.cryptonResolvers
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.sys.AndroidSys
@@ -51,7 +54,8 @@ class App :
                 smallIconResId = R.mipmap.ic_launcher_round
             ),
             createConnection = SmackConnectionFactory(setupSmackConnection),
-            features = cryptonFeatures(),
+            features = cryptonFeatures() + androidFeatures(),
+            resolvers = cryptonResolvers() + androidResolvers(),
             navigateChatId = R.id.chatFragment
         )
     }

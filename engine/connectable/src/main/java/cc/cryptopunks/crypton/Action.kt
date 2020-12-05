@@ -15,4 +15,9 @@ interface Subscription : Action {
     val enable: Boolean get() = true
 }
 
-interface Scoped<S : CoroutineScope> : Action
+interface Scoped<S : CoroutineScope> : Action {
+    data class Resolved(
+        val scope: Scope,
+        val action: Any
+    )
+}

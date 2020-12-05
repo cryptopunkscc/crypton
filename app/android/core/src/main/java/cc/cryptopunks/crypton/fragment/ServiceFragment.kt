@@ -1,9 +1,12 @@
 package cc.cryptopunks.crypton.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.context.ActivityResult
+import cc.cryptopunks.crypton.context.PermissionsResult
 import cc.cryptopunks.crypton.createBinding
 import cc.cryptopunks.crypton.minus
 import cc.cryptopunks.crypton.remove
@@ -22,6 +25,34 @@ abstract class ServiceFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding + onCreateService()
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        binding.send(
+            ActivityResult(
+                requestCode = requestCode,
+                resultCode = resultCode,
+                intent = data ?: Intent()
+            )
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        binding.send(
+            PermissionsResult(
+                requestCode = requestCode,
+                permissions = permissions.toList(),
+                grantResults = grantResults.toList()
+            )
+        )
     }
 
     protected open fun onCreateService(): Connectable? = rootScope.service(serviceName)

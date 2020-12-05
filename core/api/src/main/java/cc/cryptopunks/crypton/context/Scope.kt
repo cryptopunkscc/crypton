@@ -73,6 +73,7 @@ interface SessionScope :
 interface ChatScope :
     SessionScope {
 
+    val sessionScope: SessionScope
     val chat: Chat
     val pagedMessage: Store<Chat.PagedMessages?>
 }

@@ -16,31 +16,43 @@ import java.io.StringWriter
 import java.util.*
 import kotlin.reflect.KClass
 
-fun <T : Scope> T.service(name: String = "NoName.service"): Connectable = Service(name, this)
+fun <T : Scope> T.service(
+    name: String = "NoName.service"
+): Connectable = Service(
+    name = name,
+    scope = this,
+    resolvers = resolvers
+)
 
 val Any.serviceName get() = "${javaClass.simpleName}.service"
 val String.serviceName get() = "$this.service"
 
 private data class Service(
     val name: String,
-    val scope: Scope
+    val scope: Scope,
+    val resolvers: Resolvers = emptyList(),
 ) :
     Connectable,
     CoroutineScope by scope {
 
-    override val coroutineContext = CoroutineLog.Label(name) + scope.coroutineContext
-
-    override fun Connector.connect(): Job = launch {
-        Connection(scope, this@connect).handle().joinAll()
-    }
-
     data class Connection(
         val scope: Scope,
         val connector: Connector,
+        val resolvers: Resolvers,
         val subs: MutableMap<KClass<*>, Job> = mutableMapOf(),
         val async: WeakHashMap<Job, Any> = WeakHashMap()
     ) {
         val out: Output get() = connector.output
+    }
+
+    override val coroutineContext = CoroutineLog.Label(name) + scope.coroutineContext
+
+    override fun Connector.connect(): Job = launch {
+        Connection(
+            scope = scope,
+            connector = this@connect,
+            resolvers = resolvers
+        ).handle().joinAll()
     }
 }
 
@@ -61,24 +73,11 @@ private suspend fun Service.Connection.handle() = connector.input
         }
     }
     .collect { arg ->
-        val (scope, action) = resolve(arg)
+        val (scope, action) = resolvers.resolve(scope, arg)
         handleAction(scope, action)
     }
     .let {
         async.keys + subs.values
-    }
-
-private suspend fun Service.Connection.resolve(arg: Any): Pair<Scope, Any> =
-    when (arg) {
-        is Context -> runCatching {
-            scope resolve arg
-        }.getOrElse {
-
-            scope to CannotResolve(arg)
-        }
-        else -> {
-            scope to arg
-        }
     }
 
 private suspend fun Service.Connection.handleAction(scope: Scope, action: Any) {
@@ -181,16 +180,17 @@ data class InvalidAction(
 }
 
 data class CannotResolve(
-    val contextId: String
+    val message: String
 ) : Failure {
-    constructor(context: Context) : this(context.id)
+    constructor(context: Context) : this("context: ${context.id}")
+    constructor(any: Any) : this(any.toString())
 }
 
 data class ActionFailed(
     val action: String,
     val stackTrace: String,
     val message: String?
-): Failure {
+) : Failure {
     constructor(action: Any, throwable: Throwable) : this(
         action = action.javaClass.name,
         message = throwable.message,
