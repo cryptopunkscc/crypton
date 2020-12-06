@@ -2,13 +2,16 @@ package cc.cryptopunks.crypton.example
 
 import cc.cryptopunks.crypton.Context
 import cc.cryptopunks.crypton.HandlerRegistry
+import cc.cryptopunks.crypton.Resolvers
 import cc.cryptopunks.crypton.Scope
+import cc.cryptopunks.crypton.Scoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
 internal data class RootModule(
     override val entityRepo: Entity.Repo = EntityRepo(),
-    override val handlers: HandlerRegistry = getAllHandlers()
+    override val handlers: HandlerRegistry = getAllHandlers(),
+    override val resolvers: Resolvers = listOf { Scoped.Resolved(this, it) }
 ) : RootScope {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO

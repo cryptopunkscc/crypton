@@ -9,7 +9,7 @@ internal fun clearInfoMessages() = feature(
 
     handler = { _, _: Exec.ClearInfoMessages ->
         messageRepo.run {
-            delete(list(chat.address, Message.Status.Info))
+            delete(list(chat.address, Message.Type.Info))
         }
         log.d { "Info messages deleted for ${chat.address}" }
     }

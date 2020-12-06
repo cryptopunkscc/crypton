@@ -95,7 +95,10 @@ data class MessageData(
         suspend fun list(chat: AddressData, latest: Long, oldest: Long): List<MessageData>
 
         @Query("select * from message where chatId == :chat and status == :status")
-        suspend fun list(chat: AddressData, status: String): List<MessageData>
+        suspend fun listByStatus(chat: AddressData, status: String): List<MessageData>
+
+        @Query("select * from message where chatId == :chat and type == :type")
+        suspend fun listByType(chat: AddressData, type: String): List<MessageData>
 
         @Query("select * from message where readAt == 0 and status == 'Received'")
         suspend fun listUnread(): List<MessageData>

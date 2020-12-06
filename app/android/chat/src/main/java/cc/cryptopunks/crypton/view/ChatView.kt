@@ -109,7 +109,7 @@ class ChatView(
                     is Chat.PagedMessages -> {
                         messageAdapter.setMessages(arg)
                         arg.list.firstOrNull()?.takeIf {
-                            it.timestamp > lastMessageTimestamp && it.status != Message.Status.State
+                            it.timestamp > lastMessageTimestamp && it.type != Message.Type.State
                         }?.run {
                             lastMessageTimestamp = timestamp
                             val wasBottomReached = helper.isBottomReached(chatRecyclerView)

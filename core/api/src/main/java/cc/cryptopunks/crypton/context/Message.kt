@@ -28,7 +28,9 @@ data class Message(
 
     enum class Type {
         Text,
-        Url
+        Url,
+        Info,
+        State,
     }
 
     enum class Status {
@@ -39,9 +41,7 @@ data class Message(
         Error,
         Received,
         Read,
-        Info,
-        State,
-        Uploading
+        Uploading,
     }
 
     enum class State {
@@ -97,6 +97,7 @@ data class Message(
         suspend fun latest(chat: Address): Message?
         suspend fun list(chat: Address? = null, range: LongRange = 0..System.currentTimeMillis()): List<Message>
         suspend fun list(chat: Address, status: Status): List<Message>
+        suspend fun list(chat: Address, type: Type): List<Message>
         suspend fun listUnread(): List<Message>
         suspend fun listQueued(): List<Message>
         fun dataSourceFactory(chatAddress: Address): DataSource.Factory<Int, Message>
@@ -154,4 +155,38 @@ fun Message.isFrom(address: Address): Boolean = when {
 
 fun Message.calculateId(): Message = copy(
     id = (body + from + to + timestamp).md5()
+)
+
+internal val schemeRegex = Regex("^[a-z]+:.*")
+internal val uriRegex = Regex("^[a-z]+://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")
+
+fun createCryptonMessage(
+    id: String,
+    stanzaId: String,
+    from: Resource,
+    to: Resource,
+    body: String,
+    status: Message.Status = Message.Status.None,
+    timestamp: Long = System.currentTimeMillis(),
+    type: Message.Type? = null,
+    chat: Address? = null,
+    encrypted: Boolean = true
+) = CryptonMessage(
+    id = id,
+    stanzaId = stanzaId,
+    body = body,
+    from = from,
+    to = to,
+    timestamp = timestamp,
+    status = status,
+    type = type ?: body.parseType(),
+    chat = chat ?: when {
+        type == Message.Type.State ->
+            if (to.address.isConference) to.address
+            else from.address
+        status == Message.Status.Received -> from.address
+        status == Message.Status.Sent -> to.address
+        else -> Address.Empty
+    },
+    encrypted = encrypted
 )

@@ -26,12 +26,18 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <ImageView
+                android:id="@+id/bodyImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/bodyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:autoLink="all"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 tools:text="blalbal blab lbablablab blalbal weeeeee" />
 
             <LinearLayout

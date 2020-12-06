@@ -36,7 +36,7 @@ class MessageView(
         set(value) {
             field = value?.apply {
                 when {
-                    value.status == Message.Status.State && value.body == Message.State.composing.name -> {
+                    value.type == Message.Type.State -> {
                         bodyTextView.text = "..."
                         authorTextView.text = author
                         statusTextView.text = null

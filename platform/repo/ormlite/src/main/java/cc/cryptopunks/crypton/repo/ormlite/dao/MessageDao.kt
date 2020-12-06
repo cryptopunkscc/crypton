@@ -95,14 +95,25 @@ class MessageDao(
             .query()
     }
 
-    override suspend fun list(
+    override suspend fun listByStatus(
         chat: AddressData,
         status: String,
     ): List<MessageData> = withContext(read) {
         dao.queryBuilder().where()
             .eq("chatId", chat)
             .and()
-            .ge("status", status)
+            .eq("status", status)
+            .query()
+    }
+
+    override suspend fun listByType(
+        chat: AddressData,
+        type: String,
+    ): List<MessageData> = withContext(read) {
+        dao.queryBuilder().where()
+            .eq("chatId", chat)
+            .and()
+            .eq("type", type)
             .query()
     }
 

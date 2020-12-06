@@ -12,7 +12,7 @@ internal fun saveInfoMessage() = feature(
             Message(
                 body = text,
                 chat = chat.address,
-                status = Message.Status.Info,
+                type = Message.Type.Info,
                 to = Resource(address),
                 from = Resource.Empty,
                 timestamp = System.currentTimeMillis()

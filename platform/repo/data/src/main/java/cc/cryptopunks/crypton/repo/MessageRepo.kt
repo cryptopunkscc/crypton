@@ -90,7 +90,10 @@ class MessageRepo(
 
 
     override suspend fun list(chat: Address, status: Message.Status): List<Message> =
-        dao.list(chat.id, status.name).map { it.message() }
+        dao.listByStatus(chat.id, status.name).map { it.message() }
+
+    override suspend fun list(chat: Address, type: Message.Type): List<Message> =
+        dao.listByType(chat.id, type.name).map { it.message() }
 
     override fun flowLatest(chatAddress: Address?): Flow<Message> =
         dao.run {

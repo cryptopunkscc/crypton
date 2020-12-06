@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton.smack.util
 
 import cc.cryptopunks.crypton.context.*
 import org.jivesoftware.smackx.delay.packet.DelayInformation
-import org.jivesoftware.smack.packet.Message as SmackMessage
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.omemo.OmemoMessage
@@ -10,6 +9,7 @@ import org.jivesoftware.smackx.sid.element.StanzaIdElement
 import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
+import org.jivesoftware.smack.packet.Message as SmackMessage
 
 internal fun Forwarded.cryptonMessage(): CryptonMessage =
     (forwardedStanza as SmackMessage).cryptonMessage(timestamp = delayInformation.stamp.time)
@@ -22,16 +22,10 @@ internal fun SmackMessage.cryptonMessage(
     to: Resource = this.to.resource(),
     decrypted: OmemoMessage.Received? = null,
     text: String = decrypted?.body ?: this.body ?: "",
-    chat: Address = when (status) {
-        Message.Status.State ->
-            if (to.address.isConference) to.address
-            else from.address
-        Message.Status.Received -> from.address
-        Message.Status.Sent -> to.address
-        else -> Address.Empty
-    },
+    type: Message.Type? = null,
+    chat: Address? = null,
     encrypted: Boolean = true
-) = CryptonMessage(
+): CryptonMessage = createCryptonMessage(
     id = id,
     body = text,
     from = from,
@@ -40,6 +34,7 @@ internal fun SmackMessage.cryptonMessage(
     timestamp = timestamp,
     stanzaId = id,
     status = status,
+    type = type,
     encrypted = encrypted
 )
 
