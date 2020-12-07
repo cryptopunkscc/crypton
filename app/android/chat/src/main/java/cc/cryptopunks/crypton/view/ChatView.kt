@@ -47,7 +47,7 @@ class ChatView(
     context: Context,
     rootScope: RootScope,
     account: Address,
-    private val address: Address
+    private val address: Address,
 ) :
     ActorLayout(context),
     Message.Consumer {
@@ -66,7 +66,10 @@ class ChatView(
         )
     )
 
-    private val messageAdapter = MessageAdapter(coroutineContext)
+    private val messageAdapter = MessageAdapter(
+        coroutineContext = coroutineContext,
+        resolveUrlBody = rootScope.urlBodyResolver()
+    )
 
     private val helper = ScrollHelper(context)
 

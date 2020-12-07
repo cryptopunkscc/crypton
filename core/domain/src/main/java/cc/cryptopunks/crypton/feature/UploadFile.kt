@@ -8,8 +8,8 @@ import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
-import cc.cryptopunks.crypton.factory.createEmptyMessage
-import cc.cryptopunks.crypton.factory.encodeString
+import cc.cryptopunks.crypton.context.createEmptyMessage
+import cc.cryptopunks.crypton.context.encodeString
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log

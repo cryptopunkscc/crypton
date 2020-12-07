@@ -1,62 +1,59 @@
 package cc.cryptopunks.crypton.view
 
 import android.content.Context
-import android.view.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.view.ContextMenu
+import android.view.Gravity
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.iterator
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.author
+import cc.cryptopunks.crypton.context.downloadFile
+import cc.cryptopunks.crypton.context.getFile
 import cc.cryptopunks.crypton.util.ext.inflate
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.android.synthetic.main.chat_message_item.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.launch
+import java.io.File
 import java.text.DateFormat
+import kotlin.coroutines.CoroutineContext
 
 class MessageView(
     context: Context,
     type: Int,
-    private val dateFormat: DateFormat
-) :
-    FrameLayout(
-        if (type == Gravity.RIGHT) context
-        else ContextThemeWrapper(
-            context,
-            R.style.Theme_Crypton_Colored
-        )
-    ) {
+    override val coroutineContext: CoroutineContext,
+    private val dateFormat: DateFormat,
+    private val resolveUrlBody: ResolveUrlBody,
+) : FrameLayout(
+    if (type == Gravity.RIGHT) context
+    else ContextThemeWrapper(
+        context,
+        R.style.Theme_Crypton_Colored
+    )
+), CoroutineScope {
 
     private val padding by lazy { resources.getDimensionPixelSize(R.dimen.message_padding) }
 
     val optionClicks = BroadcastChannel<Any>(1)
 
-    var message: Message? = null
-        set(value) {
-            field = value?.apply {
-                when {
-                    value.type == Message.Type.State -> {
-                        bodyTextView.text = "..."
-                        authorTextView.text = author
-                        statusTextView.text = null
-                        timestampTextView.text = null
-                        encryptedIcon.visibility = View.GONE
-                    }
-                    else -> {
-                        bodyTextView.text = body
-                        timestampTextView.text = dateFormat.format(timestamp)
-                        authorTextView.text = " $BULLET $author"
-                        statusTextView.text = StringBuffer(" $BULLET $status").apply {
-                            if (encrypted) append(" $BULLET ")
-                        }
-                        encryptedIcon.visibility = if (encrypted) View.VISIBLE else View.GONE
-                    }
-                }
-            }
-        }
-
     var job: Job? = null
+
+    var message: Message? = null
+        set(message) {
+            field = message?.updateView()
+        }
 
     init {
         layoutParams = ViewGroup.LayoutParams(
@@ -66,6 +63,54 @@ class MessageView(
         inflate(R.layout.chat_message_item, true)
         setGravity(type)
         setOnLongClickListener { showContextMenu() }
+    }
+
+    private fun Message.updateView() = apply {
+        when (type) {
+            Message.Type.State -> {
+                bodyTextView.text = "..."
+                authorTextView.text = author
+                statusTextView.text = null
+                timestampTextView.text = null
+                encryptedIcon.visibility = View.GONE
+            }
+            else -> {
+                when (type) {
+                    Message.Type.Info,
+                    Message.Type.Text,
+                    -> {
+                        bodyTextView.text = body
+                        bodyTextView.visibility = View.VISIBLE
+                        bodyImageView.visibility = View.GONE
+                    }
+                    Message.Type.Url,
+                    -> launch {
+                        resolveUrlBody(body).let { resolved ->
+                            when (resolved) {
+                                is MessageBody.Image -> {
+                                    bodyTextView.visibility = View.GONE
+                                    bodyImageView.visibility = View.VISIBLE
+                                    bodyImageView.setImageBitmap(resolved.bitmap)
+                                }
+                                is MessageBody.Data -> {
+                                    // TODO handle unknown mime types
+                                    bodyTextView.text = body
+                                    bodyTextView.visibility = View.VISIBLE
+                                    bodyImageView.visibility = View.GONE
+                                }
+                            }
+                        }
+                    }
+                    else -> Unit
+                }
+                timestampTextView.text = dateFormat.format(timestamp)
+                authorTextView.text = " $BULLET $author"
+                statusTextView.text = StringBuffer(" $BULLET $status").apply {
+                    if (encrypted) append(" $BULLET ")
+                }
+                encryptedIcon.visibility = if (encrypted) View.VISIBLE else View.GONE
+            }
+        }
     }
 
     override fun onCreateContextMenu(menu: ContextMenu) {
@@ -89,7 +134,7 @@ class MessageView(
         when (gravity) {
             Gravity.LEFT -> setPadding(0, 0, padding, 0)
             Gravity.RIGHT -> setPadding(padding, 0, 0, 0)
-            else -> throw Exception("Unsupported gravity $gravity")
+            else -> setPadding(0, 0, 0, 0)
         }
         linearLayout.gravity = gravity
         cardContainer.gravity = gravity
@@ -97,5 +142,29 @@ class MessageView(
 
     private companion object {
         const val BULLET = '•'
+    }
+}
+
+sealed class MessageBody {
+    data class Image(val bitmap: Bitmap) : MessageBody()
+    data class Data(val file: File) : MessageBody()
+}
+
+typealias ResolveUrlBody = suspend (String) -> MessageBody
+
+fun RootScope.urlBodyResolver(): ResolveUrlBody = { url ->
+    log.d { "resolving url: $url" }
+    getFile(url).let { file ->
+        log.d { "resolving url: ${file.path}" }
+        if (!file.exists())
+            downloadFile(url)
+
+        when (file.extension) {
+            "png", "jpg", "jpeg",
+            -> MessageBody.Image(BitmapFactory.decodeFile(file.absolutePath))
+
+            else
+            -> MessageBody.Data(file)
+        }
     }
 }

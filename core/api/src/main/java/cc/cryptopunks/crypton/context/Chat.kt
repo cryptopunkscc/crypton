@@ -92,3 +92,12 @@ data class Chat(
 fun Chat.validate() = apply {
     address.validate()
 }
+
+fun Chat.createEmptyMessage(): Message =
+    Message(
+        from = Resource(account),
+        to = Resource(address),
+        status = Message.Status.Queued,
+        chat = address,
+        timestamp = System.currentTimeMillis()
+    ).calculateId()

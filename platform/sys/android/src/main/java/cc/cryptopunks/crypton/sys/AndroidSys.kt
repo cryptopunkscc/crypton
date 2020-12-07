@@ -1,15 +1,13 @@
 package cc.cryptopunks.crypton.sys
 
 import android.app.Application
-import android.content.Context
 import androidx.core.content.getSystemService
-import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Clip
+import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Device
 import cc.cryptopunks.crypton.context.Execute
 import cc.cryptopunks.crypton.context.File
 import cc.cryptopunks.crypton.context.Indicator
-import cc.cryptopunks.crypton.context.JavaFile
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Sys
@@ -22,7 +20,7 @@ class AndroidSys(
     application: Application,
     notificationFactories: Map<KClass<out Notification>, (Notification) -> android.app.Notification>,
     appNameResId: Int = 0,
-    smallIconResId: Int = 0
+    smallIconResId: Int = 0,
 ) : Sys {
 
     override val indicatorSys: Indicator.Sys by lazy {
@@ -76,10 +74,3 @@ class AndroidSys(
     }
 }
 
-class AndroidFileSys(
-    val context: Context
-) : File.Sys {
-    override fun filesDir(): JavaFile = context.filesDir
-    override fun cacheDir(): JavaFile = context.cacheDir
-    override fun tmpDir(): JavaFile = context.cacheDir.resolve("tmp").apply { mkdir() }
-}

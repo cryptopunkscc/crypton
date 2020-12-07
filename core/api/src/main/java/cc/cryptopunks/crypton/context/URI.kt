@@ -1,16 +1,17 @@
 package cc.cryptopunks.crypton.context
 
 import java.io.File
+import java.net.URI.*
 
 data class URI(
-    val path: String
+    val path: String,
 ) {
     data class Data(
-        val scheme: String? = null,
-        val authority: String? = null,
-        val path: String? = null,
-        val query: String? = null,
-        val fragment: String? = null
+        val scheme: String = "",
+        val authority: String = "",
+        val path: String = "",
+        val query: Map<String, String> = emptyMap(),
+        val fragment: String = "",
     ) {
         override fun toString() = format()
     }
@@ -20,22 +21,35 @@ data class URI(
     }
 }
 
-fun String.parseUriData() {
-    java.net.URI.create(this).run {
+fun Map<String, String>.formatUriQuery(): String =
+    toList().joinToString(";") { (key, value) -> "$key=$value" }
+
+fun String.parseUriQuery(): Map<String, String> =
+    split(";", "&")
+        .map { it.split("=", limit = 2) }
+        .map { it.first() to it.last() }
+        .toMap()
+
+val URI.Data.fileName get() = path.split("/").last()
+val URI.Data.fileExtension get() = fileName.split(".", limit = 2).last()
+
+fun String.parseUriData(): URI.Data =
+    create(this).run {
         URI.Data(
-            scheme = scheme,
-            authority = authority,
-            path = path,
-            query = query,
-            fragment= fragment,
+            scheme = scheme ?: "",
+            authority = authority ?: "",
+            path = path ?: "",
+            query = query
+                ?.parseUriQuery()
+                ?: emptyMap(),
+            fragment = fragment ?: "",
         )
     }
-}
 
 fun URI.Data.format() = listOfNotNull(
-    scheme?.let { "$it:" },
-    authority?.let { "//$it" },
-    path?.let { "/$it" },
-    query?.let { "?$it" },
-    fragment?.let { "#$it" }
+    scheme.takeIf { it.isNotBlank() }?.let { "$it:" },
+    authority.takeIf { it.isNotBlank() }?.let { "//$it" },
+    path.takeIf { it.isNotBlank() }?.let { "/$it" },
+    query.takeIf { it.isNotEmpty() }?.formatUriQuery()?.let { "?$it" },
+    fragment.takeIf { it.isNotBlank() }?.let { "#$it" }
 ).joinToString("")

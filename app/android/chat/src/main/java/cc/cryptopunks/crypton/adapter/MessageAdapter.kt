@@ -13,6 +13,7 @@ import cc.cryptopunks.crypton.context.isUnread
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.logger.typedLog
 import cc.cryptopunks.crypton.view.MessageView
+import cc.cryptopunks.crypton.view.ResolveUrlBody
 import cc.cryptopunks.crypton.widget.GenericViewHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,8 @@ import kotlin.coroutines.CoroutineContext
 private typealias ViewHolder = GenericViewHolder<MessageView>
 
 class MessageAdapter(
-    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.Main
+    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.Main,
+    val resolveUrlBody: ResolveUrlBody,
 ) :
     PagedListAdapter<Message, ViewHolder>(Diff),
     CoroutineScope {
@@ -61,8 +63,10 @@ class MessageAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         MessageView(
             context = parent.context,
+            coroutineContext = coroutineContext,
             type = viewType,
-            dateFormat = dateFormat
+            dateFormat = dateFormat,
+            resolveUrlBody = resolveUrlBody
         )
     )
 
@@ -95,12 +99,12 @@ class MessageAdapter(
     private object Diff : DiffUtil.ItemCallback<Message>() {
         override fun areItemsTheSame(
             oldItem: Message,
-            newItem: Message
+            newItem: Message,
         ) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
             oldItem: Message,
-            newItem: Message
+            newItem: Message,
         ) = oldItem == newItem
     }
 }

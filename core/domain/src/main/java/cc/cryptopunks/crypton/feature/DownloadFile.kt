@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
-import cc.cryptopunks.crypton.interactor.downloadFile
+import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.util.rename
 
 internal fun downloadFile() = feature(
