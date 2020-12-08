@@ -5,6 +5,7 @@
     <string name="type_user_address_hint">Type user address</string>
     <string name="copy">copy</string>
     <string name="attach_file">Attach file</string>
+    <string name="open">open</string>
     <string name="delete">delete</string>
     <string name="choose_option_label">Choose option:</string>
     <plurals name="messages_count">

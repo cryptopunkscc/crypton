@@ -30,6 +30,7 @@ class RootModule(
     override val mainExecutor: MainExecutor,
     override val ioExecutor: IOExecutor,
     override val navigateChatId: Int = 0,
+    override val applicationId: String = "crypton",
 ) :
     RootScope,
     Executors,

@@ -16,8 +16,8 @@ suspend fun RootScope.downloadFile(url: String): JavaFile = withContext(Dispatch
     }
 }
 
-fun RootScope.getFile(url: String): JavaFile =
-    fileSys.filesDir().resolve(url.parseUriData().fileName)
+fun RootScope.getFile(uri: String): JavaFile =
+    fileSys.filesDir().resolve(uri.parseUriData().fileName)
 
 private fun RootScope.downloadHttpFile(url: String): JavaFile =
     getFileFromPath(url).apply {

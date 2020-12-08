@@ -15,7 +15,7 @@ class AndroidFileSys(
             outWidth to outHeight
         }
 
-    override fun filesDir(): JavaFile = context.filesDir
+    override fun filesDir(): JavaFile = context.filesDir.resolve("files").apply { mkdir() }
     override fun cacheDir(): JavaFile = context.cacheDir
     override fun tmpDir(): JavaFile = context.cacheDir.resolve("tmp").apply { mkdir() }
 }

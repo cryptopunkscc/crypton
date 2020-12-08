@@ -19,6 +19,7 @@ import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.author
 import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.context.getFile
+import cc.cryptopunks.crypton.feature.OpenFile
 import cc.cryptopunks.crypton.util.ext.inflate
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.android.synthetic.main.chat_message_item.view.*
@@ -63,6 +64,13 @@ class MessageView(
         inflate(R.layout.chat_message_item, true)
         setGravity(type)
         setOnLongClickListener { showContextMenu() }
+        setOnClickListener {
+            message?.run {
+                if (this.type == Message.Type.Url)
+                    optionClicks.offer(OpenFile(body))
+
+            }
+        }
     }
 
     private fun Message.updateView() = apply {
@@ -115,19 +123,26 @@ class MessageView(
 
     override fun onCreateContextMenu(menu: ContextMenu) {
         MenuInflater(context).inflate(R.menu.message, menu)
-        menu.setHeaderTitle(R.string.choose_option_label)
-        menu.iterator().forEach { it.setOnMenuItemClickListener(onMenuItemCharSequence) }
+        menu.apply {
+            setHeaderTitle(R.string.choose_option_label)
+            iterator().forEach { item ->
+                item.setOnMenuItemClickListener(onMenuItemCharSequence)
+            }
+            if (message?.type == Message.Type.Url) {
+                findItem(R.id.openFile).isVisible = true
+            }
+        }
     }
 
     private val onMenuItemCharSequence = MenuItem.OnMenuItemClickListener { item ->
         when (item.itemId) {
             R.id.copyToClipboard -> Exec.Copy(message!!)
             R.id.delete -> Exec.DeleteMessage(message!!)
+            R.id.openFile -> OpenFile(message!!.body)
             else -> null
         }?.let {
             optionClicks.offer(it)
-            true
-        } ?: false
+        } == true
     }
 
     private fun setGravity(gravity: Int) = apply {

@@ -37,6 +37,7 @@ class App :
 
     override val scope by lazy {
         RootModule(
+            applicationId = BuildConfig.APPLICATION_ID,
             mainClass = mainActivityClass,
             mainExecutor = MainExecutor(Dispatchers.Main.asExecutor()),
             ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),

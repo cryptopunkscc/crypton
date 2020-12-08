@@ -18,6 +18,7 @@ interface RootScope :
     Sys,
     Repo {
 
+    val applicationId: String
     val features: Features
 
     val mainClass: KClass<*>
