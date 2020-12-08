@@ -5,15 +5,22 @@ import android.net.Uri
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.sys.file.getPath
 import java.io.File
+import java.io.InputStream
 
 
 class AndroidUriSys(
-    private val context: Context
+    private val context: Context,
 ) : URI.Sys {
 
-    override fun resolve(uri: URI): File {
-        return File(context.getPath(Uri.parse(uri.path))!!)
-    }
+    override fun resolve(uri: URI): File =
+        File(context.getPath(Uri.parse(uri.path))!!)
+
+    override fun inputStream(uri: URI): InputStream =
+        context.contentResolver.openInputStream(Uri.parse(uri.path))!!
+
+    override fun getMimeType(uri: URI): String =
+        context.contentResolver.getType(Uri.parse(uri.path))!!
+
 
 //    override fun resolve(uri: URI): File {
 //        val androidUri = Uri.parse(uri.path)

@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import java.io.File
+import java.io.InputStream
 import java.net.URI.*
 
 data class URI(
@@ -18,6 +19,8 @@ data class URI(
 
     interface Sys {
         fun resolve(uri: URI): File
+        fun inputStream(uri: URI): InputStream
+        fun getMimeType(uri: URI): String
     }
 }
 

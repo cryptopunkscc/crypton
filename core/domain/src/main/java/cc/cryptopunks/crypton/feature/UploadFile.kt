@@ -10,6 +10,8 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.context.createEmptyMessage
 import cc.cryptopunks.crypton.context.encodeString
+import cc.cryptopunks.crypton.context.fileName
+import cc.cryptopunks.crypton.context.parseUriData
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log
@@ -34,17 +36,23 @@ fun uploadFile() = feature(
     },
 
     handler = { out, (uri): Exec.Upload ->
-        val file = uriSys.resolve(uri)
-        log.d { file }
+        val extensions = uriSys.getMimeType(uri).split("/").last().replace("*", "")
+        val fileName = uri.path.parseUriData().fileName
+        val inputStream = uriSys.inputStream(uri)
+
+//        val file = uriSys.resolve(uri)
+//        log.d { file }
 
         val secure = AesGcm.Secure()
 
         val encryptedFile = withContext(Dispatchers.IO) {
-            fileSys.tmpDir().resolve(file.name).apply {
+//            fileSys.tmpDir().resolve(file.name).apply {
+            fileSys.tmpDir().resolve("$fileName.$extensions").apply {
                 createNewFile()
                 deleteOnExit()
                 cryptoSys.transform(
-                    stream = file.inputStream(),
+//                    stream = file.inputStream(),
+                    stream = uriSys.inputStream(uri),
                     secure = secure,
                     mode = Crypto.Mode.Encrypt
                 ).useCopyTo(outputStream())
