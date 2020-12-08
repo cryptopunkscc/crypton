@@ -92,7 +92,7 @@ class ChatView(
             autoAdjustPaddingOf(recyclerView)
             setSlashClickListener()
         }
-        messageInputView.input.requestFocus()
+//        messageInputView.input.requestFocus() // FIXME visual keyboard not showing second time when this function is called
     }
 
     override fun Connector.connect(): Job = launch {

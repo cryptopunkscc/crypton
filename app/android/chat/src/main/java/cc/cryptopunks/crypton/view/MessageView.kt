@@ -169,17 +169,21 @@ typealias ResolveUrlBody = suspend (String) -> MessageBody
 
 fun RootScope.urlBodyResolver(): ResolveUrlBody = { url ->
     log.d { "resolving url: $url" }
-    getFile(url).let { file ->
-        log.d { "resolving url: ${file.path}" }
-        if (!file.exists())
-            downloadFile(url)
+    try {
+        getFile(url).let { file ->
+            log.d { "resolving url: ${file.path}" }
+            if (!file.exists())
+                downloadFile(url)
 
-        when (file.extension) {
-            "png", "jpg", "jpeg",
-            -> MessageBody.Image(BitmapFactory.decodeFile(file.absolutePath))
+            when (file.extension) {
+                "png", "jpg", "jpeg",
+                -> MessageBody.Image(BitmapFactory.decodeFile(file.path))
 
-            else
-            -> MessageBody.Data(file)
+                else
+                -> MessageBody.Data(file)
+            }
         }
+    } catch (e: Throwable) {
+        throw Exception(url, e)
     }
 }
