@@ -16,6 +16,7 @@
         android:background="@drawable/action_input_background"
         android:minHeight="48dp"
         android:padding="16dp"
+        android:inputType="textCapSentences|textLongMessage"
         tools:hint="Input text..." />
 
     <FrameLayout
