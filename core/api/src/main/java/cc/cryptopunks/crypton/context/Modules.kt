@@ -98,7 +98,7 @@ class ChatModule(
     SessionScope by sessionScope,
     ChatScope {
 
-    override val pagedMessage = Chat.PagedMessages.Store()
+    override val pagedMessages = Chat.PagedMessages.Store()
 
     override val coroutineContext = sessionScope.coroutineContext +
         CoroutineLog.Label(javaClass.simpleName) +

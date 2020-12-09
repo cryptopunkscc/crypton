@@ -1,6 +1,9 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
 import kotlinx.coroutines.CoroutineScope
+
+val RootScope.createConnection: Connection.Factory by dep()
 
 interface Connection : Net {
 

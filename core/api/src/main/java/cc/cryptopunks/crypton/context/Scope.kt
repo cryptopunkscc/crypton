@@ -4,8 +4,17 @@ import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.Features
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.OpenStore
+
+val Scope.sessions: SessionScope.Store by dep()
+val Scope.rootScope: RootScope by dep()
+fun Scope.sessionScope(address: Address): SessionScope =
+    requireNotNull(sessions[address]) {
+        "Cannot resolve SessionScope for $address\n" +
+            "available sessions: ${sessions.get().keys.joinToString("\n")}"
+    }
 
 interface RootScope :
     Scope,
@@ -48,10 +57,13 @@ interface SessionScope :
     }
 }
 
+
+val Scope.sessionScope: SessionScope by dep()
+
 interface ChatScope :
     SessionScope {
 
     val sessionScope: SessionScope
     val chat: Chat
-    val pagedMessage: Chat.PagedMessages.Store
+    val pagedMessages: Chat.PagedMessages.Store
 }

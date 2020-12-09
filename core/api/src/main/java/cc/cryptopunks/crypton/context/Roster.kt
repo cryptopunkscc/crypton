@@ -1,7 +1,11 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.Scope
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
+
+val Scope.rosterItems: Roster.Items.Store by dep()
 
 object Roster {
 

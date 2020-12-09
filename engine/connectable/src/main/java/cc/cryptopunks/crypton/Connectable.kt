@@ -12,6 +12,8 @@ fun Connectable.dispatch(
     output: suspend (Any) -> Unit = {}
 ) = connector(*args, output).connect()
 
+val Scope.connectableBindingsStore: Connectable.Binding.Store by dep()
+
 interface Connectable : CoroutineScope {
     interface Binding {
         class Store : OpenStore<List<WeakReference<out Binding>>>(emptyList())

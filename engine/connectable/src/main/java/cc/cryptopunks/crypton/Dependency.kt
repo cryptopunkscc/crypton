@@ -7,7 +7,7 @@ import kotlin.reflect.KProperty
 
 data class Dependency<T>(
     val instance: T,
-    override val key: CoroutineContext.Key<Dependency<T>>,
+    override val key: Key<T>,
 ) : CoroutineContext.Element {
     data class Key<T>(val any: Any) : CoroutineContext.Key<Dependency<T>>
 }
@@ -29,7 +29,6 @@ fun cryptonContext(
         else Dependency(it, Dependency.Key(it::class.java))
     }
     .reduce(CoroutineContext::plus)
-
 
 class DynamicDependency<T>(
     private val key: Dependency.Key<T>,

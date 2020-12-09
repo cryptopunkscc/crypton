@@ -1,6 +1,10 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
+
 typealias JavaFile = java.io.File
+
+val RootScope.fileSys: File.Sys by dep()
 
 object File {
 

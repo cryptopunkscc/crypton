@@ -1,5 +1,9 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
+
+val RootScope.notificationSys: Notification.Sys by dep()
+
 sealed class Notification(
     val id: Int
 ) {

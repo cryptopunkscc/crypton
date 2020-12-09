@@ -1,6 +1,9 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
+
+val SessionScope.presenceStore: Presence.Store by dep()
 
 data class Presence(
     val resource: Resource,

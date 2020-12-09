@@ -1,8 +1,14 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
+
+val RootScope.accounts: Account.Store by dep()
+val RootScope.accountNet: Account.Net by dep()
+val RootScope.accountRepo: Account.Repo by dep()
+val SessionScope.account: Account.Name by dep()
 
 data class Account(
     val address: Address = Address.Empty,

@@ -3,6 +3,8 @@ package cc.cryptopunks.crypton
 import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 
+val Scope.handlers: HandlerRegistry by dep()
+
 fun <CS : CoroutineScope, S : Scoped<CS>> handle(block: Handle<CS, S>): Handle<CS, S> = block
 
 fun createHandlers(build: HandlerRegistryBuilder.() -> Unit): HandlerRegistry =

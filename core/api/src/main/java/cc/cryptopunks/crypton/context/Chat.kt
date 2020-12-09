@@ -3,8 +3,15 @@ package cc.cryptopunks.crypton.context
 import androidx.paging.DataSource
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
+
+val RootScope.navigateChatId: Chat.NavigationId by dep()
+val SessionScope.chatNet: Chat.Net by dep()
+val SessionScope.chatRepo: Chat.Repo by dep()
+val ChatScope.chat: Chat by dep()
+val ChatScope.pagedMessages: Chat.PagedMessages.Store by dep()
 
 data class Chat(
     val address: Address = Address.Empty,

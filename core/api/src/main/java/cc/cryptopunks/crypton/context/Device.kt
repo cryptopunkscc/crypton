@@ -1,6 +1,11 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
 import kotlinx.coroutines.flow.Flow
+
+val RootScope.deviceSys: Device.Sys by dep()
+val SessionScope.deviceRepo: Device.Repo by dep()
+val SessionScope.deviceNet: Device.Net by dep()
 
 data class Device(
     val id: Int = -1,
@@ -39,5 +44,4 @@ data class Device(
     interface Sys {
         fun deviceId(): String
     }
-
 }

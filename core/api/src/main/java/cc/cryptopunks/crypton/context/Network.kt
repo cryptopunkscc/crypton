@@ -1,6 +1,9 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
 import kotlinx.coroutines.flow.Flow
+
+val RootScope.networkSys: Network.Sys by dep()
 
 object Network {
 

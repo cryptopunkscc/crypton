@@ -1,8 +1,11 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
 import java.io.File
 import java.io.InputStream
-import java.net.URI.*
+import java.net.URI.create
+
+val RootScope.uriSys: URI.Sys by dep()
 
 data class URI(
     val path: String,
