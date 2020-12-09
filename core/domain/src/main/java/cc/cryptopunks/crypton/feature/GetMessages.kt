@@ -25,7 +25,7 @@ internal fun getMessages() = feature(
                 currentTime - SEVEN_DAYS_MILLIS..currentTime
             }
         ).forEach {
-            out(Chat.Messages(address, listOf(it)))
+            out(Chat.Messages(account.address, listOf(it)))
         }
     }
 )

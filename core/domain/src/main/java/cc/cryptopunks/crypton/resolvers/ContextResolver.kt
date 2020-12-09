@@ -32,7 +32,7 @@ private suspend fun Scope.resolveFromContext(context: Any): Scoped.Resolved? =
 
             is SessionScope -> {
                 when {
-                    context.id == address.id ->
+                    context.id == account.address.id ->
                         when (val next = context.next) {
                             is Context -> resolveFromContext(next)
                             else -> Scoped.Resolved(this, next)

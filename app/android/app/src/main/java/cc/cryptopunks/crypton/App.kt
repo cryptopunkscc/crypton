@@ -3,8 +3,11 @@ package cc.cryptopunks.crypton
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import cc.cryptopunks.crypton.activity.MainActivity
+import cc.cryptopunks.crypton.context.ApplicationId
+import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.RootModule
 import cc.cryptopunks.crypton.context.Core
+import cc.cryptopunks.crypton.context.Main
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.debug.drawer.initAppDebug
@@ -33,11 +36,11 @@ class App :
     Application(),
     Core {
 
-    private val mainActivityClass = MainActivity::class
+    private val mainActivityClass = Main(MainActivity::class.java)
 
     override val scope by lazy {
         RootModule(
-            applicationId = BuildConfig.APPLICATION_ID,
+            applicationId = ApplicationId(BuildConfig.APPLICATION_ID),
             mainClass = mainActivityClass,
             mainExecutor = MainExecutor(Dispatchers.Main.asExecutor()),
             ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
@@ -47,7 +50,7 @@ class App :
                 notificationFactories = mapOf(
                     Notification.Messages::class to AndroidChatNotificationFactory(
                         context = this,
-                        mainActivityClass = mainActivityClass.java,
+                        mainActivityClass = mainActivityClass,
                         navGraphId = R.navigation.main
                     )
                 ),
@@ -57,7 +60,7 @@ class App :
             createConnection = SmackConnectionFactory(setupSmackConnection),
             features = cryptonFeatures() + androidFeatures(),
             resolvers = cryptonResolvers() + androidResolvers(),
-            navigateChatId = R.id.chatFragment
+            navigateChatId = Chat.NavigationId(R.id.chatFragment)
         )
     }
 
@@ -71,7 +74,7 @@ class App :
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
         scope.apply {
             service().dispatch(Subscribe.AppService)
-            launch { newSessionsFlow().collect { currentAccount = it.address } }
+            launch { newSessionsFlow().collect { currentAccount = it.account.address } }
         }
     }
 

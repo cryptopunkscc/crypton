@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.context
 import androidx.paging.DataSource
 import androidx.paging.PagedList
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
 
 data class Chat(
@@ -12,6 +13,8 @@ data class Chat(
     val title: String = ""
 ) {
     val isConference = address.isConference
+
+    data class Name(val address: Address)
 
     interface Action : Scoped<ChatScope>
 
@@ -26,6 +29,8 @@ data class Chat(
         val affiliation: Affiliation
     )
 
+    data class NavigationId(val value: Int = 0)
+
     enum class Role { moderator, none, participant, visitor, unknown }
 
     enum class Affiliation { owner, admin, member, outcast, none, unknown }
@@ -34,7 +39,9 @@ data class Chat(
 
     data class MessageText(val text: CharSequence?)
 
-    data class PagedMessages(val account: Address, val list: PagedList<Message>)
+    data class PagedMessages(val account: Address, val list: PagedList<Message>) {
+        class Store : OpenStore<PagedMessages?>(null)
+    }
 
     data class Messages(val account: Address, val list: List<Message>)
 

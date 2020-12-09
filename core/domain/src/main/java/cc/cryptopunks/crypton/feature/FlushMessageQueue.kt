@@ -34,7 +34,7 @@ internal fun flushMessageQueue() = feature(
                 listOf(it.presence.resource.address)
             },
             messageRepo.flowListQueued().map { list ->
-                log.v { "flush by queuedListFlow $address $list" }
+                log.v { "flush by queuedListFlow $account $list" }
                 list.map { it.chat }
             }
         ).flattenMerge().filter {

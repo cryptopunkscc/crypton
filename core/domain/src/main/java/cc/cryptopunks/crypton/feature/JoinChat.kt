@@ -43,7 +43,7 @@ internal fun joinChat() = feature(
                 .minus(listJoinedRooms())
                 .asFlow()
         }.map { chat ->
-            Exec.JoinChat.inContext(address, chat)
+            Exec.JoinChat.inContext(account.address, chat)
         }
     },
 
@@ -51,7 +51,7 @@ internal fun joinChat() = feature(
         when (chat.isConference) {
             true -> joinConference(
                 address = chat.address,
-                nickname = address.local,
+                nickname = account.address.local,
                 historySince = historySince(chat.address)
             )
             false -> {

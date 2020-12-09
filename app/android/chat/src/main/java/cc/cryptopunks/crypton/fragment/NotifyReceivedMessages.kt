@@ -8,6 +8,7 @@ import androidx.core.app.Person
 import androidx.navigation.NavDeepLinkBuilder
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.context.Main
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.navigate.account
@@ -17,7 +18,7 @@ import java.util.*
 
 class AndroidChatNotificationFactory(
     private val context: Application,
-    private val mainActivityClass: Class<*>,
+    private val mainActivityClass: Main,
     private val navGraphId: Int
 ) : (Notification) -> android.app.Notification {
 
@@ -66,7 +67,7 @@ class AndroidChatNotificationFactory(
             .createPendingIntent()
 
 
-    private fun mainActivityIntent() = Intent(context, mainActivityClass)
+    private fun mainActivityIntent() = Intent(context, mainActivityClass.type)
 
     private fun Notification.Messages.getMessageStyle() = NotificationCompat.MessagingStyle(
         person

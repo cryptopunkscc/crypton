@@ -16,7 +16,7 @@ internal suspend fun RootScope.loadSessions() {
                     }
                 }
                 .map { createSession(it) }
-                .map { it.address to it }
+                .map { it.account.address to it }
         )
     }
 }

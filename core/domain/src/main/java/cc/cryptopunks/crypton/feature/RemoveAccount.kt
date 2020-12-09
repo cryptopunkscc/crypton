@@ -21,17 +21,17 @@ internal fun removeAccount() = feature(
     },
 
     handler = { _, arg: Exec.RemoveAccount ->
-        removeSessionScope(address) {
+        removeSessionScope(account.address) {
             if (!arg.deviceOnly) {
                 removeAccount()
-                log.d { "Successfully removed $address from server" }
+                log.d { "Successfully removed $account from server" }
             }
             interrupt()
-            accountRepo.delete(address)
+            accountRepo.delete(account.address)
             val session = this
             rootScope.launch {
                 session.cancel(arg.toString())
-                log.d { "Successfully removed $address from local database" }
+                log.d { "Successfully removed $account from local database" }
             }
         }
     }

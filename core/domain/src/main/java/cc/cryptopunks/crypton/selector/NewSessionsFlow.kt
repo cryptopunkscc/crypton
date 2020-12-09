@@ -19,7 +19,7 @@ fun RootScope.newSessionsFlow(
         sessions = current
         new.map { it.value }.asFlow()
     }.distinctUntilChanged().onEach {
-        log.d { "New session ${it.address} $it" }
+        log.d { "New session ${it.account.address} $it" }
     }.onCompletion {
         log.d { "Close newSessionsFlow" }
     }

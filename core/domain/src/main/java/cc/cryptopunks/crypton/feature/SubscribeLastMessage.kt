@@ -41,7 +41,7 @@ internal fun subscribeLastMessage() = feature(
             it.id + it.status
         }.map { messages ->
             Chat.Messages(
-                account = address,
+                account = account.address,
                 list = listOf(messages)
             )
         }.onStart {

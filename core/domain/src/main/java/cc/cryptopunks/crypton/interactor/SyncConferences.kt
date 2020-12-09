@@ -46,7 +46,7 @@ private suspend fun SessionScope.syncConferences(list: Set<Address>) =
         Chat(
             title = chat.local,
             address = chat,
-            account = address
+            account = account.address
         )
     }.asFlow().onEach { chat ->
         createChat(chat)

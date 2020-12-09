@@ -7,7 +7,7 @@ internal fun enableAccount() = feature(
 
     handler = { _, (condition): Exec.EnableAccount ->
         accountRepo.run {
-            get(address).apply {
+            get(account.address).apply {
                 if (condition != enabled)
                     update(copy(enabled = condition))
             }

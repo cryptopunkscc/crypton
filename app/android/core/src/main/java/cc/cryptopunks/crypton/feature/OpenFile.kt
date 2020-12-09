@@ -28,7 +28,7 @@ fun openFile() = feature(
         val intent = Intent(Intent.ACTION_VIEW).apply {
             val data: Uri = FileProvider.getUriForFile(
                 fragment.requireContext(),
-                "$applicationId.provider",
+                "${applicationId.value}.provider",
                 file
             )
             setData(data)

@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
 
 object Roster {
@@ -52,7 +53,9 @@ object Roster {
         }
     }
 
-    data class Items(val list: List<Item>)
+    data class Items(val list: List<Item>) {
+        class Store: OpenStore<Items>(Items(emptyList()))
+    }
 
 
     interface Event

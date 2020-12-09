@@ -12,13 +12,13 @@ fun updateChatNotification(): SessionScope.(List<Message>) -> Unit {
     var current = emptyList<Message>()
     return { messages ->
 
-        current.minus(messages).asNotifications(address, navigateChatId).forEach {
+        current.minus(messages).asNotifications(account.address, navigateChatId.value).forEach {
             notificationSys.cancel(it)
         }
 
         current = connectableBindingsStore.consume(messages)
 
-        current.asNotifications(address, navigateChatId).forEach {
+        current.asNotifications(account.address, navigateChatId.value).forEach {
             notificationSys.show(it)
         }
     }

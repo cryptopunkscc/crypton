@@ -9,10 +9,10 @@ import java.util.concurrent.CancellationException
 
 internal fun logout() = feature(
     handler = { _, arg: Exec.Disconnect ->
-        removeSessionScope(address) {
+        removeSessionScope(account.address) {
             disconnect()
             cancel(CancellationException(arg.toString()))
-            log.d { "Successful logout $address" }
+            log.d { "Successful logout $account" }
         }
     }
 )

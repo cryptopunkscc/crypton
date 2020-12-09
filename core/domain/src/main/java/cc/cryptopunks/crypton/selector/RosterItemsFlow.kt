@@ -49,7 +49,7 @@ private data class Change(
 private fun Collection<SessionScope>.rosterItemStatesFlow(): Flow<Pair<Address, Set<Roster.Item>>> =
     map { session ->
         session.rosterItemStatesFlow().map { states ->
-            session.address to states
+            session.account.address to states
         }
     }.asFlow().flattenMerge()
 

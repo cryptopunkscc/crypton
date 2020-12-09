@@ -18,12 +18,12 @@ abstract class ChatRepoTest {
     abstract val repo: ChatRepo
 
     private val address = address("test@address")
-    private val accountAddress = address("account@address")
+    private val account = address("account@address")
 
     private val chat = Chat(
         title = "test",
         address = address,
-        account = accountAddress,
+        account = account,
     )
 
     @Test

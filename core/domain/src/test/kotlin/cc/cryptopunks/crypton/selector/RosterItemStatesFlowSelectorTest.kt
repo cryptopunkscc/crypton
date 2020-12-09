@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.selector
 
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Chat
@@ -41,12 +42,11 @@ class RosterItemStatesFlowSelectorTest {
         val createConnection =
             MockConnectionFactory()
 
-        val sessionScopes = (0..1).map { SessionScope.Scope() }
         val connections = (0..1).map {
             createConnection(
                 Connection.Config(
                     account = addresses[it],
-                    scope = sessionScopes[it]
+                    scope = this
                 )
             )
         }
@@ -60,7 +60,7 @@ class RosterItemStatesFlowSelectorTest {
 
         val sessions = (0..1).map {
             SessionModule(
-                address = addresses[it],
+                account = Account.Name(addresses[it]),
                 sessionRepo = sessionRepos[it],
                 connection = connections[it],
                 rootScope = rootScope
@@ -90,7 +90,7 @@ class RosterItemStatesFlowSelectorTest {
 
         // when
         sessionStore.reduce {
-            sessions.associateBy { it.address }
+            sessions.associateBy { it.account.address }
         }
         sessions.forEach {
             it.presenceStore.reduce {

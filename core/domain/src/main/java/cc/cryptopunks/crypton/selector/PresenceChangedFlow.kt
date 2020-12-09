@@ -20,5 +20,5 @@ internal fun SessionScope.presenceChangedFlow(): Flow<Roster.PresenceChanged> =
         }.asFlow(),
         rosterEvents.filterIsInstance<Roster.PresenceChanged>()
     ).flattenConcat().distinctUntilChanged().onEach {
-        log.v { "Presence changed $address $it" }
+        log.v { "Presence changed $account $it" }
     }

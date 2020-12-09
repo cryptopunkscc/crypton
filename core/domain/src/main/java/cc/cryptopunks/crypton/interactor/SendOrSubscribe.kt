@@ -12,7 +12,7 @@ internal suspend fun SessionScope.sendOrSubscribe(message: Message) {
 
     log.d { "$id start sending" }
     when {
-        message.to.address == address -> return
+        message.to.address == account.address -> return
 
         !message.chat.isConference && !iAmSubscribed(message.chat) ->
             if (message.chat !in subscriptions.get()) {

@@ -2,6 +2,10 @@ package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Scoped
 
-object Main {
+data class Main(
+    val type: Class<*>
+) {
     interface Action : Scoped<RootScope>
 }
+
+data class ApplicationId(val value: String = "crypton")

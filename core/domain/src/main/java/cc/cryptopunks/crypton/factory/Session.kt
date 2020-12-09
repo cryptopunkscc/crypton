@@ -19,7 +19,7 @@ fun RootScope.createSession(account: Account): SessionModule = let {
     val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     SessionModule(
         rootScope = this,
-        address = account.address,
+        account = Account.Name(account.address),
         sessionRepo = createSessionRepo(account.address),
         connection = createConnection(
             Connection.Config(

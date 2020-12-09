@@ -16,7 +16,7 @@ internal fun subscribePagedMessages() = feature(
     handler = { out, _: Subscribe.PagedMessages ->
         messagePagedListFlow()
             .onEach(pagedMessagesReceived)
-            .map { Chat.PagedMessages(address, it) }
+            .map { Chat.PagedMessages(account.address, it) }
             .onEach { pagedMessage { it } }
             .collect(out)
     }

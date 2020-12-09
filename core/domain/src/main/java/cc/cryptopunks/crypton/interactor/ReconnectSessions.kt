@@ -13,7 +13,7 @@ internal fun RootScope.reconnectSessions(): List<Job> =
     }
 
 internal suspend fun SessionScope.reconnectIfNeeded(): Unit = try {
-    log.d { "reconnecting: $address" }
+    log.d { "reconnecting: $account" }
     if (!isConnected()) {
         connect()
         if (!isAuthenticated()) login()
@@ -31,9 +31,9 @@ internal tailrec suspend fun SessionScope.reconnectIfNeeded(
 ): Throwable? {
     val result = try {
         if (!networkSys.status.isConnected) {
-            log.d { "skip reconnecting: $address, network status: ${networkSys.status}." }
+            log.d { "skip reconnecting: $account, network status: ${networkSys.status}." }
         } else if (!isConnected()) {
-            log.d { "reconnecting: $address" }
+            log.d { "reconnecting: $account" }
             connect()
             if (!isAuthenticated()) login()
             initOmemo()

@@ -19,7 +19,7 @@ class IndicatorService : IntentService(Indicator.serviceName) {
     }
     private val showIndicatorNotification by lazy {
         ShowIndicatorNotification(
-            mainActivityClass = (application as Core).scope.mainClass.java,
+            mainActivityClass = (application as Core).scope.mainClass.type,
             context = this,
             showNotification = ShowForegroundNotification(
                 service = this,

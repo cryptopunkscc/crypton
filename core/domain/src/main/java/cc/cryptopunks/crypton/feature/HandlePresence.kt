@@ -24,13 +24,13 @@ internal fun handlePresence() = feature(
         storePresence(presence)
 
         if (presence.resource != Resource.Empty)
-            if (presence.resource.address != address)
+            if (presence.resource.address != account.address)
                 if (chatRepo.contains(presence.resource.address).not()) {
                     log.d { "Creating chat from presence ${presence.resource}" }
                     createChat(
                         Chat(
                             address = presence.resource.address,
-                            account = address
+                            account = account.address
                         )
                     )
                 }
@@ -57,7 +57,7 @@ internal fun handlePresence() = feature(
                         createChat(
                             Chat(
                                 address = presence.resource.address,
-                                account = address
+                                account = account.address
                             )
                         )
                     }
@@ -66,7 +66,7 @@ internal fun handlePresence() = feature(
                         createChat(
                             Chat(
                                 address = presence.resource.address,
-                                account = address
+                                account = account.address
                             )
                         )
                     }

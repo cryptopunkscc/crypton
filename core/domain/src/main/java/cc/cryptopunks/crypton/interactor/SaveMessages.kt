@@ -51,7 +51,7 @@ private suspend fun SessionScope.get(message: Message) = messageRepo.run {
 
 private suspend fun SessionScope.create(message: Message) = message.copy(
     chat = Chat(
-        account = address,
+        account = account.address,
         address = message.chat
     ).also {
         insertChat(it)

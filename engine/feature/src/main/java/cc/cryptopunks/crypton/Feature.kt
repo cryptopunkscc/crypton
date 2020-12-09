@@ -19,9 +19,12 @@ inline fun <reified Action : Scoped<Scope>, reified Scope : CoroutineScope> feat
 
 @Suppress("UNCHECKED_CAST")
 fun features(vararg features: Feature<out Scoped<*>, out CoroutineScope>): Features =
-    features.toList() as Features
+    Features(features.toList() as FeatureList)
 
-typealias Features = List<Feature<Scoped<CoroutineScope>, CoroutineScope>>
+private typealias FeatureList = List<Feature<Scoped<CoroutineScope>, CoroutineScope>>
+data class Features(val list: FeatureList): FeatureList by list
+
+operator fun Features.plus(features: Features) = Features(list + features)
 
 interface Feature<Action : Scoped<Scope>, Scope : CoroutineScope> {
     val command: Cli.Command.Template? get() = null

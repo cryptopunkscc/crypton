@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Connection
+import cc.cryptopunks.crypton.context.Main
 import cc.cryptopunks.crypton.context.RootModule
 import cc.cryptopunks.crypton.repo.ormlite.OrmLiteAppRepo
 import cc.cryptopunks.crypton.service.cryptonFeatures
@@ -27,7 +28,7 @@ fun createRootScope(config: Map<String, Any?>) = RootScopeConfig(config).run {
                 inMemory = inMemory.toBoolean()
             )
         },
-        mainClass = Nothing::class,
+        mainClass = Main(Nothing::class.java),
         ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
         mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
         createConnection = createConnectionFactory(this),

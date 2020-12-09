@@ -33,9 +33,9 @@ internal fun startSessionService() = feature(
                 last += current.keys
                 new.map { it.value }.asFlow()
             }.distinctUntilChanged().onEach { scope ->
-                log.d { "Start services request ${scope.address}" }
+                log.d { "Start services request ${scope.account.address}" }
             }.map { scope ->
-                Subscribe.SessionService.inContext(scope.address)
+                Subscribe.SessionService.inContext(scope.account.address)
             }.onCompletion {
                 log.d { "Close newSessionsFlow" }
             }
@@ -43,7 +43,7 @@ internal fun startSessionService() = feature(
     },
 
     handler = { _, _: Subscribe.SessionService ->
-        log.d { "Invoke session services for $address" }
+        log.d { "Invoke session services for $account" }
 
         val context = coroutineContext
             .minusKey(Job)

@@ -24,7 +24,7 @@ internal fun insertInvitation() = feature(
             insertChat(
                 Chat(
                     address = arg.address,
-                    account = address
+                    account = account.address
                 )
             )
         }
