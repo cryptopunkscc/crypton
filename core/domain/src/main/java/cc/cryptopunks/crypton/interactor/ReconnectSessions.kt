@@ -12,31 +12,39 @@ internal fun RootScope.reconnectSessions(): List<Job> =
         launch { session.reconnectIfNeeded() }
     }
 
-internal suspend fun SessionScope.reconnectIfNeeded(): Unit = try {
-    log.d { "reconnecting: $account" }
-    if (!isConnected()) {
-        connect()
-        if (!isAuthenticated()) login()
-        initOmemo()
+internal suspend fun SessionScope.reconnectIfNeeded(): Unit =
+    net.run {
+        try {
+            log.d { "reconnecting: $account" }
+            if (!isConnected()) {
+                connect()
+                accountNet.run {
+                    if (!isAuthenticated()) login()
+                }
+                initOmemo()
+            }
+        } catch (e: Throwable) {
+            log.d { "reconnection failed: $e" }
+            interrupt()
+        }
     }
-    Unit
-} catch (e: Throwable) {
-    log.d { "reconnection failed: $e" }
-    interrupt()
-}
 
 internal tailrec suspend fun SessionScope.reconnectIfNeeded(
     retryCount: Int = -1,
-    delayInMillis: Long = 3000
+    delayInMillis: Long = 3000,
 ): Throwable? {
     val result = try {
         if (!networkSys.status.isConnected) {
             log.d { "skip reconnecting: $account, network status: ${networkSys.status}." }
-        } else if (!isConnected()) {
-            log.d { "reconnecting: $account" }
-            connect()
-            if (!isAuthenticated()) login()
-            initOmemo()
+        } else net.run {
+            if (!isConnected()) {
+                log.d { "reconnecting: $account" }
+                connect()
+                accountNet.run {
+                    if (!isAuthenticated()) login()
+                }
+                initOmemo()
+            }
         }
         null
     } catch (e: Throwable) {

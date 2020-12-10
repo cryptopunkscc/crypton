@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 
 fun SessionScope.accountAuthenticatedFlow(): Flow<Account.Authenticated> = flowOf(
-    flow { if (isAuthenticated()) emit(Account.Authenticated(false)) },
-    netEvents().filterIsInstance()
+    flow { if (accountNet.isAuthenticated()) emit(Account.Authenticated(false)) },
+    net.netEvents().filterIsInstance()
 ).flattenMerge().bufferedThrottle(1000).flatMapConcat {
     it.toSet().asFlow()
 }.onEach {

@@ -8,6 +8,7 @@ internal suspend fun RootScope.removeSessionScope(
     address: Address,
     onRemove: suspend SessionScope.() -> Unit
 ) {
+    val sessions = sessions
     val sessionScope = sessions[address]
     if (sessionScope != null) {
         sessionScope.onRemove()

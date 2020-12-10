@@ -38,20 +38,14 @@ fun uploadFile() = feature(
     handler = { out, (uri): Exec.Upload ->
         val extensions = uriSys.getMimeType(uri).split("/").last().replace("*", "")
         val fileName = uri.path.parseUriData().fileName
-        val inputStream = uriSys.inputStream(uri)
-
-//        val file = uriSys.resolve(uri)
-//        log.d { file }
 
         val secure = AesGcm.Secure()
 
         val encryptedFile = withContext(Dispatchers.IO) {
-//            fileSys.tmpDir().resolve(file.name).apply {
             fileSys.tmpDir().resolve("$fileName.$extensions").apply {
                 createNewFile()
                 deleteOnExit()
                 cryptoSys.transform(
-//                    stream = file.inputStream(),
                     stream = uriSys.inputStream(uri),
                     secure = secure,
                     mode = Crypto.Mode.Encrypt
@@ -59,7 +53,7 @@ fun uploadFile() = feature(
             }
         }
 
-        upload(encryptedFile).debounce(100)
+        uploadNet.upload(encryptedFile).debounce(100)
 //        .scan(Message()) { message, progress ->
 //            progress.run {
 //                message.copy(

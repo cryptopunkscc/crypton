@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.onStart
 internal suspend fun SessionScope.archivedMessagesFlow(): Flow<List<Message>> {
     val since = messageRepo.latest()?.timestamp
     var count = 0
-    return readArchived(Message.Net.ReadQuery(since = since))
+    return messageNet.readArchived(Message.Net.ReadQuery(since = since))
         .onStart { log.d { "Fetching archived messages since: $since" } }
         .onEach { count += it.size }
         .onCompletion { log.d { "Fetched $count messages" } }

@@ -67,7 +67,7 @@ class SessionModule(
 ) :
     SessionScope,
     RootScope by rootScope,
-    Net by connection,
+    Connection by connection,
     SessionRepo by sessionRepo {
 
     override val coroutineContext: CoroutineContext =
@@ -80,7 +80,7 @@ class SessionModule(
     override val subscriptions = Address.Subscriptions.Store()
 
     init {
-        setDeviceFingerprintRepo(deviceRepo)
+        deviceNet.setDeviceFingerprintRepo(deviceRepo)
         coroutineContext[Job]!!.invokeOnCompletion {
             onClose(it)
             coroutineContext.log.d { "Finish SessionModule $account ${it.hashCode()} $it" }

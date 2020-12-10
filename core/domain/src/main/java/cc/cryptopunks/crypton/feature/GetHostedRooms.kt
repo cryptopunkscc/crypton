@@ -18,6 +18,6 @@ internal fun getHostedRooms() = feature(
     },
 
     handler = { out, _: Get.HostedRooms ->
-        Chat.AllRooms(listHostedRooms().toSet()).out()
+        Chat.AllRooms(chatNet.listHostedRooms().toSet()).out()
     }
 )

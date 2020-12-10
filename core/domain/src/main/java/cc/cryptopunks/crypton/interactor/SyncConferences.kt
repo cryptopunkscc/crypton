@@ -23,10 +23,11 @@ private val fib = (0..MAX_ATTEMPTS - initial.size).fold(initial) { acc, _ ->
 }
 
 internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
+    val chatNet = chatNet
     fib.withIndex().asFlow().map { (attempt, wait) ->
         delay(1500L * wait)
         log.d { "Syncing conferences attempt $attempt $wait" }
-        listHostedRooms()
+        chatNet.listHostedRooms()
     }.filter { it.isNotEmpty() }.firstOrNull()?.let { rooms ->
         log.d { "Fetched conferences $rooms" }
         syncConferences(rooms).map { it.address }.onEach { room ->

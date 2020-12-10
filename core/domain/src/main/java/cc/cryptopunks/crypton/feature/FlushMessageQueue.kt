@@ -22,8 +22,9 @@ import kotlinx.coroutines.flow.onStart
 internal fun flushMessageQueue() = feature(
 
     emitter = emitter<SessionScope> {
+        val net = net
         flowOf(
-            netEvents().filterIsInstance<Net.OmemoInitialized>().map {
+            net.netEvents().filterIsInstance<Net.OmemoInitialized>().map {
                 log.v { "flush by Net.OmemoInitialized" }
                 messageRepo.listQueued().map { it.chat }
             }.bufferedThrottle(3000).map { it.last() },
@@ -38,7 +39,7 @@ internal fun flushMessageQueue() = feature(
                 list.map { it.chat }
             }
         ).flattenMerge().filter {
-            it.isNotEmpty() && isOmemoInitialized().also {
+            it.isNotEmpty() && net.isOmemoInitialized().also {
                 log.v { "flush omemo initialized: $it" }
             }
         }.onStart {

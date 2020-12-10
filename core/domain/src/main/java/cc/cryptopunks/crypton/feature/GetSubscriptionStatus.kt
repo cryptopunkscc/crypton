@@ -20,6 +20,6 @@ internal fun getSubscriptionStatus() = feature(
     },
 
     handler = { out, get: Get.SubscriptionStatus ->
-        subscriptionStatus(get.address).out()
+        rosterNet.subscriptionStatus(get.address).out()
     }
 )

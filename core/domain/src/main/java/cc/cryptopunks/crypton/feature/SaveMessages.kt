@@ -20,12 +20,12 @@ internal fun saveMessages() = feature(
 
     emitter = emitter<SessionScope> {
         flowOf(
-            netEvents().filterIsInstance<Net.OmemoInitialized>().flatMapConcat {
+            net.netEvents().filterIsInstance<Net.OmemoInitialized>().flatMapConcat {
                 archivedMessagesFlow().onEach {
                     log.d { "Archived messages" }
                 }
             },
-            incomingMessages().onEach {
+            messageNet.incomingMessages().onEach {
                 log.d { "Incoming message" }
             }.map {
                 listOf(it.message)

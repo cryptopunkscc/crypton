@@ -16,7 +16,7 @@ internal fun connect() = feature(
     },
 
     handler = { _, _: Exec.Connect ->
-        if (!isConnected()) connect()
-        if (!isAuthenticated()) login()
+        net.run { if (!isConnected()) connect() }
+        accountNet.run { if (!isAuthenticated()) login() }
     }
 )

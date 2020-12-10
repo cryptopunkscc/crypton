@@ -13,12 +13,12 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun SessionScope.presenceChangedFlow(): Flow<Roster.PresenceChanged> =
     flowOf(
-        getCachedPresences().map { presence ->
+        rosterNet.getCachedPresences().map { presence ->
             Roster.PresenceChanged(
                 presence = presence
             )
         }.asFlow(),
-        rosterEvents.filterIsInstance<Roster.PresenceChanged>()
+        rosterNet.rosterEvents.filterIsInstance<Roster.PresenceChanged>()
     ).flattenConcat().distinctUntilChanged().onEach {
         log.v { "Presence changed $account $it" }
     }

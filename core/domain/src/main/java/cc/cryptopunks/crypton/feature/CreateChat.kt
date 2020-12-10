@@ -25,8 +25,10 @@ internal fun createChat() = feature(
 
     handler = { output, (chat): Exec.CreateChat ->
         sessions[chat.account]!!.createChat(chat)
-        if (!chat.address.isConference && !iAmSubscribed(chat.address))
-            subscribe(chat.address)
+        rosterNet.run {
+            if (!chat.address.isConference && !iAmSubscribed(chat.address))
+                subscribe(chat.address)
+        }
         output(Account.ChatCreated(chat.address))
     }
 )

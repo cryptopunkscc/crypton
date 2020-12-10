@@ -18,6 +18,6 @@ internal fun getJoinedRooms() = feature(
     },
 
     handler = { out, _: Get.JoinedRooms ->
-        Chat.JoinedRooms(listJoinedRooms()).out()
+        Chat.JoinedRooms(chatNet.listJoinedRooms()).out()
     }
 )

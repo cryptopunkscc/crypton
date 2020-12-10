@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 internal fun insertInvitation() = feature(
 
     emitter = emitter<SessionScope> {
-        conferenceInvitationsFlow().map {
+        chatNet.conferenceInvitationsFlow().map {
             Exec.InsertInvitation(
                 address = it.address,
                 inviter = it.inviter

@@ -24,6 +24,6 @@ internal fun inviteToConference() = feature(
 
     handler = { _, (users): Exec.Invite ->
         require(chat.isConference) { "Cannot invite to direct chat" }
-        inviteToConference(chat.address, users)
+        chatNet.inviteToConference(chat.address, users)
     }
 )

@@ -20,6 +20,6 @@ internal fun configureChat() = feature(
 
     handler = { _, _: Exec.ConfigureConference ->
         if (chat.isConference)
-            configureConference(chat.address)
+            chatNet.configureConference(chat.address)
     }
 )

@@ -32,6 +32,8 @@ internal fun joinChat() = feature(
     },
 
     emitter = emitter<SessionScope> {
+        val chatRepo = chatRepo
+        val chatNet = chatNet
         accountAuthenticatedFlow().take(1).flatMapMerge {
             chatRepo.flowList()
         }.bufferedThrottle(300).flatMapConcat { list ->
@@ -40,7 +42,7 @@ internal fun joinChat() = feature(
                 .filter(Chat::isConference)
                 .map(Chat::address)
                 .toSet()
-                .minus(listJoinedRooms())
+                .minus(chatNet.listJoinedRooms())
                 .asFlow()
         }.map { chat ->
             Exec.JoinChat.inContext(account.address, chat)
@@ -49,12 +51,12 @@ internal fun joinChat() = feature(
 
     handler = { _, _: Exec.JoinChat ->
         when (chat.isConference) {
-            true -> joinConference(
+            true -> chatNet.joinConference(
                 address = chat.address,
                 nickname = account.address.local,
                 historySince = historySince(chat.address)
             )
-            false -> {
+            false -> rosterNet.run {
                 sendPresence(
                     Presence(
                         resource = Resource(chat.address),

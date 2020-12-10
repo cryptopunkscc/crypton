@@ -24,12 +24,14 @@ suspend fun RootScope.addAccount(
     createSession(account).apply {
         withContext(logInfo) {
             log.d { "Connecting" }
-            connect()
+            net.connect()
             log.d { "Connected" }
-            if (register) createAccount()
-            login()
+            accountNet.run {
+                if (register) createAccount()
+                login()
+            }
             log.d { "Logged in" }
-            launch { initOmemo() }
+            launch { net.initOmemo() }
             if (insert) accountRepo.insert(account)
             log.d { "Account inserted" }
         }

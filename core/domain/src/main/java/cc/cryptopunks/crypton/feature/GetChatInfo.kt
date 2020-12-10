@@ -23,7 +23,7 @@ internal fun getChatInfo() = feature(
     handler = { out, _: Get.ChatInfo ->
         chat.run {
             when (isConference) {
-                true -> getChatInfo(address)
+                true -> chatNet.getChatInfo(address)
                 false -> getRosterSubscription(address)
             }
         }.out()
@@ -31,4 +31,4 @@ internal fun getChatInfo() = feature(
 )
 
 fun SessionScope.getRosterSubscription(address: Address) =
-    Roster.Subscription(address, subscriptionStatus(address))
+    Roster.Subscription(address, rosterNet.subscriptionStatus(address))

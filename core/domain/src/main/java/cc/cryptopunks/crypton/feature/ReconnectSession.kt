@@ -18,7 +18,7 @@ internal fun reconnectSession() = feature(
 
     emitter = emitter<SessionScope> {
         flowOf(
-            netEvents().filterIsInstance<Net.Disconnected>(),
+            net.netEvents().filterIsInstance<Net.Disconnected>(),
             networkSys.statusFlow().bufferedThrottle(200)
                 .map { it.last() }
                 .filter { status ->
@@ -34,7 +34,7 @@ internal fun reconnectSession() = feature(
     },
 
     handler = { _, _: Subscribe.ReconnectSession ->
-        if (isConnected()) interrupt()
+        net.run { if (isConnected()) interrupt() }
         reconnectIfNeeded(retryCount = -1)
     }
 )

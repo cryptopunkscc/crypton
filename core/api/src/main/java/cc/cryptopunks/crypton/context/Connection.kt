@@ -5,7 +5,15 @@ import kotlinx.coroutines.CoroutineScope
 
 val RootScope.createConnection: Connection.Factory by dep()
 
-interface Connection : Net {
+interface Connection {
+
+    val net: Net
+    val accountNet: Account.Net
+    val messageNet: Message.Net
+    val chatNet: Chat.Net
+    val rosterNet: Roster.Net
+    val deviceNet: Device.Net
+    val uploadNet: Upload.Net
 
     data class Config(
         val scope: CoroutineScope,

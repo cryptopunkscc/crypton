@@ -42,7 +42,7 @@ internal fun handlePresence() = feature(
                 Unit
             }
 
-            Presence.Status.Subscribe -> {
+            Presence.Status.Subscribe -> rosterNet.run {
                 when (subscriptionStatus(presence.resource.address)) {
                     Roster.Item.Status.none -> {
                         log.d { "Received subscription request from ${presence.resource}" }

@@ -17,6 +17,6 @@ internal fun purgeDeviceList() = feature(
     },
 
     handler = { _, _: Exec.PurgeDeviceList ->
-        purgeDeviceList()
+        deviceNet.purgeDeviceList()
     }
 )
