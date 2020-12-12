@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.chatScope
+import cc.cryptopunks.crypton.context.sessionScope
 import cc.cryptopunks.crypton.feature.ShowFileChooser
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat

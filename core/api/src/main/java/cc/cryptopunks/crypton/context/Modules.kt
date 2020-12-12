@@ -16,6 +16,14 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
 
+fun RootScope.sessionScope(session: Address): SessionScope =
+    requireNotNull(sessions[session]) {
+        "Cannot resolve SessionScope for $session\n" +
+            "available sessions: ${sessions.get().keys.joinToString("\n")}"
+    }
+suspend fun SessionScope.chatScope(chat: Address) = ChatModule(this, chatRepo.get(chat))
+
+
 class RootModule(
     val sys: Sys,
     val repo: Repo,
@@ -50,12 +58,6 @@ class RootModule(
             coroutineContext.log.d { "Finish AppModule $this" }
         }
     }
-
-    override fun sessionScope(address: Address): SessionScope =
-        sessions[address] ?: throw Exception(
-            "Cannot resolve SessionScope for $address\n" +
-                "available sessions: ${sessions.get().keys.joinToString("\n")}"
-        )
 }
 
 class SessionModule(
@@ -86,9 +88,6 @@ class SessionModule(
             coroutineContext.log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
         }
     }
-
-    private fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
-    override suspend fun chatScope(chat: Address): ChatScope = chatScope(chatRepo.get(chat))
 }
 
 class ChatModule(

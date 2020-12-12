@@ -8,13 +8,9 @@ import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.Executors
 import cc.cryptopunks.crypton.util.OpenStore
 
-val Scope.sessions: SessionScope.Store by dep()
-val Scope.rootScope: RootScope by dep()
-fun Scope.sessionScope(address: Address): SessionScope =
-    requireNotNull(sessions[address]) {
-        "Cannot resolve SessionScope for $address\n" +
-            "available sessions: ${sessions.get().keys.joinToString("\n")}"
-    }
+val RootScope.sessions: SessionScope.Store by dep()
+val SessionScope.rootScope: RootScope by dep()
+val ChatScope.sessionScope: SessionScope by dep()
 
 interface RootScope :
     Scope,
@@ -35,8 +31,6 @@ interface RootScope :
     val rosterItems: Roster.Items.Store
 
     val createConnection: Connection.Factory
-
-    fun sessionScope(address: Address): SessionScope
 }
 
 interface SessionScope :
@@ -50,15 +44,10 @@ interface SessionScope :
     val presenceStore: Presence.Store
     val subscriptions: Address.Subscriptions.Store
 
-    suspend fun chatScope(chat: Address): ChatScope
-
     class Store : OpenStore<Map<Address, SessionScope>>(emptyMap()) {
         operator fun get(address: Address): SessionScope? = get()[address]
     }
 }
-
-
-val Scope.sessionScope: SessionScope by dep()
 
 interface ChatScope :
     SessionScope {

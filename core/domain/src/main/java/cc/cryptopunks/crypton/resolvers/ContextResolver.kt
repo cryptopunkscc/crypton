@@ -9,6 +9,8 @@ import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.context.chatScope
+import cc.cryptopunks.crypton.context.sessionScope
 
 fun contextResolver(): Resolve = { context ->
     runCatching {
