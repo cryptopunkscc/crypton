@@ -14,6 +14,8 @@ data class Dependency<T>(
 
 inline fun <reified T> T.dep() = Dependency(this, depKey())
 
+inline fun <reified T> Any.asDep() = Dependency(this as T, depKey())
+
 inline fun <reified T> depKey(): Dependency.Key<T> = Dependency.Key(T::class.java)
 
 inline fun <reified T> dep() = DynamicDependency<T>(depKey())

@@ -30,7 +30,7 @@ val String.serviceName get() = "$this.service"
 private data class Service(
     val name: String,
     val scope: Scope,
-    val resolvers: Resolvers = emptyList(),
+    val resolvers: Resolvers = Resolvers(),
 ) :
     Connectable,
     CoroutineScope by scope {

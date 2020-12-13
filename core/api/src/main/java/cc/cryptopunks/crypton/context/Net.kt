@@ -2,7 +2,10 @@ package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Async
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.dep
 import kotlinx.coroutines.flow.Flow
+
+val SessionScope.net: Net by dep()
 
 interface Net {
 

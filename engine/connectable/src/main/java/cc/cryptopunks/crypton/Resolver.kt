@@ -6,7 +6,14 @@ import kotlinx.coroutines.flow.mapNotNull
 
 
 typealias Resolve = suspend Scope.(Any) -> Any?
-typealias Resolvers = List<Resolve>
+
+val Scope.resolvers: Resolvers by dep()
+
+class Resolvers(list: List<Resolve> = emptyList()): List<Resolve> by list
+
+fun resolvers(
+    vararg args: Resolve
+) = Resolvers(args.toList())
 
 internal suspend fun Resolvers.resolve(
     scope: Scope,
