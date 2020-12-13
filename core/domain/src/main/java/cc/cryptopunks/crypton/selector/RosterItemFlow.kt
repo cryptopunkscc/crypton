@@ -5,6 +5,8 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.messageRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf

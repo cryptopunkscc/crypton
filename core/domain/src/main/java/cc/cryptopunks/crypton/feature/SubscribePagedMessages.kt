@@ -5,6 +5,9 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Subscribe
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.pagedMessages
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.selector.messagePagedListFlow
 import cc.cryptopunks.crypton.util.logger.log
@@ -14,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun subscribePagedMessages() = feature(
     handler = { out, _: Subscribe.PagedMessages ->
+        val pagedMessages = pagedMessages
         messagePagedListFlow()
             .onEach(pagedMessagesReceived)
             .map { Chat.PagedMessages(account.address, it) }

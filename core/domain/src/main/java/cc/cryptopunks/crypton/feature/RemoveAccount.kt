@@ -3,6 +3,11 @@ package cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.cliv2.command
 import cc.cryptopunks.crypton.cliv2.config
 import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.accountNet
+import cc.cryptopunks.crypton.context.accountRepo
+import cc.cryptopunks.crypton.context.net
+import cc.cryptopunks.crypton.context.rootScope
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.interactor.removeSessionScope
@@ -21,6 +26,7 @@ internal fun removeAccount() = feature(
     },
 
     handler = { _, arg: Exec.RemoveAccount ->
+        val account = account
         removeSessionScope(account.address) {
             if (!arg.deviceOnly) {
                 accountNet.removeAccount()

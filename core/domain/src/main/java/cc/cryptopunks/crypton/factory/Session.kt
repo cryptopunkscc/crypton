@@ -5,6 +5,9 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionModule
+import cc.cryptopunks.crypton.context.accountRepo
+import cc.cryptopunks.crypton.context.createConnection
+import cc.cryptopunks.crypton.context.createSessionRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

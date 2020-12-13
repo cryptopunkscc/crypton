@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.connectableBindingsStore
 import cc.cryptopunks.crypton.context.ActivityResult
 import cc.cryptopunks.crypton.context.PermissionsResult
 import cc.cryptopunks.crypton.createBinding

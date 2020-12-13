@@ -3,6 +3,9 @@ package cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chatNet
+import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.insertChat

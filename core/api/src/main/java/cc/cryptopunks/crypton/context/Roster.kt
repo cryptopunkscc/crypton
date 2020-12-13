@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
 
 val Scope.rosterItems: Roster.Items.Store by dep()
+val SessionScope.rosterNet: Roster.Net by dep()
 
 object Roster {
 

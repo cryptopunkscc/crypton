@@ -1,21 +1,22 @@
 package cc.cryptopunks.crypton.example
 
 import cc.cryptopunks.crypton.Context
-import cc.cryptopunks.crypton.HandlerRegistry
-import cc.cryptopunks.crypton.Resolvers
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.resolvers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
 internal data class RootModule(
     override val entityRepo: Entity.Repo = EntityRepo(),
-    override val handlers: HandlerRegistry = getAllHandlers(),
-    override val resolvers: Resolvers = resolvers({ Scoped.Resolved(this, it) })
 ) : RootScope {
 
-    override val coroutineContext = SupervisorJob() + Dispatchers.IO
+    override val coroutineContext = SupervisorJob() + Dispatchers.IO +
+        cryptonContext(
+            getAllHandlers(),
+            resolvers({ Scoped.Resolved(this, it) })
+        )
 
     override val nestedScopes: Map<String, NestedScope> =
         (0..10).map { "$it" }.associateWith {
@@ -28,7 +29,7 @@ internal data class RootModule(
 
 private data class NestedModule(
     val rootScope: RootScope,
-    override val id: String
+    override val id: String,
 ) : NestedScope,
     RootScope by rootScope {
 

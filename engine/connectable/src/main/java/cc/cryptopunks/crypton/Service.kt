@@ -121,7 +121,9 @@ private fun Scope.handleRequest(
     CoroutineLog.Action(action) +
         CoroutineLog.Status(Log.Event.Status.Handling)
 ) {
-    handlerFor(action)
+    val handlers = handlers
+
+    handlers[action::class]
         ?.let { handle ->
             log.builder.d {
                 status = Log.Event.Status.Start.name
@@ -140,12 +142,9 @@ private fun Scope.handleRequest(
             }
         }
         ?: InvalidAction(action, handlers.keys).out().also {
-            logNoHandlersFor(action)
+            handlers.logNoHandlersFor(action)
         }
 }
-
-@Suppress("UNCHECKED_CAST")
-private fun Scope.handlerFor(any: Any): Handle<Scope, Any>? = handlers[any::class]
 
 private suspend fun logConnectionStarted() = log.builder.d {
     status = Log.Event.Status.Start.name
@@ -158,8 +157,8 @@ private suspend fun logConnectionFinished(e: Throwable?) = log.builder.d {
     throwable = e
 }
 
-private suspend fun Scope.logNoHandlersFor(action: Any) = log.e {
-    "No register handler for $action\n" + handlers.keys.joinToString("\n") {
+private suspend fun HandlerRegistry.logNoHandlersFor(action: Any) = log.e {
+    "No register handler for $action\n" + keys.joinToString("\n") {
         it.toString()
             .replace("class cc.cryptopunks.crypton.context.", "")
             .replace("$", ".")

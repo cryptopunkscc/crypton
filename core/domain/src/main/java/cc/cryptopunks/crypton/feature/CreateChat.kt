@@ -8,6 +8,8 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.isConference
+import cc.cryptopunks.crypton.context.rosterNet
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.interactor.createChat

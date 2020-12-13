@@ -7,7 +7,9 @@ import cc.cryptopunks.crypton.cliv2.optional
 import cc.cryptopunks.crypton.cliv2.text
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.createEmptyMessage
+import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log

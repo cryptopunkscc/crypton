@@ -2,24 +2,27 @@ package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.asDep
 import cc.cryptopunks.crypton.cryptonContext
+import cc.cryptopunks.crypton.dep
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
 
 fun Repo.context() = cryptonContext(
-    accountRepo.asDep<Account.Repo>(),
-    clipboardRepo.asDep<Clip.Board.Repo>(),
-    createSessionRepo.asDep<SessionRepo.Factory>(),
+    accountRepo.asDep(),
+    clipboardRepo.asDep(),
+    createSessionRepo.asDep(),
 )
 
 fun SessionRepo.context() = cryptonContext(
-    queryContext.asDep<Repo.Context.Query>(),
-    transactionContext.asDep<Repo.Context.Transaction>(),
-    chatRepo.asDep<Chat.Repo>(),
-    messageRepo.asDep<Message.Repo>(),
-    rosterRepo.asDep<Roster.Repo>(),
-    deviceRepo.asDep<Device.Repo>(),
+    queryContext.asDep(),
+    transactionContext.asDep(),
+    chatRepo.asDep(),
+    messageRepo.asDep(),
+    rosterRepo.asDep(),
+    deviceRepo.asDep(),
 )
+
+val RootScope.createSessionRepo: SessionRepo.Factory by dep()
 
 interface Repo {
     val accountRepo: Account.Repo
@@ -37,6 +40,9 @@ interface Repo {
         val executor get() = dispatcher.executor
     }
 }
+
+val SessionScope.queryContext: Repo.Context.Query by dep()
+val SessionScope.transactionContext: Repo.Context.Transaction by dep()
 
 interface SessionRepo {
     val queryContext: Repo.Context.Query

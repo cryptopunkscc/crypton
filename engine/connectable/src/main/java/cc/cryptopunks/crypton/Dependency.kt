@@ -12,9 +12,7 @@ data class Dependency<T>(
     data class Key<T>(val any: Any) : CoroutineContext.Key<Dependency<T>>
 }
 
-inline fun <reified T> T.dep() = Dependency(this, depKey())
-
-inline fun <reified T> Any.asDep() = Dependency(this as T, depKey())
+inline fun <reified T> T.asDep() = Dependency(this, depKey())
 
 inline fun <reified T> depKey(): Dependency.Key<T> = Dependency.Key(T::class.java)
 

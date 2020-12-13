@@ -15,6 +15,8 @@ fun resolvers(
     vararg args: Resolve
 ) = Resolvers(args.toList())
 
+operator fun Resolvers.plus(other: List<Resolve>) = Resolvers(toList() + other)
+
 internal suspend fun Resolvers.resolve(
     scope: Scope,
     any: Any

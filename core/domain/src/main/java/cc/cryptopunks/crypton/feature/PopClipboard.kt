@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.clipboardStore
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.util.pop
 

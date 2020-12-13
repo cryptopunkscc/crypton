@@ -7,13 +7,13 @@ import kotlinx.coroutines.CoroutineScope
 
 val RootScope.createConnection: Connection.Factory by dep()
 fun Connection.context() = cryptonContext(
-    net.asDep<Net>(),
-    accountNet.asDep<Account.Net>(),
-    messageNet.asDep<Message.Net>(),
-    chatNet.asDep<Chat.Net>(),
-    rosterNet.asDep<Roster.Net>(),
-    deviceNet.asDep<Device.Net>(),
-    uploadNet.asDep<Upload.Net>(),
+    net.asDep(),
+    accountNet.asDep(),
+    messageNet.asDep(),
+    chatNet.asDep(),
+    rosterNet.asDep(),
+    deviceNet.asDep(),
+    uploadNet.asDep(),
 )
 
 interface Connection {

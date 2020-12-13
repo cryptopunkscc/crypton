@@ -2,7 +2,12 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.isConference
+import cc.cryptopunks.crypton.context.messageNet
+import cc.cryptopunks.crypton.context.messageRepo
+import cc.cryptopunks.crypton.context.rosterNet
+import cc.cryptopunks.crypton.context.subscriptions
 import cc.cryptopunks.crypton.util.logger.log
 
 private var lastId = 0
@@ -15,12 +20,14 @@ internal suspend fun SessionScope.sendOrSubscribe(message: Message) {
     when {
         message.to.address == account.address -> return
 
-        !message.chat.isConference && !rosterNet.iAmSubscribed(message.chat) ->
+        !message.chat.isConference && !rosterNet.iAmSubscribed(message.chat) -> {
+            val subscriptions = subscriptions
             if (message.chat !in subscriptions.get()) {
                 log.d { "$id subscribe to ${message.to.address}" }
                 subscriptions reduce { plus(message.chat) }
                 rosterNet.subscribe(message.to.address)
             }
+        }
 
         else -> {
             val messageRepo = messageRepo

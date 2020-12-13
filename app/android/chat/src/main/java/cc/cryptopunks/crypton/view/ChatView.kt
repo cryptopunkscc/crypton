@@ -23,6 +23,7 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Subscribe
+import cc.cryptopunks.crypton.features
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges

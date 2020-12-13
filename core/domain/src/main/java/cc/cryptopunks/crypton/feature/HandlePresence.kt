@@ -6,6 +6,10 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chatRepo
+import cc.cryptopunks.crypton.context.rosterNet
+import cc.cryptopunks.crypton.context.subscriptions
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.createChat
@@ -22,6 +26,8 @@ internal fun handlePresence() = feature(
 
     handler = { _, (presence): Exec.HandlePresence ->
         storePresence(presence)
+
+        val account = account
 
         if (presence.resource != Resource.Empty)
             if (presence.resource.address != account.address)

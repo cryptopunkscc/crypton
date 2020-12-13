@@ -5,6 +5,9 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.net
+import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
@@ -23,6 +26,7 @@ internal fun flushMessageQueue() = feature(
 
     emitter = emitter<SessionScope> {
         val net = net
+        val messageRepo = messageRepo
         flowOf(
             net.netEvents().filterIsInstance<Net.OmemoInitialized>().map {
                 log.v { "flush by Net.OmemoInitialized" }

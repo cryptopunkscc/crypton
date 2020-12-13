@@ -8,7 +8,13 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.chatNet
+import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.inContext
+import cc.cryptopunks.crypton.context.messageRepo
+import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
@@ -50,6 +56,7 @@ internal fun joinChat() = feature(
     },
 
     handler = { _, _: Exec.JoinChat ->
+        val chat = chat
         when (chat.isConference) {
             true -> chatNet.joinConference(
                 address = chat.address,

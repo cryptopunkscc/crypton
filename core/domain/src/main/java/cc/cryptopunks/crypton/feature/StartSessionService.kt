@@ -5,10 +5,13 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.Subscribe
+import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.inContext
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.createEmitters
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.features
 import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.serviceName
 import cc.cryptopunks.crypton.util.Log
@@ -21,7 +24,6 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
 
 internal fun startSessionService() = feature(
 
@@ -32,10 +34,10 @@ internal fun startSessionService() = feature(
                 last.clear()
                 last += current.keys
                 new.map { it.value }.asFlow()
-            }.distinctUntilChanged().onEach { scope ->
-                log.d { "Start services request ${scope.account.address}" }
-            }.map { scope ->
-                Subscribe.SessionService.inContext(scope.account.address)
+            }.distinctUntilChanged().map { scope ->
+                val address = scope.account.address
+                log.d { "Start services request $address" }
+                Subscribe.SessionService.inContext(address)
             }.onCompletion {
                 log.d { "Close newSessionsFlow" }
             }

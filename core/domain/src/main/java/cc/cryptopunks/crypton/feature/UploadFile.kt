@@ -8,10 +8,16 @@ import cc.cryptopunks.crypton.context.Crypto
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
+import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.createEmptyMessage
+import cc.cryptopunks.crypton.context.cryptoSys
 import cc.cryptopunks.crypton.context.encodeString
 import cc.cryptopunks.crypton.context.fileName
+import cc.cryptopunks.crypton.context.fileSys
+import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.parseUriData
+import cc.cryptopunks.crypton.context.uploadNet
+import cc.cryptopunks.crypton.context.uriSys
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log
@@ -36,6 +42,7 @@ fun uploadFile() = feature(
     },
 
     handler = { out, (uri): Exec.Upload ->
+        val uriSys = uriSys
         val extensions = uriSys.getMimeType(uri).split("/").last().replace("*", "")
         val fileName = uri.path.parseUriData().fileName
 

@@ -2,6 +2,11 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.accountNet
+import cc.cryptopunks.crypton.context.net
+import cc.cryptopunks.crypton.context.networkSys
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -34,6 +39,7 @@ internal tailrec suspend fun SessionScope.reconnectIfNeeded(
     delayInMillis: Long = 3000,
 ): Throwable? {
     val result = try {
+        val account = account
         if (!networkSys.status.isConnected) {
             log.d { "skip reconnecting: $account, network status: ${networkSys.status}." }
         } else net.run {

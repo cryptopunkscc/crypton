@@ -8,8 +8,12 @@ import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.chatScope
+import cc.cryptopunks.crypton.context.rootScope
 import cc.cryptopunks.crypton.context.sessionScope
 
 fun contextResolver(): Resolve = { context ->

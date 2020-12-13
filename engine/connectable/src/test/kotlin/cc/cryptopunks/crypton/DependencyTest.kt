@@ -13,7 +13,7 @@ private object TestObj3
 
 private val CoroutineScope.test1 by dep<TestObj1>()
 
-private val context = TestObj1.dep() + TestObj2.dep() + TestObj3.dep()
+private val context = TestObj1.asDep() + TestObj2.asDep() + TestObj3.asDep()
 
 class DependencyTest {
 
@@ -34,9 +34,9 @@ class DependencyTest {
             TestObj3 to TestObj2
         )
         runBlocking {
-            withContext(TestObj1.dep()
-                + TestObj2.dep()
-                + TestObj3.dep()) {
+            withContext(TestObj1.asDep()
+                + TestObj2.asDep()
+                + TestObj3.asDep()) {
 
                 var a: Any? = null
                 var b: Any? = null

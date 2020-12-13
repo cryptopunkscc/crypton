@@ -10,6 +10,7 @@ import cc.cryptopunks.crypton.cliCommands
 import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.cliv2.reduce
 import cc.cryptopunks.crypton.debug.R
+import cc.cryptopunks.crypton.features
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks

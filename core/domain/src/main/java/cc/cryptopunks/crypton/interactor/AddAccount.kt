@@ -3,6 +3,10 @@ package cc.cryptopunks.crypton.interactor
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.RootScope
+import cc.cryptopunks.crypton.context.accountNet
+import cc.cryptopunks.crypton.context.accountRepo
+import cc.cryptopunks.crypton.context.net
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.factory.createSession
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
@@ -17,12 +21,14 @@ suspend fun RootScope.addAccount(
     insert: Boolean
 ) {
     log.d { "Adding account ${account.address}" }
+    val accountRepo = accountRepo
     accountRepo.assertAccountNotExist(account.address)
     val logInfo = coroutineScope {
         coroutineContext[CoroutineLog.Action]!! + CoroutineLog.Status(Log.Event.Status.Handling)
     }
     createSession(account).apply {
         withContext(logInfo) {
+            val net = net
             log.d { "Connecting" }
             net.connect()
             log.d { "Connected" }

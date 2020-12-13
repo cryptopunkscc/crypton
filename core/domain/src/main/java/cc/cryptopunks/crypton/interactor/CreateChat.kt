@@ -2,6 +2,8 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.chatNet
+import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.util.logger.log
 
 suspend fun SessionScope.createChat(chat: Chat) {

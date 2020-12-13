@@ -6,6 +6,9 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.chatNet
+import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 

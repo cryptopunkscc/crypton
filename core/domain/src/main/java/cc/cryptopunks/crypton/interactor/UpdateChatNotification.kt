@@ -1,24 +1,30 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.Connectable
+import cc.cryptopunks.crypton.connectableBindingsStore
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.navigateChatId
+import cc.cryptopunks.crypton.context.notificationSys
 import cc.cryptopunks.crypton.top
 
 
 fun updateChatNotification(): SessionScope.(List<Message>) -> Unit {
     var current = emptyList<Message>()
     return { messages ->
+        val navigateChatId = navigateChatId.value
+        val notificationSys = notificationSys
 
-        current.minus(messages).asNotifications(account.address, navigateChatId.value).forEach {
+        current.minus(messages).asNotifications(account.address, navigateChatId).forEach {
             notificationSys.cancel(it)
         }
 
         current = connectableBindingsStore.consume(messages)
 
-        current.asNotifications(account.address, navigateChatId.value).forEach {
+        current.asNotifications(account.address, navigateChatId).forEach {
             notificationSys.show(it)
         }
     }

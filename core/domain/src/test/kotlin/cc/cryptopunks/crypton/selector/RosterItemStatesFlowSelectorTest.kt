@@ -11,6 +11,9 @@ import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.presenceStore
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.mock.MockConnectionFactory
 import cc.cryptopunks.crypton.mock.MockSessionRepo
 import io.mockk.every

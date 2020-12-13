@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.createEmitters
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.features
 import cc.cryptopunks.crypton.interactor.loadSessions
 import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.serviceName
