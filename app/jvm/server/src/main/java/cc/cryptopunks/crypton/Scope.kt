@@ -1,8 +1,9 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Connection
-import cc.cryptopunks.crypton.context.Main
-import cc.cryptopunks.crypton.context.RootModule
+import cc.cryptopunks.crypton.context.RootScope
+import cc.cryptopunks.crypton.context.context
+import cc.cryptopunks.crypton.context.createRootScope
 import cc.cryptopunks.crypton.repo.ormlite.OrmLiteAppRepo
 import cc.cryptopunks.crypton.service.cryptonFeatures
 import cc.cryptopunks.crypton.service.cryptonResolvers
@@ -17,23 +18,26 @@ import kotlinx.coroutines.asExecutor
 import java.io.File
 
 
-fun createRootScope(config: Map<String, Any?>) = RootScopeConfig(config).run {
+fun createServerScope(config: Map<String, Any?>): RootScope = RootScopeConfig(config).run {
     initSmack(File(omemoStorePath))
-    RootModule(
-        sys = JvmSys(home),
-        repo = OrmLiteAppRepo { name: String ->
-            createJdbcH2ConnectionSource(
-                home = "$home/$profile/",
-                name = name,
-                inMemory = inMemory.toBoolean()
-            )
-        },
-        mainClass = Main(Nothing::class.java),
-        ioExecutor = IOExecutor(Dispatchers.IO.asExecutor()),
-        mainExecutor = MainExecutor(Dispatchers.IO.asExecutor()),
-        createConnection = createConnectionFactory(this),
-        features = cryptonFeatures(),
-        resolvers = cryptonResolvers()
+    val features = cryptonFeatures()
+    createRootScope(
+        cryptonContext(
+            JvmSys(home).context(),
+            OrmLiteAppRepo { name: String ->
+                createJdbcH2ConnectionSource(
+                    home = "$home/$profile/",
+                    name = name,
+                    inMemory = inMemory.toBoolean()
+                )
+            }.context(),
+            IOExecutor(Dispatchers.IO.asExecutor()),
+            MainExecutor(Dispatchers.IO.asExecutor()),
+            createConnectionFactory(this).asDep(),
+            features,
+            features.createHandlers(),
+            cryptonResolvers()
+        )
     )
 }
 

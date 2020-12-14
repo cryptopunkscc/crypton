@@ -9,7 +9,7 @@ internal fun main() {
         TrustAllManager.install()
 
         val config = ServerConfig().default().local()
-        val backend = BackendService(createRootScope(config)).init()
+        val backend = BackendService(createServerScope(config)).init()
 
         server(config, backend).invoke()
     }

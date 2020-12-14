@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Exec
-import cc.cryptopunks.crypton.context.chatScope
-import cc.cryptopunks.crypton.context.sessionScope
+import cc.cryptopunks.crypton.context.createChatScope
+import cc.cryptopunks.crypton.context.getSessionScope
 import cc.cryptopunks.crypton.feature.ShowFileChooser
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
@@ -30,8 +30,8 @@ class ChatFragment : ServiceFragment() {
         requireArguments().run {
             launch {
                 binding + rootScope
-                    .sessionScope(account!!)
-                    .chatScope(chat!!)
+                    .getSessionScope(account!!)
+                    .createChatScope(chat!!)
                     .fragmentScope()
                     .service(serviceName)
             }

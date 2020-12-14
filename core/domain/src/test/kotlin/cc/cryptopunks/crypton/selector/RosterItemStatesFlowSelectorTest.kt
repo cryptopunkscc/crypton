@@ -1,15 +1,13 @@
 package cc.cryptopunks.crypton.selector
 
-import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
+import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.SessionModule
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.presenceStore
@@ -62,12 +60,16 @@ class RosterItemStatesFlowSelectorTest {
         }
 
         val sessions = (0..1).map {
-            SessionModule(
-                account = Account.Name(addresses[it]),
-                sessionRepo = sessionRepos[it],
-                connection = connections[it],
-                rootScope = rootScope
-            )
+            TODO()
+//            SessionModule(
+//                cryptonContext(
+//                    Account.Name(addresses[it]),
+//                    sessionRepos[it].context(),
+//                    connections[it].context(),
+//                    rootScope,
+//                    rootScope.asDep(),
+//                )
+//            )
         }
 
         val chats = (0..1).map {
