@@ -13,7 +13,6 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.Route
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.inContext
 import cc.cryptopunks.crypton.createChat
@@ -46,7 +45,7 @@ private suspend fun client1() = Client1.connectDslClient {
     send(Exec.EnqueueMessage("yo 1-2"))
     flush()
 
-    send(Route.Main)
+//    send(Route.Main)
     flush()
 
     createChat(address1, address3)
@@ -56,7 +55,7 @@ private suspend fun client1() = Client1.connectDslClient {
     flush()
 
     send(
-        Route.Main,
+//        Route.Main,
         Subscribe.RosterItems(true, address1)
     )
 
@@ -148,7 +147,7 @@ private suspend fun client3() = Client3.connectDslClient {
     flush()
 
     send(
-        Route.Main,
+//        Route.Main,
         Subscribe.RosterItems(true, address3)
     )
     waitFor<Roster.Items> {
