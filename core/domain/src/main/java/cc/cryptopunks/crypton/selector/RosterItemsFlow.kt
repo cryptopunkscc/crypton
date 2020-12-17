@@ -5,6 +5,9 @@ import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chatRepo
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.actor
@@ -49,7 +52,7 @@ private data class Change(
 private fun Collection<SessionScope>.rosterItemStatesFlow(): Flow<Pair<Address, Set<Roster.Item>>> =
     map { session ->
         session.rosterItemStatesFlow().map { states ->
-            session.address to states
+            session.account.address to states
         }
     }.asFlow().flattenMerge()
 

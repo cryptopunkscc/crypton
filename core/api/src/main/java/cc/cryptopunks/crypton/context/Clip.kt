@@ -1,6 +1,11 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
+
+val RootScope.clipboardStore: Clip.Board.Store by dep()
+val RootScope.clipboardSys: Clip.Board.Sys by dep()
+val RootScope.clipboardRepo: Clip.Board.Repo by dep()
 
 class Clip(
     val id: Long = 0,

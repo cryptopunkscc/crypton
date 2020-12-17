@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.selector
 
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.RootScope
+import cc.cryptopunks.crypton.context.accountRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

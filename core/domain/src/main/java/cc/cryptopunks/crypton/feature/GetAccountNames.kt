@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.cliv2.command
 import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Get
+import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.feature
 
 internal fun getAccountNames() = feature(

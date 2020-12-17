@@ -5,6 +5,8 @@ import cc.cryptopunks.crypton.cliv2.config
 import cc.cryptopunks.crypton.cliv2.text
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 
@@ -23,7 +25,8 @@ internal fun inviteToConference() = feature(
     },
 
     handler = { _, (users): Exec.Invite ->
+        val chat = chat
         require(chat.isConference) { "Cannot invite to direct chat" }
-        inviteToConference(chat.address, users)
+        chatNet.inviteToConference(chat.address, users)
     }
 )

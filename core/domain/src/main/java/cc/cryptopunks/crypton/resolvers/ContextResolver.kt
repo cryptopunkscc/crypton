@@ -8,7 +8,14 @@ import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.chatRepo
+import cc.cryptopunks.crypton.context.createChatScope
+import cc.cryptopunks.crypton.context.rootScope
+import cc.cryptopunks.crypton.context.sessionScope
+import cc.cryptopunks.crypton.context.getSessionScope
 
 fun contextResolver(): Resolve = { context ->
     runCatching {
@@ -32,14 +39,14 @@ private suspend fun Scope.resolveFromContext(context: Any): Scoped.Resolved? =
 
             is SessionScope -> {
                 when {
-                    context.id == address.id ->
+                    context.id == account.address.id ->
                         when (val next = context.next) {
                             is Context -> resolveFromContext(next)
                             else -> Scoped.Resolved(this, next)
                         }
 
                     chatRepo.contains(address(context.id)) ->
-                        chatScope(address(context.id)).resolveFromContext(context)
+                        createChatScope(address(context.id)).resolveFromContext(context)
 
                     else ->
                         rootScope.resolveFromContext(context)
@@ -47,7 +54,7 @@ private suspend fun Scope.resolveFromContext(context: Any): Scoped.Resolved? =
             }
 
             is RootScope -> {
-                sessionScope(address(context.id)).let { scope ->
+                getSessionScope(address(context.id)).let { scope ->
                     when (val next = context.next) {
                         is Context -> scope.resolveFromContext(next)
                         else -> Scoped.Resolved(scope, next)

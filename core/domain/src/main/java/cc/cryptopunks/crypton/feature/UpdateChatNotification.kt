@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.updateChatNotification

@@ -1,80 +1,26 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.Features
 import cc.cryptopunks.crypton.Scope
-import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.util.Executors
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
-import cc.cryptopunks.crypton.util.Store
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.newSingleThreadContext
-import kotlin.reflect.KClass
+import kotlin.coroutines.CoroutineContext
 
-interface RootScope :
-    Scope,
-    Executors,
-    Sys,
-    Repo {
+val RootScope.sessions: SessionScope.Store by dep()
+val SessionScope.rootScope: RootScope by dep()
+val ChatScope.sessionScope: SessionScope by dep()
 
-    val applicationId: String
-    val features: Features
-
-    val mainClass: KClass<*>
-    val navigateChatId: Int
-
-    val sessions: SessionScope.Store
-    val clipboardStore: Clip.Board.Store
-    val connectableBindingsStore: Connectable.Binding.Store
-    val accounts: Store<Account.Many>
-    val rosterItems: Store<Roster.Items>
-
-    val createConnection: Connection.Factory
-
-    fun sessionScope(): SessionScope
-    fun sessionScope(address: Address): SessionScope
+interface RootScope : Scope {
+    data class Module(override val coroutineContext: CoroutineContext) : RootScope
 }
 
-interface SessionScope :
-    RootScope,
-    SessionRepo,
-    Connection,
-    Scoped<RootScope> {
-
-    val rootScope: RootScope
-    val address: Address
-    val presenceStore: Presence.Store
-    val subscriptions: OpenStore<Set<Address>>
-
-    fun chatScope(chat: Chat): ChatScope
-    suspend fun chatScope(chat: Address): ChatScope
-
-    data class Event internal constructor(
-        val session: SessionScope,
-        val event: Api.Event
-    )
-
-    @Suppress("FunctionName")
-    fun Event(event: Api.Event) = Event(
-        session = this,
-        event = event
-    )
-
-    class Scope : CoroutineScope {
-        override val coroutineContext = SupervisorJob() + newSingleThreadContext("Smack")
-    }
-
+interface SessionScope : RootScope {
+    data class Module(override val coroutineContext: CoroutineContext) : SessionScope
 
     class Store : OpenStore<Map<Address, SessionScope>>(emptyMap()) {
         operator fun get(address: Address): SessionScope? = get()[address]
     }
 }
 
-interface ChatScope :
-    SessionScope {
-
-    val sessionScope: SessionScope
-    val chat: Chat
-    val pagedMessage: Store<Chat.PagedMessages?>
+interface ChatScope : SessionScope {
+    data class Module(override val coroutineContext: CoroutineContext) : ChatScope
 }

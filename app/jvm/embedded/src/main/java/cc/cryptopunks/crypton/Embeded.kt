@@ -100,7 +100,7 @@ private val embeddedCommands: Cli.Commands = commands(
     ) { (interactive, text) ->
         runBlocking {
             initJvmLog()
-            val backend = BackendService(createRootScope(config))
+            val backend = BackendService(createServerScope(config))
             listOf(
                 launch {
                     if (interactive.toBoolean()) cliClient(

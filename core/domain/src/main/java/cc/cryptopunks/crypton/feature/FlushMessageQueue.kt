@@ -5,6 +5,9 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.net
+import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
@@ -22,8 +25,10 @@ import kotlinx.coroutines.flow.onStart
 internal fun flushMessageQueue() = feature(
 
     emitter = emitter<SessionScope> {
+        val net = net
+        val messageRepo = messageRepo
         flowOf(
-            netEvents().filterIsInstance<Net.OmemoInitialized>().map {
+            net.netEvents().filterIsInstance<Net.OmemoInitialized>().map {
                 log.v { "flush by Net.OmemoInitialized" }
                 messageRepo.listQueued().map { it.chat }
             }.bufferedThrottle(3000).map { it.last() },
@@ -34,11 +39,11 @@ internal fun flushMessageQueue() = feature(
                 listOf(it.presence.resource.address)
             },
             messageRepo.flowListQueued().map { list ->
-                log.v { "flush by queuedListFlow $address $list" }
+                log.v { "flush by queuedListFlow $account $list" }
                 list.map { it.chat }
             }
         ).flattenMerge().filter {
-            it.isNotEmpty() && isOmemoInitialized().also {
+            it.isNotEmpty() && net.isOmemoInitialized().also {
                 log.v { "flush omemo initialized: $it" }
             }
         }.onStart {

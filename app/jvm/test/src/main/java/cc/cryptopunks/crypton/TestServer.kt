@@ -21,7 +21,7 @@ open class TestServer {
             val config = ServerConfig().default().local().apply {
                 profile = "test_server"
             }
-            val backend = BackendService(createRootScope(config)).init()
+            val backend = BackendService(createServerScope(config)).init()
 
             server(config, backend).invoke()
         }

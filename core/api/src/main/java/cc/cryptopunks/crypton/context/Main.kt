@@ -1,7 +1,12 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.dep
 
-object Main {
+val RootScope.mainClass: Main by dep()
+
+data class Main(
+    val type: Class<*>,
+) {
     interface Action : Scoped<RootScope>
 }

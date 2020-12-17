@@ -3,6 +3,8 @@ package cc.cryptopunks.crypton.selector
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -19,7 +21,7 @@ fun RootScope.newSessionsFlow(
         sessions = current
         new.map { it.value }.asFlow()
     }.distinctUntilChanged().onEach {
-        log.d { "New session ${it.address} $it" }
+        log.d { "New session ${it.account.address} $it" }
     }.onCompletion {
         log.d { "Close newSessionsFlow" }
     }

@@ -1,11 +1,15 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
+import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.md5
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 
 typealias CryptonMessage = Message
+
+val SessionScope.messageNet: Message.Net by dep()
+val SessionScope.messageRepo: Message.Repo by dep()
 
 data class Message(
     val id: String = "",

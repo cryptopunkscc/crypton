@@ -6,6 +6,9 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.chatNet
+import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 
@@ -23,7 +26,7 @@ internal fun getChatInfo() = feature(
     handler = { out, _: Get.ChatInfo ->
         chat.run {
             when (isConference) {
-                true -> getChatInfo(address)
+                true -> chatNet.getChatInfo(address)
                 false -> getRosterSubscription(address)
             }
         }.out()
@@ -31,4 +34,4 @@ internal fun getChatInfo() = feature(
 )
 
 fun SessionScope.getRosterSubscription(address: Address) =
-    Roster.Subscription(address, subscriptionStatus(address))
+    Roster.Subscription(address, rosterNet.subscriptionStatus(address))

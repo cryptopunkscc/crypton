@@ -1,8 +1,11 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 import java.net.URL
+
+val SessionScope.uploadNet: Upload.Net by dep()
 
 object Upload {
 

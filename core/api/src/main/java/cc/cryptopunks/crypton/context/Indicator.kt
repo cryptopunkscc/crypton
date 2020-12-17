@@ -1,5 +1,9 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
+
+val RootScope.indicatorSys: Indicator.Sys by dep()
+
 object Indicator {
     const val serviceName = "Indicator Service"
 

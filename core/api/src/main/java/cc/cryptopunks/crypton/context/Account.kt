@@ -1,7 +1,14 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
+
+val RootScope.accounts: Account.Store by dep()
+val RootScope.accountNet: Account.Net by dep()
+val RootScope.accountRepo: Account.Repo by dep()
+val SessionScope.account: Account.Name by dep()
 
 data class Account(
     val address: Address = Address.Empty,
@@ -9,6 +16,10 @@ data class Account(
     val enabled: Boolean = true
 ) {
     val domain get() = address.domain
+
+    data class Name(val address: Address) {
+        override fun toString(): String = address.toString()
+    }
 
     interface Action : Scoped<SessionScope>
 
@@ -35,6 +46,8 @@ data class Account(
     data class ChatCreated(val chat: Address)
 
     interface Status
+
+    class Store : OpenStore<Many>(Many(emptySet()))
 
     interface Net {
         fun createAccount()

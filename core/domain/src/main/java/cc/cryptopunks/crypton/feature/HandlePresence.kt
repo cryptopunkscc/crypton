@@ -6,6 +6,10 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chatRepo
+import cc.cryptopunks.crypton.context.rosterNet
+import cc.cryptopunks.crypton.context.subscriptions
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.createChat
@@ -23,14 +27,16 @@ internal fun handlePresence() = feature(
     handler = { _, (presence): Exec.HandlePresence ->
         storePresence(presence)
 
+        val account = account
+
         if (presence.resource != Resource.Empty)
-            if (presence.resource.address != address)
+            if (presence.resource.address != account.address)
                 if (chatRepo.contains(presence.resource.address).not()) {
                     log.d { "Creating chat from presence ${presence.resource}" }
                     createChat(
                         Chat(
                             address = presence.resource.address,
-                            account = address
+                            account = account.address
                         )
                     )
                 }
@@ -42,7 +48,7 @@ internal fun handlePresence() = feature(
                 Unit
             }
 
-            Presence.Status.Subscribe -> {
+            Presence.Status.Subscribe -> rosterNet.run {
                 when (subscriptionStatus(presence.resource.address)) {
                     Roster.Item.Status.none -> {
                         log.d { "Received subscription request from ${presence.resource}" }
@@ -57,7 +63,7 @@ internal fun handlePresence() = feature(
                         createChat(
                             Chat(
                                 address = presence.resource.address,
-                                account = address
+                                account = account.address
                             )
                         )
                     }
@@ -66,7 +72,7 @@ internal fun handlePresence() = feature(
                         createChat(
                             Chat(
                                 address = presence.resource.address,
-                                account = address
+                                account = account.address
                             )
                         )
                     }

@@ -6,6 +6,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import cc.cryptopunks.crypton.context.clipboardRepo
 import cc.cryptopunks.crypton.debug.drawer.detachDebugDrawer
 import cc.cryptopunks.crypton.debug.drawer.initDebugDrawer
 import cc.cryptopunks.crypton.intent.NewIntentProcessor

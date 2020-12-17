@@ -3,9 +3,11 @@ package cc.cryptopunks.crypton.interactor
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.context.fileExtension
 import cc.cryptopunks.crypton.context.getFile
+import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.parseUriData
 import cc.cryptopunks.crypton.util.logger.log
 
@@ -51,7 +53,7 @@ private suspend fun SessionScope.get(message: Message) = messageRepo.run {
 
 private suspend fun SessionScope.create(message: Message) = message.copy(
     chat = Chat(
-        account = address,
+        account = account.address,
         address = message.chat
     ).also {
         insertChat(it)

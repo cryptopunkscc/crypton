@@ -1,7 +1,10 @@
 package cc.cryptopunks.crypton.selector
 
+import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -11,14 +14,17 @@ import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 
-internal fun SessionScope.presenceChangedFlow(): Flow<Roster.PresenceChanged> =
+internal fun SessionScope.presenceChangedFlow(
+    account: Account.Name = this.account,
+    rosterNet: Roster.Net = this.rosterNet
+): Flow<Roster.PresenceChanged> =
     flowOf(
-        getCachedPresences().map { presence ->
+        rosterNet.getCachedPresences().map { presence ->
             Roster.PresenceChanged(
                 presence = presence
             )
         }.asFlow(),
-        rosterEvents.filterIsInstance<Roster.PresenceChanged>()
+        rosterNet.rosterEvents.filterIsInstance<Roster.PresenceChanged>()
     ).flattenConcat().distinctUntilChanged().onEach {
-        log.v { "Presence changed $address $it" }
+        log.v { "Presence changed $account $it" }
     }

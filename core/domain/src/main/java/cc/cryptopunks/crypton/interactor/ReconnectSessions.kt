@@ -2,6 +2,11 @@ package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.accountNet
+import cc.cryptopunks.crypton.context.net
+import cc.cryptopunks.crypton.context.networkSys
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,31 +17,40 @@ internal fun RootScope.reconnectSessions(): List<Job> =
         launch { session.reconnectIfNeeded() }
     }
 
-internal suspend fun SessionScope.reconnectIfNeeded(): Unit = try {
-    log.d { "reconnecting: $address" }
-    if (!isConnected()) {
-        connect()
-        if (!isAuthenticated()) login()
-        initOmemo()
+internal suspend fun SessionScope.reconnectIfNeeded(): Unit =
+    net.run {
+        try {
+            log.d { "reconnecting: $account" }
+            if (!isConnected()) {
+                connect()
+                accountNet.run {
+                    if (!isAuthenticated()) login()
+                }
+                initOmemo()
+            }
+        } catch (e: Throwable) {
+            log.d { "reconnection failed: $e" }
+            interrupt()
+        }
     }
-    Unit
-} catch (e: Throwable) {
-    log.d { "reconnection failed: $e" }
-    interrupt()
-}
 
 internal tailrec suspend fun SessionScope.reconnectIfNeeded(
     retryCount: Int = -1,
-    delayInMillis: Long = 3000
+    delayInMillis: Long = 3000,
 ): Throwable? {
     val result = try {
+        val account = account
         if (!networkSys.status.isConnected) {
-            log.d { "skip reconnecting: $address, network status: ${networkSys.status}." }
-        } else if (!isConnected()) {
-            log.d { "reconnecting: $address" }
-            connect()
-            if (!isAuthenticated()) login()
-            initOmemo()
+            log.d { "skip reconnecting: $account, network status: ${networkSys.status}." }
+        } else net.run {
+            if (!isConnected()) {
+                log.d { "reconnecting: $account" }
+                connect()
+                accountNet.run {
+                    if (!isAuthenticated()) login()
+                }
+                initOmemo()
+            }
         }
         null
     } catch (e: Throwable) {

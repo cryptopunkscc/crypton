@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.cliv2.config
 import cc.cryptopunks.crypton.cliv2.param
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.address
+import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 
@@ -20,6 +21,6 @@ internal fun getSubscriptionStatus() = feature(
     },
 
     handler = { out, get: Get.SubscriptionStatus ->
-        subscriptionStatus(get.address).out()
+        rosterNet.subscriptionStatus(get.address).out()
     }
 )

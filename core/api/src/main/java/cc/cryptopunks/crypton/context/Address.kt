@@ -1,5 +1,10 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.util.OpenStore
+
+val SessionScope.subscriptions: Address.Subscriptions.Store by dep()
+
 fun address(string: String) = Address.from(string)
 
 data class Address(
@@ -30,6 +35,10 @@ data class Address(
                 domain = getOrNull(1) ?: ""
             )
         }
+    }
+
+    object Subscriptions {
+        class Store: OpenStore<Set<Address>>(emptySet())
     }
 
     class Exception(message: String?) : kotlin.Exception(message) {

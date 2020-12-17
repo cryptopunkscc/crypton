@@ -5,6 +5,9 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chatNet
+import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
@@ -23,10 +26,11 @@ private val fib = (0..MAX_ATTEMPTS - initial.size).fold(initial) { acc, _ ->
 }
 
 internal suspend fun SessionScope.syncConferencesWithRetry(out: Output) {
+    val chatNet = chatNet
     fib.withIndex().asFlow().map { (attempt, wait) ->
         delay(1500L * wait)
         log.d { "Syncing conferences attempt $attempt $wait" }
-        listHostedRooms()
+        chatNet.listHostedRooms()
     }.filter { it.isNotEmpty() }.firstOrNull()?.let { rooms ->
         log.d { "Fetched conferences $rooms" }
         syncConferences(rooms).map { it.address }.onEach { room ->
@@ -46,7 +50,7 @@ private suspend fun SessionScope.syncConferences(list: Set<Address>) =
         Chat(
             title = chat.local,
             address = chat,
-            account = address
+            account = account.address
         )
     }.asFlow().onEach { chat ->
         createChat(chat)

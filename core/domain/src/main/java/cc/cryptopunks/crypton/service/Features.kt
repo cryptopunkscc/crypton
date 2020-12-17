@@ -50,6 +50,7 @@ import cc.cryptopunks.crypton.feature.toggleIndicator
 import cc.cryptopunks.crypton.feature.updateChatNotification
 import cc.cryptopunks.crypton.feature.uploadFile
 import cc.cryptopunks.crypton.features
+import cc.cryptopunks.crypton.resolvers
 import cc.cryptopunks.crypton.resolvers.contextResolver
 import cc.cryptopunks.crypton.resolvers.scopedActionResolver
 
@@ -111,7 +112,7 @@ fun cryptonFeatures(): Features = features(
     downloadFile()
 )
 
-fun cryptonResolvers() = listOf(
+fun cryptonResolvers() = resolvers(
     scopedActionResolver(),
     contextResolver()
 )

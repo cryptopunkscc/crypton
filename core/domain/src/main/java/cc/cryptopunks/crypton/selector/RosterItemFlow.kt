@@ -5,6 +5,8 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.messageRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
@@ -18,7 +20,7 @@ internal fun SessionScope.rosterItemStatesFlow(chatAddress: Address): Flow<Roste
         messageRepo.flowUnreadCount(chatAddress)
     ).flattenMerge().scan(
         Roster.Item(
-            account = address,
+            account = account.address,
             chatAddress = chatAddress,
             letter = chatAddress.toString().firstOrNull()?.toLowerCase() ?: 'a',
             title = chatAddress.toString(),

@@ -1,7 +1,10 @@
 package cc.cryptopunks.crypton.interactor
 
 import cc.cryptopunks.crypton.context.RootScope
-import cc.cryptopunks.crypton.factory.createSession
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.accountRepo
+import cc.cryptopunks.crypton.context.createSessionScope
+import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.util.logger.log
 
 internal suspend fun RootScope.loadSessions() {
@@ -15,8 +18,8 @@ internal suspend fun RootScope.loadSessions() {
                         else "Loading sessions: $accounts"
                     }
                 }
-                .map { createSession(it) }
-                .map { it.address to it }
+                .map { createSessionScope(it) }
+                .map { it.account.address to it }
         )
     }
 }

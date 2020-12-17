@@ -8,7 +8,13 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.chatNet
+import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.inContext
+import cc.cryptopunks.crypton.context.messageRepo
+import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
@@ -32,6 +38,8 @@ internal fun joinChat() = feature(
     },
 
     emitter = emitter<SessionScope> {
+        val chatRepo = chatRepo
+        val chatNet = chatNet
         accountAuthenticatedFlow().take(1).flatMapMerge {
             chatRepo.flowList()
         }.bufferedThrottle(300).flatMapConcat { list ->
@@ -40,21 +48,22 @@ internal fun joinChat() = feature(
                 .filter(Chat::isConference)
                 .map(Chat::address)
                 .toSet()
-                .minus(listJoinedRooms())
+                .minus(chatNet.listJoinedRooms())
                 .asFlow()
         }.map { chat ->
-            Exec.JoinChat.inContext(address, chat)
+            Exec.JoinChat.inContext(account.address, chat)
         }
     },
 
     handler = { _, _: Exec.JoinChat ->
+        val chat = chat
         when (chat.isConference) {
-            true -> joinConference(
+            true -> chatNet.joinConference(
                 address = chat.address,
-                nickname = address.local,
+                nickname = account.address.local,
                 historySince = historySince(chat.address)
             )
-            false -> {
+            false -> rosterNet.run {
                 sendPresence(
                     Presence(
                         resource = Resource(chat.address),

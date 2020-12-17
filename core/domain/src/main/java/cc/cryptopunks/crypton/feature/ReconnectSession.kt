@@ -4,6 +4,8 @@ import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Network
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.Subscribe
+import cc.cryptopunks.crypton.context.net
+import cc.cryptopunks.crypton.context.networkSys
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.reconnectIfNeeded
@@ -18,7 +20,7 @@ internal fun reconnectSession() = feature(
 
     emitter = emitter<SessionScope> {
         flowOf(
-            netEvents().filterIsInstance<Net.Disconnected>(),
+            net.netEvents().filterIsInstance<Net.Disconnected>(),
             networkSys.statusFlow().bufferedThrottle(200)
                 .map { it.last() }
                 .filter { status ->
@@ -34,7 +36,7 @@ internal fun reconnectSession() = feature(
     },
 
     handler = { _, _: Subscribe.ReconnectSession ->
-        if (isConnected()) interrupt()
+        net.run { if (isConnected()) interrupt() }
         reconnectIfNeeded(retryCount = -1)
     }
 )

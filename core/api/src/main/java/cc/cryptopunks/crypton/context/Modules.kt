@@ -1,139 +1,113 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.Context
-import cc.cryptopunks.crypton.Features
-import cc.cryptopunks.crypton.HandlerRegistry
-import cc.cryptopunks.crypton.Resolvers
-import cc.cryptopunks.crypton.Scope
-import cc.cryptopunks.crypton.createHandlers
-import cc.cryptopunks.crypton.util.Executors
-import cc.cryptopunks.crypton.util.IOExecutor
-import cc.cryptopunks.crypton.util.MainExecutor
-import cc.cryptopunks.crypton.util.Store
+import cc.cryptopunks.crypton.asDep
+import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.log
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.newSingleThreadContext
+import java.util.concurrent.CancellationException
 import kotlin.coroutines.CoroutineContext
-import kotlin.reflect.KClass
 
-class RootModule(
-    val sys: Sys,
-    val repo: Repo,
-    override val mainClass: KClass<*>,
-    override val features: Features,
-    override val resolvers: Resolvers,
-    override val createConnection: Connection.Factory,
-    override val mainExecutor: MainExecutor,
-    override val ioExecutor: IOExecutor,
-    override val navigateChatId: Int = 0,
-    override val applicationId: String = "crypton",
-) :
-    RootScope,
-    Executors,
-    Sys by sys,
-    Repo by repo {
+fun createRootScope(
+    dependencies: CoroutineContext,
+): RootScope = RootScope.Module(
+    cryptonContext(
+        dependencies,
+        baseRootContext(),
+    )
+).apply {
+    coroutineContext[Job]!!.invokeOnCompletion {
+        coroutineContext.log.d { "Finish AppModule $this" }
+    }
+}
 
-    override val coroutineContext: CoroutineContext = SupervisorJob() +
-        Dispatchers.IO +
-        CoroutineLog.Label(javaClass.simpleName)
+fun baseRootContext() = cryptonContext(
+    Main(Nothing::class.java),
+    Chat.NavigationId(),
+    ApplicationId(),
 
-    override val handlers: HandlerRegistry = features.createHandlers()
+    SessionScope.Store(),
+    Clip.Board.Store(),
+    Connectable.Binding.Store(),
+    Account.Store(),
+    Roster.Items.Store(),
 
-    override val sessions = SessionScope.Store()
-    override val clipboardStore = Clip.Board.Store()
-    override val connectableBindingsStore = Connectable.Binding.Store()
-    override val accounts = Store(Account.Many(emptySet()))
-    override val rosterItems = Store(Roster.Items(emptyList()))
+    SupervisorJob(),
+    Dispatchers.IO,
+    CoroutineLog.Label(RootScope::class.java.simpleName),
+)
 
-    init {
-        coroutineContext[Job]!!.invokeOnCompletion {
-            coroutineContext.log.d { "Finish AppModule $this" }
-        }
+
+fun RootScope.getSessionScope(session: Address): SessionScope =
+    requireNotNull(sessions[session]) {
+        "Cannot resolve SessionScope for $session\n" +
+            "available sessions: ${sessions.get().keys.joinToString("\n")}"
     }
 
-    override fun sessionScope(): SessionScope = sessions.get().values.first()
-    override fun sessionScope(address: Address): SessionScope =
-        sessions[address] ?: throw Exception(
-            "Cannot resolve SessionScope for $address\n" +
-                "available sessions: ${sessions.get().keys.joinToString("\n")}"
+suspend fun RootScope.createSessionScope(address: Address): SessionScope =
+    createSessionScope(accountRepo.get(address))
+
+fun RootScope.createSessionScope(account: Account): SessionScope = let {
+    val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    val connectionConfig = Connection.Config(
+        scope = connectionScope,
+        account = account.address,
+        password = account.password
+    )
+
+    SessionScope.Module(
+        cryptonContext(
+            coroutineContext,
+            asDep(),
+            createSessionRepo(account.address).context(),
+            createConnection(connectionConfig).context(),
+            baseSessionContext(Account.Name(account.address))
         )
-
-    override suspend fun resolve(context: Context): Pair<Scope, Any> =
-        sessionScope(address(context.id)).let { scope ->
-            when (val any = context.next) {
-                is Context -> scope.resolve(any)
-                else -> scope to any
-            }
-        }
-}
-
-class SessionModule(
-    override val rootScope: RootScope,
-    val connection: Connection,
-    val sessionRepo: SessionRepo,
-    override val address: Address,
-    val onClose: (Throwable?) -> Unit = {}
-) :
-    SessionScope,
-    RootScope by rootScope,
-    Net by connection,
-    SessionRepo by sessionRepo {
-
-    override val coroutineContext: CoroutineContext =
-        SupervisorJob(rootScope.coroutineContext[Job]) +
-            newSingleThreadContext(address.id) +
-            CoroutineLog.Label(javaClass.simpleName) +
-            CoroutineLog.Scope(address.id)
-
-    override val presenceStore = Presence.Store()
-    override val subscriptions = Store(emptySet<Address>())
-
-    init {
-        setDeviceFingerprintRepo(deviceRepo)
+    ).apply {
+        deviceNet.setDeviceFingerprintRepo(deviceRepo)
         coroutineContext[Job]!!.invokeOnCompletion {
-            onClose(it)
-            coroutineContext.log.d { "Finish SessionModule $address ${it.hashCode()} $it" }
+            connectionScope.cancel(CancellationException(it?.message))
+            coroutineContext.log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
         }
-    }
-
-    override fun chatScope(chat: Chat): ChatScope = ChatModule(this, chat)
-    override suspend fun chatScope(chat: Address): ChatScope = chatScope(chatRepo.get(chat))
-
-
-    override suspend fun resolve(
-        context: Context
-    ): Pair<Scope, Any> = when {
-        context.id == address.id -> when (val any = context.next) {
-            is Context -> resolve(any)
-            else -> this to context.next
-        }
-        chatRepo.contains(address(context.id)) -> chatScope(address(context.id)).resolve(context)
-        else -> rootScope.resolve(context)
     }
 }
 
-class ChatModule(
-    override val sessionScope: SessionScope,
-    override val chat: Chat
-) :
-    SessionScope by sessionScope,
-    ChatScope {
+fun RootScope.baseSessionContext(
+    account: Account.Name,
+) = cryptonContext(
+    coroutineContext,
+    asDep(),
+    account,
+    Presence.Store(),
+    Address.Subscriptions.Store(),
 
-    override val pagedMessage: Store<Chat.PagedMessages?> = Store(null)
+    SupervisorJob(coroutineContext[Job]),
+    newSingleThreadContext(account.address.id),
+    CoroutineLog.Label(SessionScope::class.java.simpleName),
+    CoroutineLog.Scope(account.address.id),
+)
 
-    override val coroutineContext = sessionScope.coroutineContext +
-        CoroutineLog.Label(javaClass.simpleName) +
-        CoroutineLog.Scope(chat.address.id)
 
-    @Suppress("IntroduceWhenSubject")
-    override suspend fun resolve(
-        context: Context
-    ): Pair<Scope, Any> = when {
-        context.id == chat.address.id -> this to context.next
-        else -> sessionScope.resolve(context)
-    }
-}
+suspend fun SessionScope.createChatScope(
+    chat: Address,
+): ChatScope = ChatScope.Module(
+    baseChatContext(chatRepo.get(chat))
+)
+
+fun SessionScope.baseChatContext(
+    chat: Chat,
+) = cryptonContext(
+    coroutineContext,
+    asDep(),
+    chat,
+    Chat.PagedMessages.Store(),
+
+    CoroutineLog.Label(javaClass.simpleName),
+    CoroutineLog.Scope(chat.address.id),
+)

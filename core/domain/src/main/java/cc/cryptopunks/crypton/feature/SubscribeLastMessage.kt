@@ -6,6 +6,9 @@ import cc.cryptopunks.crypton.cliv2.option
 import cc.cryptopunks.crypton.cliv2.optional
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Subscribe
+import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.chat
+import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log
@@ -32,16 +35,18 @@ internal fun subscribeLastMessage() = feature(
     },
 
     handler = { out, _: Subscribe.LastMessage ->
+        val chatAddress = chat.address
+        val messageRepo = messageRepo
         flowOf(
-            messageRepo.list(chat.address).asFlow(),
-            messageRepo.flowLatest(chat.address)
+            messageRepo.list(chatAddress).asFlow(),
+            messageRepo.flowLatest(chatAddress)
         ).flattenMerge().onEach {
             log.d { "last message $it" }
         }.distinctUntilChangedBy {
             it.id + it.status
         }.map { messages ->
             Chat.Messages(
-                account = address,
+                account = account.address,
                 list = listOf(messages)
             )
         }.onStart {

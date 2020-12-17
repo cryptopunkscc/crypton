@@ -2,15 +2,12 @@ package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.Async
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.dep
 import kotlinx.coroutines.flow.Flow
 
-interface Net :
-    Account.Net,
-    Message.Net,
-    Chat.Net,
-    Roster.Net,
-    Device.Net,
-    Upload.Net {
+val SessionScope.net: Net by dep()
+
+interface Net {
 
     fun connect()
     fun disconnect()
@@ -28,7 +25,7 @@ interface Net :
 
     open class Exception(
         message: String? = null,
-        cause: Throwable? = null
+        cause: Throwable? = null,
     ) :
         kotlin.Exception(message, cause),
         Event
