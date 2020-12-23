@@ -74,7 +74,7 @@ abstract class ServiceFragment :
     override fun onDestroy() {
         super.onDestroy()
         runBlocking {
-            binding.cancel(Destroy(this@ServiceFragment))
+            binding.cancel()
             log.d { "binding canceled" }
             rootScope.connectableBindingsStore.remove(binding)
             log.d { "binding removed" }

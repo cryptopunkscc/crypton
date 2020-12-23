@@ -26,7 +26,7 @@ internal class LogEventViewHolder(view: View) :
         "|",
         status,
         "|",
-        action?.run { javaClass.name.removePackage().replace("$", ".") },
+        action?.run { removePackage().replace("$", ".") },
         scopes.takeIf { it.isNotEmpty() }?.run { ":(${scopes.joinToString("; ")})" },
         "|"
     ).joinToString(" ")

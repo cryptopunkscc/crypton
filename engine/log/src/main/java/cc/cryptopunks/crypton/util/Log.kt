@@ -40,7 +40,7 @@ interface Log : (Log.Level, () -> Log.Event) -> Unit {
         val throwable: Throwable? = null,
         val level: Level = Level.Debug,
         val scopes: List<String> = emptyList(),
-        val action: Any? = null,
+        val action: String? = null,
         val status: String = Status.Null.name,
         val timestamp: Long = System.currentTimeMillis(),
         val thread: String = Thread.currentThread().name

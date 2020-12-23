@@ -27,4 +27,7 @@ internal fun subscribePagedMessages() = feature(
 )
 
 private val ChatScope.pagedMessagesReceived: suspend (PagedList<Message>) -> Unit
-    get() = { list -> log.d { "Received ${list.size} messages for chat $chat" } }
+    get() = { list ->
+        val size = list.size
+        log.d { "Received $size messages for chat $chat" }
+    }

@@ -12,14 +12,15 @@ import cc.cryptopunks.crypton.Resolve
 import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.cliv2.command
 import cc.cryptopunks.crypton.context.ActivityResult
+import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.PermissionsResult
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.fragment.ChatFragmentModule
-import cc.cryptopunks.crypton.fragment.FragmentScope
+import cc.cryptopunks.crypton.fragment.fragment
+import cc.cryptopunks.crypton.get
 
-object ShowFileChooser : Scoped<ChatFragmentModule>
+object ShowFileChooser : Scoped<ChatScope>
 
 internal fun showFileChooser() = feature(
 
@@ -30,6 +31,7 @@ internal fun showFileChooser() = feature(
     },
 
     handler = { _, _: ShowFileChooser ->
+        val fragment = fragment
         fragment.activity?.let { activity ->
             if (!activity.hasPermissionForReadExternalStorage())
                 fragment.requestPermissionForReadExternalStorage()
@@ -90,8 +92,7 @@ internal fun showFileChooserResolver(): Resolve = { activityResult ->
     when {
         activityResult !is PermissionsResult -> null
         activityResult.requestCode != READ_STORAGE_PERMISSION_REQUEST_CODE -> null
-        this !is FragmentScope -> null
-        fragment.context?.hasPermissionForReadExternalStorage() != true -> null
+        get<Fragment>()?.context?.hasPermissionForReadExternalStorage() != true -> null
         else -> ShowFileChooser
     }
 }

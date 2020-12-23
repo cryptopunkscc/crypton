@@ -4,7 +4,6 @@ import android.app.IntentService
 import android.app.Service
 import android.content.Intent
 import androidx.core.content.getSystemService
-import cc.cryptopunks.crypton.context.Core
 import cc.cryptopunks.crypton.context.Indicator
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.RootScope

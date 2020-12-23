@@ -4,17 +4,19 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.applicationId
 import cc.cryptopunks.crypton.context.getFile
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.fragment.ChatFragmentModule
+import cc.cryptopunks.crypton.fragment.fragment
 
 
-data class OpenFile(val uri: String) : Scoped<ChatFragmentModule>
+data class OpenFile(val uri: String) : Scoped<ChatScope>
 
 fun openFile() = feature(
 
     handler = { _, (uri): OpenFile ->
+        val fragment = fragment
         val file = getFile(uri)
 //        val intent = Intent().apply {
 //            action = Intent.ACTION_VIEW

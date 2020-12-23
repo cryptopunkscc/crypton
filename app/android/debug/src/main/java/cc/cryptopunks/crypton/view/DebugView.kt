@@ -84,7 +84,7 @@ class DebugView(
                     is Cli.Result.Suggestion -> debugAdapter += Log.Event(
                         label = "Debug",
                         message = command.toString(),
-                        action = command
+                        action = command.javaClass.name
                     )
                     is Action -> command.out()
                     is Any -> println(command) // FIXME

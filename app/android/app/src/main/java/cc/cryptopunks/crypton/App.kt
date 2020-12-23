@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.baseRootContext
 import cc.cryptopunks.crypton.context.context
 import cc.cryptopunks.crypton.debug.drawer.initAppDebug
 import cc.cryptopunks.crypton.feature.androidFeatures
@@ -43,6 +44,7 @@ class App :
 
     override val coroutineContext by lazy {
         cryptonContext(
+            baseRootContext(),
             ApplicationId(BuildConfig.APPLICATION_ID),
             mainActivityClass,
             MainExecutor(Dispatchers.Main.asExecutor()),

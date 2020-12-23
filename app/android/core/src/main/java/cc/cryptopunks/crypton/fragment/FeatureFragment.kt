@@ -5,8 +5,11 @@ import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.activity.FeatureActivity
+import cc.cryptopunks.crypton.asDep
 import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.dep
+import kotlinx.coroutines.CoroutineScope
 
 abstract class FeatureFragment :
     CoroutineFragment() {
@@ -23,8 +26,10 @@ abstract class FeatureFragment :
     }
 
     fun SessionScope.fragmentScope() = SessionFragmentModule(this@FeatureFragment, this)
-    fun ChatScope.fragmentScope() = ChatFragmentModule(this@FeatureFragment, this)
+    fun ChatScope.fragmentScope() = ChatScope.Module(coroutineContext + this@FeatureFragment.asDep<Fragment>())
 }
+
+val CoroutineScope.fragment: Fragment by dep()
 
 interface FragmentScope : Scope {
     val fragment: Fragment

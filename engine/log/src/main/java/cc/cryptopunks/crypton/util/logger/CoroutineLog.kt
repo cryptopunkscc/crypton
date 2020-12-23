@@ -158,7 +158,8 @@ object CoroutineLog : Log, Log.Output, LogCompanion, CoroutineScope {
         data class Key(val hash: Int) : CoroutineContext.Key<Tag>
     }
 
-    data class Action(val action: Any) : Element {
+    data class Action(val action: String) : Element {
+        constructor(action: Any) : this(action.javaClass.name)
         companion object : CoroutineContext.Key<Action>
 
         override val key get() = Companion

@@ -19,7 +19,10 @@ inline fun <reified T> depKey(any: Any = T::class.java): Dependency.Key<T> = Dep
 inline fun <reified T> dep() = DynamicDependency<T>(depKey())
 
 inline fun <reified T> CoroutineScope.dep(key: Dependency.Key<T> = depKey()) =
-    lazy { coroutineContext[key]!!.instance }
+    lazy { get(key)!! }
+
+inline fun <reified T> CoroutineScope.get(key: Dependency.Key<T> = depKey()): T? =
+    coroutineContext[key]?.instance
 
 fun cryptonContext(
     vararg any: Any,

@@ -34,7 +34,7 @@ private fun Log.Event.formatMessage() = listOf(
     "|",
     status,
     ":|",
-    action?.run { javaClass.name.removePackage().replace("$", ".") },
+    action?.run { removePackage().replace("$", ".") },
     scopes.takeIf { it.isNotEmpty() }?.run { ":(${scopes.joinToString("; ")})" },
     "|:",
     message

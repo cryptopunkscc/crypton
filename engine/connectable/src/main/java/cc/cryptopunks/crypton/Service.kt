@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
@@ -17,7 +18,7 @@ import java.util.*
 import kotlin.reflect.KClass
 
 fun <T : Scope> T.service(
-    name: String = "NoName.service"
+    name: String = "NoName.service",
 ): Connectable = Service(
     name = name,
     scope = this,
@@ -40,12 +41,14 @@ private data class Service(
         val connector: Connector,
         val resolvers: Resolvers,
         val subs: MutableMap<KClass<*>, Job> = mutableMapOf(),
-        val async: WeakHashMap<Job, Any> = WeakHashMap()
+        val async: WeakHashMap<Job, Any> = WeakHashMap(),
     ) {
         val out: Output get() = connector.output
     }
 
-    override val coroutineContext = CoroutineLog.Label(name) + scope.coroutineContext
+    override val coroutineContext = CoroutineLog.Label(name) +
+        scope.coroutineContext +
+        SupervisorJob(scope.coroutineContext[Job])
 
     override fun Connector.connect(): Job = launch {
         Connection(
@@ -92,7 +95,7 @@ private suspend fun Service.Connection.handleAction(scope: Scope, action: Any) {
 private fun Scope.handleSubscription(
     subscriptions: MutableMap<KClass<*>, Job>,
     subscription: Subscription,
-    out: Output
+    out: Output,
 ) {
     val type = subscription::class
     if (!subscription.enable) subscriptions.remove(type)?.cancel()
@@ -106,7 +109,7 @@ private fun Scope.handleSubscription(
 private fun Scope.handleAsync(
     async: WeakHashMap<Job, Any>,
     action: Async,
-    out: Output
+    out: Output,
 ) {
     handleRequest(action, out).also { job ->
         job.invokeOnCompletion { async -= job }
@@ -116,7 +119,7 @@ private fun Scope.handleAsync(
 
 private fun Scope.handleRequest(
     action: Any,
-    out: Output = {}
+    out: Output = {},
 ): Job = launch(
     CoroutineLog.Action(action) +
         CoroutineLog.Status(Log.Event.Status.Handling)
@@ -148,12 +151,12 @@ private fun Scope.handleRequest(
 
 private suspend fun logConnectionStarted() = log.builder.d {
     status = Log.Event.Status.Start.name
-    message = "Connection"
+    message = "Start service connection"
 }
 
 private suspend fun logConnectionFinished(e: Throwable?) = log.builder.d {
     status = Log.Event.Status.Finished.name
-    message = "Connection"
+    message = "Finish service connection"
     throwable = e
 }
 
@@ -170,7 +173,7 @@ interface Failure
 
 data class InvalidAction(
     val action: String,
-    val availableActions: List<String>
+    val availableActions: List<String>,
 ) : Failure {
     constructor(action: Any, availableActions: Collection<KClass<*>>) : this(
         action = action.javaClass.name,
@@ -179,7 +182,7 @@ data class InvalidAction(
 }
 
 data class CannotResolve(
-    val message: String
+    val message: String,
 ) : Failure {
     constructor(context: Context) : this("context: ${context.id}")
     constructor(any: Any) : this(any.toString())
@@ -188,7 +191,7 @@ data class CannotResolve(
 data class ActionFailed(
     val action: String,
     val stackTrace: String,
-    val message: String?
+    val message: String?,
 ) : Failure {
     constructor(action: Any, throwable: Throwable) : this(
         action = action.javaClass.name,

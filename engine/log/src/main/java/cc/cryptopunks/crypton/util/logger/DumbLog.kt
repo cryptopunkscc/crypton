@@ -10,7 +10,6 @@ object DumbLog : Log.Output {
             println("-")
             if (scopes.isNotEmpty()) println(scopes.joinToString("/", prefix = "/"))
             if (message.isNotBlank()) println(message)
-            if (action != Unit ) println(action)
             println(Date(timestamp))
             throwable?.printStackTrace()
             println()

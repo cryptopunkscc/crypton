@@ -16,8 +16,6 @@ import cc.cryptopunks.crypton.view.MessageView
 import cc.cryptopunks.crypton.view.ResolveUrlBody
 import cc.cryptopunks.crypton.widget.GenericViewHolder
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
@@ -33,7 +31,7 @@ import kotlin.coroutines.CoroutineContext
 private typealias ViewHolder = GenericViewHolder<MessageView>
 
 class MessageAdapter(
-    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.Main,
+    override val coroutineContext: CoroutineContext,
     val resolveUrlBody: ResolveUrlBody,
 ) :
     PagedListAdapter<Message, ViewHolder>(Diff),
