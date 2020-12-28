@@ -5,6 +5,7 @@ import cc.cryptopunks.crypton.context.RootScopeTag
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.createEmitters
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.features
 import cc.cryptopunks.crypton.interactor.loadSessions
 import cc.cryptopunks.crypton.service
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.flowOn
 
 internal fun startAppServices() = feature(
 
-    handler = { _, _: Subscribe.AppService ->
+    handler = handler {_, _: Subscribe.AppService ->
         println("Start AppService")
 
         loadSessions()

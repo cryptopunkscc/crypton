@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 
 internal fun deleteChat() = feature(
@@ -19,7 +20,7 @@ internal fun deleteChat() = feature(
         Exec.DeleteChat.inContext(account, chat)
     },
 
-    handler = { _, _: Exec.DeleteChat ->
+    handler = handler {_, _: Exec.DeleteChat ->
         chatRepo.delete(listOf(chat.address))
     }
 )

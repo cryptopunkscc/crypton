@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.createEmptyMessage
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log
 
@@ -27,7 +28,7 @@ internal fun enqueueMessage() = feature(
         Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inContext(account, chat)
     },
 
-    handler = { _, arg: Exec.EnqueueMessage ->
+    handler = handler {_, arg: Exec.EnqueueMessage ->
         chat.queuedMessage(arg).let { message ->
             log.d { "Enqueue message $message" }
             messageRepo.insertOrUpdate(message)

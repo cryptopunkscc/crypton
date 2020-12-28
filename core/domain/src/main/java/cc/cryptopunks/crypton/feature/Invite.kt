@@ -8,6 +8,7 @@ import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 
 internal fun inviteToConference() = feature(
@@ -24,7 +25,7 @@ internal fun inviteToConference() = feature(
         ).inContext(account, chat)
     },
 
-    handler = { _, (users): Exec.Invite ->
+    handler = handler {_, (users): Exec.Invite ->
         val chat = chat
         require(chat.isConference) { "Cannot invite to direct chat" }
         chatNet.inviteToConference(chat.address, users)

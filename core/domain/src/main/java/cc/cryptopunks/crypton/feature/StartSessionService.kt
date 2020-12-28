@@ -11,6 +11,7 @@ import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.createEmitters
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.features
 import cc.cryptopunks.crypton.service
 import cc.cryptopunks.crypton.serviceName
@@ -44,7 +45,7 @@ internal fun startSessionService() = feature(
         }
     },
 
-    handler = { _, _: Subscribe.SessionService ->
+    handler = handler {_, _: Subscribe.SessionService ->
         log.d { "Invoke session services for $account" }
 
         val context = coroutineContext

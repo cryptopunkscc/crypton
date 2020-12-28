@@ -10,6 +10,7 @@ import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
@@ -55,7 +56,7 @@ internal fun flushMessageQueue() = feature(
         }
     },
 
-    handler = { _, (addresses): Exec.FlushQueuedMessages ->
+    handler = handler {_, (addresses): Exec.FlushQueuedMessages ->
         if (addresses.isEmpty())
             flushQueuedMessages { true } else
             flushQueuedMessages { message: Message -> addresses.contains(message.chat) }

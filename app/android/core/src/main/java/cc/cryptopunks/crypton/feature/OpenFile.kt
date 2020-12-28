@@ -8,6 +8,7 @@ import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.applicationId
 import cc.cryptopunks.crypton.context.getFile
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.fragment.fragment
 
 
@@ -15,7 +16,7 @@ data class OpenFile(val uri: String) : Scoped<ChatScope>
 
 fun openFile() = feature(
 
-    handler = { _, (uri): OpenFile ->
+    handler = handler {_, (uri): OpenFile ->
         val fragment = fragment
         val file = getFile(uri)
 //        val intent = Intent().apply {

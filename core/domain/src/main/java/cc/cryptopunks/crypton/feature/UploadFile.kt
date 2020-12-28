@@ -19,6 +19,7 @@ import cc.cryptopunks.crypton.context.parseUriData
 import cc.cryptopunks.crypton.context.uploadNet
 import cc.cryptopunks.crypton.context.uriSys
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.util.logger.log
 import cc.cryptopunks.crypton.util.rename
@@ -41,7 +42,7 @@ fun uploadFile() = feature(
         Exec.Upload(URI(file)).inContext(account, chat)
     },
 
-    handler = { out, (uri): Exec.Upload ->
+    handler = handler {out, (uri): Exec.Upload ->
         val uriSys = uriSys
         val extensions = uriSys.getMimeType(uri).split("/").last().replace("*", "")
         val fileName = uri.path.parseUriData().fileName

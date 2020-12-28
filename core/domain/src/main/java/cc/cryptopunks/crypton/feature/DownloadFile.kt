@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.context.messageRepo
@@ -23,7 +24,7 @@ internal fun downloadFile() = feature(
         Exec.DownloadFromMessage(id).inContext(account)
     },
 
-    handler = { out, (messageId): Exec.DownloadFromMessage ->
+    handler = handler {out, (messageId): Exec.DownloadFromMessage ->
         messageRepo.get(messageId)?.run {
             require(type == Message.Type.Url)
             downloadFile(url = body).rename { "$messageId-$it" }

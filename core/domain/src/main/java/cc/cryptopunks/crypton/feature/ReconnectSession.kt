@@ -8,6 +8,7 @@ import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.networkSys
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.interactor.reconnectIfNeeded
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.flow.filter
@@ -35,7 +36,7 @@ internal fun reconnectSession() = feature(
             .map { Subscribe.ReconnectSession }
     },
 
-    handler = { _, _: Subscribe.ReconnectSession ->
+    handler = handler {_, _: Subscribe.ReconnectSession ->
         net.run { if (isConnected()) interrupt() }
         reconnectIfNeeded(retryCount = -1)
     }

@@ -12,6 +12,7 @@ import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.context.subscriptions
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.interactor.createChat
 import cc.cryptopunks.crypton.interactor.storePresence
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
@@ -24,7 +25,7 @@ internal fun handlePresence() = feature(
         presenceChangedFlow().map { Exec.HandlePresence(it.presence) }
     },
 
-    handler = { _, (presence): Exec.HandlePresence ->
+    handler = handler {_, (presence): Exec.HandlePresence ->
         storePresence(presence)
 
         val account = account

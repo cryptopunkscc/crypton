@@ -17,6 +17,7 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.PermissionsResult
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.fragment.fragment
 import cc.cryptopunks.crypton.get
 
@@ -30,7 +31,7 @@ internal fun showFileChooser() = feature(
         ShowFileChooser
     },
 
-    handler = { _, _: ShowFileChooser ->
+    handler = handler {_, _: ShowFileChooser ->
         val fragment = fragment
         fragment.activity?.let { activity ->
             if (!activity.hasPermissionForReadExternalStorage())

@@ -8,6 +8,7 @@ import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 
 internal fun getMessages() = feature(
@@ -21,7 +22,7 @@ internal fun getMessages() = feature(
         Get.Messages.inContext(account, chat)
     },
 
-    handler = { out, _: Get.Messages ->
+    handler = handler {out, _: Get.Messages ->
         messageRepo.list(
             chat = chat.address,
             range = System.currentTimeMillis().let { currentTime ->

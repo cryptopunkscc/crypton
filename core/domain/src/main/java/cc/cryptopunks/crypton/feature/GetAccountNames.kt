@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.feature
-
+import cc.cryptopunks.crypton.factory.handler
 internal fun getAccountNames() = feature(
     
     command = command(
@@ -15,7 +15,7 @@ internal fun getAccountNames() = feature(
         Get.AccountNames
     },
 
-    handler = { out, _: Get.AccountNames ->
+    handler = handler {out, _: Get.AccountNames ->
         Account.Many(accountRepo.addressList().toSet()).out()
     }
 )

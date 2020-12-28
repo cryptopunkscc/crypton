@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 
 internal fun getHostedRooms() = feature(
@@ -18,7 +19,7 @@ internal fun getHostedRooms() = feature(
         Get.HostedRooms.inContext(account)
     },
 
-    handler = { out, _: Get.HostedRooms ->
+    handler = handler {out, _: Get.HostedRooms ->
         Chat.AllRooms(chatNet.listHostedRooms().toSet()).out()
     }
 )

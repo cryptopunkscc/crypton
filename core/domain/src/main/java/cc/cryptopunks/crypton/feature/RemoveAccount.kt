@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.rootScope
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.interactor.removeSessionScope
 import cc.cryptopunks.crypton.util.logger.log
@@ -25,7 +26,7 @@ internal fun removeAccount() = feature(
         Exec.RemoveAccount().inContext(account)
     },
 
-    handler = { _, arg: Exec.RemoveAccount ->
+    handler = handler {_, arg: Exec.RemoveAccount ->
         val account = account
         removeSessionScope(account.address) {
             if (!arg.deviceOnly) {

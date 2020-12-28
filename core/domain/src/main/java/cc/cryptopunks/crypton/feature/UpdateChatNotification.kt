@@ -7,6 +7,7 @@ import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.interactor.updateChatNotification
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.util.logger.log
@@ -22,7 +23,7 @@ internal fun updateChatNotification(
         }
     },
 
-    handler = { _, (messages): Exec.UpdateNotification ->
+    handler = handler {_, (messages): Exec.UpdateNotification ->
         log.d { "update chat notification $messages" }
         updateNotification(messages)
     }

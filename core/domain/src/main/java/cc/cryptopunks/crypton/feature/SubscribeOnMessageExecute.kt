@@ -10,6 +10,7 @@ import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.executeSys
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.selector.filterByStatus
 import kotlinx.coroutines.flow.collect
@@ -27,7 +28,7 @@ internal fun subscribeOnMessageExecute() = feature(
         Subscribe.OnMessageExecute(command).inContext(account, chat)
     },
 
-    handler = { _, (command): Subscribe.OnMessageExecute ->
+    handler = handler {_, (command): Subscribe.OnMessageExecute ->
         messageRepo
             .flowLatest(chat.address)
             .filterByStatus(Message.Status.Received, Message.Status.Sent)

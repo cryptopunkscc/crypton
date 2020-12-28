@@ -6,6 +6,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.inContext
 
 internal fun getJoinedRooms() = feature(
@@ -18,7 +19,7 @@ internal fun getJoinedRooms() = feature(
         Get.JoinedRooms.inContext(account)
     },
 
-    handler = { out, _: Get.JoinedRooms ->
+    handler = handler {out, _: Get.JoinedRooms ->
         Chat.JoinedRooms(chatNet.listJoinedRooms()).out()
     }
 )
