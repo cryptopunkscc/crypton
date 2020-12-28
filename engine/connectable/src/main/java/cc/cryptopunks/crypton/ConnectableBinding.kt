@@ -53,7 +53,7 @@ class ConnectableBinding(
     }
 
     override suspend fun cancel(cause: CancellationException?) {
-        services.clear()
+        services.toList().forEach { minus(it) }
         binding.cancel(cause)
         binding = createBinding()
     }

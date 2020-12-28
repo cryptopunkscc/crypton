@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.util.elements
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 import kotlin.properties.ReadOnlyProperty
@@ -16,7 +17,7 @@ inline fun <reified T> T.asDep(any: Any = T::class.java) = Dependency(this, depK
 
 inline fun <reified T> depKey(any: Any = T::class.java): Dependency.Key<T> = Dependency.Key(any)
 
-inline fun <reified T> dep() = DynamicDependency<T>(depKey())
+inline fun <reified T> dep(tag: Any = T::class.java) = DynamicDependency(depKey<T>(tag))
 
 inline fun <reified T> CoroutineScope.dep(key: Dependency.Key<T> = depKey()) =
     lazy { get(key)!! }
@@ -37,5 +38,11 @@ class DynamicDependency<T>(
     private val key: Dependency.Key<T>,
 ) : ReadOnlyProperty<CoroutineScope, T> {
     override fun getValue(thisRef: CoroutineScope, property: KProperty<*>): T =
-        requireNotNull(thisRef.coroutineContext[key]).instance
+        requireNotNull(thisRef.coroutineContext[key]) {
+            """
+Cannot find dependency: ${property.name} with key: $key
+available dependencies:
+${thisRef.coroutineContext.elements().joinToString("\n")}
+            """.trimMargin()
+        }.instance
 }

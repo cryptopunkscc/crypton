@@ -193,3 +193,5 @@ object CoroutineLog : Log, Log.Output, LogCompanion, CoroutineScope {
         )
     }
 }
+
+fun Any.coroutineLogLabel() = CoroutineLog.Label(javaClass.simpleName)

@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.Exec
-import cc.cryptopunks.crypton.context.RootScope
+import cc.cryptopunks.crypton.context.RootScopeTag
 import cc.cryptopunks.crypton.context.indicatorSys
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 
 internal fun toggleIndicator() = feature(
 
-    emitter = emitter<RootScope> {
+    emitter = emitter(RootScopeTag) {
         hasAccountsFlow().map {
             Exec.ToggleIndicator(show = it.condition)
         }

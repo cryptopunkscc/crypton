@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Network
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.networkSys
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.map
 
 internal fun reconnectSession() = feature(
 
-    emitter = emitter<SessionScope> {
+    emitter = emitter(SessionScopeTag) {
         flowOf(
             net.netEvents().filterIsInstance<Net.Disconnected>(),
             networkSys.statusFlow().bufferedThrottle(200)

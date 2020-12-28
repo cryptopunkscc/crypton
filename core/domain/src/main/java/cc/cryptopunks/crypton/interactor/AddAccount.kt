@@ -26,8 +26,8 @@ suspend fun RootScope.addAccount(
     val logInfo = coroutineScope {
         coroutineContext[CoroutineLog.Action]!! + CoroutineLog.Status(Log.Event.Status.Handling)
     }
-    createSessionScope(account).apply {
-        withContext(logInfo) {
+    createSessionScope(this, account).apply {
+        launch(logInfo) {
             val net = net
             log.d { "Connecting" }
             net.connect()
@@ -40,7 +40,7 @@ suspend fun RootScope.addAccount(
             launch { net.initOmemo() }
             if (insert) accountRepo.insert(account)
             log.d { "Account inserted" }
-        }
+        }.join()
     }.also { session ->
         sessions reduce {
             plus(account.address to session)

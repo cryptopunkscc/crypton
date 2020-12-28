@@ -9,6 +9,7 @@ import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionStore
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.presenceStore
 import cc.cryptopunks.crypton.context.sessions
@@ -52,7 +53,7 @@ class RosterItemStatesFlowSelectorTest {
             )
         }
 
-        val sessionStore = SessionScope.Store()
+        val sessionStore = SessionStore()
         val presenceStore = Presence.Store()
 
         val rootScope = mockk<RootScope> {

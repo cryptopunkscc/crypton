@@ -4,23 +4,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flattenMerge
+import kotlin.coroutines.CoroutineContext
 
 data class Emitter<Scope : CoroutineScope>(
-    val type: Class<Scope>,
+    val type: CoroutineContext.Element,
     val create: Scope.() -> Flow<Any>,
 )
 
-inline fun <reified Scope : CoroutineScope> emitter(
-    noinline create: Scope.() -> Flow<Any>,
+fun emitter(
+    type: CoroutineContext.Element,
+    create: Scope.() -> Flow<Any>,
 ) = Emitter(
     create = create,
-    type = Scope::class.java
+    type = type
 )
 
-inline fun <reified S : CoroutineScope> CoroutineScope.createEmitters(features: Features) =
-    createEmitters(features, S::class.java)
+fun CoroutineScope.createEmitters(
+    tag: CoroutineContext.Element,
+    features: Features
+) =
+    createEmitters(features, tag)
 
-fun CoroutineScope.createEmitters(features: Features, type: Class<*>) = features
+fun CoroutineScope.createEmitters(features: Features, type: CoroutineContext.Element) = features
     .mapNotNull { feature -> feature.emitter?.takeIf { emitter -> emitter.type == type } }
     .filterIsInstance<Emitter<CoroutineScope>>()
     .map { emitter -> let(emitter.create) }

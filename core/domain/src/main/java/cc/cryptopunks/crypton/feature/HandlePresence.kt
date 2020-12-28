@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.rosterNet
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 
 internal fun handlePresence() = feature(
 
-    emitter = emitter<SessionScope> {
+    emitter = emitter(SessionScopeTag) {
         presenceChangedFlow().map { Exec.HandlePresence(it.presence) }
     },
 

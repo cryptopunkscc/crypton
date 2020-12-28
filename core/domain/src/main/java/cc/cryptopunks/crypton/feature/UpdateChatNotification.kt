@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.feature
@@ -15,7 +16,7 @@ internal fun updateChatNotification(
     updateNotification: SessionScope.(List<Message>) -> Unit = updateChatNotification()
 ) = feature(
 
-    emitter = emitter<SessionScope> {
+    emitter = emitter(SessionScopeTag) {
         messageRepo.flowListUnread().bufferedThrottle(500).map {
             Exec.UpdateNotification(it.flatten())
         }

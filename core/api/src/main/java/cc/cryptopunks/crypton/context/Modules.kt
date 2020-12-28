@@ -16,7 +16,7 @@ import kotlin.coroutines.CoroutineContext
 
 fun createRootScope(
     dependencies: CoroutineContext,
-): RootScope = RootScope.Module(
+): RootScope = CoroutineScope(
     cryptonContext(
         dependencies,
         baseRootContext(),
@@ -28,11 +28,12 @@ fun createRootScope(
 }
 
 fun baseRootContext() = cryptonContext(
+    RootScopeTag,
     Main(Nothing::class.java),
     Chat.NavigationId(),
     ApplicationId(),
 
-    SessionScope.Store(),
+    SessionStore(),
     Clip.Board.Store(),
     Connectable.Binding.Store(),
     Account.Store(),
@@ -50,10 +51,10 @@ fun RootScope.getSessionScope(session: Address): SessionScope =
             "available sessions: ${sessions.get().keys.joinToString("\n")}"
     }
 
-suspend fun RootScope.createSessionScope(address: Address): SessionScope =
-    createSessionScope(accountRepo.get(address))
+suspend fun createSessionScope(scope: RootScope, address: Address): SessionScope =
+    createSessionScope(scope, scope.accountRepo.get(address))
 
-fun RootScope.createSessionScope(account: Account): SessionScope = let {
+fun createSessionScope(scope: RootScope, account: Account): SessionScope = scope.let {
     val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     val connectionConfig = Connection.Config(
         scope = connectionScope,
@@ -61,53 +62,56 @@ fun RootScope.createSessionScope(account: Account): SessionScope = let {
         password = account.password
     )
 
-    SessionScope.Module(
+    CoroutineScope(
         cryptonContext(
-            coroutineContext,
-            asDep(),
-            createSessionRepo(account.address).context(),
-            createConnection(connectionConfig).context(),
-            baseSessionContext(Account.Name(account.address))
+            scope.coroutineContext,
+            scope.asDep(),
+            scope.createSessionRepo(account.address).context(),
+            scope.createConnection(connectionConfig).context(),
+            baseSessionContext(scope, Account.Name(account.address))
         )
     ).apply {
-        deviceNet.setDeviceFingerprintRepo(deviceRepo)
-        coroutineContext[Job]!!.invokeOnCompletion {
+        this.deviceNet.setDeviceFingerprintRepo(this.deviceRepo)
+        this.coroutineContext[Job]!!.invokeOnCompletion {
             connectionScope.cancel(CancellationException(it?.message))
-            coroutineContext.log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
+            this.coroutineContext.log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
         }
     }
 }
 
-fun RootScope.baseSessionContext(
+fun baseSessionContext(
+    rootScope: RootScope,
     account: Account.Name,
 ) = cryptonContext(
-    coroutineContext,
-    asDep(),
+    rootScope.coroutineContext,
+    rootScope.asDep(),
     account,
+    SessionScopeTag,
     Presence.Store(),
     Address.Subscriptions.Store(),
-
-    SupervisorJob(coroutineContext[Job]),
+    SupervisorJob(rootScope.coroutineContext[Job]),
     newSingleThreadContext(account.address.id),
     CoroutineLog.Label(SessionScope::class.java.simpleName),
     CoroutineLog.Scope(account.address.id),
 )
 
 
-suspend fun SessionScope.createChatScope(
+suspend fun createChatScope(
+    sessionScope: SessionScope,
     chat: Address,
-): ChatScope = ChatScope.Module(
-    baseChatContext(chatRepo.get(chat))
+): ChatScope = CoroutineScope(
+    baseChatContext(sessionScope, sessionScope.chatRepo.get(chat))
 )
 
-fun SessionScope.baseChatContext(
+fun baseChatContext(
+    sessionScope: SessionScope,
     chat: Chat,
 ) = cryptonContext(
-    coroutineContext,
-    asDep(),
+    sessionScope.coroutineContext,
+    sessionScope.asDep(),
     chat,
+    ChatScopeTag,
     Chat.PagedMessages.Store(),
-
-    CoroutineLog.Label(javaClass.simpleName),
     CoroutineLog.Scope(chat.address.id),
+    CoroutineLog.Label(sessionScope.javaClass.simpleName),
 )

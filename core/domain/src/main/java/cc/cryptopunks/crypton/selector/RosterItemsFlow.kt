@@ -51,13 +51,15 @@ private data class Change(
 
 private fun Collection<SessionScope>.rosterItemStatesFlow(): Flow<Pair<Address, Set<Roster.Item>>> =
     map { session ->
-        session.rosterItemStatesFlow().map { states ->
+        session.sessionsRosterItemStatesFlow().map { states ->
             session.account.address to states
         }
     }.asFlow().flattenMerge()
 
 
-private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
+private fun SessionScope.sessionsRosterItemStatesFlow(): Flow<Set<Roster.Item>> {
+    val context = coroutineContext
+    val chatRepo = chatRepo
     val jobs = mutableMapOf<Address, Job>()
     val items = mutableMapOf<Address, Roster.Item>()
     val sync = actor<suspend () -> Unit> {
@@ -83,7 +85,7 @@ private fun SessionScope.rosterItemStatesFlow(): Flow<Set<Roster.Item>> {
 
             // Observe new chat changes
             current.minus(jobs.keys).map { address ->
-                jobs += (address to launch {
+                jobs += (address to launch(context) {
                     rosterItemStatesFlow(address).collect { state ->
                         sync.send {
                             items[address] = state

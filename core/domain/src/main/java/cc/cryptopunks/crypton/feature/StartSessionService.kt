@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.connector
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.context.RootScope
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.RootScopeTag
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.inContext
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.onCompletion
 
 internal fun startSessionService() = feature(
 
-    emitter = emitter<RootScope> {
+    emitter = emitter(RootScopeTag) {
         mutableSetOf<Address>().let { last ->
             sessions.changesFlow().flatMapConcat { current ->
                 val new = (current - last)
@@ -36,7 +36,7 @@ internal fun startSessionService() = feature(
                 new.map { it.value }.asFlow()
             }.distinctUntilChanged().map { scope ->
                 val address = scope.account.address
-                log.d { "Start services request $address" }
+                log.d { "Request start services $address" }
                 Subscribe.SessionService.inContext(address)
             }.onCompletion {
                 log.d { "Close newSessionsFlow" }
@@ -53,7 +53,7 @@ internal fun startSessionService() = feature(
             .plus(CoroutineLog.Action(Subscribe.SessionService))
             .plus(CoroutineLog.Status(Log.Event.Status.Handling))
 
-        val emitters = createEmitters<SessionScope>(features)
+        val emitters = createEmitters(SessionScopeTag, features)
             .flowOn(context)
             .connector()
 

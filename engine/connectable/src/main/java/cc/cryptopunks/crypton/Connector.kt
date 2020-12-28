@@ -74,7 +74,7 @@ fun Connector.logging() = copy(
         } catch (e: Throwable) {
             log.builder.e {
                 throwable = e
-                message = "Cannot send"
+                message = "Cannot send $it"
             }
         }
     }

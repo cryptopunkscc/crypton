@@ -8,6 +8,7 @@ import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.util.logger.log
 
 internal suspend fun RootScope.loadSessions() {
+    val scope = this
     sessions.reduce {
         plus(
             accountRepo.addressList()
@@ -18,7 +19,7 @@ internal suspend fun RootScope.loadSessions() {
                         else "Loading sessions: $accounts"
                     }
                 }
-                .map { createSessionScope(it) }
+                .map { createSessionScope(scope, it) }
                 .map { it.account.address to it }
         )
     }

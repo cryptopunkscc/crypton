@@ -30,6 +30,9 @@ import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.initAndroidLog
+import cc.cryptopunks.crypton.util.logger.coroutineLogLabel
+import cc.cryptopunks.crypton.util.logger.log
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.flow.collect
@@ -45,6 +48,7 @@ class App :
     override val coroutineContext by lazy {
         cryptonContext(
             baseRootContext(),
+            coroutineLogLabel(),
             ApplicationId(BuildConfig.APPLICATION_ID),
             mainActivityClass,
             MainExecutor(Dispatchers.Main.asExecutor()),
@@ -66,7 +70,10 @@ class App :
             features,
             features.createHandlers(),
             cryptonResolvers() + androidResolvers(),
-            Chat.NavigationId(R.id.chatFragment)
+            Chat.NavigationId(R.id.chatFragment),
+            CoroutineExceptionHandler { coroutineContext, throwable ->
+                launch { log.builder.e { this.throwable = throwable } }
+            }
         )
     }
 

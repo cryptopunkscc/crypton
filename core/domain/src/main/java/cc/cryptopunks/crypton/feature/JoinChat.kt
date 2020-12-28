@@ -8,6 +8,7 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
@@ -37,7 +38,7 @@ internal fun joinChat() = feature(
         Exec.JoinChat.inContext(account, chat)
     },
 
-    emitter = emitter<SessionScope> {
+    emitter = emitter(SessionScopeTag) {
         val chatRepo = chatRepo
         val chatNet = chatNet
         accountAuthenticatedFlow().take(1).flatMapMerge {

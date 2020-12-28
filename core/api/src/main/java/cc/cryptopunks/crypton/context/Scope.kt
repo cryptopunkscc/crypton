@@ -1,26 +1,24 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Scope
+import cc.cryptopunks.crypton.ScopeTag
 import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
 
-val RootScope.sessions: SessionScope.Store by dep()
+val RootScope.sessions: SessionStore by dep()
 val SessionScope.rootScope: RootScope by dep()
 val ChatScope.sessionScope: SessionScope by dep()
 
-interface RootScope : Scope {
-    data class Module(override val coroutineContext: CoroutineContext) : RootScope
+typealias RootScope = CoroutineScope
+
+typealias SessionScope = RootScope
+
+class SessionStore : OpenStore<Map<Address, SessionScope>>(emptyMap()) {
+    operator fun get(address: Address): SessionScope? = get()[address]
 }
 
-interface SessionScope : RootScope {
-    data class Module(override val coroutineContext: CoroutineContext) : SessionScope
+typealias ChatScope = SessionScope
 
-    class Store : OpenStore<Map<Address, SessionScope>>(emptyMap()) {
-        operator fun get(address: Address): SessionScope? = get()[address]
-    }
-}
-
-interface ChatScope : SessionScope {
-    data class Module(override val coroutineContext: CoroutineContext) : ChatScope
-}
+object RootScopeTag : ScopeTag
+object SessionScopeTag : ScopeTag
+object ChatScopeTag : ScopeTag

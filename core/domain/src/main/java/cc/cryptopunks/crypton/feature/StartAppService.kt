@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.connector
-import cc.cryptopunks.crypton.context.RootScope
+import cc.cryptopunks.crypton.context.RootScopeTag
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.createEmitters
 import cc.cryptopunks.crypton.feature
@@ -26,7 +26,7 @@ internal fun startAppServices() = feature(
             .plus(CoroutineLog.Label("RootEmitter"))
             .plus(CoroutineLog.Status(Log.Event.Status.Handling))
 
-        val emitters = createEmitters<RootScope>(features)
+        val emitters = createEmitters(RootScopeTag, features)
             .flowOn(context)
             .connector()
 
