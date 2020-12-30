@@ -9,12 +9,12 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.address
-import cc.cryptopunks.crypton.context.inContext
+import cc.cryptopunks.crypton.context.inScope
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.navigate.navigateChat
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
-import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.ConnectableLayout
 import kotlinx.android.synthetic.main.create_chat.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 
 class CreateChatView(context: Context) :
-    ActorLayout(context) {
+    ConnectableLayout(context) {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
@@ -60,7 +60,7 @@ class CreateChatView(context: Context) :
             account = context.currentAccount,
             address = address(addressInputView.input.text.toString())
         )
-    ).inContext(context.currentAccount)
+    ).inScope(context.currentAccount)
 
     private fun setError(throwable: Throwable?) {
         errorOutput.text = throwable?.message

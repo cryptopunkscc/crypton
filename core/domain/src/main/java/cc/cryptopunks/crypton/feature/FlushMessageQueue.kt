@@ -5,12 +5,11 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.SessionScopeTag
-import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.emitter
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
@@ -21,6 +20,7 @@ import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 internal fun flushMessageQueue() = feature(
@@ -30,29 +30,26 @@ internal fun flushMessageQueue() = feature(
         val messageRepo = messageRepo
         flowOf(
             net.netEvents().filterIsInstance<Net.OmemoInitialized>().map {
-                log.v { "flush by Net.OmemoInitialized" }
-                messageRepo.listQueued().map { it.chat }
+                Net.OmemoInitialized to messageRepo.listQueued().map { it.chat }
             }.bufferedThrottle(3000).map { it.last() },
             presenceChangedFlow().filter {
                 it.presence.status == Presence.Status.Available
             }.map {
-                log.v { "flush by Presence.Status.Subscribed" }
-                listOf(it.presence.resource.address)
+                it to listOf(it.presence.resource.address)
             },
             messageRepo.flowListQueued().map { list ->
-                log.v { "flush by queuedListFlow $account $list" }
-                list.map { it.chat }
+                "flowListQueued" to list.map { it.chat }
             }
-        ).flattenMerge().filter {
-            it.isNotEmpty() && net.isOmemoInitialized().also {
-                log.v { "flush omemo initialized: $it" }
-            }
+        ).flattenMerge().filter { (_, addresses) ->
+            addresses.isNotEmpty() && net.isOmemoInitialized()
+        }.onEach {
+            log.v { "flush omemo initialized: $it" }
         }.onStart {
             log.v { "start flushMessageQueueFlow" }
         }.onCompletion {
             log.v { "complete flushMessageQueueFlow" }
         }.map {
-            Exec.FlushQueuedMessages(it.toSet())
+            Exec.FlushQueuedMessages(it.second.toSet())
         }
     },
 

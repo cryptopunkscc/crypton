@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 
 internal fun inviteToConference() = feature(
 
@@ -22,7 +22,7 @@ internal fun inviteToConference() = feature(
     ) { (account, chat, users) ->
         Exec.Invite(
             users.split(" ", ",").map { address(it) }.toSet()
-        ).inContext(account, chat)
+        ).inScope(account, chat)
     },
 
     handler = handler {_, (users): Exec.Invite ->

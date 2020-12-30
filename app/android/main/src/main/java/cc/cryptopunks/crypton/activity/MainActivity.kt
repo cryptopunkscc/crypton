@@ -13,17 +13,14 @@ import cc.cryptopunks.crypton.debug.drawer.detachDebugDrawer
 import cc.cryptopunks.crypton.debug.drawer.initDebugDrawer
 import cc.cryptopunks.crypton.intent.NewIntentProcessor
 import cc.cryptopunks.crypton.main.R
-import cc.cryptopunks.crypton.util.Buffer
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.view.setupDrawerAccountView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 
 private val topLevelDestinations = setOf(
@@ -76,6 +73,7 @@ private suspend fun Activity.subscribeErrorDialog() =
     CoroutineLog.flow()
 //        .scan(Buffer<Log.Event>()) { accumulator, value -> accumulator + value }
 //        .mapNotNull { it.lastOrNull()?.throwable }
+        .filterIsInstance<Log.Event>()
         .mapNotNull { it.throwable }
         .collect { throwable -> showErrorDialog(throwable) }
 

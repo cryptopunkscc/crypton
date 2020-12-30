@@ -16,16 +16,20 @@ fun CoroutineScope.initJvmLog() = launch {
 }
 
 object JvmLogOutput : Log.Output {
-
-    private val formatColumn = columnFormatter()
-
-    override fun invoke(event: Log.Event) = event
-        .formatMessage()
-        .formatColumn()
-        .joinToString(" ")
-        .let(::println)
-        .also { event.throwable?.printStackTrace() }
+    override fun invoke(event: Any) = when(event) {
+        is Log.Event -> event.log()
+        else -> Unit
+    }
 }
+
+private val formatColumn = columnFormatter()
+
+private fun Log.Event.log() = this
+    .formatMessage()
+    .formatColumn()
+    .joinToString(" ")
+    .let(::println)
+    .also { throwable?.printStackTrace() }
 
 private fun Log.Event.formatMessage() = listOf(
     dateFormat.format(timestamp),

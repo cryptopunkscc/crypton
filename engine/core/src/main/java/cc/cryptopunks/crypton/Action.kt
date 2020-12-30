@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton
 
 import kotlinx.coroutines.CoroutineScope
-import kotlin.coroutines.EmptyCoroutineContext
 
 const val DEFAULT_CHANNEL = 0
 const val NO_CHANNEL = -1
@@ -22,22 +21,32 @@ interface Action {
         val handle: Handle<Action>
     }
 
+    interface Async : Action {
+        override val channelId: Int get() = NO_CHANNEL
+    }
+
+    interface Subscription : Action {
+        override val channelId: Int get() = NO_CHANNEL
+        val enable: Boolean get() = true
+    }
+
     data class Error(
-        val action: Action,
-        val throwable: Throwable,
-    )
+        val action: String,
+        val stackTrace: String,
+        val message: String?,
+    ) {
+        constructor(action: Any, throwable: Throwable) : this(
+            action = action.javaClass.name,
+            message = throwable.message,
+            stackTrace = throwable.stackTraceToString()
+        )
+    }
 }
 
-interface Async : Action {
-    override val channelId: Int get() = NO_CHANNEL
-}
+typealias Async = Action.Async
+typealias Subscription = Action.Subscription
 
-interface Subscription : Action {
-    override val channelId: Int get() = NO_CHANNEL
-    val enable: Boolean get() = true
-}
-
-data class Scoped(
-    val scope: String,
-    val action: Action,
-) : Action
+data class Resolved(
+    override val scope: CoroutineScope,
+    override val action: Action,
+) : Action.Resolved

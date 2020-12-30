@@ -20,7 +20,10 @@ import java.io.File
 
 fun createServerScope(config: Map<String, Any?>): RootScope = RootScopeConfig(config).run {
     initSmack(File(omemoStorePath))
-    val features = cryptonFeatures()
+    createServerScope()
+}
+
+fun RootScopeConfig.createServerScope() =
     createRootScope(
         cryptonContext(
             JvmSys(home).context(),
@@ -34,14 +37,12 @@ fun createServerScope(config: Map<String, Any?>): RootScope = RootScopeConfig(co
             IOExecutor(Dispatchers.IO.asExecutor()),
             MainExecutor(Dispatchers.IO.asExecutor()),
             createConnectionFactory(this).asDep(),
-            features,
-            features.createHandlers(),
+            cryptonFeatures(),
             cryptonResolvers()
         )
     )
-}
 
-private class RootScopeConfig(
+class RootScopeConfig(
     map: Map<String, Any?>
 ) : MutableMap<String, Any?> by map.toMutableMap() {
     var home: String by this

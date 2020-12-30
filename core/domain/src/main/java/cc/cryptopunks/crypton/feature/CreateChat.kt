@@ -12,7 +12,7 @@ import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.context.sessions
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.interactor.createChat
 
 internal fun createChat() = feature(
@@ -23,7 +23,7 @@ internal fun createChat() = feature(
         name = "create chat",
         description = "Open chat with given address."
     ) { (account, address) ->
-        Exec.CreateChat(Chat(address(address), address(account))).inContext(account)
+        Exec.CreateChat(Chat(address(address), address(account))).inScope(account)
     },
 
     handler = handler {output, (chat): Exec.CreateChat ->

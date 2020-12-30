@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.context.inContext
+import cc.cryptopunks.crypton.context.inScope
 import cc.cryptopunks.crypton.util.all
 import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
@@ -34,7 +34,7 @@ suspend fun ClientDsl.tryRemoveAccount(
             when (this) {
                 is Account.Error -> true
                 is Account.Connected -> true.also {
-                    send(Exec.RemoveAccount(deviceOnly = false).inContext(address))
+                    send(Exec.RemoveAccount(deviceOnly = false).inScope(address))
                 }
                 else -> false
             }
@@ -46,7 +46,7 @@ suspend fun ClientDsl.tryRemoveAccount(
 suspend fun ClientDsl.removeAccounts(vararg addresses: Address) {
     send(
         *addresses.map { address ->
-            Exec.RemoveAccount(deviceOnly = false).inContext(address)
+            Exec.RemoveAccount(deviceOnly = false).inScope(address)
         }.toTypedArray()
     )
     flush()
@@ -69,7 +69,7 @@ suspend fun ClientDsl.createChat(
     chat: Address,
     users: List<Address> = listOf(chat)
 ) {
-    send(Exec.CreateChat(Chat(chat, account, users)).inContext(account))
+    send(Exec.CreateChat(Chat(chat, account, users)).inScope(account))
     expect(Account.ChatCreated(chat = chat))
 }
 
@@ -78,7 +78,7 @@ suspend fun ClientDsl.openChat(
     chat: Address
 ) {
     send(
-        Subscribe.LastMessage(true).inContext(account, chat)
+        Subscribe.LastMessage(true).inScope(account, chat)
     )
     flush()
 }
@@ -101,7 +101,7 @@ suspend fun ClientDsl.sendMessage(
     }
     openSubscription()
     send(
-        Exec.EnqueueMessage(message).inContext(account, chat)
+        Exec.EnqueueMessage(message).inScope(account, chat)
     )
 
     waitFor<Chat.Messages> {
@@ -152,7 +152,7 @@ suspend fun ClientDsl.acceptSubscription(
             )
         }
     }
-    send(Exec.JoinChat.inContext(account, subscriber))
+    send(Exec.JoinChat.inScope(account, subscriber))
 }
 
 suspend fun ClientDsl.expectRosterItemMessage(text: String, account: Address, chat: Address) {

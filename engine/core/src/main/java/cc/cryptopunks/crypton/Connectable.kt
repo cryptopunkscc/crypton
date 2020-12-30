@@ -7,3 +7,5 @@ interface Connectable : CoroutineScope {
     fun Connector.connect(): Job
 }
 
+fun Connectable.connect(connector: Connector): Job =
+    connector.connect()

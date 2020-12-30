@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 
 internal fun getSubscriptionStatus() = feature(
 
@@ -18,7 +18,7 @@ internal fun getSubscriptionStatus() = feature(
         name = "status of",
         description = "Get roster subscription status"
     ) { (account, buddy) ->
-        Get.SubscriptionStatus(address(buddy)).inContext(account)
+        Get.SubscriptionStatus(address(buddy)).inScope(account)
     },
 
     handler = handler {out, get: Get.SubscriptionStatus ->

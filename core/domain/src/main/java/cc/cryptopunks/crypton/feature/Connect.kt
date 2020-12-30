@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.accountNet
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 
 internal fun connect() = feature(
 
@@ -15,7 +15,7 @@ internal fun connect() = feature(
         param(),
         name = "connect"
     ) { (account) ->
-        Exec.Connect.inContext(account)
+        Exec.Connect.inScope(account)
     },
 
     handler = handler {_, _: Exec.Connect ->

@@ -2,14 +2,17 @@ package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
 import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.util.OpenStore
 import cc.cryptopunks.crypton.util.md5
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import java.lang.ref.WeakReference
 
 typealias CryptonMessage = Message
 
 val SessionScope.messageNet: Message.Net by dep()
 val SessionScope.messageRepo: Message.Repo by dep()
+val RootScope.messageConsumers: Message.Consumer.Store by dep()
 
 data class Message(
     val id: String = "",
@@ -23,7 +26,7 @@ data class Message(
     val status: Status = Status.None,
     val notifiedAt: Long = 0,
     val readAt: Long = 0,
-    val encrypted: Boolean = true
+    val encrypted: Boolean = true,
 ) {
 
     companion object {
@@ -86,7 +89,7 @@ data class Message(
             val since: Long? = null,
             val afterUid: String? = null,
             val until: Long = System.currentTimeMillis(),
-            val chat: Chat? = null
+            val chat: Chat? = null,
         )
     }
 
@@ -99,7 +102,11 @@ data class Message(
         suspend fun delete(message: List<Message>)
         suspend fun latest(): Message?
         suspend fun latest(chat: Address): Message?
-        suspend fun list(chat: Address? = null, range: LongRange = 0..System.currentTimeMillis()): List<Message>
+        suspend fun list(
+            chat: Address? = null,
+            range: LongRange = 0..System.currentTimeMillis(),
+        ): List<Message>
+
         suspend fun list(chat: Address, status: Status): List<Message>
         suspend fun list(chat: Address, type: Type): List<Message>
         suspend fun listUnread(): List<Message>
@@ -114,6 +121,8 @@ data class Message(
 
     interface Consumer {
         fun canConsume(message: Message): Boolean
+
+        class Store : OpenStore<List<WeakReference<out Consumer>>>(emptyList())
     }
 
     object Notification {
@@ -174,7 +183,7 @@ fun createCryptonMessage(
     timestamp: Long = System.currentTimeMillis(),
     type: Message.Type? = null,
     chat: Address? = null,
-    encrypted: Boolean = true
+    encrypted: Boolean = true,
 ) = CryptonMessage(
     id = id,
     stanzaId = stanzaId,
@@ -194,3 +203,15 @@ fun createCryptonMessage(
     },
     encrypted = encrypted
 )
+
+operator fun Message.Consumer.Store.plusAssign(
+    consumer: Message.Consumer,
+) {
+    get().first { it.get() == consumer }.get() ?: invoke { plus(WeakReference(consumer)) }
+}
+
+operator fun Message.Consumer.Store.minusAssign(consumer: Message.Consumer) {
+    invoke { filter { it.get() != consumer } }
+}
+
+fun Message.Consumer.Store.top(): Message.Consumer? = get().lastOrNull()?.get()

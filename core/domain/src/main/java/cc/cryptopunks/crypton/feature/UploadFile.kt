@@ -20,7 +20,7 @@ import cc.cryptopunks.crypton.context.uploadNet
 import cc.cryptopunks.crypton.context.uriSys
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.util.logger.log
 import cc.cryptopunks.crypton.util.rename
 import cc.cryptopunks.crypton.util.useCopyTo
@@ -39,7 +39,7 @@ fun uploadFile() = feature(
         name = "upload file",
         description = "Upload file to server and share link in chat."
     ) { (account, chat, file) ->
-        Exec.Upload(URI(file)).inContext(account, chat)
+        Exec.Upload(URI(file)).inScope(account, chat)
     },
 
     handler = handler {out, (uri): Exec.Upload ->

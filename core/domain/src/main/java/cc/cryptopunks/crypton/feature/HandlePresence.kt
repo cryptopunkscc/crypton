@@ -17,15 +17,19 @@ import cc.cryptopunks.crypton.interactor.createChat
 import cc.cryptopunks.crypton.interactor.storePresence
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.util.logger.log
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 internal fun handlePresence() = feature(
 
     emitter = emitter(SessionScopeTag) {
-        presenceChangedFlow().map { Exec.HandlePresence(it.presence) }
+        presenceChangedFlow()
+            .map { Exec.HandlePresence(it.presence) }
+            .distinctUntilChanged() // FIXME
     },
 
     handler = handler {_, (presence): Exec.HandlePresence ->
+        log.d { presence }
         storePresence(presence)
 
         val account = account

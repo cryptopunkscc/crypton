@@ -5,17 +5,21 @@ import cc.cryptopunks.crypton.Async
 import cc.cryptopunks.crypton.Handler
 import cc.cryptopunks.crypton.Service
 import cc.cryptopunks.crypton.Subscription
-import cc.cryptopunks.crypton.service.connector
+import cc.cryptopunks.crypton.factory.connector
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.service.start
+import cc.cryptopunks.crypton.service.terminate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.junit.Test
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -45,7 +49,6 @@ private val async = (0..100).map {
         override fun toString(): String = "async: $it"
     }
 }
-
 
 
 private val actionHandlers = actions.map {
@@ -113,47 +116,48 @@ class ServiceTest {
         val results = mutableListOf<Any>()
 
         runBlocking(handlers) {
-            CoroutineScope(
-                coroutineContext +
-                    newSingleThreadContext("test") +
-                    SupervisorJob()
-            ).run {
-
-                val serviceJob = launch {
-                    service.start()
-                }
-
-                val inputJob = launch {
-                    connector.input.collect {
-                        println("${System.nanoTime()} result: $it")
-                        results.add(it)
+            coroutineScope {
+                withContext(
+                    coroutineContext +
+                        newSingleThreadContext("test") +
+                        SupervisorJob()
+                ) {
+                    val serviceJob = launch {
+                        service.start()
                     }
+
+                    val inputJob = launch {
+                        connector.input.collect {
+                            println("${System.nanoTime()} result: $it")
+                            results.add(it)
+                        }
+                    }
+
+                    flowOf(
+                        LongRunningAction,
+                        ActionChannel2,
+                        actions[3],
+                        actions[2],
+                        actions[1],
+                        LongRunningAsync,
+                        SubscribeNumbers(),
+                        async[0],
+                        async[1],
+                        async[2],
+                        ActionError,
+                        AsyncError,
+                    ).collect(
+                        connector.output
+                    )
+
+//                    delay(5000)
+//                    cancel()
+//                    delay(500)
+//                    service.terminate()
+////                 Lines below are not required because scope is already cancelled
+//                    serviceJob.cancel()
+//                    inputJob.cancel()
                 }
-
-                flowOf(
-                    LongRunningAction,
-                    ActionChannel2,
-                    actions[3],
-                    actions[2],
-                    actions[1],
-                    LongRunningAsync,
-                    SubscribeNumbers(),
-                    async[0],
-                    async[1],
-                    async[2],
-                    ActionError,
-                    AsyncError,
-                ).collect(
-                    connector.output
-                )
-
-                delay(5000)
-//                cancel()
-                delay(500)
-//                service.terminate()
-                // Lines below are not required because scope is already cancelled
-//                serviceJob.cancel()
-//                inputJob.cancel()
             }
         }
     }

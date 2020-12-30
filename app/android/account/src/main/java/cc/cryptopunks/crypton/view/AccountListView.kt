@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.account.R
 import cc.cryptopunks.crypton.adapter.AccountListAdapter
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.ConnectableLayout
 import kotlinx.android.synthetic.main.account_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +20,7 @@ internal class AccountListView(
     context: Context,
     fragmentManager: FragmentManager
 ) :
-    ActorLayout(context) {
+    ConnectableLayout(context) {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.Main
 
@@ -38,7 +38,7 @@ internal class AccountListView(
     }
 
     override fun Connector.connect(): Job = launch {
-        connect(accountListAdapter)
+        accountListAdapter.run { connect() }
         launch {
             Get.Accounts.out()
             Subscribe.Accounts(true).out()

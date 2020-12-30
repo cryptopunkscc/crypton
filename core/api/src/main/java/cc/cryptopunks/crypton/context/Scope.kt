@@ -6,8 +6,8 @@ import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.CoroutineScope
 
 val RootScope.sessions: SessionStore by dep()
-val SessionScope.rootScope: RootScope by dep()
-val ChatScope.sessionScope: SessionScope by dep()
+val SessionScope.rootScope: RootScope by dep(RootScopeTag)
+val ChatScope.sessionScope: SessionScope by dep(SessionScopeTag)
 
 typealias RootScope = CoroutineScope
 

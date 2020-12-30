@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 
 internal fun getHostedRooms() = feature(
 
@@ -16,7 +16,7 @@ internal fun getHostedRooms() = feature(
         name = "hosted rooms",
         description = "List hosted rooms."
     ) { (account) ->
-        Get.HostedRooms.inContext(account)
+        Get.HostedRooms.inScope(account)
     },
 
     handler = handler {out, _: Get.HostedRooms ->

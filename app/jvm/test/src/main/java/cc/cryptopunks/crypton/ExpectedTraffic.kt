@@ -14,7 +14,7 @@ class ExpectedTraffic(
         expected.add {
             try {
                 val t =
-                    if (it !is Context) it else it.list().minus(context.map(
+                    if (it !is Scoped) it else it.list().minus(context.map(
                         Address::id)).apply {
                         require(size == 1) {
                             "Invalid $this context: ${context.toList()} arg: $it"

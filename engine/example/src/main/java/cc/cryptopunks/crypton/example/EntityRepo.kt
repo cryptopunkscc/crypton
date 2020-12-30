@@ -1,5 +1,10 @@
 package cc.cryptopunks.crypton.example
 
+import cc.cryptopunks.crypton.dep
+import kotlinx.coroutines.CoroutineScope
+
+val CoroutineScope.entityRepo: Entity.Repo by dep()
+
 class EntityRepo : Entity.Repo {
     private val cache = mutableMapOf<String, Entity>()
     override suspend fun collection() = cache.values

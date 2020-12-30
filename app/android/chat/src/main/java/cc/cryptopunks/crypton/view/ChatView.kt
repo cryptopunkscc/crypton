@@ -23,12 +23,14 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.features
+import cc.cryptopunks.crypton.context.messageConsumers
+import cc.cryptopunks.crypton.context.minusAssign
+import cc.cryptopunks.crypton.context.plusAssign
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.util.logger.log
-import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.ConnectableLayout
 import cc.cryptopunks.crypton.widget.autoAdjustActionButtons
 import cc.cryptopunks.crypton.widget.autoAdjustPaddingOf
 import cc.cryptopunks.crypton.widget.setSlashClickListener
@@ -50,7 +52,7 @@ class ChatView(
     account: Address,
     private val address: Address,
 ) :
-    ActorLayout(context),
+    ConnectableLayout(context),
     Message.Consumer {
 
     var resumed: Boolean = false
@@ -58,7 +60,7 @@ class ChatView(
     private val cliContext = Cli.Context(
 
         commands = rootScope
-            .features
+            .coroutineContext
             .cliCommands(),
 
         config = cliConfig(
@@ -167,8 +169,12 @@ class ChatView(
             Get.PagedMessages.out()
             Subscribe.PagedMessages(true).out()
         }
+        launch {
+            messageConsumers += this@ChatView
+        }
     }.apply {
         invokeOnCompletion {
+            messageConsumers -= this@ChatView
             messageAdapter.setMessages(null)
         }
     }

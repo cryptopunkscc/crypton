@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.asDep
 import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
@@ -29,17 +28,19 @@ fun createRootScope(
 
 fun baseRootContext() = cryptonContext(
     RootScopeTag,
+    CoroutineLog.Label("RootScope"),
     Main(Nothing::class.java),
     Chat.NavigationId(),
     ApplicationId(),
 
     SessionStore(),
     Clip.Board.Store(),
-    Connectable.Binding.Store(),
+    Message.Consumer.Store(),
     Account.Store(),
     Roster.Items.Store(),
 
     SupervisorJob(),
+//    newSingleThreadContext("RootScope"),
     Dispatchers.IO,
     CoroutineLog.Label(RootScope::class.java.simpleName),
 )
@@ -64,8 +65,6 @@ fun createSessionScope(scope: RootScope, account: Account): SessionScope = scope
 
     CoroutineScope(
         cryptonContext(
-            scope.coroutineContext,
-            scope.asDep(),
             scope.createSessionRepo(account.address).context(),
             scope.createConnection(connectionConfig).context(),
             baseSessionContext(scope, Account.Name(account.address))
@@ -84,14 +83,14 @@ fun baseSessionContext(
     account: Account.Name,
 ) = cryptonContext(
     rootScope.coroutineContext,
-    rootScope.asDep(),
+    rootScope.asDep(RootScopeTag),
     account,
     SessionScopeTag,
     Presence.Store(),
     Address.Subscriptions.Store(),
     SupervisorJob(rootScope.coroutineContext[Job]),
     newSingleThreadContext(account.address.id),
-    CoroutineLog.Label(SessionScope::class.java.simpleName),
+    CoroutineLog.Label("SessionScope"),
     CoroutineLog.Scope(account.address.id),
 )
 
@@ -108,10 +107,10 @@ fun baseChatContext(
     chat: Chat,
 ) = cryptonContext(
     sessionScope.coroutineContext,
-    sessionScope.asDep(),
+    sessionScope.asDep(SessionScopeTag),
     chat,
     ChatScopeTag,
     Chat.PagedMessages.Store(),
     CoroutineLog.Scope(chat.address.id),
-    CoroutineLog.Label(sessionScope.javaClass.simpleName),
+    CoroutineLog.Label("ChatScope"),
 )

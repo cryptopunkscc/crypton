@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.util.contains
 import kotlinx.coroutines.CoroutineScope
 
 internal val resolveScope: Execute = {
-    root.resolveRecursive(action).run {
+    resolveRecursive(root, action).run {
         copy(
             action = action,
             scope = scope
@@ -16,21 +16,23 @@ internal val resolveScope: Execute = {
     }
 }
 
-internal tailrec fun CoroutineScope.resolveRecursive(
+private tailrec suspend fun resolveRecursive(
+    scope: CoroutineScope,
     input: Any,
 ): Action.Resolved =
     when (input) {
         is Action.Resolved -> input
-        else -> resolveRecursive(resolve(input))
+        else -> resolveRecursive(scope, resolve(scope, input))
     }
 
-private fun CoroutineScope.resolve(
+private suspend fun resolve(
+    scope: CoroutineScope,
     input: Any,
-): Any = resolver(input)
-    ?.resolve?.invoke(this, input)
+): Any = scope.resolver(input)
+    ?.resolve?.invoke(scope, input)
     ?: when {
-        contains(Resolver.ThrowOnUnknown) -> throw cannotFindResolver(input)
-        input is Action -> Resolved(input, this)
+        Resolver.ThrowOnUnknown in scope -> throw cannotFindResolver(input)
+        input is Action -> Resolved(scope, input)
         else -> throw cannotFindResolver(input)
     }
 
@@ -40,7 +42,7 @@ private fun CoroutineScope.resolver(
     coroutineContext[input.resolverKey()]
 
 private fun Any.resolverKey() =
-    Resolver.Key(javaClass.name)
+    Resolver.Key(javaClass)
 
 private fun cannotFindResolver(any: Any) =
     IllegalArgumentException("Cannot find resolver for $any")

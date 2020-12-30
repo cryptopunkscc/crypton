@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlin.system.exitProcess
 
 fun consoleConnector(
     args: Array<String> = emptyArray()
@@ -19,13 +18,12 @@ fun consoleConnector(
 
 fun Flow<Any>.systemFlowConnector() = Connector(
     input = this,
-    output = { println(it) },
-    close = { exitProcess(0) }
+    output = { println(this) }
 )
 
-private fun Array<out Any>.argsFlow() = flowOf(joinArgs())
+fun Array<out Any>.argsFlow() = flowOf(joinArgs())
 
-private fun systemInput(): Flow<String> =
+fun systemInput(): Flow<String> =
     flow {
         do {
             readLine()

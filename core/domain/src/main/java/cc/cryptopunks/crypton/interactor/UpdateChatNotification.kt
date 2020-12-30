@@ -1,15 +1,14 @@
 package cc.cryptopunks.crypton.interactor
 
-import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.connectableBindingsStore
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Notification
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.account
+import cc.cryptopunks.crypton.context.messageConsumers
 import cc.cryptopunks.crypton.context.navigateChatId
 import cc.cryptopunks.crypton.context.notificationSys
-import cc.cryptopunks.crypton.top
+import cc.cryptopunks.crypton.context.top
 
 
 fun updateChatNotification(): SessionScope.(List<Message>) -> Unit {
@@ -22,7 +21,7 @@ fun updateChatNotification(): SessionScope.(List<Message>) -> Unit {
             notificationSys.cancel(it)
         }
 
-        current = connectableBindingsStore.consume(messages)
+        current = messageConsumers.consume(messages)
 
         current.asNotifications(account.address, navigateChatId).forEach {
             notificationSys.show(it)
@@ -32,7 +31,7 @@ fun updateChatNotification(): SessionScope.(List<Message>) -> Unit {
 
 private fun List<Message>.asNotifications(
     account: Address,
-    destination: Int
+    destination: Int,
 ) = groupBy { message: Message ->
     message.chat
 }.map { (address: Address, messages: List<Message>) ->
@@ -44,14 +43,6 @@ private fun List<Message>.asNotifications(
     )
 }
 
-private fun Connectable.Binding.Store.consume(messages: List<Message>) = top()
-    ?.services
-    ?.filterIsInstance<Message.Consumer>()
-    ?.let { consumers ->
-        messages.filterNot { message ->
-            consumers.any { consumer ->
-                consumer.canConsume(message)
-            }
-        }
-    }
+private fun Message.Consumer.Store.consume(messages: List<Message>) = top()
+    ?.let { consumer -> messages.filterNot(consumer::canConsume) }
     ?: messages

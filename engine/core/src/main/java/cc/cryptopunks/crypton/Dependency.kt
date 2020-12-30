@@ -17,7 +17,7 @@ inline fun <reified T> T.asDep(any: Any = T::class.java) = Dependency(this, depK
 
 inline fun <reified T> depKey(any: Any = T::class.java): Dependency.Key<T> = Dependency.Key(any)
 
-inline fun <reified T> dep(key: Dependency.Key<T> = depKey()) = DynamicDependency(key)
+inline fun <reified T> dep(any: Any? = null) = DynamicDependency(depKey<T>(any ?: T::class.java))
 
 inline fun <reified T> CoroutineScope.dep(key: Dependency.Key<T> = depKey()) =
     lazy { get(key)!! }

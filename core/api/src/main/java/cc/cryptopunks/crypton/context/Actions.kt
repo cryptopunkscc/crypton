@@ -10,7 +10,9 @@ object Exec {
     data class ToggleIndicator(val show: Boolean) : Main.Action
     object SyncConferences : Account.Action, Async
     data class UpdateNotification(val messages: List<Message>) : Account.Action
-    data class HandlePresence(val presence: Presence) : Account.Action
+    data class HandlePresence(val presence: Presence) : Account.Action {
+        override val channelId: Int get() = 10
+    }
     data class SaveMessages(val messages: List<Message>) : Account.Action
     data class FlushQueuedMessages(val addresses: Set<Address> = emptySet()) : Account.Action
     data class InsertInvitation(val address: Address, val inviter: Resource) : Account.Action

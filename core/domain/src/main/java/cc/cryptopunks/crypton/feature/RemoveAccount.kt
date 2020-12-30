@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.rootScope
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.interactor.removeSessionScope
 import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.cancel
@@ -23,7 +23,7 @@ internal fun removeAccount() = feature(
         name = "delete account",
         description = "Delete account."
     ) { (account) ->
-        Exec.RemoveAccount().inContext(account)
+        Exec.RemoveAccount().inScope(account)
     },
 
     handler = handler {_, arg: Exec.RemoveAccount ->

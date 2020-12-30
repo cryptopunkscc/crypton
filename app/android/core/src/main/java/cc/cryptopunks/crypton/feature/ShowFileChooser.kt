@@ -8,20 +8,19 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import cc.cryptopunks.crypton.Resolve
-import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.cliv2.command
 import cc.cryptopunks.crypton.context.ActivityResult
-import cc.cryptopunks.crypton.context.ChatScope
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.PermissionsResult
 import cc.cryptopunks.crypton.context.URI
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.factory.resolver
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.fragment.fragment
 import cc.cryptopunks.crypton.get
 
-object ShowFileChooser : Scoped<ChatScope>
+object ShowFileChooser : Action
 
 internal fun showFileChooser() = feature(
 
@@ -31,7 +30,7 @@ internal fun showFileChooser() = feature(
         ShowFileChooser
     },
 
-    handler = handler {_, _: ShowFileChooser ->
+    handler = handler { _, _: ShowFileChooser ->
         val fragment = fragment
         fragment.activity?.let { activity ->
             if (!activity.hasPermissionForReadExternalStorage())
@@ -80,20 +79,18 @@ private fun getContentIntent() = Intent(Intent.ACTION_GET_CONTENT).apply {
     type = "*/*"
 }
 
-internal fun execUploadResolver(): Resolve = { activityResult ->
+internal fun execUploadResolver() = resolver<ActivityResult> { activityResult ->
     when {
-        activityResult !is ActivityResult -> null
         activityResult.resultCode != Activity.RESULT_OK -> null
         activityResult.requestCode != FILE_CHOOSER_REQUEST_CODE -> null
         else -> activityResult.intent.data?.run { Exec.Upload(URI(toString())) }
-    }
+    } ?: Unit
 }
 
-internal fun showFileChooserResolver(): Resolve = { activityResult ->
+internal fun showFileChooserResolver() = resolver<PermissionsResult> { activityResult ->
     when {
-        activityResult !is PermissionsResult -> null
         activityResult.requestCode != READ_STORAGE_PERMISSION_REQUEST_CODE -> null
         get<Fragment>()?.context?.hasPermissionForReadExternalStorage() != true -> null
         else -> ShowFileChooser
-    }
+    } ?: Unit
 }

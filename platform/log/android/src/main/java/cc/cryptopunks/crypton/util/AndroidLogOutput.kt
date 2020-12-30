@@ -18,8 +18,8 @@ private object AndroidLogOutput : Log.Output {
     private val formatLabel = columnFormatter()
     private val formatColumns = columnFormatter()
 
-    override fun invoke(event: Log.Event) {
-        event.run {
+    override fun invoke(event: Any) {
+        (event as? Log.Event)?.run {
             val label = listOf(label).formatLabel().first() + ":"
             val message = formatMessage().formatColumns().joinToString("")
             if (throwable != null) android.util.Log.e(

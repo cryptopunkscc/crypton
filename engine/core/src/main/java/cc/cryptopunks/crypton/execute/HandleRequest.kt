@@ -9,6 +9,8 @@ import cc.cryptopunks.crypton.Request
 import cc.cryptopunks.crypton.Subscription
 import cc.cryptopunks.crypton.Subscriptions
 import cc.cryptopunks.crypton.type
+import cc.cryptopunks.crypton.util.Log
+import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -39,7 +41,7 @@ private suspend fun Request.handle() {
     }
 }
 
-private fun Action.Dispatch.dispatchSubscription(
+private fun Request.dispatchSubscription(
     out: Output,
     root: CoroutineScope,
     subscriptions: Subscriptions,
@@ -52,21 +54,21 @@ private fun Action.Dispatch.dispatchSubscription(
     }
 }
 
-private fun Action.Dispatch.dispatchAsync(
+private fun Request.dispatchAsync(
     out: Output,
     root: CoroutineScope,
 ) {
     root.launch { invoke(out).join() }
 }
 
-private suspend fun Action.Dispatch.dispatchAction(
+private suspend fun Request.dispatchAction(
     out: Output,
     channels: Channels,
     root: CoroutineScope,
 ) {
     root.launch {
         val channel = channels.getOrPut(action.channelId) {
-            Channel<Action.Dispatch>(Channel.BUFFERED).apply {
+            Channel<Request>(Channel.BUFFERED).apply {
                 root.launch {
                     consumeAsFlow().collect { dispatch ->
                         dispatch.invoke(out).join()
@@ -79,14 +81,27 @@ private suspend fun Action.Dispatch.dispatchAction(
 }
 
 
-private fun Action.Dispatch.invoke(out: Output): Job =
+private fun Request.invoke(out: Output): Job =
     scope.launch {
+        val log = log
+        log.builder.d {
+            status = Log.Event.Status.Start.name
+            message = "channelId: ${action.channelId}"
+        }
+//        log { Log.Status("Start") }
         try {
-            println("start: $action ${action.channelId}")
             scope.handle(out, action)
         } catch (e: Throwable) {
+            log.builder.d {
+                status = Log.Event.Status.Failed.name
+                message = "$action ${action.channelId}"
+                throwable = e
+            }
+//            log { Log.Error(e) }
             Action.Error(action, e).out()
-        } finally {
-            println("finish: $action")
         }
+        log.builder.d {
+            status = Log.Event.Status.Finished.name
+        }
+//        log { Log.Status("Finish") }
     }

@@ -23,7 +23,7 @@ open class TestServer {
             }
             val backend = BackendService(createServerScope(config)).init()
 
-            server(config, backend).invoke()
+            server(config)
         }
         delay(1000)
     }

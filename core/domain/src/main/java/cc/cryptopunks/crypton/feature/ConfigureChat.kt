@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 
 
 internal fun configureChat() = feature(
@@ -18,7 +18,7 @@ internal fun configureChat() = feature(
         name = "configure conference",
         description = "Configure conference (WIP)."
     ) { (account, chat) ->
-        Exec.ConfigureConference().inContext(account, chat)
+        Exec.ConfigureConference().inScope(account, chat)
     },
 
     handler = handler {_, _: Exec.ConfigureConference ->

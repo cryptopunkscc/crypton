@@ -12,7 +12,7 @@ import cc.cryptopunks.crypton.context.createEmptyMessage
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.util.logger.log
 
 internal fun enqueueMessage() = feature(
@@ -25,7 +25,7 @@ internal fun enqueueMessage() = feature(
         name = "-",
         description = "Send a message in chat."
     ) { (account, chat, notEncrypted, message) ->
-        Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inContext(account, chat)
+        Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inScope(account, chat)
     },
 
     handler = handler {_, arg: Exec.EnqueueMessage ->

@@ -1,16 +1,15 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.net.connect
+import cc.cryptopunks.crypton.net.startService
 import cc.cryptopunks.crypton.net.startServerSocket
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.withContext
 import java.net.InetSocketAddress
 
 
-fun server(
+suspend fun server(
     config: Map<String, Any?>,
-    backend: Connectable
-): suspend  () -> Unit = {
+) =
     withContext(
         CoroutineLog.Label("CryptonServer")
     ) {
@@ -20,13 +19,12 @@ fun server(
                     socketAddress,
                     socketPort
                 )
-            ).connect(backend)
+            ).startService()
         }
     }
-}
 
 class ServerConfig(
-    map: Map<String, Any?> = emptyMap()
+    map: Map<String, Any?> = emptyMap(),
 ) : MutableMap<String, Any?> by map.toMutableMap() {
     var home: String by this
     var omemoStore: String by this

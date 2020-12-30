@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.dep
 import cc.cryptopunks.crypton.util.OpenStore
@@ -21,7 +22,7 @@ data class Account(
         override fun toString(): String = address.toString()
     }
 
-    interface Action : Scoped<SessionScope>
+    interface Action : cc.cryptopunks.crypton.Action
 
     companion object {
         val Empty = Account()

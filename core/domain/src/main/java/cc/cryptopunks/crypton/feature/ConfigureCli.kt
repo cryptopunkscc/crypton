@@ -13,7 +13,6 @@ import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.util.invoke
 
 internal fun cliConfigure() = feature(
-
     command = command(
         named("account").copy(optional = true),
         named("chat").copy(optional = true),

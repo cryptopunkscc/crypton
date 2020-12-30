@@ -28,10 +28,7 @@ abstract class FeatureFragment :
     val rootScope get() = featureActivity.rootScope
 
     override val coroutineContext by lazy {
-        requireContext().applicationScope.coroutineContext +
-//            rootScope.coroutineContext
-//                .minusKey(Job)
-//                .minusKey(ContinuationInterceptor) +
+        rootScope.coroutineContext +
             SupervisorJob() +
             Dispatchers.Main +
             CoroutineLog.Label(javaClass.simpleName) +

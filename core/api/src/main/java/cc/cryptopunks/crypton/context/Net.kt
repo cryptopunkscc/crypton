@@ -17,7 +17,7 @@ interface Net {
     fun isOmemoInitialized(): Boolean
     fun netEvents(): Flow<Api.Event>
 
-    interface Event : Api.Event, Scoped<SessionScope>, Async
+    interface Event : Api.Event
 
     object Connected : Event
     object OmemoInitialized : Event

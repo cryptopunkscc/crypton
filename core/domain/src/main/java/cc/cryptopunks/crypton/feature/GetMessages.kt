@@ -9,7 +9,7 @@ import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 
 internal fun getMessages() = feature(
 
@@ -19,7 +19,7 @@ internal fun getMessages() = feature(
         name = "messages",
         description = "Get chat messages."
     ) { (account, chat) ->
-        Get.Messages.inContext(account, chat)
+        Get.Messages.inScope(account, chat)
     },
 
     handler = handler {out, _: Get.Messages ->

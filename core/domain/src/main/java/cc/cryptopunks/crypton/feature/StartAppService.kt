@@ -1,40 +1,35 @@
 package cc.cryptopunks.crypton.feature
 
-import cc.cryptopunks.crypton.connector
 import cc.cryptopunks.crypton.context.RootScopeTag
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.createEmitters
-import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.features
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.loadSessions
-import cc.cryptopunks.crypton.service
-import cc.cryptopunks.crypton.serviceName
+import cc.cryptopunks.crypton.service.start
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flowOn
+import cc.cryptopunks.crypton.util.logger.log
+import kotlinx.coroutines.withContext
 
 internal fun startAppServices() = feature(
 
-    handler = handler {_, _: Subscribe.AppService ->
-        println("Start AppService")
+    handler = handler { _, _: Subscribe.AppService ->
+        withContext(
+            cryptonContext(
+                CoroutineLog.Label("AppService"),
+                CoroutineLog.Status(Log.Event.Status.Handling)
+            )
+        ) {
 
-        loadSessions()
+            log.d { "Start AppService" }
 
-        val context = coroutineContext
-            .minusKey(Job)
-            .plus(CoroutineLog.Label("RootEmitter"))
-            .plus(CoroutineLog.Status(Log.Event.Status.Handling))
+            loadSessions()
 
-        val emitters = createEmitters(RootScopeTag, features)
-            .flowOn(context)
-            .connector()
+            createEmitters(RootScopeTag).start { }
 
-        service("Root".serviceName)
-            .run { emitters.connect() }
-            .join()
-
-        println("Finish AppService")
+            log.d { "Finish AppService" }
+        }
     }
 )

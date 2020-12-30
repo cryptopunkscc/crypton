@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.inScope
 
 internal fun deleteChat() = feature(
 
@@ -17,7 +17,7 @@ internal fun deleteChat() = feature(
         name = "delete chat",
         description = "Delete each chat form given list"
     ) { (account, chat) ->
-        Exec.DeleteChat.inContext(account, chat)
+        Exec.DeleteChat.inScope(account, chat)
     },
 
     handler = handler {_, _: Exec.DeleteChat ->

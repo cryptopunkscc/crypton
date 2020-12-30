@@ -1,32 +1,35 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.cliv2.Cli
+import cc.cryptopunks.crypton.util.CoroutineContextObject
 import kotlinx.coroutines.CoroutineScope
+import kotlin.coroutines.CoroutineContext
 
-inline fun <reified Action : Scoped<Scope>, reified Scope : CoroutineScope> feature(
+fun <A : Action> feature(
     command: Cli.Command.Template? = null,
-    emitter: Emitter<*>? = null,
-    noinline handler: Handle<Scope, Action>,
-): Feature<Action, Scope> = FeatureData(
-    command = command,
-    handle = handler,
-    emitter = emitter,
-    type = Action::class.java
-)
+    emitter: Emitter? = null,
+    handler: Handler<A>,
+): CoroutineContext =
+    listOfNotNull<CoroutineContext>(
+        handler,
+        emitter,
+        command?.let { CliCommand(it) }
+    ).reduce { acc, coroutineContext -> acc + coroutineContext }
 
-interface Feature<Action : Scoped<Scope>, Scope : CoroutineScope> {
-    val command: Cli.Command.Template? get() = null
-    val emitter: Emitter<*>? get() = null
-    val handle: Handle<Scope, Action>
-    val type: Class<Action>
+fun feature(
+    vararg elements: Any
+) = elements.map {
+    when(it) {
+        is CoroutineContext -> it
+        is Cli.Command.Template -> it
+        else -> throw IllegalArgumentException()
+    }
 }
 
-data class FeatureData<Action : Scoped<Scope>, Scope : CoroutineScope>(
-    override val command: Cli.Command.Template? = null,
-    override val emitter: Emitter<*>? = null,
-    override val handle: Handle<Scope, Action>,
-    override val type: Class<Action>,
-) : Feature<Action, Scope>
+data class CliCommand(
+    val template: Cli.Command.Template,
+) : CoroutineContextObject
 
-private fun Features.getHandlers(): List<Handle<CoroutineScope, Scoped<CoroutineScope>>> =
-    map { it.handle }.filterNot { it == NonHandle }
+interface Feature<A : Action> : CoroutineScope {
+    val emitter: Emitter? get() = null
+}

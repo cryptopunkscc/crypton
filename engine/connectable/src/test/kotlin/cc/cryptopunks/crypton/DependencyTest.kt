@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.util.CoroutineContextTag
+import cc.cryptopunks.crypton.util.CoroutineContextObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -11,35 +11,35 @@ import kotlin.system.measureNanoTime
 
 private const val times: Int = 1000
 
-private object TestObj1 : CoroutineContextTag
-private object TestObj2 : CoroutineContextTag
-private object TestObj3 : CoroutineContextTag
-private object TestObj4 : CoroutineContextTag
-private object TestObj5 : CoroutineContextTag
-private object TestObj6 : CoroutineContextTag
-private object TestObj7 : CoroutineContextTag
-private object TestObj8 : CoroutineContextTag
-private object TestObj9 : CoroutineContextTag
-private object TestObj10 : CoroutineContextTag
-private object TestObj11 : CoroutineContextTag
-private object TestObj12 : CoroutineContextTag
-private object TestObj13 : CoroutineContextTag
-private object TestObj14 : CoroutineContextTag
-private object TestObj15 : CoroutineContextTag
-private object TestObj16 : CoroutineContextTag
-private object TestObj17 : CoroutineContextTag
-private object TestObj18 : CoroutineContextTag
-private object TestObj19 : CoroutineContextTag
-private object TestObj20 : CoroutineContextTag
-private object TestObj21 : CoroutineContextTag
-private object TestObj22 : CoroutineContextTag
-private object TestObj23 : CoroutineContextTag
-private object TestObj24 : CoroutineContextTag
-private object TestObj25 : CoroutineContextTag
-private object TestObj26 : CoroutineContextTag
-private object TestObj27 : CoroutineContextTag
-private object TestObj28 : CoroutineContextTag
-private object TestObj29 : CoroutineContextTag
+private object TestObj1 : CoroutineContextObject
+private object TestObj2 : CoroutineContextObject
+private object TestObj3 : CoroutineContextObject
+private object TestObj4 : CoroutineContextObject
+private object TestObj5 : CoroutineContextObject
+private object TestObj6 : CoroutineContextObject
+private object TestObj7 : CoroutineContextObject
+private object TestObj8 : CoroutineContextObject
+private object TestObj9 : CoroutineContextObject
+private object TestObj10 : CoroutineContextObject
+private object TestObj11 : CoroutineContextObject
+private object TestObj12 : CoroutineContextObject
+private object TestObj13 : CoroutineContextObject
+private object TestObj14 : CoroutineContextObject
+private object TestObj15 : CoroutineContextObject
+private object TestObj16 : CoroutineContextObject
+private object TestObj17 : CoroutineContextObject
+private object TestObj18 : CoroutineContextObject
+private object TestObj19 : CoroutineContextObject
+private object TestObj20 : CoroutineContextObject
+private object TestObj21 : CoroutineContextObject
+private object TestObj22 : CoroutineContextObject
+private object TestObj23 : CoroutineContextObject
+private object TestObj24 : CoroutineContextObject
+private object TestObj25 : CoroutineContextObject
+private object TestObj26 : CoroutineContextObject
+private object TestObj27 : CoroutineContextObject
+private object TestObj28 : CoroutineContextObject
+private object TestObj29 : CoroutineContextObject
 
 class DependencyTest {
 
@@ -84,14 +84,14 @@ class DependencyTest {
         TestObj29,
     )
     val classes = list.map { it.javaClass }
-    private val randomList = mutableListOf<CoroutineContextTag>().apply {
+    private val randomList = mutableListOf<CoroutineContextObject>().apply {
         repeat(times) {
             add(list.random())
         }
     }
     val randomClasses = randomList.map { it.javaClass }
-    private val map: Map<CoroutineContextTag, CoroutineContextTag> = list.associateBy { it }
-    private val depList: List<Dependency<out CoroutineContextTag>> = listOf(
+    private val map: Map<CoroutineContextObject, CoroutineContextObject> = list.associateBy { it }
+    private val depList: List<Dependency<out CoroutineContextObject>> = listOf(
         TestObj1.asDep(),
         TestObj2.asDep(),
         TestObj3.asDep(),
@@ -122,7 +122,7 @@ class DependencyTest {
         TestObj28.asDep(),
         TestObj29.asDep(),
     )
-    private val randomDepList = mutableListOf<Dependency<out CoroutineContextTag>>().apply {
+    private val randomDepList = mutableListOf<Dependency<out CoroutineContextObject>>().apply {
         repeat(times) {
             add(depList.random())
         }

@@ -23,6 +23,7 @@ import cc.cryptopunks.crypton.selector.newSessionsFlow
 import cc.cryptopunks.crypton.service.cryptonFeatures
 import cc.cryptopunks.crypton.service.cryptonResolvers
 import cc.cryptopunks.crypton.service.initExceptionService
+import cc.cryptopunks.crypton.service.start
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.sys.AndroidSys
@@ -68,7 +69,6 @@ class App :
             ).context(),
             SmackConnectionFactory(setupSmackConnection).asDep<Connection.Factory>(),
             features,
-            features.createHandlers(),
             cryptonResolvers() + androidResolvers(),
             Chat.NavigationId(R.id.chatFragment),
             CoroutineExceptionHandler { coroutineContext, throwable ->
@@ -85,7 +85,7 @@ class App :
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        service().dispatch(Subscribe.AppService)
+        launch { Subscribe.AppService.start { println(this) } } // FIXME print
         launch { newSessionsFlow().collect { currentAccount = it.account.address } }
     }
 

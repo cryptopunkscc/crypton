@@ -3,16 +3,15 @@ package cc.cryptopunks.crypton.feature
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
-import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.context.ChatScope
+import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.context.applicationId
 import cc.cryptopunks.crypton.context.getFile
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.fragment.fragment
 
 
-data class OpenFile(val uri: String) : Scoped<ChatScope>
+data class OpenFile(val uri: String) : Action
 
 fun openFile() = feature(
 
