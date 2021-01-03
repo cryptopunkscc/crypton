@@ -4,10 +4,10 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.RootScopeTag
 import cc.cryptopunks.crypton.context.indicatorSys
 import cc.cryptopunks.crypton.emitter
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.selector.hasAccountsFlow
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.map
 
 internal fun toggleIndicator() = feature(
@@ -18,7 +18,7 @@ internal fun toggleIndicator() = feature(
         }
     },
 
-    handler = handler {_, (condition): Exec.ToggleIndicator ->
+    handler = handler { _, (condition): Exec.ToggleIndicator ->
         indicatorSys.run {
             if (isIndicatorVisible != condition) when (condition) {
                 true -> showIndicator().let { "Show" }

@@ -2,7 +2,8 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

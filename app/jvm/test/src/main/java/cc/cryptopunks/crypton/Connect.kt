@@ -2,7 +2,6 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.net.connectClientSocket
 import cc.cryptopunks.crypton.net.connector
-import cc.cryptopunks.crypton.util.Log
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -22,9 +21,7 @@ suspend fun Any.connectDslClient(
         .connector()
         .also { connector ->
             ClientDsl(name, connector).apply {
-                log.builder.d { status = Log.Event.Status.Start.name }
                 block()
-                log.builder.d { status = Log.Event.Status.Finished.name }
                 if (isActive) {
                     cancel()
                     delay(200)

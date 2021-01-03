@@ -29,7 +29,8 @@ import cc.cryptopunks.crypton.context.plusAssign
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.widget.ConnectableLayout
 import cc.cryptopunks.crypton.widget.autoAdjustActionButtons
 import cc.cryptopunks.crypton.widget.autoAdjustPaddingOf

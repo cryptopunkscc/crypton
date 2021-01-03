@@ -80,7 +80,7 @@ private val embeddedCommands: Cli.Commands = commands(
                     launch { server(config) },
                     launch {
                         cliClient(
-                            args = arrayOf(text),
+                            args = if (text.isBlank()) emptyArray() else arrayOf(text),
                             interactive = interactive.toBoolean(),
                             context = Cli.Context(
                                 commands = cryptonFeatures().cliCommands(),

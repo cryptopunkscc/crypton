@@ -8,11 +8,12 @@ import cc.cryptopunks.crypton.context.messageNet
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.emitter
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.saveMessage
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.selector.archivedMessagesFlow
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flattenMerge
@@ -39,13 +40,14 @@ internal fun saveMessages() = feature(
         }
     },
 
-    handler = handler {_, (messages): Exec.SaveMessages ->
+    handler = handler { _, (messages): Exec.SaveMessages ->
         messages.forEach { message ->
             when (message.type) {
                 Message.Type.State -> when (message.body) {
                     Message.State.composing.name -> saveMessage(message.copy(id = message.simpleStatusId()))
                     Message.State.paused.name,
-                    Message.State.active.name -> messageRepo.delete(id = message.simpleStatusId())
+                    Message.State.active.name,
+                    -> messageRepo.delete(id = message.simpleStatusId())
                     else -> Unit
                 }
                 else -> null

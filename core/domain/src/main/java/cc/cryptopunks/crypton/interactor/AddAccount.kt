@@ -8,12 +8,12 @@ import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.context.createSessionScope
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.sessions
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 suspend fun RootScope.addAccount(
     account: Account,

@@ -1,6 +1,7 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.util.CoroutineContextObject
+import cc.cryptopunks.crypton.util.Instance
 import cc.cryptopunks.crypton.util.mapNotNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -9,12 +10,12 @@ import kotlinx.coroutines.flow.flattenMerge
 import kotlin.coroutines.CoroutineContext
 
 data class Emitter(
-    val type: CoroutineContext.Element,
+    val type: Any,
     val create: CoroutineScope.() -> Flow<Any>,
 ) : CoroutineContextObject
 
 fun emitter(
-    type: CoroutineContext.Element,
+    type: Any,
     create: CoroutineScope.() -> Flow<Any>,
 ) = Emitter(
     create = create,
@@ -36,3 +37,5 @@ interface ScopeTag : CoroutineContext.Element {
     override val key get() = Key
     companion object Key : CoroutineContext.Key<ScopeTag>
 }
+
+data class ScopeElement(val id: String) : Instance

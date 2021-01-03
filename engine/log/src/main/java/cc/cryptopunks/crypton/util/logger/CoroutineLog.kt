@@ -8,7 +8,6 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -24,7 +23,6 @@ object CoroutineLog :
 
     override val coroutineContext = SupervisorJob() + newSingleThreadContext("CoroutineLog")
 
-    val builder get() = Builder
 
     override fun invoke(event: Any) = logAny(event)
     override fun invoke(level: Log.Level, build: () -> Any) = logBuilder(level, build)
@@ -34,38 +32,11 @@ object CoroutineLog :
 
     override suspend fun output(output: Log.Output) = events.asFlow().collect { output(it) }
 
-    suspend fun v(build: suspend () -> Any) = log(Log.Level.Verbose) { build() }
-    suspend fun d(build: suspend () -> Any) = log(Log.Level.Debug) { build() }
-    suspend fun i(build: suspend () -> Any) = log(Log.Level.Info) { build() }
-    suspend fun w(build: suspend () -> Any) = log(Log.Level.Warn) { build() }
-    suspend fun e(build: suspend () -> Any) = log(Log.Level.Error) { build() }
-
-    object Builder {
-        suspend fun v(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Verbose, build)
-        suspend fun d(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Debug, build)
-        suspend fun i(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Info, build)
-        suspend fun w(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Warn, build)
-        suspend fun e(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Error, build)
-    }
-
-    class Locked(val context: CoroutineContext) {
-        fun v(build: suspend () -> Any) = log(Log.Level.Verbose) { build() }
-        fun d(build: suspend () -> Any) = log(Log.Level.Debug) { build() }
-        fun i(build: suspend () -> Any) = log(Log.Level.Info) { build() }
-        fun w(build: suspend () -> Any) = log(Log.Level.Warn) { build() }
-        fun e(build: suspend () -> Any) = log(Log.Level.Error) { build() }
-
-        val builder = Build()
-
-        inner class Build {
-            fun v(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Verbose, build)
-            fun d(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Debug, build)
-            fun i(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Info, build)
-            fun w(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Warn, build)
-            fun e(build: suspend Log.Event.Builder.() -> Unit) = log(Log.Level.Error, build)
-        }
-
-    }
+    suspend fun v(build: () -> Any) = logEvent(Log.Level.Verbose) { build() }
+    suspend fun d(build: () -> Any) = logEvent(Log.Level.Debug) { build() }
+    suspend fun i(build: () -> Any) = logEvent(Log.Level.Info) { build() }
+    suspend fun w(build: () -> Any) = logEvent(Log.Level.Warn) { build() }
+    suspend fun e(build: () -> Any) = logEvent(Log.Level.Error) { build() }
 
     interface Element : CoroutineContext.Element
 
@@ -105,10 +76,6 @@ object CoroutineLog :
 }
 
 
-val log get() = CoroutineLog
-
-val CoroutineContext.log get() = CoroutineLog.Locked(this)
-
 private val events = BroadcastChannel<Any>(Channel.BUFFERED)
 
 private val coroutineLogger = CoroutineLog.actor<suspend () -> Any>(capacity = Channel.BUFFERED) {
@@ -124,12 +91,8 @@ private val coroutineLogger = CoroutineLog.actor<suspend () -> Any>(capacity = C
     }
 }
 
-fun CoroutineScope.coroutineLog() = CoroutineLog.Locked(coroutineContext)
 
 fun Any.coroutineLogLabel() = CoroutineLog.Label(javaClass.simpleName)
-
-suspend fun coroutineLog(vararg elements: CoroutineContext.Element) =
-    CoroutineLog.Locked(elements.fold(coroutineContext) { acc, element -> acc + element })
 
 private fun logAny(event: Any) {
     coroutineLogger.offer { event }
@@ -141,54 +104,52 @@ private fun logBuilder(level: Log.Level, build: () -> Any) {
     coroutineLogger.offer { build() }
 }
 
-private fun CoroutineLog.Locked.log(level: Log.Level, build: suspend Log.Event.Builder.() -> Any) {
-    if (level < Log.Config.level) return
-    log(
-        level = level,
-        context = context,
-        build = build
-    )
-}
-
-private suspend fun log(
+private val logEvent: suspend (
     level: Log.Level,
-    build: suspend Log.Event.Builder.() -> Any,
-) {
-    if (level < Log.Config.level) return
-    log(
+    build: Log.Event.Builder.() -> Unit,
+) -> Unit = { level, build ->
+    if (level >= Log.Config.level) log(
         level = level,
-        context = coroutineScope { coroutineContext },
+        context = coroutineContext,
         build = build
     )
 }
 
-private fun log(
+internal fun log(
     level: Log.Level,
     context: CoroutineContext,
-    build: suspend Log.Event.Builder.() -> Any,
+    build: Log.Event.Builder.() -> Any,
 ) {
     val timestamp = System.currentTimeMillis()
     val thread = Thread.currentThread().name
     coroutineLogger.offer {
-
-        Log.Event.Builder().apply {
-            when (val result = build()) {
-                is Unit -> Unit
-                is String -> message = result
-                is Throwable -> throwable = result
-                else -> message = result.toString()
-            }
-        }.run {
-            Log.Event(
-                message = message,
-                throwable = throwable,
-                status = status ?: Log.Event.Status.Null.name,
-                level = level,
-                timestamp = timestamp,
-                thread = thread
-            ).set(context)
-        }
+        log(context, level, timestamp, thread, build)
     }
+}
+
+internal fun log(
+    context: CoroutineContext,
+    level: Log.Level = Log.Level.Debug,
+    timestamp: Long = System.currentTimeMillis(),
+    thread: String = Thread.currentThread().name,
+    build: Log.Event.Builder.() -> Any,
+) =
+    Log.Event.Builder().apply {
+    when (val result = build()) {
+        is Unit -> Unit
+        is String -> message = result
+        is Throwable -> throwable = result
+        else -> message = result.toString()
+    }
+}.run {
+    Log.Event(
+        message = message,
+        throwable = throwable,
+        status = status ?: Log.Event.Status.Null.name,
+        level = level,
+        timestamp = timestamp,
+        thread = thread
+    ).set(context)
 }
 
 private fun Log.Event.set(context: CoroutineContext) = context.run {

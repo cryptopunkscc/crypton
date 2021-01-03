@@ -11,12 +11,12 @@ import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.context.subscriptions
 import cc.cryptopunks.crypton.emitter
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.createChat
 import cc.cryptopunks.crypton.interactor.storePresence
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 

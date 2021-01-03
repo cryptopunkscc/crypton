@@ -60,6 +60,8 @@ class DebugView(
                 notifyDataSetChanged()
                 helper.scrollToBottom(debugRecyclerView, smooth = false)
             }
+
+            TODO()
             CoroutineLog.flow().filterIsInstance<Log.Event>().collect { event ->
                 debugAdapter += event
                 delay(300)

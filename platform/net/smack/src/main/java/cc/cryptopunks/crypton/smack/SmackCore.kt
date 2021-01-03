@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.smack
 
+import cc.cryptopunks.crypton.logv2.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.CoroutineScope
 import org.jivesoftware.smack.chat2.ChatManager
@@ -14,7 +15,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.omemo.OmemoManager
 
 internal interface SmackCore : CoroutineScope {
-    val log: CoroutineLog.Locked
+    val log: Log<Unit, Any>
     val configuration: XMPPTCPConnectionConfiguration
     val connection: XMPPTCPConnection
     val accountManager: AccountManager

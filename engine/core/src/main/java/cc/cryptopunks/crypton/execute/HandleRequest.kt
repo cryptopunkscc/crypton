@@ -8,9 +8,10 @@ import cc.cryptopunks.crypton.Output
 import cc.cryptopunks.crypton.Request
 import cc.cryptopunks.crypton.Subscription
 import cc.cryptopunks.crypton.Subscriptions
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.e
+import cc.cryptopunks.crypton.map
 import cc.cryptopunks.crypton.type
-import cc.cryptopunks.crypton.util.Log
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -82,26 +83,13 @@ private suspend fun Request.dispatchAction(
 
 
 private fun Request.invoke(out: Output): Job =
-    scope.launch {
-        val log = log
-        log.builder.d {
-            status = Log.Event.Status.Start.name
-            message = "channelId: ${action.channelId}"
-        }
-//        log { Log.Status("Start") }
+    launch(log.map(Unit)) {
+        log.d { Request.LogEvent.Start }
         try {
-            scope.handle(out, action)
+            copy(scope = this).handle(out, action)
         } catch (e: Throwable) {
-            log.builder.d {
-                status = Log.Event.Status.Failed.name
-                message = "$action ${action.channelId}"
-                throwable = e
-            }
-//            log { Log.Error(e) }
+            log.e { e }
             Action.Error(action, e).out()
         }
-        log.builder.d {
-            status = Log.Event.Status.Finished.name
-        }
-//        log { Log.Status("Finish") }
+        log.d { Request.LogEvent.Finish }
     }

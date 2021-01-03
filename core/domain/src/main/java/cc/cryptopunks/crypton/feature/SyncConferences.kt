@@ -15,7 +15,7 @@ internal fun syncConferences() = feature(
         accountAuthenticatedFlow().map { Exec.SyncConferences }
     },
 
-    handler = handler {out, _: Exec.SyncConferences ->
+    handler = handler { out, _: Exec.SyncConferences ->
         syncConferencesWithRetry(out)
     }
 )

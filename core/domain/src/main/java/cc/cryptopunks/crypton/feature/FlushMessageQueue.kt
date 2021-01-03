@@ -13,7 +13,8 @@ import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.v
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge

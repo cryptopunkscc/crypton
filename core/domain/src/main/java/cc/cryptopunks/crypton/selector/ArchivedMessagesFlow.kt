@@ -4,7 +4,8 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.messageNet
 import cc.cryptopunks.crypton.context.messageRepo
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach

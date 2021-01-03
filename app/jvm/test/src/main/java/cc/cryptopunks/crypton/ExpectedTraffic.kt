@@ -1,10 +1,11 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.logv2.Log
+import cc.cryptopunks.crypton.logv2.d
 
 class ExpectedTraffic(
-    private val log: CoroutineLog.Locked
+    private val log: Log<Unit, Any>
 ) {
     private val expected = mutableListOf<(Any) -> Any?>()
     val traffic = mutableListOf<Any>()

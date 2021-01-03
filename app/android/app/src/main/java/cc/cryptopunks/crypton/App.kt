@@ -32,7 +32,8 @@ import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.initAndroidLog
 import cc.cryptopunks.crypton.util.logger.coroutineLogLabel
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.e
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
@@ -72,7 +73,7 @@ class App :
             cryptonResolvers() + androidResolvers(),
             Chat.NavigationId(R.id.chatFragment),
             CoroutineExceptionHandler { coroutineContext, throwable ->
-                launch { log.builder.e { this.throwable = throwable } }
+                launch { log.e { throwable } }
             }
         )
     }

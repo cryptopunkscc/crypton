@@ -2,9 +2,9 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.messageRepo
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.logv2.d
 
 internal fun messageRead() = feature(
     handler = handler {_, (messages): Exec.MessagesRead ->

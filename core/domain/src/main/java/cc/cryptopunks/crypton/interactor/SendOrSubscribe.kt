@@ -8,14 +8,15 @@ import cc.cryptopunks.crypton.context.messageNet
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.context.subscriptions
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 
 private var lastId = 0
 
 internal suspend fun SessionScope.sendOrSubscribe(message: Message) {
     val rosterNet = rosterNet
     val id = lastId++
-
+    val log = log
     log.d { "$id start sending" }
     when {
         message.to.address == account.address -> return

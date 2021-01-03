@@ -1,7 +1,8 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -28,7 +29,6 @@ class ClientDsl internal constructor(
     private val input = BroadcastChannel<Any>(Channel.BUFFERED)
     private var subscription: ReceiveChannel<Any> = Channel()
     private val actions = Channel<() -> Job>(Channel.BUFFERED)
-    val log = coroutineContext.log
     val expected = ExpectedTraffic(log)
 
     init {

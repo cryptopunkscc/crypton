@@ -18,10 +18,10 @@ import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.parseUriData
 import cc.cryptopunks.crypton.context.uploadNet
 import cc.cryptopunks.crypton.context.uriSys
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inScope
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.util.rename
 import cc.cryptopunks.crypton.util.useCopyTo
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +42,7 @@ fun uploadFile() = feature(
         Exec.Upload(URI(file)).inScope(account, chat)
     },
 
-    handler = handler {out, (uri): Exec.Upload ->
+    handler = handler { out, (uri): Exec.Upload ->
         val uriSys = uriSys
         val extensions = uriSys.getMimeType(uri).split("/").last().replace("*", "")
         val fileName = uri.path.parseUriData().fileName

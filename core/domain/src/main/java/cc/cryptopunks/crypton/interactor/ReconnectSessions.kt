@@ -7,7 +7,8 @@ import cc.cryptopunks.crypton.context.accountNet
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.networkSys
 import cc.cryptopunks.crypton.context.sessions
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

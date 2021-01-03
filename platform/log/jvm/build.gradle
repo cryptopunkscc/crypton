@@ -4,4 +4,5 @@ apply plugin: 'kotlin-kapt'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api project(':engine:log')
+    api project(':engine:core')
 }

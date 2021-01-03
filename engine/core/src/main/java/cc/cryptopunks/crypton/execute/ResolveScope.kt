@@ -2,13 +2,16 @@ package cc.cryptopunks.crypton.execute
 
 import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Execute
+import cc.cryptopunks.crypton.Request
 import cc.cryptopunks.crypton.Resolved
 import cc.cryptopunks.crypton.Resolver
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.util.contains
 import kotlinx.coroutines.CoroutineScope
 
 internal val resolveScope: Execute = {
     resolveRecursive(root, action).run {
+        log.d { Request.LogEvent.Resolved }
         copy(
             action = action,
             scope = scope

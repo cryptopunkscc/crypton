@@ -5,7 +5,8 @@ import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.context.createSessionScope
 import cc.cryptopunks.crypton.context.sessions
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 
 internal suspend fun RootScope.loadSessions() {
     val scope = this

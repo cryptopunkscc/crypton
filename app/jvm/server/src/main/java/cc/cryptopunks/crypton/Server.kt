@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.logv2.basicLog
 import cc.cryptopunks.crypton.net.startService
 import cc.cryptopunks.crypton.net.startServerSocket
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
@@ -11,7 +12,7 @@ suspend fun server(
     config: Map<String, Any?>,
 ) =
     withContext(
-        CoroutineLog.Label("CryptonServer")
+        CoroutineLog.Label("CryptonServer") + basicLog,
     ) {
         ServerConfig(config).run {
             startServerSocket(

@@ -6,15 +6,15 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.emitter
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.updateChatNotification
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.flow.map
 
 internal fun updateChatNotification(
-    updateNotification: SessionScope.(List<Message>) -> Unit = updateChatNotification()
+    updateNotification: SessionScope.(List<Message>) -> Unit = updateChatNotification(),
 ) = feature(
 
     emitter = emitter(SessionScopeTag) {
@@ -23,8 +23,8 @@ internal fun updateChatNotification(
         }
     },
 
-    handler = handler {_, (messages): Exec.UpdateNotification ->
-        log.d { "update chat notification $messages" }
+    handler = handler { _, (messages): Exec.UpdateNotification ->
+        log.d { "update chat notification ${messages.size}" }
         updateNotification(messages)
     }
 )

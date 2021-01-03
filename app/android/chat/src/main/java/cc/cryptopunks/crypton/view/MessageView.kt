@@ -21,7 +21,8 @@ import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.context.getFile
 import cc.cryptopunks.crypton.feature.OpenFile
 import cc.cryptopunks.crypton.util.ext.inflate
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.android.synthetic.main.chat_message_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

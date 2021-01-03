@@ -9,10 +9,10 @@ import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.messageRepo
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inScope
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -35,7 +35,8 @@ internal fun subscribeLastMessage() = feature(
         Subscribe.LastMessage(!cancel.toBoolean()).inScope(account, chat)
     },
 
-    handler = handler {out, _: Subscribe.LastMessage ->
+    handler = handler { out, _: Subscribe.LastMessage ->
+        val log = log
         val chatAddress = chat.address
         val messageRepo = messageRepo
         flowOf(

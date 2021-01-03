@@ -7,10 +7,10 @@ import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.loadSessions
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.service.start
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.withContext
 
 internal fun startAppServices() = feature(

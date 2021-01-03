@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.smack.net.chat
 
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Chat
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.smack.SmackCore
 import cc.cryptopunks.crypton.smack.util.address
 import cc.cryptopunks.crypton.smack.util.entityBareJid

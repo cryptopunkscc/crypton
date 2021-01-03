@@ -9,7 +9,9 @@ import cc.cryptopunks.crypton.context.fileExtension
 import cc.cryptopunks.crypton.context.getFile
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.parseUriData
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.e
 
 internal suspend fun SessionScope.saveMessage(message: Message) {
     message

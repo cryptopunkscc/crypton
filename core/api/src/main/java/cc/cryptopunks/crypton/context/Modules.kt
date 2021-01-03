@@ -1,9 +1,11 @@
 package cc.cryptopunks.crypton.context
 
+import cc.cryptopunks.crypton.ScopeElement
 import cc.cryptopunks.crypton.asDep
 import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,7 +24,7 @@ fun createRootScope(
     )
 ).apply {
     coroutineContext[Job]!!.invokeOnCompletion {
-        coroutineContext.log.d { "Finish AppModule $this" }
+        log.d { "Finish AppModule $this" }
     }
 }
 
@@ -55,14 +57,14 @@ fun RootScope.getSessionScope(session: Address): SessionScope =
 suspend fun createSessionScope(scope: RootScope, address: Address): SessionScope =
     createSessionScope(scope, scope.accountRepo.get(address))
 
-fun createSessionScope(scope: RootScope, account: Account): SessionScope = scope.let {
-    val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    val connectionConfig = Connection.Config(
-        scope = connectionScope,
-        account = account.address,
-        password = account.password
-    )
-
+fun createSessionScope(
+    scope: RootScope,
+    account: Account,
+): SessionScope = Connection.Config(
+    scope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+    account = account.address,
+    password = account.password
+).let { connectionConfig ->
     CoroutineScope(
         cryptonContext(
             scope.createSessionRepo(account.address).context(),
@@ -72,8 +74,8 @@ fun createSessionScope(scope: RootScope, account: Account): SessionScope = scope
     ).apply {
         this.deviceNet.setDeviceFingerprintRepo(this.deviceRepo)
         this.coroutineContext[Job]!!.invokeOnCompletion {
-            connectionScope.cancel(CancellationException(it?.message))
-            this.coroutineContext.log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
+            connectionConfig.scope.cancel(CancellationException(it?.message))
+            log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
         }
     }
 }
@@ -86,6 +88,7 @@ fun baseSessionContext(
     rootScope.asDep(RootScopeTag),
     account,
     SessionScopeTag,
+    ScopeElement(account.address.id),
     Presence.Store(),
     Address.Subscriptions.Store(),
     SupervisorJob(rootScope.coroutineContext[Job]),
@@ -99,7 +102,10 @@ suspend fun createChatScope(
     sessionScope: SessionScope,
     chat: Address,
 ): ChatScope = CoroutineScope(
-    baseChatContext(sessionScope, sessionScope.chatRepo.get(chat))
+    baseChatContext(
+        sessionScope,
+        sessionScope.chatRepo.get(chat)
+    )
 )
 
 fun baseChatContext(
@@ -110,6 +116,7 @@ fun baseChatContext(
     sessionScope.asDep(SessionScopeTag),
     chat,
     ChatScopeTag,
+    ScopeElement(chat.address.id),
     Chat.PagedMessages.Store(),
     CoroutineLog.Scope(chat.address.id),
     CoroutineLog.Label("ChatScope"),

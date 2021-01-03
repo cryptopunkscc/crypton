@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.smack.module
 
 import cc.cryptopunks.crypton.context.Address
+import cc.cryptopunks.crypton.logv2.basicLog
 import cc.cryptopunks.crypton.smack.SmackCore
-import cc.cryptopunks.crypton.util.logger.coroutineLog
 import kotlinx.coroutines.CoroutineScope
 import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.chat2.ChatManager
@@ -23,7 +23,7 @@ internal class SmackModule(
 ) : SmackCore,
     CoroutineScope by scope {
 
-    override val log = scope.coroutineLog()
+    override val log = basicLog
 
     // Smack
     override val connection by lazy {

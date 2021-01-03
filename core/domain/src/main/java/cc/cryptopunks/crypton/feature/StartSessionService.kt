@@ -12,10 +12,11 @@ import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.service.start
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapConcat

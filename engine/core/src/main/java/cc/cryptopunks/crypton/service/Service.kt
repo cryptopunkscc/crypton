@@ -1,5 +1,6 @@
 package cc.cryptopunks.crypton.service
 
+import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.Execute
 import cc.cryptopunks.crypton.Execution
@@ -7,8 +8,8 @@ import cc.cryptopunks.crypton.Output
 import cc.cryptopunks.crypton.Request
 import cc.cryptopunks.crypton.Service
 import cc.cryptopunks.crypton.execute.defaultExecution
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.nextId
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -21,27 +22,31 @@ suspend fun Flow<Any>.start(
     execution: Execution = defaultExecution,
     output: Output = {},
 ) = supervisorScope {
-    val base = Request(
+    Request(
+        action = Service.Running,
         out = output,
         root = this,
-    )
-    //    base.log { "Start service" }
-    log.d { "Start service" }
-    collect { input: Any ->
-        execution.fold(
-            base.copy(
-                id = Request.nextId(),
-                arg = input,
-            )
-        ) { request: Request, execute: Execute ->
-            execute(request)
+    ).run {
+        log.d { Request.LogEvent.Custom("Start service") }
+        collect { input: Any ->
+            execution.fold(
+                new(input)
+            ) { request: Request, execute: Execute ->
+                execute(request)
+            }
         }
+        coroutineContext[Job]?.join()
+        log.d { "Stop service" }
     }
-    coroutineContext[Job]?.join()
-//    base.log { "Stop service" }
-    log.d { "Stop service" }
 }
 
+private fun Request.new(input: Any) = copy(
+    id = Request.nextId(),
+    arg = input,
+    action = Action.Empty
+).apply {
+    log.d { Request.LogEvent.Received }
+}
 
 suspend fun Connector.start(
     execution: Execution = defaultExecution,
