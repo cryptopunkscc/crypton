@@ -9,31 +9,25 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 val jvmRequestEventLogOutput: LogOutput = { logEvent ->
-    (logEvent.data as? Request.LogEvent)?.let { request ->
-        logEvent.log(request)
-    }
+    (logEvent.data as? RequestLog.Event)?.let { log(logEvent, it) }
 }
 
-fun Any.formatData() = when (this) {
-    is String -> this
-    is Request.LogEvent.Custom -> toString()
-    is Request.LogEvent.Status -> javaClass.name.formatClassName()
-    is Throwable -> stackTraceToString()
-    else -> toString()
-}
+private fun log(
+    logEvent: LogEvent,
+    scope: RequestLog.Event,
+) = println(formatLine(logEvent, scope))
 
-
-private val formatColumn = columnFormatter()
-
-private val formatScopes = columnFormatter()
-
-private fun LogEvent.log(scope: Request.LogEvent) = this
+private fun formatLine(
+    logEvent: LogEvent,
+    scope: RequestLog.Event,
+) = logEvent
     .formatMessage(scope)
     .formatColumn()
     .joinToString(" ")
-    .let(::println)
 
-private fun LogEvent.formatMessage(event: Request.LogEvent) = listOf(
+private val formatColumn = columnFormatter()
+
+private fun LogEvent.formatMessage(event: RequestLog.Event) = listOf(
     dateFormat.format(timestamp),
     "|",
     event.id.toString(),
@@ -44,19 +38,28 @@ private fun LogEvent.formatMessage(event: Request.LogEvent) = listOf(
     event.data.formatData()
 )
 
-fun CoroutineScope.scopes(): List<String> =
-    coroutineContext.mapNotNull { (it as? ScopeElement)?.id }
-
-fun List<String>.formatScopes(): String? = formatScopes(
+private fun List<String>.formatScopes(): String? = formatScopes(
     when {
         isEmpty() -> this
         else -> listOf("(") + this + ")"
     }
 ).joinToString(" ")
 
+private val formatScopes = columnFormatter()
+
 private val dateFormat = SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS", Locale.UK)
 
 private fun String.formatClassName(): String =
     split(".").last().replace("$", ".")
 
-private fun String.removePackage() = replace("cc.cryptopunks.crypton.context.", "")
+private fun CoroutineScope.scopes(): List<String> =
+    coroutineContext.mapNotNull { (it as? ScopeElement)?.id }
+
+
+private fun Any.formatData() = when (this) {
+    is String -> this
+    is RequestLog.Event.Custom -> toString()
+    is RequestLog.Event.Status -> javaClass.name.formatClassName()
+    is Throwable -> stackTraceToString()
+    else -> toString()
+}

@@ -6,3 +6,8 @@ dependencies {
     api project(':engine:log')
     api project(':engine:core')
 }
+compileKotlin {
+    kotlinOptions {
+        languageVersion = "1.4"
+    }
+}

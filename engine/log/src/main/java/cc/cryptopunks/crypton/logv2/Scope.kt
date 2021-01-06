@@ -3,7 +3,7 @@ package cc.cryptopunks.crypton.logv2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.joinAll
@@ -15,7 +15,7 @@ object LogScope : CoroutineScope, LogOutput, LogBroadcast {
     override val coroutineContext = SupervisorJob() + newSingleThreadContext("CoroutineLog")
     override fun connect(vararg outputs: LogOutput) = connect(outputs)
     override fun invoke(event: LogEvent) = send(event)
-    fun flow() = channel.asFlow()
+    fun flow(): Flow<LogEvent> = channel.asFlow()
 }
 
 private val channel = BroadcastChannel<LogEvent>(2048)

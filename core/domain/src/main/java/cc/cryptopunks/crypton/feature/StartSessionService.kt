@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.inScope
 import cc.cryptopunks.crypton.context.sessions
-import cc.cryptopunks.crypton.createEmitters
+import cc.cryptopunks.crypton.createEmission
 import cc.cryptopunks.crypton.cryptonContext
 import cc.cryptopunks.crypton.emitter
 import cc.cryptopunks.crypton.factory.handler
@@ -52,7 +52,7 @@ internal fun startSessionService() = feature(
             )
         ) {
             log.d { "Invoke session services for $account" }
-            createEmitters(SessionScopeTag).start { println(this) }
+            createEmission(SessionScopeTag).start { println(this) }
         }
     }
 )

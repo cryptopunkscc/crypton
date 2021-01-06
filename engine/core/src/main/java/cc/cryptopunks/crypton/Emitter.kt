@@ -9,9 +9,11 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flattenMerge
 import kotlin.coroutines.CoroutineContext
 
+typealias CreateEmission = CoroutineScope.() -> Flow<Any>
+
 data class Emitter(
     val type: Any,
-    val create: CoroutineScope.() -> Flow<Any>,
+    val create: CreateEmission,
 ) : CoroutineContextObject
 
 fun emitter(
@@ -22,19 +24,22 @@ fun emitter(
     type = type
 )
 
-fun CoroutineScope.createEmitters(type: CoroutineContext.Element) = coroutineContext
-    .mapNotNull { it as? Emitter }
-    .filter { it.type == type }
-    .map { emitter -> let(emitter.create) }
-    .also { println("emitters size: ${it.size} for scope $this") }
+fun CoroutineScope.createEmission(element: CoroutineContext.Element): Flow<Any> = this
+    .getEmitters(element)
     .asFlow()
     .flattenMerge()
+
+fun CoroutineScope.getEmitters(element: CoroutineContext.Element) = coroutineContext
+    .mapNotNull { it as? Emitter }
+    .filter { it.type == element }
+    .map { emitter -> let(emitter.create) }
 
 
 val CoroutineScope.scopeTag get() = coroutineContext[ScopeTag]
 
 interface ScopeTag : CoroutineContext.Element {
     override val key get() = Key
+
     companion object Key : CoroutineContext.Key<ScopeTag>
 }
 

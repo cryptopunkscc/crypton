@@ -6,11 +6,13 @@ import cc.cryptopunks.crypton.Channels
 import cc.cryptopunks.crypton.Execute
 import cc.cryptopunks.crypton.Output
 import cc.cryptopunks.crypton.Request
+import cc.cryptopunks.crypton.RequestLog
 import cc.cryptopunks.crypton.Subscription
 import cc.cryptopunks.crypton.Subscriptions
+import cc.cryptopunks.crypton.logv2.Log
+import cc.cryptopunks.crypton.logv2.LogElement
 import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.logv2.e
-import cc.cryptopunks.crypton.map
 import cc.cryptopunks.crypton.type
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -68,7 +70,7 @@ private suspend fun Request.dispatchAction(
     root: CoroutineScope,
 ) {
     root.launch {
-        val channel = channels.getOrPut(action.channelId) {
+        channels.getOrPut(action.channelId) {
             Channel<Request>(Channel.BUFFERED).apply {
                 root.launch {
                     consumeAsFlow().collect { dispatch ->
@@ -76,20 +78,22 @@ private suspend fun Request.dispatchAction(
                     }
                 }
             }
-        }
-        channel.send(this@dispatchAction)
+        }.send(this@dispatchAction)
     }
 }
 
 
 private fun Request.invoke(out: Output): Job =
     launch(log.map(Unit)) {
-        log.d { Request.LogEvent.Start }
+        log.d { RequestLog.Event.Start }
         try {
             copy(scope = this).handle(out, action)
         } catch (e: Throwable) {
             log.e { e }
             Action.Error(action, e).out()
         }
-        log.d { Request.LogEvent.Finish }
+        log.d { RequestLog.Event.Finish }
     }
+
+private fun <S> Log<in Any, Any>.map(scope: S) =
+    LogElement<S, Any> { level, build -> invoke(level) { scope.build() } }
