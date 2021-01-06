@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.logv2.d
 
 internal fun clearInfoMessages() = feature(
 
-    handler = handler {_, _: Exec.ClearInfoMessages ->
+    handler = handler { _, _: Exec.ClearInfoMessages ->
         val chatAddress = chat.address
         messageRepo.run {
             delete(list(chatAddress, Message.Type.Info))

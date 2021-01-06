@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.messageNet
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.net
-import cc.cryptopunks.crypton.emitter
+import cc.cryptopunks.crypton.factory.emitter
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.saveMessage

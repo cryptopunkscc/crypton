@@ -7,8 +7,8 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.messageRepo
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inScope
 
 internal fun getMessages() = feature(
@@ -22,7 +22,7 @@ internal fun getMessages() = feature(
         Get.Messages.inScope(account, chat)
     },
 
-    handler = handler {out, _: Get.Messages ->
+    handler = handler { out, _: Get.Messages ->
         messageRepo.list(
             chat = chat.address,
             range = System.currentTimeMillis().let { currentTime ->

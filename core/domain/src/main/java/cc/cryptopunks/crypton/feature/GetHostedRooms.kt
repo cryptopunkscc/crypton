@@ -5,8 +5,8 @@ import cc.cryptopunks.crypton.cliv2.config
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.chatNet
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inScope
 
 internal fun getHostedRooms() = feature(
@@ -19,7 +19,7 @@ internal fun getHostedRooms() = feature(
         Get.HostedRooms.inScope(account)
     },
 
-    handler = handler {out, _: Get.HostedRooms ->
+    handler = handler { out, _: Get.HostedRooms ->
         Chat.AllRooms(chatNet.listHostedRooms().toSet()).out()
     }
 )

@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.context.subscriptions
-import cc.cryptopunks.crypton.emitter
+import cc.cryptopunks.crypton.factory.emitter
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.createChat
@@ -28,7 +28,7 @@ internal fun handlePresence() = feature(
             .distinctUntilChanged() // FIXME
     },
 
-    handler = handler {_, (presence): Exec.HandlePresence ->
+    handler = handler { _, (presence): Exec.HandlePresence ->
         log.d { presence }
         storePresence(presence)
 
@@ -91,7 +91,8 @@ internal fun handlePresence() = feature(
                         )
                     }
                     Roster.Item.Status.both,
-                    Roster.Item.Status.remove -> Unit
+                    Roster.Item.Status.remove,
+                    -> Unit
                 }
             }
 
@@ -100,7 +101,8 @@ internal fun handlePresence() = feature(
             Presence.Status.Available,
             Presence.Status.Unsubscribe,
             Presence.Status.Error,
-            Presence.Status.Probe -> Unit
+            Presence.Status.Probe,
+            -> Unit
         }
         Unit
     }

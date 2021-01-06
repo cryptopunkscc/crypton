@@ -28,7 +28,7 @@ internal fun enqueueMessage() = feature(
         Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inScope(account, chat)
     },
 
-    handler = handler {_, arg: Exec.EnqueueMessage ->
+    handler = handler { _, arg: Exec.EnqueueMessage ->
         chat.queuedMessage(arg).let { message ->
             log.d { "Enqueue message $message" }
             messageRepo.insertOrUpdate(message)

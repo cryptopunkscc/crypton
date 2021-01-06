@@ -6,9 +6,9 @@ import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.context.chatRepo
-import cc.cryptopunks.crypton.emitter
-import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.emitter
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.insertChat
 import kotlinx.coroutines.flow.map
 
@@ -23,7 +23,7 @@ internal fun insertInvitation() = feature(
         }
     },
 
-    handler = handler {_, arg: Exec.InsertInvitation ->
+    handler = handler { _, arg: Exec.InsertInvitation ->
         if (!chatRepo.contains(arg.address)) {
             insertChat(
                 Chat(

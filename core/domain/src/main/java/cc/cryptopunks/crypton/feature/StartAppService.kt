@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.RootScopeTag
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.createEmission
 import cc.cryptopunks.crypton.cryptonContext
+import cc.cryptopunks.crypton.factory.emission
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.loadSessions
@@ -27,7 +27,7 @@ internal fun startAppServices() = feature(
 
             loadSessions()
 
-            createEmission(RootScopeTag).start { println(this) }
+            emission(RootScopeTag).start { println(this) }
 
             log.d { "Finish AppService" }
         }

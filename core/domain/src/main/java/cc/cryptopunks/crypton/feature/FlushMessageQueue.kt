@@ -7,14 +7,14 @@ import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.net
-import cc.cryptopunks.crypton.emitter
+import cc.cryptopunks.crypton.factory.emitter
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.flushQueuedMessages
-import cc.cryptopunks.crypton.selector.presenceChangedFlow
-import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.logv2.v
+import cc.cryptopunks.crypton.selector.presenceChangedFlow
+import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
@@ -54,7 +54,7 @@ internal fun flushMessageQueue() = feature(
         }
     },
 
-    handler = handler {_, (addresses): Exec.FlushQueuedMessages ->
+    handler = handler { _, (addresses): Exec.FlushQueuedMessages ->
         if (addresses.isEmpty())
             flushQueuedMessages { true } else
             flushQueuedMessages { message: Message -> addresses.contains(message.chat) }

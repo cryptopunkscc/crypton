@@ -7,16 +7,16 @@ import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.inScope
 import cc.cryptopunks.crypton.context.sessions
-import cc.cryptopunks.crypton.createEmission
 import cc.cryptopunks.crypton.cryptonContext
-import cc.cryptopunks.crypton.emitter
+import cc.cryptopunks.crypton.factory.emission
+import cc.cryptopunks.crypton.factory.emitter
 import cc.cryptopunks.crypton.factory.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.service.start
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.logv2.log
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapConcat
@@ -52,7 +52,7 @@ internal fun startSessionService() = feature(
             )
         ) {
             log.d { "Invoke session services for $account" }
-            createEmission(SessionScopeTag).start { println(this) }
+            emission(SessionScopeTag).start { println(this) }
         }
     }
 )

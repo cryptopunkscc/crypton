@@ -26,7 +26,7 @@ internal fun removeAccount() = feature(
         Exec.RemoveAccount().inScope(account)
     },
 
-    handler = handler {_, arg: Exec.RemoveAccount ->
+    handler = handler { _, arg: Exec.RemoveAccount ->
         val account = account
         removeSessionScope(account.address) {
             if (!arg.deviceOnly) {

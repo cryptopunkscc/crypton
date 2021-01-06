@@ -5,8 +5,8 @@ import cc.cryptopunks.crypton.cliv2.config
 import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.chatNet
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inScope
 
 internal fun getJoinedRooms() = feature(
@@ -19,7 +19,7 @@ internal fun getJoinedRooms() = feature(
         Get.JoinedRooms.inScope(account)
     },
 
-    handler = handler {out, _: Get.JoinedRooms ->
+    handler = handler { out, _: Get.JoinedRooms ->
         Chat.JoinedRooms(chatNet.listJoinedRooms()).out()
     }
 )

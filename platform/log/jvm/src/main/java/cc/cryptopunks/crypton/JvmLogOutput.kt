@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton
 
-import cc.cryptopunks.crypton.log.filterLatest
+import cc.cryptopunks.crypton.log.filterLast
 import cc.cryptopunks.crypton.log.groupById
 import cc.cryptopunks.crypton.log.mapToRequestLogData
 import cc.cryptopunks.crypton.log.printOnFinish
@@ -30,7 +30,7 @@ fun CoroutineScope.initJvmLog() = launch {
             LogScope.flow()
                 .mapToRequestLogData()
                 .groupById()
-                .filterLatest()
+                .filterLast()
                 .collect(printOnFinish)
         }
     )

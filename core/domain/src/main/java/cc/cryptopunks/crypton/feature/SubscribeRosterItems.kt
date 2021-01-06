@@ -7,8 +7,8 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.rosterItems
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.selector.rosterItemStatesFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -26,7 +26,7 @@ internal fun subscribeRosterItems() = feature(
         Subscribe.RosterItems(!cancel.toBoolean(), list = false)
     },
 
-    handler = handler {out, (_, account, inList): Subscribe.RosterItems ->
+    handler = handler { out, (_, account, inList): Subscribe.RosterItems ->
         val rosterItems = rosterItems
         rosterItemStatesFlow()
             .filterBy(account)

@@ -6,11 +6,11 @@ import cc.cryptopunks.crypton.cliv2.param
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
-import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.context.messageRepo
+import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.util.rename
 
 internal fun downloadFile() = feature(
@@ -24,7 +24,7 @@ internal fun downloadFile() = feature(
         Exec.DownloadFromMessage(id).inScope(account)
     },
 
-    handler = handler {out, (messageId): Exec.DownloadFromMessage ->
+    handler = handler { out, (messageId): Exec.DownloadFromMessage ->
         messageRepo.get(messageId)?.run {
             require(type == Message.Type.Url)
             downloadFile(url = body).rename { "$messageId-$it" }

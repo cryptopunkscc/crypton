@@ -9,8 +9,8 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.context.rosterNet
-import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inScope
 
 internal fun getChatInfo() = feature(
@@ -24,7 +24,7 @@ internal fun getChatInfo() = feature(
         Get.ChatInfo.inScope(account, chat)
     },
 
-    handler = handler {out, _: Get.ChatInfo ->
+    handler = handler { out, _: Get.ChatInfo ->
         chat.run {
             when (isConference) {
                 true -> chatNet.getChatInfo(address)

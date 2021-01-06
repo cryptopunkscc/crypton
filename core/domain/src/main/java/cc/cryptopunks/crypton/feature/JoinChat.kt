@@ -16,9 +16,9 @@ import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.inScope
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.rosterNet
-import cc.cryptopunks.crypton.emitter
-import cc.cryptopunks.crypton.feature
+import cc.cryptopunks.crypton.factory.emitter
 import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.selector.accountAuthenticatedFlow
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
@@ -57,7 +57,7 @@ internal fun joinChat() = feature(
         }
     },
 
-    handler = handler {_, _: Exec.JoinChat ->
+    handler = handler { _, _: Exec.JoinChat ->
         val chat = chat
         when (chat.isConference) {
             true -> chatNet.joinConference(
