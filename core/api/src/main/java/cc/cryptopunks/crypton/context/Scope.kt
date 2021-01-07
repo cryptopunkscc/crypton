@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.ScopeTag
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.CoroutineScope
 

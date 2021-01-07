@@ -2,7 +2,7 @@ package cc.cryptopunks.crypton.example
 
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.cryptonContext
+import cc.cryptopunks.crypton.create.cryptonContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 

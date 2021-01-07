@@ -10,9 +10,9 @@ import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.isConference
 import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.context.sessions
-import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.interactor.createChat
 
 internal fun createChat() = feature(

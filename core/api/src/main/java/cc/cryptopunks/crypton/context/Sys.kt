@@ -1,18 +1,18 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.asDep
-import cc.cryptopunks.crypton.cryptonContext
+import cc.cryptopunks.crypton.create.cryptonContext
+import cc.cryptopunks.crypton.create.dep
 
 fun Sys.context() = cryptonContext(
-    indicatorSys.asDep(),
-    notificationSys.asDep(),
-    clipboardSys.asDep(),
-    networkSys.asDep(),
-    deviceSys.asDep(),
-    executeSys.asDep(),
-    uriSys.asDep(),
-    cryptoSys.asDep(),
-    fileSys.asDep(),
+    indicatorSys.dep(),
+    notificationSys.dep(),
+    clipboardSys.dep(),
+    networkSys.dep(),
+    deviceSys.dep(),
+    executeSys.dep(),
+    uriSys.dep(),
+    cryptoSys.dep(),
+    fileSys.dep(),
 )
 
 interface Sys {

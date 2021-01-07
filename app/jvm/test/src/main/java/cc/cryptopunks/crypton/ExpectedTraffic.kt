@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton
 import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.logv2.Log
 import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.serial.list
 
 class ExpectedTraffic(
     private val log: Log<Unit, Any>

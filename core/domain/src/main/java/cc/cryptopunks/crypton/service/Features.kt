@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.cryptonContext
+import cc.cryptopunks.crypton.create.cryptonContext
 import cc.cryptopunks.crypton.feature.addAccount
 import cc.cryptopunks.crypton.feature.clearInfoMessages
 import cc.cryptopunks.crypton.feature.cliConfigure

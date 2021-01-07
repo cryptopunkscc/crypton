@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import cc.cryptopunks.crypton.util.OpenStore
 import cc.cryptopunks.crypton.util.md5
 import kotlinx.coroutines.Job

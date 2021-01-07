@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.rosterItems
-import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.selector.rosterItemStatesFlow
 import kotlinx.coroutines.flow.Flow

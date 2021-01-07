@@ -6,16 +6,14 @@ import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.activity.FeatureActivity
-import cc.cryptopunks.crypton.asDep
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
+import cc.cryptopunks.crypton.create.dep
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 
 abstract class FeatureFragment :
@@ -39,7 +37,7 @@ abstract class FeatureFragment :
                 log.e { this.throwable = throwable }
                 onException(coroutineContext, throwable)
             } +
-            asDep<Fragment>()
+            dep<Fragment>()
     }
 
     open fun onException(coroutineContext: CoroutineContext, throwable: Throwable) = Unit
@@ -61,7 +59,7 @@ abstract class FeatureFragment :
         cancel()
     }
 
-    fun CoroutineScope.fragmentScope() = CoroutineScope(coroutineContext + this@FeatureFragment.asDep<Fragment>())
+    fun CoroutineScope.fragmentScope() = CoroutineScope(coroutineContext + this@FeatureFragment.dep<Fragment>())
 }
 
 val Context.applicationScope get() = applicationContext as CoroutineScope

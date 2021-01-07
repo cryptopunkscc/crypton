@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import cc.cryptopunks.crypton.util.OpenStore
 
 val RootScope.clipboardStore: Clip.Board.Store by dep()

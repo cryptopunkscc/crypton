@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.factory
+package cc.cryptopunks.crypton.create
 
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.Service

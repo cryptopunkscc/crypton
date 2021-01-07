@@ -1,19 +1,19 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.asDep
-import cc.cryptopunks.crypton.cryptonContext
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
+import cc.cryptopunks.crypton.create.cryptonContext
+import cc.cryptopunks.crypton.create.dep
 import kotlinx.coroutines.CoroutineScope
 
 val RootScope.createConnection: Connection.Factory by dep()
 fun Connection.context() = cryptonContext(
-    net.asDep(),
-    accountNet.asDep(),
-    messageNet.asDep(),
-    chatNet.asDep(),
-    rosterNet.asDep(),
-    deviceNet.asDep(),
-    uploadNet.asDep(),
+    net.dep(),
+    accountNet.dep(),
+    messageNet.dep(),
+    chatNet.dep(),
+    rosterNet.dep(),
+    deviceNet.dep(),
+    uploadNet.dep(),
 )
 
 interface Connection {

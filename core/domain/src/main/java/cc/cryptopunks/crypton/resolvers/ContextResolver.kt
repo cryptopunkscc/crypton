@@ -14,7 +14,7 @@ import cc.cryptopunks.crypton.context.createChatScope
 import cc.cryptopunks.crypton.context.getSessionScope
 import cc.cryptopunks.crypton.context.rootScope
 import cc.cryptopunks.crypton.context.sessionScope
-import cc.cryptopunks.crypton.factory.resolver
+import cc.cryptopunks.crypton.create.resolver
 import cc.cryptopunks.crypton.scopeTag
 import kotlinx.coroutines.CoroutineScope
 

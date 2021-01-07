@@ -1,25 +1,25 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.asDep
-import cc.cryptopunks.crypton.cryptonContext
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
+import cc.cryptopunks.crypton.create.cryptonContext
+import cc.cryptopunks.crypton.create.dep
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.newSingleThreadContext
 import kotlin.coroutines.CoroutineContext
 
 fun Repo.context() = cryptonContext(
-    accountRepo.asDep(),
-    clipboardRepo.asDep(),
-    createSessionRepo.asDep(),
+    accountRepo.dep(),
+    clipboardRepo.dep(),
+    createSessionRepo.dep(),
 )
 
 fun SessionRepo.context() = cryptonContext(
-    queryContext.asDep(),
-    transactionContext.asDep(),
-    chatRepo.asDep(),
-    messageRepo.asDep(),
-    rosterRepo.asDep(),
-    deviceRepo.asDep(),
+    queryContext.dep(),
+    transactionContext.dep(),
+    chatRepo.dep(),
+    messageRepo.dep(),
+    rosterRepo.dep(),
+    deviceRepo.dep(),
 )
 
 val RootScope.createSessionRepo: SessionRepo.Factory by dep()

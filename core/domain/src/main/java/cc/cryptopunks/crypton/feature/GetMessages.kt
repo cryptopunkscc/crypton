@@ -7,9 +7,9 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.messageRepo
-import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inScope
 
 internal fun getMessages() = feature(
 

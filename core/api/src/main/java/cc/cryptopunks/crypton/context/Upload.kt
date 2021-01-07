@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 import java.net.URL

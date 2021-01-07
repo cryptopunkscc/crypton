@@ -1,11 +1,11 @@
 package cc.cryptopunks.crypton.context
 
 import cc.cryptopunks.crypton.ScopeElement
-import cc.cryptopunks.crypton.asDep
-import cc.cryptopunks.crypton.cryptonContext
-import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.create.cryptonContext
+import cc.cryptopunks.crypton.create.dep
 import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -85,7 +85,7 @@ fun baseSessionContext(
     account: Account.Name,
 ) = cryptonContext(
     rootScope.coroutineContext,
-    rootScope.asDep(RootScopeTag),
+    rootScope.dep(RootScopeTag),
     account,
     SessionScopeTag,
     ScopeElement(account.address.id),
@@ -113,7 +113,7 @@ fun baseChatContext(
     chat: Chat,
 ) = cryptonContext(
     sessionScope.coroutineContext,
-    sessionScope.asDep(SessionScopeTag),
+    sessionScope.dep(SessionScopeTag),
     chat,
     ChatScopeTag,
     ScopeElement(chat.address.id),

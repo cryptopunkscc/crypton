@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.Service
 import cc.cryptopunks.crypton.connect
 import cc.cryptopunks.crypton.context.ActivityResult
 import cc.cryptopunks.crypton.context.PermissionsResult
-import cc.cryptopunks.crypton.factory.connector
+import cc.cryptopunks.crypton.create.connector
 import cc.cryptopunks.crypton.service.start
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel

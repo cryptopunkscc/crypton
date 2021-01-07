@@ -1,8 +1,7 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.cliv2.Cli
-import cc.cryptopunks.crypton.util.CoroutineContextObject
-import kotlinx.coroutines.CoroutineScope
+import cc.cryptopunks.crypton.util.Instance
 import kotlin.coroutines.CoroutineContext
 
 fun <A : Action> feature(
@@ -28,8 +27,4 @@ fun feature(
 
 data class CliCommand(
     val template: Cli.Command.Template,
-) : CoroutineContextObject
-
-interface Feature<A : Action> : CoroutineScope {
-    val emitter: Emitter? get() = null
-}
+) : Instance

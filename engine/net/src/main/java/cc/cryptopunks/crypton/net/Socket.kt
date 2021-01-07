@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.net
 
 import cc.cryptopunks.crypton.Connector
-import cc.cryptopunks.crypton.encodeScopedAction
 import cc.cryptopunks.crypton.json.formatJson
 import cc.cryptopunks.crypton.json.parseJson
+import cc.cryptopunks.crypton.serial.encodeScopedAction
 import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.Flow

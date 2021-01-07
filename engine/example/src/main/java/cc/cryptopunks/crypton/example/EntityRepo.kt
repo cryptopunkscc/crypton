@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.example
 
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import kotlinx.coroutines.CoroutineScope
 
 val CoroutineScope.entityRepo: Entity.Repo by dep()

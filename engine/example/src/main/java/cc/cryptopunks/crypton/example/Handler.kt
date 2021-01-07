@@ -1,7 +1,7 @@
 package cc.cryptopunks.crypton.example
 
-import cc.cryptopunks.crypton.cryptonContext
-import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.create.cryptonContext
+import cc.cryptopunks.crypton.create.handler
 
 internal fun getAllHandlers() = cryptonContext(
     setEntity,

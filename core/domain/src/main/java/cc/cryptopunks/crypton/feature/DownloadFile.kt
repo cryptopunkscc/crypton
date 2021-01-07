@@ -8,9 +8,9 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.URI
 import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.context.messageRepo
-import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inScope
 import cc.cryptopunks.crypton.util.rename
 
 internal fun downloadFile() = feature(

@@ -14,11 +14,11 @@ import cc.cryptopunks.crypton.context.ActivityResult
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.PermissionsResult
 import cc.cryptopunks.crypton.context.URI
-import cc.cryptopunks.crypton.factory.handler
-import cc.cryptopunks.crypton.factory.resolver
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.resolver
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.fragment.fragment
-import cc.cryptopunks.crypton.get
+import cc.cryptopunks.crypton.dependency.get
 
 object ShowFileChooser : Action
 

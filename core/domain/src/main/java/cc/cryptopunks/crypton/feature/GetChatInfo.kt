@@ -9,9 +9,9 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.context.rosterNet
-import cc.cryptopunks.crypton.factory.handler
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inScope
 
 internal fun getChatInfo() = feature(
 

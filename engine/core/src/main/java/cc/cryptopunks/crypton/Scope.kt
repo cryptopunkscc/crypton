@@ -4,8 +4,6 @@ import cc.cryptopunks.crypton.util.Instance
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 
-typealias Scope = CoroutineScope
-
 val CoroutineScope.scopeTag get() = coroutineContext[ScopeTag]
 
 interface ScopeTag : CoroutineContext.Element {
@@ -15,3 +13,5 @@ interface ScopeTag : CoroutineContext.Element {
 }
 
 data class ScopeElement(val id: String) : Instance
+
+typealias Scope = CoroutineScope
