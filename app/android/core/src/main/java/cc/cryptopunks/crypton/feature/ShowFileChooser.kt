@@ -30,7 +30,7 @@ internal fun showFileChooser() = feature(
         ShowFileChooser
     },
 
-    handler = handler { _, _: ShowFileChooser ->
+    handler { _, _: ShowFileChooser ->
         val fragment = fragment
         fragment.activity?.let { activity ->
             if (!activity.hasPermissionForReadExternalStorage())

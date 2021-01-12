@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.onStart
 
 internal fun subscribeLastMessage() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         option("cancel").optional().copy(description = "Cancel subscription", value = false),
@@ -35,7 +35,7 @@ internal fun subscribeLastMessage() = feature(
         Subscribe.LastMessage(!cancel.toBoolean()).inScope(account, chat)
     },
 
-    handler = handler { out, _: Subscribe.LastMessage ->
+    handler { out, _: Subscribe.LastMessage ->
         val log = log
         val chatAddress = chat.address
         val messageRepo = messageRepo

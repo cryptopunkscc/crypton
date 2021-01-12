@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun deleteMessage() = feature(
 
-    handler = handler { _, (message): Exec.DeleteMessage ->
+    handler { _, (message): Exec.DeleteMessage ->
         messageRepo.delete(message)
     }
 )

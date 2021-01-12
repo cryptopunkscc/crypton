@@ -15,7 +15,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun getChatInfo() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         name = "chat info",
@@ -24,7 +24,7 @@ internal fun getChatInfo() = feature(
         Get.ChatInfo.inScope(account, chat)
     },
 
-    handler = handler { out, _: Get.ChatInfo ->
+    handler { out, _: Get.ChatInfo ->
         chat.run {
             when (isConference) {
                 true -> chatNet.getChatInfo(address)

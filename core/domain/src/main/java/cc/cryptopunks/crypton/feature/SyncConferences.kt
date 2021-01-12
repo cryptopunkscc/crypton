@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.map
 
 internal fun syncConferences() = feature(
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         accountAuthenticatedFlow().map { Exec.SyncConferences }
     },
 
-    handler = handler { out, _: Exec.SyncConferences ->
+    handler { out, _: Exec.SyncConferences ->
         syncConferencesWithRetry(out)
     }
 )

@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun saveMessages() = feature(
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         flowOf(
             net.netEvents().filterIsInstance<Net.OmemoInitialized>().flatMapConcat {
                 archivedMessagesFlow().onEach {
@@ -40,7 +40,7 @@ internal fun saveMessages() = feature(
         }
     },
 
-    handler = handler { _, (messages): Exec.SaveMessages ->
+    handler { _, (messages): Exec.SaveMessages ->
         messages.forEach { message ->
             when (message.type) {
                 Message.Type.State -> when (message.body) {

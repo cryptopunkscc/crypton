@@ -5,6 +5,10 @@ import kotlin.coroutines.CoroutineContext
 
 fun cryptonContext(
     vararg elements: Any,
+): CoroutineContext = cryptonContext(elements.asList())
+
+fun cryptonContext(
+    elements: List<Any>,
 ): CoroutineContext = elements
     .map(Any::asCoroutineContext)
     .reduce(CoroutineContext::plus)
@@ -12,7 +16,4 @@ fun cryptonContext(
 private fun Any.asCoroutineContext():
     CoroutineContext = this
     as? CoroutineContext
-    ?: Dependency(
-        instance = this,
-        key = Dependency.Key(javaClass)
-    )
+    ?: Dependency(Dependency.Key(javaClass)) { this }

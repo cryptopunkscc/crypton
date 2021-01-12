@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun getPagedMessages() = feature(
 
-    handler = handler { out, _: Get.PagedMessages ->
+    handler { out, _: Get.PagedMessages ->
         pagedMessages.get()?.let { out(it) }
     }
 )

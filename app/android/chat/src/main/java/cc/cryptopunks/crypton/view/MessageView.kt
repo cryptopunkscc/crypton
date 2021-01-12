@@ -21,8 +21,6 @@ import cc.cryptopunks.crypton.context.downloadFile
 import cc.cryptopunks.crypton.context.getFile
 import cc.cryptopunks.crypton.feature.OpenFile
 import cc.cryptopunks.crypton.util.ext.inflate
-import cc.cryptopunks.crypton.logv2.log
-import cc.cryptopunks.crypton.logv2.d
 import kotlinx.android.synthetic.main.chat_message_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -169,11 +167,11 @@ sealed class MessageBody {
 typealias ResolveUrlBody = suspend (String) -> MessageBody
 
 fun RootScope.urlBodyResolver(): ResolveUrlBody = { url ->
-    log.d { "resolving url: $url" }
+//    log.d { "resolving url: $url" } TODO
     try {
         // Fixme clean this mess down below
         getFile(url).let { file ->
-            log.d { "resolving url: ${file.path}" }
+//            log.d { "resolving url: ${file.path}" } TODO
             if (!file.exists())
                 downloadFile(url)
 

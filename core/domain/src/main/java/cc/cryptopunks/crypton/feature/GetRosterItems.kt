@@ -8,14 +8,14 @@ import cc.cryptopunks.crypton.feature
 
 internal fun getRosterItems() = feature(
 
-    command = command(
+    command(
         name = "roster",
         description = "Get roster for all accounts."
     ) {
         Get.RosterItems
     },
 
-    handler = handler { out, _: Get.RosterItems ->
+    handler { out, _: Get.RosterItems ->
         rosterItems.get().out()
     }
 )

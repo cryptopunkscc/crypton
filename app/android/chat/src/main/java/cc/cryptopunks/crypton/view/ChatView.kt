@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
@@ -26,11 +25,12 @@ import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.messageConsumers
 import cc.cryptopunks.crypton.context.minusAssign
 import cc.cryptopunks.crypton.context.plusAssign
+import cc.cryptopunks.crypton.logv2.basicLog
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
-import cc.cryptopunks.crypton.logv2.log
-import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.widget.ConnectableLayout
 import cc.cryptopunks.crypton.widget.autoAdjustActionButtons
 import cc.cryptopunks.crypton.widget.autoAdjustPaddingOf
@@ -57,6 +57,8 @@ class ChatView(
     Message.Consumer {
 
     var resumed: Boolean = false
+
+    override val coroutineContext = rootScope.coroutineContext + super.coroutineContext + basicLog
 
     private val cliContext = Cli.Context(
 
@@ -127,8 +129,8 @@ class ChatView(
                         }
                     }
 
-                    is Action.Error ->
-                        Exec.SaveInfoMessage(arg.message ?: arg.javaClass.name).out()
+//                    is Action.Error ->
+//                        Exec.SaveInfoMessage(arg.message ?: arg.javaClass.name).out()
 
                     else -> log.d { arg }
                 }

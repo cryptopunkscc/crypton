@@ -207,7 +207,7 @@ fun createCryptonMessage(
 operator fun Message.Consumer.Store.plusAssign(
     consumer: Message.Consumer,
 ) {
-    get().first { it.get() == consumer }.get() ?: invoke { plus(WeakReference(consumer)) }
+    get().firstOrNull { it.get() == consumer }?.get() ?: invoke { plus(WeakReference(consumer)) }
 }
 
 operator fun Message.Consumer.Store.minusAssign(consumer: Message.Consumer) {

@@ -8,7 +8,8 @@ fun <A : Action> feature(
     command: Cli.Command.Template? = null,
     emitter: Emitter? = null,
     handler: Handler<A>,
-): CoroutineContext =
+):
+    CoroutineContext =
     listOfNotNull<CoroutineContext>(
         handler,
         emitter,
@@ -16,14 +17,16 @@ fun <A : Action> feature(
     ).reduce { acc, coroutineContext -> acc + coroutineContext }
 
 fun feature(
-    vararg elements: Any
-) = elements.map {
-    when(it) {
-        is CoroutineContext -> it
-        is Cli.Command.Template -> it
-        else -> throw IllegalArgumentException()
-    }
-}
+    vararg elements: Any,
+):
+    CoroutineContext =
+    elements.map {
+        when (it) {
+            is CoroutineContext -> it
+            is Cli.Command.Template -> CliCommand(it)
+            else -> throw IllegalArgumentException()
+        }
+    }.reduce { acc, context -> acc + context }
 
 data class CliCommand(
     val template: Cli.Command.Template,

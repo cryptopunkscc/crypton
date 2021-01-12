@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.take
 
 internal fun joinChat() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         name = "join",
@@ -39,7 +39,7 @@ internal fun joinChat() = feature(
         Exec.JoinChat.inScope(account, chat)
     },
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         val chatRepo = chatRepo
         val chatNet = chatNet
         accountAuthenticatedFlow().take(1).flatMapMerge {
@@ -57,7 +57,7 @@ internal fun joinChat() = feature(
         }
     },
 
-    handler = handler { _, _: Exec.JoinChat ->
+    handler { _, _: Exec.JoinChat ->
         val chat = chat
         when (chat.isConference) {
             true -> chatNet.joinConference(

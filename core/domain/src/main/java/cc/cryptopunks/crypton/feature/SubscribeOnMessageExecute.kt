@@ -28,7 +28,7 @@ internal fun subscribeOnMessageExecute() = feature(
         Subscribe.OnMessageExecute(command).inScope(account, chat)
     },
 
-    handler = handler { _, (command): Subscribe.OnMessageExecute ->
+    handler { _, (command): Subscribe.OnMessageExecute ->
         messageRepo
             .flowLatest(chat.address)
             .filterByStatus(Message.Status.Received, Message.Status.Sent)

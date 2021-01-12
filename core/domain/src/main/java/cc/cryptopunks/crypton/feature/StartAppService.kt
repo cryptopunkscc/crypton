@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 
 internal fun startAppServices() = feature(
 
-    handler = handler { _, _: Subscribe.AppService ->
+    handler { _, _: Subscribe.AppService ->
         withContext(
             cryptonContext(
                 CoroutineLog.Label("AppService"),

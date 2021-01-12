@@ -11,14 +11,14 @@ import cc.cryptopunks.crypton.feature
 
 internal fun connect() = feature(
 
-    command = command(
+    command(
         param(),
         name = "connect"
     ) { (account) ->
         Exec.Connect.inScope(account)
     },
 
-    handler = handler { _, _: Exec.Connect ->
+    handler { _, _: Exec.Connect ->
         net.run { if (!isConnected()) connect() }
         accountNet.run { if (!isAuthenticated()) login() }
     }

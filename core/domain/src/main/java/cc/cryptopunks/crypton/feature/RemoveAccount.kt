@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 internal fun removeAccount() = feature(
 
-    command = command(
+    command(
         config("account"),
         name = "delete account",
         description = "Delete account."
@@ -26,7 +26,7 @@ internal fun removeAccount() = feature(
         Exec.RemoveAccount().inScope(account)
     },
 
-    handler = handler { _, arg: Exec.RemoveAccount ->
+    handler { _, arg: Exec.RemoveAccount ->
         val account = account
         removeSessionScope(account.address) {
             if (!arg.deviceOnly) {

@@ -8,18 +8,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import cc.cryptopunks.crypton.RequestLog
 import cc.cryptopunks.crypton.context.clipboardRepo
 import cc.cryptopunks.crypton.debug.drawer.detachDebugDrawer
 import cc.cryptopunks.crypton.debug.drawer.initDebugDrawer
 import cc.cryptopunks.crypton.intent.NewIntentProcessor
+import cc.cryptopunks.crypton.logv2.LogScope
 import cc.cryptopunks.crypton.main.R
-import cc.cryptopunks.crypton.util.Log
-import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.view.setupDrawerAccountView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
@@ -70,11 +69,12 @@ class MainActivity : FeatureActivity() {
 }
 
 private suspend fun Activity.subscribeErrorDialog() =
-    CoroutineLog.flow()
+//    CoroutineLog.flow()
 //        .scan(Buffer<Log.Event>()) { accumulator, value -> accumulator + value }
 //        .mapNotNull { it.lastOrNull()?.throwable }
-        .filterIsInstance<Log.Event>()
-        .mapNotNull { it.throwable }
+    LogScope.flow()
+        .mapNotNull { it.data as? RequestLog.Data }
+        .mapNotNull { it.data as? Throwable }
         .collect { throwable -> showErrorDialog(throwable) }
 
 private fun Activity.showErrorDialog(throwable: Throwable) = AlertDialog

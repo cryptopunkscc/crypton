@@ -31,6 +31,8 @@ fun MutableMap<Long, MutableList<RequestLog.Data>>.createGroupById():
             else
             -> getOrPut(eventId) { mutableListOf() }
         }.also { group ->
-            group += if (isEmpty()) this else copy(time = timestamp - group.first().timestamp)
+            group += if (group.isEmpty())
+                this else
+                copy(time = timestamp - group.first().timestamp)
         }
     }

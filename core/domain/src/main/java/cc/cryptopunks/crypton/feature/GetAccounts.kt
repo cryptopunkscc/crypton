@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 
 internal fun getAccounts() = feature(
-    handler = handler { out, _: Get.Accounts ->
+    handler { out, _: Get.Accounts ->
         out(accounts.get())
     }
 )

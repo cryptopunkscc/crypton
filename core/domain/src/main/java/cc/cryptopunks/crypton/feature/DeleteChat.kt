@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun deleteChat() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         name = "delete chat",
@@ -20,7 +20,7 @@ internal fun deleteChat() = feature(
         Exec.DeleteChat.inScope(account, chat)
     },
 
-    handler = handler { _, _: Exec.DeleteChat ->
+    handler { _, _: Exec.DeleteChat ->
         chatRepo.delete(listOf(chat.address))
     }
 )

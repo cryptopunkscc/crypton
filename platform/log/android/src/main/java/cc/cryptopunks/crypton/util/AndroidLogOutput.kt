@@ -1,16 +1,33 @@
 package cc.cryptopunks.crypton.util
 
+import cc.cryptopunks.crypton.log.filterLast
+import cc.cryptopunks.crypton.log.groupById
+import cc.cryptopunks.crypton.log.mapToRequestLogData
+import cc.cryptopunks.crypton.log.printOnFinish
+import cc.cryptopunks.crypton.logv2.LogScope
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.LogOutputCache
 import cc.cryptopunks.crypton.util.logger.TypedLog
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
 fun CoroutineScope.initAndroidLog() = launch {
-    Log.output(CoroutineLog)
-    TypedLog.output(CoroutineLog)
-    launch { CoroutineLog.output(AndroidLogOutput) }
-    launch { CoroutineLog.output(LogOutputCache.Default) }
+    joinAll(
+        launch { Log.output(CoroutineLog) },
+        launch { TypedLog.output(CoroutineLog) },
+        launch { CoroutineLog.output(AndroidLogOutput) },
+        launch { CoroutineLog.output(LogOutputCache.Default) },
+        launch {
+            LogScope.flow()
+                .mapToRequestLogData()
+                .groupById()
+                .filterLast()
+//                .collect(printLast)
+                .collect(printOnFinish)
+        }
+    )
 }
 
 private object AndroidLogOutput : Log.Output {

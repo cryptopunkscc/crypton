@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun getHostedRooms() = feature(
 
-    command = command(
+    command(
         config("account"),
         name = "hosted rooms",
         description = "List hosted rooms."
@@ -19,7 +19,7 @@ internal fun getHostedRooms() = feature(
         Get.HostedRooms.inScope(account)
     },
 
-    handler = handler { out, _: Get.HostedRooms ->
+    handler { out, _: Get.HostedRooms ->
         Chat.AllRooms(chatNet.listHostedRooms().toSet()).out()
     }
 )

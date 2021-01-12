@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun subscribeRosterItems() = feature(
 
-    command = command(
+    command(
         option("cancel").optional().copy(description = "Cancel subscription", value = false),
         name = "subscribe roster",
         description = "Subscribe roster for all accounts."
@@ -26,7 +26,7 @@ internal fun subscribeRosterItems() = feature(
         Subscribe.RosterItems(!cancel.toBoolean(), list = false)
     },
 
-    handler = handler { out, (_, account, inList): Subscribe.RosterItems ->
+    handler { out, (_, account, inList): Subscribe.RosterItems ->
         val rosterItems = rosterItems
         rosterItemStatesFlow()
             .filterBy(account)

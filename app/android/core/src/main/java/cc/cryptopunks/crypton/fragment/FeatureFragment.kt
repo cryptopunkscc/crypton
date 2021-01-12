@@ -8,6 +8,7 @@ import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.activity.FeatureActivity
 import cc.cryptopunks.crypton.delegate.dep
 import cc.cryptopunks.crypton.create.dep
+import cc.cryptopunks.crypton.create.weakDep
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +38,7 @@ abstract class FeatureFragment :
                 log.e { this.throwable = throwable }
                 onException(coroutineContext, throwable)
             } +
-            dep<Fragment>()
+            weakDep<Fragment>()
     }
 
     open fun onException(coroutineContext: CoroutineContext, throwable: Throwable) = Unit

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 
 internal fun insertInvitation() = feature(
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         chatNet.conferenceInvitationsFlow().map {
             Exec.InsertInvitation(
                 address = it.address,
@@ -23,7 +23,7 @@ internal fun insertInvitation() = feature(
         }
     },
 
-    handler = handler { _, arg: Exec.InsertInvitation ->
+    handler { _, arg: Exec.InsertInvitation ->
         if (!chatRepo.contains(arg.address)) {
             insertChat(
                 Chat(

@@ -64,7 +64,7 @@ suspend fun Service.start(
 ) {
     input.consumeAsFlow().start(
         execution = execution,
-        output = output::send
+        output = { output.send(this) }
     )
 }
 

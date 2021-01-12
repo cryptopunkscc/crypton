@@ -42,7 +42,7 @@ fun uploadFile() = feature(
         Exec.Upload(URI(file)).inScope(account, chat)
     },
 
-    handler = handler { out, (uri): Exec.Upload ->
+    handler { out, (uri): Exec.Upload ->
         val uriSys = uriSys
         val extensions = uriSys.getMimeType(uri).split("/").last().replace("*", "")
         val fileName = uri.path.parseUriData().fileName

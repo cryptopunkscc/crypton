@@ -15,7 +15,7 @@ import cc.cryptopunks.crypton.util.rename
 
 internal fun downloadFile() = feature(
 
-    command = command(
+    command(
         config("account"),
         param().copy(name = "messageId"),
         name = "download",
@@ -24,7 +24,7 @@ internal fun downloadFile() = feature(
         Exec.DownloadFromMessage(id).inScope(account)
     },
 
-    handler = handler { out, (messageId): Exec.DownloadFromMessage ->
+    handler { out, (messageId): Exec.DownloadFromMessage ->
         messageRepo.get(messageId)?.run {
             require(type == Message.Type.Url)
             downloadFile(url = body).rename { "$messageId-$it" }

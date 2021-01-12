@@ -17,7 +17,7 @@ import cc.cryptopunks.crypton.logv2.d
 
 internal fun enqueueMessage() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         option("-!").optional().copy(description = "Send not encrypted message. Not recommended!"),
@@ -28,7 +28,7 @@ internal fun enqueueMessage() = feature(
         Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inScope(account, chat)
     },
 
-    handler = handler { _, arg: Exec.EnqueueMessage ->
+    handler { _, arg: Exec.EnqueueMessage ->
         chat.queuedMessage(arg).let { message ->
             log.d { "Enqueue message $message" }
             messageRepo.insertOrUpdate(message)

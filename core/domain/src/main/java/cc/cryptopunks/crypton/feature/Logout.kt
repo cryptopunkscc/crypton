@@ -11,7 +11,7 @@ import kotlinx.coroutines.cancel
 import java.util.concurrent.CancellationException
 
 internal fun logout() = feature(
-    handler = handler { _, arg: Exec.Disconnect ->
+    handler { _, arg: Exec.Disconnect ->
         removeSessionScope(account.address) {
             net.disconnect()
             cancel(CancellationException(arg.toString()))

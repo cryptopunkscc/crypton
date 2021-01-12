@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun getJoinedRooms() = feature(
 
-    command = command(
+    command(
         config("account"),
         name = "joined rooms",
         description = "List joined rooms."
@@ -19,7 +19,7 @@ internal fun getJoinedRooms() = feature(
         Get.JoinedRooms.inScope(account)
     },
 
-    handler = handler { out, _: Get.JoinedRooms ->
+    handler { out, _: Get.JoinedRooms ->
         Chat.JoinedRooms(chatNet.listJoinedRooms()).out()
     }
 )

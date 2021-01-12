@@ -2,6 +2,7 @@ package cc.cryptopunks.crypton.resolvers
 
 import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Resolved
+import cc.cryptopunks.crypton.ScopeTag
 import cc.cryptopunks.crypton.Scoped
 import cc.cryptopunks.crypton.context.ChatScopeTag
 import cc.cryptopunks.crypton.context.RootScopeTag
@@ -15,7 +16,6 @@ import cc.cryptopunks.crypton.context.getSessionScope
 import cc.cryptopunks.crypton.context.rootScope
 import cc.cryptopunks.crypton.context.sessionScope
 import cc.cryptopunks.crypton.create.resolver
-import cc.cryptopunks.crypton.scopeTag
 import kotlinx.coroutines.CoroutineScope
 
 fun scopedResolver() = resolver<Scoped> {
@@ -27,7 +27,7 @@ private class CannotResolve(val arg: Any) : Action
 private suspend fun resolveFromScope(scope: CoroutineScope, context: Any): Action.Resolved? =
     if (context !is Scoped) null
     else {
-        when (scope.scopeTag) {
+        when (scope.coroutineContext[ScopeTag]) {
 
             ChatScopeTag -> {
                 when (context.id) {

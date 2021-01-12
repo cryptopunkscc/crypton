@@ -22,13 +22,13 @@ import kotlinx.coroutines.flow.map
 
 internal fun handlePresence() = feature(
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         presenceChangedFlow()
             .map { Exec.HandlePresence(it.presence) }
             .distinctUntilChanged() // FIXME
     },
 
-    handler = handler { _, (presence): Exec.HandlePresence ->
+    handler { _, (presence): Exec.HandlePresence ->
         log.d { presence }
         storePresence(presence)
 

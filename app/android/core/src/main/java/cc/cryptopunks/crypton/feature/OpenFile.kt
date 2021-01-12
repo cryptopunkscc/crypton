@@ -15,7 +15,7 @@ data class OpenFile(val uri: String) : Action
 
 fun openFile() = feature(
 
-    handler = handler {_, (uri): OpenFile ->
+    handler {_, (uri): OpenFile ->
         val fragment = fragment
         val file = getFile(uri)
 //        val intent = Intent().apply {

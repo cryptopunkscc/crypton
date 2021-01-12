@@ -13,7 +13,7 @@ import cc.cryptopunks.crypton.interactor.connectAccount
 
 internal fun registerAccount() = feature(
 
-    command = command(
+    command(
         named("account").copy(name = "local@domain", description = "XMPP account address"),
         named("password").copy(name = "****", description = "XMPP account password"),
         name = "register",
@@ -22,7 +22,7 @@ internal fun registerAccount() = feature(
         Exec.Register(Account(address(account), Password(password)))
     },
 
-    handler = handler { out, (account): Exec.Register ->
+    handler { out, (account): Exec.Register ->
         account.connectAccount(out) {
             addAccount(
                 account = account,

@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.onStart
 
 internal fun flushMessageQueue() = feature(
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         val net = net
         val messageRepo = messageRepo
         flowOf(
@@ -54,7 +54,7 @@ internal fun flushMessageQueue() = feature(
         }
     },
 
-    handler = handler { _, (addresses): Exec.FlushQueuedMessages ->
+    handler { _, (addresses): Exec.FlushQueuedMessages ->
         if (addresses.isEmpty())
             flushQueuedMessages { true } else
             flushQueuedMessages { message: Message -> addresses.contains(message.chat) }

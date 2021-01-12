@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 
 internal fun startSessionService() = feature(
 
-    emitter = emitter(RootScopeTag) {
+    emitter(RootScopeTag) {
         mutableSetOf<Address>().let { last ->
             sessions.changesFlow().flatMapConcat { current ->
                 val new = (current - last)
@@ -43,7 +43,7 @@ internal fun startSessionService() = feature(
         }
     },
 
-    handler = handler { _, _: Subscribe.SessionService ->
+    handler { _, _: Subscribe.SessionService ->
         withContext(
             cryptonContext(
                 CoroutineLog.Label("SessionService"),

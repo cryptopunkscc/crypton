@@ -11,7 +11,7 @@ import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 
 internal fun saveInfoMessage() = feature(
-    handler = handler { _, (text): Exec.SaveInfoMessage ->
+    handler { _, (text): Exec.SaveInfoMessage ->
         messageRepo.insertOrUpdate(
             Message(
                 body = text,

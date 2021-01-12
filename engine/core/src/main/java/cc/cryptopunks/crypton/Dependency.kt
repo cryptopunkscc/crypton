@@ -7,8 +7,8 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 data class Dependency<T>(
-    val instance: T,
     override val key: Key<T>,
+    val get: () -> T,
 ) : CoroutineContext.Element {
     data class Key<T>(val any: Any) : CoroutineContext.Key<Dependency<T>>
 }
@@ -23,5 +23,5 @@ Cannot find dependency: ${property.name} with key: $key
 available dependencies:
 ${thisRef.coroutineContext.elements().joinToString("\n")}
             """.trimMargin()
-        }.instance
+        }.get()
 }

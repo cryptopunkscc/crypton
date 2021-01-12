@@ -10,7 +10,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun purgeDeviceList() = feature(
 
-    command = command(
+    command(
         config("account"),
         name = "purge devices",
         description = "Purge device list for account"
@@ -18,7 +18,7 @@ internal fun purgeDeviceList() = feature(
         Exec.PurgeDeviceList.inScope(account)
     },
 
-    handler = handler { _, _: Exec.PurgeDeviceList ->
+    handler { _, _: Exec.PurgeDeviceList ->
         deviceNet.purgeDeviceList()
     }
 )

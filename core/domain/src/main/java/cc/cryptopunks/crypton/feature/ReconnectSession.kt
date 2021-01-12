@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.map
 
 internal fun reconnectSession() = feature(
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         flowOf(
             net.netEvents().filterIsInstance<Net.Disconnected>(),
             networkSys.statusFlow().bufferedThrottle(200)
@@ -37,7 +37,7 @@ internal fun reconnectSession() = feature(
             .map { Subscribe.ReconnectSession }
     },
 
-    handler = handler { _, _: Subscribe.ReconnectSession ->
+    handler { _, _: Subscribe.ReconnectSession ->
         net.run { if (isConnected()) interrupt() }
         reconnectIfNeeded(retryCount = -1)
     }

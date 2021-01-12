@@ -6,15 +6,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChatScope
 import cc.cryptopunks.crypton.context.getSessionScope
-import cc.cryptopunks.crypton.create.connector
 import cc.cryptopunks.crypton.create.cryptonContext
-import cc.cryptopunks.crypton.create.dep
 import cc.cryptopunks.crypton.feature.ShowFileChooser
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
@@ -34,7 +31,6 @@ class ChatFragment :
             rootScope.getSessionScope(requireArguments().account!!).coroutineContext
                 .minusKey(Job)
                 .minusKey(ContinuationInterceptor),
-            dep<Fragment>()
         )
     }
 
@@ -46,7 +42,7 @@ class ChatFragment :
     override fun onCreateService() {
         launch {
             createChatScope(this, requireArguments().chat!!).launch {
-                service.connector().start()
+                service.start()
             }.join()
         }
     }

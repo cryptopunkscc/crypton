@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 internal fun subscribePagedMessages() = feature(
-    handler = handler { out, _: Subscribe.PagedMessages ->
+    handler { out, _: Subscribe.PagedMessages ->
         val pagedMessages = pagedMessages
         messagePagedListFlow()
             .onEach(pagedMessagesReceived)

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun subscribeAccounts() = feature(
 
-    handler = handler { out, _: Subscribe.Accounts ->
+    handler { out, _: Subscribe.Accounts ->
         val accounts = accounts
         accountRepo.flowList().map { list ->
             Account.Many(list.toSet())

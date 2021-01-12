@@ -17,13 +17,13 @@ internal fun updateChatNotification(
     updateNotification: SessionScope.(List<Message>) -> Unit = updateChatNotification(),
 ) = feature(
 
-    emitter = emitter(SessionScopeTag) {
+    emitter(SessionScopeTag) {
         messageRepo.flowListUnread().bufferedThrottle(500).map {
             Exec.UpdateNotification(it.flatten())
         }
     },
 
-    handler = handler { _, (messages): Exec.UpdateNotification ->
+    handler { _, (messages): Exec.UpdateNotification ->
         log.d { "update chat notification ${messages.size}" }
         updateNotification(messages)
     }

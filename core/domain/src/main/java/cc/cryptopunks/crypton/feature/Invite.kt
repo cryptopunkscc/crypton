@@ -13,7 +13,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun inviteToConference() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         text().copy(name = "local1@domain, local2@domain"),
@@ -25,7 +25,7 @@ internal fun inviteToConference() = feature(
         ).inScope(account, chat)
     },
 
-    handler = handler { _, (users): Exec.Invite ->
+    handler { _, (users): Exec.Invite ->
         val chat = chat
         require(chat.isConference) { "Cannot invite to direct chat" }
         chatNet.inviteToConference(chat.address, users)

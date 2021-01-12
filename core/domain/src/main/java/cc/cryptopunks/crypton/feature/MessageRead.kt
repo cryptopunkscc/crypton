@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.logv2.d
 
 internal fun messageRead() = feature(
-    handler = handler { _, (messages): Exec.MessagesRead ->
+    handler { _, (messages): Exec.MessagesRead ->
         log.d { "Read ${messages.size} messages" }
         messageRepo.run {
             insertOrUpdate(

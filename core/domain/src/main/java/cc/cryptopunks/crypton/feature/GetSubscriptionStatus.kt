@@ -12,7 +12,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun getSubscriptionStatus() = feature(
 
-    command = command(
+    command(
         config("account"),
         param().copy(name = "local@domain"),
         name = "status of",
@@ -21,7 +21,7 @@ internal fun getSubscriptionStatus() = feature(
         Get.SubscriptionStatus(address(buddy)).inScope(account)
     },
 
-    handler = handler { out, get: Get.SubscriptionStatus ->
+    handler { out, get: Get.SubscriptionStatus ->
         rosterNet.subscriptionStatus(get.address).out()
     }
 )

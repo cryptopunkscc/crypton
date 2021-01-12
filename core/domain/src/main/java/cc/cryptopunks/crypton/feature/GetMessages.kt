@@ -13,7 +13,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun getMessages() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         name = "messages",
@@ -22,7 +22,7 @@ internal fun getMessages() = feature(
         Get.Messages.inScope(account, chat)
     },
 
-    handler = handler { out, _: Get.Messages ->
+    handler { out, _: Get.Messages ->
         messageRepo.list(
             chat = chat.address,
             range = System.currentTimeMillis().let { currentTime ->

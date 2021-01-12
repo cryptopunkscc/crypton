@@ -12,7 +12,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun configureChat() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         name = "configure conference",
@@ -21,7 +21,7 @@ internal fun configureChat() = feature(
         Exec.ConfigureConference().inScope(account, chat)
     },
 
-    handler = handler { _, _: Exec.ConfigureConference ->
+    handler { _, _: Exec.ConfigureConference ->
         val chat = chat
         if (chat.isConference)
             chatNet.configureConference(chat.address)

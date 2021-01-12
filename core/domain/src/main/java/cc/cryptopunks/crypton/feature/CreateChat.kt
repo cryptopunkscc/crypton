@@ -17,7 +17,7 @@ import cc.cryptopunks.crypton.interactor.createChat
 
 internal fun createChat() = feature(
 
-    command = command(
+    command(
         config("account"),
         param().copy(name = "local@domain"),
         name = "create chat",
@@ -26,7 +26,7 @@ internal fun createChat() = feature(
         Exec.CreateChat(Chat(address(address), address(account))).inScope(account)
     },
 
-    handler = handler { output, (chat): Exec.CreateChat ->
+    handler { output, (chat): Exec.CreateChat ->
         sessions[chat.account]!!.createChat(chat)
         rosterNet.run {
             if (!chat.address.isConference && !iAmSubscribed(chat.address))

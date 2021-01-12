@@ -8,7 +8,7 @@ import cc.cryptopunks.crypton.feature
 
 internal fun enableAccount() = feature(
 
-    handler = handler { _, (condition): Exec.EnableAccount ->
+    handler { _, (condition): Exec.EnableAccount ->
         accountRepo.run {
             get(account.address).apply {
                 if (condition != enabled)

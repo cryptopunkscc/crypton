@@ -37,9 +37,9 @@ internal class AccountListAdapter(
 
     override fun Connector.connect(): Job = launch {
         launch {
-            val log = log
+//            val log = log
             input.filterIsInstance<Account.Many>().collect { (accounts) ->
-                log.d { "items $accounts" }
+//                log.d { "items $accounts" }
                 items = accounts.toList()
                 notifyDataSetChanged()
             }
