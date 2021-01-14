@@ -5,7 +5,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0"
-    testImplementation project(":core:fs")
+    testImplementation project(":engine:fs")
     testImplementation project(":platform:fs:ormlite")
     testImplementation project(":platform:util:ormlite")
     testImplementation project(":platform:util:ormlite:jvm")

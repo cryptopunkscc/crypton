@@ -1,6 +1,5 @@
 include ':core:api',
         ':core:domain',
-        ':core:fs',
 
         ':platform:crypto:jvm',
 
@@ -34,6 +33,7 @@ include ':core:api',
         ':engine:paging',
 //        ':engine:connectable',
         ':engine:core',
+        ':engine:fs',
         ':engine:feature',
         ':engine:net',
         ':engine:util',
