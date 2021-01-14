@@ -6,42 +6,51 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import cc.cryptopunks.crypton.Connectable
 import cc.cryptopunks.crypton.chat.R
 import cc.cryptopunks.crypton.context.Exec
+import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.createChatScope
 import cc.cryptopunks.crypton.context.getSessionScope
+import cc.cryptopunks.crypton.create.cryptonContext
 import cc.cryptopunks.crypton.feature.ShowFileChooser
 import cc.cryptopunks.crypton.navigate.account
 import cc.cryptopunks.crypton.navigate.chat
-import cc.cryptopunks.crypton.service
-import cc.cryptopunks.crypton.serviceName
+import cc.cryptopunks.crypton.service.start
 import cc.cryptopunks.crypton.view.ChatView
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.coroutines.ContinuationInterceptor
 
-class ChatFragment : ServiceFragment() {
+class ChatFragment :
+    ServiceFragment(),
+    SessionScope {
+
+    override val coroutineContext by lazy {
+        cryptonContext(
+            super.coroutineContext,
+            rootScope.getSessionScope(requireArguments().account!!).coroutineContext
+                .minusKey(Job)
+                .minusKey(ContinuationInterceptor),
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateService(): Connectable? =
-        requireArguments().run {
-            launch {
-                binding + rootScope
-                    .getSessionScope(account!!)
-                    .createChatScope(chat!!)
-                    .fragmentScope()
-                    .service(serviceName)
-            }
-            null
+    override fun onCreateService() {
+        launch {
+            createChatScope(this, requireArguments().chat!!).launch {
+                service.start()
+            }.join()
         }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ) = requireArguments().run {
         setTitle(chat!!)
         ChatView(
@@ -59,7 +68,7 @@ class ChatFragment : ServiceFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.attach_file -> ShowFileChooser
         else -> null
-    }?.let(binding::send) != null
+    }?.let(service.input::offer) != null
 
     override fun onResume() {
         super.onResume()
@@ -72,7 +81,7 @@ class ChatFragment : ServiceFragment() {
     }
 
     override fun onDestroy() {
-        binding.send(Exec.ClearInfoMessages)
+        service.input.offer(Exec.ClearInfoMessages)
         super.onDestroy()
     }
 }

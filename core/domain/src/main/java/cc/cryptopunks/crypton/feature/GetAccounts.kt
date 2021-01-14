@@ -2,10 +2,11 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.accounts
+import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 
 internal fun getAccounts() = feature(
-    handler = { out, _: Get.Accounts ->
+    handler { out, _: Get.Accounts ->
         out(accounts.get())
     }
 )

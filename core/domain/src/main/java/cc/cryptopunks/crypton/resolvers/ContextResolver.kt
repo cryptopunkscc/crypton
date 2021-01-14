@@ -1,63 +1,62 @@
 package cc.cryptopunks.crypton.resolvers
 
-import cc.cryptopunks.crypton.CannotResolve
-import cc.cryptopunks.crypton.Context
-import cc.cryptopunks.crypton.Resolve
-import cc.cryptopunks.crypton.Scope
+import cc.cryptopunks.crypton.Action
+import cc.cryptopunks.crypton.Resolved
+import cc.cryptopunks.crypton.ScopeTag
 import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.context.ChatScope
-import cc.cryptopunks.crypton.context.RootScope
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.ChatScopeTag
+import cc.cryptopunks.crypton.context.RootScopeTag
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.address
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.createChatScope
+import cc.cryptopunks.crypton.context.getSessionScope
 import cc.cryptopunks.crypton.context.rootScope
 import cc.cryptopunks.crypton.context.sessionScope
-import cc.cryptopunks.crypton.context.getSessionScope
+import cc.cryptopunks.crypton.create.resolver
+import kotlinx.coroutines.CoroutineScope
 
-fun contextResolver(): Resolve = { context ->
-    runCatching {
-        resolveFromContext(context)
-    }.getOrElse {
-        Scoped.Resolved(this, CannotResolve(context))
-    }
+fun scopedResolver() = resolver<Scoped> {
+    resolveFromScope(this, it) ?: Resolved(this, CannotResolve(it))
 }
 
-private suspend fun Scope.resolveFromContext(context: Any): Scoped.Resolved? =
-    if (context !is Context) null
-    else {
-        when (this) {
+private class CannotResolve(val arg: Any) : Action
 
-            is ChatScope -> {
+private suspend fun resolveFromScope(scope: CoroutineScope, context: Any): Action.Resolved? =
+    if (context !is Scoped) null
+    else {
+        when (scope.coroutineContext[ScopeTag]) {
+
+            ChatScopeTag -> {
                 when (context.id) {
-                    chat.address.id -> Scoped.Resolved(this, context.next)
-                    else -> sessionScope.resolveFromContext(context)
+                    scope.chat.address.id -> Resolved(scope, context.next)
+                    else -> resolveFromScope(scope.sessionScope, context)
                 }
             }
 
-            is SessionScope -> {
+            SessionScopeTag -> {
                 when {
-                    context.id == account.address.id ->
+                    context.id == scope.account.address.id ->
                         when (val next = context.next) {
-                            is Context -> resolveFromContext(next)
-                            else -> Scoped.Resolved(this, next)
+                            is Scoped -> resolveFromScope(scope, next)
+                            else -> Resolved(scope, next)
                         }
 
-                    chatRepo.contains(address(context.id)) ->
-                        createChatScope(address(context.id)).resolveFromContext(context)
+                    scope.chatRepo.contains(address(context.id)) ->
+                        resolveFromScope(createChatScope(scope, address(context.id)), context)
 
-                    else ->
-                        rootScope.resolveFromContext(context)
+
+                    else -> resolveFromScope(scope.rootScope, context)
                 }
             }
 
-            is RootScope -> {
-                getSessionScope(address(context.id)).let { scope ->
+            RootScopeTag -> {
+                scope.getSessionScope(address(context.id)).let { scope ->
                     when (val next = context.next) {
-                        is Context -> scope.resolveFromContext(next)
-                        else -> Scoped.Resolved(scope, next)
+                        is Scoped -> resolveFromScope(scope, next)
+                        else -> Resolved(scope, next)
                     }
                 }
             }

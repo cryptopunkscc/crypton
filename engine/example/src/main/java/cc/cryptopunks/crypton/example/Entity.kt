@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.example
 
-import cc.cryptopunks.crypton.Scoped
+import cc.cryptopunks.crypton.Action
 
 data class Entity(
     val id: String
@@ -9,11 +9,11 @@ data class Entity(
     data class Many(val entities: Collection<Entity>)
 
     object Command {
-        data class Set(val entity: Entity) : Scoped<RootScope>
+        data class Set(val entity: Entity) : Action
     }
 
     object Query {
-        object All : Scoped<RootScope>
+        object All : Action
     }
 
     interface Repo {
@@ -28,7 +28,6 @@ data class Details(
 ) {
 
     object Query {
-        object Get :
-            Scoped<NestedScope>
+        object Get : Action
     }
 }

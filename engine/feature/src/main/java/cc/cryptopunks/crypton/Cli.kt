@@ -2,18 +2,22 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.cliv2.commands
+import cc.cryptopunks.crypton.util.mapNotNull
+import kotlin.coroutines.CoroutineContext
 
-fun Features.cliCommands(): Cli.Commands = commands(
+fun CoroutineContext.cliCommands(): Cli.Commands = commands(
     args = commandTemplates().fold(mutableMapOf<String, Any>()) { acc, template ->
         acc.apply { put(template.name.split(" "), template) }
     }
 )
 
-private fun Features.commandTemplates(): List<Cli.Command.Template> = mapNotNull { it.command }
+private fun CoroutineContext.commandTemplates(): List<Cli.Command.Template> = this
+    .mapNotNull { it as? CliCommand }
+    .map { it.template }
 
 private tailrec fun MutableMap<String, Any>.put(
     keys: List<String>,
-    template: Cli.Command.Template
+    template: Cli.Command.Template,
 ) {
     when {
         keys.isEmpty() ->

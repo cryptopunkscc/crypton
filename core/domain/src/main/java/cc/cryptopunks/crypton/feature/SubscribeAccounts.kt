@@ -4,6 +4,7 @@ import cc.cryptopunks.crypton.context.Account
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.context.accounts
+import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 
 internal fun subscribeAccounts() = feature(
 
-    handler = { out, _: Subscribe.Accounts ->
+    handler { out, _: Subscribe.Accounts ->
         val accounts = accounts
         accountRepo.flowList().map { list ->
             Account.Many(list.toSet())

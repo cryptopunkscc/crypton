@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cc.cryptopunks.crypton.Action
 import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.adapter.MessageAdapter
 import cc.cryptopunks.crypton.chat.R
@@ -23,12 +22,16 @@ import cc.cryptopunks.crypton.context.Get
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.features
+import cc.cryptopunks.crypton.context.messageConsumers
+import cc.cryptopunks.crypton.context.minusAssign
+import cc.cryptopunks.crypton.context.plusAssign
+import cc.cryptopunks.crypton.logv2.basicLog
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
-import cc.cryptopunks.crypton.util.logger.log
-import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.ConnectableLayout
 import cc.cryptopunks.crypton.widget.autoAdjustActionButtons
 import cc.cryptopunks.crypton.widget.autoAdjustPaddingOf
 import cc.cryptopunks.crypton.widget.setSlashClickListener
@@ -50,15 +53,17 @@ class ChatView(
     account: Address,
     private val address: Address,
 ) :
-    ActorLayout(context),
+    ConnectableLayout(context),
     Message.Consumer {
 
     var resumed: Boolean = false
 
+    override val coroutineContext = rootScope.coroutineContext + super.coroutineContext + basicLog
+
     private val cliContext = Cli.Context(
 
         commands = rootScope
-            .features
+            .coroutineContext
             .cliCommands(),
 
         config = cliConfig(
@@ -124,8 +129,8 @@ class ChatView(
                         }
                     }
 
-                    is Action.Error ->
-                        Exec.SaveInfoMessage(arg.message ?: arg.javaClass.name).out()
+//                    is Action.Error ->
+//                        Exec.SaveInfoMessage(arg.message ?: arg.javaClass.name).out()
 
                     else -> log.d { arg }
                 }
@@ -167,8 +172,12 @@ class ChatView(
             Get.PagedMessages.out()
             Subscribe.PagedMessages(true).out()
         }
+        launch {
+            messageConsumers += this@ChatView
+        }
     }.apply {
         invokeOnCompletion {
+            messageConsumers -= this@ChatView
             messageAdapter.setMessages(null)
         }
     }

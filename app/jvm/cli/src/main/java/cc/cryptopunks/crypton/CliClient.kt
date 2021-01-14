@@ -12,9 +12,11 @@ import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,7 +24,7 @@ import kotlinx.coroutines.withContext
 fun cliClient(
     console: Connector,
     backend: Connector,
-    context: Cli.Context
+    context: Cli.Context,
 ): suspend () -> Unit = {
     withContext(
         SupervisorJob() + Dispatchers.IO + CoroutineLog.Label("CliClient")
@@ -47,6 +49,39 @@ fun cliClient(
     }
 }
 
+fun cliClient(
+    args: Array<String>,
+    interactive: Boolean = true,
+    context: Cli.Context,
+): Connector = run {
+    if (interactive)
+        consoleConnector(args) else
+        args.asFlow().systemFlowConnector()
+}
+    .formatCliOutput()
+    .plus(context)
+
+fun Connector.plus(
+    context: Cli.Context,
+) = copy(
+    input = input
+        .filterIsInstance<String>()
+        .scan(context, { context, input -> context.reduce(input) })
+        .map { it.unwrapCliResult() }
+        .mapNotNull { result ->
+            when (result) {
+                is Action -> result
+                else -> null.also {
+                    result.out()
+                }
+            }
+        }
+)
+
+fun Connector.formatCliOutput() = copy {
+    formatCliOutput().out()
+}
+
 fun Any.formatCliOutput(): String =
     when (this) {
         is String -> this
@@ -61,7 +96,7 @@ fun Any.formatCliOutput(): String =
         is Message -> format()
         is Map<*, *> -> toMap().toString()
         is Throwable -> stackTraceToString()
-        is ActionFailed -> format()
+        is Action.Error -> format()
         else -> try {
             javaClass.name + ": " + formatJsonPretty()
         } catch (e: Throwable) {

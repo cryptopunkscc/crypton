@@ -4,6 +4,8 @@ import cc.cryptopunks.crypton.context.Connection
 import cc.cryptopunks.crypton.context.RootScope
 import cc.cryptopunks.crypton.context.context
 import cc.cryptopunks.crypton.context.createRootScope
+import cc.cryptopunks.crypton.create.dep
+import cc.cryptopunks.crypton.create.cryptonContext
 import cc.cryptopunks.crypton.repo.ormlite.OrmLiteAppRepo
 import cc.cryptopunks.crypton.service.cryptonFeatures
 import cc.cryptopunks.crypton.service.cryptonResolvers
@@ -20,7 +22,10 @@ import java.io.File
 
 fun createServerScope(config: Map<String, Any?>): RootScope = RootScopeConfig(config).run {
     initSmack(File(omemoStorePath))
-    val features = cryptonFeatures()
+    createServerScope()
+}
+
+fun RootScopeConfig.createServerScope() =
     createRootScope(
         cryptonContext(
             JvmSys(home).context(),
@@ -33,15 +38,13 @@ fun createServerScope(config: Map<String, Any?>): RootScope = RootScopeConfig(co
             }.context(),
             IOExecutor(Dispatchers.IO.asExecutor()),
             MainExecutor(Dispatchers.IO.asExecutor()),
-            createConnectionFactory(this).asDep(),
-            features,
-            features.createHandlers(),
+            createConnectionFactory(this).dep(),
+            cryptonFeatures(),
             cryptonResolvers()
         )
     )
-}
 
-private class RootScopeConfig(
+class RootScopeConfig(
     map: Map<String, Any?>
 ) : MutableMap<String, Any?> by map.toMutableMap() {
     var home: String by this

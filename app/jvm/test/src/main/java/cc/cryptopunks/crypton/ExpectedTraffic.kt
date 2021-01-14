@@ -1,10 +1,12 @@
 package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.context.Address
-import cc.cryptopunks.crypton.util.logger.CoroutineLog
+import cc.cryptopunks.crypton.logv2.Log
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.serial.list
 
 class ExpectedTraffic(
-    private val log: CoroutineLog.Locked
+    private val log: Log<Unit, Any>
 ) {
     private val expected = mutableListOf<(Any) -> Any?>()
     val traffic = mutableListOf<Any>()
@@ -14,7 +16,7 @@ class ExpectedTraffic(
         expected.add {
             try {
                 val t =
-                    if (it !is Context) it else it.list().minus(context.map(
+                    if (it !is Scoped) it else it.list().minus(context.map(
                         Address::id)).apply {
                         require(size == 1) {
                             "Invalid $this context: ${context.toList()} arg: $it"

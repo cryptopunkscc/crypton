@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.feature
 
-import cc.cryptopunks.crypton.NonHandle
 import cc.cryptopunks.crypton.cli.account
 import cc.cryptopunks.crypton.cli.chat
 import cc.cryptopunks.crypton.cliv2.Cli
@@ -13,8 +12,7 @@ import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.util.invoke
 
 internal fun cliConfigure() = feature(
-
-    command = command(
+    command(
         named("account").copy(optional = true),
         named("chat").copy(optional = true),
         name = "configure cli"
@@ -27,33 +25,25 @@ internal fun cliConfigure() = feature(
                 c { chat = toString() }
             }
         }
-    },
-
-    handler = NonHandle
+    }
 )
 
 internal fun cliSetAccount() = feature(
-
-    command = command(
+    command(
         param().copy(name = "account@domain.com", description = "Account address"),
         name = "a",
         description = "Set current account to config."
     ).raw { (a) ->
         configure { account = a?.toString()?.takeIf { it.isNotBlank() } }
-    },
-
-    handler = NonHandle
+    }
 )
 
 internal fun cliSetChat() = feature(
-
-    command = command(
+    command(
         param().copy(name = "chat@domain.com", description = "Chat address"),
         name = "c",
         description = "Set current chat to config."
     ).raw { (c) ->
         configure { chat = c?.toString()?.takeIf { it.isNotBlank() } }
-    },
-
-    handler = NonHandle
+    }
 )

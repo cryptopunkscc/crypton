@@ -1,31 +1,65 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.log.filterLast
+import cc.cryptopunks.crypton.log.groupById
+import cc.cryptopunks.crypton.log.mapToRequestLogData
+import cc.cryptopunks.crypton.log.printOnFinish
+import cc.cryptopunks.crypton.logv2.LogOutput
+import cc.cryptopunks.crypton.logv2.LogScope
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.columnFormatter
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.TypedLog
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 fun CoroutineScope.initJvmLog() = launch {
-    Log.output(CoroutineLog)
-    TypedLog.output(CoroutineLog)
-    CoroutineLog.output(JvmLogOutput)
+    joinAll(
+        launch { Log.output(CoroutineLog) },
+        launch { TypedLog.output(CoroutineLog) },
+        launch { CoroutineLog.output(JvmLogOutput) },
+        LogScope.connect(
+//            jvmRequestEventLogOutput,
+            jvmLegacyEventLogOutput
+        ),
+        launch {
+            LogScope.flow()
+                .mapToRequestLogData()
+                .groupById()
+                .filterLast()
+                .collect(printOnFinish)
+        }
+    )
 }
 
 object JvmLogOutput : Log.Output {
-
-    private val formatColumn = columnFormatter()
-
-    override fun invoke(event: Log.Event) = event
-        .formatMessage()
-        .formatColumn()
-        .joinToString(" ")
-        .let(::println)
-        .also { event.throwable?.printStackTrace() }
+    override fun invoke(event: Any) = when (event) {
+        is Log.Event -> event.log()
+        else -> Unit
+    }
 }
+
+val jvmLegacyEventLogOutput: LogOutput = { logEvent ->
+    (logEvent.data as? Log.Event)?.run {
+        copy(
+            timestamp = logEvent.timestamp,
+            thread = logEvent.thread,
+        ).log()
+    }
+}
+
+private val formatColumn = columnFormatter()
+
+private fun Log.Event.log() = this
+    .formatMessage()
+    .formatColumn()
+    .joinToString(" ")
+    .let(::println)
+    .also { throwable?.printStackTrace() }
 
 private fun Log.Event.formatMessage() = listOf(
     dateFormat.format(timestamp),

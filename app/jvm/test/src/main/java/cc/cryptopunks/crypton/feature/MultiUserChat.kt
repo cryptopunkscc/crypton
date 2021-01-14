@@ -14,7 +14,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.context.Subscribe
-import cc.cryptopunks.crypton.context.inContext
+import cc.cryptopunks.crypton.context.inScope
 import cc.cryptopunks.crypton.createChat
 import cc.cryptopunks.crypton.openChat
 import cc.cryptopunks.crypton.pass
@@ -78,7 +78,7 @@ private suspend fun client1() = Client1.connectDslClient {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
     }
-    send(Exec.JoinChat.inContext(address1, chatAddress))
+    send(Exec.JoinChat.inScope(address1, chatAddress))
     flush()
 
     delay(1000)
@@ -99,21 +99,21 @@ private suspend fun client2() = Client2.connectDslClient {
         }
     }
 
-    send(Exec.JoinChat.inContext(address2, address1))
+    send(Exec.JoinChat.inScope(address2, address1))
     waitFor<Roster.Items> {
         list.any {
             it.chatAddress == address3 && it.presence == Presence.Status.Subscribe
         }
     }
 
-    send(Exec.JoinChat.inContext(address2, address3))
+    send(Exec.JoinChat.inScope(address2, address3))
     waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress && it.presence == Presence.Status.Unavailable
         }
     }
 
-    send(Exec.JoinChat.inContext(address2, chatAddress))
+    send(Exec.JoinChat.inScope(address2, chatAddress))
     waitFor<Roster.Items> {
         list.any {
             it.chatAddress == chatAddress
@@ -137,7 +137,7 @@ private suspend fun client3() = Client3.connectDslClient {
         }
     }
 
-    send(Exec.JoinChat.inContext(address3, address1))
+    send(Exec.JoinChat.inScope(address3, address1))
     flush()
 
     createChat(address3, address2)

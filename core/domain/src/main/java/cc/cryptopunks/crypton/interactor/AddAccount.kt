@@ -8,12 +8,12 @@ import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.context.createSessionScope
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.sessions
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 suspend fun RootScope.addAccount(
     account: Account,
@@ -26,8 +26,8 @@ suspend fun RootScope.addAccount(
     val logInfo = coroutineScope {
         coroutineContext[CoroutineLog.Action]!! + CoroutineLog.Status(Log.Event.Status.Handling)
     }
-    createSessionScope(account).apply {
-        withContext(logInfo) {
+    createSessionScope(this, account).apply {
+        launch(logInfo) {
             val net = net
             log.d { "Connecting" }
             net.connect()
@@ -40,7 +40,7 @@ suspend fun RootScope.addAccount(
             launch { net.initOmemo() }
             if (insert) accountRepo.insert(account)
             log.d { "Account inserted" }
-        }
+        }.join()
     }.also { session ->
         sessions reduce {
             plus(account.address to session)

@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.service
 
-import cc.cryptopunks.crypton.Features
+import cc.cryptopunks.crypton.create.cryptonContext
 import cc.cryptopunks.crypton.feature.addAccount
 import cc.cryptopunks.crypton.feature.clearInfoMessages
 import cc.cryptopunks.crypton.feature.cliConfigure
@@ -49,12 +49,10 @@ import cc.cryptopunks.crypton.feature.syncConferences
 import cc.cryptopunks.crypton.feature.toggleIndicator
 import cc.cryptopunks.crypton.feature.updateChatNotification
 import cc.cryptopunks.crypton.feature.uploadFile
-import cc.cryptopunks.crypton.features
-import cc.cryptopunks.crypton.resolvers
-import cc.cryptopunks.crypton.resolvers.contextResolver
-import cc.cryptopunks.crypton.resolvers.scopedActionResolver
+import cc.cryptopunks.crypton.resolvers.scopedResolver
+import kotlin.coroutines.CoroutineContext
 
-fun cryptonFeatures(): Features = features(
+fun cryptonFeatures() = cryptonContext(
     // cli
     cliConfigure(),
     cliSetAccount(),
@@ -112,7 +110,4 @@ fun cryptonFeatures(): Features = features(
     downloadFile()
 )
 
-fun cryptonResolvers() = resolvers(
-    scopedActionResolver(),
-    contextResolver()
-)
+fun cryptonResolvers(): CoroutineContext = scopedResolver()

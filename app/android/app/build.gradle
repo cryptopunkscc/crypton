@@ -79,7 +79,6 @@ android {
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':core:backend')
     implementation project(':platform:net:smack:android')
     implementation project(':platform:repo:room')
     implementation project(':platform:sys:android')

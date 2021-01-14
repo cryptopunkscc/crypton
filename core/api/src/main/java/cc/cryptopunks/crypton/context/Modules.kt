@@ -1,10 +1,11 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.asDep
-import cc.cryptopunks.crypton.cryptonContext
+import cc.cryptopunks.crypton.ScopeElement
+import cc.cryptopunks.crypton.create.cryptonContext
+import cc.cryptopunks.crypton.create.dep
+import cc.cryptopunks.crypton.logv2.d
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -16,29 +17,32 @@ import kotlin.coroutines.CoroutineContext
 
 fun createRootScope(
     dependencies: CoroutineContext,
-): RootScope = RootScope.Module(
+): RootScope = CoroutineScope(
     cryptonContext(
         dependencies,
         baseRootContext(),
     )
 ).apply {
     coroutineContext[Job]!!.invokeOnCompletion {
-        coroutineContext.log.d { "Finish AppModule $this" }
+        log.d { "Finish AppModule $this" }
     }
 }
 
 fun baseRootContext() = cryptonContext(
+    RootScopeTag,
+    CoroutineLog.Label("RootScope"),
     Main(Nothing::class.java),
     Chat.NavigationId(),
     ApplicationId(),
 
-    SessionScope.Store(),
+    SessionStore(),
     Clip.Board.Store(),
-    Connectable.Binding.Store(),
+    Message.Consumer.Store(),
     Account.Store(),
     Roster.Items.Store(),
 
     SupervisorJob(),
+//    newSingleThreadContext("RootScope"),
     Dispatchers.IO,
     CoroutineLog.Label(RootScope::class.java.simpleName),
 )
@@ -50,64 +54,70 @@ fun RootScope.getSessionScope(session: Address): SessionScope =
             "available sessions: ${sessions.get().keys.joinToString("\n")}"
     }
 
-suspend fun RootScope.createSessionScope(address: Address): SessionScope =
-    createSessionScope(accountRepo.get(address))
+suspend fun createSessionScope(scope: RootScope, address: Address): SessionScope =
+    createSessionScope(scope, scope.accountRepo.get(address))
 
-fun RootScope.createSessionScope(account: Account): SessionScope = let {
-    val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    val connectionConfig = Connection.Config(
-        scope = connectionScope,
-        account = account.address,
-        password = account.password
-    )
-
-    SessionScope.Module(
+fun createSessionScope(
+    scope: RootScope,
+    account: Account,
+): SessionScope = Connection.Config(
+    scope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+    account = account.address,
+    password = account.password
+).let { connectionConfig ->
+    CoroutineScope(
         cryptonContext(
-            coroutineContext,
-            asDep(),
-            createSessionRepo(account.address).context(),
-            createConnection(connectionConfig).context(),
-            baseSessionContext(Account.Name(account.address))
+            scope.createSessionRepo(account.address).context(),
+            scope.createConnection(connectionConfig).context(),
+            baseSessionContext(scope, Account.Name(account.address))
         )
     ).apply {
-        deviceNet.setDeviceFingerprintRepo(deviceRepo)
-        coroutineContext[Job]!!.invokeOnCompletion {
-            connectionScope.cancel(CancellationException(it?.message))
-            coroutineContext.log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
+        this.deviceNet.setDeviceFingerprintRepo(this.deviceRepo)
+        this.coroutineContext[Job]!!.invokeOnCompletion {
+            connectionConfig.scope.cancel(CancellationException(it?.message))
+            log.d { "Finish SessionModule $account ${it.hashCode()} $it" }
         }
     }
 }
 
-fun RootScope.baseSessionContext(
+fun baseSessionContext(
+    rootScope: RootScope,
     account: Account.Name,
 ) = cryptonContext(
-    coroutineContext,
-    asDep(),
+    rootScope.coroutineContext,
+    rootScope.dep(RootScopeTag),
     account,
+    SessionScopeTag,
+    ScopeElement(account.address.id),
     Presence.Store(),
     Address.Subscriptions.Store(),
-
-    SupervisorJob(coroutineContext[Job]),
+    SupervisorJob(rootScope.coroutineContext[Job]),
     newSingleThreadContext(account.address.id),
-    CoroutineLog.Label(SessionScope::class.java.simpleName),
+    CoroutineLog.Label("SessionScope"),
     CoroutineLog.Scope(account.address.id),
 )
 
 
-suspend fun SessionScope.createChatScope(
+suspend fun createChatScope(
+    sessionScope: SessionScope,
     chat: Address,
-): ChatScope = ChatScope.Module(
-    baseChatContext(chatRepo.get(chat))
+): ChatScope = CoroutineScope(
+    baseChatContext(
+        sessionScope,
+        sessionScope.chatRepo.get(chat)
+    )
 )
 
-fun SessionScope.baseChatContext(
+fun baseChatContext(
+    sessionScope: SessionScope,
     chat: Chat,
 ) = cryptonContext(
-    coroutineContext,
-    asDep(),
+    sessionScope.coroutineContext,
+    sessionScope.dep(SessionScopeTag),
     chat,
+    ChatScopeTag,
+    ScopeElement(chat.address.id),
     Chat.PagedMessages.Store(),
-
-    CoroutineLog.Label(javaClass.simpleName),
     CoroutineLog.Scope(chat.address.id),
+    CoroutineLog.Label("ChatScope"),
 )

@@ -2,11 +2,12 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.clipboardSys
+import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 
 internal fun copyToClipboard() = feature(
 
-    handler = { _, (message): Exec.Copy ->
+    handler { _, (message): Exec.Copy ->
         clipboardSys.setClip(message.body)
     }
 )

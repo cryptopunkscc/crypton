@@ -22,8 +22,8 @@ dependencies {
     api project(':platform:util:ormlite:jvm')
     api project(':platform:sys:jvm')
     api project(':platform:net:smack:jvm')
-    api project(':engine:cli')
-    api project(':core:backend')
-    api project(':engine:net')
     api project(':platform:log:jvm')
+    api project(':core:domain')
+    api project(':engine:cli')
+    api project(':engine:net')
 }

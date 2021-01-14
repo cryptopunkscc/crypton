@@ -10,30 +10,28 @@ import cc.cryptopunks.crypton.cliCommands
 import cc.cryptopunks.crypton.cliv2.Cli
 import cc.cryptopunks.crypton.cliv2.reduce
 import cc.cryptopunks.crypton.debug.R
-import cc.cryptopunks.crypton.features
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.ScrollHelper
 import cc.cryptopunks.crypton.util.bindings.clicks
 import cc.cryptopunks.crypton.util.bindings.textChanges
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import cc.cryptopunks.crypton.util.logger.LogOutputCache
-import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.ConnectableLayout
 import cc.cryptopunks.crypton.widget.autoAdjustActionButtons
 import cc.cryptopunks.crypton.widget.autoAdjustPaddingOf
 import kotlinx.android.synthetic.main.debug_view.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class DebugView(
-    context: BaseActivity
-) : ActorLayout(context) {
+    context: BaseActivity,
+) : ConnectableLayout(context) {
 
-    private val cliContext = Cli.Context(
-        context.rootScope.features.cliCommands()
-    )
+    private val cliContext = Cli.Context(context.rootScope.coroutineContext.cliCommands())
 
     private val helper = ScrollHelper(context)
 
@@ -58,11 +56,13 @@ class DebugView(
     override fun Connector.connect(): Job = launch {
         launch {
             debugAdapter.apply {
-                items.addAll(LogOutputCache.Default)
+                items.addAll(LogOutputCache.Default.filterIsInstance<Log.Event>())
                 notifyDataSetChanged()
                 helper.scrollToBottom(debugRecyclerView, smooth = false)
             }
-            CoroutineLog.flow().collect { event ->
+
+            TODO()
+            CoroutineLog.flow().filterIsInstance<Log.Event>().collect { event ->
                 debugAdapter += event
                 delay(300)
                 helper.scrollToBottom(debugRecyclerView)

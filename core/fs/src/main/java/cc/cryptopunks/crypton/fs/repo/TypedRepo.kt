@@ -7,5 +7,7 @@ interface TypedRepo<T> {
     operator fun get(id: Id): T
     operator fun contains(id: Id): Boolean
     operator fun minus(id: Id): Boolean
+//    fun free(): Long
+//    fun set(): Set<Id>
     fun typeOf(any: Any): Boolean
 }

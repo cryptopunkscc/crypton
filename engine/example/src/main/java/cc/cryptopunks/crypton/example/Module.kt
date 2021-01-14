@@ -1,10 +1,8 @@
 package cc.cryptopunks.crypton.example
 
-import cc.cryptopunks.crypton.Context
 import cc.cryptopunks.crypton.Scope
 import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.cryptonContext
-import cc.cryptopunks.crypton.resolvers
+import cc.cryptopunks.crypton.create.cryptonContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
@@ -14,8 +12,7 @@ internal data class RootModule(
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO +
         cryptonContext(
-            getAllHandlers(),
-            resolvers({ Scoped.Resolved(this, it) })
+            getAllHandlers()
         )
 
     override val nestedScopes: Map<String, NestedScope> =
@@ -23,7 +20,7 @@ internal data class RootModule(
             NestedModule(this, it)
         }
 
-    override suspend fun resolve(context: Context): Pair<Scope, Any> =
+    override suspend fun resolve(context: Scoped): Pair<Scope, Any> =
         nestedScopes.getValue(context.id) to context.next
 }
 
@@ -33,7 +30,7 @@ private data class NestedModule(
 ) : NestedScope,
     RootScope by rootScope {
 
-    override suspend fun resolve(context: Context): Pair<Scope, Any> = when (id) {
+    override suspend fun resolve(context: Scoped): Pair<Scope, Any> = when (id) {
         context.id -> this to context.next
         else -> rootScope resolve context
     }

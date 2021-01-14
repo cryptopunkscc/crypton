@@ -8,24 +8,25 @@ import cc.cryptopunks.crypton.context.accountNet
 import cc.cryptopunks.crypton.context.accountRepo
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.rootScope
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.interactor.removeSessionScope
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 internal fun removeAccount() = feature(
 
-    command = command(
+    command(
         config("account"),
         name = "delete account",
         description = "Delete account."
     ) { (account) ->
-        Exec.RemoveAccount().inContext(account)
+        Exec.RemoveAccount().inScope(account)
     },
 
-    handler = { _, arg: Exec.RemoveAccount ->
+    handler { _, arg: Exec.RemoveAccount ->
         val account = account
         removeSessionScope(account.address) {
             if (!arg.deviceOnly) {

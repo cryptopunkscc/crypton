@@ -1,15 +1,13 @@
 package cc.cryptopunks.crypton.feature
 
-import cc.cryptopunks.crypton.Features
-import cc.cryptopunks.crypton.features
-import cc.cryptopunks.crypton.resolvers
+import cc.cryptopunks.crypton.create.cryptonContext
 
-fun androidFeatures(): Features = features(
+fun androidFeatures() = cryptonContext(
     showFileChooser(),
     openFile()
 )
 
-fun androidResolvers() = resolvers(
+fun androidResolvers() = cryptonContext(
     execUploadResolver(),
     showFileChooserResolver()
 )

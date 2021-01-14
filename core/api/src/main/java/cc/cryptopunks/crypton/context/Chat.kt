@@ -2,8 +2,7 @@ package cc.cryptopunks.crypton.context
 
 import androidx.paging.DataSource
 import androidx.paging.PagedList
-import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import cc.cryptopunks.crypton.util.OpenStore
 import kotlinx.coroutines.flow.Flow
 
@@ -23,7 +22,7 @@ data class Chat(
 
     data class Name(val address: Address)
 
-    interface Action : Scoped<ChatScope>
+    interface Action : cc.cryptopunks.crypton.Action
 
     companion object {
         val Empty = Chat()

@@ -9,21 +9,22 @@ import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.context.rosterNet
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inContext
 
 internal fun getChatInfo() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         name = "chat info",
         description = "Display info about chat."
     ) { (account, chat) ->
-        Get.ChatInfo.inContext(account, chat)
+        Get.ChatInfo.inScope(account, chat)
     },
 
-    handler = { out, _: Get.ChatInfo ->
+    handler { out, _: Get.ChatInfo ->
         chat.run {
             when (isConference) {
                 true -> chatNet.getChatInfo(address)

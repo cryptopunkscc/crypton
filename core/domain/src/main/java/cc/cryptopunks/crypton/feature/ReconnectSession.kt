@@ -2,11 +2,12 @@ package cc.cryptopunks.crypton.feature
 
 import cc.cryptopunks.crypton.context.Net
 import cc.cryptopunks.crypton.context.Network
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.net
 import cc.cryptopunks.crypton.context.networkSys
-import cc.cryptopunks.crypton.emitter
+import cc.cryptopunks.crypton.create.emitter
+import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.reconnectIfNeeded
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.map
 
 internal fun reconnectSession() = feature(
 
-    emitter = emitter<SessionScope> {
+    emitter(SessionScopeTag) {
         flowOf(
             net.netEvents().filterIsInstance<Net.Disconnected>(),
             networkSys.statusFlow().bufferedThrottle(200)
@@ -26,7 +27,8 @@ internal fun reconnectSession() = feature(
                 .filter { status ->
                     when (status) {
                         is Network.Status.Available,
-                        is Network.Status.Changed -> true
+                        is Network.Status.Changed,
+                        -> true
                         else -> false
                     }
                 }
@@ -35,7 +37,7 @@ internal fun reconnectSession() = feature(
             .map { Subscribe.ReconnectSession }
     },
 
-    handler = { _, _: Subscribe.ReconnectSession ->
+    handler { _, _: Subscribe.ReconnectSession ->
         net.run { if (isConnected()) interrupt() }
         reconnectIfNeeded(retryCount = -1)
     }

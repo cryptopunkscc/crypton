@@ -1,0 +1,57 @@
+@startuml
+
+interface Store {
+    add(Blob): Id
+    delete(Id): Boolean
+    get(Id): Blob
+    list(): Set<Id>
+    adds(): Flow<Id>
+    deletes(): Flow<Id>
+}
+
+interface Graph {
+    source(id: Id): Set<Id>
+    target(id: Id): Set<Id>
+    type(name: String): Set<Id>
+}
+
+class Story {
+    ver: Int
+    type: String
+    rel: Set<Id>
+    body: Body
+}
+
+class Request {
+    sender: PubKeyFingerprint
+    signature: Signature
+    story: Story
+}
+
+class Response
+
+interface AuthService {
+    authorize(request: Request): Boolean
+}
+
+interface Handler {
+    handle(Request)
+}
+
+class Gateway
+
+Story -*  Request
+Blob <|-- Story
+Blob -*  Response : contains
+Request <. Gateway : receives
+Response <.. Gateway : sends
+
+
+Graph --> Store : [adds, deletes]
+Gateway -> Handler : handle
+Gateway --> AuthService : authorize
+Handler -> Store : [add, delete, get]
+Handler --> Graph : [source, target, type]
+AuthService --> Store : get
+
+@enduml

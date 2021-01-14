@@ -13,7 +13,7 @@ import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.navigate.navigateChat
 import cc.cryptopunks.crypton.navigate.navigateCreateChat
 import cc.cryptopunks.crypton.util.logger.typedLog
-import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.ConnectableLayout
 import kotlinx.android.synthetic.main.roster.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 class RosterView(
     context: Context
-) : ActorLayout(context) {
+) : ConnectableLayout(context) {
 
     private val rosterAdapter = RosterAdapter(coroutineContext)
 

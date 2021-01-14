@@ -1,8 +1,6 @@
 package cc.cryptopunks.crypton.view
 
 import android.content.Context
-import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import android.widget.EditText
 import androidx.navigation.NavGraph
@@ -14,7 +12,7 @@ import cc.cryptopunks.crypton.context.Address
 import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Password
 import cc.cryptopunks.crypton.util.bindings.clicks
-import cc.cryptopunks.crypton.widget.ActorLayout
+import cc.cryptopunks.crypton.widget.ConnectableLayout
 import kotlinx.android.synthetic.main.create_account.view.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-internal class AddAccountView(context: Context) : ActorLayout(context) {
+internal class AddAccountView(context: Context) : ConnectableLayout(context) {
 
     init {
         View.inflate(context, R.layout.create_account, this)

@@ -3,7 +3,8 @@ package cc.cryptopunks.crypton.interactor
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.SessionScope
 import cc.cryptopunks.crypton.context.messageRepo
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 
 internal suspend fun SessionScope.flushQueuedMessages(
     filter: (Message) -> Boolean

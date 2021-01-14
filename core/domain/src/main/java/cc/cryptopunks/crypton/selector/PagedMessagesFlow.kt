@@ -6,7 +6,7 @@ import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.queryContext
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import cc.cryptopunks.crypton.util.CreatePagedList
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.asFlow

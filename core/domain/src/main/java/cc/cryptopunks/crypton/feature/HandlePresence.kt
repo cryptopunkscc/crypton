@@ -5,26 +5,31 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.Roster
-import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chatRepo
 import cc.cryptopunks.crypton.context.rosterNet
 import cc.cryptopunks.crypton.context.subscriptions
-import cc.cryptopunks.crypton.emitter
+import cc.cryptopunks.crypton.create.emitter
+import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 import cc.cryptopunks.crypton.interactor.createChat
 import cc.cryptopunks.crypton.interactor.storePresence
+import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.selector.presenceChangedFlow
-import cc.cryptopunks.crypton.util.logger.log
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 internal fun handlePresence() = feature(
 
-    emitter = emitter<SessionScope> {
-        presenceChangedFlow().map { Exec.HandlePresence(it.presence) }
+    emitter(SessionScopeTag) {
+        presenceChangedFlow()
+            .map { Exec.HandlePresence(it.presence) }
+            .distinctUntilChanged() // FIXME
     },
 
-    handler = { _, (presence): Exec.HandlePresence ->
+    handler { _, (presence): Exec.HandlePresence ->
+        log.d { presence }
         storePresence(presence)
 
         val account = account
@@ -86,7 +91,8 @@ internal fun handlePresence() = feature(
                         )
                     }
                     Roster.Item.Status.both,
-                    Roster.Item.Status.remove -> Unit
+                    Roster.Item.Status.remove,
+                    -> Unit
                 }
             }
 
@@ -95,7 +101,8 @@ internal fun handlePresence() = feature(
             Presence.Status.Available,
             Presence.Status.Unsubscribe,
             Presence.Status.Error,
-            Presence.Status.Probe -> Unit
+            Presence.Status.Probe,
+            -> Unit
         }
         Unit
     }

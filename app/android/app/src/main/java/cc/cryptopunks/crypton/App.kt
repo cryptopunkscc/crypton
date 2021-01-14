@@ -13,16 +13,21 @@ import cc.cryptopunks.crypton.context.Subscribe
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.baseRootContext
 import cc.cryptopunks.crypton.context.context
+import cc.cryptopunks.crypton.create.cryptonContext
+import cc.cryptopunks.crypton.create.dep
 import cc.cryptopunks.crypton.debug.drawer.initAppDebug
 import cc.cryptopunks.crypton.feature.androidFeatures
 import cc.cryptopunks.crypton.feature.androidResolvers
 import cc.cryptopunks.crypton.fragment.AndroidChatNotificationFactory
+import cc.cryptopunks.crypton.logv2.e
+import cc.cryptopunks.crypton.logv2.log
 import cc.cryptopunks.crypton.navigate.currentAccount
 import cc.cryptopunks.crypton.room.RoomAppRepo
 import cc.cryptopunks.crypton.selector.newSessionsFlow
 import cc.cryptopunks.crypton.service.cryptonFeatures
 import cc.cryptopunks.crypton.service.cryptonResolvers
 import cc.cryptopunks.crypton.service.initExceptionService
+import cc.cryptopunks.crypton.service.start
 import cc.cryptopunks.crypton.smack.SmackConnectionFactory
 import cc.cryptopunks.crypton.smack.initSmack
 import cc.cryptopunks.crypton.sys.AndroidSys
@@ -30,6 +35,8 @@ import cc.cryptopunks.crypton.util.ActivityLifecycleLogger
 import cc.cryptopunks.crypton.util.IOExecutor
 import cc.cryptopunks.crypton.util.MainExecutor
 import cc.cryptopunks.crypton.util.initAndroidLog
+import cc.cryptopunks.crypton.util.logger.coroutineLogLabel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.flow.collect
@@ -45,6 +52,7 @@ class App :
     override val coroutineContext by lazy {
         cryptonContext(
             baseRootContext(),
+            coroutineLogLabel(),
             ApplicationId(BuildConfig.APPLICATION_ID),
             mainActivityClass,
             MainExecutor(Dispatchers.Main.asExecutor()),
@@ -62,11 +70,13 @@ class App :
                 appNameResId = R.string.app_name,
                 smallIconResId = R.mipmap.ic_launcher_round
             ).context(),
-            SmackConnectionFactory(setupSmackConnection).asDep<Connection.Factory>(),
+            SmackConnectionFactory(setupSmackConnection).dep<Connection.Factory>(),
             features,
-            features.createHandlers(),
             cryptonResolvers() + androidResolvers(),
-            Chat.NavigationId(R.id.chatFragment)
+            Chat.NavigationId(R.id.chatFragment),
+            CoroutineExceptionHandler { coroutineContext, throwable ->
+                launch { log.e { throwable } }
+            }
         )
     }
 
@@ -78,7 +88,7 @@ class App :
         initAppDebug()
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger)
         initSmack(cacheDir.resolve(OMEMO_STORE_NAME))
-        service().dispatch(Subscribe.AppService)
+        launch { Subscribe.AppService.start { println(this) } } // FIXME print
         launch { newSessionsFlow().collect { currentAccount = it.account.address } }
     }
 

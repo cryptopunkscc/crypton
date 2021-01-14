@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.sys
 
 import cc.cryptopunks.crypton.context.Network
-import cc.cryptopunks.crypton.util.logger.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -36,7 +35,6 @@ private fun networkCallbacksFlow(wait: Long = 3000) =
         }
         awaitClose { job.cancel() }
     }.distinctUntilChanged().map { networks ->
-        log.d { "Network changes: $networks" }
         when (networks.isNotEmpty()) {
             true -> Network.Status.Available
             false -> Network.Status.Unavailable

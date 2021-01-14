@@ -1,9 +1,8 @@
 package cc.cryptopunks.crypton.format
 
-import cc.cryptopunks.crypton.ActionFailed
-import java.lang.StringBuilder
+import cc.cryptopunks.crypton.Action
 
-fun ActionFailed.format() = StringBuilder()
+fun Action.Error.format() = StringBuilder()
     .append(javaClass.name)
     .appendLine("action: $action")
     .appendLine("message: $message")

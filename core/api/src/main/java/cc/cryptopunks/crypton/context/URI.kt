@@ -1,6 +1,6 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.dep
+import cc.cryptopunks.crypton.delegate.dep
 import java.io.File
 import java.io.InputStream
 import java.net.URI.create

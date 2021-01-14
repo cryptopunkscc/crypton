@@ -2,27 +2,29 @@ package cc.cryptopunks.crypton
 
 import cc.cryptopunks.crypton.util.Log
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.log
+import cc.cryptopunks.crypton.logv2.d
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.*
+import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 
-fun <T : Scope> T.service(
+fun <T : CoroutineScope> T.service(
     name: String = "NoName.service",
 ): Connectable = Service(
     name = name,
-    scope = this,
-    resolvers = resolvers
+    scope = this
 )
 
 val Any.serviceName get() = "${javaClass.simpleName}.service"
@@ -31,15 +33,14 @@ val String.serviceName get() = "$this.service"
 private data class Service(
     val name: String,
     val scope: Scope,
-    val resolvers: Resolvers = Resolvers(),
 ) :
-    Connectable,
-    CoroutineScope by scope {
+    Connectable {
 
     data class Connection(
-        val scope: Scope,
+        val scope: CoroutineScope,
         val connector: Connector,
-        val resolvers: Resolvers,
+        val handlers: Handlers = scope.handlers,
+        val resolvers: Resolvers = scope.resolvers,
         val subs: MutableMap<KClass<*>, Job> = mutableMapOf(),
         val async: WeakHashMap<Job, Any> = WeakHashMap(),
     ) {
@@ -50,49 +51,85 @@ private data class Service(
         scope.coroutineContext +
         SupervisorJob(scope.coroutineContext[Job])
 
-    override fun Connector.connect(): Job = launch {
-        Connection(
-            scope = scope,
+    override fun Connector.connect(): Job {
+        val connection = Connection(
+            scope = this@Service,
             connector = this@connect,
             resolvers = resolvers
-        ).handle().joinAll()
+        )
+        return launch {
+//            logConnectionStarted(this@Service.coroutineContext[ScopeTag])
+            connection.handle().joinAll()
+        }.apply {
+            invokeOnCompletion {
+                connection.apply {
+                    (async.keys + subs.values).forEach { job ->
+                        job.cancel()
+//                        job.cancel(CancellationException("Complete input $job $it"))
+                    }
+                    async.clear()
+                    subs.clear()
+                }
+            }
+        }
     }
+}
+
+suspend fun Connector.connectService() = coroutineScope {
+    Service.Connection(
+        scope = this,
+        connector = this@connectService,
+    ).handle().joinAll()
 }
 
 private suspend fun Service.Connection.handle() = connector.input
     .onStart {
         logConnectionStarted()
     }
-    .onCompletion { throwable ->
-
-        logConnectionFinished(throwable)
-
-        if (throwable != null) {
-            (async.keys + subs.values).forEach { job ->
-                job.cancel(CancellationException("Complete input $job $throwable"))
-            }
-            async.clear()
-            subs.clear()
-        }
-    }
+//    .onCompletion { throwable ->
+//
+//        logConnectionFinished(throwable)
+//
+//        if (throwable != null) {
+//            (async.keys + subs.values).forEach { job ->
+////                job.cancel(CancellationException("Complete input $job $throwable"))
+//                job.cancel()
+//            }
+//            async.clear()
+//            subs.clear()
+//        }
+//    }
     .collect { arg ->
-        val (scope, action) = resolvers.resolve(scope, arg)
-        handleAction(scope, action)
+        log.d { "Start handling: $arg, job: ${scope.coroutineContext[Job]}, tag: ${scope.coroutineContext[ScopeTag]}" }
+        try {
+            val (
+                scope,
+                action,
+            ) = resolvers.resolve(scope, arg)
+            copy(
+                scope = scope + cryptonContext(
+                    CoroutineLog.Action(action),
+                    CoroutineLog.Status(Log.Event.Status.Handling)
+                )
+            ).handleAction(action)
+        } catch (e: Throwable) {
+            log.builder.e { throwable = e }
+        }
     }
     .let {
         async.keys + subs.values
     }
 
-private suspend fun Service.Connection.handleAction(scope: Scope, action: Any) {
+private suspend fun Service.Connection.handleAction(action: Any) {
     when (action) {
-        is Subscription -> scope.handleSubscription(subs, action, out)
-        is Async -> scope.handleAsync(async, action, out)
+        is Subscription -> handleSubscription(subs, action, out)
+        is Async -> handleAsync(async, action, out)
         is Failure -> action.out()
-        else -> scope.handleRequest(action, out).join()
+        else -> handleRequest(action, out).join()
     }
 }
 
-private fun Scope.handleSubscription(
+private fun Service.Connection.handleSubscription(
     subscriptions: MutableMap<KClass<*>, Job>,
     subscription: Subscription,
     out: Output,
@@ -106,7 +143,7 @@ private fun Scope.handleSubscription(
     }
 }
 
-private fun Scope.handleAsync(
+private fun Service.Connection.handleAsync(
     async: WeakHashMap<Job, Any>,
     action: Async,
     out: Output,
@@ -117,16 +154,12 @@ private fun Scope.handleAsync(
     }
 }
 
-private fun Scope.handleRequest(
+private fun Service.Connection.handleRequest(
     action: Any,
     out: Output = {},
-): Job = launch(
-    CoroutineLog.Action(action) +
-        CoroutineLog.Status(Log.Event.Status.Handling)
-) {
-    val handlers = handlers
+): Job = scope.launch {
 
-    handlers[action::class]
+    this@handleRequest.handlers[action::class]
         ?.let { handle ->
             log.builder.d {
                 status = Log.Event.Status.Start.name
@@ -136,12 +169,20 @@ private fun Scope.handleRequest(
                 log.builder.d {
                     status = Log.Event.Status.Finished.name
                 }
-            }.getOrElse { e ->
-                ActionFailed(action, e).out()
-                log.builder.e {
-                    status = Log.Event.Status.Failed.name
-                    throwable = e
-                }
+            }.onFailure { e ->
+                if (e !is CancellationException)
+                    runCatching {
+                        log.builder.e {
+                            status = Log.Event.Status.Failed.name
+                            throwable = e
+                        }
+                        ActionFailed(action, e).out()
+                    }.onFailure {
+                        log.builder.e {
+                            status = Log.Event.Status.Failed.name
+                            throwable = it
+                        }
+                    }
             }
         }
         ?: InvalidAction(action, handlers.keys).out().also {
@@ -149,14 +190,17 @@ private fun Scope.handleRequest(
         }
 }
 
-private suspend fun logConnectionStarted() = log.builder.d {
-    status = Log.Event.Status.Start.name
-    message = "Start service connection"
+private suspend fun logConnectionStarted(tag: ScopeTag? = null) {
+//    println("Start service connection: \n" + coroutineContext.elements().joinToString("") { "Start service connection: $it\n" })
+    log.builder.d {
+        status = Log.Event.Status.Start.name
+        message = "Start service connection ${tag ?: coroutineContext[ScopeTag]}"
+    }
 }
 
 private suspend fun logConnectionFinished(e: Throwable?) = log.builder.d {
     status = Log.Event.Status.Finished.name
-    message = "Finish service connection"
+    message = "Finish service connection ${coroutineContext[ScopeTag]}"
     throwable = e
 }
 
@@ -185,7 +229,9 @@ data class CannotResolve(
     val message: String,
 ) : Failure {
     constructor(context: Context) : this("context: ${context.id}")
-    constructor(any: Any) : this(any.toString())
+    constructor(any: Any) : this(any.toString()) {
+        println()
+    }
 }
 
 data class ActionFailed(

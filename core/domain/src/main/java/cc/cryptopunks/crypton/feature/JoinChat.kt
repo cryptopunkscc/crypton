@@ -8,16 +8,18 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.Presence
 import cc.cryptopunks.crypton.context.Resource
 import cc.cryptopunks.crypton.context.SessionScope
+import cc.cryptopunks.crypton.context.SessionScopeTag
 import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.chatNet
 import cc.cryptopunks.crypton.context.chatRepo
-import cc.cryptopunks.crypton.context.inContext
+import cc.cryptopunks.crypton.context.inScope
 import cc.cryptopunks.crypton.context.messageRepo
 import cc.cryptopunks.crypton.context.rosterNet
-import cc.cryptopunks.crypton.emitter
+import cc.cryptopunks.crypton.create.emitter
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inContext
 import cc.cryptopunks.crypton.selector.accountAuthenticatedFlow
 import cc.cryptopunks.crypton.util.ext.bufferedThrottle
 import kotlinx.coroutines.flow.asFlow
@@ -28,16 +30,16 @@ import kotlinx.coroutines.flow.take
 
 internal fun joinChat() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         name = "join",
         description = "Accept buddy invitation or join to conference."
     ) { (account, chat) ->
-        Exec.JoinChat.inContext(account, chat)
+        Exec.JoinChat.inScope(account, chat)
     },
 
-    emitter = emitter<SessionScope> {
+    emitter(SessionScopeTag) {
         val chatRepo = chatRepo
         val chatNet = chatNet
         accountAuthenticatedFlow().take(1).flatMapMerge {
@@ -51,11 +53,11 @@ internal fun joinChat() = feature(
                 .minus(chatNet.listJoinedRooms())
                 .asFlow()
         }.map { chat ->
-            Exec.JoinChat.inContext(account.address, chat)
+            Exec.JoinChat.inScope(account.address, chat)
         }
     },
 
-    handler = { _, _: Exec.JoinChat ->
+    handler { _, _: Exec.JoinChat ->
         val chat = chat
         when (chat.isConference) {
             true -> chatNet.joinConference(

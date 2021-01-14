@@ -7,10 +7,11 @@ import cc.cryptopunks.crypton.context.account
 import cc.cryptopunks.crypton.context.calculateId
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.messageRepo
+import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.feature
 
 internal fun saveInfoMessage() = feature(
-    handler = { _, (text): Exec.SaveInfoMessage ->
+    handler { _, (text): Exec.SaveInfoMessage ->
         messageRepo.insertOrUpdate(
             Message(
                 body = text,

@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.net.URL
 
-suspend fun RootScope.downloadFile(url: String): JavaFile = withContext(Dispatchers.IO) {
+suspend fun downloadFile(url: String): JavaFile = withContext(Dispatchers.IO) {
     when (url.split(":").first()) {
         "http",
         "https",

@@ -3,29 +3,25 @@ package cc.cryptopunks.crypton.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import cc.cryptopunks.crypton.Actor
 import cc.cryptopunks.crypton.Connectable
-import cc.cryptopunks.crypton.connectableBindingsStore
+import cc.cryptopunks.crypton.Service
+import cc.cryptopunks.crypton.connect
 import cc.cryptopunks.crypton.context.ActivityResult
 import cc.cryptopunks.crypton.context.PermissionsResult
-import cc.cryptopunks.crypton.createBinding
-import cc.cryptopunks.crypton.minus
-import cc.cryptopunks.crypton.remove
-import cc.cryptopunks.crypton.service
-import cc.cryptopunks.crypton.serviceName
-import kotlinx.coroutines.runBlocking
+import cc.cryptopunks.crypton.create.connector
+import cc.cryptopunks.crypton.service.start
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 abstract class ServiceFragment :
-    FeatureFragment(),
-    Connectable {
+    FeatureFragment() {
 
-    protected val binding: Connectable.Binding by lazy {
-        runBlocking { rootScope.connectableBindingsStore.createBinding() }
-    }
+    protected val service = Service()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding + onCreateService()
+        onCreateService()
     }
 
     override fun onActivityResult(
@@ -33,7 +29,7 @@ abstract class ServiceFragment :
         resultCode: Int,
         data: Intent?
     ) {
-        binding.send(
+        service.input.offer(
             ActivityResult(
                 requestCode = requestCode,
                 resultCode = resultCode,
@@ -47,7 +43,7 @@ abstract class ServiceFragment :
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        binding.send(
+        service.input.offer(
             PermissionsResult(
                 requestCode = requestCode,
                 permissions = permissions.toList(),
@@ -56,29 +52,27 @@ abstract class ServiceFragment :
         )
     }
 
-    protected open fun onCreateService(): Connectable? = rootScope.service(serviceName)
+    protected open fun onCreateService() {
+        launch { service.start() }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding + onCreateActor(view)
+        onCreateActor(view)
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected open fun onCreateActor(view: View): Actor? = view as? Actor
+    protected open fun onCreateActor(view: View) {
+        (view as? Connectable)?.connect(service.connector())
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.minus<Actor>()
+        (view as? CoroutineScope)?.cancel()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        runBlocking {
-            binding.cancel()
-            log.d { "binding canceled" }
-            rootScope.connectableBindingsStore.remove(binding)
-            log.d { "binding removed" }
-        }
-        log.d { "destroyed" }
+        cancel()
     }
 }

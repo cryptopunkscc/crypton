@@ -10,13 +10,14 @@ import cc.cryptopunks.crypton.context.Exec
 import cc.cryptopunks.crypton.context.chat
 import cc.cryptopunks.crypton.context.createEmptyMessage
 import cc.cryptopunks.crypton.context.messageRepo
+import cc.cryptopunks.crypton.create.handler
+import cc.cryptopunks.crypton.create.inScope
 import cc.cryptopunks.crypton.feature
-import cc.cryptopunks.crypton.inContext
-import cc.cryptopunks.crypton.util.logger.log
+import cc.cryptopunks.crypton.logv2.d
 
 internal fun enqueueMessage() = feature(
 
-    command = command(
+    command(
         config("account"),
         config("chat"),
         option("-!").optional().copy(description = "Send not encrypted message. Not recommended!"),
@@ -24,10 +25,10 @@ internal fun enqueueMessage() = feature(
         name = "-",
         description = "Send a message in chat."
     ) { (account, chat, notEncrypted, message) ->
-        Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inContext(account, chat)
+        Exec.EnqueueMessage(message, notEncrypted.toBoolean().not()).inScope(account, chat)
     },
 
-    handler = { _, arg: Exec.EnqueueMessage ->
+    handler { _, arg: Exec.EnqueueMessage ->
         chat.queuedMessage(arg).let { message ->
             log.d { "Enqueue message $message" }
             messageRepo.insertOrUpdate(message)

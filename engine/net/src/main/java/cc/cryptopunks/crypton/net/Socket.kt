@@ -1,9 +1,9 @@
 package cc.cryptopunks.crypton.net
 
 import cc.cryptopunks.crypton.Connector
-import cc.cryptopunks.crypton.encodeContext
 import cc.cryptopunks.crypton.json.formatJson
 import cc.cryptopunks.crypton.json.parseJson
+import cc.cryptopunks.crypton.serial.encodeScopedAction
 import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.Flow
@@ -14,27 +14,21 @@ import kotlinx.coroutines.flow.scan
 import java.io.IOException
 import kotlin.reflect.KClass
 
-
 fun Socket.connector(): Connector {
     val readChannel = openReadChannel()
     val writeChannel = openWriteChannel()
     return Connector(
-        input = readChannel.flowParsedMessages(),
-        output = {
-            writeChannel.send(it)
-        },
-        close = {
-            writeChannel.close()
+        input = readChannel.flowMessages(),
+        output = { writeChannel.send(this) },
+        cancel = {
             readChannel.cancel()
-            dispose()
+            writeChannel.close()
         }
     )
 }
 
-private fun ByteReadChannel.flowParsedMessages(): Flow<Any> = flowMessages()
-
-private fun ByteReadChannel.flowMessages(): Flow<Any> = flow {
-    try {
+private fun ByteReadChannel.flowMessages(): Flow<Any> =
+    flow {
         while (true) {
             val len = readInt()
             val arr = ByteArray(len)
@@ -42,21 +36,17 @@ private fun ByteReadChannel.flowMessages(): Flow<Any> = flow {
             val message = arr.toString(Charsets.UTF_8)
             emit(message)
         }
-    } catch (e: Throwable) {
-//        e.printStackTrace()
-        println("Close message flow (${e.message})")
+    }.scan(emptyList<String>()) { accumulator, value ->
+        when (accumulator.size) {
+            2 -> listOf(value)
+            else -> accumulator + value
+        }
+    }.filter { it.size == 2 }.map { (type, message) ->
+        when (type) {
+            "s" -> message
+            else -> message.parseMessage(type)
+        }
     }
-}.scan(emptyList<String>()) { accumulator, value ->
-    when (accumulator.size) {
-        2 -> listOf(value)
-        else -> accumulator + value
-    }
-}.filter { it.size == 2 }.map { (type, message) ->
-    when (type) {
-        "s" -> message
-        else -> message.parseMessage(type)
-    }
-}
 
 private fun String.parseMessage(type: String): Any = try {
     parseJson(Class.forName(PREFIX + type).kotlin as KClass<Any>)
@@ -67,7 +57,7 @@ private fun String.parseMessage(type: String): Any = try {
 }
 
 private suspend fun ByteWriteChannel.send(any: Any) = try {
-    any.encodeContext().forEach { chunk ->
+    any.encodeScopedAction().forEach { chunk ->
         when (chunk) {
             is String -> send("s", chunk)
             else -> send(chunk.type(), chunk.formatJson())

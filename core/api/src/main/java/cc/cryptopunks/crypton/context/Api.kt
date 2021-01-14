@@ -1,10 +1,10 @@
 package cc.cryptopunks.crypton.context
 
-import cc.cryptopunks.crypton.Scoped
-import cc.cryptopunks.crypton.inContext
+import cc.cryptopunks.crypton.Action
+import cc.cryptopunks.crypton.create.inScope
 
 object Api {
     interface Event
 }
 
-fun Scoped<*>.inContext(vararg addresses: Address) = inContext(addresses.map { it.id })
+fun Action.inScope(vararg addresses: Address) = inScope(addresses.map { it.id })

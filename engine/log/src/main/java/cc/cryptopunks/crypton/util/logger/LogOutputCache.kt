@@ -4,11 +4,11 @@ import cc.cryptopunks.crypton.util.Log
 
 class LogOutputCache(
     private val capacity: Int,
-    private val cache: MutableList<Log.Event> = mutableListOf()
-) : List<Log.Event> by cache,
+    private val cache: MutableList<Any> = mutableListOf()
+) : List<Any> by cache,
     Log.Output {
 
-    override fun invoke(event: Log.Event) {
+    override fun invoke(event: Any) {
         if (cache.size > capacity)
             cache.drop(cache.size - capacity)
         cache.add(event)
