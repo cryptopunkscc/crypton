@@ -8,24 +8,26 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
-data class Connector(
-    val input: Flow<Any>,
+data class TypedConnector<T>(
+    val input: Flow<T>,
     val cancel: () -> Unit = {},
-    val output: Output = {},
+    val output: TypedOutput<T> = {},
 ) {
-    suspend fun Any.out() = output()
+    suspend fun T.out() = output()
 }
+
+typealias Connector = TypedConnector<Any>
 
 fun emptyConnector() = Connector(emptyFlow())
 
-suspend fun Connector.connect(other: Connector) = coroutineScope {
+suspend fun <T> TypedConnector<T>.connect(other: TypedConnector<T>) = coroutineScope {
     joinAll(
         launch { input.collect(other.output) },
         launch { other.input.collect(output) },
     )
 }
 
-fun Connector.logging() = copy(
+fun <T> TypedConnector<T>.logging() = copy(
     input = input.onEach { println("in: $it") },
     output = { println("out: $this"); out() }
 )
