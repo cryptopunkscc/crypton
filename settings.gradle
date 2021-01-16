@@ -37,6 +37,7 @@ include ':core:api',
         ':engine:json',
         ':engine:paging',
         ':engine:net',
+        ':engine:agent',
         ':engine:example',
 
         ':app:jvm:server',

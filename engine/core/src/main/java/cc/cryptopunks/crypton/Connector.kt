@@ -3,6 +3,7 @@ package cc.cryptopunks.crypton
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -14,6 +15,8 @@ data class Connector(
 ) {
     suspend fun Any.out() = output()
 }
+
+fun emptyConnector() = Connector(emptyFlow())
 
 suspend fun Connector.connect(other: Connector) = coroutineScope {
     joinAll(
