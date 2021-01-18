@@ -7,7 +7,7 @@ dependencies {
     api project(':core:api')
     api project(':engine:feature')
     testImplementation project(':platform:repo:mock')
-    testImplementation project(':platform:net:mock')
+//    testImplementation project(':platform:net:mock')
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
 }

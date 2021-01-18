@@ -1,4 +1,4 @@
-package cc.cryptopunks.crypton.fs.util
+package cc.cryptopunks.crypton.yaml
 
 import org.yaml.snakeyaml.Yaml
 import java.io.File

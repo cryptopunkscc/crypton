@@ -1,13 +1,14 @@
 package cc.cryptopunks.crypton.service
 
 import cc.cryptopunks.crypton.Action
-import cc.cryptopunks.crypton.Connector
 import cc.cryptopunks.crypton.Execute
 import cc.cryptopunks.crypton.Execution
 import cc.cryptopunks.crypton.Output
 import cc.cryptopunks.crypton.Request
 import cc.cryptopunks.crypton.RequestLog
 import cc.cryptopunks.crypton.Service
+import cc.cryptopunks.crypton.TypedConnector
+import cc.cryptopunks.crypton.TypedOutput
 import cc.cryptopunks.crypton.execute.defaultExecution
 import cc.cryptopunks.crypton.logv2.d
 import cc.cryptopunks.crypton.nextId
@@ -18,16 +19,16 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.supervisorScope
 
-suspend fun Flow<Any>.start(
+suspend fun <T: Any> Flow<T>.start(
     execution: Execution = defaultExecution,
-    output: Output = {},
+    output: TypedOutput<T> = {},
 ) = supervisorScope {
     Request(
         action = Service.Running,
-        out = output,
+        out = { output(this as T) }, // TODO
         root = this,
     ).run {
-        log.d { RequestLog.Event.Custom("Start service") }
+        log.d { "Start service" }
         collect { input: Any ->
             execution.fold(
                 new(input)
@@ -40,7 +41,7 @@ suspend fun Flow<Any>.start(
     }
 }
 
-private fun Request.new(input: Any) = copy(
+private fun <T: Any> Request.new(input: T) = copy(
     id = Request.nextId(),
     arg = input,
     action = Action.Empty
@@ -48,13 +49,13 @@ private fun Request.new(input: Any) = copy(
     log.d { RequestLog.Event.Received }
 }
 
-suspend fun Connector.start(
+suspend fun <T: Any> TypedConnector<T>.start(
     execution: Execution = defaultExecution,
 ) {
     input.start(execution, output)
 }
 
-suspend fun Any.start(
+suspend fun Action.start(
     execution: Execution = defaultExecution,
     output: Output = {},
 ) = flowOf(this).start(execution, output)

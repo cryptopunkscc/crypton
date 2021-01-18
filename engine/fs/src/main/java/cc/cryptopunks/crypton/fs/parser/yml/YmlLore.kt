@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.fs.parser.yml
 
 import cc.cryptopunks.crypton.fs.Lore
 import cc.cryptopunks.crypton.fs.util.isLore
-import cc.cryptopunks.crypton.fs.util.parseYaml
 import cc.cryptopunks.crypton.fs.util.toLore
+import cc.cryptopunks.crypton.yaml.parseYaml
 import java.io.File
 
 object YmlLoreParser : Lore.Parse {

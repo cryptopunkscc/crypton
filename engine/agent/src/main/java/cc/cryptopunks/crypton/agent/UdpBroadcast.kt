@@ -1,6 +1,5 @@
 package cc.cryptopunks.crypton.agent
 
-import cc.cryptopunks.crypton.Connector
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -8,11 +7,19 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-fun loopback(): Connector = loopbackSocket().connector()
 
-fun DatagramSocket.connector() = Connector(
+val ports = 64000 .. 65000
+
+fun randomPort() = ports.random()
+
+fun tcpEndpoint(port: Int = randomPort()) = "tcp:\\localhost:$port"
+
+
+fun loopback(): Broadcast = loopbackSocket().connector()
+
+fun DatagramSocket.connector() = Broadcast(
     input = packagesFlow(),
-    output = { if (this is ByteArray) sendBroadcast(this) }
+    output = { sendBroadcast(this) }
 )
 
 const val BUFFER_SIZE = 4096
@@ -25,7 +32,7 @@ fun DatagramSocket.packagesFlow() = flow {
             val datagramPacket = DatagramPacket(buffer, buffer.size)
             datagramPacket.offset
             receive(datagramPacket)
-            emit(datagramPacket)
+            emit(datagramPacket.data)
         }
     }
 }

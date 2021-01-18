@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 fun emitter(
-    type: Any,
+    type: Any = Unit,
     create: CoroutineScope.() -> Flow<Any>,
 ) = Emitter(
     create = create,

@@ -4,6 +4,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -32,4 +34,6 @@ fun <T> TypedConnector<T>.logging() = copy(
     output = { println("out: $this"); out() }
 )
 
+operator fun <T> TypedConnector<T>.plus(input: Flow<T>) = copy(input = input + this.input)
 
+operator fun <T> Flow<T>.plus(other: Flow<T>): Flow<T> = flowOf(this, other).flattenMerge()

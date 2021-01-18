@@ -18,7 +18,7 @@ internal fun CoroutineScope.handleFor(action: Action): Handle<Action> =
         """
 Cannot find handler for $action
 Available handlers: 
-${coroutineContext.mapNotNull { it is Handler<*> }.joinToString("\n")}
+${coroutineContext.mapNotNull { it as? Handler<*> }.joinToString("\n")}
         """.trimIndent()
     }.handle
 

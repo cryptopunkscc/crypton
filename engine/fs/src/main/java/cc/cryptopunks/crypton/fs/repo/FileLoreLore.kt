@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.fs.Lore
 import cc.cryptopunks.crypton.fs.Type
 import cc.cryptopunks.crypton.fs.parser.yml.loreFromYaml
 import cc.cryptopunks.crypton.fs.util.calculateId
-import cc.cryptopunks.crypton.fs.util.formatYaml
+import cc.cryptopunks.crypton.fs.util.formatYamlLore
 import java.io.File
 
 class FileLoreLore(
@@ -16,7 +16,7 @@ class FileLoreLore(
     private val refStorage = FileStorage(dir.resolve(REF))
 
     override suspend fun plus(lore: Lore): Id =
-        lore.formatYaml().let { yaml ->
+        lore.formatYamlLore().let { yaml ->
             yaml.calculateId().also { id ->
                 loreStorage.new(id) { append(yaml) }
                 lore.updateRelations(id)

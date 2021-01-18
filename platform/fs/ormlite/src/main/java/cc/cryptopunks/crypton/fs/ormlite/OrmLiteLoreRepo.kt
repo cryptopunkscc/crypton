@@ -6,7 +6,7 @@ import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.support.ConnectionSource
 
 class OrmLiteLoreRepo(
-    private val connection: ConnectionSource
+    private val connection: ConnectionSource,
 ) : Lore.Repo {
 
     private val loreDao: Dao<LoreData, String> = connection.createDao()

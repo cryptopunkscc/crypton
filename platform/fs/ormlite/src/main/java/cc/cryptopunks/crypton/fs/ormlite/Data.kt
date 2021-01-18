@@ -2,8 +2,8 @@ package cc.cryptopunks.crypton.fs.ormlite
 
 import cc.cryptopunks.crypton.fs.Lore
 import cc.cryptopunks.crypton.fs.util.calculateId
-import cc.cryptopunks.crypton.fs.util.formatYaml
-import cc.cryptopunks.crypton.fs.util.parseYaml
+import cc.cryptopunks.crypton.yaml.formatYaml
+import cc.cryptopunks.crypton.yaml.parseYaml
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
@@ -24,6 +24,22 @@ internal data class LoreData(
         val Empty = LoreData()
     }
 }
+
+@DatabaseTable(tableName = "relation")
+internal data class Relation(
+    @DatabaseField(index = true, uniqueCombo = true)
+    val sourceId: String = "",
+    @DatabaseField(index = true, uniqueCombo = true)
+    val targetId: String = ""
+)
+
+@DatabaseTable(tableName = "datatype")
+internal data class DataType(
+    @DatabaseField(id = true)
+    val id: String = "",
+    @DatabaseField(index = true)
+    val type: String = ""
+)
 
 @DatabaseTable(tableName = "rel")
 internal data class RelData(
