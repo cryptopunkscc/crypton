@@ -76,6 +76,10 @@ class MockMessageRepo : Message.Repo {
         TODO("Not yet implemented")
     }
 
+    override suspend fun list(chat: Address, type: Message.Type): List<Message> {
+        TODO("Not yet implemented")
+    }
+
     override fun flowLatest(chatAddress: Address?): Flow<Message> =
         latest.asFlow().run {
             if (chatAddress == null) this

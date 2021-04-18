@@ -6,7 +6,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation project(":platform:util:ormlite")
     api project(":engine:fs")
-    api project(":engine:yaml")
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
 }

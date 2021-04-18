@@ -1,8 +1,9 @@
 package cc.cryptopunks.crypton.agent.features
 
 import cc.cryptopunks.crypton.Async
+import cc.cryptopunks.crypton.agent.decodeStoryHeader
+import cc.cryptopunks.crypton.agent.encodeDatagram
 import cc.cryptopunks.crypton.agent.fileStreamChunks
-import cc.cryptopunks.crypton.agent.story
 import cc.cryptopunks.crypton.create.cryptonContext
 import cc.cryptopunks.crypton.create.handler
 import cc.cryptopunks.crypton.delegate.dep
@@ -10,8 +11,10 @@ import cc.cryptopunks.crypton.fsv2.Graph
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 
 val CoroutineScope.fileGraph: Graph.ReadWrite by dep()
@@ -23,11 +26,13 @@ object GraphRequest {
     object AllStories : Async
 }
 
+
 fun fileGraph() = cryptonContext(
 
     handler { _, (id): FileAdded ->
         runCatching {
-            fileStore[id].first().story()
+            val bytes = fileStore[id].fold(ByteArray(0)) { acc, bytes -> acc + bytes }
+            bytes.decodeStoryHeader()
         }.onSuccess { story ->
             fileGraph.setType(id, story.type)
             story.rel.forEach { target -> fileGraph.setRelation(target, id) }
@@ -57,6 +62,9 @@ fun fileGraph() = cryptonContext(
     },
 
     handler { out, _: GraphRequest.AllStories ->
-        fileStore.fileStreamChunks(fileGraph.stories()).collect(out)
+        fileStore.fileStreamChunks(fileGraph.stories())
+            .onEach { print(it.bytes.toString(Charsets.UTF_8)) } // TODO print
+            .map { encodeDatagram(it) }
+            .collect(out)
     }
 )

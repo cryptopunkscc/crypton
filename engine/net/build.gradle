@@ -12,5 +12,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api "io.ktor:ktor-server-netty:$ktor_version"
     api project(':engine:core')
-    api project(':engine:json')
+    api project(':platform:serializer:gson')
 }

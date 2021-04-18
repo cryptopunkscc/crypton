@@ -1,7 +1,6 @@
 package cc.cryptopunks.crypton.fs.util
 
 import cc.cryptopunks.crypton.fs.Lore
-import cc.cryptopunks.crypton.yaml.formatYaml
 import java.io.File
 import java.io.Reader
 import java.lang.StringBuilder
@@ -20,8 +19,9 @@ fun Map<String, Any>.toLore(): Lore {
 fun Lore.calculateId() = formatYamlLore().calculateId()
 
 fun Lore.formatYamlLore() = StringBuilder().apply {
-    append(mapOf("lore" to headerToMap()).formatYaml())
-    append(body.formatYaml())
+    TODO()
+//    append(mapOf("lore" to headerToMap()).formatYaml())
+//    append(body.formatYaml())
 }.toString()
 
 fun Lore.toMap() = body + ("lore" to headerToMap())

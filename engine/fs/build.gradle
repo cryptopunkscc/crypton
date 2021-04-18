@@ -9,8 +9,8 @@ dependencies {
     implementation "com.mpatric:mp3agic:0.9.1"
 //    implementation "com.charleskorn.kaml:kaml:0.24.0"
 //    implementation "org.yaml:snakeyaml:1.21"
-    implementation project(":engine:json")
-    implementation project(":engine:yaml")
+//    implementation project(':platform:serializer:gson')
+//    implementation project(':platform:serializer:snakeyaml')
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
 }

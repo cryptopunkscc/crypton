@@ -1,8 +1,10 @@
 package cc.cryptopunks.crypton
 
+import cc.cryptopunks.crypton.log.PrintRequestLogData
 import cc.cryptopunks.crypton.log.filterLast
 import cc.cryptopunks.crypton.log.groupById
 import cc.cryptopunks.crypton.log.mapToRequestLogData
+import cc.cryptopunks.crypton.log.printGroup
 import cc.cryptopunks.crypton.log.printOnFinish
 import cc.cryptopunks.crypton.logv2.LogOutput
 import cc.cryptopunks.crypton.logv2.LogScope
@@ -17,7 +19,10 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun CoroutineScope.initJvmLog() = launch {
+fun CoroutineScope.initJvmLog(
+    print: PrintRequestLogData = printOnFinish,
+) = launch {
+
     joinAll(
         launch { Log.output(CoroutineLog) },
         launch { TypedLog.output(CoroutineLog) },
@@ -29,9 +34,12 @@ fun CoroutineScope.initJvmLog() = launch {
         launch {
             LogScope.flow()
                 .mapToRequestLogData()
-                .groupById()
-                .filterLast()
-                .collect(printOnFinish)
+                .groupById().let {
+                    when (print) {
+                        printOnFinish, printGroup -> it.filterLast()
+                        else -> it
+                    }
+                }.collect(print)
         }
     )
 }

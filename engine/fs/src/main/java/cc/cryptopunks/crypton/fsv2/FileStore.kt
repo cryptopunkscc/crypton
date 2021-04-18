@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileFilter
@@ -55,25 +57,31 @@ class FileStore(
 
 }
 
-suspend fun OutputStream.write(bytes: Flow<ByteArray>): ByteArray = sha256MessageDigest().apply {
-    use { bytes.flowOn(Dispatchers.IO).collect { update(it); write(it) } }
-}.digest()
-
-fun InputStream.asFlow(bufferSize: Int = 506) = flow {
-    withContext(Dispatchers.IO) {
-        var len = 0
-        while (len > 0) {
-            ByteArray(bufferSize).also {
-                len = read(it)
-            }.run {
-                when {
-                    size == bufferSize -> this
-                    size > 0 -> copyOf(len)
-                    else -> null
-                }
-            }?.let {
-                emit(it)
+//fun InputStream.asFlow(bufferSize: Int = 506) = flow {
+private fun InputStream.asFlow(bufferSize: Int = 8) = flow {
+    var len = 0
+    while (len != -1) {
+        ByteArray(bufferSize).also {
+            len = read(it)
+        }.run {
+            when {
+                len == bufferSize -> this
+                len > 0 -> copyOf(len)
+                else -> null
             }
+        }?.let {
+            emit(it)
         }
     }
 }
+
+suspend fun OutputStream.write(bytes: Flow<ByteArray>): ByteArray = sha256MessageDigest().apply {
+    use {
+        bytes
+            .flowOn(Dispatchers.IO)
+            .onEach { println("CHUNK ========== ${it.toString(Charsets.UTF_8)}") }
+            .onEach { update(it) }
+            .collect { write(it) }
+    }
+}.digest()
+

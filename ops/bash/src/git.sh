@@ -38,7 +38,7 @@ function git-add-commit() {
   git add .
   case $1 in
   "") git commit -S ;;
-  *) git commit -S "$@" ;;
+  *) git commit -S -m "$@" ;;
   esac
 }
 

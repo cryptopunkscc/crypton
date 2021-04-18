@@ -2,8 +2,6 @@ package cc.cryptopunks.crypton.fs.parser.yml
 
 import cc.cryptopunks.crypton.fs.Lore
 import cc.cryptopunks.crypton.fs.util.isLore
-import cc.cryptopunks.crypton.fs.util.toLore
-import cc.cryptopunks.crypton.yaml.parseYaml
 import java.io.File
 
 object YmlLoreParser : Lore.Parse {
@@ -11,5 +9,5 @@ object YmlLoreParser : Lore.Parse {
     override fun invoke(file: File): List<Lore> = listOf(file.loreFromYaml())
 }
 
-fun File.loreFromYaml(): Lore =
-    inputStream().parseYaml().toLore()
+fun File.loreFromYaml(): Lore = TODO()
+//    inputStream().parseYaml().toLore()

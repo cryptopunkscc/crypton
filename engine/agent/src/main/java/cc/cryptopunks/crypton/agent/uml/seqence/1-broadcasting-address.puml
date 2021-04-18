@@ -1,0 +1,20 @@
+@startuml
+
+autonumber
+actor Agent1
+actor Agent2
+boundary Broadcast
+
+==Both agents are offline==
+
+hnote over Agent1: Start
+Agent1 --> Broadcast: Broadcast address
+rnote over Broadcast: Nothing happens,\nno other agents\nonline
+hnote over Agent2: Start
+Agent2 --> Broadcast: Broadcast address
+rnote over Broadcast: Broadcast is passed\nto other agents
+Broadcast --> Agent1: Address Agent2
+rnote over Agent1: After receiving the address\nthrough broadcast, the agent\nwill immediately try to open a tunnel
+Agent1 -> Agent2: Init tunnel
+
+@enduml

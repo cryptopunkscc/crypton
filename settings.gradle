@@ -28,16 +28,20 @@ include ':core:api',
         ':platform:util:ormlite',
         ':platform:util:ormlite:jvm',
 
+        ':platform:serializer:gson',
+        ':platform:serializer:jackson',
+        ':platform:serializer:snakeyaml',
+
         ':engine:util',
         ':engine:log',
         ':engine:core',
         ':engine:cli',
         ':engine:fs',
         ':engine:feature',
-        ':engine:json',
-        ':engine:yaml',
+        ':engine:transform',
         ':engine:paging',
         ':engine:net',
+        ':engine:mux',
         ':engine:agent',
         ':engine:example',
 
@@ -60,5 +64,7 @@ include ':core:api',
         ':app:android:chat',
 
         ':playground:smack',
+        ':playground:chacha20',
+        ':playground:ecdh',
 
         ':ops'

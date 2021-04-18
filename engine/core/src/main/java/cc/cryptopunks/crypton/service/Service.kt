@@ -23,7 +23,9 @@ suspend fun <T: Any> Flow<T>.start(
     execution: Execution = defaultExecution,
     output: TypedOutput<T> = {},
 ) = supervisorScope {
+    var requestId = 0L
     Request(
+        id = requestId++,
         action = Service.Running,
         out = { output(this as T) }, // TODO
         root = this,
@@ -31,7 +33,7 @@ suspend fun <T: Any> Flow<T>.start(
         log.d { "Start service" }
         collect { input: Any ->
             execution.fold(
-                new(input)
+                new(input, requestId++)
             ) { request: Request, execute: Execute ->
                 execute(request)
             }
@@ -41,8 +43,11 @@ suspend fun <T: Any> Flow<T>.start(
     }
 }
 
-private fun <T: Any> Request.new(input: T) = copy(
-    id = Request.nextId(),
+private fun <T: Any> Request.new(
+    input: T,
+    id: Long = Request.nextId(),
+) = copy(
+    id = id,
     arg = input,
     action = Action.Empty
 ).apply {

@@ -33,7 +33,7 @@ dependencies {
     // implementation "com.commonsware.cwac:saferoom.x:1.2.1"
     implementation project(':core:api')
     implementation project(':platform:repo:data')
-    implementation project(':engine:json')
+    implementation project(':platform:serializer:gson')
     implementation deps.room.ktx
     kapt deps.room.compiler
     androidTestImplementation deps.test.core

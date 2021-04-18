@@ -8,10 +8,11 @@ dependencies {
     api project(':engine:core')
     api project(':engine:cli')
     api project(':engine:fs')
-    api project(':engine:json')
-    api project(':engine:yaml')
+    api project(':engine:transform')
     testImplementation "junit:junit:$junit_version"
     testImplementation project(":platform:log:jvm")
     testImplementation project(":platform:fs:ormlite")
+    testImplementation project(":platform:serializer:gson")
+    testImplementation project(":platform:serializer:jackson")
     testImplementation project(":platform:util:ormlite:jvm")
 }

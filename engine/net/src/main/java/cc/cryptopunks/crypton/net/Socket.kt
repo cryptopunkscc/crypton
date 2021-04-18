@@ -1,8 +1,8 @@
 package cc.cryptopunks.crypton.net
 
 import cc.cryptopunks.crypton.Connector
-import cc.cryptopunks.crypton.json.formatJson
-import cc.cryptopunks.crypton.json.parseJson
+import cc.cryptopunks.crypton.gson.formatJson
+import cc.cryptopunks.crypton.gson.parseJson
 import cc.cryptopunks.crypton.serial.encodeScopedAction
 import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 import java.io.IOException
-import kotlin.reflect.KClass
 
 fun Socket.connector(): Connector {
     val readChannel = openReadChannel()
@@ -49,7 +48,7 @@ private fun ByteReadChannel.flowMessages(): Flow<Any> =
     }
 
 private fun String.parseMessage(type: String): Any = try {
-    parseJson(Class.forName(PREFIX + type).kotlin as KClass<Any>)
+    parseJson(Class.forName(PREFIX + type))
 } catch (e: Throwable) {
     println(this)
     e.printStackTrace()

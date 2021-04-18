@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+boundary "Network Input"
+queue "Channel 0"
+control RequestHandler
+box Storage
+database Store
+database Graph
+end box
+control GetDataHandler
+queue "Channel X"
+boundary "Network Output"
+
+"Network Input" -> "Channel 0"
+"Channel 0" --> RequestHandler: GetData(X)
+RequestHandler -> Store: add: Blob(GetData)
+Store -> Graph: added: Blob
+Graph -> GetDataHandler: added: GetData
+GetDataHandler -> "Channel X": SaveData
+"Channel X" -> "Network Output"
+
+@enduml
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+boundary "Network Input"
+queue "Channel X"
+control RequestHandler
+box Storage
+database Store
+database Graph
+end box
+control GetDataHandler
+
+"Network Input" -> "Channel X"
+"Channel X" --> RequestHandler: SaveData
+RequestHandler -> Store: add: Blob(GetData)
+Store -> Graph: added: Blob
+Graph -> GetDataHandler: added: GetData
+
+@enduml

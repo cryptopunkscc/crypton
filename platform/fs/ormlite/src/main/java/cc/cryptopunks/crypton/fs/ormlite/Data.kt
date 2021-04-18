@@ -2,8 +2,6 @@ package cc.cryptopunks.crypton.fs.ormlite
 
 import cc.cryptopunks.crypton.fs.Lore
 import cc.cryptopunks.crypton.fs.util.calculateId
-import cc.cryptopunks.crypton.yaml.formatYaml
-import cc.cryptopunks.crypton.yaml.parseYaml
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
@@ -30,7 +28,9 @@ internal data class Relation(
     @DatabaseField(index = true, uniqueCombo = true)
     val sourceId: String = "",
     @DatabaseField(index = true, uniqueCombo = true)
-    val targetId: String = ""
+    val targetId: String = "",
+    @DatabaseField(id = true)
+    val id: String = sourceId + targetId
 )
 
 @DatabaseTable(tableName = "datatype")
@@ -57,7 +57,8 @@ internal fun Lore.toRelDataList(
     id = id,
     ver = ver,
     type = type,
-    body = body.formatYaml()
+//    body = body.formatYaml()
+    body = TODO()
 ).let { loreData ->
     rel.map { relId ->
         RelData(
@@ -71,5 +72,6 @@ internal fun Lore.toRelDataList(
 internal fun LoreData.toLore() = Lore(
     ver = ver,
     type = type,
-    body = body.parseYaml()
+//    body = body.parseYaml()
+    body = TODO()
 )

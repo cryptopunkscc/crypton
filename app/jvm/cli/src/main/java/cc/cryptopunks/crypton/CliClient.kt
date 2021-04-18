@@ -7,7 +7,7 @@ import cc.cryptopunks.crypton.context.Chat
 import cc.cryptopunks.crypton.context.Message
 import cc.cryptopunks.crypton.context.Roster
 import cc.cryptopunks.crypton.format.format
-import cc.cryptopunks.crypton.json.formatJsonPretty
+import cc.cryptopunks.crypton.gson.formatJsonPretty
 import cc.cryptopunks.crypton.util.logger.CoroutineLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

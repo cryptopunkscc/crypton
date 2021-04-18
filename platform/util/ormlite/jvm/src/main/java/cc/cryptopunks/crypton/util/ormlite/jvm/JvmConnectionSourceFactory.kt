@@ -1,6 +1,8 @@
 package cc.cryptopunks.crypton.util.ormlite.jvm
 
 import cc.cryptopunks.crypton.util.ormlite.ConnectionSourceFactory
+import com.j256.ormlite.logger.Log
+import com.j256.ormlite.logger.Logger
 import com.j256.ormlite.support.ConnectionSource
 
 class JvmConnectionSourceFactory(
@@ -14,4 +16,8 @@ class JvmConnectionSourceFactory(
             inMemory = inMemory
         )
     }
+}
+
+fun setOrmLiteLogLevel(level: Log.Level = Log.Level.ERROR) {
+    Logger.setGlobalLogLevel(level)
 }

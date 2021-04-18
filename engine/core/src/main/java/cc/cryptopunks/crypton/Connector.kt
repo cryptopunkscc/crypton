@@ -4,7 +4,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 
 data class TypedConnector<T>(
     val input: Flow<T>,
+    val address: String = "",
     val cancel: () -> Unit = {},
     val output: TypedOutput<T> = {},
 ) {
@@ -36,4 +37,4 @@ fun <T> TypedConnector<T>.logging() = copy(
 
 operator fun <T> TypedConnector<T>.plus(input: Flow<T>) = copy(input = input + this.input)
 
-operator fun <T> Flow<T>.plus(other: Flow<T>): Flow<T> = flowOf(this, other).flattenMerge()
+operator fun <T> Flow<T>.plus(other: Flow<T>): Flow<T> = flowOf(this, other).flattenConcat()

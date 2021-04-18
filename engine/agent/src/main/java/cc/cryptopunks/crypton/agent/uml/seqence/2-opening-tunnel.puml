@@ -1,0 +1,17 @@
+@startuml
+
+autonumber
+actor Agent1
+actor Agent2
+
+== Both agents are online ==
+hnote over Agent1: Already knows\nAgent2 address
+Agent1 -> Agent2: Init tunnel
+note over Agent1, Agent2: The tunnel is an abstraction\nfor bi-directional byte stream\nover the network between two agents.\nUnder the hood it could be TCP socket\nor any other replacement for byte streaming.
+group Tunnel
+rnote over Agent1, Agent2: After the tunnel initialization,\nagents will share the identities
+Agent1 <-> Agent2: Share Identities
+end
+note over Agent1, Agent2: Once the tunnel is established\nand the Identities are exchanged,\nthe plugins registered in agents\ncan start talking through tunnel\nusing multiplexer / de-multiplexer\nfor packet routing
+
+@enduml

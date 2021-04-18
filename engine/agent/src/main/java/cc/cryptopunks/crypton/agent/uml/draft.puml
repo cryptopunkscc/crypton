@@ -1,0 +1,25 @@
+@startuml
+
+autonumber
+box Agent1
+actor Agent1
+end box
+box Network
+boundary Broadcast
+boundary Connection
+end box
+box Agent2
+actor Agent2
+
+
+Agent1 -> Broadcast: Identity
+Broadcast -> Agent2: Identity
+Agent2 -> Store: Save blob
+Store --> Graph: Blob added
+Graph --> Handler: Identity added
+Handler -> Connection: Initialize
+Connection -> Agent1: Connect
+Handler -> Connection: Identity
+Connection -> Agent1: Identity
+
+@enduml

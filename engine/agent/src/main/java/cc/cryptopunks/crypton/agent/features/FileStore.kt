@@ -40,31 +40,37 @@ fun fileStore() = cryptonContext(
     handler { _, (id): StoreRequest.Remove -> fileStore - id },
     handler { out, (id): StoreRequest.Get -> fileStore.fileStreamChunks(id).collect(out) },
     build {
-        val write = byteStreamWriter(fileStore)
-        handler { _, chunk: ByteStreamChunk -> write(chunk) }
+        val write = byteStreamWriter(fileStore) // TODO
+        handler { _, chunk: ByteStreamChunk ->
+//            println(listOf(chunk.index, chunk.bytes.toString(Charsets.UTF_8)))
+            println(chunk.bytes.toString(Charsets.UTF_8))
+            write(chunk)
+        }
     }
 )
 
 private fun byteStreamWriter(
     fileStore: ByteFlowStore,
     channels: MutableMap<String, Channel<ByteArray>> = mutableMapOf(),
-): suspend (ByteStreamChunk) -> Unit = { stream ->
-    when (stream.index) {
+): suspend (ByteStreamChunk) -> Unit = { chunk ->
+    when (chunk.index) {
         0 -> {
             channels
-                .getOrPut(stream.id) { Channel(Channel.BUFFERED) }
-                .apply { offer(stream.bytes) }
+                .getOrPut(chunk.id) { Channel(Channel.BUFFERED) }
+                .apply { offer(chunk.bytes) }
                 .consumeAsFlow()
         }
         -1 -> null.also {
-            channels.remove(stream.id)?.close()
+            channels.remove(chunk.id)?.cancel()
         }
         else -> null.also {
-            channels.getValue(stream.id).send(stream.bytes)
+            channels.getValue(chunk.id).send(chunk.bytes)
         }
     }?.let { bytesFlow ->
         coroutineScope {
-            launch { fileStore.plus(bytesFlow) }
+            launch {
+                fileStore.plus(bytesFlow)
+            }
         }
     }
 }

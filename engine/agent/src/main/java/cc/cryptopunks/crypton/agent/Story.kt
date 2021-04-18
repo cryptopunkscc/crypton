@@ -1,19 +1,13 @@
 package cc.cryptopunks.crypton.agent
 
-import cc.cryptopunks.crypton.yaml.formatYaml
-import cc.cryptopunks.crypton.yaml.parseYaml
-
-data class Story(val map: Map<String, Any>) {
-    val ver: Int by map
-    val rel: List<String> by map
-    val type: String by map
-
-    init {
-        ver; rel; type
-    }
+interface Story {
+    val type: String
+    val ver: Int
+    val rel: List<String>
 }
 
-
-fun ByteArray.story() = Story(toString(Charsets.UTF_8).parseYaml())
-
-fun Story.encode() = map.formatYaml().toByteArray(Charsets.UTF_8)
+data class StoryHeader(
+    override val ver: Int,
+    override val type: String,
+    override val rel: List<String>
+) : Story

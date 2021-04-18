@@ -5,7 +5,7 @@ import cc.cryptopunks.crypton.agent.Connections
 import cc.cryptopunks.crypton.agent.Identity
 import cc.cryptopunks.crypton.agent.Socket
 import cc.cryptopunks.crypton.agent.connections
-import cc.cryptopunks.crypton.agent.encode
+import cc.cryptopunks.crypton.agent.encodeDatagram
 import cc.cryptopunks.crypton.agent.identityGraph
 import cc.cryptopunks.crypton.agent.openConnection
 import cc.cryptopunks.crypton.agent.ownIdentity
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 private data class OpenConnection(val identity: Identity) : Async
-private data class IncomingConnection(val socket: Socket) : Async
+private data class ReceiveConnection(val socket: Socket) : Async
 
 
 fun handleConnections() = cryptonContext(
@@ -37,7 +37,7 @@ fun handleConnections() = cryptonContext(
     emitter {
         ownIdentity.endpoints.first()
             .let(socketConnections)
-            .map { socket -> IncomingConnection(socket) }
+            .map { ReceiveConnection(it) }
     },
 
     handler { _, (identity): OpenConnection ->
@@ -48,11 +48,11 @@ fun handleConnections() = cryptonContext(
         val endpoint = identity.endpoints.first()
         val socket = openConnection(endpoint)
         connections[identity.id] = socket
-        socket.output(PostIdentity(ownIdentity).encode())
+        socket.output(PostIdentity(ownIdentity).encodeDatagram())
         socket.start()
     },
 
-    handler { _, (socket): IncomingConnection ->
+    handler { _, (socket): ReceiveConnection ->
         withContext(socket.dep()) {
             socket.start()
         }
