@@ -66,5 +66,6 @@ include ':core:api',
         ':playground:smack',
         ':playground:chacha20',
         ':playground:ecdh',
+        ':playground:bolt',
 
         ':ops'

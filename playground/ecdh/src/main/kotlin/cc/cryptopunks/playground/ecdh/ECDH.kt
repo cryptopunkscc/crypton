@@ -20,7 +20,7 @@ fun ECDH(
 
     ellipticCurve = KeyFactory.getInstance("EC"),
 
-    sha256 = sha256(),
+    sha256 = MessageDigest.getInstance("SHA-256"),
 )
 
 fun generateEphemeralKeypair(): KeyPair = KeyPairGenerator
@@ -47,7 +47,7 @@ fun ECDH.performKeyAgreement(
     agreement.doPhase(generatePublic(publicKey), true)
 }.isSuccess
 
-fun ECDH.buildFinalKey(publicKey: ByteArray): ByteArray = sha256().run {
+fun ECDH.buildFinalKey(publicKey: ByteArray): ByteArray = sha256.run {
 
     listOf(
         key.public.encoded,
@@ -72,4 +72,3 @@ internal fun ECDH.generatePrivate(bytes: ByteArray): PrivateKey =
 
 fun String.hexToBinary(): ByteArray = TODO()
 
-fun sha256(): MessageDigest = MessageDigest.getInstance("SHA-256")
