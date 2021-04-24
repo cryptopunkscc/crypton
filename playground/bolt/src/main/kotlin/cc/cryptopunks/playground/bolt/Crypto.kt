@@ -18,125 +18,84 @@ import javax.crypto.KeyAgreement
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-/**
- * Generates and returns a fresh secp256k1 keypair
- */
-fun generateKey(): KeyPair =
-    KeyPairGenerator
-        .getInstance("EC")
-        .apply { initialize(256) }
-        .generateKeyPair()
-        .run {
-            KeyPair(
-                pub = public.encoded,
-                priv = private.encoded
-            )
-        }
+object JavaCrypto : BoltHandshake.Crypto {
 
-class KeyPair(
-    val pub: ByteArray,
-    val priv: ByteArray
-)
+    override fun generateKey(): BoltHandshake.KeyPair =
+        KeyPairGenerator
+            .getInstance("EC")
+            .apply { initialize(256) }
+            .generateKeyPair()
+            .run {
+                BoltHandshake.KeyPair(
+                    pub = public.encoded,
+                    priv = private.encoded
+                )
+            }
 
+    override fun sha256(
+        input: ByteArray
+    ): ByteArray =
+        MessageDigest.getInstance("SHA-256").digest(input)
 
-/**
- * Calculate SHA 256 digest
- */
-internal fun sha256(
-    input: ByteArray
-): ByteArray =
-    MessageDigest.getInstance("SHA-256").digest(input)
+    override fun ByteArray.serializeCompressed(): ByteArray =
+        KeyFactory
+            .getInstance("EC")
+            .generatePublic(X509EncodedKeySpec(this))
+            .let { it as ECPublicKey }.w.run {
+                byteArrayOf(
+                    if (affineY.mod(TWO) == ZERO) 2 else 3
+                ) + affineX.toByteArray()
+            }
 
+    override fun ECDH(
+        privateEphemeralKey: ByteArray,
+        publicStaticRemoteKey: ByteArray
+    ): ByteArray {
+        val ec = KeyFactory.getInstance("EC")
+        val ecdh = KeyAgreement.getInstance("ECDH")
+        ecdh.init(ec.generatePrivate(X509EncodedKeySpec(privateEphemeralKey)))
+        val key = ecdh.doPhase(ec.generatePublic(X509EncodedKeySpec(publicStaticRemoteKey)), true)
+        return MessageDigest.getInstance("SHA-256").digest(key.encoded)
+    }
 
-/**
- * Serialize in Bitcoin's compressed format.
- */
-internal fun ByteArray.serializeCompressed(): ByteArray =
-    KeyFactory
-        .getInstance("EC")
-        .generatePublic(X509EncodedKeySpec(this))
-        .let { it as ECPublicKey }.w.run {
-            byteArrayOf(
-                if (affineY.mod(TWO) == ZERO) 2 else 3
-            ) + affineX.toByteArray()
-        }
+    override fun HKDF(
+        salt: ByteArray,
+        ikm: ByteArray
+    ): Pair<ByteArray, ByteArray> {
+        val prk = hkdfExtract(salt, ikm)
+        val okm = hkdfExpand(prk, byteArrayOf(), 64)
+        return prk to okm
+    }
 
+    override fun encryptWithAD(
+        k: ByteArray,
+        n: Long,
+        ad: ByteArray,
+        plaintext: ByteArray
+    ): ByteArray {
+        val cipher = Cipher.getInstance("ChaCha20-Poly1305")
+        val key = SecretKeySpec(k, "ChaCha20")
+        val nonce = encodeNonce(n)
+        val iv = IvParameterSpec(nonce)
+        cipher.init(Cipher.ENCRYPT_MODE, key, iv)
+        cipher.updateAAD(ad)
+        return cipher.doFinal(plaintext)
+    }
 
-/**
- * ECDH(k, rk): performs an Elliptic-Curve Diffie-Hellman operation
- * @param privateEphemeralKey A valid secp256k1 private key,
- * @param publicStaticRemoteKey A valid public key
- * @return The returned value is the SHA256 of the compressed format of the generated point.
- */
-internal fun ECDH(
-    privateEphemeralKey: ByteArray,
-    publicStaticRemoteKey: ByteArray
-): ByteArray {
-    val ec = KeyFactory.getInstance("EC")
-    val ecdh = KeyAgreement.getInstance("ECDH")
-    ecdh.init(ec.generatePrivate(X509EncodedKeySpec(privateEphemeralKey)))
-    val key = ecdh.doPhase(ec.generatePublic(X509EncodedKeySpec(publicStaticRemoteKey)), true)
-    return MessageDigest.getInstance("SHA-256").digest(key.encoded)
-}
-
-internal fun HKDF(
-    salt: ByteArray,
-    ikm: ByteArray
-): Pair<ByteArray, ByteArray> {
-    val prk = hkdfExtract(salt, ikm)
-    val okm = hkdfExpand(prk, byteArrayOf(), 64)
-    return prk to okm
-}
-
-
-/**
- * Encrypt plain text using AEAD_CHACHA20_POLY1305 algorithm (IETF variant).
- * Note: this follows the Noise Protocol convention, rather than our normal endian.
- *
- * @param k A 256-bit key.
- * @param n A value used to calculate a 96-bit nonce.
- * @param ad An additional data.
- * @param plaintext - Data for encryption.
- * @return Encrypted cipher text.
- */
-internal fun encryptWithAD(
-    k: ByteArray,
-    n: Long,
-    ad: ByteArray,
-    plaintext: ByteArray
-): ByteArray {
-    val cipher = Cipher.getInstance("ChaCha20-Poly1305")
-    val key = SecretKeySpec(k, "ChaCha20")
-    val nonce = encodeNonce(n)
-    val iv = IvParameterSpec(nonce)
-    cipher.init(Cipher.ENCRYPT_MODE, key, iv)
-    cipher.updateAAD(ad)
-    return cipher.doFinal(plaintext)
-}
-
-/**
- * Decrypt cipher text using AEAD_CHACHA20_POLY1305 algorithm (IETF variant).
- * Note: this follows the Noise Protocol convention, rather than our normal endian.
- *
- * @param k A 256-bit key
- * @param n A value used to calculate a 96-bit nonce
- * @param ad An additional data
- * @param ciphertext - An encrypted data.
- * @return Decrypted plain text.
- */
-internal fun decryptWithAD(
-    k: ByteArray,
-    n: Long,
-    ad: ByteArray,
-    ciphertext: ByteArray
-): ByteArray {
-    val cipher = Cipher.getInstance("ChaCha20-Poly1305")
-    val key = SecretKeySpec(k, "ChaCha20")
-    val nonce = encodeNonce(n)
-    val iv = IvParameterSpec(nonce)
-    cipher.init(Cipher.DECRYPT_MODE, key, iv)
-    cipher.updateAAD(ad)
-    return cipher.doFinal(ciphertext)
+    override fun decryptWithAD(
+        k: ByteArray,
+        n: Long,
+        ad: ByteArray,
+        ciphertext: ByteArray
+    ): ByteArray {
+        val cipher = Cipher.getInstance("ChaCha20-Poly1305")
+        val key = SecretKeySpec(k, "ChaCha20")
+        val nonce = encodeNonce(n)
+        val iv = IvParameterSpec(nonce)
+        cipher.init(Cipher.DECRYPT_MODE, key, iv)
+        cipher.updateAAD(ad)
+        return cipher.doFinal(ciphertext)
+    }
 }
 
 /**

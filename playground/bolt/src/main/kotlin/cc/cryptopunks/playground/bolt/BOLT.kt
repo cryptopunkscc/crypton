@@ -1,5 +1,7 @@
 package cc.cryptopunks.playground.bolt
 
+import cc.cryptopunks.playground.bolt.BoltHandshake.KeyPair
+
 private const val PROTOCOL_NAME = "Noise_XK_secp256k1_ChaChaPoly_SHA256"
 private const val PROLOGUE = "lightning"
 private const val PROTOCOL_VERSION: Byte = 0
@@ -16,6 +18,7 @@ object BoltHandshake {
      * The representation of BOLT handshake state
      */
     class State(
+        crypto: Crypto,
         val s: KeyPair,
         var e: KeyPair = emptyKeyPair,
         var ck: ByteArray = byteArrayOf(),
@@ -23,7 +26,79 @@ object BoltHandshake {
         var temp_k1: ByteArray = byteArrayOf(),
         var temp_k2: ByteArray = byteArrayOf(),
         var temp_k3: ByteArray = byteArrayOf()
+    ) : Crypto by crypto
+
+    class KeyPair(
+        val pub: ByteArray,
+        val priv: ByteArray
     )
+
+    interface Crypto {
+        /**
+         * Generates and returns a fresh secp256k1 keypair
+         */
+        fun generateKey(): KeyPair
+
+        /**
+         * Calculate SHA 256 digest
+         */
+        fun sha256(input: ByteArray): ByteArray
+
+        /**
+         * Serialize in Bitcoin's compressed format.
+         */
+        fun ByteArray.serializeCompressed(): ByteArray
+
+        /**
+         * ECDH(k, rk): performs an Elliptic-Curve Diffie-Hellman operation
+         * @param privateEphemeralKey A valid secp256k1 private key,
+         * @param publicStaticRemoteKey A valid public key
+         * @return The returned value is the SHA256 of the compressed format of the generated point.
+         */
+        fun ECDH(
+            privateEphemeralKey: ByteArray,
+            publicStaticRemoteKey: ByteArray
+        ): ByteArray
+
+        fun HKDF(
+            salt: ByteArray,
+            ikm: ByteArray
+        ): Pair<ByteArray, ByteArray>
+
+        /**
+         * Encrypt plain text using AEAD_CHACHA20_POLY1305 algorithm (IETF variant).
+         * Note: this follows the Noise Protocol convention, rather than our normal endian.
+         *
+         * @param k A 256-bit key.
+         * @param n A value used to calculate a 96-bit nonce.
+         * @param ad An additional data.
+         * @param plaintext - Data for encryption.
+         * @return Encrypted cipher text.
+         */
+        fun encryptWithAD(
+            k: ByteArray,
+            n: Long,
+            ad: ByteArray,
+            plaintext: ByteArray
+        ): ByteArray
+
+        /**
+         * Decrypt cipher text using AEAD_CHACHA20_POLY1305 algorithm (IETF variant).
+         * Note: this follows the Noise Protocol convention, rather than our normal endian.
+         *
+         * @param k A 256-bit key
+         * @param n A value used to calculate a 96-bit nonce
+         * @param ad An additional data
+         * @param ciphertext - An encrypted data.
+         * @return Decrypted plain text.
+         */
+        fun decryptWithAD(
+            k: ByteArray,
+            n: Long,
+            ad: ByteArray,
+            ciphertext: ByteArray
+        ): ByteArray
+    }
 }
 
 // Initialization
