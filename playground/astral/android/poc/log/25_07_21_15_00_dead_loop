@@ -1,0 +1,269 @@
+2021-07-25 14:59:21.890 1882-3988/? I/ActivityManager: Force stopping cc.cryptopunks.astral appid=10090 user=0: from pid 12876
+2021-07-25 14:59:21.892 2136-2136/? D/CarrierSvcBindHelper: No carrier app for: 0
+2021-07-25 14:59:21.960 1882-3988/? I/ActivityManager: Force stopping cc.cryptopunks.astral appid=10090 user=0: from pid 12887
+2021-07-25 14:59:21.996 1882-3988/? I/ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=cc.cryptopunks.astral/.MainActivity} from uid 2000
+2021-07-25 14:59:21.964 2136-2136/? D/CarrierSvcBindHelper: No carrier app for: 0
+2021-07-25 14:59:22.013 12894-12894/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:22.015 1882-1898/? I/ActivityManager: Start proc 12894:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:22.027 12894-12894/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:22.042 1639-1681/? D/gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 8298496
+2021-07-25 14:59:22.126 1882-2001/? I/GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@10ac9e6)
+2021-07-25 14:59:22.126 1882-1895/? I/GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@10ac9e6)
+2021-07-25 14:59:22.176 1639-1681/? D/gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 8298496
+2021-07-25 14:59:22.373 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:22.373 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:22.373 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:22.373 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:22.373 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:22.391 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:22.395 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:22.413 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:22.413 12894-12894/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:22.450 12894-12919/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:22.465 2019-2281/? D/EGL_emulation: eglMakeCurrent: 0xca8ca120: ver 3 0 (tinfo 0xdf53f740)
+2021-07-25 14:59:22.467 2609-2815/? D/EGL_emulation: eglMakeCurrent: 0xe1605d80: ver 3 0 (tinfo 0xe1603bb0)
+2021-07-25 14:59:22.469 2584-2727/? D/EGL_emulation: eglMakeCurrent: 0xcbfb69e0: ver 3 0 (tinfo 0xcbfca4a0)
+2021-07-25 14:59:22.473 12894-12894/cc.cryptopunks.astral D/OpenGLRenderer: Skia GL Pipeline
+2021-07-25 14:59:22.518 1740-1740/? I/Zygote: Process 12894 exited cleanly (4)
+2021-07-25 14:59:22.520 1882-3988/? I/ActivityManager: Process cc.cryptopunks.astral (pid 12894) has died: fore TOP
+2021-07-25 14:59:22.520 1882-1899/? W/libprocessgroup: kill(-12894, 9) failed: No such process
+2021-07-25 14:59:22.520 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 12894 in 0ms
+2021-07-25 14:59:22.527 12928-12928/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:22.532 1882-1898/? I/ActivityManager: Start proc 12928:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:22.543 12928-12928/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:22.831 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:22.831 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:22.831 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:22.831 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:22.831 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:22.853 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:22.857 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:22.875 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:22.876 12928-12928/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:22.911 12928-12954/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:22.949 1740-1740/? I/Zygote: Process 12928 exited cleanly (4)
+2021-07-25 14:59:22.949 1882-2519/? I/ActivityManager: Process cc.cryptopunks.astral (pid 12928) has died: fore TOP
+2021-07-25 14:59:22.950 1882-1899/? W/libprocessgroup: kill(-12928, 9) failed: No such process
+2021-07-25 14:59:22.950 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 12928 in 0ms
+2021-07-25 14:59:22.975 12963-12963/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:22.975 1882-1898/? I/ActivityManager: Start proc 12963:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:22.996 12963-12963/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:23.118 1882-2001/? I/GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b6a89ca)
+2021-07-25 14:59:23.118 1882-1895/? I/GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b6a89ca)
+2021-07-25 14:59:23.295 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:23.295 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:23.295 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:23.295 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:23.295 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:23.312 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:23.316 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:23.332 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:23.333 12963-12963/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:23.367 12963-12989/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:23.380 12963-12963/cc.cryptopunks.astral D/OpenGLRenderer: Skia GL Pipeline
+2021-07-25 14:59:23.418 1740-1740/? I/Zygote: Process 12963 exited cleanly (4)
+2021-07-25 14:59:23.420 1882-2541/? I/ActivityManager: Process cc.cryptopunks.astral (pid 12963) has died: fore TOP
+2021-07-25 14:59:23.420 1882-1899/? W/libprocessgroup: kill(-12963, 9) failed: No such process
+2021-07-25 14:59:23.420 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 12963 in 0ms
+2021-07-25 14:59:23.429 12999-12999/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:23.432 1882-1898/? I/ActivityManager: Start proc 12999:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:23.446 12999-12999/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:23.734 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:23.734 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:23.734 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:23.734 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:23.734 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:23.753 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:23.756 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:23.777 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:23.777 12999-12999/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:23.814 12999-13025/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:23.824 12999-12999/cc.cryptopunks.astral D/OpenGLRenderer: Skia GL Pipeline
+2021-07-25 14:59:23.888 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 12999) has died: fore TOP
+2021-07-25 14:59:23.888 1882-1899/? W/libprocessgroup: kill(-12999, 9) failed: No such process
+2021-07-25 14:59:23.888 1740-1740/? I/Zygote: Process 12999 exited cleanly (4)
+2021-07-25 14:59:23.888 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 12999 in 0ms
+2021-07-25 14:59:23.897 13033-13033/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:23.901 1882-1898/? I/ActivityManager: Start proc 13033:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:23.917 13033-13033/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:24.118 1882-2001/? I/GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2d83c17)
+2021-07-25 14:59:24.118 1882-1895/? I/GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2d83c17)
+2021-07-25 14:59:24.188 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:24.188 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:24.188 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:24.188 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:24.188 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:24.204 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:24.208 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:24.223 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:24.223 13033-13033/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:24.251 13033-13058/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:24.262 13033-13033/cc.cryptopunks.astral D/OpenGLRenderer: Skia GL Pipeline
+2021-07-25 14:59:24.289 1740-1740/? I/Zygote: Process 13033 exited cleanly (4)
+2021-07-25 14:59:24.289 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13033) has died: fore TOP
+2021-07-25 14:59:24.289 1882-1899/? W/libprocessgroup: kill(-13033, 9) failed: No such process
+2021-07-25 14:59:24.289 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13033 in 0ms
+2021-07-25 14:59:24.310 13067-13067/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:24.313 1882-1898/? I/ActivityManager: Start proc 13067:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:24.331 13067-13067/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:24.570 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:24.570 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:24.570 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:24.570 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:24.570 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:24.588 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:24.591 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:24.609 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:24.609 13067-13067/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:24.635 13067-13092/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:24.688 1740-1740/? I/Zygote: Process 13067 exited cleanly (4)
+2021-07-25 14:59:24.688 1882-4342/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13067) has died: fore TOP
+2021-07-25 14:59:24.688 1882-1899/? W/libprocessgroup: kill(-13067, 9) failed: No such process
+2021-07-25 14:59:24.688 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13067 in 0ms
+2021-07-25 14:59:24.690 1882-1895/? E/memtrack: Couldn't load memtrack module
+2021-07-25 14:59:24.690 1882-1895/? W/android.os.Debug: failed to get memory consumption info: -1
+2021-07-25 14:59:24.703 1882-1898/? I/ActivityManager: Start proc 13102:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:24.703 13102-13102/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:24.718 13102-13102/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:24.966 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:24.966 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:24.966 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:24.966 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:24.966 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:24.982 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:24.985 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:25.001 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:25.001 13102-13102/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:25.027 13102-13128/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:25.068 1882-4171/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13102) has died: fore TOP
+2021-07-25 14:59:25.068 1882-1899/? W/libprocessgroup: kill(-13102, 9) failed: No such process
+2021-07-25 14:59:25.068 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13102 in 0ms
+2021-07-25 14:59:25.068 1740-1740/? I/Zygote: Process 13102 exited cleanly (4)
+2021-07-25 14:59:25.075 13138-13138/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:25.080 1882-1898/? I/ActivityManager: Start proc 13138:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:25.088 13138-13138/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:25.118 1882-2001/? I/GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@71a82b3)
+2021-07-25 14:59:25.118 1882-1895/? I/GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@71a82b3)
+2021-07-25 14:59:25.355 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:25.355 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:25.356 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:25.356 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:25.356 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:25.373 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:25.376 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:25.389 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:25.390 13138-13138/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:25.418 13138-13163/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:25.488 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13138) has died: fore TOP
+2021-07-25 14:59:25.488 1740-1740/? I/Zygote: Process 13138 exited cleanly (4)
+2021-07-25 14:59:25.488 1882-1899/? W/libprocessgroup: kill(-13138, 9) failed: No such process
+2021-07-25 14:59:25.488 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13138 in 0ms
+2021-07-25 14:59:25.500 13173-13173/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:25.502 1882-1898/? I/ActivityManager: Start proc 13173:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:25.521 13173-13173/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:25.758 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:25.758 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:25.758 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:25.758 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:25.758 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:25.776 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:25.779 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:25.793 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:25.794 13173-13173/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:25.818 13173-13198/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:25.868 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13173) has died: fore TOP
+2021-07-25 14:59:25.868 1882-1899/? W/libprocessgroup: kill(-13173, 9) failed: No such process
+2021-07-25 14:59:25.868 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13173 in 0ms
+2021-07-25 14:59:25.868 1740-1740/? I/Zygote: Process 13173 exited cleanly (4)
+2021-07-25 14:59:25.875 13208-13208/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:25.880 1882-1898/? I/ActivityManager: Start proc 13208:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:25.889 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:26.117 1882-2001/? I/GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@625046e)
+2021-07-25 14:59:26.118 1882-1895/? I/GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@625046e)
+2021-07-25 14:59:26.169 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:26.169 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:26.169 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:26.169 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:26.169 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:26.190 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:26.193 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:26.207 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:26.208 13208-13208/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:26.233 13208-13233/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:26.278 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13208) has died: fore TOP
+2021-07-25 14:59:26.278 1882-1899/? W/libprocessgroup: kill(-13208, 9) failed: No such process
+2021-07-25 14:59:26.278 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13208 in 0ms
+2021-07-25 14:59:26.279 1740-1740/? I/Zygote: Process 13208 exited cleanly (4)
+2021-07-25 14:59:26.284 13243-13243/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:26.290 1882-1898/? I/ActivityManager: Start proc 13243:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:26.298 13243-13243/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:26.552 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:26.552 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:26.552 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:26.552 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:26.552 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:26.571 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:26.574 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:26.588 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:26.588 13243-13243/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:26.615 13243-13268/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:26.658 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13243) has died: fore TOP
+2021-07-25 14:59:26.658 1740-1740/? I/Zygote: Process 13243 exited cleanly (4)
+2021-07-25 14:59:26.658 1882-1899/? W/libprocessgroup: kill(-13243, 9) failed: No such process
+2021-07-25 14:59:26.658 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13243 in 0ms
+2021-07-25 14:59:26.664 13278-13278/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:26.670 1882-1898/? I/ActivityManager: Start proc 13278:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:26.677 13278-13278/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:26.928 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:26.928 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:26.928 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:26.928 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:26.928 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:26.947 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:26.951 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:26.967 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:26.968 13278-13278/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:26.997 13278-13304/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:27.007 13278-13278/cc.cryptopunks.astral D/OpenGLRenderer: Skia GL Pipeline
+2021-07-25 14:59:27.049 1740-1740/? I/Zygote: Process 13278 exited cleanly (4)
+2021-07-25 14:59:27.060 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13278) has died: fore TOP
+2021-07-25 14:59:27.061 1882-1899/? W/libprocessgroup: kill(-13278, 9) failed: No such process
+2021-07-25 14:59:27.061 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13278 in 0ms
+2021-07-25 14:59:27.080 13314-13314/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:27.081 1882-1898/? I/ActivityManager: Start proc 13314:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:27.101 13314-13314/? W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:27.117 1882-2001/? I/GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@929cd88)
+2021-07-25 14:59:27.117 1882-1895/? I/GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@929cd88)
+2021-07-25 14:59:27.357 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:27.357 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:27.357 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:27.358 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:27.358 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:27.377 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:27.381 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:27.396 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:27.397 13314-13314/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:27.423 13314-13339/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:27.458 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13314) has died: fore TOP
+2021-07-25 14:59:27.458 1740-1740/? I/Zygote: Process 13314 exited cleanly (4)
+2021-07-25 14:59:27.459 1882-1899/? W/libprocessgroup: kill(-13314, 9) failed: No such process
+2021-07-25 14:59:27.459 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13314 in 0ms
+2021-07-25 14:59:27.465 13349-13349/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:27.470 1882-1898/? I/ActivityManager: Start proc 13349:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity
+2021-07-25 14:59:27.479 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Unexpected CPU variant for X86 using defaults: x86
+2021-07-25 14:59:27.741 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/graphics/drawable/Drawable;->getOpticalInsets()Landroid/graphics/Insets; (light greylist, linking)
+2021-07-25 14:59:27.741 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->left:I (light greylist, linking)
+2021-07-25 14:59:27.741 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->right:I (light greylist, linking)
+2021-07-25 14:59:27.741 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->top:I (light greylist, linking)
+2021-07-25 14:59:27.741 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/graphics/Insets;->bottom:I (light greylist, linking)
+2021-07-25 14:59:27.759 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden field Landroid/view/WindowInsets;->CONSUMED:Landroid/view/WindowInsets; (light greylist, reflection)
+2021-07-25 14:59:27.762 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->getAccessibilityDelegate()Landroid/view/View$AccessibilityDelegate; (light greylist, linking)
+2021-07-25 14:59:27.777 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (light greylist, reflection)
+2021-07-25 14:59:27.777 13349-13349/cc.cryptopunks.astral W/ptopunks.astra: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (light greylist, reflection)
+2021-07-25 14:59:27.802 13349-13374/cc.cryptopunks.astral D/AstralPoc: Staring astrald
+2021-07-25 14:59:27.849 1740-1740/? I/Zygote: Process 13349 exited cleanly (4)
+2021-07-25 14:59:27.849 1882-4287/? I/ActivityManager: Process cc.cryptopunks.astral (pid 13349) has died: fore TOP
+2021-07-25 14:59:27.849 1882-1899/? W/libprocessgroup: kill(-13349, 9) failed: No such process
+2021-07-25 14:59:27.849 1882-1899/? I/libprocessgroup: Successfully killed process cgroup uid 10090 pid 13349 in 0ms
+2021-07-25 14:59:27.871 13384-13384/? I/ptopunks.astra: Not late-enabling -Xcheck:jni (already on)
+2021-07-25 14:59:27.877 1882-1898/? I/ActivityManager: Start proc 13384:cc.cryptopunks.astral/u0a90 for activity cc.cryptopunks.astral/.MainActivity

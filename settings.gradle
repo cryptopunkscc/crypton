@@ -67,5 +67,6 @@ include ':core:api',
         ':playground:chacha20',
         ':playground:ecdh',
         ':playground:bolt',
+        ':playground:astral:android:poc',
 
         ':ops'
